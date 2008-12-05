@@ -1,6 +1,6 @@
 === WebComic ===
 Contributors: mgsisk
-Donate link: http://maikeruon.com/wcib/webcomic/
+Donate link: http://rad.maikeruon.com/wcib/webcomic/
 Tags: webcomic, comic, file manager, taxonomy, chapters, volumes
 Requires at least: 2.5
 Tested up to: 2.7rc1
