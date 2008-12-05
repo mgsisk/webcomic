@@ -25,7 +25,7 @@ WebComic includes the following widgets:
 * __Dropdown Comics:__ Displays a dropdown menu listing all of your comics. Options include the ability to group posts by chapter or chapters by volume and to automatically number posts or chapters. This widget requires additional javascript functionality to work correctly.
 * __Random Comic:__ Displays a random comic as a simple text link, an image, or a linked image.
 * __Recent Comics:__ Displays a list of your recently posted comics (up to ten) as simple text links, images, or linked images.
-* __Recent Posts:_ WebComic modifies the standard Recent Posts widget to ignore your comic posts.
+* __Recent Posts:__ WebComic modifies the standard Recent Posts widget to ignore your comic posts.
 
 WebComic also takes advantage of WordPress custom fields to provide a simple way of adding custom comic descriptions and comic transcripts.
 
