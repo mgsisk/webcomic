@@ -458,7 +458,7 @@ function comic_page_library(){
 				<?php foreach($comic_posts as $post): ?>
 					<tr<?php if($post['file']): if($i%2): ?> class="alt"<?php endif; else: ?> style="background:#fdd"<?php endif; ?>>
 						<th scope="row" class="check-column"><input type="checkbox" name="comics[]" value="<?php echo $post['id'] ?>" /></th>
-						<?php if($comic_thumb): ?><td><a href="<?php echo $post['file'] ?>"><img src="<?php echo $post['thumb'] ?>" alt="<?php echo $post['name'] ?>" style="width: 100%" /></a></td><? endif; ?>
+						<?php if($comic_thumb): ?><td><a href="<?php echo $post['file'] ?>"><img src="<?php echo $post['thumb'] ?>" alt="<?php echo $post['name'] ?>" /></a></td><? endif; ?>
 						<td><?php if($post['file']): ?><strong><a href="<?php echo $post['file'] ?>"><?php echo $post['name'] ?></a></strong><div class="row-actions"><a href="admin.php?page=comic-library<?php echo $paged_link ?>&amp;action=webcomic_delete&amp;file=<?php echo $post['name'] ?>">Delete</a></div><?php else: ?><strong>No Comic Found</strong><?php endif; ?></td>
 						<td><strong><a href="<?php echo $post['permalink'] ?>"><?php echo $post['title'] ?></a></strong><div class="row-actions"><a href="post.php?action=edit&amp;post=<?php echo $post['id'] ?>">Edit</a></div></td>
 						<td><?php echo $post['volume'] ?></td>
