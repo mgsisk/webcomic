@@ -83,5 +83,5 @@ require_once('wc-admin.php');    //Contains all administrative functions for man
 require_once('wc-core.php');     //Contains the core functions and template tags for displaying and navigating comics
 require_once('wc-chapters.php'); //Contains taxonomy functions and template tags for working with chapters
 include_once('wc-widgets.php');  //Contains widgits for recent comics, random comic, dropdown comics, comic archive, and modified recent posts
-include_once('extras/markdown.php');    //Totally optional, only used for comic transcripts
+include_once('markdown.php');    //Totally optional, only used for comic transcripts
 ?>
