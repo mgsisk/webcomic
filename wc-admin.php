@@ -27,8 +27,8 @@ function comic_page_settings(){
 		if(!file_exists(ABSPATH.get_comic_directory()))
 			mkdir(ABSPATH.get_comic_directory(),0775,true);
 		
-		if(!file_exists(ABSPATH.get_comic_directory().'thumbs/'))
-			mkdir(ABSPATH.get_comic_directory().'thumbs/',0775,true);
+		if(!file_exists(ABSPATH.get_comic_directory(true)))
+			mkdir(ABSPATH.get_comic_directory(true),0775,true);
 			
 		update_option('comic_current_chapter',$_REQUEST['comic_current_chapter']);
 			
@@ -43,6 +43,11 @@ function comic_page_settings(){
 			update_option('comic_name_format_date','Y-m-d');
 		else
 			update_option('comic_name_format_date',$_REQUEST['comic_name_format_date']);
+			
+		if('' == $_REQUEST['comic_secure_names'])
+			update_option('comic_secure_names','off');
+		else
+			update_option('comic_secure_names','on');
 		
 		echo '<div id="message" class="updated fade"><p><strong>Settings saved.</strong></p></div>';
 	endif;
@@ -120,12 +125,16 @@ function comic_page_settings(){
 					<td><input type="text" name="comic_name_format_date" value="<?php print get_option('comic_name_format_date'); ?>" class="code" /><p>Your comics must have the  <a href="http://us2.php.net/date">date</a> somewhere in the filename, in the format of <code><?php echo date(get_option('comic_name_format_date')); ?></code>.</p></td>
 				</tr>
 				<tr>
-					<th><label><input type="radio" name="comic_name_format" value="slug"<?php if('slug' == get_option('comic_name_format')) echo ' checked="checked"'; ?> /> Title</label></th>
+					<th scope="row"><label><input type="radio" name="comic_name_format" value="slug"<?php if('slug' == get_option('comic_name_format')) echo ' checked="checked"'; ?> /> Title</label></th>
 					<td>Your comics must have the <a href="http://lorelle.wordpress.com/2007/09/02/understanding-the-wordpress-post-title-and-post-slug/">post slug</a> somewhere in the filename.</td>
 				</tr>
 				<tr>
-					<th><label><input type="radio" name="comic_name_format" value="meta"<?php if('meta' == get_option('comic_name_format')) echo ' checked="checked"'; ?> /> Custom</label></th>
+					<th scope="row"><label><input type="radio" name="comic_name_format" value="meta"<?php if('meta' == get_option('comic_name_format')) echo ' checked="checked"'; ?> /> Custom</label></th>
 					<td>Your comics must have the value of a <a href="http://codex.wordpress.org/Using_Custom_Fields">custom field</a> called <code>comic_filename</code> somewhere in the filename.</td>
+				</tr>
+				<tr>
+					<th scope="row"><label><input type="checkbox" name="comic_secure_names" value="on"<?php if('on' == get_option('comic_secure_names')) print ' checked="checked"'; ?> /> Secure</label></th>
+					<td>When this option is enabled WebComic will automatically append a secure hash to your comic filenames during upload, preventing read ahead and archive scraping.</td>
 				</tr>
 			</table>
 		<p class="submit"><input type="submit" name="Submit" class="button-primary" value="Save Changes" /><input type="hidden" name="action" value="save_webcomic_settings" /></p>
@@ -174,7 +183,13 @@ function comic_page_library(){
 		if($invalid_format):
 			echo '<div id="message" class="error"><p><strong>Invalid file format. Images must be either gif, jpg, jpeg, or png.</strong></p></div>';
 		else:
-			$target_path = ABSPATH.get_comic_directory().basename($_FILES['new_comic_file']['name']); 
+			$ext = '.'.$ext;
+			$file = basename($_FILES['new_comic_file']['name'], $ext);
+			
+			if('on' == get_option('comic_secure_names'))
+				$cfhash = '-'.md5(microtime().basename($_FILES['new_comic_file']['name']));
+			
+			$target_path = ABSPATH.get_comic_directory().$file.$cfhash.$ext; 
 			
 			if(move_uploaded_file($_FILES['new_comic_file']['tmp_name'],$target_path)):
 				$img_dim = getimagesize($target_path);
@@ -186,12 +201,15 @@ function comic_page_library(){
 				$img_tw = get_option('thumbnail_size_w');
 				$img_th = get_option('thumbnail_size_h');
 				
+				if(!file_exists(ABSPATH.get_comic_directory(true)))
+					mkdir(ABSPATH.get_comic_directory(true),0775,true);
+				
 				if($img_dim[0] > $img_lw || $img_dim[1] > $img_lh)
-					image_resize($target_path,$img_lw,$img_lh,0,'large',ABSPATH.get_comic_directory().'thumbs/');
+					image_resize($target_path,$img_lw,$img_lh,0,'large',ABSPATH.get_comic_directory(true));
 				if($img_dim[0] > $img_mw || $img_dim[1] > $img_mh)
-					image_resize($target_path,$img_mw,$img_mh,0,'medium',ABSPATH.get_comic_directory().'thumbs/');
+					image_resize($target_path,$img_mw,$img_mh,0,'medium',ABSPATH.get_comic_directory(true));
 				if($img_dim[0] > $img_tw || $img_dim[1] > $img_th)
-					image_resize($target_path,$img_tw,$img_th,$img_crop,'thumb',ABSPATH.get_comic_directory().'thumbs/');
+					image_resize($target_path,$img_tw,$img_th,$img_crop,'thumb',ABSPATH.get_comic_directory(true));
 					
 				echo '<div id="message" class="updated fade"><p><strong>Comic uploaded.</strong></p></div>';
 			else:
@@ -213,17 +231,21 @@ function comic_page_library(){
 			$info = pathinfo(ABSPATH.get_option('comic_directory').'/'.$_REQUEST['webcomic_old_name']);
 			$old_name = $info['filename'];
 			$ext = $info['extension'];
-			if(rename(ABSPATH.get_comic_directory().$_REQUEST['webcomic_old_name'],ABSPATH.get_comic_directory().$_REQUEST['webcomic_new_name'].'.'.$ext)):
+			
+			if('on' == get_option('comic_secure_names'))
+				$cfhash = '-'.md5(microtime().basename($_FILES['new_comic_file']['name']));
+			
+			if(rename(ABSPATH.get_comic_directory().$_REQUEST['webcomic_old_name'],ABSPATH.get_comic_directory().$_REQUEST['webcomic_new_name'].$cfhash.'.'.$ext)):
 			 
-				$dir = opendir(ABSPATH.get_comic_directory().'thumbs/');
+				$dir = opendir(ABSPATH.get_comic_directory(true));
 				while(($file = readdir($dir)) !== false):
 					if(strstr($file,$old_name) !== false ):
 						if(strstr($file,$old_name.'-large.'.$ext))
-							rename(ABSPATH.get_comic_directory().'thumbs/'.$old_name.'-large.'.$ext,ABSPATH.get_comic_directory().'thumbs/'.$_REQUEST['webcomic_new_name'].'-large.'.$ext);
+							rename(ABSPATH.get_comic_directory(true).$old_name.'-large.'.$ext,ABSPATH.get_comic_directory(true).$_REQUEST['webcomic_new_name'].$cfhash.'-large.'.$ext);
 						if(strstr($file,$old_name.'-medium.'.$ext))
-							rename(ABSPATH.get_comic_directory().'thumbs/'.$old_name.'-medium.'.$ext,ABSPATH.get_comic_directory().'thumbs/'.$_REQUEST['webcomic_new_name'].'-medium.'.$ext);
+							rename(ABSPATH.get_comic_directory(true).$old_name.'-medium.'.$ext,ABSPATH.get_comic_directory(true).$_REQUEST['webcomic_new_name'].$cfhash.'-medium.'.$ext);
 						if(strstr($file,$old_name.'-thumb.'.$ext))
-							rename(ABSPATH.get_comic_directory().'thumbs/'.$old_name.'-thumb.'.$ext,ABSPATH.get_comic_directory().'thumbs/'.$_REQUEST['webcomic_new_name'].'-thumb.'.$ext);
+							rename(ABSPATH.get_comic_directory(true).$old_name.'-thumb.'.$ext,ABSPATH.get_comic_directory(true).$_REQUEST['webcomic_new_name'].$cfhash.'-thumb.'.$ext);
 					endif;
 				endwhile;
 				closedir($dir);
@@ -242,10 +264,10 @@ function comic_page_library(){
 			$ext = strrchr($_REQUEST['file'],'.');  
 			$fid = substr($_REQUEST['file'], 0, -strlen($ext));
 			 
-			$dir = opendir(ABSPATH.get_comic_directory().'thumbs/');
+			$dir = opendir(ABSPATH.get_comic_directory(true));
 			while(($file = readdir($dir)) !== false):
 				if(strstr($file,$fid) !== false )
-					unlink(ABSPATH.get_comic_directory().'thumbs/'.$file);
+					unlink(ABSPATH.get_comic_directory(true).$file);
 			endwhile;
 			closedir($dir);
 			
@@ -258,7 +280,7 @@ function comic_page_library(){
 	if('regen_comic_thumbs' == $_REQUEST['action']):
 		//Get our comic and media options
 		$original_path = ABSPATH.get_comic_directory();
-		$target_path = ABSPATH.get_comic_directory().'thumbs/';
+		$target_path = ABSPATH.get_comic_directory(true);
 		$img_crop = get_option('thumbnail_crop');
 		$img_lw = get_option('large_size_w');
 		$img_lh = get_option('large_size_h');
@@ -268,11 +290,11 @@ function comic_page_library(){
 		$img_th = get_option('thumbnail_size_h');
 		
 		//Delete everything in the thumbs folder
-		$dir = opendir(ABSPATH.get_comic_directory().'thumbs/');
+		$dir = opendir(ABSPATH.get_comic_directory(true));
 		while(($file = readdir($dir)) !== false):
-			if(is_dir(ABSPATH.get_comic_directory().'thumbs/'.$file))
+			if(is_dir(ABSPATH.get_comic_directory(true).$file))
 				continue;
-			unlink(ABSPATH.get_comic_directory().'thumbs/'.$file);
+			unlink(ABSPATH.get_comic_directory(true).$file);
 		endwhile;
 		closedir($dir);
 		

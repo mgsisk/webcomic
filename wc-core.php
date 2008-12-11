@@ -97,8 +97,8 @@ function get_the_comic_url($id,$size=false){
 			case 'medium': $id = $id.'-medium'; break;
 			case 'thumb': $id = $id.'-thumb';
 		endswitch;
-		$path = $path = ABSPATH.get_comic_directory().'thumbs/';
-		$http_path = get_settings('siteurl').'/'.get_comic_directory().'thumbs/';
+		$path = $path = ABSPATH.get_comic_directory(true);
+		$http_path = get_settings('siteurl').'/'.get_comic_directory(true);
 	endif;
 	
 	if(!is_dir($path)) die('<p class="error"><strong>Webcomic could not access your comic directory.</strong></p>');

@@ -27,7 +27,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 
 //Activation Check - Make sure all of our options have a default value
-if(!get_option('comic_category') || !get_option('comic_directory') || !get_option('comic_name_format') || !get_option('comic_name_format_date') || !get_option('comic_feed') || !get_option('comic_library_view') || !get_option('comic_current_chapter')):
+if(!get_option('comic_category') || !get_option('comic_directory') || !get_option('comic_name_format') || !get_option('comic_name_format_date') || !get_option('comic_feed') || !get_option('comic_library_view') || !get_option('comic_current_chapter') || !get_option('comic_secure_names')):
 	function comic_set_defaults(){
 		add_option('comic_category','1');
 		add_option('comic_directory','comics');
@@ -36,6 +36,7 @@ if(!get_option('comic_category') || !get_option('comic_directory') || !get_optio
 		add_option('comic_current_chapter','-1');
 		add_option('comic_feed','on');
 		add_option('comic_library_view','list');
+		add_option('comic_secure_names','off');
 		if(!file_exists(ABSPATH.get_comic_directory()))
 			mkdir(ABSPATH.get_comic_directory(),0775,true);
 		if(!file_exists(ABSPATH.get_comic_directory().'thumbs/'))
@@ -49,7 +50,11 @@ endif;
 
 //Option Retrieval Functions - For all your option retrieving needs
 function get_comic_category(){return intval(get_option('comic_category'));}
-function get_comic_directory(){return get_option('comic_directory').'/';}
+function get_comic_directory($thumbs=false){
+	if($thumbs)
+		return get_option('comic_directory').'/thumbs/';
+	return get_option('comic_directory').'/';
+}
 function get_comic_current_chapter(){return intval(get_option('comic_current_chapter'));}
 function get_comic_library_view($view=false){
 	if($view && ($view == get_option('comic_library_view'))) echo ' class="current"';
@@ -78,5 +83,5 @@ require_once('wc-admin.php');    //Contains all administrative functions for man
 require_once('wc-core.php');     //Contains the core functions and template tags for displaying and navigating comics
 require_once('wc-chapters.php'); //Contains taxonomy functions and template tags for working with chapters
 include_once('wc-widgets.php');  //Contains widgits for recent comics, random comic, dropdown comics, comic archive, and modified recent posts
-include_once('markdown.php');    //Totally optional, only used for comic transcripts
+include_once('extras/markdown.php');    //Totally optional, only used for comic transcripts
 ?>

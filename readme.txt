@@ -3,8 +3,8 @@ Contributors: mgsisk
 Donate link: http://rad.maikeruon.com/wcib/webcomic/
 Tags: webcomic, comic, file manager, taxonomy, chapters, volumes
 Requires at least: 2.5
-Tested up to: 2.7rc1
-Stable tag: 1.0
+Tested up to: 2.7
+Stable tag: 1.1
 
 WebComic makes any WordPress theme webcomic ready by adding new template tags and widgets specifically designed for publishing webcomics.
 
