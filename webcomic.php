@@ -1,9 +1,9 @@
 <?php
 /*
 Plugin Name: WebComic
-Plugin URI: http://rad.maikeruon.com/wcib/
+Plugin URI: http://maikeruon.com/wcib/
 Description: WebComic makes any WordPress theme webcomic ready by adding additional template tags and widgets specifically designed for publishing webcomics.
-Version: 1.1
+Version: 1.2
 Author: Michael Sisk
 Author URI: http://maikeruon.com/
 
@@ -27,20 +27,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 
 //Activation Check - Make sure all of our options have a default value
-if(!get_option('comic_category') || !get_option('comic_directory') || !get_option('comic_name_format') || !get_option('comic_name_format_date') || !get_option('comic_feed') || !get_option('comic_library_view') || !get_option('comic_current_chapter') || !get_option('comic_secure_names')):
+if(!get_option('comic_category') || !get_option('comic_directory') || !get_option('comic_current_chapter') || !get_option('comic_feed') || !get_option('comic_auto_post') || !get_option('comic_name_format') || !get_option('comic_name_format_date') || !get_option('comic_secure_names') || !get_option('comic_library_view')):
 	function comic_set_defaults(){
 		add_option('comic_category','1');
 		add_option('comic_directory','comics');
-		add_option('comic_name_format','date');
-		add_option('comic_name_format_date','Y-m-d');
 		add_option('comic_current_chapter','-1');
 		add_option('comic_feed','on');
-		add_option('comic_library_view','list');
+		add_option('comic_auto_post','off');
+		add_option('comic_name_format','date');
+		add_option('comic_name_format_date','Y-m-d');
 		add_option('comic_secure_names','off');
+		add_option('comic_library_view','list');
+		
 		if(!file_exists(ABSPATH.get_comic_directory()))
 			mkdir(ABSPATH.get_comic_directory(),0775,true);
 		if(!file_exists(ABSPATH.get_comic_directory().'thumbs/'))
 			mkdir(ABSPATH.get_comic_directory().'thumbs/',0775,true);
+		
 		echo '<div id="comic-warning" class="updated fade"><p><strong>Thanks for choosing WebComic! Please check the <a href="admin.php?page=webcomic/wc-admin.php">setting page</a> to configure the plugin.</strong></p></div>';
 	}
 	add_action('admin_notices', 'comic_set_defaults');
@@ -49,29 +52,40 @@ endif;
 
 
 //Option Retrieval Functions - For all your option retrieving needs
-function get_comic_category(){return intval(get_option('comic_category'));}
+function get_comic_category(){
+	return intval(get_option('comic_category'));
+}
+
 function get_comic_directory($thumbs=false){
 	if($thumbs)
 		return get_option('comic_directory').'/thumbs/';
+		
 	return get_option('comic_directory').'/';
 }
-function get_comic_current_chapter(){return intval(get_option('comic_current_chapter'));}
+
+function get_comic_current_chapter(){
+	return intval(get_option('comic_current_chapter'));
+}
+
 function get_comic_library_view($view=false){
-	if($view && ($view == get_option('comic_library_view'))) echo ' class="current"';
-	if($view && ($view != get_option('comic_library_view'))) return false;
+	if($view && ($view == get_option('comic_library_view')))
+		echo ' class="current"';
+	
+	if($view && ($view != get_option('comic_library_view')))
+		return;
+	
 	return get_option('comic_library_view');
 }
 
 
 
-//Feed Filter - Didn't know where else to stick it XD
+//Show or hide comic images based on user settings
 if('on' == get_option('comic_feed')):
 	function webcomic_feed($content) {
-		if(is_feed() && in_category('comic')):
-			return '<p>'.the_comic().'</p>'.$content;
-		else:
+		if(is_feed() && in_category('comic'))
+			return '<p>'.get_the_comic(false,'image').'</p>'.$content;
+		else
 			return $content;
-		endif;
 	}
 	add_filter('the_content','webcomic_feed');
 endif;
@@ -79,9 +93,8 @@ endif;
 
 
 //Split the functions to avoide 1000+ line plugin file
-require_once('wc-admin.php');    //Contains all administrative functions for managing the plugin
-require_once('wc-core.php');     //Contains the core functions and template tags for displaying and navigating comics
-require_once('wc-chapters.php'); //Contains taxonomy functions and template tags for working with chapters
-include_once('wc-widgets.php');  //Contains widgits for recent comics, random comic, dropdown comics, comic archive, and modified recent posts
-include_once('markdown.php');    //Totally optional, only used for comic transcripts
+require_once('wc-admin.php');   //Contains all administrative functions for managing the plugin
+require_once('wc-core.php');    //Contains the core functions and template tags for displaying and navigating comics
+include_once('wc-widgets.php'); //Contains widgits for recent comics, random comic, dropdown comics, comic archive, and modified recent posts
+include_once('markdown.php');   //Totally optional, only used for comic transcripts
 ?>

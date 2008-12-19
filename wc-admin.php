@@ -1,20 +1,72 @@
 <?php
-//Register the WebComic administrative pages (which are all defined below)
+//Register the WebComic administrative pages and enquee the administrative scripts
 function comic_admin_pages_add(){
-	add_menu_page('WebComic', 'WebComic', 8, __FILE__, 'comic_page_settings');
+	add_menu_page('WebComic','WebComic',8, __FILE__,'comic_page_settings');
 	add_submenu_page(__FILE__,'Settings','Settings',8,__FILE__,'comic_page_settings');
 	add_submenu_page(__FILE__,'Comic Library','Library',8,'comic-library','comic_page_library');
 	add_submenu_page(__FILE__,'Comic Chapters','Chapters',8,'comic-chapters','comic_page_chapters');
 }
 add_action('admin_menu', 'comic_admin_pages_add');
 
-
-
-//Enqueue the admin form scripts for fancy administrative stuff
+//Enqueue admin scripts for fancy effects
 function wc_admin_scripts() {
 	wp_enqueue_script('admin-forms');
 }
 add_action('admin_init','wc_admin_scripts');
+
+//Add the "chapter" taxonomy
+function register_chapters(){
+	register_taxonomy('chapter','post',array('hierarchical' => true, 'update_count_callback' => '_update_post_term_count'));
+}
+add_action('init','register_chapters');
+
+
+
+//Retrieves all chapters
+function get_chapters($args=''){
+	$defaults = array('orderby' => 'id','pad_counts' => true);
+	$args = wp_parse_args($args, $defaults);
+	$chapters = (array) get_terms('chapter',$args);
+	return $chapters;
+}
+
+//Add comic post to chapter
+function add_post_to_chapter($id,$chapter,$overwrite=true){		
+	$taxonomies = get_the_taxonomies($id);
+	$has_chapter = (array_key_exists('chapter',$taxonomies)) ? true : false;
+	
+	if($has_chapter):
+		if($overwrite)
+			wp_delete_object_term_relationships($id,'chapter');
+		else
+			return;
+	endif;
+	
+	wp_set_object_terms($id,intval($chapter),'chapter');
+}
+
+//Remove any associated chapter information whenever a comic post is deleted	
+function remove_post_from_chapter($id){
+	wp_delete_object_term_relationships($id,'chapter');
+}
+add_action('delete_post','remove_post_from_chapter');
+
+//Make sure any new comic posts or unassigned comic posts are assigned to the current chapter
+if(-1 != get_comic_current_chapter()):
+	function add_post_to_current_chapter($id){
+		$cats = get_the_category($id);
+		
+		foreach($cats as $cat)
+			if($cat->cat_ID == get_comic_category())
+				$comic = true;
+	
+		if($comic)
+			add_post_to_chapter($id,get_comic_current_chapter(),false);
+		else
+			return;
+	}
+	add_action('save_post','add_post_to_current_chapter');
+endif;
 
 
 
@@ -37,12 +89,40 @@ function comic_page_settings(){
 		else
 			update_option('comic_feed','on');
 		
+		if('' == $_REQUEST['comic_auto_post'])
+			update_option('comic_auto_post','off');
+		else
+			update_option('comic_auto_post','on');
+		
 		update_option('comic_name_format',$_REQUEST['comic_name_format']);
 		
-		if(!$_REQUEST['comic_name_format_date'])
+		$days   = array('d','j','z','w');
+		$months = array('F','m','M','n');
+		$years  = array('o','Y','y');
+		foreach($days as $day):
+			if(strstr($_REQUEST['comic_name_format_date'],$day)):
+				$days = true;
+				break;
+			endif;
+		endforeach;
+		foreach($months as $month):
+			if(strstr($_REQUEST['comic_name_format_date'],$month)):
+				$months = true;
+				break;
+			endif;
+		endforeach;
+		foreach($years as $year):
+			if(strstr($_REQUEST['comic_name_format_date'],$year)):
+				$years = true;
+				break;
+			endif;
+		endforeach;
+		
+		if(!$_REQUEST['comic_name_format_date'] || true !== $days || true !== $months || true !== $years):
 			update_option('comic_name_format_date','Y-m-d');
-		else
+		else:
 			update_option('comic_name_format_date',$_REQUEST['comic_name_format_date']);
+		endif;
 			
 		if('' == $_REQUEST['comic_secure_names'])
 			update_option('comic_secure_names','off');
@@ -111,11 +191,17 @@ function comic_page_settings(){
 						</select><span class="setting-description">Select the chapter new comic posts will be assigned to.</span>
 					</td>
 				</tr>
-				<?php endif; ?>
+				<?php endif ?>
 				<tr>
 					<th scope="row">Feed</th>
 					<td><label for="comic_feed"><input name="comic_feed" type="checkbox" id="comic_feed" value="on"<?php if('on' == get_option('comic_feed')) print ' checked="checked"'; ?> /> Include comic images in feed</label></td>
 				</tr>
+				<?php if('date' == get_option('comic_name_format')): ?>
+				<tr>
+					<th scope="row">Posts</th>
+					<td><label for="comic_auto_post"><input name="comic_auto_post" type="checkbox" id="comic_auto_post" value="on"<?php if('on' == get_option('comic_auto_post')) print ' checked="checked"'; ?> /> Automatically create comic posts during upload</label></td>
+				</tr>
+				<?php endif ?>
 			</table>
 			<?php if(!$chapters):?><input type="hidden" name="comic_current_chapter" value="-1" /><?php endif; ?>
 			<h3>How do you name your comics?</h3>
@@ -134,7 +220,7 @@ function comic_page_settings(){
 				</tr>
 				<tr>
 					<th scope="row"><label><input type="checkbox" name="comic_secure_names" value="on"<?php if('on' == get_option('comic_secure_names')) print ' checked="checked"'; ?> /> Secure</label></th>
-					<td>When this option is enabled WebComic will automatically append a secure hash to your comic filenames during upload, preventing read ahead and archive scraping.</td>
+					<td>Automatically append a secure hash to comic filenames during upload to prevent read ahead and archive scraping.</td>
 				</tr>
 			</table>
 		<p class="submit"><input type="submit" name="Submit" class="button-primary" value="Save Changes" /><input type="hidden" name="action" value="save_webcomic_settings" /></p>
@@ -153,17 +239,19 @@ function comic_page_library(){
 	if('update_comic_chapters' == $_REQUEST['action']):
 		$comics = $_REQUEST['comics'];
 		$chapter = (isset($_REQUEST['Submit1'])) ? $_REQUEST['comic_chapter1'] : $_REQUEST['comic_chapter2'];
+		
 		if(!$comics):
 			echo '<div id="message" class="error"><p>Please select at least one comic.</p></div>';
 		else:
 			if(-1 == $chapter):
 				foreach($comics as $comic)
 					remove_post_from_chapter($comic);
+				
 				echo '<div id="message" class="updated fade"><p><strong>All comics removed from chapters.</strong></p></div>';
 			else:
-				foreach($comics as $comic):
+				foreach($comics as $comic)
 					add_post_to_chapter($comic,$chapter);
-				endforeach;
+					
 				echo '<div id="message" class="updated fade"><p><strong>All comics assigned to new chapter.</strong></p></div>';
 			endif;
 		endif;
@@ -177,6 +265,7 @@ function comic_page_library(){
 			case 'jpg': break;
 			case 'jpeg': break;
 			case 'png': break;
+			case 'zip': break;
 			default: $invalid_format = true;
 		endswitch;
 		
@@ -210,6 +299,18 @@ function comic_page_library(){
 					image_resize($target_path,$img_mw,$img_mh,0,'medium',ABSPATH.get_comic_directory(true));
 				if($img_dim[0] > $img_tw || $img_dim[1] > $img_th)
 					image_resize($target_path,$img_tw,$img_th,$img_crop,'thumb',ABSPATH.get_comic_directory(true));
+					
+				if('on' == get_option('comic_auto_post') && strtotime($file)):
+					$post_date = date('Y-m-d H:i:s', strtotime($file));
+					$psot_date_gmt = get_gmt_from_date($post_date);
+					$error = wp_insert_post(array(
+						'post_content' => ' ',
+						'post_status' => 'publish',
+						'post_category' => array(get_comic_category()),
+						'post_date' => $post_date,
+						'post_date_gmt' => $post_date_gmt
+					));
+				endif;
 					
 				echo '<div id="message" class="updated fade"><p><strong>Comic uploaded.</strong></p></div>';
 			else:
@@ -261,7 +362,7 @@ function comic_page_library(){
 	
 	if('webcomic_delete' == $_REQUEST['action']):
 		if(unlink(ABSPATH.get_comic_directory().$_REQUEST['file'])):
-			$ext = strrchr($_REQUEST['file'],'.');  
+			$ext = strrchr($_REQUEST['file'],'.');
 			$fid = substr($_REQUEST['file'], 0, -strlen($ext));
 			 
 			$dir = opendir(ABSPATH.get_comic_directory(true));
@@ -318,6 +419,35 @@ function comic_page_library(){
 		echo '<div id="message" class="updated fade"><p><strong>All thumbnails regenrated.</strong></p></div>';
 	endif;
 	
+	if('generate_comic_posts' == $_REQUEST['action']):
+		$orphans = explode('/',$_REQUEST['orphaned_comics']);
+		array_pop($orphans);
+		
+		foreach($orphans as $key => $value):
+			$ext = strrchr($value,'.');
+			$fid = substr($value, 0, -strlen($ext));
+			
+			if(strtotime($fid)):
+				$post_date = date('Y-m-d H:i:s', strtotime($fid));
+				$psot_date_gmt = get_gmt_from_date($post_date);
+				$error = wp_insert_post(array(
+					'post_content' => ' ',
+					'post_status' => 'publish',
+					'post_category' => array(get_comic_category()),
+					'post_date' => $post_date,
+					'post_date_gmt' => $post_date_gmt
+				));
+				$i++;
+			endif;
+		endforeach;
+		
+		if(!$i)
+			echo '<div id="message" class="error"><p><strong>No posts could be automatically generated.</strong></p></div>';
+		else
+			$s = ($i > 1) ? 's' : '';
+			echo '<div id="message" class="updated fade"><p><strong>'.$i.' post'.$s.' automatically generated.</strong></p></div>';
+	endif;
+	
 	global $post,$paged;
 	
 	$paged = ($_GET['paged']) ? $_GET['paged'] : 1;
@@ -353,16 +483,18 @@ function comic_page_library(){
 	$comics = comic_loop(15);
 	if($comics->have_posts()):
 		while($comics->have_posts()) : $comics->the_post();	
+			$chapter_temp = get_the_chapter();
+			$volume_temp = get_the_volume();
 			$comic_posts_temp['id'] = $post->ID;
 			$comic_posts_temp['permalink'] = get_permalink();
-			$comic_posts_temp['title'] = get_the_title();
+			$comic_posts_temp['title'] = (get_the_title()) ? get_the_title() : '(no title)';
 			$comic_posts_temp['slug'] = $post->post_name;
 			$comic_posts_temp['date'] = get_the_time(get_option('date_format'));
 			$comic_posts_temp['file'] = get_the_comic(false,'file');
 			$comic_posts_temp['thumb'] = get_the_comic(false,'file','thumb');
 			$comic_posts_temp['name'] = end(explode('/',$comic_posts_temp['file']));
-			$comic_posts_temp['volume'] = get_the_chapter('volume','title');
-			$comic_posts_temp['chapter'] = get_the_chapter(false,'title');
+			$comic_posts_temp['volume'] = $volume_temp['name'];
+			$comic_posts_temp['chapter'] = $chapter_temp['name'];
 			switch($post->post_status):
 				case 'future': $comic_posts_temp['status'] = 'Scheduled'; break;
 				case 'publish': $comic_posts_temp['status'] = 'Published'; break;
@@ -522,7 +654,16 @@ function comic_page_library(){
 <? else: ?>
 		<p class="error"><strong>No comic posts could be found.</strong></p>
 <?php endif; if($comic_files): //Display the orphaned comic files ?>
-		<p>WebComic couldn't find any post information for the following comics:</p>
+		<h3 class="alignleft">Orphaned Comics</h3>
+		<?php if('date' == get_option('comic_name_format')): ?>
+		<form method="post" action="">
+			<p class="alignright">
+				<input type="submit" value="Generate Missing Posts" class="button-primary" title="Attempt to generate posts for orphaned comics." />
+				<input type="hidden" name="orphaned_comics" value="<?php foreach($comic_files as $file) echo $file.'/'; ?>" />
+				<input type="hidden" name="action" value="generate_comic_posts" />
+			</p>
+		</form>
+		<?php endif ?>
 		<table class="widefat">
 			<thead>
 				<tr>

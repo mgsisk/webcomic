@@ -141,6 +141,7 @@ function widget_init_dropdown_comics(){
 		$title = $options['title'];
 		$label = $options['label'];
 		$numbers = $options['numbers'];
+		$pages = $options['pages'];
 		switch($options['group']):
 			case 2: $group = 'volumes'; break;
 			case 1: $group = true;
@@ -149,7 +150,7 @@ function widget_init_dropdown_comics(){
 		echo $before_widget;
 		if(!empty($title))
 			echo $before_title.$title.$after_title;
-		dropdown_comics($label,$group,$numbers);
+		dropdown_comics($label,$group,$numbers,$pages);
 		echo $after_widget;
 	}
 	
@@ -161,6 +162,7 @@ function widget_init_dropdown_comics(){
 			$newoptions['title'] = strip_tags(stripslashes($_POST['dropdown-comics-title']));
 			$newoptions['label'] = strip_tags(stripslashes($_POST['dropdown-comics-label']));
 			$newoptions['numbers'] = $_POST['dropdown-comics-numbers'];
+			$newoptions['pages'] = $_POST['dropdown-comics-pages'];
 			$newoptions['group'] = $_POST['dropdown-comics-group'];
 			if($options != $newoptions):
 				$options = $newoptions;
@@ -171,6 +173,7 @@ function widget_init_dropdown_comics(){
 		$title = htmlspecialchars($options['title'], ENT_QUOTES);
 		$label = $options['label'];
 		$numbers = $options['numbers'];
+		$pages = $options['pages'];
 		$group = $options['group'];
 		?>
 			<p><label>Title: <input type="text" class="widefat" id="dropdown-comics-title" name="dropdown-comics-title" value="<?php echo $title; ?>" /></label></p>
@@ -185,6 +188,7 @@ function widget_init_dropdown_comics(){
 				</label>
 			</p>
 			<p><label><input type="checkbox" id="dropdown-comics-numbers" name="dropdown-comics-numbers" value="on"<?php if($numbers) echo ' checked="checked"' ?> /> Automatically number comics</label></p>
+			<p><label><input type="checkbox" id="dropdown-comics-pages" name="dropdown-comics-pages" value="on"<?php if($pages) echo ' checked="checked"' ?> /> Show volume and chapter page counts</label></p>
 			<input type="hidden" name="dropdown-comics-submit" id="dropdown-comics-submit" value="1" />
 		<?
 	}
