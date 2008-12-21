@@ -4,7 +4,7 @@ Donate link: http://maikeruon.com/wcib/
 Tags: webcomic, comic, file manager, taxonomy, chapters, volumes
 Requires at least: 2.5
 Tested up to: 2.7
-Stable tag: 1.2
+Stable tag: 1.3
 
 WebComic makes any WordPress theme webcomic ready by adding new template tags and widgets specifically designed for publishing webcomics.
 
@@ -12,9 +12,13 @@ WebComic makes any WordPress theme webcomic ready by adding new template tags an
 
 WebComic makes any WordPress theme webcomic ready by adding additional functionality, template tags, and widgets specifically designed for publishing webcomics.
 
-= New in 1.2 =
+= New in 1.3 =
 
-* __Automatic Post Creation:__ WebComic can now automatically create comic posts for orphaned comics or create a post for a comic during upload. This option is only available when using the _Date_ name format, and comic filenames must only contain date information.
+The following bugs have been fixed:
+
+* Thumbnails could not be retrieved using Secure filenames.
+* _comic\_archive()_ and _dropdown\_comics()_ incorrectly displayed post revisions, autosaves, etc.
+* A flaw in the WordPress taxonomy API prevents the total page count for Volumes from being set correctly, always showing as zero regardless of the number of pages in a volume.
 
 = Major Features =
 
@@ -47,6 +51,10 @@ To take full advantage of WebComic, you'll need at least some understanding of c
 
 Please see the [WebComic](http://rad.maikeruon.com/wcib/webcomic/) section at the WebComic and InkBlot development site for complete documentation, including *Frequently Asked Questions*.
 
+= Where can I get help with this? =
+
+Please see the [WebComic & InkBlot Codex](http://maikeruon.com/wcib/codex/) or  [WebComic & InkBlot Support Forum0](http://www.maikeruon.com/wcib/forum/viewforum.php?f=4) for assistance.
+
 == Screenshots ==
 
 1. Settings Page
@@ -55,12 +63,19 @@ Please see the [WebComic](http://rad.maikeruon.com/wcib/webcomic/) section at th
 
 == Release Notes ==
 
+= 1.3 =
+
+* Corrected secure filenames bug that prevented thumbnails from being retrieved.
+* Corrected comic_archive() and dropdown_comics() bug that displayed post revisions, autosaves, etc.
+* Added code to correctly set the total page count for Volumes.
+
 = 1.2 =
 
 * Includes _Automatic Post Creation_. When enabled, WebComic will attempt to create a new comic post during upload. This option is only available when using the _Date_ name format, and comics must only have date information in their filename.
 * Added _Generate Missing Posts_ option to the Library page. WebComic will attempt to create comic posts for orphaned comics when activated. This option is only available when using the _Date_ name format, and comics must only have date information in their filename.
 * Added a validation check to custom date names. WebComic now checks to make sure you have (at least) a year, month, and day or week PHP date string identifier and resets to the default date format if one or more of these is missing.
 * Rewrote most of the WebComic functions to add features and improve performance.
+* Includes new template tags: get\_the\_chapter and get\_the\_volume.
 
 = 1.1 =
 
@@ -87,5 +102,5 @@ Please see the [WebComic](http://rad.maikeruon.com/wcib/webcomic/) section at th
 	* Create, modify, and delete volunmes and chapters to organize your comic library.
 	* Add unique titles and descriptions volumes and chapters.
 	* See a total page count for volumes and a running page count for chapters.
-* Includes new template tags for WordPress themes: comics_nav_link, comic_archive, comic_loop, dropdown_comics, first_comic_link, get_the_comic, ignore_comics, last_comic_link, next_comic_link, previous_comic_link, random_comic, recent_comics, the_chapter, the_comic, the_comic_embed, the_comic_transcript, and the_volume.
+* Includes new template tags for WordPress themes: comics\_nav\_link, comic\_archive, comic\_loop, dropdown\_comics, first\_comic\_link, get\_the\_comic, ignore\_comics, last\_comic\_link, next\_comic\_link, previous\_comic\_link, random\_comic, recent\_comics, the\_chapter, the\_comic, the\_comic\_embed, the\_comic\_transcript, and the\_volume.
 * Includes new widgets for WordPress themes: Random Comic, Recent Comics, Dropdown Comics, Comic Archive, and ecent Posts (modified to ignore comic posts).

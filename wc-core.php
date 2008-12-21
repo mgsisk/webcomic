@@ -175,12 +175,8 @@ function get_the_comic($comic=false,$format='post',$display=false){
 	$path = ABSPATH.get_comic_directory();
 	$http_path = get_settings('siteurl').'/'.get_comic_directory();
 	
-	if($display && ('large' == $display || 'medium' == $display || 'thumb' == $display)):
-		switch($display):
-			case 'large':  $comic_name .= '-large'; break;
-			case 'medium': $comic_name .= '-medium'; break;
-			case 'thumb':  $comic_name .= '-thumb';
-		endswitch;
+	if('large' == $display || 'medium' == $display || 'thumb' == $display):
+		$thumb = true;
 		$path = ABSPATH.get_comic_directory(true);
 		$http_path = get_settings('siteurl').'/'.get_comic_directory(true);
 	endif;
@@ -190,7 +186,15 @@ function get_the_comic($comic=false,$format='post',$display=false){
 	
 	$dir = opendir($path);
 	while(($file = readdir($dir)) !== false):
-		if(strstr($file,$comic_name) !== false ):
+		if(false !== strstr($file,$comic_name)):
+			if($thumb):
+				if(false !== strstr($file,$display)):
+					$comic_url = $http_path.$file;
+					break;
+				else:
+					continue;
+				endif;
+			endif;
 			$comic_url = $http_path.$file;
 			break;
 		endif;
@@ -264,7 +268,8 @@ function dropdown_comics($label='',$group=false,$numbered=false,$pages=false){
 					$chapter_sorted_posts = array();
 					foreach($chapter_posts as $chapter_post):
 						$chapter_post = &get_post($chapter_post);
-						$chapter_sorted_posts[$chapter_post->ID] = strtotime($chapter_post->post_date);
+						if('publish' == $chapter_post->post_status && 'post' == $chapter_post->post_type)
+							$chapter_sorted_posts[$chapter_post->ID] = strtotime($chapter_post->post_date);
 					endforeach;
 					natsort($chapter_sorted_posts);
 					
@@ -342,7 +347,8 @@ function comic_archive($descriptions=false,$pages=false){
 			$chapter_sorted_posts = array();
 			foreach($chapter_posts as $chapter_post):
 				$chapter_post = &get_post($chapter_post);
-				$chapter_sorted_posts[$chapter_post->ID] = strtotime($chapter_post->post_date);
+				if('publish' == $chapter_post->post_status && 'post' == $chapter_post->post_type)
+					$chapter_sorted_posts[$chapter_post->ID] = strtotime($chapter_post->post_date);
 			endforeach;
 			natsort($chapter_sorted_posts);
 			
@@ -401,7 +407,8 @@ function get_the_chapter($chapter=false){
 	$chapter_posts = get_objects_in_term(intval($chapter->term_id),'chapter');
 	foreach($chapter_posts as $chapter_post):
 		$chapter_post = &get_post($chapter_post);
-		array_push($chapter_post_times,$chapter_post->post_date);
+		if('publish' == $chapter_post->post_status && 'post' == $chapter_post->post_type)
+			array_push($chapter_post_times,$chapter_post->post_date);
 	endforeach;
 	if(!empty($chapter_post_times))
 		$chapter_first_post = array_keys($chapter_post_times,min($chapter_post_times));
@@ -432,14 +439,17 @@ function get_the_volume($volume=false){
 	$chapter_posts = get_objects_in_term(intval(min(get_term_children($volume->term_id,'chapter'))),'chapter');
 	foreach($chapter_posts as $chapter_post):
 		$chapter_post = &get_post($chapter_post);
-		array_push($chapter_post_times,$chapter_post->post_date);
+		if('publish' == $chapter_post->post_status && 'post' == $chapter_post->post_type):
+			array_push($chapter_post_times,$chapter_post->post_date);
+			$volume_pages += 1; //Correct for empty page counts
+		endif;
 	endforeach;
 	if(!empty($chapter_post_times))
 		$chapter_first_post = array_keys($chapter_post_times,min($chapter_post_times));
 	
 	$output['name'] = $volume->name;
 	$output['description'] = $volume->description;
-	$output['pages'] = $volume->count;
+	$output['pages'] = (0 == $volume->count) ? $volume_pages : $volume->count;
 	$output['link'] = get_the_comic($chapter_posts[$chapter_first_post[0]]);
 	
 	return $output;

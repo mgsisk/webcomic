@@ -27,6 +27,12 @@ function get_chapters($args=''){
 	$defaults = array('orderby' => 'id','pad_counts' => true);
 	$args = wp_parse_args($args, $defaults);
 	$chapters = (array) get_terms('chapter',$args);
+	foreach($chapters as $key => $chapter):
+		if(0 == $chapter->parent && 0 == $chapter->count):
+			$volume = get_the_volume($chapter->term_id);
+			$chapter->count = $volume['pages'];
+		endif;
+	endforeach;
 	return $chapters;
 }
 
@@ -276,9 +282,9 @@ function comic_page_library(){
 			$file = basename($_FILES['new_comic_file']['name'], $ext);
 			
 			if('on' == get_option('comic_secure_names'))
-				$cfhash = '-'.md5(microtime().basename($_FILES['new_comic_file']['name']));
+				$hash = '-'.md5(microtime().basename($_FILES['new_comic_file']['name']));
 			
-			$target_path = ABSPATH.get_comic_directory().$file.$cfhash.$ext; 
+			$target_path = ABSPATH.get_comic_directory().$file.$hash.$ext; 
 			
 			if(move_uploaded_file($_FILES['new_comic_file']['tmp_name'],$target_path)):
 				$img_dim = getimagesize($target_path);
@@ -334,19 +340,19 @@ function comic_page_library(){
 			$ext = $info['extension'];
 			
 			if('on' == get_option('comic_secure_names'))
-				$cfhash = '-'.md5(microtime().basename($_FILES['new_comic_file']['name']));
+				$hash = '-'.md5(microtime().basename($_FILES['new_comic_file']['name']));
 			
-			if(rename(ABSPATH.get_comic_directory().$_REQUEST['webcomic_old_name'],ABSPATH.get_comic_directory().$_REQUEST['webcomic_new_name'].$cfhash.'.'.$ext)):
+			if(rename(ABSPATH.get_comic_directory().$_REQUEST['webcomic_old_name'],ABSPATH.get_comic_directory().$_REQUEST['webcomic_new_name'].$hash.'.'.$ext)):
 			 
 				$dir = opendir(ABSPATH.get_comic_directory(true));
 				while(($file = readdir($dir)) !== false):
 					if(strstr($file,$old_name) !== false ):
 						if(strstr($file,$old_name.'-large.'.$ext))
-							rename(ABSPATH.get_comic_directory(true).$old_name.'-large.'.$ext,ABSPATH.get_comic_directory(true).$_REQUEST['webcomic_new_name'].$cfhash.'-large.'.$ext);
+							rename(ABSPATH.get_comic_directory(true).$old_name.'-large.'.$ext,ABSPATH.get_comic_directory(true).$_REQUEST['webcomic_new_name'].$hash.'-large.'.$ext);
 						if(strstr($file,$old_name.'-medium.'.$ext))
-							rename(ABSPATH.get_comic_directory(true).$old_name.'-medium.'.$ext,ABSPATH.get_comic_directory(true).$_REQUEST['webcomic_new_name'].$cfhash.'-medium.'.$ext);
+							rename(ABSPATH.get_comic_directory(true).$old_name.'-medium.'.$ext,ABSPATH.get_comic_directory(true).$_REQUEST['webcomic_new_name'].$hash.'-medium.'.$ext);
 						if(strstr($file,$old_name.'-thumb.'.$ext))
-							rename(ABSPATH.get_comic_directory(true).$old_name.'-thumb.'.$ext,ABSPATH.get_comic_directory(true).$_REQUEST['webcomic_new_name'].$cfhash.'-thumb.'.$ext);
+							rename(ABSPATH.get_comic_directory(true).$old_name.'-thumb.'.$ext,ABSPATH.get_comic_directory(true).$_REQUEST['webcomic_new_name'].$hash.'-thumb.'.$ext);
 					endif;
 				endwhile;
 				closedir($dir);
