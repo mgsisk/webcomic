@@ -53,7 +53,7 @@ Please see the [WebComic](http://rad.maikeruon.com/wcib/webcomic/) section at th
 
 = Where can I get help with this? =
 
-Please see the [WebComic & InkBlot Codex](http://maikeruon.com/wcib/codex/) or  [WebComic & InkBlot Support Forum0](http://www.maikeruon.com/wcib/forum/viewforum.php?f=4) for assistance.
+Please see the [WebComic & InkBlot Codex](http://maikeruon.com/wcib/codex/) or  [WebComic & InkBlot Support Forum](http://www.maikeruon.com/wcib/forum/viewforum.php?f=4) for assistance.
 
 == Screenshots ==
 
