@@ -436,7 +436,7 @@ function get_the_volume($volume=false){
 		return 'N\A';
 	
 	$chapter_post_times = array();
-	$chapter_posts = get_objects_in_term(intval(min(get_term_children($volume->term_id,'chapter'))),'chapter');
+	$chapter_posts = get_objects_in_term(intval(@min(get_term_children($volume->term_id,'chapter'))),'chapter');
 	foreach($chapter_posts as $chapter_post):
 		$chapter_post = &get_post($chapter_post);
 		if('publish' == $chapter_post->post_status && 'post' == $chapter_post->post_type):
