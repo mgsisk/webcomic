@@ -441,11 +441,18 @@ function get_the_volume($volume=false){
 		$chapter_post = &get_post($chapter_post);
 		if('publish' == $chapter_post->post_status && 'post' == $chapter_post->post_type):
 			array_push($chapter_post_times,$chapter_post->post_date);
-			$volume_pages += 1; //Correct for empty page counts
 		endif;
 	endforeach;
 	if(!empty($chapter_post_times))
 		$chapter_first_post = array_keys($chapter_post_times,min($chapter_post_times));
+	
+	if(0 == $volume->count):
+		$chapters = get_term_children($volume->term_id,'chapter');
+		foreach($chapters as $chapter):
+			$chapter = get_term($chapter,'chapter');
+			$volume_pages += $chapter->count;
+		endforeach;
+	endif;
 	
 	$output['name'] = $volume->name;
 	$output['description'] = $volume->description;
