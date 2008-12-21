@@ -66,7 +66,7 @@ Please see the [WebComic & InkBlot Codex](http://maikeruon.com/wcib/codex/) or  
 = 1.3 =
 
 * Corrected secure filenames bug that prevented thumbnails from being retrieved.
-* Corrected comic_archive() and dropdown_comics() bug that displayed post revisions, autosaves, etc.
+* Corrected comic\_archive() and dropdown\_comics() bug that displayed post revisions, autosaves, etc.
 * Added code to correctly set the total page count for Volumes.
 
 = 1.2 =
