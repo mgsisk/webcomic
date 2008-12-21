@@ -27,12 +27,14 @@ function get_chapters($args=''){
 	$defaults = array('orderby' => 'id','pad_counts' => true);
 	$args = wp_parse_args($args, $defaults);
 	$chapters = (array) get_terms('chapter',$args);
-	foreach($chapters as $key => $chapter):
-		if(0 == $chapter->parent && 0 == $chapter->count):
-			$volume = get_the_volume($chapter->term_id);
-			$chapter->count = $volume['pages'];
-		endif;
-	endforeach;
+	if($chapters):
+		foreach($chapters as $key => $chapter):
+			if(0 == $chapter->parent && 0 == $chapter->count):
+				$volume = get_the_volume($chapter->term_id);
+				$chapter->count = $volume['pages'];
+			endif;
+		endforeach;
+	endif;
 	return $chapters;
 }
 
