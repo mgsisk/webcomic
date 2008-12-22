@@ -225,6 +225,8 @@ function dropdown_comics($label='',$group=false,$numbered=false,$pages=false){
 	
 	if($group):
 		$collection = _get_term_hierarchy('chapter');
+		
+		ksort($collection);
 	
 		foreach($collection as $volume => $chapters):
 			foreach($chapters as $key => $value):
@@ -232,10 +234,12 @@ function dropdown_comics($label='',$group=false,$numbered=false,$pages=false){
 				if(0 == $chapter['pages'])
 					unset($chapters[$key]);
 			endforeach;
-			if(!$chapters)
+			if(!$chapters):
 				unset($collection[$volume]);
-			else
+			else:
+				sort($chapters);
 				$collection[$volume] = $chapters;
+			endif;
 		endforeach;
 		
 		if(!$collection)
@@ -262,7 +266,6 @@ function dropdown_comics($label='',$group=false,$numbered=false,$pages=false){
 			endforeach;
 		else:
 			foreach($collection as $volume => $chapters):
-				sort($chapters); //Make sure they're in the right order
 				foreach($chapters as $chapter):
 					$chapter_posts = get_objects_in_term($chapter,'chapter');
 					$chapter_sorted_posts = array();
@@ -316,16 +319,20 @@ function dropdown_comics($label='',$group=false,$numbered=false,$pages=false){
 function comic_archive($descriptions=false,$pages=false){
 	$collection = _get_term_hierarchy('chapter');
 	
+	ksort($collection);
+	
 	foreach($collection as $volume => $chapters):
 		foreach($chapters as $key => $value):
 			$chapter = get_the_chapter($value);
 			if(0 == $chapter['pages'])
 				unset($chapters[$key]);
 		endforeach;
-		if(!$chapters)
+		if(!$chapters):
 			unset($collection[$volume]);
-		else
+		else:
+			sort($chapters);
 			$collection[$volume] = $chapters;
+		endif;
 	endforeach;
 	
 	if(!$collection)
@@ -341,9 +348,13 @@ function comic_archive($descriptions=false,$pages=false){
 		
 		$output .= '<li class="comic-volume-item comic-volume-item-'.$volume.'"><a href="'.$the_volume['link'].'">'.$the_volume['name'].$the_pages.'</a>'.$description.'<ol class="comic-volume-chapters">';
 		
-		sort($chapters); //Make sure they're in the right order
+		//sort($chapters); //Make sure they're in the right order
 		foreach($chapters as $chapter):
 			$chapter_posts = get_objects_in_term($chapter,'chapter');
+			
+			if(!$chapter_posts)
+				continue; //Nothin' to show
+			
 			$chapter_sorted_posts = array();
 			foreach($chapter_posts as $chapter_post):
 				$chapter_post = &get_post($chapter_post);
@@ -351,9 +362,6 @@ function comic_archive($descriptions=false,$pages=false){
 					$chapter_sorted_posts[$chapter_post->ID] = strtotime($chapter_post->post_date);
 			endforeach;
 			natsort($chapter_sorted_posts);
-			
-			if(!$chapter_posts)
-				continue; //Nothin' to show
 				
 			$the_chapter = get_the_chapter($chapter);
 			
