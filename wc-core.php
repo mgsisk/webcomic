@@ -151,6 +151,7 @@ function get_the_chapter($chapter=false){
 	$output['description'] = $chapter->description;
 	$output['pages'] = $chapter->count;
 	$output['link'] = get_the_comic($chapter_posts[$chapter_first_post[0]]);
+	$output['class'] = 'comic-chapter-item comic-chapter-'.$chapter->term_id;
 	$output['parent'] = $chapter->parent;
 	
 	return $output;
@@ -191,6 +192,7 @@ function get_the_volume($volume=false){
 	$output['description'] = $volume->description;
 	$output['pages'] = intval($volume_pages);
 	$output['link'] = get_the_comic($chapter_posts[$chapter_first_post[0]]);
+	$output['class'] = 'comic-volume-item comic-volume-item-'.$volume->term_id;
 	
 	return $output;
 }
@@ -365,14 +367,14 @@ function comic_archive($descriptions=false,$pages=false,$reverse=false){
 		$description = ($descriptions && $volume['description']) ? '<p>'.$volume['description'].'</p>' : false;
 		$the_pages = ($pages && $volume['pages']) ? ' ('.$volume['pages'].' pages)' : false;
 		
-		$output .= '<li class="comic-volume-item comic-volume-item-'.$vid.'"><a href="'.$volume['link'].'">'.$volume['title'].$the_pages.'</a>'.$description.'<ol class="comic-volume-chapters">';
+		$output .= '<li class="'.$volume['class'].'"><a href="'.$volume['link'].'">'.$volume['title'].$the_pages.'</a>'.$description.'<ol class="comic-volume-chapters">';
 		
 		foreach($volume['chapters'] as $cid => $chapter):
 			
 			$description = ($descriptions && $chapter['description']) ? '<p>'.$chapter['description'].'</p>' : false;
 			$the_pages = ($pages && $chapter['pages']) ? ' ('.$chapter['pages'].' pages)' : false;
 			
-			$output .= '<li class="comic-chapter-item comic-chapter-item-'.$cid.'"><a href="'.$chapter['link'].'">'.$chapter['title'].$the_pages.'</a>'.$description.'<ol class="comic-chapter-pages">';
+			$output .= '<li class="'.$chapter['class'].'"><a href="'.$chapter['link'].'">'.$chapter['title'].$the_pages.'</a>'.$description.'<ol class="comic-chapter-pages">';
 			
 			foreach($chapter['posts'] as $the_post => $timestamp)
 				$output .= '<li class="comic-page-item comic-page-item-'.$the_post.'">'.get_the_comic($the_post,'link').'</li>';
