@@ -284,6 +284,7 @@ function comic_page_library(){
 			$comic_posts_temp['id'] = $post->ID;
 			$comic_posts_temp['permalink'] = get_permalink();
 			$comic_posts_temp['title'] = (get_the_title()) ? get_the_title() : '(no title)';
+			$comic_posts_temp['custom'] = (get_post_meta($comic_id,'comic_filename',true)) ? get_post_meta($comic_id,'comic_filename',true) : '&mdash';
 			$comic_posts_temp['slug'] = $post->post_name;
 			$comic_posts_temp['date'] = get_the_time(get_option('date_format'));
 			$comic_posts_temp['file'] = get_the_comic(false,'file');
@@ -385,6 +386,7 @@ function comic_page_library(){
 						<th scope="col">Post</th>
 						<th scope="col">Volume</th>
 						<th scope="col">Chapter</th>
+						<th scope="col">Custom</th>
 						<th scope="col">Slug</th>
 						<th scope="col">Date</th>
 					</tr>
@@ -396,6 +398,7 @@ function comic_page_library(){
 						<th scope="col">Post</th>
 						<th scope="col">Volume</th>
 						<th scope="col">Chapter</th>
+						<th scope="col">Custom</th>
 						<th scope="col">Slug</th>
 						<th scope="col">Date</th>
 					</tr>
@@ -409,6 +412,7 @@ function comic_page_library(){
 						<td><strong><a href="<?php echo $post['permalink'] ?>"><?php echo $post['title'] ?></a></strong><div class="row-actions"><a href="post.php?action=edit&amp;post=<?php echo $post['id'] ?>">Edit</a></div></td>
 						<td><?php echo $post['volume'] ?></td>
 						<td><?php echo $post['chapter'] ?></td>
+						<td><?php echo $post['custom'] ?></td>
 						<td><?php echo $post['slug'] ?></td>
 						<td><?php echo $post['date'] ?><br /><?php echo $post['status'] ?></td>
 					</tr>
