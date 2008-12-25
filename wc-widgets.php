@@ -45,7 +45,7 @@ function widget_init_random_comic(){
 			</select>
 			</label></p>
 			<input type="hidden" name="random-comic-submit" id="random-comic-submit" value="1" />
-		<?
+		<?php
 	}
 	
 	$widget_ops = array('description' => __("Links to a single, randomly selected comic"));
@@ -86,7 +86,7 @@ function widget_init_recent_comics(){
 		if($_POST['recent-comics-submit']):
 			$newoptions['title'] = strip_tags(stripslashes($_POST['recent-comics-title']));
 			$newoptions['number'] = $_POST['recent-comics-number']; 
-			$newoptions['format'] = $_POST['recent-comics-format'];
+			$newoptions['format'] = intval($_POST['recent-comics-format']);
 			if($options != $newoptions):
 				$options = $newoptions;
 				update_option('widget_recent_comics', $options);
@@ -94,24 +94,13 @@ function widget_init_recent_comics(){
 		endif;
 		
 		$title = htmlspecialchars($options['title'], ENT_QUOTES);
-		$number = $options['number'];
 		$format = $options['format'];
+		$number = $options['number'];
+		if (!$number = (int) $options['number'])
+			$number = 5;
 		?>
 			<p><label>Title: <input type="text" class="widefat" id="recent-comics-title" name="recent-comics-title" value="<?php echo $title; ?>" /></label></p>
-			<p><label>Number:
-			<select name="recent-comics-number" id="recent-comics-number" class="widefat">
-				<option value="1"<?php if(1 == $number) echo ' selected="selected"'; ?>>1</option>
-				<option value="2"<?php if(2 == $number) echo ' selected="selected"'; ?>>2</option>
-				<option value="3"<?php if(3 == $number) echo ' selected="selected"'; ?>>3</option>
-				<option value="4"<?php if(4 == $number) echo ' selected="selected"'; ?>>4</option>
-				<option value="5"<?php if(5 == $number) echo ' selected="selected"'; ?>>5</option>
-				<option value="6"<?php if(6 == $number) echo ' selected="selected"'; ?>>6</option>
-				<option value="7"<?php if(7 == $number) echo ' selected="selected"'; ?>>7</option>
-				<option value="8"<?php if(8 == $number) echo ' selected="selected"'; ?>>8</option>
-				<option value="9"<?php if(9 == $number) echo ' selected="selected"'; ?>>9</option>
-				<option value="10"<?php if(10 == $number) echo ' selected="selected"'; ?>>10</option>
-			</select>
-			</label></p>
+			<p><label>Number of comics to show: <input type="text" name="recent-comics-number" id="recent-comics-number" style="width: 25px; text-align: center;" value="<?php echo $number ?>" /></label></p>
 			<p><label>Format:
 			<select name="recent-comics-format" id="random-comics-format" class="widefat"> 
 				<option value="full"<?php if('full' == $format) echo ' selected="selected"'; ?>>Image</option>
@@ -119,7 +108,7 @@ function widget_init_recent_comics(){
 			</select>
 			</label></p>
 			<input type="hidden" name="recent-comics-submit" id="recent-comics-submit" value="1" />
-		<?
+		<?php
 	}
 	$widget_ops = array('description' => __("The most recent comics posted to your site"));
 	wp_register_sidebar_widget('recent-comics','Recent Comics','widget_recent_comics',$widget_ops);
@@ -138,10 +127,11 @@ function widget_init_dropdown_comics(){
 		extract($args);
 		
 		$options = get_option('widget_dropdown_comics');
-		$title = $options['title'];
-		$label = $options['label'];
+		$title   = $options['title'];
+		$label   = $options['label'];
 		$numbers = $options['numbers'];
-		$pages = $options['pages'];
+		$pages   = $options['pages'];
+		$reverse = $options['reverse'];
 		switch($options['group']):
 			case 2: $group = 'volumes'; break;
 			case 1: $group = true;
@@ -150,7 +140,7 @@ function widget_init_dropdown_comics(){
 		echo $before_widget;
 		if(!empty($title))
 			echo $before_title.$title.$after_title;
-		dropdown_comics($label,$group,$numbers,$pages);
+		dropdown_comics($label,$group,$numbers,$pages,$reverse);
 		echo $after_widget;
 	}
 	
@@ -159,22 +149,24 @@ function widget_init_dropdown_comics(){
 		$options = get_option('widget_dropdown_comics');
 		
 		if($_POST['dropdown-comics-submit']):
-			$newoptions['title'] = strip_tags(stripslashes($_POST['dropdown-comics-title']));
-			$newoptions['label'] = strip_tags(stripslashes($_POST['dropdown-comics-label']));
+			$newoptions['title']   = strip_tags(stripslashes($_POST['dropdown-comics-title']));
+			$newoptions['label']   = strip_tags(stripslashes($_POST['dropdown-comics-label']));
 			$newoptions['numbers'] = $_POST['dropdown-comics-numbers'];
-			$newoptions['pages'] = $_POST['dropdown-comics-pages'];
-			$newoptions['group'] = $_POST['dropdown-comics-group'];
+			$newoptions['pages']   = $_POST['dropdown-comics-pages'];
+			$newoptions['group']   = $_POST['dropdown-comics-group'];
+			$newoptions['reverse'] = $_POST['dropdown-comics-reverse'];
 			if($options != $newoptions):
 				$options = $newoptions;
 				update_option('widget_dropdown_comics',$options);
 			endif;
 		endif;
 		
-		$title = htmlspecialchars($options['title'], ENT_QUOTES);
-		$label = $options['label'];
+		$title   = htmlspecialchars($options['title'], ENT_QUOTES);
+		$label   = $options['label'];
 		$numbers = $options['numbers'];
-		$pages = $options['pages'];
-		$group = $options['group'];
+		$pages   = $options['pages'];
+		$group   = $options['group'];
+		$reverse = $options['reverse'];
 		?>
 			<p><label>Title: <input type="text" class="widefat" id="dropdown-comics-title" name="dropdown-comics-title" value="<?php echo $title; ?>" /></label></p>
 			<p><label>Label: <input type="text" class="widefat" id="dropdown-comics-label" name="dropdown-comics-label" value="<?php echo $label; ?>" /></label></p>
@@ -189,8 +181,9 @@ function widget_init_dropdown_comics(){
 			</p>
 			<p><label><input type="checkbox" id="dropdown-comics-numbers" name="dropdown-comics-numbers" value="on"<?php if($numbers) echo ' checked="checked"' ?> /> Automatically number comics</label></p>
 			<p><label><input type="checkbox" id="dropdown-comics-pages" name="dropdown-comics-pages" value="on"<?php if($pages) echo ' checked="checked"' ?> /> Show volume and chapter page counts</label></p>
+			<p><label><input type="checkbox" id="dropdown-comics-reverse" name="dropdown-comics-reverse" value="on"<?php if($reverse) echo ' checked="checked"' ?> /> Show volumes, chapters, and pages in reverse order</label></p>
 			<input type="hidden" name="dropdown-comics-submit" id="dropdown-comics-submit" value="1" />
-		<?
+		<?php
 	}
 	
 	$widget_ops = array('description' => __("Displays a dropdown list of all comic posts."));
@@ -213,11 +206,12 @@ function widget_init_comic_archive(){
 		$title = $options['title'];
 		$descriptions = $options['descriptions'];
 		$pages = $options['pages'];
+		$reverse = $options['reverse'];
 		
 		echo $before_widget;
 		if(!empty($title))
 			echo $before_title.$title.$after_title;
-		comic_archive($descriptions,$pages);
+		comic_archive($descriptions,$pages,$reverse);
 		echo $after_widget;
 	}
 	
@@ -229,6 +223,7 @@ function widget_init_comic_archive(){
 			$newoptions['title'] = $_POST['comic-archive-title'];
 			$newoptions['descriptions'] = $_POST['comic-archive-descriptions'];
 			$newoptions['pages'] = $_POST['comic-archive-pages'];
+			$newoptions['reverse'] = $_POST['comic-archive-reverse'];
 			if($options != $newoptions):
 				$options = $newoptions;
 				update_option('widget_comic_archive', $options);
@@ -238,12 +233,14 @@ function widget_init_comic_archive(){
 		$title = htmlspecialchars($options['title'], ENT_QUOTES);
 		$descriptions = $options['descriptions'];
 		$pages = $options['pages'];
+		$reverse = $options['reverse'];
 		?>
 			<p><label>Title: <input type="text" class="widefat" id="comic-archive-title" name="comic-archive-title" value="<?php echo $title; ?>" /></label></p>
 			<p><label><input type="checkbox" id="comic-archive-descriptions" name="comic-archive-descriptions" value="on"<?php if($descriptions) echo ' checked="checked"' ?> /> Show volume and chapter descriptions</label></p>
 			<p><label><input type="checkbox" id="comic-archive-pages" name="comic-archive-pages" value="on"<?php if($pages) echo ' checked="checked"' ?> /> Show volume and chapter page counts</label></p>
+			<p><label><input type="checkbox" id="comic-archive-reverse" name="comic-archive-reverse" value="on"<?php if($reverse) echo ' checked="checked"' ?> /> Show volumes, chapters, and pages in reverse order</label></p>
 			<input type="hidden" name="comic-archive-submit" id="comic-archive-submit" value="1" />
-		<?
+		<?php
 	}
 	
 	$widget_ops = array('description' => __("Displays your complete comic library organized by volume and chapter."));
@@ -291,7 +288,7 @@ function widget_webcomic_recent_posts_init(){
 		
 		if($_POST['webcomic-recent-posts-submit']):
 			$newoptions['title'] = strip_tags(stripslashes($_POST['webcomic-recent-posts-title']));
-			$newoptions['number'] = $_POST['webcomic-recent-posts-number']; 
+			$newoptions['number'] = intval($_POST['webcomic-recent-posts-number']);
 			if($options != $newoptions):
 				$options = $newoptions;
 				update_option('widget_webcomic_recent_posts', $options);
@@ -300,24 +297,14 @@ function widget_webcomic_recent_posts_init(){
 		
 		$title = htmlspecialchars($options['title'], ENT_QUOTES);
 		$number = $options['number'];
+		$number = $options['number'];
+		if (!$number = (int) $options['number'])
+			$number = 5;
 		?>
 			<p><label>Title: <input type="text" class="widefat" id="webcomic-recent-posts-title" name="webcomic-recent-posts-title" value="<?php echo $title; ?>" /></label></p>
-			<p><label>Number:
-			<select name="webcomic-recent-posts-number" id="webcomic-recent-posts-number" class="widefat">
-				<option value="1"<?php if(1 == $number) echo ' selected="selected"'; ?>>1</option>
-				<option value="2"<?php if(2 == $number) echo ' selected="selected"'; ?>>2</option>
-				<option value="3"<?php if(3 == $number) echo ' selected="selected"'; ?>>3</option>
-				<option value="4"<?php if(4 == $number) echo ' selected="selected"'; ?>>4</option>
-				<option value="5"<?php if(5 == $number) echo ' selected="selected"'; ?>>5</option>
-				<option value="6"<?php if(6 == $number) echo ' selected="selected"'; ?>>6</option>
-				<option value="7"<?php if(7 == $number) echo ' selected="selected"'; ?>>7</option>
-				<option value="8"<?php if(8 == $number) echo ' selected="selected"'; ?>>8</option>
-				<option value="9"<?php if(9 == $number) echo ' selected="selected"'; ?>>9</option>
-				<option value="10"<?php if(10 == $number) echo ' selected="selected"'; ?>>10</option>
-			</select>
-			</label></p>
+			<p><label>Number of posts to show: <input name="webcomic-recent-posts-number" id="webcomic-recent-posts-number" style="width: 25px; text-align: center;" value="<?php echo $number ?>" /></label></p>
 			<input type="hidden" name="webcomic-recent-posts-submit" id="webcomic-recent-posts-submit" value="1" />
-		<?
+		<?php
 	}
 	$widget_ops = array('description' => __("The most recent posts on your blog (ignores comic posts)"));
 	wp_register_sidebar_widget('recent-posts','Recent Posts','widget_webcomic_recent_posts',$widget_ops);

@@ -4,7 +4,7 @@ Donate link: http://maikeruon.com/wcib/
 Tags: webcomic, comic, file manager, taxonomy, chapters, volumes
 Requires at least: 2.5
 Tested up to: 2.7
-Stable tag: 1.3
+Stable tag: 1.4
 
 WebComic makes any WordPress theme webcomic ready by adding new template tags and widgets specifically designed for publishing webcomics.
 
@@ -12,13 +12,13 @@ WebComic makes any WordPress theme webcomic ready by adding new template tags an
 
 WebComic makes any WordPress theme webcomic ready by adding additional functionality, template tags, and widgets specifically designed for publishing webcomics.
 
-= New in 1.3 =
+= New in 1.4 =
 
-The following bugs have been fixed:
-
-* Thumbnails could not be retrieved using Secure filenames.
-* _comic\_archive()_ and _dropdown\_comics()_ incorrectly displayed post revisions, autosaves, etc.
-* A flaw in the WordPress taxonomy API prevents the total page count for Volumes from being set correctly, always showing as zero regardless of the number of pages in a volume.
+* __Thumbnail Options:__ WebComic now has a full set of thumbnail options separate from the regular WordPress media settings.
+* __Feed Options:__ You can now select what size comic image will be included in site feeds (full, large, medium, or thumbnail).
+* __Improved Auto Post Creation:__ Posts are now given the comic filename as a title when generating posts for orphaned comics or auto-generating posts during upload.
+* Includes new template tag get\_the\_collection, which retrieves all volume, chapter, and post information. Useful for creating custom comic archives instead of relying on the comic\_archive() template tag.
+* Much of the code base has been rewritten to improve performance, add features, and fix bugs.
 
 = Major Features =
 
@@ -62,6 +62,13 @@ Please see the [WebComic & InkBlot Codex](http://maikeruon.com/wcib/codex/) or  
 3. Chapters Page
 
 == Release Notes ==
+
+= 1.4 =
+
+* Added _Thumbnail Options_. WebComic now has an independent set of media options for generating comic thumbnails.
+* Added _Feed Options_. You can now select the size of the comic image that appears in site feeds.
+* Includes new template tag: get\_the\_collection.
+* Most of the code base has been rewritten to improve performance, add features, and fix bugs.
 
 = 1.3 =
 

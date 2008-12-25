@@ -3,7 +3,7 @@
 Plugin Name: WebComic
 Plugin URI: http://maikeruon.com/wcib/
 Description: WebComic makes any WordPress theme webcomic ready by adding additional template tags and widgets specifically designed for publishing webcomics.
-Version: 1.3
+Version: 1.4
 Author: Michael Sisk
 Author URI: http://maikeruon.com/
 
@@ -27,16 +27,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 
 //Activation Check - Make sure all of our options have a default value
-if(!get_option('comic_category') || !get_option('comic_directory') || !get_option('comic_current_chapter') || !get_option('comic_feed') || !get_option('comic_auto_post') || !get_option('comic_name_format') || !get_option('comic_name_format_date') || !get_option('comic_secure_names') || !get_option('comic_library_view')):
+if(!get_option('comic_category') || !get_option('comic_directory') || !get_option('comic_current_chapter') || !get_option('comic_feed') || !get_option('comic_feed_size') || !get_option('comic_auto_post') || !get_option('comic_name_format') || !get_option('comic_name_format_date') || !get_option('comic_secure_names') || !get_option('comic_thumbnail_crop') || !get_option('comic_thumbnail_size_w') || !get_option('comic_thumbnail_size_h') || !get_option('comic_medium_size_w') || !get_option('comic_medium_size_h') || !get_option('comic_large_size_w') || !get_option('comic_large_size_h') || !get_option('comic_library_view')):
 	function comic_set_defaults(){
 		add_option('comic_category','1');
 		add_option('comic_directory','comics');
 		add_option('comic_current_chapter','-1');
 		add_option('comic_feed','on');
+		add_option('comic_feed_size','full');
 		add_option('comic_auto_post','off');
 		add_option('comic_name_format','date');
 		add_option('comic_name_format_date','Y-m-d');
 		add_option('comic_secure_names','off');
+		add_option('comic_thumbnail_crop','off');
+		add_option('comic_thumbnail_size_w',get_option('thumbnail_size_w'));
+		add_option('comic_thumbnail_size_h',get_option('thumbnail_size_h'));
+		add_option('comic_medium_size_w',get_option('medium_size_w'));
+		add_option('comic_medium_size_h',get_option('medium_size_h'));
+		add_option('comic_large_size_w',get_option('large_size_w'));
+		add_option('comic_large_size_h',get_option('large_size_h'));
 		add_option('comic_library_view','list');
 		
 		if(!file_exists(ABSPATH.get_comic_directory()))
@@ -79,11 +87,19 @@ function get_comic_library_view($view=false){
 
 
 
+//Add the "chapter" taxonomy
+function register_chapters(){
+	register_taxonomy('chapter','post',array('hierarchical' => true, 'update_count_callback' => '_update_post_term_count'));
+}
+add_action('init','register_chapters');
+
+
+
 //Show or hide comic images based on user settings
 if('on' == get_option('comic_feed')):
 	function webcomic_feed($content) {
 		if(is_feed() && in_category('comic'))
-			return '<p>'.get_the_comic(false,'image').'</p>'.$content;
+			return '<p>'.get_the_comic(false,'image',get_option('comic_feed_size')).'</p>'.$content;
 		else
 			return $content;
 	}
@@ -91,10 +107,14 @@ if('on' == get_option('comic_feed')):
 endif;
 
 
+if(is_admin()):							   //Load tha admin files only when necessary
+	require_once('wc-admin.php');          //Contains general administrative functions
+	require_once('wc-admin-settings.php'); //Contains administrative functions for the settings page
+	require_once('wc-admin-library.php');  //Contains administrative functions for the library page
+	require_once('wc-admin-chapters.php'); //Contains administrative functions for the chapters page
+endif;
 
-//Split the functions to avoide 1000+ line plugin file
-require_once('wc-admin.php');   //Contains all administrative functions for managing the plugin
-require_once('wc-core.php');    //Contains the core functions and template tags for displaying and navigating comics
-include_once('wc-widgets.php'); //Contains widgits for recent comics, random comic, dropdown comics, comic archive, and modified recent posts
-include_once('markdown.php');   //Totally optional, only used for comic transcripts
+require_once('wc-core.php');               //Contains the core functions and template tags for displaying and navigating comics
+include_once('wc-widgets.php');            //Contains widgits for recent comics, random comic, dropdown comics, comic archive, and modified recent posts
+include_once('markdown.php');              //Totally optional, only used for comic transcripts
 ?>
