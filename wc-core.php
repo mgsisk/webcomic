@@ -235,7 +235,13 @@ function get_the_collection($hide_empty=true,$reverse=false){
 				
 				natsort($chapter_sorted_posts);
 				
-				$collection[$vid]['chapters'][$value->term_id]['posts'] = ($reverse) ? array_reverse($chapter_sorted_posts,true) : $chapter_sorted_posts;
+				$chapter_ordered_posts = ($reverse) ? array_reverse($chapter_sorted_posts,true) : $chapter_sorted_posts;
+				$chapter_post_keys = array();
+				
+				foreach($chapter_ordered_posts as $the_post => $timestamp)
+					array_push($chapter_post_keys,$the_post);
+				
+				$collection[$vid]['chapters'][$value->term_id]['posts'] = $chapter_post_keys;
 				
 				unset($collection_flat[$key]);
 			endif;
@@ -363,20 +369,20 @@ function comic_archive($descriptions=false,$pages=false,$reverse=false){
 	
 	$output = '<ol class="comic-library">';
 	
-	foreach($collection as $vid => $volume):
+	foreach($collection as $volume):
 		$description = ($descriptions && $volume['description']) ? '<p>'.$volume['description'].'</p>' : false;
 		$the_pages = ($pages && $volume['pages']) ? ' ('.$volume['pages'].' pages)' : false;
 		
 		$output .= '<li class="'.$volume['class'].'"><a href="'.$volume['link'].'">'.$volume['title'].$the_pages.'</a>'.$description.'<ol class="comic-volume-chapters">';
 		
-		foreach($volume['chapters'] as $cid => $chapter):
+		foreach($volume['chapters'] as $chapter):
 			
 			$description = ($descriptions && $chapter['description']) ? '<p>'.$chapter['description'].'</p>' : false;
 			$the_pages = ($pages && $chapter['pages']) ? ' ('.$chapter['pages'].' pages)' : false;
 			
 			$output .= '<li class="'.$chapter['class'].'"><a href="'.$chapter['link'].'">'.$chapter['title'].$the_pages.'</a>'.$description.'<ol class="comic-chapter-pages">';
 			
-			foreach($chapter['posts'] as $the_post => $timestamp)
+			foreach($chapter['posts'] as $the_post)
 				$output .= '<li class="comic-page-item comic-page-item-'.$the_post.'">'.get_the_comic($the_post,'link').'</li>';
 				
 			$output .= '</ol></li>';
@@ -423,7 +429,7 @@ function dropdown_comics($label='',$group=false,$numbered=false,$pages=false,$re
 					$output .= '<optgroup label="'.$chapter['title'].$append.'">';
 					if($numbered)
 						$i = 1;
-					foreach($chapter['posts'] as $the_post => $timestamp):
+					foreach($chapter['posts'] as $the_post):
 						$prepend = ($i) ? $i.'. ' : '';
 						$output .= '<option value="'.get_permalink($the_post).'">'.$prepend.get_the_title($the_post).'</option>';
 						if($numbered)
