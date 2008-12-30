@@ -41,7 +41,7 @@ WebComic also takes advantage of WordPress custom fields to provide a simple way
 1. Activate the plugin through the 'Plugins' menu in WordPress
 1. Start using WebComic!
 
-To take full advantage of WebComic, you'll need at least some understanding of creating or modifying WordPress themese. If this sounds scary, check out [InkBlot](http://rad.maikeruon.com/wcib/inkblot/), a highly customizable WordPress theme designed to take full advantage of all the features WebComic offers.
+To take full advantage of WebComic, you'll need at least some understanding of creating or modifying WordPress themes. If this sounds scary, check out [InkBlot](http://rad.maikeruon.com/wcib/inkblot/), a highly customizable WordPress theme designed to take full advantage of all the features WebComic offers.
 
 == Frequently Asked Questions ==
 
