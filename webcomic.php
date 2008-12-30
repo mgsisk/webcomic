@@ -3,7 +3,7 @@
 Plugin Name: WebComic
 Plugin URI: http://maikeruon.com/wcib/
 Description: WebComic makes any WordPress theme webcomic ready by adding additional template tags and widgets specifically designed for publishing webcomics.
-Version: 1.5
+Version: 1.6
 Author: Michael Sisk
 Author URI: http://maikeruon.com/
 
@@ -52,7 +52,7 @@ if(!get_option('comic_category') || !get_option('comic_directory') || !get_optio
 		if(!file_exists(ABSPATH.get_comic_directory().'thumbs/'))
 			mkdir(ABSPATH.get_comic_directory().'thumbs/',0775,true);
 		
-		echo '<div id="comic-warning" class="updated fade"><p><strong>Thanks for choosing WebComic! Please check the <a href="admin.php?page=webcomic/wc-admin.php">setting page</a> to configure the plugin.</strong></p></div>';
+		echo '<div class="updated fade"><p>'.sprintf(__('Thanks for choosing WebComic! Please check the <a href="%1$s">setting page</a> to configure the plugin.','webcomic'),'admin.php?page=webcomic/wc-admin.php').'</p></div>';
 	}
 	add_action('admin_notices', 'comic_set_defaults');
 endif;

@@ -1,10 +1,10 @@
 <?php
 //Register the WebComic administrative pages
 function comic_admin_pages_add(){
-	add_menu_page('WebComic','WebComic',8, __FILE__,'comic_page_settings');
-	add_submenu_page(__FILE__,'Settings','Settings',8,__FILE__,'comic_page_settings');
-	add_submenu_page(__FILE__,'Comic Library','Library',8,'comic-library','comic_page_library');
-	add_submenu_page(__FILE__,'Comic Chapters','Chapters',8,'comic-chapters','comic_page_chapters');
+	add_menu_page(__('WebComic'),__('WebComic','webcomic'),8, __FILE__,'comic_page_settings');
+	add_submenu_page(__FILE__,__('Settings','webcomic'),__('Settings','webcomic'),8,__FILE__,'comic_page_settings');
+	add_submenu_page(__FILE__,__('Comic Library','webcomic'),__('Library','webcomic'),8,'comic-library','comic_page_library');
+	add_submenu_page(__FILE__,__('Comic Chapters','webcomic'),__('Chapters','webcomic'),8,'comic-chapters','comic_page_chapters');
 }
 add_action('admin_menu', 'comic_admin_pages_add');
 

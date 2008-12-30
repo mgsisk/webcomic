@@ -57,16 +57,16 @@ function comic_page_settings(){
 		if(!file_exists(ABSPATH.get_comic_directory(true)))
 			mkdir(ABSPATH.get_comic_directory(true),0775,true);
 		
-		echo '<div id="message" class="updated fade"><p><strong>Settings saved.</strong></p></div>';
+		echo '<div id="message" class="updated fade"><p><strong>'.__('Settings saved.','webcomic').'</strong></p></div>';
 	endif;
 ?>
 	<div class="wrap">
-		<h2>WebComic</h2>
+		<h2><?php _e('WebComic','webcomic') ?></h2>
 		<form method="post" action="">
 			<?php wp_nonce_field('webcomic_save_settings'); ?>
 			<table class="form-table">
 				<tr>
-					<th scope="row"><label for="comic_category">Comic Category</label></th>
+					<th scope="row"><label for="comic_category"><?php _e('Comic Category','webcomic') ?></label></th>
 					<td>
 						<select name="comic_category" id="comic_category"> 
 						<?php 
@@ -82,20 +82,20 @@ function comic_page_settings(){
 							endforeach;
 						?>
 						</select>
-						<span class="setting-description">Select the category that your comic posts are assigned to.</span>
+						<span class="setting-description"><?php _e('Select the category that your comic posts are assigned to.','webcomic') ?></span>
 					</td>
 				</tr>
 				<tr>
-					<th scope="row"><label for="comic_directory">Comic Directory</label></th>
+					<th scope="row"><label for="comic_directory"><?php _e('Comic Directory','webcomic') ?></label></th>
 					<td>
-						<input type="text" name="comic_directory" id="comic_directory" value="<?php echo get_option('comic_directory'); ?>" class="code" /> <span class="setting-description">WebComic will look for your comics in <a href="<?php echo get_settings('siteurl').'/'.get_comic_directory(); ?>"><?php echo get_settings('siteurl').'/'.get_comic_directory(); ?></a></span>
+						<input type="text" name="comic_directory" id="comic_directory" value="<?php echo get_option('comic_directory'); ?>" class="code" /> <span class="setting-description"><?php _e('WebComic will look for your comics in','webcomic') ?> <a href="<?php echo get_settings('siteurl').'/'.get_comic_directory(); ?>"><?php echo get_settings('siteurl').'/'.get_comic_directory(); ?></a></span>
 					</td>
 				</tr>
 				<tr>
-					<th scope="row"><label for="comic_current_chapter">Current Chapter</label></th>
+					<th scope="row"><label for="comic_current_chapter"><?php _e('Current Chapter','webcomic') ?></label></th>
 					<td>
 						<select name="comic_current_chapter">
-							<option value="-1">N/A</option>
+							<option value="-1"><?php _e('N\A','webcomic') ?></option>
 						<?php
 							$collection = get_the_collection(false);
 							foreach($collection as $vid => $volume):
@@ -106,61 +106,61 @@ function comic_page_settings(){
 								<?php endforeach ?>
 							</optgroup>
 						<?php endforeach ?>
-						</select><span class="setting-description">Select the chapter new comic posts will be assigned to.</span>
+						</select><span class="setting-description"><?php _e('Select the chapter new comic posts will be assigned to.','webcomic') ?></span>
 					</td>
 				</tr>
 				<tr>
-					<th scope="row"><label for="comic_feed">Feed</label></th>
+					<th scope="row"><label for="comic_feed"><?php _e('Feed','webcomic') ?></label></th>
 					<td><input name="comic_feed" type="checkbox" id="comic_feed" value="on"<?php if('on' == get_option('comic_feed')) print ' checked="checked"'; ?> />
-					<label>Include
+					<label><?php _e('Include','webcomic') ?>
 						<select name="comic_feed_size">
-							<option value="full"<?php if('full' == get_option('comic_feed_size')) echo ' selected="selected"'; ?>>Full</option>
-							<option value="large"<?php if('large' == get_option('comic_feed_size')) echo ' selected="selected"'; ?>>Large</option>
-							<option value="medium"<?php if('medium' == get_option('comic_feed_size')) echo ' selected="selected"'; ?>>Medium</option>
-							<option value="thumb"<?php if('thumb' == get_option('comic_feed_size')) echo ' selected="selected"'; ?>>Thumbnail</option>
+							<option value="full"<?php if('full' == get_option('comic_feed_size')) echo ' selected="selected"'; ?>><?php _e('Full','webcomic') ?></option>
+							<option value="large"<?php if('large' == get_option('comic_feed_size')) echo ' selected="selected"'; ?>><?php _e('Large','webcomic') ?></option>
+							<option value="medium"<?php if('medium' == get_option('comic_feed_size')) echo ' selected="selected"'; ?>><?php _e('Medium','webcomic') ?></option>
+							<option value="thumb"<?php if('thumb' == get_option('comic_feed_size')) echo ' selected="selected"'; ?>><?php _e('Thumbnail','webcomic') ?></option>
 						</select>
-					comic images in feed</label></td>
+					<?php _e('comic images in feed','webcomic') ?></label></td>
 				</tr>
 				<tr>
-					<th scope="row">Thumbnail Size</th>
+					<th scope="row"><?php _e('Thumbnail Size','webcomic') ?></th>
 					<td>
-						<label>Width <input type="text" name="comic_thumbnail_size_w" value="<?php echo get_option('comic_thumbnail_size_w') ?>" class="small-text" /></label> <label>Height <input type="text" name="comic_thumbnail_size_h" value="<?php echo get_option('comic_thumbnail_size_h') ?>" class="small-text" /></label>
-						<p><label><input type="checkbox" name="comic_thumbnail_crop" value="on"<?php if('on' == get_option('comic_thumbnail_crop')) echo ' checked="checked"'; ?> /> Crop thumbnail to exact dimensions (normally thumbnails are proportional)</label></p>
+						<label><?php _e('Width','webcomic') ?> <input type="text" name="comic_thumbnail_size_w" value="<?php echo get_option('comic_thumbnail_size_w') ?>" class="small-text" /></label> <label><?php _e('Height','webcomic') ?> <input type="text" name="comic_thumbnail_size_h" value="<?php echo get_option('comic_thumbnail_size_h') ?>" class="small-text" /></label>
+						<p><label><input type="checkbox" name="comic_thumbnail_crop" value="on"<?php if('on' == get_option('comic_thumbnail_crop')) echo ' checked="checked"'; ?> /> <?php _e('Crop thumbnail to exact dimensions (normally thumbnails are proportional)','webcomic') ?></label></p>
 					</td>
 				</tr>
 				<tr>
-					<th scope="row">Medium Size</th>
-					<td><label>Max Width <input type="text" name="comic_medium_size_w" value="<?php echo get_option('comic_medium_size_w') ?>" class="small-text" /></label> <label>Max Height <input type="text" name="comic_medium_size_h" value="<?php echo get_option('comic_medium_size_h') ?>" class="small-text" /></label></td>
+					<th scope="row"><?php _e('Medium Size','webcomic') ?></th>
+					<td><label><?php _e('Max Width','webcomic') ?> <input type="text" name="comic_medium_size_w" value="<?php echo get_option('comic_medium_size_w') ?>" class="small-text" /></label> <label><?php _e('Max Height','webcomic') ?> <input type="text" name="comic_medium_size_h" value="<?php echo get_option('comic_medium_size_h') ?>" class="small-text" /></label></td>
 				</tr>
 				<tr>
-					<th scope="row">Large Size</th>
-					<td><label>Max Width <input type="text" name="comic_large_size_w" value="<?php echo get_option('comic_large_size_w') ?>" class="small-text" /></label> <label>Max Height <input type="text" name="comic_large_size_h" value="<?php echo get_option('comic_large_size_h') ?>" class="small-text" /></label></td>
+					<th scope="row"><?php _e('Large Size','webcomic') ?></th>
+					<td><label><?php _e('Max Width','webcomic') ?> <input type="text" name="comic_large_size_w" value="<?php echo get_option('comic_large_size_w') ?>" class="small-text" /></label> <label><?php _e('Max Height','webcomic') ?> <input type="text" name="comic_large_size_h" value="<?php echo get_option('comic_large_size_h') ?>" class="small-text" /></label></td>
 				</tr>
 			</table>
-			<h3>How do you name your comics?</h3>
+			<h3><?php _e('How do you name your comics?','webcomic') ?></h3>
 			<table class="form-table">
 				<tr>
-					<th scope="row"><label><input type="radio" name="comic_name_format" value="date"<?php if('date' == get_option('comic_name_format')) echo ' checked="checked"'; ?> /> Date</label></th>
+					<th scope="row"><label><input type="radio" name="comic_name_format" value="date"<?php if('date' == get_option('comic_name_format')) echo ' checked="checked"'; ?> /> <?php _e('Date','webcomic') ?></label></th>
 					<td>
-						<input type="text" name="comic_name_format_date" value="<?php print get_option('comic_name_format_date'); ?>" class="small-text" /> Your comics must have the  <a href="http://us2.php.net/date">date</a> somewhere in the filename, in the format of <code><?php echo date(get_option('comic_name_format_date')); ?></code>.
-						<p><label for="comic_auto_post"><input name="comic_auto_post" type="checkbox" id="comic_auto_post" value="on"<?php if('on' == get_option('comic_auto_post')) print ' checked="checked"'; ?> /> Automatically create comic posts during upload</label></p>
+						<input type="text" name="comic_name_format_date" value="<?php print get_option('comic_name_format_date'); ?>" class="small-text" /> <?php printf(__('Your comics must have the  <a href="%1$s">date</a> somewhere in the filename, in the format of','webcomic'), 'http://us2.php.net/date') ?> <code><?php echo date(get_option('comic_name_format_date')); ?></code>.
+						<p><label for="comic_auto_post"><input name="comic_auto_post" type="checkbox" id="comic_auto_post" value="on"<?php if('on' == get_option('comic_auto_post')) print ' checked="checked"'; ?> /> <?php _e('Automatically create comic posts during upload','webcomic') ?></label></p>
 					</td>
 				</tr>
 				<tr>
-					<th scope="row"><label><input type="radio" name="comic_name_format" value="slug"<?php if('slug' == get_option('comic_name_format')) echo ' checked="checked"'; ?> /> Title</label></th>
-					<td>Your comics must have the <a href="http://lorelle.wordpress.com/2007/09/02/understanding-the-wordpress-post-title-and-post-slug/">post slug</a> somewhere in the filename.</td>
+					<th scope="row"><label><input type="radio" name="comic_name_format" value="slug"<?php if('slug' == get_option('comic_name_format')) echo ' checked="checked"'; ?> /> <?php _e('Title','webcomic') ?></label></th>
+					<td><?php printf(__('Your comics must have the <a href="%1$s">post slug</a> somewhere in the filename.','webcomic'), 'http://lorelle.wordpress.com/2007/09/02/understanding-the-wordpress-post-title-and-post-slug/') ?></td>
 				</tr>
 				<tr>
-					<th scope="row"><label><input type="radio" name="comic_name_format" value="meta"<?php if('meta' == get_option('comic_name_format')) echo ' checked="checked"'; ?> /> Custom</label></th>
-					<td>Your comics must have the value of a <a href="http://codex.wordpress.org/Using_Custom_Fields">custom field</a> called <code>comic_filename</code> somewhere in the filename.</td>
+					<th scope="row"><label><input type="radio" name="comic_name_format" value="meta"<?php if('meta' == get_option('comic_name_format')) echo ' checked="checked"'; ?> /> <?php _e('Custom','webcomic') ?></label></th>
+					<td><?php printf(__('Your comics must have the value of a <a href="%1$s">custom field</a> called <code>comic_filename</code> somewhere in the filename.','webcomic'),'http://codex.wordpress.org/Using_Custom_Fields') ?></td>
 				</tr>
 				<tr>
-					<th scope="row"><label><input type="checkbox" name="comic_secure_names" value="on"<?php if('on' == get_option('comic_secure_names')) print ' checked="checked"'; ?> /> Secure</label></th>
-					<td>Automatically append a secure hash to comic filenames during upload to prevent read ahead and archive scraping.</td>
+					<th scope="row"><label><input type="checkbox" name="comic_secure_names" value="on"<?php if('on' == get_option('comic_secure_names')) print ' checked="checked"'; ?> /> <?php _e('Secure','webcomic') ?></label></th>
+					<td><?php _e('Automatically append a secure hash to comic filenames during upload to prevent read ahead and archive scraping.','webcomic') ?></td>
 				</tr>
 			</table>
 		<p class="submit">
-			<input type="submit" name="Submit" class="button-primary" value="Save Changes" />
+			<input type="submit" name="Submit" class="button-primary" value="<?php _e('Save Changes','webcomic') ?>" />
 			<input type="hidden" name="action" value="webcomic_save_settings" />
 		</p>
 		</form>

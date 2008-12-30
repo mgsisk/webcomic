@@ -12,18 +12,18 @@ function comic_page_library(){
 		$chapter = (isset($_REQUEST['Submit1'])) ? $_REQUEST['comic_chapter1'] : $_REQUEST['comic_chapter2'];
 		
 		if(!$comics):
-			echo '<div id="message" class="error"><p>Please select at least one comic.</p></div>';
+			echo '<div id="message" class="error"><p>'.__('Please select at least one comic.','webcomic').'</p></div>';
 		else:
 			if(-1 == $chapter):
 				foreach($comics as $comic)
 					remove_post_from_chapter($comic);
 				
-				echo '<div id="message" class="updated fade"><p><strong>All comics removed from chapters.</strong></p></div>';
+				echo '<div id="message" class="updated fade"><p>'.__('All comics removed from chapters.','webcomic').'</p></div>';
 			else:
 				foreach($comics as $comic)
 					add_post_to_chapter($comic,$chapter);
 					
-				echo '<div id="message" class="updated fade"><p><strong>All comics assigned to new chapter.</strong></p></div>';
+				echo '<div id="message" class="updated fade"><p>'.__('All comics assigned to new chapter.','webcomic').'</p></div>';
 			endif;
 		endif;
 	endif;
@@ -45,7 +45,7 @@ function comic_page_library(){
 		endswitch;
 		
 		if($invalid_format):
-			echo '<div id="message" class="error"><p><strong>Invalid file format. Images must be either gif, jpg, jpeg, or png.</strong></p></div>';
+			echo '<div id="message" class="error"><p>'.__('Invalid file format. Images must be gif, jpg, jpeg, or png.','webcomic').'</p></div>';
 		else:
 			$ext = '.'.$ext;
 			$file = basename($_FILES['new_comic_file']['name'], $ext);
@@ -88,16 +88,16 @@ function comic_page_library(){
 					));
 				endif;
 					
-				echo '<div id="message" class="updated fade"><p><strong>Comic uploaded.</strong></p></div>';
+				echo '<div id="message" class="updated fade"><p>'.__('New comic uploaded','webcomic').'</p></div>';
 			else:
 				switch($_FILES['new_comic_file']['error']):
 					case 1: //For simplicities sake we treat these as the same error.
-					case 2: echo '<div id="message" class="error"><p><strong>The comic is too large to upload.</strong></p></div>'; break;
-					case 3: echo '<div id="message" class="error"><p><strong>The comic was only partially uploaded.</strong></p></div>'; break;
-					case 4: echo '<div id="message" class="error"><p><strong>No comic was uploaded.</strong></p></div>'; break;
-					case 6: echo '<div id="message" class="error"><p><strong>WebComic could not find your web servers temporary directory.</strong></p></div>'; break;
-					case 7: echo '<div id="message" class="error"><p><strong>The comic could not be saved properly after upload.</strong></p></div>'; break;
-					case 8: echo '<div id="message" class="error"><p><strong>The comic upload was haulted by a PHP extensions.</strong></p></div>'; break;
+					case 2: echo '<div id="message" class="error"><p>'.__('The comic is too large to upload.','webcomic').'</p></div>'; break;
+					case 3: echo '<div id="message" class="error"><p>'.__('The comic was only partially uploaded.','webcomic').'</p></div>'; break;
+					case 4: echo '<div id="message" class="error"><p>'.__('No comic was uploaded.','webcomic').'</p></div>'; break;
+					case 6: echo '<div id="message" class="error"><p>'.__('WebComic could not find your web servers temporary directory.','webcomic').'</p></div>'; break;
+					case 7: echo '<div id="message" class="error"><p>'.__('The comic could not be saved properly after upload.','webcomic').'</p></div>'; break;
+					case 8: echo '<div id="message" class="error"><p>'.__('The comic upload was haulted by a PHP extensions.','webcomic').'</p></div>'; break;
 				endswitch;
 			endif;
 		endif;
@@ -131,12 +131,14 @@ function comic_page_library(){
 				endwhile;
 				closedir($dir);
 				
-				echo '<div id="message" class="updated fade"><p><strong>Comic <em>'.$_REQUEST['webcomic_old_name'].'</em> renamed to <em>'.$_REQUEST['webcomic_new_name'].'.'.$ext.'</em></strong></p></div>';
+				echo '<div id="message" class="updated fade"><p>';
+				printf(__('Comic <em>%1$s</em> renamed to <em>%2$s</em>','webcomic'),$_REQUEST['webcomic_old_name'],$_REQUEST['webcomic_new_name'].'.'.$ext);
+				echo '</p></div>';
 			else:
-				echo '<div id="message" class="error"><p><strong>A filename must be provided.</strong></p></div>';
+				echo '<div id="message" class="error"><p>'.__('A filename must be provided','webcomic').'</p></div>';
 			endif;
 		else:
-			echo '<div id="message" class="error"><p><strong>WebComic could not rename'.$_REQUEST['webcomic_old_name'].'</strong></p></div>';
+			echo '<div id="message" class="error"><p>'.__('WebComic could not rename','webcomic').' '.$_REQUEST['webcomic_old_name'].'</strong></p></div>';
 		endif;
 	endif;
 	
@@ -156,9 +158,9 @@ function comic_page_library(){
 			endwhile;
 			closedir($dir);
 			
-			echo '<div id="message" class="updated fade"><p><strong>Comic '.$_REQUEST['file'].' deleted.</strong></p></div>';
+			echo '<div id="message" class="updated fade"><p>'.__('Deleted comic','webcomic').' '.$_REQUEST['file'].'.</p></div>';
 		else:
-			echo '<div id="message" class="error"><p><strong>Comic '.$_REQUEST['file'].' could not be deleted.</strong></p></div>';
+			echo '<div id="message" class="error"><p>'.$_REQUEST['file'].' '.__('could not be deleted.','webcomic').'</p></div>';
 		endif;
 	endif;
 	
@@ -204,7 +206,7 @@ function comic_page_library(){
 		endwhile;
 		closedir($dir);
 			
-		echo '<div id="message" class="updated fade"><p><strong>All thumbnails regenrated.</strong></p></div>';
+		echo '<div id="message" class="updated fade"><p>'.__('All thumbnails regenrated.','webcomic').'</p></div>';
 	endif;
 	
 	
@@ -234,12 +236,10 @@ function comic_page_library(){
 			endif;
 		endforeach;
 		
-		if(!$i):
-			echo '<div id="message" class="error"><p><strong>No posts could be automatically generated.</strong></p></div>';
-		else:
-			$s = ($i > 1) ? 's' : '';
-			echo '<div id="message" class="updated fade"><p><strong>'.$i.' post'.$s.' automatically generated.</strong></p></div>';
-		endif;
+		if(!$i)
+			echo '<div id="message" class="error"><p>'.__('No posts could be automatically generated.','webcomic').'</p></div>';
+		else
+			echo '<div id="message" class="updated fade"><p>'.sprintf(__ngettext('%d post automatically generated.','%d posts automatically generated.',$i,'webcomic'),$i).'</p></div>';
 	endif;
 	
 	
@@ -253,7 +253,7 @@ function comic_page_library(){
 	$comic_files = array();
 	$path = ABSPATH.get_comic_directory();
 	if(!is_dir($path)) 
-		die('<p class="error"><strong>Webcomic could not access your comic directory.</strong></p>');
+		die('<p class="error">'.__('Webcomic could not access your comic directory.','webcomic').'</p>');
 	$dir = opendir($path);
 	while(false !== ($file = readdir($dir))):
 		if(is_dir($path.$file))
@@ -339,7 +339,7 @@ function comic_page_library(){
 			<?php wp_nonce_field('webcomic_upload'); ?>
 			<p class="alignleft">
 				<input type="file" name="new_comic_file" id="new_comic_file" />
-				<input type="submit" name="submit-upload" class="button-primary upload" value="Upload Comic" />
+				<input type="submit" name="submit-upload" class="button-primary upload" value="<?php _e('Upload Comic','webcomic') ?>" />
 				<input type="hidden" name="MAX_FILE_SIZE" value="20000000" />
 				<input type="hidden" name="webcomic_upload_status" value="0" />
 				<input type="hidden" name="action" value="webcomic_upload" />
@@ -348,7 +348,7 @@ function comic_page_library(){
 		<form method="post" action="">
 			<?php wp_nonce_field('regen_comic_thumbs'); ?>
 			<p class="alignright">
-				<input type="submit" value="Regenerate Thumbnails" class="button-primary" title="This may take several minutes for large libraries." />
+				<input type="submit" class="button-primary" value="<?php _e('Regenerate Thumbnails','webcomic') ?>" title="<?php _e('This may take several minutes for large libraries.','webcomic') ?>" />
 				<input type="hidden" name="action" value="regen_comic_thumbs" />
 			</p>
 		</form>
@@ -358,7 +358,7 @@ function comic_page_library(){
 			<div class="tablenav">
 				<div class="alignleft actions">
 					<select name="comic_chapter1">
-						<option value="-1">N/A</option>
+						<option value="-1"><?php _e('N\A','webcomic') ?></option>
 					<?php
 						$collection = get_the_collection(false);
 						foreach($collection as $vid => $volume):
@@ -370,7 +370,7 @@ function comic_page_library(){
 						</optgroup>
 					<?php endforeach ?>
 					</select>
-					<input type="submit" value="Update Chapter" name="Submit1" class="button-secondary action" />
+					<input type="submit" value="<?php _e('Update Chapters','webcomic') ?>" name="Submit1" class="button-secondary action" />
 				</div>
 				<?php echo $paged_output; ?>
 				<div class="view-switch">
@@ -382,34 +382,34 @@ function comic_page_library(){
 				<thead>
 					<tr>
 						<th scope="col" class="check-column"><input type="checkbox" /></th><?php echo $comic_thumb ?>
-						<th scope="col">Comic</th>
-						<th scope="col">Post</th>
-						<th scope="col">Volume</th>
-						<th scope="col">Chapter</th>
-						<th scope="col">Custom</th>
-						<th scope="col">Slug</th>
-						<th scope="col">Date</th>
+						<th scope="col"><?php _e('Comic','webcomic') ?></th>
+						<th scope="col"><?php _e('Post','webcomic') ?></th>
+						<th scope="col"><?php _e('Volume','webcomic') ?></th>
+						<th scope="col"><?php _e('Chapter','webcomic') ?></th>
+						<th scope="col"><?php _e('Custom','webcomic') ?></th>
+						<th scope="col"><?php _e('Slug','webcomic') ?></th>
+						<th scope="col"><?php _e('Date','webcomic') ?></th>
 					</tr>
 				</thead>
 				<tfoot>
 					<tr>
 						<th scope="col" class="check-column"><input type="checkbox" /></th><?php echo $comic_thumb ?>
-						<th scope="col">Comic</th>
-						<th scope="col">Post</th>
-						<th scope="col">Volume</th>
-						<th scope="col">Chapter</th>
-						<th scope="col">Custom</th>
-						<th scope="col">Slug</th>
-						<th scope="col">Date</th>
+						<th scope="col"><?php _e('Comic','webcomic') ?></th>
+						<th scope="col"><?php _e('Post','webcomic') ?></th>
+						<th scope="col"><?php _e('Volume','webcomic') ?></th>
+						<th scope="col"><?php _e('Chapter','webcomic') ?></th>
+						<th scope="col"><?php _e('Custom','webcomic') ?></th>
+						<th scope="col"><?php _e('Slug','webcomic') ?></th>
+						<th scope="col"><?php _e('Date','webcomic') ?></th>
 					</tr>
 				</tfoot>
 				<tbody>
 				<?php foreach($comic_posts as $post): ?>
 					<tr<?php if($post['file']): if($i%2): ?> class="alt"<?php endif; else: ?> style="background:#fdd"<?php endif; ?>>
 						<th scope="row" class="check-column"><input type="checkbox" name="comics[]" value="<?php echo $post['id'] ?>" /></th>
-						<?php if($comic_thumb): ?><td><a href="<?php echo $post['file'] ?>"><img src="<?php echo $post['thumb'] ?>" alt="<?php echo $post['name'] ?>" /></a></td><?php endif; ?>
-						<td><?php if($post['file']): ?><strong><a href="<?php echo $post['file'] ?>"><?php echo $post['name'] ?></a></strong><div class="row-actions"><a href="<?php echo wp_nonce_url('admin.php?page=comic-library'.$paged_link.'&amp;action=webcomic_delete&amp;file='.$post['name'], 'webcomic_delete') ?>">Delete</a></div><?php else: ?><strong>No Comic Found</strong><?php endif; ?></td>
-						<td><strong><a href="<?php echo $post['permalink'] ?>"><?php echo $post['title'] ?></a></strong><div class="row-actions"><a href="post.php?action=edit&amp;post=<?php echo $post['id'] ?>">Edit</a></div></td>
+						<?php if($comic_thumb): ?><td style="text-align:center"><a href="<?php echo $post['file'] ?>"><img src="<?php echo $post['thumb'] ?>" alt="<?php echo $post['name'] ?>" /></a></td><?php endif; ?>
+						<td><?php if($post['file']): ?><strong><a href="<?php echo $post['file'] ?>"><?php echo $post['name'] ?></a></strong><div class="row-actions"><a href="<?php echo wp_nonce_url('admin.php?page=comic-library'.$paged_link.'&amp;action=webcomic_delete&amp;file='.$post['name'], 'webcomic_delete') ?>"><?php _e('Delete','webcomic') ?></a></div><?php else: ?><strong><?php _e('No Comic Found','webcomic') ?></strong><?php endif; ?></td>
+						<td><strong><a href="<?php echo $post['permalink'] ?>"><?php echo $post['title'] ?></a></strong><div class="row-actions"><a href="post.php?action=edit&amp;post=<?php echo $post['id'] ?>"><?php _e('Edit','webcomic') ?></a></div></td>
 						<td><?php echo $post['volume'] ?></td>
 						<td><?php echo $post['chapter'] ?></td>
 						<td><?php echo $post['custom'] ?></td>
@@ -422,7 +422,7 @@ function comic_page_library(){
 			<div class="tablenav">
 				<div class="alignleft actions">
 					<select name="comic_chapter2">
-						<option value="-1">N/A</option>
+						<option value="-1"><?php _e('N\A','webcomic') ?></option>
 					<?php
 						$collection = get_the_collection(false);
 						foreach($collection as $vid => $volume):
@@ -434,21 +434,21 @@ function comic_page_library(){
 						</optgroup>
 					<?php endforeach ?>
 					</select>
-					<input type="submit" value="Update Chapter" name="Submit2" class="button-secondary action" />
+					<input type="submit" value="<?php _e('Update Chapters','webcomic') ?>" name="Submit2" class="button-secondary action" />
 					<input type="hidden" name="action" value="update_comic_chapters" />
 				</div>
 				<?php echo $paged_output; ?>
 			</div>
 		</form>
 <?php else: ?>
-		<p class="error"><strong>No comic posts could be found.</strong></p>
+		<p class="error"><?php _e('No comic posts could be found.','webcomic') ?></p>
 <?php endif; if($comic_files): //Display the orphaned comic files ?>
-		<h3 class="alignleft">Orphaned Comics</h3>
+		<h3 class="alignleft"><?php _e('Orphaned Comics','webcomic') ?></h3>
 		<?php if('date' == get_option('comic_name_format')): ?>
 		<form method="post" action="">
 			<?php wp_nonce_field('generate_comic_posts'); ?>
 			<p class="alignright">
-				<input type="submit" value="Generate Missing Posts" class="button-primary" title="Attempt to generate posts for orphaned comics." />
+				<input type="submit" class="button-primary" value="<?php _e('Generate Missing Posts','webcomic') ?>" title="<?php _e('Attempt to generate posts for orphaned comics.','webcomic') ?>" />
 				<input type="hidden" name="orphaned_comics" value="<?php foreach($comic_files as $file) echo $file.'/'; ?>" />
 				<input type="hidden" name="action" value="generate_comic_posts" />
 			</p>
@@ -457,21 +457,21 @@ function comic_page_library(){
 		<table class="widefat">
 			<thead>
 				<tr>
-					<th scope="col">File</th>
-					<th scope="col">Actions</th>
+					<th scope="col"><?php _e('File','webcomic') ?></th>
+					<th scope="col"><?php _e('Actions','webcomic') ?></th>
 				</tr>
 			</thead>
 			<tfoot>
 				<tr>
-					<th scope="col">File</th>
-					<th scope="col">Actions</th>
+					<th scope="col"><?php _e('File','webcomic') ?></th>
+					<th scope="col"><?php _e('Actions','webcomic') ?></th>
 				</tr>
 			</tfoot>
 			<tbody>
 			<?php foreach($comic_files as $file): ?>
 				<tr<?php if($i%2): ?> class="alt"<?php endif; ?>>
-					<td><strong><a href="<?php echo get_settings('siteurl').'/'.get_comic_directory().$file ?>"><?php echo $file ?></a></strong><div class="row-actions"><a href="<?php echo wp_nonce_url('admin.php?page=comic-library'.$paged_link.'&amp;action=webcomic_delete&amp;file='.$file,'webcomic_delete') ?>">Delete</a></div></td>
-					<td><form method="post" action=""><?php wp_nonce_field('webcomic_rename'); ?><input type="text" name="webcomic_new_name" class="small-text" /><input type="submit" name="Submit" class="button-secondary upload" value="Rename" /> <input type="hidden" name="webcomic_old_name" value="<?php echo $file ?>" /><input type="hidden" name="action" value="webcomic_rename" /></form></td>
+					<td><strong><a href="<?php echo get_settings('siteurl').'/'.get_comic_directory().$file ?>"><?php echo $file ?></a></strong><div class="row-actions"><a href="<?php echo wp_nonce_url('admin.php?page=comic-library'.$paged_link.'&amp;action=webcomic_delete&amp;file='.$file,'webcomic_delete') ?>"><?php _e('Delete','webcomic') ?></a></div></td>
+					<td><form method="post" action=""><?php wp_nonce_field('webcomic_rename'); ?><input type="text" name="webcomic_new_name" class="small-text" /><input type="submit" name="Submit" class="button-secondary upload" value="<?php _e('Rename','webcomic') ?>" /> <input type="hidden" name="webcomic_old_name" value="<?php echo $file ?>" /><input type="hidden" name="action" value="webcomic_rename" /></form></td>
 				</tr>
 			<?php $i++; endforeach; $i=0; ?>
 			</tbody>
