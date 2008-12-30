@@ -15,7 +15,7 @@ WebComic makes any WordPress theme webcomic ready by adding additional functiona
 = New in 1.5 =
 
 * __Search Integration:__ Comic transcripts and custom comic descriptions (using the comic\_transcript and comic\_description custom fields, respectively) are now seamlessly integrated into WordPress' search functionality and will be included in searches.
-* __custom column:__  The Comic Library now has a custom column, which will display the custom field value of _comic_filename_ if custom filenames are being used.
+* __custom column:__  The Comic Library now has a custom column, which will display the custom field value of _comic\_filename_ if custom filenames are being used.
 * Minor bug fixes and feature enhancements.
 
 = Major Features =
@@ -64,7 +64,7 @@ Please see the [WebComic & InkBlot Codex](http://maikeruon.com/wcib/codex/) or  
 = 1.5 =
 
 * Added _Search Integration_. Comic transcripts and custom descriptions are now seamlessly integrated into the WordPress search function and will be included in searches.
-* Added _custom_ column to the Media Library. This will display the custom field value of _comic_filename_ (if custom filenames are being used).
+* Added _custom_ column to the Media Library. This will display the custom field value of _comic\_filename_ (if custom filenames are being used).
 * Minor bug fixes and feature enhancements.
 
 = 1.4 =
