@@ -1,5 +1,7 @@
 <?php
 function comic_page_chapters(){
+	load_webcomic_domain();
+	
 	if('create_new_chapter' == $_REQUEST['action']):
 		check_admin_referer('create_new_chapter');
 		

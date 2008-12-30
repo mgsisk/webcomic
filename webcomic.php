@@ -26,9 +26,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 
 
+//Load plugin domain for translations
+function load_webcomic_domain(){
+	load_plugin_textdomain('webcomic', PLUGINDIR.'/'.dirname(plugin_basename(__FILE__)), dirname(plugin_basename(__FILE__)));
+}
+
+
+
 //Activation Check - Make sure all of our options have a default value
 if(!get_option('comic_category') || !get_option('comic_directory') || !get_option('comic_current_chapter') || !get_option('comic_feed') || !get_option('comic_feed_size') || !get_option('comic_auto_post') || !get_option('comic_name_format') || !get_option('comic_name_format_date') || !get_option('comic_secure_names') || !get_option('comic_thumbnail_crop') || false===get_option('comic_thumbnail_size_w') || false===get_option('comic_thumbnail_size_h') || false===get_option('comic_medium_size_w') || false===get_option('comic_medium_size_h') || false===get_option('comic_large_size_w') || false===get_option('comic_large_size_h') || !get_option('comic_library_view')):
 	function comic_set_defaults(){
+		load_webcomic_domain();
+		
 		add_option('comic_category','1');
 		add_option('comic_directory','comics');
 		add_option('comic_current_chapter','-1');

@@ -1,5 +1,7 @@
 <?php
 function comic_page_library(){
+	load_webcomic_domain();
+	
 	if(isset($_REQUEST['comic_library']))
 		update_option('comic_library_view',$_REQUEST['comic_library']);
 	

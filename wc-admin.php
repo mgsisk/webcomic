@@ -1,6 +1,8 @@
 <?php
 //Register the WebComic administrative pages
 function comic_admin_pages_add(){
+	load_webcomic_domain();
+	
 	add_menu_page(__('WebComic'),__('WebComic','webcomic'),8, __FILE__,'comic_page_settings');
 	add_submenu_page(__FILE__,__('Settings','webcomic'),__('Settings','webcomic'),8,__FILE__,'comic_page_settings');
 	add_submenu_page(__FILE__,__('Comic Library','webcomic'),__('Library','webcomic'),8,'comic-library','comic_page_library');

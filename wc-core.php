@@ -27,6 +27,8 @@ function ignore_comics($number=false){
 
 //Retrieves the comic information associated with the specified or current post
 function get_the_comic($comic=false,$format='post',$display=false){
+	load_webcomic_domain();
+	
 	global $wpdb,$post;
 	
 	if($comic):
@@ -350,12 +352,16 @@ function next_comic_link($label='Next &gt;'){
 
 //Displays the chapter the current post is associated with, linked to the first page in the chapter
 function the_chapter(){
+	load_webcomic_domain();
+	
 	$chapter = get_the_chapter();
 	echo '<a href="'.$chapter['link'].'" title="'.__('Go to the beginning of','webcomic').' '.$chapter['title'].'">'.$chapter['title'].'</a>';
 }
 
 //Displays the volume the current post is associated with, linked to the first page in the volume
 function the_volume(){
+	load_webcomic_domain();
+	
 	$volume = get_the_volume();
 	echo '<a href="'.$volume['link'].'" title="'.__('Go to the beginning of','webcomic').' '.$volume['title'].'">'.$volume['title'].'</a>';
 }
@@ -399,6 +405,8 @@ function comic_archive($descriptions=false,$pages=false,$reverse=false){
 
 //Displays a form select with all comic posts
 function dropdown_comics($label='',$group=false,$numbered=false,$pages=false,$reverse=false){
+	load_webcomic_domain();
+	
 	$label = ($label) ? $label : __('Quick Archive','webcomic');
 	
 	$output = '<select name="comic-select" class="dropdown-comics"><option value="0">'.$label.'</option>';

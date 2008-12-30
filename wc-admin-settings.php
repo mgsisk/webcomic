@@ -1,5 +1,7 @@
 <?php
-function comic_page_settings(){ 
+function comic_page_settings(){
+	load_webcomic_domain();
+	
 	if('webcomic_save_settings' == $_REQUEST['action']):
 		check_admin_referer('webcomic_save_settings');
 		
