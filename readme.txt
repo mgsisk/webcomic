@@ -4,7 +4,7 @@ Donate link: http://maikeruon.com/wcib/
 Tags: webcomic, comic, file manager, taxonomy, chapters, volumes
 Requires at least: 2.5
 Tested up to: 2.7
-Stable tag: 1.4
+Stable tag: 1.5
 
 WebComic makes any WordPress theme webcomic ready by adding new template tags and widgets specifically designed for publishing webcomics.
 
@@ -12,13 +12,11 @@ WebComic makes any WordPress theme webcomic ready by adding new template tags an
 
 WebComic makes any WordPress theme webcomic ready by adding additional functionality, template tags, and widgets specifically designed for publishing webcomics.
 
-= New in 1.4 =
+= New in 1.5 =
 
-* __Thumbnail Options:__ WebComic now has a full set of thumbnail options separate from the regular WordPress media settings.
-* __Feed Options:__ You can now select what size comic image will be included in site feeds (full, large, medium, or thumbnail).
-* __Improved Auto Post Creation:__ Posts are now given the comic filename as a title when generating posts for orphaned comics or auto-generating posts during upload.
-* Includes new template tag get\_the\_collection, which retrieves all volume, chapter, and post information. Useful for creating custom comic archives instead of relying on the comic\_archive() template tag.
-* Much of the code base has been rewritten to improve performance, add features, and fix bugs.
+* __Search Integration:__ Comic transcripts and custom comic descriptions (using the comic_transcript and comic_description custom fields, respectively) are now seamlessly integrated into WordPress' search functionality and will be included in searches.
+* __custom column:__  The Comic Library now has a custom column, which will display the custom field value of _comic_filename_ if custom filenames are being used.
+* Minor bug fixes and feature enhancements.
 
 = Major Features =
 
@@ -62,6 +60,12 @@ Please see the [WebComic & InkBlot Codex](http://maikeruon.com/wcib/codex/) or  
 3. Chapters Page
 
 == Release Notes ==
+
+= 1.5 =
+
+* Added _Search Integration_. Comic transcripts and custom descriptions are now seamlessly integrated into the WordPress search function and will be included in searches.
+* Added _custom_ column to the Media Library. This will display the custom field value of _comic_filename_ (if custom filenames are being used).
+* Minor bug fixes and feature enhancements.
 
 = 1.4 =
 
