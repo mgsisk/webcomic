@@ -52,7 +52,7 @@ if(!get_option('comic_category') || !get_option('comic_directory') || !get_optio
 		if(!file_exists(ABSPATH.get_comic_directory().'thumbs/'))
 			mkdir(ABSPATH.get_comic_directory().'thumbs/',0775,true);
 		
-		echo '<div class="updated fade"><p>'.sprintf(__('Thanks for choosing WebComic! Please check the <a href="%1$s">setting page</a> to configure the plugin.','webcomic'),'admin.php?page=webcomic/wc-admin.php').'</p></div>';
+		echo '<div class="updated fade"><p>'.sprintf(__('Thanks for choosing WebComic! Please check the <a href="%1$s">settings page</a> to configure the plugin.','webcomic'),'admin.php?page=webcomic/wc-admin.php').'</p></div>';
 	}
 	add_action('admin_notices', 'comic_set_defaults');
 endif;
