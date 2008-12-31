@@ -62,7 +62,7 @@ function get_comic_library_view($view=false){
 //Feed Filter - Didn't know where else to stick it XD
 if('on' == get_option('comic_feed')):
 	function webcomic_feed($content) {
-		if(is_feed() && in_category('comic')):
+		if(is_feed() && in_category(get_option('comic_category'))):
 			return '<p>'.the_comic().'</p>'.$content;
 		else:
 			return $content;
