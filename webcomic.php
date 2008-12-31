@@ -107,7 +107,7 @@ add_action('init','register_chapters');
 //Show or hide comic images based on user settings
 if('on' == get_option('comic_feed')):
 	function webcomic_feed($content) {
-		if(is_feed() && in_category('comic'))
+		if(is_feed() && in_category(get_option('comic_category')))
 			return '<p>'.get_the_comic(false,'image',get_option('comic_feed_size')).'</p>'.$content;
 		else
 			return $content;
