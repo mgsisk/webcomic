@@ -1,11 +1,13 @@
 <?php
 //Generates a new comic loop
-function comic_loop($number=1){
+function comic_loop($number=1,$reverse=false){
 	global $wp_query,$paged;
 	$wp_query->in_the_loop=true;
 	
+	$reverse = ($reverse) ? 'ASC' : 'DESC';
+	
 	$comics = new WP_Query;
-	$comics->query('cat='.get_comic_category().'&posts_per_page='.$number.'&paged='.$paged);
+	$comics->query('cat='.get_comic_category().'&order='.$reverse.'&posts_per_page='.$number.'&paged='.$paged);
 	
 	return $comics;
 }
@@ -92,9 +94,9 @@ function get_the_comic($comic=false,$format='post',$display=false){
 	
 	$dir = opendir($path);
 	while(($file = readdir($dir)) !== false):
-		if(false !== strstr($file,$comic_name)):
+		if(false !== strpos($file,$comic_name)):
 			if($thumb):
-				if(false !== strstr($file,$display)):
+				if(false !== strpos($file,$display)):
 					$comic_file = $file;
 					break;
 				else:
@@ -355,7 +357,7 @@ function the_chapter(){
 	load_webcomic_domain();
 	
 	$chapter = get_the_chapter();
-	echo '<a href="'.$chapter['link'].'" title="'.__('Go to the beginning of','webcomic').' '.$chapter['title'].'">'.$chapter['title'].'</a>';
+	echo '<a href="'.$chapter['link'].'" title="'.sprintf(__('Go to the beginning of %1$s','webcomic'),$chapter['title']).'">'.$chapter['title'].'</a>';
 }
 
 //Displays the volume the current post is associated with, linked to the first page in the volume
@@ -363,7 +365,7 @@ function the_volume(){
 	load_webcomic_domain();
 	
 	$volume = get_the_volume();
-	echo '<a href="'.$volume['link'].'" title="'.__('Go to the beginning of','webcomic').' '.$volume['title'].'">'.$volume['title'].'</a>';
+	echo '<a href="'.$volume['link'].'" title="'.sprintf(__('Go to the beginning of %1$s','webcomic'),$volume['title']).'">'.$volume['title'].'</a>';
 }
 
 //Displays a copmlete list of comic volumes, chapters, and posts

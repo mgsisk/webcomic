@@ -12,20 +12,26 @@ WebComic makes any WordPress theme webcomic ready by adding new template tags an
 
 WebComic makes any WordPress theme webcomic ready by adding additional functionality, template tags, and widgets specifically designed for publishing webcomics.
 
-= New in 1.5 =
+= New in 1.6 =
 
-* __Search Integration:__ Comic transcripts and custom comic descriptions (using the comic\_transcript and comic\_description custom fields, respectively) are now seamlessly integrated into WordPress' search functionality and will be included in searches.
-* __custom column:__  The Comic Library now has a custom column, which will display the custom field value of _comic\_filename_ if custom filenames are being used.
-* Minor bug fixes and feature enhancements.
+* __The Meta Box:__ WebComic now adds a new meta box to the add/edit post pages, which allows you to upload a comic directly from the add/edit post page and add custom descriptions, transcripts, and filenames more easily. Many thanks to Andrew Naylor for inspiring this addition with his original modifications.
+* __New Permission Scheme:__ WebComic permissions have been updated to check for specific user capabilities instead of limiting all plugin access to site administrators. WordPress _Author's_ now have access to a limited Comic Library and WordPress _Editor's_ now have access to the full Comic Library and Comic Chapters.
+* __Enhanced Comic Library:__ The Comic Library now offers the option to regenerate individual comic thumbnails, delete comic posts, and now compares filenames during upload to prevent accidental overwrites (with a new option to force overwriting an existing file).
+* __Enhanced Auto Post:__  Automatic post creation is now compatible with all file name options. When enabled, new options to set (or override for the "Date" naming option) the publish datetime for the generated comic post are available.
+* __Enhanced Orphan Post Generation:__ Orphaned post generation is now compatible with all file name options. New options to set (or override for the "Date" naming option) the publish datetime and interval ("Post every week starting January 1, 2009", for example) for the generated comic posts are now available.
+* __Internationalization Support:__ WebComic now makes full use of WordPress's I18n features to allow for localization.
+* The library view option is now set per-user instead of globally. If you're using the thumbnail view when you upgrade your view will initially be reset to the list view.
+* Corrected a flaw in the search functions that prevented transcripts and custom descriptions from being found when searching for more than one term.
+* Additional minor bug fixes and feature enhancements
 
 = Major Features =
 
-* __Flexible File Names:__ WebComic can find your comics using a date format of your choice (defaults to YYYY-MM-DD), post slugs, or entirely custom values defined by you using the comic_filename custom field.
-* __Manage your Library:__ The Library allows you to manage your comics and their associated posts from within WordPress. View all of your posts and which comic they’re associated with, see which posts don’t have a comic (and which comics don’t have a post), and upload, rename, and delete comics through WordPress.
-* __Organize your Chapters:__ The Chapters feature allows you to create volumes and chapters and assign posts to them. WebComic has a number of widgets and template tags designed to display your comics organized by volume and chapter.
-* __Template Tags for WordPress Themes:__ Leverage WebComics new template tags and widgets to turn _any_ WordPress theme into a webcomic site.
+* __Flexible File Names:__ WebComic can find comic files based on a custom date format, post slugs, or entirely custom values defined by you.
+* __Manage Your Library:__ The Library allows you to manage your comics and associated posts from within WordPress. Upload, rename, and delete comics, view all of your comics and which posts they're associated with, see which comics don't have a post (and which posts don't have a comic), automatically generate missing posts for orphaned comics, and more.
+* __Organize Your Chapters:__ Take advantage of WebComics Chapters feature to organize your comics into unique volumes and chapters with title, descriptions, and page counts. WebComic has a number of functions and widgets that allow you to take full advantage of comic chapters.
+* __Template Tags for WordPress Themes:__ Leverage WebComic's new template tags to turn any WordPress theme into a webcomic site.
 
-WebComic also takes advantage of WordPress custom fields to provide a simple way of adding custom comic descriptions and comic transcripts.
+WebComic also takes advantage of WordPress custom fields to provide a simple way of adding custom comic descriptions and comic transcripts, both of which are fully searchable using the standard WordPress search.
 
 = New Widgets =
 
@@ -45,13 +51,9 @@ To take full advantage of WebComic, you'll need at least some understanding of c
 
 == Frequently Asked Questions ==
 
-= How do I use this now? =
-
-Please see the [WebComic](http://maikeruon.com/wcib/webcomic/) section at the WebComic and InkBlot development site for complete documentation, including *Frequently Asked Questions*.
-
 = Where can I get help with this? =
 
-Please see the [WebComic & InkBlot Codex](http://maikeruon.com/wcib/codex/) or  [WebComic & InkBlot Support Forum](http://www.maikeruon.com/wcib/forum/viewforum.php?f=4) for assistance.
+Please see the [WebComic & InkBlot Codex](http://maikeruon.com/wcib/codex/) for full documentation or [WebComic & InkBlot Support Forum](http://www.maikeruon.com/wcib/forum/viewforum.php?f=4) for assistance.
 
 == Screenshots ==
 
@@ -60,6 +62,16 @@ Please see the [WebComic & InkBlot Codex](http://maikeruon.com/wcib/codex/) or  
 3. Chapters Page
 
 == Release Notes ==
+
+= 1.6 =
+
+* Includes new permissions scheme. Permissions have been updated to check for specific user capabilities instead of limiting all plugin access to site administrators. WordPress _Author's_ now have access to a limited Comic Library and WordPress _Editor's_ now have access to the full Comic Library and Comic Chapters.
+* Includes enhanced Comic Library. The Comic Library now offers the option to regenerate individual comic thumbnails, delete comic posts, and now compares filenames during upload to prevent accidental overwrites (with a new option to force overwriting existing files).
+* Includes enhanced automatic post creation.  Automatic post creation is now compatible with all file name options. When enabled, new options to set (or override for the "Date" naming option) the publish datetime for the generated comic post are available.
+* Includes enhanced orphan post generation. Orphaned post generation is now compatible with all file name options. New options to set (or override for the "Date" naming option) the publish datetime and interval ("Post every week starting January 1, 2009", for example) for the generated comic posts are now available.
+* The library view option is now set per-user instead of globally. If you're using the thumbnail view when you upgrade view will initially be reset to the list view.
+* Corrected a flaw in the search functions that prevented transcripts and custom descriptions from being found when searching for more than one term.
+* Additional minor bug fixes and feature enhancements
 
 = 1.5 =
 

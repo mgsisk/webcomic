@@ -16,7 +16,7 @@ function comic_page_chapters(){
 			$error = 2;
 		else:
 			wp_insert_term($chapter_name,'chapter',array('description' => $chapter_description, 'parent' => $chapter_parent, 'slug' => $chapter_nicename));
-			echo '<div id="message" class="updated fade"><p>'.__('Added new chapter','webcomic').' <q>'.$chapter_name.'</q></strong></p></div>';
+			echo '<div id="message" class="updated fade"><p>'.sprintf(__('Added new chapter <q>%1$s</q>','webcomic'),$chapter_name).'</p></div>';
 		endif;
 	endif;
 	
@@ -27,7 +27,7 @@ function comic_page_chapters(){
 		
 		$chapter = get_the_chapter($_REQUEST['chapter']);
 		wp_delete_term($_REQUEST['chapter'],'chapter');
-		echo '<div id="message" class="updated fade"><p>'.__('Deleted chapter','webcomic').' <q>'.$chapter['title'].'</q></p></div>';
+		echo '<div id="message" class="updated fade"><p>'.sprintf(__('Deleted chapter <q>%1$s</q>','webcomic'),$chapter['title']).'</p></div>';
 	endif;
 	
 	
@@ -65,7 +65,7 @@ function comic_page_chapters(){
 		$chapter_description = $_REQUEST['chapter_description'];
 		
 		if(!is_wp_error(wp_update_term($_REQUEST['chapter_id'],'chapter',array('name' => $chapter_name, 'slug' => $chapter_nicename, 'parent' => $chapter_parent, 'description' => $chapter_description))))
-			echo '<div id="message" class="updated fade"><p>'.__('Updted chapter','webcomic').' <q>'.$chapter_name.'</q></p></div>';
+			echo '<div id="message" class="updated fade"><p>'.sprintf(__('Updted chapter <q>%1$s</q>','webcomic'),$chapter_name).'</p></div>';
 		else
 			echo '<div id="message" class="error"><p>'.__('The chapter could not be updated.','webcomic').'</p></div>';
 	endif;
@@ -113,7 +113,7 @@ function comic_page_chapters(){
 			<?php if(!get_the_collection(false)): ?>
 				<p><?php _e('Chapters are a useful (but optional) way of categorizing your comics, similar to post categories. You can create new chapters or modify existing ones here and assign comics to them from the Comic Library.','webcomic') ?></p>
 				<p><?php _e("To start using chapters, you'll need to create two of them: the first will be a <em>volume</em>, which can contain any number of regular chapters. You should assign the second chapter to your newly created volume.",'webcomic') ?></p>
-				<p><?php _e("Don't forget to update the <strong>Current Chapter</strong> setting, which will assign any new comic posts to the chapter you select.",'webcomic') ?></p>
+				<p><?php _e("Don't forget to update the <strong>Current Chapter</strong> setting, which will automatically assign any new comic posts to the chapter you select.",'webcomic') ?></p>
 			<?php else: ?>
 				<form action="" method="post">
 					<?php wp_nonce_field('modify_chapters'); ?>
@@ -208,7 +208,7 @@ function comic_page_chapters(){
 									echo '<option value="'.$vid.'">'.$volume['title'].'</option>';
 							?>
 							</select> 
-							<p><?php _e('Select <strong>None</strong> to turn this chapter into a new volume that you can add other chapters to.','webcomic') ?></p> 
+							<p><?php _e('Select <strong>None</strong> to turn this chapter into a new volume that you can assign other chapters to.','webcomic') ?></p> 
 						</div>
 						<div class="form-field"> 
 							<label for="chapter_description"><?php _e('Description','webcomic') ?></label> 

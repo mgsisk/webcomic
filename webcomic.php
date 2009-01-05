@@ -34,7 +34,7 @@ function load_webcomic_domain(){
 
 
 //Activation Check - Make sure all of our options have a default value
-if(!get_option('comic_category') || !get_option('comic_directory') || !get_option('comic_current_chapter') || !get_option('comic_feed') || !get_option('comic_feed_size') || !get_option('comic_auto_post') || !get_option('comic_name_format') || !get_option('comic_name_format_date') || !get_option('comic_secure_names') || !get_option('comic_thumbnail_crop') || false===get_option('comic_thumbnail_size_w') || false===get_option('comic_thumbnail_size_h') || false===get_option('comic_medium_size_w') || false===get_option('comic_medium_size_h') || false===get_option('comic_large_size_w') || false===get_option('comic_large_size_h') || !get_option('comic_library_view')):
+if(!get_option('comic_category') || !get_option('comic_directory') || !get_option('comic_current_chapter') || !get_option('comic_feed') || !get_option('comic_feed_size') || !get_option('comic_auto_post') || !get_option('comic_name_format') || !get_option('comic_name_format_date') || !get_option('comic_secure_names') || !get_option('comic_thumbnail_crop') || false===get_option('comic_thumbnail_size_w') || false===get_option('comic_thumbnail_size_h') || false===get_option('comic_medium_size_w') || false===get_option('comic_medium_size_h') || false===get_option('comic_large_size_w') || false===get_option('comic_large_size_h')):
 	function comic_set_defaults(){
 		load_webcomic_domain();
 		
@@ -54,7 +54,6 @@ if(!get_option('comic_category') || !get_option('comic_directory') || !get_optio
 		add_option('comic_medium_size_h',get_option('medium_size_h'));
 		add_option('comic_large_size_w',get_option('large_size_w'));
 		add_option('comic_large_size_h',get_option('large_size_h'));
-		add_option('comic_library_view','list');
 		
 		if(!file_exists(ABSPATH.get_comic_directory()))
 			mkdir(ABSPATH.get_comic_directory(),0775,true);
@@ -85,13 +84,15 @@ function get_comic_current_chapter(){
 }
 
 function get_comic_library_view($view=false){
-	if($view && ($view == get_option('comic_library_view')))
+	global $current_user;
+	
+	if($view && ($view == get_usermeta($current_user->ID,'comic_library_view')))
 		echo ' class="current"';
 	
-	if($view && ($view != get_option('comic_library_view')))
+	if($view && ($view != get_usermeta($current_user->ID,'comic_library_view')))
 		return;
 	
-	return get_option('comic_library_view');
+	return get_usermeta($current_user->ID,'comic_library_view');
 }
 
 
@@ -107,7 +108,7 @@ add_action('init','register_chapters');
 //Show or hide comic images based on user settings
 if('on' == get_option('comic_feed')):
 	function webcomic_feed($content) {
-		if(is_feed() && in_category(get_option('comic_category')))
+		if(is_feed() && in_category(get_comic_category()))
 			return '<p>'.get_the_comic(false,'image',get_option('comic_feed_size')).'</p>'.$content;
 		else
 			return $content;
@@ -121,7 +122,7 @@ endif;
 function webcomic_search_distinct($query){
 	global $wp_query;
 	
-	if (is_search() && !strstr($where, 'DISTINCT'))
+	if (is_search() && false === strpos($where, 'DISTINCT'))
 		$query = str_replace('SELECT', 'SELECT DISTINCT', $query);
 	
 	return $query;
@@ -141,10 +142,21 @@ add_filter('posts_join', 'webcomic_search_join');
 function webcomic_search_where($where){
 	global $wp_query,$wpdb;
 	
-	if(is_search())
-		$or = " OR (($wpdb->postmeta.meta_key = 'comic_transcript' OR $wpdb->postmeta.meta_key = 'comic_description') AND $wpdb->postmeta.meta_value LIKE '%" . $wpdb->escape($wp_query->query_vars['s']) . "%') ";
+	$query_terms = explode(' ',$wp_query->query_vars['s']);
 	
-	$where = preg_replace("/\bor\b/i",$or." OR",$where,1);
+	$or = '(';
+	foreach($query_terms as $query_term):
+		if($Query_term !== ''):
+			$or .= "(($wpdb->posts.post_title LIKE '%".$wpdb->escape($query_term)."%') OR ($wpdb->posts.post_content LIKE '%".$wpdb->escape($query_term)."%') OR (($wpdb->postmeta.meta_key = 'comic_transcript' OR $wpdb->postmeta.meta_key = 'comic_description') AND $wpdb->postmeta.meta_value LIKE '%".$wpdb->escape($query_term)."%')) OR ";
+			$i++;
+		endif;
+	endforeach;
+	if($i > 1)
+		$or .= "(($wpdb->posts.post_title LIKE '".$wpdb->escape($wp_query->query_vars['s'])."') OR ($wpdb->posts.post_content LIKE '".$wpdb->escape($wp_query->query_vars['s'])."') OR (($wpdb->postmeta.meta_key = 'comic_transcript' OR $wpdb->postmeta.meta_key = 'comic_description') AND $wpdb->postmeta.meta_value LIKE '%".$wpdb->escape($wp_query->query_vars['s'])."%')))";
+	else
+		$or = rtrim($or,' OR ').')';
+	
+	$where = preg_replace("/\(\(\(.*\)\)/i",$or,$where,1);
 	
 	return $where;
 }
@@ -157,6 +169,7 @@ if(is_admin()):							   //Load tha admin files only when necessary
 	require_once('wc-admin-settings.php'); //Contains administrative functions for the settings page
 	require_once('wc-admin-library.php');  //Contains administrative functions for the library page
 	require_once('wc-admin-chapters.php'); //Contains administrative functions for the chapters page
+	@include_once('wc-admin-metabox.php'); //Contains administrative functions for the post meta box
 endif;
 require_once('wc-core.php');               //Contains the core functions and template tags for displaying and navigating comics
 @include_once('wc-widgets.php');           //Contains widgits for recent comics, random comic, dropdown comics, comic archive, and modified recent posts

@@ -51,7 +51,7 @@ function widget_init_random_comic(){
 		<?php
 	}
 	
-	$widget_ops = array('description' => __("Links to a single, randomly selected comic",'webcomic'));
+	$widget_ops = array('description' => __('Links to a single, randomly selected comic','webcomic'));
 	wp_register_sidebar_widget('random-comic',__('Random Comic','webcomic'),'widget_random_comic',$widget_ops);
 	wp_register_widget_control('random-comic',__('Random Comic','webcomic'), 'widget_random_comic_control',$widget_ops);
 }
@@ -116,7 +116,7 @@ function widget_init_recent_comics(){
 			<input type="hidden" name="recent-comics-submit" id="recent-comics-submit" value="1" />
 		<?php
 	}
-	$widget_ops = array('description' => __("The most recent comics posted to your site",'webcomic'));
+	$widget_ops = array('description' => __('The most recent comics posted to your site','webcomic'));
 	wp_register_sidebar_widget('recent-comics',__('Recent Comics','webcomic'),'widget_recent_comics',$widget_ops);
 	wp_register_widget_control('recent-comics',__('Recent Comics','webcomic'), 'widget_recent_comics_control',$widget_ops);
 }
@@ -195,7 +195,7 @@ function widget_init_dropdown_comics(){
 		<?php
 	}
 	
-	$widget_ops = array('description' => __("Displays a dropdown list of all comic posts.",'webcomic'));
+	$widget_ops = array('description' => __('Displays a dropdown list of all comic posts.','webcomic'));
 	wp_register_sidebar_widget('dropdown-comics',__('Dropdown Comics','webcomic'),'widget_dropdown_comics',$widget_ops);
 	wp_register_widget_control('dropdown-comics',__('Dropdown Comics','webcomic'),'widget_dropdown_comics_control',$widget_ops);
 }
@@ -255,7 +255,7 @@ function widget_init_comic_archive(){
 		<?php
 	}
 	
-	$widget_ops = array('description' => __("Displays your complete comic library organized by volume and chapter.",'webcomic'));
+	$widget_ops = array('description' => __('Displays your complete comic library organized by volume and chapter.','webcomic'));
 	wp_register_sidebar_widget('comic-archive',__('Comic Archive','webcomic'),'widget_comic_archive',$widget_ops);
 	wp_register_widget_control('comic-archive',__('Comic Archive','webcomic'),'widget_comic_archive_control',$widget_ops);
 }
@@ -322,14 +322,14 @@ function widget_webcomic_recent_posts_init(){
 		if (!$number = (int) $options['number'])
 			$number = 5;
 		?>
-			<p><label>Title: <input type="text" class="widefat" id="webcomic-recent-posts-title" name="webcomic-recent-posts-title" value="<?php echo $title; ?>" /></label></p>
-			<p><label>Number of posts to show: <input name="webcomic-recent-posts-number" id="webcomic-recent-posts-number" style="width: 25px; text-align: center;" value="<?php echo $number ?>" /></label></p>
+			<p><label><?php _e('Title: ','webcomic') ?><input type="text" class="widefat" id="webcomic-recent-posts-title" name="webcomic-recent-posts-title" value="<?php echo $title; ?>" /></label></p>
+			<p><label><?php _e('Number of posts to show: ','webcomic') ?><input name="webcomic-recent-posts-number" id="webcomic-recent-posts-number" style="width: 25px; text-align: center;" value="<?php echo $number ?>" /></label></p>
 			<input type="hidden" name="webcomic-recent-posts-submit" id="webcomic-recent-posts-submit" value="1" />
 		<?php
 	}
-	$widget_ops = array('description' => __("The most recent posts on your blog (ignores comic posts)",'webcomic'));
-	wp_register_sidebar_widget('recent-posts','Recent Posts','widget_webcomic_recent_posts',$widget_ops);
-	wp_register_widget_control('recent-posts','Recent Posts', 'widget_webcomic_recent_posts_control',$widget_ops);
+	$widget_ops = array('description' => __('The most recent posts on your blog (ignores comic posts)','webcomic'));
+	wp_register_sidebar_widget('recent-posts',__('Recent Posts','webcomic'),'widget_webcomic_recent_posts',$widget_ops);
+	wp_register_widget_control('recent-posts',__('Recent Posts','webcomic'), 'widget_webcomic_recent_posts_control',$widget_ops);
 }
 add_action('widgets_init', 'widget_webcomic_recent_posts_init');
 ?>

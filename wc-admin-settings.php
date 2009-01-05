@@ -26,9 +26,9 @@ function comic_page_settings(){
 		update_option('comic_auto_post',$comic_auto_post);
 		update_option('comic_secure_names',$comic_secure_names);
 		
-		$days = array('d','j','z','w');
+		$days = array('d','j','z');
 		foreach($days as $day):
-			if(strstr($_REQUEST['comic_name_format_date'],$day)):
+			if(false !== strpos($_REQUEST['comic_name_format_date'],$day)):
 				$days = true;
 				break;
 			endif;
@@ -36,7 +36,7 @@ function comic_page_settings(){
 		
 		$months = array('F','m','M','n');
 		foreach($months as $month):
-			if(strstr($_REQUEST['comic_name_format_date'],$month)):
+			if(false !== strpos($_REQUEST['comic_name_format_date'],$month)):
 				$months = true;
 				break;
 			endif;
@@ -44,15 +44,14 @@ function comic_page_settings(){
 		
 		$years = array('o','Y','y');
 		foreach($years as $year):
-			if(strstr($_REQUEST['comic_name_format_date'],$year)):
+			if(false !== strpos($_REQUEST['comic_name_format_date'],$year)):
 				$years = true;
 				break;
 			endif;
 		endforeach;
 		
-		if($_REQUEST['comic_name_format_date'] || true === $days || true === $months || true === $years):
+		if($_REQUEST['comic_name_format_date'] && true === $days && true === $months && true === $years)
 			update_option('comic_name_format_date',$_REQUEST['comic_name_format_date']);
-		endif;
 		
 		if(!file_exists(ABSPATH.get_comic_directory()))
 			mkdir(ABSPATH.get_comic_directory(),0775,true);
@@ -96,7 +95,7 @@ function comic_page_settings(){
 				<tr>
 					<th scope="row"><label for="comic_current_chapter"><?php _e('Current Chapter','webcomic') ?></label></th>
 					<td>
-						<select name="comic_current_chapter">
+						<select name="comic_current_chapter" id="comic_current_chapter">
 							<option value="-1"><?php _e('N\A','webcomic') ?></option>
 						<?php
 							$collection = get_the_collection(false);
@@ -112,7 +111,7 @@ function comic_page_settings(){
 					</td>
 				</tr>
 				<tr>
-					<th scope="row"><label for="comic_feed"><?php _e('Feed','webcomic') ?></label></th>
+					<th scope="row"><label for="comic_feed"><?php _e('Feeds','webcomic') ?></label></th>
 					<td><input name="comic_feed" type="checkbox" id="comic_feed" value="on"<?php if('on' == get_option('comic_feed')) print ' checked="checked"'; ?> />
 					<label><?php _e('Include','webcomic') ?>
 						<select name="comic_feed_size">
@@ -121,8 +120,15 @@ function comic_page_settings(){
 							<option value="medium"<?php if('medium' == get_option('comic_feed_size')) echo ' selected="selected"'; ?>><?php _e('Medium','webcomic') ?></option>
 							<option value="thumb"<?php if('thumb' == get_option('comic_feed_size')) echo ' selected="selected"'; ?>><?php _e('Thumbnail','webcomic') ?></option>
 						</select>
-					<?php _e('comic images in feed','webcomic') ?></label></td>
+					<?php _e('comic images in feeds','webcomic') ?></label></td>
 				</tr>
+				<tr>
+					<th scope="row"><?php _e('Posts','webcomic') ?></th>
+					<td><label for="comic_auto_post"><input name="comic_auto_post" type="checkbox" id="comic_auto_post" value="on"<?php if('on' == get_option('comic_auto_post')) print ' checked="checked"'; ?> /> <?php _e('Automatically create comic posts during upload','webcomic') ?></label></td>
+				</tr>
+			</table>
+			<h3><?php _e('Image Sizes','webcomic') ?></h3>
+			<table class="form-table">
 				<tr>
 					<th scope="row"><?php _e('Thumbnail Size','webcomic') ?></th>
 					<td>
@@ -143,10 +149,7 @@ function comic_page_settings(){
 			<table class="form-table">
 				<tr>
 					<th scope="row"><label><input type="radio" name="comic_name_format" value="date"<?php if('date' == get_option('comic_name_format')) echo ' checked="checked"'; ?> /> <?php _e('Date','webcomic') ?></label></th>
-					<td>
-						<input type="text" name="comic_name_format_date" value="<?php print get_option('comic_name_format_date'); ?>" class="small-text" /> <?php printf(__('Your comics must have the  <a href="%1$s">date</a> somewhere in the filename, in the format of','webcomic'), 'http://us2.php.net/date') ?> <code><?php echo date(get_option('comic_name_format_date')); ?></code>.
-						<p><label for="comic_auto_post"><input name="comic_auto_post" type="checkbox" id="comic_auto_post" value="on"<?php if('on' == get_option('comic_auto_post')) print ' checked="checked"'; ?> /> <?php _e('Automatically create comic posts during upload','webcomic') ?></label></p>
-					</td>
+					<td><input type="text" name="comic_name_format_date" value="<?php print get_option('comic_name_format_date'); ?>" class="small-text" /> <?php printf(__('Your comics must have the  <a href="%1$s">date</a> somewhere in the filename, in the format of','webcomic'), 'http://us2.php.net/date') ?> <code><?php echo date(get_option('comic_name_format_date')); ?></code>.</td>
 				</tr>
 				<tr>
 					<th scope="row"><label><input type="radio" name="comic_name_format" value="slug"<?php if('slug' == get_option('comic_name_format')) echo ' checked="checked"'; ?> /> <?php _e('Title','webcomic') ?></label></th>
