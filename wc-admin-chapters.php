@@ -71,6 +71,7 @@ function comic_page_chapters(){
 	endif;
 ?>
 	<div class="wrap">
+		<div id="icon-webcomic" class="icon32"><img src="<?php echo plugins_url('webcomic/webcomic.png') ?>" alt="icon" /></div>
 <?php if('edit_chapter' == $_REQUEST['action']): $the_chapter = get_term_to_edit($_REQUEST['chapter'],'chapter'); //Show the edit chapter form ?>
 		<h2><?php _e('Edit Chapter','webcomic') ?></h2>
 		<form action="" method="post">
@@ -107,7 +108,7 @@ function comic_page_chapters(){
 			<p class="submit"><input type="submit" class="button" name="submit" value="<?php _e('Edit Chapter','webcomic') ?>" /><input type="hidden" name="action" value="update_chapter" /><input type="hidden" name="chapter_id" value="<?php echo $_REQUEST['chapter'] ?>" /></p> 
 		</form>
 <?php else: ?>
-		<h2><?php _e('Comic Chapters','webcomic') ?></h2>
+		<h2><?php _e('Chapters','webcomic') ?></h2>
 		<div id="col-right">
 			<div class="col-wrap">
 			<?php if(!get_the_collection(false)): ?>

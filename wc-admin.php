@@ -3,17 +3,19 @@
 function comic_admin_pages_add(){
 	load_webcomic_domain();
 	
-	add_menu_page(__('WebComic','webcomic'),__('WebComic','webcomic'),'manage_options', __FILE__,'comic_page_settings');
+	add_menu_page(__('WebComic','webcomic'),__('WebComic','webcomic'),'manage_options', __FILE__,'comic_page_settings',plugins_url('webcomic/webcomic-small.png'));
 	add_submenu_page(__FILE__,__('Settings','webcomic'),__('Settings','webcomic'),'manage_options',__FILE__,'comic_page_settings');
 	add_submenu_page(__FILE__,__('Comic Library','webcomic'),__('Library','webcomic'),'upload_files','comic-library','comic_page_library');
 	add_submenu_page(__FILE__,__('Comic Chapters','webcomic'),__('Chapters','webcomic'),'manage_categories','comic-chapters','comic_page_chapters');
+	
+	if(function_exists('add_meta_box'))
+		add_meta_box('webcomic', __('WebComic','webcomic'), 'comic_meta_box', 'post', 'normal', 'high');
 }
 add_action('admin_menu', 'comic_admin_pages_add');
 
 //Enqueue admin scripts for fancy effects
 function wc_admin_scripts() {
 	wp_enqueue_script('admin-forms');
-	//wp_enqueue_script('jquery-form');
 }
 add_action('admin_init','wc_admin_scripts');
 

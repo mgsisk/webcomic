@@ -62,7 +62,8 @@ function comic_page_settings(){
 	endif;
 ?>
 	<div class="wrap">
-		<h2><?php _e('WebComic','webcomic') ?></h2>
+		<div id="icon-webcomic" class="icon32"><img src="<?php echo plugins_url('webcomic/webcomic.png') ?>" alt="icon" /></div>
+		<h2><?php _e('Settings','webcomic') ?></h2>
 		<form method="post" action="">
 			<?php wp_nonce_field('webcomic_save_settings'); ?>
 			<table class="form-table">

@@ -229,7 +229,7 @@ function comic_page_library(){
 	if('regen_all_thumbs' == $_REQUEST['action']):
 		check_admin_referer('regen_all_thumbs');
 		
-		echo '<div id="message" class="updated fade"><p>'.__('Please wait while WebComic attempts to regenerate your comic thumbnails. This could take several minutes for large libraries.','webcomic').'</p></div>';
+		echo '<div id="message" class="updated fade"><p><img src="'.plugins_url('webcomic/load.gif').'" alt="Working..." /> '.__('Please wait while WebComic attempts to regenerate your comic thumbnails. This could take several minutes for large libraries.','webcomic').'</p></div>';
 		
 		//Get our comic and media options
 		$original_path = ABSPATH.get_comic_directory();
@@ -431,7 +431,8 @@ function comic_page_library(){
 		$comic_thumb = '<th scope="col" style="width:'.get_option('thumbnail_size_h').'px"></th>';
 ?>
 	<div class="wrap">
-		<h2>Comic Library</h2>
+		<div id="icon-webcomic" class="icon32"><img src="<?php echo plugins_url('webcomic/webcomic.png') ?>" alt="icon" /></div>
+		<h2><?php _e('Library','webcomic') ?></h2>
 		<form method="post" action="" enctype="multipart/form-data">
 			<?php wp_nonce_field('webcomic_upload'); ?>
 			<p class="alignleft">

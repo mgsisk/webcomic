@@ -169,7 +169,7 @@ if(is_admin()):							   //Load tha admin files only when necessary
 	require_once('wc-admin-settings.php'); //Contains administrative functions for the settings page
 	require_once('wc-admin-library.php');  //Contains administrative functions for the library page
 	require_once('wc-admin-chapters.php'); //Contains administrative functions for the chapters page
-	@include_once('wc-admin-metabox.php'); //Contains administrative functions for the post meta box
+	require_once('wc-admin-metabox.php');  //Contains administrative functions for the post meta box
 endif;
 require_once('wc-core.php');               //Contains the core functions and template tags for displaying and navigating comics
 @include_once('wc-widgets.php');           //Contains widgits for recent comics, random comic, dropdown comics, comic archive, and modified recent posts
