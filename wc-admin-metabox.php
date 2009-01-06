@@ -23,7 +23,7 @@ function comic_meta_box(){
 	</p>
 	<p><?php _e('If you are uploading a comic and leave this blank it will be automatically set to the name of the uploaded comic file.','webcomic') ?></p><br />
 	<?php endif ?>
-	<?php if(get_the_collection() && current_user_can('manage_categories')): ?>
+	<?php if(get_the_collection(false) && current_user_can('manage_categories')): ?>
 	<p>
 		<label for="comic_chapter"><strong><?php _e('Chapter','webcomic') ?></strong></label><br />
 		<?php _e('','webcomic') ?>
