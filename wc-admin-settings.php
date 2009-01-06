@@ -100,11 +100,11 @@ function comic_page_settings(){
 							<option value="-1"><?php _e('N\A','webcomic') ?></option>
 						<?php
 							$collection = get_the_collection(false);
-							foreach($collection as $vid => $volume):
+							foreach($collection as $volume):
 						?>
 							<optgroup label="<?php echo $volume['title'] ?>">
-							<?php foreach($volume['chapters'] as $cid => $chapter): ?>
-								<option value="<?php echo $cid ?>"<?php if($cid == get_option('comic_current_chapter')) echo ' selected="selected"' ?>><?php echo $chapter['title'] ?></option>
+							<?php foreach($volume['chapters'] as $chapter): ?>
+								<option value="<?php echo $chapter['id'] ?>"<?php if($chapter['id'] == get_option('comic_current_chapter')) echo ' selected="selected"' ?>><?php echo $chapter['title'] ?></option>
 								<?php endforeach ?>
 							</optgroup>
 						<?php endforeach ?>

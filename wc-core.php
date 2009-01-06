@@ -1,28 +1,28 @@
 <?php
 //Generates a new comic loop
-function comic_loop($number=1,$reverse=false){
+function comic_loop($number=1,$reverse=false,$query=false){
 	global $wp_query,$paged;
 	$wp_query->in_the_loop=true;
 	
 	$reverse = ($reverse) ? 'ASC' : 'DESC';
 	
 	$comics = new WP_Query;
-	$comics->query('cat='.get_comic_category().'&order='.$reverse.'&posts_per_page='.$number.'&paged='.$paged);
+	$comics->query('cat='.get_comic_category().'&order='.$reverse.'&posts_per_page='.$number.'&paged='.$paged.$query);
 	
 	return $comics;
 }
 
 //Removes comic posts from the standard loop or generates a new loop that excludes comic psots
-function ignore_comics($number=false){
+function ignore_comics($number=false,$query=false){
 	global $paged;
 	
 	if($number):
 		$new_query = new WP_Query;
-		$new_query->query('posts_per_page='.$number.'&cat=-'.get_comic_category().'&paged='.$paged);
+		$new_query->query('posts_per_page='.$number.'&cat=-'.get_comic_category().'&paged='.$paged.$query);
 		return $new_query;
 	endif;
 	
-	query_posts('cat=-'.get_comic_category().'&paged='.$paged);
+	query_posts('cat=-'.get_comic_category().'&paged='.$paged.$query);
 }
 
 
@@ -151,6 +151,7 @@ function get_the_chapter($chapter=false){
 	if(!empty($chapter_post_times))
 		$chapter_first_post = array_keys($chapter_post_times,min($chapter_post_times));
 	
+	$output['id'] = $chapter->term_id;
 	$output['title'] = $chapter->name;
 	$output['description'] = $chapter->description;
 	$output['pages'] = $chapter->count;
@@ -192,6 +193,7 @@ function get_the_volume($volume=false){
 		$volume_pages += $chapter->count;
 	endforeach;
 	
+	$output['id'] = $volume->term_id;
 	$output['title'] = $volume->name;
 	$output['description'] = $volume->description;
 	$output['pages'] = intval($volume_pages);
@@ -353,7 +355,7 @@ function next_comic_link($label='Next &gt;'){
 }
 
 //Displays the chapter the current post is associated with, linked to the first page in the chapter
-function the_chapter(){
+function the_chapter($show=true){
 	load_webcomic_domain();
 	
 	$chapter = get_the_chapter();

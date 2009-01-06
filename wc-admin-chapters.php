@@ -25,9 +25,23 @@ function comic_page_chapters(){
 	if('delete_chapter' == $_REQUEST['action']):
 		check_admin_referer('delete_chapter');
 		
-		$chapter = get_the_chapter($_REQUEST['chapter']);
-		wp_delete_term($_REQUEST['chapter'],'chapter');
-		echo '<div id="message" class="updated fade"><p>'.sprintf(__('Deleted chapter <q>%1$s</q>','webcomic'),$chapter['title']).'</p></div>';
+		if($_REQUEST['volume']):
+			$the_chapter = get_the_volume($_REQUEST['chapter']);
+			$children = get_term_children($_REQUEST['chapter'],'chapter');
+			
+			foreach($children as $chapter):
+				wp_delete_term($chapter,'chapter');
+			endforeach;
+			
+			wp_delete_term($_REQUEST['chapter'],'chapter');
+			
+			$the_volume = __(' and all the chapters it contained.','webcomic');
+		else:
+			$the_chapter = get_the_chapter($_REQUEST['chapter']);
+			wp_delete_term($_REQUEST['chapter'],'chapter');
+		endif;
+		
+		echo '<div id="message" class="updated fade"><p>'.sprintf(__('Deleted <q>%1$s</q>','webcomic'),$the_chapter['title']).$the_volume.'</p></div>';
 	endif;
 	
 	
@@ -88,12 +102,12 @@ function comic_page_chapters(){
 							<select name="chapter_parent" id="chapter_parent">
 							<?php
 								$collection = get_the_collection(false);
-								foreach($collection as $vid => $volume):
-									if($vid == $the_chapter->parent)
+								foreach($collection as $volume):
+									if($volume['id'] == $the_chapter->parent)
 										$the_parent = ' selected="selected"';
 									else
 										unset($the_parent);
-									echo '<option value="'.$vid.'"'.$the_parent.'>'.$volume['title'].'</option>';
+									echo '<option value="'.$volume['id'].'"'.$the_parent.'>'.$volume['title'].'</option>';
 								endforeach;
 							?>
 							</select><br /><?php _e('Select the volume that this chapter belongs to.','webcomic') ?>
@@ -153,18 +167,18 @@ function comic_page_chapters(){
 						<tbody>
 						<?php
 							$collection = get_the_collection(false);
-							foreach($collection as $vid => $volume):
+							foreach($collection as $volume):
 						?>
 							<tr<?php if($i%2) echo' class="alt"'; ?>>
-								<th scope="row" class="check-column"><input type="checkbox" name="chapters[]" value="<?php echo $vid ?>" /></th>
-								<td><a href="<?php echo $volume['link'] ?>" title="Go to the beginning of <?php echo $volume['title'] ?>"><strong><?php echo $volume['title'] ?></strong></a><div class="row-actions"><a href="admin.php?page=comic-chapters&amp;action=edit_chapter&amp;chapter=<?php echo $vid ?>"><?php _e('Edit','webcomic') ?></a> | <a href="<?php echo wp_nonce_url('admin.php?page=comic-chapters&amp;action=delete_chapter&amp;chapter='.$vid,'delete_chapter') ?>"><?php _e('Delete','webcomic') ?></a></div></td>
+								<th scope="row" class="check-column"><input type="checkbox" name="chapters[]" value="<?php echo $volume['id'] ?>" /></th>
+								<td><a href="<?php echo $volume['link'] ?>" title="Go to the beginning of <?php echo $volume['title'] ?>"><strong><?php echo $volume['title'] ?></strong></a><div class="row-actions"><a href="admin.php?page=comic-chapters&amp;action=edit_chapter&amp;chapter=<?php echo $volume['id'] ?>"><?php _e('Edit','webcomic') ?></a> | <span class="delete"><a href="<?php echo wp_nonce_url('admin.php?page=comic-chapters&amp;action=delete_chapter&amp;volume=1&amp;chapter='.$volume['id'],'delete_chapter') ?>" onclick="if(confirm('<?php printf(__("You are about to delete \'%s\'. Any chapters in this volume will also be deleted.\\n \'Cancel\' to stop, \'OK\' to delete.","webcomic"),$volume['title']) ?>')) { return true;}return false;" title="<?php _e('Delete this volume','webcomic') ?>"><?php _e('Delete','webcomic') ?></a></span></div></td>
 								<td><?php echo $volume['description'] ?></td>
 								<td class="num"><?php echo $volume['pages'] ?></td>
 							</tr>
-							<?php foreach($volume['chapters'] as $cid => $chapter): $i++; ?>
+							<?php foreach($volume['chapters'] as $chapter): $i++; ?>
 							<tr<?php if($i%2) echo' class="alt"'; ?>>
-								<th scope="row" class="check-column"><input type="checkbox" name="chapters[]" value="<?php echo $cid ?>" /></th>
-								<td><a href="<?php echo $chapter['link'] ?>" title="Go to the beginning of <?php echo $chapter['title'] ?>"><strong>&mdash; <?php echo $chapter['title'] ?></strong></a><div class="row-actions"><a href="admin.php?page=comic-chapters&amp;action=edit_chapter&amp;chapter=<?php echo $cid ?>"><?php _e('Edit','webcomic') ?></a> | <a href="<?php echo wp_nonce_url('admin.php?page=comic-chapters&amp;action=delete_chapter&amp;chapter='.$cid,'delete_chapter') ?>"><?php _e('Delete','webcomic') ?></a></div></td>
+								<th scope="row" class="check-column"><input type="checkbox" name="chapters[]" value="<?php echo $chapter['id'] ?>" /></th>
+								<td><a href="<?php echo $chapter['link'] ?>" title="Go to the beginning of <?php echo $chapter['title'] ?>"><strong>&mdash; <?php echo $chapter['title'] ?></strong></a><div class="row-actions"><a href="admin.php?page=comic-chapters&amp;action=edit_chapter&amp;chapter=<?php echo $chapter['id'] ?>"><?php _e('Edit','webcomic') ?></a> | <span class="delete"><a href="<?php echo wp_nonce_url('admin.php?page=comic-chapters&amp;action=delete_chapter&amp;chapter='.$chapter['id'],'delete_chapter') ?>" onclick="if(confirm('<?php printf(__("You are about to delete \'%s\'\\n \'Cancel\' to stop, \'OK\' to delete.","webcomic"),$chapter['title']) ?>')) { return true;}return false;" title="<?php _e('Delete this chapter','webcomic') ?>"><?php _e('Delete','webcomic') ?></a></span></div></td>
 								<td><?php echo $chapter['description'] ?></td>
 								<td class="num"><?php echo $chapter['pages'] ?></td>
 							</tr>
@@ -205,8 +219,8 @@ function comic_page_chapters(){
 								<option value="0"><?php _e('None','webcomic') ?></option>
 							<?php
 								$collection = get_the_collection(false);
-								foreach($collection as $vid => $volume)
-									echo '<option value="'.$vid.'">'.$volume['title'].'</option>';
+								foreach($collection as $volume)
+									echo '<option value="'.$volume['id'].'">'.$volume['title'].'</option>';
 							?>
 							</select> 
 							<p><?php _e('Select <strong>None</strong> to turn this chapter into a new volume that you can assign other chapters to.','webcomic') ?></p> 

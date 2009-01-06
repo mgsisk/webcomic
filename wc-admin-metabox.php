@@ -5,24 +5,51 @@ function comic_meta_box(){
 	global $post;
 	?>
 	<script type="text/javascript">jQuery('form#post').attr('enctype','multipart/form-data').attr('encoding','multipart/form-data')</script>
-		<?php if(in_category(get_comic_category()) && get_the_comic()): ?>
-			<p class="alignright"><?php echo get_the_comic(false,'full','thumb') ?></p>
-		<?php elseif(in_category(get_comic_category()) && !get_the_comic()): ?>
-			<p class="alignright"><strong class="error"><?php _e('WebComic could not match this post with a comic.','webcomic') ?></strong></p>
-		<?php endif ?>
+	<?php if(in_category(get_comic_category()) && get_the_comic()): ?>
+		<p class="alignright"><?php echo get_the_comic(false,'full','thumb') ?></p>
+	<?php elseif(in_category(get_comic_category()) && !get_the_comic()): ?>
+		<p class="alignright"><strong class="error"><?php _e('WebComic could not match this post with a comic.','webcomic') ?></strong></p>
+	<?php endif ?>
 	<p>
 		<input type="file" name="new_comic_file" id="new_comic_file" />
 		<input type="hidden" name="MAX_FILE_SIZE" value="20000000" />
 		<input type="hidden" name="webcomic_upload_status" value="0" />
-		<?php if(current_user_can('edit_others_posts')): ?><label title="<?php _e('Overwrite an existing file with the same name','webcomic') ?>"><input type="checkbox" name="new_comic_overwrite" id="new_comic_overwrite" value="1" /> <?php _e('Overwrite','webcomic') ?></label><?php endif ?>
-	</p>
+		<?php if(current_user_can('edit_others_posts')): ?><label title="<?php _e('Overwrite an existing file with the same name','webcomic') ?>"><input type="checkbox" name="new_comic_overwrite" id="new_comic_overwrite" value="1" /> <?php _e('Overwrite','webcomic') ?></label><?php endif ?><br />
+	</p><br />
 	<?php if('meta' == get_option('comic_name_format')): ?>
 	<p>
 		<label for="comic_filename"><strong><?php _e('Filename','webcomic') ?></strong></label><br />
 		<input type="text" name="comic_filename" id="comic_filename" style="width:25%" value="<?php echo get_post_meta($post->ID,'comic_filename',true) ?>" />
 	</p>
-	<p><?php _e('If you are uploading a comic WebComic will automatically set this value using the name of the uploaded file.','webcomic') ?></p><br />
+	<p><?php _e('If you are uploading a comic and leave this blank it will be automatically set to the name of the uploaded comic file.','webcomic') ?></p><br />
 	<?php endif ?>
+	<?php if(get_the_collection() && current_user_can('manage_categories')): ?>
+	<p>
+		<label for="comic_chapter"><strong><?php _e('Chapter','webcomic') ?></strong></label><br />
+		<?php _e('','webcomic') ?>
+		<select name="comic_chapter" id="comic_chapter" style="vertical-align:middle">
+			<option value="-1"><?php _e('N\A','webcomic') ?></option>
+		<?php
+			if(get_the_chapter()):
+				$comic_chapter = get_the_chapter();
+				$comic_chapter = $comic_chapter['id'];
+			else:
+				$comic_chapter = get_comic_current_chapter();
+			endif;
+			
+			$collection = get_the_collection(false);
+			foreach($collection as $volume):
+		?>
+			<optgroup label="<?php echo $volume['title'] ?>">
+			<?php foreach($volume['chapters'] as $chapter): ?>
+				<option value="<?php echo $chapter['id'] ?>"<?php if($chapter['id'] == $comic_chapter) echo ' selected="selected"'; ?>><?php echo $chapter['title'] ?></option>
+				<?php endforeach ?>
+			</optgroup>
+		<?php endforeach ?>
+		</select>
+	</p>
+	<?php endif ?>
+	<?php if(get_the_chapter()): ?><p><?php _e('This comic currently belongs to ','webcomic') ?><?php the_chapter() ?> &laquo; <?php the_volume() ?></p><br /><?php else: ?><br /><?php endif ?>
 	<p style="clear:both"><label for="comic_description"><strong><?php _e('Description','webcomic') ?></strong></label> <input type="text" name="comic_description" id="comic_description" style="width:99%" value="<?php echo get_post_meta($post->ID,'comic_description',true) ?>" /></p>
 	<p><?php _e('If provided, the comic description will replace the post title as the hover text for links to and images of the comic.','webcomic') ?></p><br />
 	<p><label for="comic_transcript"><strong><?php _e('Transcript','webcomic') ?></strong></label><textarea rows="2" cols="40" name="comic_transcript" id="comic_transcript" style="margin:0;height:10em;width:98%"><?php echo get_post_meta($post->ID,'comic_transcript',true) ?></textarea></p>
@@ -75,6 +102,13 @@ function comic_meta_box_save($id){
 					add_post_meta($id,'comic_filename',$file);
 			endif;
 		endif;
+	endif;
+	
+	if($_REQUEST['comic_chapter']):
+		if(-1 == intval($_REQUEST['comic_chapter']))
+			remove_post_from_chapter($id);
+		else
+			add_post_to_chapter($id,$_REQUEST['comic_chapter']);
 	endif;
 	
 	if($_REQUEST['comic_filename']):

@@ -164,6 +164,8 @@ add_filter('posts_where', 'webcomic_search_where');
 
 
 
+require_once('wc-core.php');               //Contains the core functions and template tags for displaying and navigating comics
+
 if(is_admin()):							   //Load tha admin files only when necessary
 	require_once('wc-admin.php');          //Contains general administrative functions
 	require_once('wc-admin-settings.php'); //Contains administrative functions for the settings page
@@ -171,7 +173,7 @@ if(is_admin()):							   //Load tha admin files only when necessary
 	require_once('wc-admin-chapters.php'); //Contains administrative functions for the chapters page
 	require_once('wc-admin-metabox.php');  //Contains administrative functions for the post meta box
 endif;
-require_once('wc-core.php');               //Contains the core functions and template tags for displaying and navigating comics
+
 @include_once('wc-widgets.php');           //Contains widgits for recent comics, random comic, dropdown comics, comic archive, and modified recent posts
 @include_once('markdown.php');             //Totally optional, only used for comic transcripts
 ?>

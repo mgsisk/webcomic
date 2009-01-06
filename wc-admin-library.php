@@ -229,7 +229,7 @@ function comic_page_library(){
 	if('regen_all_thumbs' == $_REQUEST['action']):
 		check_admin_referer('regen_all_thumbs');
 		
-		echo '<div id="message" class="updated fade"><p><img src="'.plugins_url('webcomic/load.gif').'" alt="Working..." /> '.__('Please wait while WebComic attempts to regenerate your comic thumbnails. This could take several minutes for large libraries.','webcomic').'</p></div>';
+		echo '<div id="message" class="updated fade"><p><img src="'.plugins_url('webcomic/load.gif').'" alt="Working..." style="vertical-align:middle" /> '.__('Please wait while WebComic attempts to regenerate your comic thumbnails. This could take several minutes for large libraries.','webcomic').'</p></div>';
 		
 		//Get our comic and media options
 		$original_path = ABSPATH.get_comic_directory();
@@ -486,11 +486,11 @@ function comic_page_library(){
 						<option value="-1"><?php _e('N\A','webcomic') ?></option>
 					<?php
 						$collection = get_the_collection(false);
-						foreach($collection as $vid => $volume):
+						foreach($collection as $volume):
 					?>
 						<optgroup label="<?php echo $volume['title'] ?>">
-						<?php foreach($volume['chapters'] as $cid => $chapter): ?>
-							<option value="<?php echo $cid ?>"><?php echo $chapter['title'] ?></option>
+						<?php foreach($volume['chapters'] as $chapter): ?>
+							<option value="<?php echo $chapter['id'] ?>"><?php echo $chapter['title'] ?></option>
 							<?php endforeach ?>
 						</optgroup>
 					<?php endforeach ?>
@@ -577,11 +577,11 @@ function comic_page_library(){
 						<option value="-1"><?php _e('N\A','webcomic') ?></option>
 					<?php
 						$collection = get_the_collection(false);
-						foreach($collection as $vid => $volume):
+						foreach($collection as $volume):
 					?>
 						<optgroup label="<?php echo $volume['title'] ?>">
-						<?php foreach($volume['chapters'] as $cid => $chapter): ?>
-							<option value="<?php echo $cid ?>"><?php echo $chapter['title'] ?></option>
+						<?php foreach($volume['chapters'] as $chapter): ?>
+							<option value="<?php echo $chapter['id'] ?>"><?php echo $chapter['title'] ?></option>
 							<?php endforeach ?>
 						</optgroup>
 					<?php endforeach ?>
