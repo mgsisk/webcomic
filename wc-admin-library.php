@@ -220,7 +220,7 @@ function comic_page_library(){
 		endwhile;
 		closedir($dir);
 			
-		echo '<div id="message" class="updated fade"><p>'.sprintf(__('%1$s thumbnails regenrated.','webcomic'),$_REQUEST['file']).'</p></div>';
+		echo '<div id="message" class="updated fade"><p>'.sprintf(__('%1$s thumbnails regenerated.','webcomic'),$_REQUEST['file']).'</p></div>';
 		
 	endif;
 	
@@ -414,7 +414,7 @@ function comic_page_library(){
 		while($i<=$max_num_pages):
 			if(($i != 1 && $i < $paged-2) || ($i != $max_num_pages && $i > $paged+2)):
 				if($i == 2 || $i == $max_num_pages-1)
-					$page_output .= '<span class="page-numbers dots">&hellip;</span>';
+					$paged_output .= '<span class="page-numbers dots">&hellip;</span>';
 				$i++;
 				continue;
 			endif;
@@ -471,7 +471,7 @@ function comic_page_library(){
 		<form method="post" action="">
 			<?php wp_nonce_field('regen_all_thumbs'); ?>
 			<p class="alignright">
-				<input type="submit" class="button-primary" value="<?php _e('Regenerate Thumbnails','webcomic') ?>" title="<?php _e('This may take several minutes for large libraries','webcomic') ?>" />
+				<input type="submit" class="button-primary" value="<?php _e('Regenerate All Thumbnails','webcomic') ?>" title="<?php _e('This may take several minutes for large libraries','webcomic') ?>" />
 				<input type="hidden" name="action" value="regen_all_thumbs" />
 			</p>
 		</form>

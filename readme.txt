@@ -66,11 +66,13 @@ Please see the [WebComic & InkBlot Codex](http://maikeruon.com/wcib/codex/) for 
 
 = 1.6 =
 
-* Includes new permissions scheme. Permissions have been updated to check for specific user capabilities instead of limiting all plugin access to site administrators. WordPress _Author's_ now have access to a limited Comic Library and WordPress _Editor's_ now have access to the full Comic Library and Comic Chapters.
-* Includes enhanced Comic Library. The Comic Library now offers the option to regenerate individual comic thumbnails, delete comic posts, and now compares filenames during upload to prevent accidental overwrites (with a new option to force overwriting existing files).
-* Includes enhanced automatic post creation.  Automatic post creation is now compatible with all file name options. When enabled, new options to set (or override for the "Date" naming option) the publish datetime for the generated comic post are available.
+* Includes _Meta Box_. WebComic now adds a new meta box to the add/edit post pages, which allows you to upload a comic directly from the add/edit post page and add custom descriptions, transcripts, and filenames more easily. Many thanks to Andrew Naylor for inspiring this addition with his original modifications.
+* Inclueds new permission scheme. WebComic permissions have been updated to check for specific user capabilities instead of limiting all plugin access to site administrators. WordPress _Author's_ now have access to a limited Comic Library and WordPress _Editor's_ now have access to the full Comic Library and Comic Chapters.
+* Includes enhanced comic library. The Comic Library now offers the option to regenerate individual comic thumbnails, delete comic posts, and now compares filenames during upload to prevent accidental overwrites (with a new option to force overwriting an existing file).
+* Includes enhanced auto post. Automatic post creation is now compatible with all file name options. When enabled, new options to set (or override for the "Date" naming option) the publish datetime for the generated comic post are available.
 * Includes enhanced orphan post generation. Orphaned post generation is now compatible with all file name options. New options to set (or override for the "Date" naming option) the publish datetime and interval ("Post every week starting January 1, 2009", for example) for the generated comic posts are now available.
-* The library view option is now set per-user instead of globally. If you're using the thumbnail view when you upgrade view will initially be reset to the list view.
+* Includes internationalization support. WebComic now makes full use of WordPress's I18n features to allow for localization.
+* The library view option is now set per-user instead of globally. If you're using the thumbnail view when you upgrade your view will initially be reset to the list view.
 * Corrected a flaw in the search functions that prevented transcripts and custom descriptions from being found when searching for more than one term.
 * Additional minor bug fixes and feature enhancements
 

@@ -29,7 +29,6 @@ function comic_meta_box(){
 	<p><?php printf(__('Transcripts can be formatted using HTML or <a href="%1$s">Markdown</a> <a href="%2$s">Extra</a>.','webcomic'),'http://daringfireball.net/projects/markdown/syntax','http://michelf.com/projects/php-markdown/extra/') ?></p>
 	<?php
 }
-add_meta_box('webcomic', __('WebComic','webcomic'), 'comic_meta_box', 'post', 'normal', 'high');
 
 function comic_meta_box_save($id){	
 	if($_FILES['new_comic_file']):		
