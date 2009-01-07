@@ -171,7 +171,7 @@ function comic_page_library(){
 			endwhile;
 			closedir($dir);
 			
-			echo '<div id="message" class="updated fade"><p>'.sprintf(__('Deleted comic %1$s','webcomic'),$_REQUEST['file']).'.</p></div>';
+			echo '<div id="message" class="updated fade"><p>'.sprintf(__('Deleted comic %1$s','webcomic'),$_REQUEST['file']).'</p></div>';
 		else:
 			echo '<div id="message" class="error"><p>'.sprintf(__('%1$s could not be deleted.','webcomic'),$_REQUEST['file']).'</p></div>';
 		endif;
@@ -414,7 +414,7 @@ function comic_page_library(){
 		while($i<=$max_num_pages):
 			if(($i != 1 && $i < $paged-2) || ($i != $max_num_pages && $i > $paged+2)):
 				if($i == 2 || $i == $max_num_pages-1)
-					$paged_output .= '<span class="page-numbers dots">&hellip;</span>';
+					$paged_output .= '<span class="page-numbers dots">...</span>';
 				$i++;
 				continue;
 			endif;
