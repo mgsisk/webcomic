@@ -1,15 +1,72 @@
 <?php
+/**
+ * This document contains all functions related to the Library page.
+ * These functions were in wc-admin.php prior to version 1.4.
+ * 
+ * @package WebComic
+ * @since 1.4
+ */
+ 
 function comic_page_library(){
 	load_webcomic_domain();
 	
 	global $current_user;
+
+	if('edit_comic' == $_REQUEST['action']):
+		$post = &get_post($_REQUEST['comic']);
+		if(current_user_can('edit_others_posts') || $current_user->ID == $post->post_author):
+		$comic = get_the_comic($_REQUEST['comic']);
+	?>
+	<div class="wrap">
+		<div id="icon-webcomic" class="icon32"><img src="<?php echo plugins_url('webcomic/webcomic.png') ?>" alt="icon" /></div>
+		<h2><?php _e('Edit Comic','webcomic')?></h2>
+		<form action="" method="post">
+			<?php wp_nonce_field('webcomic_rename'); ?>
+			<table class="slidetoggle describe form-table">
+				<thead class="media-item-info">
+					<tr>
+						<td rowspan="5"><a href="<?php echo $comic['link'] ?>" title="<?php echo $comic['description'] ?>"><img src="<?php echo get_comic_image($comic,'medium') ?>" alt="<?php echo $comic['title'] ?>" /></a></td>
+					</tr>
+					<tr>
+						<td><?php echo end(explode('/',$comic['file'])) ?></td>
+					</tr>
+					<tr>
+						<td><?php if($comic['large']) echo end(explode('/',$comic['large'])); else _e('No Large Size','webcomic'); ?></td>
+					</tr>
+					<tr>
+						<td><?php if($comic['medium']) echo end(explode('/',$comic['medium'])); else _e('No Medium Size','webcomic'); ?></td>
+					</tr>
+					<tr>
+						<td><?php if($comic['thumb']) echo end(explode('/',$comic['thumb'])); else _e('No Thumbnail Size','webcomic'); ?></td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="form-field">
+						<th scope="row"><label for="chapter_name"><?php _e('Filename','webcomic') ?></label></th>
+						<td>
+						<input type="text" name="webcomic_new_name" class="regular-text" /> <span class="setting-description"><?php _e('Do not include the file extension','webcomic') ?></span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<p class="submit"><input type="submit" class="button" name="submit" value="<?php _e('Edit Comic','webcomic') ?>" /><input type="hidden" name="webcomic_old_name" value="<?php echo end(explode('/',$comic['file'])) ?>" /><input type="hidden" name="action" value="webcomic_rename" /></p> 
+		</form>
+	</div>
+	<?php else: ?>
+	<p><?php _e('You do not have sufficient permissions to access this page.','webcomic') ?></p>
+	<?php
+		endif;
+	else:
 	
+	/** Set the default user view. */
 	if(!get_usermeta($current_user->ID,'comic_library_view'))
 		update_usermeta($current_user->ID,'comic_library_view','list');
 	
+	/** Update the current users view. */
 	if(isset($_REQUEST['comic_library_view']))
 		update_usermeta($current_user->ID,'comic_library_view',$_REQUEST['comic_library_view']);
 	
+	/** Attempt to update the chapter information for the selected comics. */
 	if('update_comic_chapters' == $_REQUEST['action']):
 		check_admin_referer('update_comic_chapters');
 		
@@ -33,8 +90,7 @@ function comic_page_library(){
 		endif;
 	endif;
 	
-	
-	
+	/** Attempt to upload the selected comic file, generate comic thumbnails, and automatically generate a post (if that option is enabled. */
 	if('webcomic_upload' == $_REQUEST['action']):
 		check_admin_referer('webcomic_upload');
 		
@@ -63,6 +119,11 @@ function comic_page_library(){
 				echo '<div id="message" class="error"><p>'.__('A comic with that filename already exists.','webcomic').'</p></div>';
 			else:
 				if(@move_uploaded_file($_FILES['new_comic_file']['tmp_name'],$target_path)):
+					if(strpos(PHP_OS,'WIN'))
+						chmod($target_path,0777);
+					else
+						chmod($target_path,0664);
+					
 					$img_dim = getimagesize($target_path);
 					$img_crop = ('on' == get_option('comic_thumbnail_crop')) ? true : false;
 					$img_lw = get_option('comic_large_size_w');
@@ -73,7 +134,7 @@ function comic_page_library(){
 					$img_th = get_option('comic_thumbnail_size_h');
 					
 					if(!file_exists(ABSPATH.get_comic_directory(true)))
-						mkdir(ABSPATH.get_comic_directory(true),0775,true);
+						mkdir(ABSPATH.get_comic_directory(true),0775);
 					
 					if($img_dim[0] > $img_lw || $img_dim[1] > $img_lh)
 						image_resize($target_path,$img_lw,$img_lh,0,'large',ABSPATH.get_comic_directory(true));
@@ -116,8 +177,7 @@ function comic_page_library(){
 		endif;
 	endif;
 	
-	
-	
+	/** Attempt to rename the specified comic. */
 	if('webcomic_rename' == $_REQUEST['action']):
 		check_admin_referer('webcomic_rename');
 		
@@ -155,8 +215,7 @@ function comic_page_library(){
 		endif;
 	endif;
 	
-	
-	
+	/** Attempt to delete the selected comic. */
 	if('webcomic_delete' == $_REQUEST['action']):
 		check_admin_referer('webcomic_delete');
 		
@@ -177,8 +236,7 @@ function comic_page_library(){
 		endif;
 	endif;
 	
-	
-	
+	/** Attempt to regenerate the thumbnails of the specified comic. */
 	if('regen_comic_thumbs' == $_REQUEST['action']):
 		check_admin_referer('regen_comic_thumbs');
 		
@@ -203,7 +261,6 @@ function comic_page_library(){
 		endwhile;
 		closedir($dir);
 		
-		
 		$dir = opendir($original_path);
 		while(false !== ($file = readdir($dir))):
 			if(is_dir($original_path.$file) || $file != $_REQUEST['file'])
@@ -224,14 +281,12 @@ function comic_page_library(){
 		
 	endif;
 	
-	
-	
+	/** Attempt to regenerate all comic thumbnails. */
 	if('regen_all_thumbs' == $_REQUEST['action']):
 		check_admin_referer('regen_all_thumbs');
 		
 		echo '<div id="message" class="updated fade"><p><img src="'.plugins_url('webcomic/load.gif').'" alt="Working..." style="vertical-align:middle" /> '.__('Please wait while WebComic attempts to regenerate your comic thumbnails. This could take several minutes for large libraries.','webcomic').'</p></div>';
 		
-		//Get our comic and media options
 		$original_path = ABSPATH.get_comic_directory();
 		$target_path = ABSPATH.get_comic_directory(true);
 		$img_crop = ('on' == get_option('comic_thumbnail_crop')) ? true : false;
@@ -242,7 +297,6 @@ function comic_page_library(){
 		$img_tw = get_option('comic_thumbnail_size_w');
 		$img_th = get_option('comic_thumbnail_size_h');
 		
-		//Delete everything in the thumbs folder
 		$dir = opendir($target_path);
 		while(($file = readdir($dir)) !== false):
 			if(is_dir($target_path.$file))
@@ -251,7 +305,6 @@ function comic_page_library(){
 		endwhile;
 		closedir($dir);
 		
-		//Next, get everything in the comics folder
 		$dir = opendir($original_path);
 		while(false !== ($file = readdir($dir))):
 			if(is_dir($original_path.$file))
@@ -271,8 +324,7 @@ function comic_page_library(){
 		echo '<script type="text/javascript">jQuery("#message").hide(0);</script><div id="message" class="updated fade"><p>'.__('All thumbnails regenrated.','webcomic').'</p></div>';
 	endif;
 	
-	
-	
+	/** Attempt to generate orphaned comic posts. */
 	if('generate_comic_posts' == $_REQUEST['action']):
 		check_admin_referer('generate_comic_posts');
 			
@@ -326,8 +378,7 @@ function comic_page_library(){
 		endif;
 	endif;
 	
-	
-	
+	/** Begin the library output. */
 	global $post,$paged;
 	
 	$paged = ($_GET['paged']) ? $_GET['paged'] : 1;
@@ -337,7 +388,7 @@ function comic_page_library(){
 	$comic_files = array();
 	$path = ABSPATH.get_comic_directory();
 	if(!is_dir($path)) 
-		die('<p class="error">'.__('Webcomic could not access your comic directory.','webcomic').'</p>');
+		die('<p class="error">'.__('Webcomic could not access your comic directory. Please make sure that the directory exists and that your <em>Comic Category</em> setting is set correctly.','webcomic').'</p>');
 	$dir = opendir($path);
 	while(false !== ($file = readdir($dir))):
 		if(is_dir($path.$file))
@@ -349,7 +400,8 @@ function comic_page_library(){
 	//Get just the comic files associated with a post
 	$comic_posts_compare = array();
 	$comics_check = comic_loop(-1); if($comics_check->have_posts()): while($comics_check->have_posts()): $comics_check->the_post();
-		array_push($comic_posts_compare,end(explode('/',get_the_comic('','file'))));
+		$comic = get_the_comic();
+		array_push($comic_posts_compare,end(explode('/',$comic['file'])));
 		$total_post_num += 1;
 	endwhile; endif;
 	$comic_posts_compare = array_filter($comic_posts_compare);
@@ -364,8 +416,10 @@ function comic_page_library(){
 	if($comics->have_posts()):
 		while($comics->have_posts()) : $comics->the_post();	
 			$chapter_temp = get_the_chapter();
-			$volume_temp = get_the_volume();
+			$volume_temp = get_the_chapter('volume');
 			$user_temp = get_userdata($post->post_author);
+			
+			$comic = get_the_comic();
 			
 			$comic_posts_temp['id'] = $post->ID;
 			$comic_posts_temp['permalink'] = get_permalink();
@@ -375,8 +429,8 @@ function comic_page_library(){
 			$comic_posts_temp['custom'] = (get_post_meta($comic_id,'comic_filename',true)) ? get_post_meta($comic_id,'comic_filename',true) : '&mdash';
 			$comic_posts_temp['slug'] = $post->post_name;
 			$comic_posts_temp['date'] = get_the_time(get_option('date_format'));
-			$comic_posts_temp['file'] = get_the_comic(false,'file');
-			$comic_posts_temp['thumb'] = get_the_comic(false,'file','thumb');
+			$comic_posts_temp['file'] = $comic['file'];
+			$comic_posts_temp['thumb'] = $comic['thumb'];
 			$comic_posts_temp['name'] = end(explode('/',$comic_posts_temp['file']));
 			$comic_posts_temp['volume'] = ($volume_temp) ? $volume_temp['title'] : '&mdash;';
 			$comic_posts_temp['chapter'] = ($chapter_temp) ? $chapter_temp['title'].' &laquo; ' : '';
@@ -426,7 +480,7 @@ function comic_page_library(){
 		$paged_output .= '</div>'; $i = 0;
 	endif;
 	
-	//And how about them thumbnails? 
+	//And how about those thumbnails? 
 	if('thumbnail' == get_comic_library_view())
 		$comic_thumb = '<th scope="col" style="width:'.get_option('thumbnail_size_h').'px"></th>';
 ?>
@@ -485,7 +539,7 @@ function comic_page_library(){
 					<select name="comic_chapter1">
 						<option value="-1"><?php _e('N\A','webcomic') ?></option>
 					<?php
-						$collection = get_the_collection(false);
+						$collection = get_the_collection(array('hide_empty' => false));
 						foreach($collection as $volume):
 					?>
 						<optgroup label="<?php echo $volume['title'] ?>">
@@ -548,10 +602,10 @@ function comic_page_library(){
 						<td>
 						<?php if($post['file']): ?>
 							<strong><a href="<?php echo $post['file'] ?>"><?php echo $post['name'] ?></a></strong>
-							<?php if(current_user_can('edit_others_posts') || $current_user->ID == $post['author_id']): ?><div class="row-actions"><a href="<?php echo wp_nonce_url('admin.php?page=comic-library'.$paged_link.'&amp;action=regen_comic_thumbs&amp;file='.$post['name'], 'regen_comic_thumbs') ?>" title="<?php _e('Regenerate thumbnails for this comic','webcomic') ?>"><?php _e('Regenerate Thumbnails','webcomic') ?></a> | <span class="delete"><a href="<?php echo wp_nonce_url('admin.php?page=comic-library'.$paged_link.'&amp;action=webcomic_delete&amp;file='.$post['name'], 'webcomic_delete') ?>" onclick="if(confirm('<?php printf(__("You are about to delete \'%s\'\\n \'Cancel\' to stop, \'OK\' to delete.","webcomic"),$post['name']) ?>')) {return true;}return false;" title="<?php _e('Delete this comic','webcomic') ?>"><?php _e('Delete','webcomic') ?></a></span></div><?php endif ?>
+							<?php if(current_user_can('edit_others_posts') || $current_user->ID == $post['author_id']): ?><div class="row-actions"><a href="admin.php?page=comic-library<?php $paged_link ?>&amp;action=edit_comic&amp;comic=<?php echo $post['id'] ?>" title="<?php _e('Edit this comic','webcomic') ?>"><?php _e('Edit','webcomic') ?></a> | <a href="<?php echo wp_nonce_url('admin.php?page=comic-library'.$paged_link.'&amp;action=regen_comic_thumbs&amp;file='.$post['name'], 'regen_comic_thumbs') ?>" title="<?php _e('Regenerate thumbnails for this comic','webcomic') ?>"><?php _e('Regenerate Thumbnails','webcomic') ?></a> | <span class="delete"><a href="<?php echo wp_nonce_url('admin.php?page=comic-library'.$paged_link.'&amp;action=webcomic_delete&amp;file='.$post['name'], 'webcomic_delete') ?>" onclick="if(confirm('<?php printf(__("You are about to delete \'%s\'\\n \'Cancel\' to stop, \'OK\' to delete.","webcomic"),$post['name']) ?>')) {return true;}return false;" title="<?php _e('Delete this comic','webcomic') ?>"><?php _e('Delete','webcomic') ?></a></span></div><?php endif ?>
 						<?php else: ?>
 							<strong><?php _e('No Comic Found','webcomic') ?></strong>
-						<?php endif; ?>
+						<?php endif ?>
 						</td>
 						<td>
 							<strong><?php if(current_user_can('edit_others_posts') || $current_user->ID == $post['author_id']): ?><a href="post.php?action=edit&amp;post=<?php echo $post['id'] ?>" title="Edit &quot;<?php echo $post['title'] ?>&quot;"><?php echo $post['title'] ?></a><?php else: echo $post['title']; endif ?></strong>
@@ -576,7 +630,7 @@ function comic_page_library(){
 					<select name="comic_chapter2">
 						<option value="-1"><?php _e('N\A','webcomic') ?></option>
 					<?php
-						$collection = get_the_collection(false);
+						$collection = get_the_collection(array('hide_empty' => false));
 						foreach($collection as $volume):
 					?>
 						<optgroup label="<?php echo $volume['title'] ?>">
@@ -659,6 +713,6 @@ function comic_page_library(){
 			<?php $i++; endforeach; $i=0; ?>
 			</tbody>
 		</table>
-<?php endif; ?>
+<?php endif; endif; ?>
 	</div>
 <?php } ?>

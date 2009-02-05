@@ -1,4 +1,12 @@
 <?php
+/**
+ * This document contains all functions related to the Settings page.
+ * These functions were in wc-admin.php prior to version 1.4.
+ * 
+ * @package WebComic
+ * @since 1.4
+ */
+ 
 function comic_page_settings(){
 	load_webcomic_domain();
 	
@@ -54,9 +62,9 @@ function comic_page_settings(){
 			update_option('comic_name_format_date',$_REQUEST['comic_name_format_date']);
 		
 		if(!file_exists(ABSPATH.get_comic_directory()))
-			mkdir(ABSPATH.get_comic_directory(),0775,true);
+			mkdir(ABSPATH.get_comic_directory(),0775);
 		if(!file_exists(ABSPATH.get_comic_directory(true)))
-			mkdir(ABSPATH.get_comic_directory(true),0775,true);
+			mkdir(ABSPATH.get_comic_directory(true),0775);
 		
 		echo '<div id="message" class="updated fade"><p><strong>'.__('Settings saved.','webcomic').'</strong></p></div>';
 	endif;
@@ -65,7 +73,7 @@ function comic_page_settings(){
 		<div id="icon-webcomic" class="icon32"><img src="<?php echo plugins_url('webcomic/webcomic.png') ?>" alt="icon" /></div>
 		<h2><?php _e('Settings','webcomic') ?></h2>
 		<form method="post" action="">
-			<?php wp_nonce_field('webcomic_save_settings'); ?>
+			<?php wp_nonce_field('webcomic_save_settings') ?>
 			<table class="form-table">
 				<tr>
 					<th scope="row"><label for="comic_category"><?php _e('Comic Category','webcomic') ?></label></th>
@@ -99,7 +107,7 @@ function comic_page_settings(){
 						<select name="comic_current_chapter" id="comic_current_chapter">
 							<option value="-1"><?php _e('N\A','webcomic') ?></option>
 						<?php
-							$collection = get_the_collection(false);
+							$collection = get_the_collection(array('hide_empty' => false));
 							foreach($collection as $volume):
 						?>
 							<optgroup label="<?php echo $volume['title'] ?>">

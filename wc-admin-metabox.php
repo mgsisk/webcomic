@@ -1,12 +1,17 @@
 <?php
-function comic_meta_box(){	
+/**
+ * This document contains all of the functions related to the WebComic Metabox.
+ * 
+ * @package WebComic
+ * @since 1.6
+ */
+
+function comic_meta_box($post){	
 	load_webcomic_domain();
-	
-	global $post;
 	?>
 	<script type="text/javascript">jQuery('form#post').attr('enctype','multipart/form-data').attr('encoding','multipart/form-data')</script>
-	<?php if(in_category(get_comic_category()) && get_the_comic()): ?>
-		<p class="alignright"><?php echo get_the_comic(false,'full','thumb') ?></p>
+	<?php if(in_category(get_comic_category()) && get_the_comic()): $comic = get_the_comic(); ?>
+		<p class="alignright"><a href="<?php echo $comic['link'] ?>" title="<?php echo $comic['description'] ?>"><img src="<?php echo $comic['thumb'] ?>" alt="<?php echo $comic['title'] ?>" /></a></p>
 	<?php elseif(in_category(get_comic_category()) && !get_the_comic()): ?>
 		<p class="alignright"><strong class="error"><?php _e('WebComic could not match this post with a comic.','webcomic') ?></strong></p>
 	<?php endif ?>
@@ -23,7 +28,7 @@ function comic_meta_box(){
 	</p>
 	<p><?php _e('If you are uploading a comic and leave this blank it will be automatically set to the name of the uploaded comic file.','webcomic') ?></p><br />
 	<?php endif ?>
-	<?php if(get_the_collection(false) && current_user_can('manage_categories')): ?>
+	<?php if(get_the_collection(array('hide_empty' => false)) && current_user_can('manage_categories')): ?>
 	<p>
 		<label for="comic_chapter"><strong><?php _e('Chapter','webcomic') ?></strong></label><br />
 		<?php _e('','webcomic') ?>
@@ -37,7 +42,7 @@ function comic_meta_box(){
 				$comic_chapter = get_comic_current_chapter();
 			endif;
 			
-			$collection = get_the_collection(false);
+			$collection = get_the_collection(array('hide_empty' => false));
 			foreach($collection as $volume):
 		?>
 			<optgroup label="<?php echo $volume['title'] ?>">
@@ -57,7 +62,9 @@ function comic_meta_box(){
 	<?php
 }
 
-function comic_meta_box_save($id){	
+function comic_meta_box_save($id){
+	
+	/** Attempt to upload the selected comic file and generate comic thumbnails. */
 	if($_FILES['new_comic_file']):		
 		$ext = strtolower(end(explode('.',basename($_FILES['new_comic_file']['name']))));
 		
@@ -79,6 +86,11 @@ function comic_meta_box_save($id){
 			$target_path = ABSPATH.get_comic_directory().$file.$hash.$ext;
 			
 			if((!is_file($target_path) || $_REQUEST['new_comic_overwrite']) && move_uploaded_file($_FILES['new_comic_file']['tmp_name'],$target_path)):
+				if(strpos(PHP_OS,'WIN'))
+					chmod($target_path,0777);
+				else
+					chmod($target_path,0664);
+				
 				$img_dim = getimagesize($target_path);
 				$img_crop = ('on' == get_option('comic_thumbnail_crop')) ? true : false;
 				$img_lw = get_option('comic_large_size_w');
@@ -89,7 +101,7 @@ function comic_meta_box_save($id){
 				$img_th = get_option('comic_thumbnail_size_h');
 				
 				if(!file_exists(ABSPATH.get_comic_directory(true)))
-					mkdir(ABSPATH.get_comic_directory(true),0775,true);
+					mkdir(ABSPATH.get_comic_directory(true),0775);
 				
 				if($img_dim[0] > $img_lw || $img_dim[1] > $img_lh)
 					image_resize($target_path,$img_lw,$img_lh,0,'large',ABSPATH.get_comic_directory(true));
@@ -104,6 +116,7 @@ function comic_meta_box_save($id){
 		endif;
 	endif;
 	
+	/** Attempt to update the chapter information for the selected comics. */
 	if($_REQUEST['comic_chapter']):
 		if(-1 == intval($_REQUEST['comic_chapter']))
 			remove_post_from_chapter($id);
@@ -111,6 +124,7 @@ function comic_meta_box_save($id){
 			add_post_to_chapter($id,$_REQUEST['comic_chapter']);
 	endif;
 	
+	/** Attempt to update the comic filename. */
 	if($_REQUEST['comic_filename']):
 		if(false !== get_post_meta($id,'comic_filename',true)):
 			update_post_meta($id,'comic_filename',$_REQUEST['comic_filename']);
@@ -119,6 +133,7 @@ function comic_meta_box_save($id){
 		endif;
 	endif;
 	
+	/** Attempt to update the comic description. */
 	if($_REQUEST['comic_description']):
 		if(false !== get_post_meta($id,'comic_description',true)):
 			update_post_meta($id,'comic_description',$_REQUEST['comic_description']);
@@ -127,6 +142,7 @@ function comic_meta_box_save($id){
 		endif;
 	endif;
 	
+	/** Attempt to update the comic transcript. */
 	if($_REQUEST['comic_transcript']):
 		if(false !== get_post_meta($id,'comic_transcript',true)):
 			update_post_meta($id,'comic_transcript',$_REQUEST['comic_transcript']);

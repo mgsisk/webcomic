@@ -1,7 +1,16 @@
 <?php
+/**
+ * This document contains all functions related to the Chapters page.
+ * These functions were in wc-admin.php prior to version 1.4.
+ * 
+ * @package WebComic
+ * @since 1.4
+ */
+ 
 function comic_page_chapters(){
 	load_webcomic_domain();
 	
+	/** Attempts to create a new chapter. */
 	if('create_new_chapter' == $_REQUEST['action']):
 		check_admin_referer('create_new_chapter');
 		
@@ -20,13 +29,12 @@ function comic_page_chapters(){
 		endif;
 	endif;
 	
-	
-	
+	/** Attempts to delete the selected chapter. */
 	if('delete_chapter' == $_REQUEST['action']):
 		check_admin_referer('delete_chapter');
 		
 		if($_REQUEST['volume']):
-			$the_chapter = get_the_volume($_REQUEST['chapter']);
+			$the_chapter = get_the_chapter($_REQUEST['chapter']);
 			$children = get_term_children($_REQUEST['chapter'],'chapter');
 			
 			foreach($children as $chapter):
@@ -44,8 +52,7 @@ function comic_page_chapters(){
 		echo '<div id="message" class="updated fade"><p>'.sprintf(__('Deleted <q>%1$s</q>','webcomic'),$the_chapter['title']).$the_volume.'</p></div>';
 	endif;
 	
-	
-	
+	/** Attempts to delete the selected chapters. */
 	if('modify_chapters' == $_REQUEST['action']):
 		check_admin_referer('modify_chapters');
 		
@@ -68,8 +75,7 @@ function comic_page_chapters(){
 		endif;
 	endif;
 	
-	
-	
+	/** Attempts to update the selected chapter. */
 	if('update_chapter' == $_REQUEST['action']):
 		check_admin_referer('update_chapter');
 		
@@ -77,9 +83,20 @@ function comic_page_chapters(){
 		$chapter_nicename = sanitize_title($_REQUEST['chapter_name']);
 		$chapter_parent = $_REQUEST['chapter_parent'];
 		$chapter_description = $_REQUEST['chapter_description'];
+		$chapter_check = is_term($chapter_name,'chapter');
 		
-		if(!is_wp_error(wp_update_term($_REQUEST['chapter_id'],'chapter',array('name' => $chapter_name, 'slug' => $chapter_nicename, 'parent' => $chapter_parent, 'description' => $chapter_description))))
+		if(!$chapter_name):
+			$update_error = 1;
+		elseif($_REQUEST['chapter_id'] != $chapter_check['term_id']):
+			$update_error = 2;
+		endif;
+		
+		if(!$update_error && !is_wp_error(wp_update_term($_REQUEST['chapter_id'],'chapter',array('name' => $chapter_name, 'slug' => $chapter_nicename, 'parent' => $chapter_parent, 'description' => $chapter_description))))
 			echo '<div id="message" class="updated fade"><p>'.sprintf(__('Updted chapter <q>%1$s</q>','webcomic'),$chapter_name).'</p></div>';
+		elseif(1 == $update_error)
+			echo '<div id="message" class="error"><p>'.__('A chapter name must be provided.','webcomic').'</p></div>';
+		elseif(2 == $update_error)
+			echo '<div id="message" class="error"><p>'.__('A chapter with that name already exists.','webcomic').'</p></div>';
 		else
 			echo '<div id="message" class="error"><p>'.__('The chapter could not be updated.','webcomic').'</p></div>';
 	endif;
@@ -93,7 +110,7 @@ function comic_page_chapters(){
 			<table class="form-table">
 				<tr class="form-field">
 					<th scope="row"><label for="chapter_name"><?php _e('Chapter Name','webcomic') ?></label></th>
-					<td><input name="chapter_name" id="chapter_name" type="text" value="<?php echo $the_chapter->name ?>" <?php if($error) echo ' style="border-color:#c00"' ?> /><br /><?php _e('The name is used to identify the chapter almost everywhere.','webcomic') ?></td>
+					<td><input name="chapter_name" id="chapter_name" type="text" value="<?php echo $the_chapter->name ?>" /><br /><?php _e('The name is used to identify the chapter almost everywhere.','webcomic') ?></td>
 				</tr>
 				<?php if($the_chapter->parent != 0): ?>
 				<tr class="form-field">
@@ -101,7 +118,7 @@ function comic_page_chapters(){
 					<td>
 							<select name="chapter_parent" id="chapter_parent">
 							<?php
-								$collection = get_the_collection(false);
+								$collection = get_the_collection(array('hide_empty' => false));
 								foreach($collection as $volume):
 									if($volume['id'] == $the_chapter->parent)
 										$the_parent = ' selected="selected"';
@@ -125,7 +142,7 @@ function comic_page_chapters(){
 		<h2><?php _e('Chapters','webcomic') ?></h2>
 		<div id="col-right">
 			<div class="col-wrap">
-			<?php if(!get_the_collection(false)): ?>
+			<?php if(!get_the_collection(array('hide_empty' => false))): ?>
 				<p><?php _e('Chapters are a useful (but optional) way of categorizing your comics, similar to post categories. You can create new chapters or modify existing ones here and assign comics to them from the Comic Library.','webcomic') ?></p>
 				<p><?php _e("To start using chapters, you'll need to create two of them: the first will be a <em>volume</em>, which can contain any number of regular chapters. You should assign the second chapter to your newly created volume.",'webcomic') ?></p>
 				<p><?php _e("Don't forget to update the <strong>Current Chapter</strong> setting, which will automatically assign any new comic posts to the chapter you select.",'webcomic') ?></p>
@@ -166,7 +183,7 @@ function comic_page_chapters(){
 						</tfoot>
 						<tbody>
 						<?php
-							$collection = get_the_collection(false);
+							$collection = get_the_collection(array('hide_empty' => false));
 							foreach($collection as $volume):
 						?>
 							<tr<?php if($i%2) echo' class="alt"'; ?>>
@@ -218,7 +235,7 @@ function comic_page_chapters(){
 							<select name="chapter_parent" id="chapter_parent"> 
 								<option value="0"><?php _e('None','webcomic') ?></option>
 							<?php
-								$collection = get_the_collection(false);
+								$collection = get_the_collection(array('hide_empty' => false));
 								foreach($collection as $volume)
 									echo '<option value="'.$volume['id'].'">'.$volume['title'].'</option>';
 							?>
