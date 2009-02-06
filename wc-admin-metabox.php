@@ -28,7 +28,7 @@ function comic_meta_box($post){
 	</p>
 	<p><?php _e('If you are uploading a comic and leave this blank it will be automatically set to the name of the uploaded comic file.','webcomic') ?></p><br />
 	<?php endif ?>
-	<?php if(get_the_collection(array('hide_empty' => false)) && current_user_can('manage_categories')): ?>
+	<?php if(get_the_collection('hide_empty=0') && current_user_can('manage_categories')): ?>
 	<p>
 		<label for="comic_chapter"><strong><?php _e('Chapter','webcomic') ?></strong></label><br />
 		<?php _e('','webcomic') ?>
@@ -42,7 +42,7 @@ function comic_meta_box($post){
 				$comic_chapter = get_comic_current_chapter();
 			endif;
 			
-			$collection = get_the_collection(array('hide_empty' => false));
+			$collection = get_the_collection('hide_empty=0');
 			foreach($collection as $volume):
 		?>
 			<optgroup label="<?php echo $volume['title'] ?>">

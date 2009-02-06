@@ -539,7 +539,7 @@ function comic_page_library(){
 					<select name="comic_chapter1">
 						<option value="-1"><?php _e('N\A','webcomic') ?></option>
 					<?php
-						$collection = get_the_collection(array('hide_empty' => false));
+						$collection = get_the_collection('hide_empty=0');
 						foreach($collection as $volume):
 					?>
 						<optgroup label="<?php echo $volume['title'] ?>">
@@ -630,7 +630,7 @@ function comic_page_library(){
 					<select name="comic_chapter2">
 						<option value="-1"><?php _e('N\A','webcomic') ?></option>
 					<?php
-						$collection = get_the_collection(array('hide_empty' => false));
+						$collection = get_the_collection('hide_empty=0');
 						foreach($collection as $volume):
 					?>
 						<optgroup label="<?php echo $volume['title'] ?>">

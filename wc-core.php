@@ -126,10 +126,10 @@ function get_the_comic($comic=false){
 	
 	$output['id']          = $comic_post->ID;
 	$output['title']       = $comic_post->post_title;
-	$output['file']        = get_settings('siteurl').'/'.get_comic_directory().$comic_file;
+	$output['description'] = (get_post_meta($comic_post->ID,'comic_description',true)) ? get_post_meta($comic_post->ID,'comic_description',true) : $comic_post->post_title;
 	$output['link']        = get_permalink($comic_post->ID);
 	$output['class']       = 'comic-item comic-time-'.$comic_post->ID;
-	$output['description'] = (get_post_meta($comic_post->ID,'comic_description',true)) ? get_post_meta($comic_post->ID,'comic_description',true) : $comic_post->post_title;
+	$output['file']        = get_settings('siteurl').'/'.get_comic_directory().$comic_file;
 	
 	if(get_post_meta($comic_post->ID,'comic_transcript',true))
 		$output['transcript']  = (function_exists('Markdown')) ? Markdown(get_post_meta($comic_post->ID,'comic_transcript',true)) : get_post_meta($comic_post->ID,'comic_transcript',true);
@@ -668,13 +668,13 @@ function dropdown_comics($label='',$group=false,$reverse=false,$numbers=false,$p
 	$output = '<select name="comic-select" class="dropdown-comics"><option value="0">'.$label.'</option>';
 	
 	if($group):
-		$collection = get_the_collection(array('order' => $order));
+		$collection = get_the_collection('order='.$order);
 		
 		if(!$collection) //No colleciton could be found.
 			return;
 
 		foreach($collection as $volume):
-			if('volumes' === $group):
+			if('volume' === $group):
 				$append = ($pages) ? ' ('.$volume['pages'].')' : '';
 				$output .= '<optgroup label="'.$volume['title'].$append.'">';
 				
@@ -752,7 +752,7 @@ function dropdown_comics($label='',$group=false,$reverse=false,$numbers=false,$p
  */
 function comic_archive($descriptions=false,$pages=false,$reverse=false){
 	$reverse = ($reverse) ? 'DESC' : 'ASC';
-	$collection = get_the_collection(array('order' => $reverse));
+	$collection = get_the_collection('order='.$reverse);
 	
 	if(!$collection) //No collection could be found.
 		return;

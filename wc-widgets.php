@@ -171,7 +171,7 @@ function widget_init_dropdown_comics(){
 		$numbers = $options['numbers'];
 		$pages   = $options['pages'];
 		switch($options['group']):
-			case 2: $group = 'volumes'; break;
+			case 2: $group = 'volume'; break;
 			case 1: $group = true;
 		endswitch;
 		

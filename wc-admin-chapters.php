@@ -118,7 +118,7 @@ function comic_page_chapters(){
 					<td>
 							<select name="chapter_parent" id="chapter_parent">
 							<?php
-								$collection = get_the_collection(array('hide_empty' => false));
+								$collection = get_the_collection('hide_empty=0');
 								foreach($collection as $volume):
 									if($volume['id'] == $the_chapter->parent)
 										$the_parent = ' selected="selected"';
@@ -142,7 +142,7 @@ function comic_page_chapters(){
 		<h2><?php _e('Chapters','webcomic') ?></h2>
 		<div id="col-right">
 			<div class="col-wrap">
-			<?php if(!get_the_collection(array('hide_empty' => false))): ?>
+			<?php if(!get_the_collection('hide_empty=0')): ?>
 				<p><?php _e('Chapters are a useful (but optional) way of categorizing your comics, similar to post categories. You can create new chapters or modify existing ones here and assign comics to them from the Comic Library.','webcomic') ?></p>
 				<p><?php _e("To start using chapters, you'll need to create two of them: the first will be a <em>volume</em>, which can contain any number of regular chapters. You should assign the second chapter to your newly created volume.",'webcomic') ?></p>
 				<p><?php _e("Don't forget to update the <strong>Current Chapter</strong> setting, which will automatically assign any new comic posts to the chapter you select.",'webcomic') ?></p>
@@ -183,7 +183,7 @@ function comic_page_chapters(){
 						</tfoot>
 						<tbody>
 						<?php
-							$collection = get_the_collection(array('hide_empty' => false));
+							$collection = get_the_collection('hide_empty=0');
 							foreach($collection as $volume):
 						?>
 							<tr<?php if($i%2) echo' class="alt"'; ?>>
@@ -235,7 +235,7 @@ function comic_page_chapters(){
 							<select name="chapter_parent" id="chapter_parent"> 
 								<option value="0"><?php _e('None','webcomic') ?></option>
 							<?php
-								$collection = get_the_collection(array('hide_empty' => false));
+								$collection = get_the_collection('hide_empty=0');
 								foreach($collection as $volume)
 									echo '<option value="'.$volume['id'].'">'.$volume['title'].'</option>';
 							?>
