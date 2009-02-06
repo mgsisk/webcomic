@@ -19,7 +19,7 @@ WebComic makes any WordPress theme webcomic ready by adding additional functiona
 	* get\_the\_comic() now returns an array of comic related information instead of specifically formatted output (similar to get\_the\_chapter()).
 	* get\_the\_chapter() can now provide both chapter and volume information (get\_the\_volume() has been removed; use get\_the\_chapter('volume') instead).
 	* get\_the\_collection() now accepts an array argument which takes any key/value pairs that the WordPress function get\_terms() will accept (see wp-includes/taxonomy.php).
-	* Includes new template tag get\_comic\_image().
+* Includes new template tags get\_comic\_image(), the\_current\_chapter(), and the\_current\_volume().
 * All plugin files now include inline documentation.
 * Additional bug fixes and feature enhancements.
 
@@ -70,7 +70,7 @@ Please see the [WebComic & InkBlot Codex](http://maikeruon.com/wcib/codex/) for 
 	* get\_the\_comic() now returns an array of comic related information instead of specifically formatted output (similar to get\_the\_chapter()).
 	* get\_the\_chapter() can now provide both chapter and volume information (get\_the\_volume() has been removed; use get\_the\_chapter('volume') instead).
 	* get\_the\_collection() now accepts an array argument which takes any key/value pairs that the WordPress function get\_terms() will accept (see wp-includes/taxonomy.php).
-	* Includes new template tag get\_comic\_image().
+* Includes new template tags get\_comic\_image(), the\_current\_chapter(), and the\_current\_volume().
 * All plugin files now include inline documentation.
 * Additional bug fixes and feature enhancements.
 
