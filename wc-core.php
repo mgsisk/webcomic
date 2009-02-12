@@ -112,6 +112,9 @@ function get_the_comic($comic=false){
 		default:     $comic_name = get_post_meta($comic_post->ID,'comic_filename',true);
 	endswitch;
 	
+	if(!$comic_name)
+		return;
+	
 	$dir = opendir($path);
 	while(($file = readdir($dir)) !== false):
 		if(false !== strpos($file,$comic_name)):
