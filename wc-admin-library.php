@@ -49,7 +49,7 @@ function comic_page_library(){
 					</tr>
 				</tbody>
 			</table>
-			<p class="submit"><input type="submit" class="button" name="submit" value="<?php _e('Edit Comic','webcomic') ?>" /><input type="hidden" name="webcomic_old_name" value="<?php echo end(explode('/',$comic['file'])) ?>" /><input type="hidden" name="action" value="webcomic_rename" /></p> 
+			<p class="submit"><input type="submit" class="button" name="submit" value="<?php _e('Edit Comic','webcomic') ?>" /><input type="hidden" name="webcomic_old_name" value="<?php echo end(explode('/',$comic['file'])) ?>" /><input type="hidden" name="webcomic_post_id" value="<?php echo $comic['id'] ?>" /><input type="hidden" name="action" value="webcomic_rename" /></p> 
 		</form>
 	</div>
 	<?php else: ?>
@@ -190,6 +190,9 @@ function comic_page_library(){
 				$hash = '-'.md5(microtime().basename($_FILES['new_comic_file']['name']));
 			
 			if(@rename(ABSPATH.get_comic_directory().$_REQUEST['webcomic_old_name'],ABSPATH.get_comic_directory().$_REQUEST['webcomic_new_name'].$hash.'.'.$ext)):
+			
+				if('meta' == get_option('comic_name_format') && $_REQUEST['webcomic_post_id'])
+					update_post_meta($_REQUEST['webcomic_post_id'], 'comic_filename', $_REQUEST['webcomic_new_name']);
 			 
 				$dir = opendir(ABSPATH.get_comic_directory(true));
 				while(($file = readdir($dir)) !== false):
