@@ -51,7 +51,7 @@ if(!get_option('comic_category') || !get_option('comic_directory') || !get_optio
 	function comic_set_defaults(){
 		load_webcomic_domain();
 		
-		add_option('comic_category','1/');
+		add_option('comic_category','1');
 		add_option('comic_directory','comics');
 		add_option('comic_current_chapter','-1');
 		add_option('comic_feed','on');
