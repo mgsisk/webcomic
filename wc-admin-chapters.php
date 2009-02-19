@@ -87,7 +87,7 @@ function comic_page_chapters(){
 		
 		if(!$chapter_name):
 			$update_error = 1;
-		elseif($_REQUEST['chapter_id'] != $chapter_check['term_id']):
+		elseif($chapter_check && $_REQUEST['chapter_id'] != $chapter_check->term_id):
 			$update_error = 2;
 		endif;
 		
