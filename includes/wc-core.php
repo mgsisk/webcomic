@@ -912,11 +912,11 @@ function chapters_nav_link($collection='id',$volume=false,$bound='first',$sep=''
 	$collection = (is_array($collection)) ? $collection : get_the_collection('orderby='.$collection);
 	
 	first_chapter_link($collection,$volume,$bound,$fstlabel);
-	echo '<span class="">'.$sep.'</span>';
+	echo '<span class="chapters-link-separator">'.$sep.'</span>';
 	previous_chapter_link($collection,$volume,$bound,$prelabel);
-	echo $sep;
+	echo '<span class="chapters-link-separator">'.$sep.'</span>';
 	next_chapter_link($collection,$volume,$bound,$nxtlabel);
-	echo $sep;
+	echo '<span class="chapters-link-separator">'.$sep.'</span>';
 	last_chapter_link($collection,$volume,$bound,$lstlabel);
 }
 
