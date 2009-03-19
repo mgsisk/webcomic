@@ -3,7 +3,7 @@
 Plugin Name: WebComic
 Plugin URI: http://maikeruon.com/wcib/
 Description: WebComic makes any WordPress theme webcomic ready by adding additional template tags and widgets specifically designed for publishing webcomics.
-Version: 1.8-beta
+Version: 1.8
 Author: Michael Sisk
 Author URI: http://maikeruon.com/
 
