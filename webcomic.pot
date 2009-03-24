@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/webcomic\n"
-"POT-Creation-Date: 2009-03-19 17:55+0000\n"
+"POT-Creation-Date: 2009-03-24 13:17+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 
 #: includes/wc-admin-chapters.php:57
 #, php-format
-msgid "Added new chapter <q>%1$s</q>"
+msgid "Added new chapter <q>%s</q>"
 msgstr ""
 
 #: includes/wc-admin-chapters.php:80
@@ -29,7 +29,7 @@ msgstr ""
 
 #: includes/wc-admin-chapters.php:89
 #, php-format
-msgid "Deleted <q>%1$s</q>"
+msgid "Deleted <q>%s</q>"
 msgstr ""
 
 #: includes/wc-admin-chapters.php:99
@@ -77,7 +77,7 @@ msgstr ""
 msgid "The name is used to identify the chapter almost everywhere."
 msgstr ""
 
-#: includes/wc-admin-chapters.php:165
+#: includes/wc-admin-chapters.php:165 includes/wc-admin-chapters.php:316
 msgid "Chapter Slug"
 msgstr ""
 
@@ -134,7 +134,7 @@ msgid "Apply"
 msgstr ""
 
 #: includes/wc-admin-chapters.php:228 includes/wc-admin-chapters.php:237
-#: includes/wc-core.php:582
+#: includes/wc-core.php:578
 msgid "Name"
 msgstr ""
 
@@ -509,6 +509,14 @@ msgstr ""
 msgid "Regenerate All Thumbnails"
 msgstr ""
 
+#: includes/wc-admin-library.php:570
+msgid "List View"
+msgstr ""
+
+#: includes/wc-admin-library.php:571
+msgid "Thumbnail View"
+msgstr ""
+
 #: includes/wc-admin-library.php:579 includes/wc-admin-library.php:596
 msgid "Comic"
 msgstr ""
@@ -556,7 +564,15 @@ msgid "No Comic Found"
 msgstr ""
 
 #: includes/wc-admin-library.php:626
+msgid "Edit this post"
+msgstr ""
+
+#: includes/wc-admin-library.php:626
 msgid "Delete this post"
+msgstr ""
+
+#: includes/wc-admin-library.php:626
+msgid "View"
 msgstr ""
 
 #: includes/wc-admin-library.php:666
@@ -643,11 +659,11 @@ msgid ""
 "text for links to and images of the comic."
 msgstr ""
 
-#: includes/wc-admin-metabox.php:58 includes/wc-core.php:584
+#: includes/wc-admin-metabox.php:58 includes/wc-core.php:580
 msgid "Transcript"
 msgstr ""
 
-#: includes/wc-admin-metabox.php:59 includes/wc-core.php:585
+#: includes/wc-admin-metabox.php:59 includes/wc-core.php:581
 #, php-format
 msgid ""
 "Transcripts can be formatted using HTML or <a href=\"%1$s\">Markdown</a> <a "
@@ -830,76 +846,76 @@ msgstr ""
 msgid "Comic Settings"
 msgstr ""
 
-#: includes/wc-core.php:575
+#: includes/wc-core.php:571
 msgid "View Transcript"
 msgstr ""
 
-#: includes/wc-core.php:583
+#: includes/wc-core.php:579
 msgid "E-mail"
 msgstr ""
 
-#: includes/wc-core.php:587
+#: includes/wc-core.php:583
 msgid "Submit"
 msgstr ""
 
-#: includes/wc-core.php:658
+#: includes/wc-core.php:654
 msgid "&laquo; First"
 msgstr ""
 
-#: includes/wc-core.php:703
+#: includes/wc-core.php:699
 msgid "Last &raquo;"
 msgstr ""
 
-#: includes/wc-core.php:750
+#: includes/wc-core.php:746
 msgid "&lt; Back"
 msgstr ""
 
-#: includes/wc-core.php:808
+#: includes/wc-core.php:804
 msgid "Next &gt;"
 msgstr ""
 
-#: includes/wc-core.php:956
+#: includes/wc-core.php:952
 #, php-format
 msgid "&laquo; First %s"
+msgstr ""
+
+#: includes/wc-core.php:956 includes/wc-core.php:1016
+#: includes/wc-core.php:1096 includes/wc-core.php:1176
+#: includes/wc-core.php:1224
+#, php-format
+msgid "Go to the %s archive"
 msgstr ""
 
 #: includes/wc-core.php:960 includes/wc-core.php:1020
 #: includes/wc-core.php:1100 includes/wc-core.php:1180
 #: includes/wc-core.php:1228
 #, php-format
-msgid "Go to the %s archive"
+msgid "Go to the end of %s"
 msgstr ""
 
 #: includes/wc-core.php:964 includes/wc-core.php:1024
 #: includes/wc-core.php:1104 includes/wc-core.php:1184
 #: includes/wc-core.php:1232
 #, php-format
-msgid "Go to the end of %s"
-msgstr ""
-
-#: includes/wc-core.php:968 includes/wc-core.php:1028
-#: includes/wc-core.php:1108 includes/wc-core.php:1188
-#: includes/wc-core.php:1236
-#, php-format
 msgid "Go to the beginning of %s"
 msgstr ""
 
-#: includes/wc-core.php:1016
+#: includes/wc-core.php:1012
 #, php-format
 msgid "Last %s &raquo;"
 msgstr ""
 
-#: includes/wc-core.php:1096
+#: includes/wc-core.php:1092
 #, php-format
 msgid "&lt; Previous %s"
 msgstr ""
 
-#: includes/wc-core.php:1176
+#: includes/wc-core.php:1172
 #, php-format
 msgid "Next %s &gt;"
 msgstr ""
 
-#: includes/wc-core.php:1389
+#: includes/wc-core.php:1385
 msgid "Quick Archive"
 msgstr ""
 
@@ -1042,7 +1058,7 @@ msgstr ""
 msgid "Recent Posts"
 msgstr ""
 
-#: webcomic.php:127
+#: webcomic.php:93
 #, php-format
 msgid ""
 "Thanks for choosing WebComic! Please <a href=\"%s\">update your settings</a>."
