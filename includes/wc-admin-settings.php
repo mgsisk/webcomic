@@ -134,8 +134,8 @@ function comic_page_settings(){
 				<tr>
 					<th scope="row"><?php _e('Thumbnail Size','webcomic') ?></th>
 					<td>
-						<label><?php _e('Width','webcomic') ?> <input type="text" name="comic_thumbnail_size_w" value="<?php echo get_option('comic_thumbnail_size_w') ?>" class="small-text" /></label> <label><?php _e('Height','webcomic') ?> <input type="text" name="comic_thumbnail_size_h" value="<?php echo get_option('comic_thumbnail_size_h') ?>" class="small-text" /></label>
-						<p><label><input type="checkbox" name="comic_thumbnail_crop" value="1"<?php if(get_option('comic_thumbnail_crop')) echo ' checked="checked"'; ?> /> <?php _e('Crop thumbnail to exact dimensions (normally thumbnails are proportional)','webcomic') ?></label></p>
+						<label><?php _e('Width','webcomic') ?> <input type="text" name="comic_thumbnail_size_w" value="<?php echo get_option('comic_thumbnail_size_w') ?>" class="small-text" /></label> <label><?php _e('Height','webcomic') ?> <input type="text" name="comic_thumbnail_size_h" value="<?php echo get_option('comic_thumbnail_size_h') ?>" class="small-text" /></label><br />
+						<label><input type="checkbox" name="comic_thumbnail_crop" value="1"<?php if(get_option('comic_thumbnail_crop')) echo ' checked="checked"'; ?> /> <?php _e('Crop thumbnail to exact dimensions (normally thumbnails are proportional)','webcomic') ?></label>
 					</td>
 				</tr>
 				<tr>

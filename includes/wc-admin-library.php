@@ -143,7 +143,7 @@ function comic_page_library(){
 						image_resize($target_path,$img_tw,$img_th,$img_crop,'thumb',get_comic_directory('abs',true,$comic_dir));
 						
 					if(get_option('comic_auto_post') && !$_REQUEST['disable_auto_post']):
-						$post_date = ('date' != get_option('comic_name_format') || $_REQUEST['new_comic_date_override']) ? $_REQUEST['aa'].'-'.$_REQUEST['mm'].'-'.$_REQUEST['jj'].' '.$_REQUEST['hh'].':'.$_REQUEST['mn'].':'.$_REQUEST['ss'] :  date('Y-m-d H:i:s', strtotime($file));
+						$post_date = ('date' != get_option('comic_name_format') || ('date' == get_option('comic_name_format') && '1969-12-31 19:00:00' == date('Y-m-d H:i:s', strtotime($file))) || $_REQUEST['new_comic_date_override']) ? $_REQUEST['aa'].'-'.$_REQUEST['mm'].'-'.$_REQUEST['jj'].' '.$_REQUEST['hh'].':'.$_REQUEST['mn'].':'.$_REQUEST['ss'] : date('Y-m-d H:i:s', strtotime($file));
 						$psot_date_gmt = get_gmt_from_date($post_date);
 						$error = wp_insert_post(array(
 							'post_content' => '&nbsp;',
@@ -376,7 +376,7 @@ function comic_page_library(){
 			if(!$i)
 				echo '<div id="message" class="error"><p>'.__('No posts could be automatically generated.','webcomic').'</p></div>';
 			else
-				echo '<div id="message" class="updated fade"><p>'.sprintf(__ngettext('%d post automatically generated.','%d posts automatically generated.',$i,'webcomic'),$i).'</p></div>';
+				echo '<div id="message" class="updated fade"><p>'.__ngettext('%d post automatically generated.','%d posts automatically generated.',$i,'webcomic').'</p></div>';
 		endif;
 	endif;
 	
@@ -567,8 +567,8 @@ function comic_page_library(){
 				</div>
 			<?php endif; echo $paged_output ?>
 				<div class="view-switch">
-					<a href="admin.php?page=webcomic/includes/wc-admin.php<?php echo $paged_link; ?>&amp;comic_library_view=list"><img<?php get_comic_library_view('list') ?> id="view-switch-list" src="../wp-includes/images/blank.gif" width="20" height="20" title="List View" alt="List View" /></a>
-					<a href="admin.php?page=webcomic/includes/wc-admin.php<?php echo $paged_link; ?>&amp;comic_library_view=thumbnail"><img<?php get_comic_library_view('thumbnail') ?>  id="view-switch-excerpt" src="../wp-includes/images/blank.gif" width="20" height="20" title="Thumbnail View" alt="Thumbnail View" /></a>
+					<a href="admin.php?page=webcomic/includes/wc-admin.php<?php echo $paged_link; ?>&amp;comic_library_view=list"><img<?php get_comic_library_view('list') ?> id="view-switch-list" src="../wp-includes/images/blank.gif" width="20" height="20" title="<?php _e('List View','webcomic'); ?>" alt="<?php _e('List View','webcomic'); ?>" /></a>
+					<a href="admin.php?page=webcomic/includes/wc-admin.php<?php echo $paged_link; ?>&amp;comic_library_view=thumbnail"><img<?php get_comic_library_view('thumbnail') ?>  id="view-switch-excerpt" src="../wp-includes/images/blank.gif" width="20" height="20" title="<?php _e('Thumbnail View','webcomic'); ?>" alt="<?php _e('Thumbnail View','webcomic'); ?>" /></a>
 				</div>
 			</div>
 			<table class="widefat">
@@ -623,7 +623,7 @@ function comic_page_library(){
 						</td>
 						<td>
 							<strong><?php if(current_user_can('edit_others_posts') || $current_user->ID == $post['author_id']): ?><a href="post.php?action=edit&amp;post=<?php echo $post['id'] ?>&amp;referredby=admin.php?page=webcoic/includes/wc-admin.php<?php echo $paged_link; ?>" title="Edit &quot;<?php echo $post['title'] ?>&quot;"><?php echo $post['title'] ?></a><?php else: echo $post['title']; endif ?></strong>
-							<div class="row-actions"><?php if(current_user_can('edit_others_posts') || $current_user->ID == $post['author_id']): ?><a href="post.php?action=edit&amp;post=<?php echo $post['id'] ?>&amp;referredby=admin.php?page=webcoic/includes/wc-admin.php<?php echo $paged_link; ?>" title="<?php _E('Edit this post','webcomic') ?>"><?php _e('Edit','webcomic') ?></a> | <span class="delete"><a href="<?php echo wp_nonce_url('post.php?action=delete&amp;post='.$post['id'].'&amp;referredby=admin.php?page=webcomic/includes/wc-admin.php'.$paged_link, 'delete-post_'.$post['id']) ?>" title="<?php _e('Delete this post','webcomic') ?>" onclick="if(confirm('<?php printf(__("You are about to delete \'%s\'\\n \'Cancel\' to stop, \'OK\' to delete.","webcomic"),$post['title']) ?>')) {return true;}return false;"><?php _e('Delete','webcomic') ?></a> | </span><?php endif ?><span class="view"><a href="<?php echo $post['permalink'] ?>" title="View &quot;<?php echo $post['title'] ?>&quot;">View</a></span></div>
+							<div class="row-actions"><?php if(current_user_can('edit_others_posts') || $current_user->ID == $post['author_id']): ?><a href="post.php?action=edit&amp;post=<?php echo $post['id'] ?>&amp;referredby=admin.php?page=webcoic/includes/wc-admin.php<?php echo $paged_link; ?>" title="<?php _e('Edit this post','webcomic') ?>"><?php _e('Edit','webcomic') ?></a> | <span class="delete"><a href="<?php echo wp_nonce_url('post.php?action=delete&amp;post='.$post['id'].'&amp;referredby=admin.php?page=webcomic/includes/wc-admin.php'.$paged_link, 'delete-post_'.$post['id']) ?>" title="<?php _e('Delete this post','webcomic') ?>" onclick="if(confirm('<?php printf(__("You are about to delete \'%s\'\\n \'Cancel\' to stop, \'OK\' to delete.","webcomic"),$post['title']) ?>')) {return true;}return false;"><?php _e('Delete','webcomic') ?></a> | </span><?php endif ?><span class="view"><a href="<?php echo $post['permalink'] ?>" title="<?php _e('View','webcomic'); ?> &quot;<?php echo $post['title'] ?>&quot;"><?php _e('View','webcomic'); ?></a></span></div>
 						</td>
 						<td><?php echo $post['author'] ?></td>
 						<td><?php echo $post['chapter'].$post['volume'] ?></td>
