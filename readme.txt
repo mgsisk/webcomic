@@ -28,6 +28,7 @@ Webcomic makes any WordPress theme webcomic-ready by adding new functionality de
 * __Manage Your Library:__ The Library allows you to manage your comics and associated posts from within WordPress. Upload, rename, and delete comics, view all of your comics and which posts they're associated with, see which comics don't have a post (and which posts don't have a comic), automatically generate posts during upload or missing posts for orphaned comics, and more.
 * __Organize Your Stories:__ Take advantage of WebComics Chapters feature to organize your comics into unique volumes and chapters with titles, descriptions, page counts, archive pages, and feeds. WebComic has a number of functiosn designed specifically to take advantage of the new "chapter" taxonomy.
 * __Template Tags for WordPress Themes:__ Leverage WebComic's new template tags to turn any WordPress theme into a webcomic site.
+* __Internationalization Support:__ WebComic makes use of WordPress' I18n functions, allowing it to be translated into any language.
 
 WebComic also takes advantage of WordPress custom fields to provide a simple way of adding custom comic descriptions and comic transcripts, both of which are fully searchable using the standard WordPress search funcitons.
 
