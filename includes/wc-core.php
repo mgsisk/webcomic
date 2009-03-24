@@ -161,17 +161,14 @@ function get_the_comic($comic=false,$category=false){
 	if(1 < count(get_comic_category('all')))
 		$comic_dir = ($category) ? $category->term_id : get_post_comic_category($comic_post->ID);
 	
-	$path   = get_comic_directory('abs',false,$comic_dir);
-	$tpath  = get_comic_directory('abs',true,$comic_dir);
+	$comic_files       = glob(get_comic_directory('abs',false,$comic_dir).'*.*');
 	
-	$dir = opendir($path);
-	while(($file = readdir($dir)) !== false):
-		if(false !== strpos($file,$comic_name)):
-			$comic_file = $file;
+	foreach(array_keys($comic_files) as $key):
+		if(false !== strpos(basename($comic_files[$key]),$comic_name)):
+			$comic_file = basename($comic_files[$key]);
 			break;
 		endif;
-	endwhile;
-	closedir($dir);
+	endforeach;
 	
 	if(!$comic_file) //The post could not be matched with a comic
 		return;
@@ -185,22 +182,21 @@ function get_the_comic($comic=false,$category=false){
 	if(get_post_meta($comic_post->ID,'comic_transcript',true))
 		$output['transcript']  = (function_exists('Markdown')) ? Markdown(get_post_meta($comic_post->ID,'comic_transcript',true)) : get_post_meta($comic_post->ID,'comic_transcript',true);
 	
-	$comic_thumbs = array();
+	$comic_thumbs      = array();
+	$comic_thumb_files = glob(get_comic_directory('abs',true,$comic_dir).'*.*');
 	
-	$dir = opendir($tpath);
-	while(($file = readdir($dir)) !== false):
-		if(false !== strpos($file,$comic_name)):
-			array_push($comic_thumbs,$file);
+	foreach(array_keys($comic_thumb_files) as $key):
+		if(false !== strpos(basename($comic_thumb_files[$key]),$comic_name)):
+			array_push($comic_thumbs,basename($comic_thumb_files[$key]));
 		endif;
-	endwhile;
-	closedir($dir);
+	endforeach;
 	
 	foreach($comic_thumbs as $comic_thumb):
-		if(strpos($comic_thumb,'thumb'))
+		if(strpos($comic_thumb,'thumb') && !$output['thumb'])
 			$output['thumb'] = get_comic_directory('url',true,$comic_dir).$comic_thumb;
-		if(strpos($comic_thumb,'medium'))
+		if(strpos($comic_thumb,'medium') && !$output['medium'])
 			$output['medium'] = get_comic_directory('url',true,$comic_dir).$comic_thumb;
-		if(strpos($comic_thumb,'large'))
+		if(strpos($comic_thumb,'large') && !$output['large'])
 			$output['large'] = get_comic_directory('url',true,$comic_dir).$comic_thumb;
 	endforeach;
 	
@@ -620,13 +616,13 @@ function the_comic_transcript($title='',$submit=''){
  * @param str $lstlabel The text to display for the last comic link.
  */
 function comics_nav_link($limit=false,$sep='',$fstlabel='',$prelabel='',$nxtlabel='',$lstlabel=''){	
-	first_comic_link($fstlabel,$limit);
+	first_comic_link($limit,$fstlabel);
 	if($sep) echo '<span class="comic-link-separator">'.$sep.'</span>';
-	previous_comic_link($prelabel,$limit);
+	previous_comic_link($limit,$prelabel);
 	if($sep) echo '<span class="comic-link-separator">'.$sep.'</span>';
-	next_comic_link($nxtlabel,$limit);
+	next_comic_link($limit,$nxtlabel);
 	if($sep) echo '<span class="comic-link-separator">'.$sep.'</span>';
-	last_comic_link($lstlabel,$limit);
+	last_comic_link($limit,$lstlabel);
 }
 
 /**
@@ -892,7 +888,7 @@ function random_comic($label=false,$series=false){
  * navigation links (first, back, next, last).
  * 
  * @package WebComic
- * @since   1.8
+ * @since 1.8
  * 
  * @uses first_chapter_link()
  * @uses next_chapter_link()
@@ -912,11 +908,11 @@ function chapters_nav_link($collection='id',$volume=false,$bound='first',$sep=''
 	$collection = (is_array($collection)) ? $collection : get_the_collection('orderby='.$collection);
 	
 	first_chapter_link($collection,$volume,$bound,$fstlabel);
-	echo '<span class="chapters-link-separator">'.$sep.'</span>';
+	echo '<span class="chapter-link-separator">'.$sep.'</span>';
 	previous_chapter_link($collection,$volume,$bound,$prelabel);
-	echo '<span class="chapters-link-separator">'.$sep.'</span>';
+	echo '<span class="chapter-link-separator">'.$sep.'</span>';
 	next_chapter_link($collection,$volume,$bound,$nxtlabel);
-	echo '<span class="chapters-link-separator">'.$sep.'</span>';
+	echo '<span class="chapter-link-separator">'.$sep.'</span>';
 	last_chapter_link($collection,$volume,$bound,$lstlabel);
 }
 
@@ -1378,12 +1374,12 @@ function recent_comics($number=5,$label=false,$series=false,$before='<li>',$afte
  * @param str $category A valid comic category ID.
  * @param str $label The label to display for the very first 'null' option.
  * @param bool $numbers Automatically prepends chapters or posts with a number.
- * @param bool $reverse Reverses the order of chapters or posts.
  * @param bool $group Groups posts by chapter or chapters by volume.
+ * @param bool $reverse Reverses the order of chapters or posts.
  * @param bool $pages Automatically appends page counts to chapters.
  * @return bool Returns if no collection or no comic posts can be found.
  */
-function dropdown_comics($category=false,$label='',$numbers=false,$reverse_posts=false,$reverse=false,$group=false,$pages=false){
+function dropdown_comics($category=false,$label='',$numbers=false,$reverse_posts=false,$group=false,$reverse=false,$pages=false){
 	load_webcomic_domain();
 	
 	$label = ($label) ? $label : __('Quick Archive','webcomic');
@@ -1473,10 +1469,10 @@ function dropdown_comics($category=false,$label='',$numbers=false,$reverse_posts
 }
 
 /**
- * Displays the comic archive organized by volume and chapter.
+ * Displays the comic archive organized by series, volume, and chapter.
  * 
  * This is a fully functional example function that displays a simple comic
- * archive using get_the_collection.
+ * archive using get_the_collection().
  * 
  * @package WebComic
  * @since 1.0
@@ -1484,7 +1480,7 @@ function dropdown_comics($category=false,$label='',$numbers=false,$reverse_posts
  * @uses get_the_collection()
  * 
  * @param int $category A valid comic category ID.
- * @param bool $format The format for comic links, either 'text' or 'image'.
+ * @param bool $format The format for comic links, one of false (text), 'full', 'large', 'medium', or 'thumb'.
  * @param bool $reverse_posts Reverses the order of comic posts.
  * @param bool $reverse Reverses the order of series, volumes, and chapters.
  * @param bool $description Displays series, chapter, and volume descriptions.

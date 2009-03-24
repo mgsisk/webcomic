@@ -54,7 +54,7 @@ function comic_page_chapters(){
 			$error = 3;
 		else:
 			wp_insert_term($chapter_name,'chapter',array('description' => $chapter_description, 'parent' => $chapter_parent, 'slug' => $chapter_nicename));
-			echo '<div id="message" class="updated fade"><p>'.sprintf(__('Added new chapter <q>%1$s</q>','webcomic'),$chapter_name).'</p></div>';
+			echo '<div id="message" class="updated fade"><p>'.sprintf(__('Added new chapter <q>%s</q>','webcomic'),$chapter_name).'</p></div>';
 		endif;
 	endif;
 	
@@ -65,7 +65,7 @@ function comic_page_chapters(){
 		$current_chapters = get_comic_current_chapter('all');
 		
 		if($_REQUEST['volume']):
-			$the_chapter = get_the_chapter($_REQUEST['chapter']);
+			$the_chapter = get_the_chapter((int) $_REQUEST['chapter']);
 			$children = get_term_children($_REQUEST['chapter'],'chapter');
 			
 			foreach($children as $chapter):
@@ -81,12 +81,12 @@ function comic_page_chapters(){
 		else:
 			if($_REQUEST['chapter'] == $current_chapter)
 				$current_chapters[$the_series] = -1;
-			$the_chapter = get_the_chapter($_REQUEST['chapter']);
+			$the_chapter = get_the_chapter((int) $_REQUEST['chapter']);
 			update_option('comic_current_chapter',$current_chapters);
 			wp_delete_term($_REQUEST['chapter'],'chapter');
 		endif;
 		
-		echo '<div id="message" class="updated fade"><p>'.sprintf(__('Deleted <q>%1$s</q>','webcomic'),$the_chapter['title']).$extra.'</p></div>';
+		echo '<div id="message" class="updated fade"><p>'.sprintf(__('Deleted <q>%s</q>','webcomic'),$the_chapter['title']).$extra.'</p></div>';
 	endif;
 	
 	/** Attempts to modify the selected chapters. */
@@ -313,7 +313,7 @@ function comic_page_chapters(){
 						<?php 
 						if(3==$error) echo '<div style="background:#ffebe8; border: 1px solid #c00; margin: 5px 0; padding: 0 7px;"><p>'.__('A chapter with that slug already exists.','webcomic').'</p></div>'; ?>
 						<div class="form-field"<?php if(3==$error) echo ' style="background:#ffebe8"'; ?>>
-							<label for="chapter_nicename">Chapter Slug</label>
+							<label for="chapter_nicename"><?php _e('Chapter Slug','webcomic'); ?></label>
 							<input name="chapter_nicename" id="chapter_nicename" type="text" value="<?php if($error) echo $_REQUEST['chapter_nicename']; ?>" size="40" />
 							<p><?php _e('The &#8220;slug&#8221; is the URL-friendly version of the name. It is usually all lowercase and contains only letters, numbers, and hyphens.','webcomic'); ?></p>
 						</div>
