@@ -50,7 +50,7 @@ function load_webcomic_domain(){
  * @package WebComic
  * @since 1.0
  */
-if(!get_option('webcomic_version') || '1.9' != get_option('webcomic_version')):
+if(!get_option('webcomic_version') || '1.8' != get_option('webcomic_version')):
 	function comic_upgrade(){
 		load_webcomic_domain();
 		
