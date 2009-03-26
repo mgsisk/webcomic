@@ -161,8 +161,8 @@ msgstr ""
 #: includes/wc-admin-chapters.php:262
 #, php-format
 msgid ""
-"You are about to delete \\'%s\\'. Any chapters in this volume will also be "
-"deleted.\\n \\'Cancel\\' to stop, \\'OK\\' to delete."
+"You are about to delete \'%s\'. Any chapters in this volume will also be "
+"deleted.\n \'Cancel\' to stop, \'OK\' to delete."
 msgstr ""
 
 #: includes/wc-admin-chapters.php:262
@@ -189,7 +189,7 @@ msgstr ""
 #: includes/wc-admin-library.php:626 includes/wc-admin-library.php:725
 #, php-format
 msgid ""
-"You are about to delete \\'%s\\'\\n \\'Cancel\\' to stop, \\'OK\\' to delete."
+"You are about to delete \'%s\'\n \'Cancel\' to stop, \'OK\' to delete."
 msgstr ""
 
 #: includes/wc-admin-chapters.php:270
