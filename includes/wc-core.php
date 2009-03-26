@@ -161,7 +161,10 @@ function get_the_comic($comic=false,$category=false){
 	if(1 < count(get_comic_category('all')))
 		$comic_dir = ($category) ? $category->term_id : get_post_comic_category($comic_post->ID);
 	
-	$comic_files       = glob(get_comic_directory('abs',false,$comic_dir).'*.*');
+	$comic_files = glob(get_comic_directory('abs',false,$comic_dir).'*.*');
+	
+	if(!is_array($comic_files)) //Could not access comic directory
+		return;
 	
 	foreach(array_keys($comic_files) as $key):
 		if(false !== strpos(basename($comic_files[$key]),$comic_name)):
