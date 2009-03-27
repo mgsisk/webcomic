@@ -122,6 +122,7 @@ function comic_page_chapters(){
 		$chapter_name = trim($_REQUEST['chapter_name']);
 		$chapter_nicename = ($_REQUEST['chapter_nicename']) ? sanitize_title($_REQUEST['chapter_nicename']) : sanitize_title($_REQUEST['chapter_name']);
 		$chapter_parent = ($_REQUEST['chapter_parent']) ? $_REQUEST['chapter_parent'] : $_REQUEST['volume_parent'];
+		$chapter_parent = ($_REQUEST['chapter_id'] == $chapter_parent) ? 0 : $chapter_parent;
 		$chapter_description = $_REQUEST['chapter_description'];
 		$chapter_name_check = is_term($_REQUEST['chapter_name'],'chapter');
 		$chapter_slug_check = ($_REQUEST['chapter_nicename']) ? is_term($_REQUEST['chapter_nicename'],'chapter') : '';
