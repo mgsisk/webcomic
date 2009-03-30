@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/webcomic\n"
-"POT-Creation-Date: 2009-03-26 20:36+0000\n"
+"POT-Creation-Date: 2009-03-30 21:14+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -44,163 +44,163 @@ msgstr ""
 msgid "Please select a valid action."
 msgstr ""
 
-#: includes/wc-admin-chapters.php:138
+#: includes/wc-admin-chapters.php:139
 #, php-format
 msgid "Updted chapter <q>%1$s</q>"
 msgstr ""
 
-#: includes/wc-admin-chapters.php:140
+#: includes/wc-admin-chapters.php:141
 msgid "A chapter name must be provided."
 msgstr ""
 
-#: includes/wc-admin-chapters.php:142
+#: includes/wc-admin-chapters.php:143
 msgid "A chapter with that name already exists."
 msgstr ""
 
-#: includes/wc-admin-chapters.php:144 includes/wc-admin-chapters.php:314
+#: includes/wc-admin-chapters.php:145 includes/wc-admin-chapters.php:315
 msgid "A chapter with that slug already exists."
 msgstr ""
 
-#: includes/wc-admin-chapters.php:146
+#: includes/wc-admin-chapters.php:147
 msgid "The chapter could not be updated."
 msgstr ""
 
-#: includes/wc-admin-chapters.php:156 includes/wc-admin-chapters.php:195
+#: includes/wc-admin-chapters.php:157 includes/wc-admin-chapters.php:196
 msgid "Edit Chapter"
 msgstr ""
 
-#: includes/wc-admin-chapters.php:161 includes/wc-admin-chapters.php:309
+#: includes/wc-admin-chapters.php:162 includes/wc-admin-chapters.php:310
 msgid "Chapter Name"
 msgstr ""
 
-#: includes/wc-admin-chapters.php:162 includes/wc-admin-chapters.php:311
+#: includes/wc-admin-chapters.php:163 includes/wc-admin-chapters.php:312
 msgid "The name is used to identify the chapter almost everywhere."
 msgstr ""
 
-#: includes/wc-admin-chapters.php:165 includes/wc-admin-chapters.php:316
+#: includes/wc-admin-chapters.php:166 includes/wc-admin-chapters.php:317
 msgid "Chapter Slug"
 msgstr ""
 
-#: includes/wc-admin-chapters.php:166 includes/wc-admin-chapters.php:318
+#: includes/wc-admin-chapters.php:167 includes/wc-admin-chapters.php:319
 msgid ""
 "The &#8220;slug&#8221; is the URL-friendly version of the name. It is "
 "usually all lowercase and contains only letters, numbers, and hyphens."
 msgstr ""
 
-#: includes/wc-admin-chapters.php:170 includes/wc-admin-chapters.php:321
+#: includes/wc-admin-chapters.php:171 includes/wc-admin-chapters.php:322
 msgid "Chapter Volume"
 msgstr ""
 
-#: includes/wc-admin-chapters.php:173 includes/wc-admin-chapters.php:323
+#: includes/wc-admin-chapters.php:174 includes/wc-admin-chapters.php:324
 #: includes/wc-widgets.php:258
 msgid "None"
 msgstr ""
 
-#: includes/wc-admin-chapters.php:186
+#: includes/wc-admin-chapters.php:187
 msgid "Select the volume that this chapter belongs to."
 msgstr ""
 
-#: includes/wc-admin-chapters.php:191
+#: includes/wc-admin-chapters.php:192
 msgid "Descriptions"
 msgstr ""
 
-#: includes/wc-admin-chapters.php:192 includes/wc-admin-chapters.php:338
+#: includes/wc-admin-chapters.php:193 includes/wc-admin-chapters.php:339
 msgid ""
 "Useful for providing a brief overview of the events covered in this chapter."
 msgstr ""
 
-#: includes/wc-admin-chapters.php:198 includes/wc-admin.php:21
+#: includes/wc-admin-chapters.php:199 includes/wc-admin.php:21
 #: includes/wc-widgets.php:259
 msgid "Chapters"
 msgstr ""
 
-#: includes/wc-admin-chapters.php:207 includes/wc-admin-library.php:506
+#: includes/wc-admin-chapters.php:208 includes/wc-admin-library.php:506
 msgid "Change Series"
 msgstr ""
 
-#: includes/wc-admin-chapters.php:218 includes/wc-admin-chapters.php:282
+#: includes/wc-admin-chapters.php:219 includes/wc-admin-chapters.php:283
 msgid "Action"
 msgstr ""
 
-#: includes/wc-admin-chapters.php:219 includes/wc-admin-chapters.php:262
-#: includes/wc-admin-chapters.php:270 includes/wc-admin-chapters.php:283
+#: includes/wc-admin-chapters.php:220 includes/wc-admin-chapters.php:263
+#: includes/wc-admin-chapters.php:271 includes/wc-admin-chapters.php:284
 #: includes/wc-admin-library.php:619 includes/wc-admin-library.php:626
 #: includes/wc-admin-library.php:725
 msgid "Delete"
 msgstr ""
 
-#: includes/wc-admin-chapters.php:221 includes/wc-admin-chapters.php:285
+#: includes/wc-admin-chapters.php:222 includes/wc-admin-chapters.php:286
 msgid "Apply"
 msgstr ""
 
-#: includes/wc-admin-chapters.php:228 includes/wc-admin-chapters.php:237
+#: includes/wc-admin-chapters.php:229 includes/wc-admin-chapters.php:238
 #: includes/wc-core.php:581
 msgid "Name"
 msgstr ""
 
-#: includes/wc-admin-chapters.php:229 includes/wc-admin-chapters.php:238
-#: includes/wc-admin-chapters.php:336 includes/wc-admin-metabox.php:56
+#: includes/wc-admin-chapters.php:230 includes/wc-admin-chapters.php:239
+#: includes/wc-admin-chapters.php:337 includes/wc-admin-metabox.php:56
 msgid "Description"
 msgstr ""
 
-#: includes/wc-admin-chapters.php:230 includes/wc-admin-chapters.php:239
+#: includes/wc-admin-chapters.php:231 includes/wc-admin-chapters.php:240
 #: includes/wc-admin-library.php:587 includes/wc-admin-library.php:604
 msgid "Slug"
 msgstr ""
 
-#: includes/wc-admin-chapters.php:231 includes/wc-admin-chapters.php:240
+#: includes/wc-admin-chapters.php:232 includes/wc-admin-chapters.php:241
 msgid "Pages"
 msgstr ""
 
-#: includes/wc-admin-chapters.php:252 includes/wc-admin-chapters.php:262
-#: includes/wc-admin-chapters.php:270 includes/wc-admin-library.php:619
+#: includes/wc-admin-chapters.php:253 includes/wc-admin-chapters.php:263
+#: includes/wc-admin-chapters.php:271 includes/wc-admin-library.php:619
 #: includes/wc-admin-library.php:626
 msgid "Edit"
 msgstr ""
 
-#: includes/wc-admin-chapters.php:262
+#: includes/wc-admin-chapters.php:263
 #, php-format
 msgid ""
-"You are about to delete \'%s\'. Any chapters in this volume will also be "
-"deleted.\n \'Cancel\' to stop, \'OK\' to delete."
+"You are about to delete \\'%s\\'. Any chapters in this volume will also be "
+"deleted.\\n \\'Cancel\\' to stop, \\'OK\\' to delete."
 msgstr ""
 
-#: includes/wc-admin-chapters.php:262
+#: includes/wc-admin-chapters.php:263
 msgid "Delete this volume"
 msgstr ""
 
-#: includes/wc-admin-chapters.php:270
+#: includes/wc-admin-chapters.php:271
 msgid "New posts will be assigned to this chapter"
 msgstr ""
 
-#: includes/wc-admin-chapters.php:270
+#: includes/wc-admin-chapters.php:271
 msgid "Make Current"
 msgstr ""
 
-#: includes/wc-admin-chapters.php:270
+#: includes/wc-admin-chapters.php:271
 msgid "New posts will not be assigned to a chapter"
 msgstr ""
 
-#: includes/wc-admin-chapters.php:270
+#: includes/wc-admin-chapters.php:271
 msgid "Remove Current"
 msgstr ""
 
-#: includes/wc-admin-chapters.php:270 includes/wc-admin-library.php:619
+#: includes/wc-admin-chapters.php:271 includes/wc-admin-library.php:619
 #: includes/wc-admin-library.php:626 includes/wc-admin-library.php:725
 #, php-format
 msgid ""
-"You are about to delete \'%s\'\n \'Cancel\' to stop, \'OK\' to delete."
+"You are about to delete \\'%s\\'\\n \\'Cancel\\' to stop, \\'OK\\' to delete."
 msgstr ""
 
-#: includes/wc-admin-chapters.php:270
+#: includes/wc-admin-chapters.php:271
 msgid "Delete this chapter"
 msgstr ""
 
-#: includes/wc-admin-chapters.php:292
+#: includes/wc-admin-chapters.php:293
 msgid "Using Chapters"
 msgstr ""
 
-#: includes/wc-admin-chapters.php:293
+#: includes/wc-admin-chapters.php:294
 msgid ""
 "Chapters are a useful (but optional) way of categorizing your comics, "
 "similar to post categories. You can create new chapters or modify existing "
@@ -208,7 +208,7 @@ msgid ""
 "Post pages."
 msgstr ""
 
-#: includes/wc-admin-chapters.php:294
+#: includes/wc-admin-chapters.php:295
 msgid ""
 "Above you'll see your first <em>series</em>. Each series corresponds to one "
 "of the categories you've selected for the Comic Category setting, and series "
@@ -216,7 +216,7 @@ msgid ""
 "they contain) whenever the Comic Category setting is updated."
 msgstr ""
 
-#: includes/wc-admin-chapters.php:295
+#: includes/wc-admin-chapters.php:296
 msgid ""
 "To start using chapters, you'll need to create two of them: the first will "
 "be a <em>volume</em> assigned to the current series, which can contain any "
@@ -224,7 +224,7 @@ msgid ""
 "newly created volume using the Chapter Volume option."
 msgstr ""
 
-#: includes/wc-admin-chapters.php:296
+#: includes/wc-admin-chapters.php:297
 msgid ""
 "From there, you can assign posts to any chapter from either the Add Post or "
 "Edit Post pages or the Comic Library. You can also set a chapter as the "
@@ -232,15 +232,15 @@ msgid ""
 "assigned to it."
 msgstr ""
 
-#: includes/wc-admin-chapters.php:304 includes/wc-admin-chapters.php:340
+#: includes/wc-admin-chapters.php:305 includes/wc-admin-chapters.php:341
 msgid "Add Chapter"
 msgstr ""
 
-#: includes/wc-admin-chapters.php:305
+#: includes/wc-admin-chapters.php:306
 msgid "The chapter you are trying to create already exists."
 msgstr ""
 
-#: includes/wc-admin-chapters.php:333
+#: includes/wc-admin-chapters.php:334
 msgid ""
 "Select <strong>None</strong> to turn this chapter into a new volume that you "
 "can assign other chapters to."
@@ -955,6 +955,11 @@ msgstr ""
 #: includes/wc-widgets.php:74 includes/wc-widgets.php:159
 #: includes/wc-widgets.php:247 includes/wc-widgets.php:342
 msgid "Series:"
+msgstr ""
+
+#: includes/wc-widgets.php:76 includes/wc-widgets.php:161
+#: includes/wc-widgets.php:249 includes/wc-widgets.php:344
+msgid "All"
 msgstr ""
 
 #: includes/wc-widgets.php:86
