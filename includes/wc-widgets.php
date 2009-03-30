@@ -73,7 +73,7 @@ function widget_init_random_comic(){
 			</label></p>
 			<p><label><?php _e('Series:','webcomic') ?>
 			<select name="random-comic-series" id="random-comic-series" class="widefat">
-				<option value="">All</option>
+				<option value="0"><?php _e('All','webcomic') ?></option>
 			<?php $collection = get_the_collection('hide_empty=0'); foreach($collection as $series): ?>
 				<option value="<?php echo $series['id'] ?>"<?php if($the_series == $series['id']) echo ' selected="selected"'; ?>><?php echo $series['title'] ?></option>
 			<?php endforeach; ?>
@@ -158,7 +158,7 @@ function widget_init_recent_comics(){
 			</label></p>
 			<p><label><?php _e('Series:','webcomic') ?>
 			<select name="recent-comics-series" id="recent-comics-series" class="widefat">
-				<option value="0">All</option>
+				<option value="0"><?php _e('All','webcomic') ?></option>
 			<?php $collection = get_the_collection('hide_empty=0'); foreach($collection as $series): ?>
 				<option value="<?php echo $series['id'] ?>"<?php if($the_series == $series['id']) echo ' selected="selected"'; ?>><?php echo $series['title'] ?></option>
 			<?php endforeach; ?>
@@ -246,7 +246,7 @@ function widget_init_dropdown_comics(){
 			<p><label><?php _e('Label: ','webcomic') ?><input type="text" class="widefat" id="dropdown-comics-label" name="dropdown-comics-label" value="<?php echo $label; ?>" /></label></p>
 			<p><label><?php _e('Series:','webcomic') ?>
 			<select name="dropdown-comics-category" id="dropdown-comics-category" class="widefat">
-				<option value="0">All</option>
+				<option value="0"><?php _e('All','webcomic') ?></option>
 			<?php $collection = get_the_collection('hide_empty=0'); foreach($collection as $series): ?>
 				<option value="<?php echo $series['id'] ?>"<?php if($category == $series['id']) echo ' selected="selected"'; ?>><?php echo $series['title'] ?></option>
 			<?php endforeach; ?>
@@ -341,7 +341,7 @@ function widget_init_comic_archive(){
 			<p><label><?php _e('Title: ','webcomic') ?><input type="text" class="widefat" id="comic-archive-title" name="comic-archive-title" value="<?php echo $title; ?>" /></label></p>
 			<p><label><?php _e('Series:','webcomic') ?>
 			<select name="comic-archive-category" id="comic-archive-category" class="widefat">
-				<option value="0">All</option>
+				<option value="0"><?php _e('All','webcomic') ?></option>
 			<?php $collection = get_the_collection('hide_empty=0'); foreach($collection as $series): ?>
 				<option value="<?php echo $series['id'] ?>"<?php if($category == $series['id']) echo ' selected="selected"'; ?>><?php echo $series['title'] ?></option>
 			<?php endforeach; ?>
