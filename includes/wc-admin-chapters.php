@@ -54,7 +54,7 @@ function comic_page_chapters(){
 			$error = 3;
 		else:
 			wp_insert_term($chapter_name,'chapter',array('description' => $chapter_description, 'parent' => $chapter_parent, 'slug' => $chapter_nicename));
-			echo '<div id="message" class="updated fade"><p>'.sprintf(__('Added new chapter <q>%s</q>','webcomic'),$chapter_name).'</p></div>';
+			echo '<div id="message" class="updated fade"><p>'.sprintf(__('Added new chapter <q>%s</q>','webcomic'),stripslashes($chapter_name)).'</p></div>';
 		endif;
 	endif;
 	
