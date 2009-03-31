@@ -353,36 +353,39 @@ endif;
  * @package WebComic
  * @since 1.8
  */
-function comic_transcript_submit(){
-	if($_POST['comic_trans_submit']):
+function comic_transcript_submit() {
+	if ( $_POST[ 'comic_trans_submit' ] ) {
 		global $comic_trans_message;
 		
-		if(!$_POST['trans_from'])
-			$errors += 1;
-		if(!$_POST['trans_mail'])
-			$errors += 1;
-		if(!$_POST['trans_script'])
-			$errors += 1;
-		
-		if($errors > 0):
-			$comic_trans_message = '<span class="comic-transcript-submit-error">'.__('All fields are required.','webcomic').'</span>';
-		elseif(!filter_var($_POST['trans_mail'], FILTER_VALIDATE_EMAIL)):
-			$comic_trans_message = '<span class="comic-transcript-submit-error">'.__('A valid e-mail address is required.','webcomic').'</span>';
-		else:
-			$from    = (get_magic_quotes_gpc()) ? stripslashes($_POST['trans_from']) : $_POST['trans_from'];
-			$title   = (get_magic_quotes_gpc()) ? stripslashes($_POST['comic_trans_title']) : $_POST['comic_trans_title'];
-			$message = (get_magic_quotes_gpc()) ? stripslashes($_POST['trans_script']) : $_POST['trans_script'];
-			mail(get_option('comic_transcript_email'), '[Transcript] '.$title, $message, 'From: "'.$from.'" <'.$_POST['trans_mail'].'>');
-			$comic_trans_message = '<span class="comic-transcript-submit-success">'.__('Thanks! Your transcript has been submitted.','webcomic').'</span>';
-		endif;
-		
-		if(1 < $_POST['comic_trans_submit']):
-			echo $comic_trans_message;
-			die();
-		endif;
-	endif;
+		if ( $_POST[ 'comic_trans_human' ] || 7 == $_POST[ 'comic_trans_captcha' ] ) {
+			if ( !$_POST[ 'comic_trans_from' ] || !$_POST[ 'comic_trans_mail' ] || !$_POST[ 'comic_trans_script' ] )
+				$errors = 1;
+			
+			if ( $errors ) {
+				$comic_trans_message = '<span class="comic-transcript-submit-error">' . __( 'All fields are required.', 'webcomic' ) . '</span>';
+			} elseif ( !filter_var( $_POST[ 'comic_trans_mail' ], FILTER_VALIDATE_EMAIL ) ) {
+				$comic_trans_message = '<span class="comic-transcript-submit-error">'. __( 'A valid e-mail address is required.','webcomic' ) .'</span>';
+			} else {
+				$from    = ( get_magic_quotes_gpc() ) ? stripslashes( $_POST[ 'comic_trans_from' ] ) : $_POST[ 'comic_trans_from' ];
+				$title   = ( get_magic_quotes_gpc() ) ? stripslashes( $_POST[ 'comic_trans_title' ] ) : $_POST[ 'comic_trans_title' ];
+				$message = ( get_magic_quotes_gpc() ) ? stripslashes( $_POST[ 'comic_trans_script' ] ) : $_POST[ 'comic_trans_script' ];
+				
+				mail( get_option( 'comic_transcript_email' ), '[Transcript] ' . $title, $message, 'From: "' . $from . '" <' . $_POST[ 'comic_trans_mail' ] . '>' );
+				
+				$comic_trans_message = '<span class="comic-transcript-submit-success">' . __( 'Thanks! Your transcript has been submitted.', 'webcomic' ) . '</span>';
+			}
+			
+			if ( 1 < $_POST[ 'comic_trans_submit' ] )
+				die( $comic_trans_message );
+		} else {
+			$comic_trans_message = '<span class="comic-transcript-submit-error">' . __( 'Human validation check failed.', 'webcomic' ) . '</span>';
+			
+			if ( 1 < $_POST[ 'comic_trans_submit' ] )
+				die( $comic_trans_message );
+		}
+	}
 }
-add_action('init','comic_transcript_submit');
+add_action( 'init', 'comic_transcript_submit' );
 
 /**
  * Adds the 'chapter' taxonomy.
