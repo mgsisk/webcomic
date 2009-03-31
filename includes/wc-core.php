@@ -563,33 +563,34 @@ function the_comic_embed($size='medium',$before='<p>',$after='</p>'){
  * @param str $title The text to display for the "title" of the transcript.
  * @param str $submit The text to display for the "title" of the submit transcript form.
  */
-function the_comic_transcript($title='',$submit=''){
+function the_comic_transcript( $title = '', $submit = '' ) {
 	load_webcomic_domain();
-	
 	global $comic_trans_message;
 	
 	$comic = get_the_comic();
 	
-	if($comic['transcript']):
-		$title = ($title) ? $title : __('View Transcript','webcomic');
-		echo '<div class="comic-transcript-title"><span>'.$title.'</span></div><div class="comic-transcript">'.$comic['transcript'].'</div>';
-	elseif(get_option('comic_transcript_email')):
-		$title = ($submit) ? $submit : __('Submit Transcript','webcomic');
-		echo '<div class="comic-transcript-title"><span>'.$title.'</span></div><div class="comic-transcript">
+	if ( $comic[ 'transcript' ] ) {
+		$title = ( $title ) ? $title : __( 'View Transcript', 'webcomic' );
+		echo '<div class="comic-transcript-title"><span>' . $title . '</span></div><div class="comic-transcript">' . $comic['transcript'] . '</div>';
+	} elseif ( get_option( 'comic_transcript_email' ) ) {
+		$title = ( $submit ) ? $submit : __( 'Submit Transcript', 'webcomic' );
+		echo '<div class="comic-transcript-title"><span>' . $title . '</span></div><div class="comic-transcript">
 			<form action="" method="post" id="comic-transcript-form">
-				<div id="comic-trans-message">'.$comic_trans_message.'</div>
-				<p><label for="trans_from">'.__('Name','webcomic').'</label><input type="text" name="trans_from" id="trans_from" /></p>
-				<p><label for="trans_mail">'.__('E-mail','webcomic').'</label><input type="text" name="trans_mail" id="trans_mail" /></p>
-				<p><label for="trans_script">'.__('Transcript','webcomic').'</label><textarea rows="7" cols="40" name="trans_script" id="trans_script"></textarea></p>
-				<p>'.sprintf(__('Transcripts can be formatted using HTML or <a href="%1$s">Markdown</a> <a href="%2$s">Extra</a>.','webcomic'),'http://daringfireball.net/projects/markdown/syntax','http://michelf.com/projects/php-markdown/extra/').'</p>
+				<div id="comic-trans-message">' . $comic_trans_message . '</div>
+				<p><label for="comic_trans_from">' . __( 'Name', 'webcomic' ) . '</label><input type="text" name="comic_trans_from" id="comic_trans_from" /></p>
+				<p><label for="comic_trans_mail">' . __( 'E-mail', 'webcomic' ) . '</label><input type="text" name="comic_trans_mail" id="comic_trans_mail" /></p>
+				<noscript><p><label for="comic_trans_captcha">' . __( "What's three plus four?", "webcomic" ) . '</label><input type="text" maxlength="1" name="comic_trans_captcha" id="comic_trans_captcha" /></p></noscript>
+				<p><label for="comic_trans_script">' . __( 'Transcript', 'webcomic' ) . '</label><textarea rows="7" cols="40" name="comic_trans_script" id="comic_trans_script"></textarea></p>
+				<p>' . sprintf( __( 'Transcripts can be formatted using <a href="%s">HTML</a> or <a href="%s">Markdown</a> <a href="%s">Extra</a>.', 'webcomic' ), 'http://www.w3schools.com/html/default.asp', 'http://daringfireball.net/projects/markdown/syntax', 'http://michelf.com/projects/php-markdown/extra/' ) . '</p>
 				<p>
-					<input type="submit" value="'.__('Submit','webcomic').'" />
-					<input type="hidden" name="comic_trans_title" value="'.$comic['title'].'" />
+					<input type="submit" value="' . __('Submit','webcomic') . '" />
+					<input type="hidden" name="comic_trans_title" value="' . $comic['title'] . '" />
+					<input type="hidden" name="comic_trans_human" value="0" />
 					<input type="hidden" name="comic_trans_submit" value="1" />
 				</p>
 			</form>
 		</div>';
-	endif;
+	}
 }
 
 //
