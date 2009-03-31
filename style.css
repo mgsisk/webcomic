@@ -1,0 +1,986 @@
+/*
+Text Domain: inkblot
+Theme Name: InkBlot
+Theme URI: http://maikeruon.com/wcib/
+Description: Highly customizable theme designed for WordPress with <a href="http://maikeruon.com/wcib/about/webcomic/">WebComic</a>.
+Version: 1.3
+Author: Michael Sisk
+Author URI: http://maikeruon.com/
+Tags: black, white, one-column, two-column, three-column, fixed-width, theme-options, left-sidebar, right-sidebar, comic, webcomic
+*/
+
+/* reset all elements */
+address,blockquote,body,caption,div,dd,dl,dt,fieldset,form,
+h1,h2,h3,h4,h5,h6,html,legend,noscript,ol,p,pre,table,tbody,
+td,tfoot,th,thead,tr,ul,a,abbr,br,cite,code,dfn,em,kbd,label,
+q,samp,span,strong,sub,sup,tt,var,img {
+ border:0;
+ border-collapse:collapse;
+ border-spacing:0;
+ color:inherit;
+ font-family:inherit;
+ font-size:inherit;
+ font-style:inherit;
+ font-weight:inherit;
+ line-height:inherit;
+ list-style:none;
+ margin:0;
+ outline:0;
+ padding:0;
+ text-decoration:none;
+ text-align:inherit;
+ vertical-align:baseline;
+}
+
+/* Standard formatting and typography. Skip to the "InkBlot" section
+   for more specific styles.
+----------------------------------------------------------------------*/
+body {
+	background-attachment:fixed;
+	background-image:url('images/inkblot/bg.png');
+	background-repeat:repeat-x;
+	color:#333;
+	font-family:'Lucida Sans', 'Lucida Grande', sans-serif;
+	font-size:75%;
+	line-height:1.5em;
+}
+
+
+	
+/* hyperlinks */
+a {
+	color:#333;
+	text-decoration:underline;
+}
+	
+	a:hover {
+		text-decoration:none;
+	}
+	
+h1 a,h2 a,h3 a,h4 a,h5 a,h6 a {
+	text-decoration:none;
+}
+
+	h1 a:hover,h2 a:hover,h3 a:hover,h4 a:hover,h5 a:hover,h6 a:hover {
+		text-decoration:underline;
+	}
+
+
+	
+/* headings */
+h1 {
+	font-family:'Palatino Linotype','Book Antiqua',serif;
+	font-size:300%;
+	line-height:1em;
+	margin-bottom:.5em;
+}
+
+h2 {
+	font-family:'Palatino Linotype','Book Antiqua',serif;
+	font-size:200%;
+	line-height:1em;
+	margin-bottom:.75em;
+}
+
+h3 {
+	font-family:'Palatino Linotype','Book Antiqua',serif;
+	font-size:150%;
+	line-height:1em;
+	margin-bottom:1em;
+}
+
+h4 {
+	font-family:'Palatino Linotype','Book Antiqua',serif;
+	font-size:125%;
+	line-height:1em;
+	margin-bottom:1.2em;
+}
+
+h5 {
+	font-family:'Palatino Linotype','Book Antiqua',serif;
+	font-size:115%;
+	line-height:1em;
+	margin-bottom:1.3em;
+}
+
+h6 {
+	font-family:'Palatino Linotype','Book Antiqua',serif;
+	line-height:1em;
+	margin-bottom:1.5em;
+}
+
+
+	
+/* text */
+abbr {
+	border-bottom-style:dotted;
+	border-bottom-width:.1em;
+	cursor:help;
+}
+
+blockquote {
+	margin-bottom:1.5em;
+	padding-left:1.5em;
+	padding-right:1.5em;
+}
+
+code,kbd,pre,var {
+	font-family:'Andale Mono', 'Courier New', monospace;
+	font-size:125%;
+}
+
+dfn,strong {
+	font-weight:bold;
+}
+
+pre {
+	display:block;
+	margin-bottom:1.5em;
+	padding-left:1.5em;
+	padding-right:1.5em;
+	white-space:pre-wrap;
+}
+
+em,samp {
+	font-style:italic;
+}
+
+p {
+	margin-bottom:1.5em;
+}
+
+sub {
+	font-size:85%;
+	vertical-align:sub;
+}
+
+sup {
+	font-size:85%;
+	vertical-align:super;
+}
+
+
+	
+/* lists */
+dl {
+	margin-bottom:1.5em;
+}
+
+dt {
+	font-weight:bold;
+}
+
+dd {
+	margin-left:1.5em;
+}
+
+ol,ul {
+	margin-bottom:1.5em;
+	margin-left:1.5em;
+	padding-left:1.5em;
+}
+
+ol ol,ul ul {
+	margin-bottom:0;
+}
+
+ol {
+	list-style:decimal;
+}
+
+ul {
+	list-style:square;
+}
+
+
+	
+/* tables */
+table {
+	caption-side:bottom;
+	margin:0 0 1.5em;
+	width:100%;
+}
+
+caption {
+	font-size:85%;
+	padding:.25em .75em;
+	text-align:center;
+}
+
+col {
+	border:.1em solid #ccc;
+}
+
+thead {
+	border-bottom:.25em double #ccc;
+}
+
+tfoot {
+	border-top:.25em double #ccc;
+}
+
+tbody tr {
+	border:.1em solid #ccc;
+}
+
+th {
+	font-weight:bold;
+	padding:.25em .75em;
+	text-align:left;
+}
+
+td {
+	padding:.25em .75em;
+}
+
+
+	
+/* forms */
+fieldset {
+	border-width:.1em;
+	border-style:solid;
+	border-color:#ccc;
+	padding:1.5em;
+	margin-bottom:1.5em;
+}
+
+legend {
+	font-weight:bold;
+	padding-left:1.5em;
+	padding-right:1.5em;
+}
+
+label {
+	cursor:pointer;
+}
+
+textarea {
+	font-family:'Lucida Sans', 'Lucida Grande', sans-serif;
+	font-size:100%;
+}
+
+/* InkBlot
+----------------------------------------------------------------------*/
+.pad {
+	padding:1.5em;
+}
+
+.clear {
+	clear:both;
+}
+
+.alignleft {
+	float:left;
+}
+
+.alignright {
+	float:right;
+}
+
+.align-right {
+	text-align:right;
+}
+
+.align-center {
+	text-align:center;
+}
+
+.align-left {
+	text-align:left;
+}
+
+
+
+/* #wrap */
+#wrap {
+	background-image:url('images/inkblot/shadow-left.png');
+	background-repeat:repeat-y;
+	padding-left:10px;
+	padding-right:10px;
+	position:relative;
+}
+
+
+
+/* #page */
+#page {
+	background-image:url('images/inkblot/shadow-right.png');
+	background-position:right;
+	background-repeat:repeat-y;
+	margin-right:-10px;
+	padding-right:10px;
+}
+
+
+	
+/* #head */
+#head{
+	background-color:#fff;
+}
+	#head .title {
+		font-family:'Palatino Linotype','Book Antiqua',serif;
+		font-size:500%;
+		line-height:1em;
+	}
+	
+		#head .title a {
+			text-decoration:none;
+		}
+		
+			#head .title a:hover {
+				text-decoration:underline;
+			}
+			
+	#head .tagline {
+		font-family:'Palatino Linotype','Book Antiqua',serif;
+		font-size:150%;
+		line-height:1em;
+		margin-top:1em;
+	}
+	
+	#head .navi {
+		background:#333;
+		color:#999;
+		float:left;
+		list-style:none;
+		margin:0;
+		padding:0;
+		position:relative;
+		width:100%;
+		z-index:1;
+	}
+	
+		#head .navi li {
+			float:left;
+		}
+		
+		#head .navi .feed {
+			float: right;
+		}
+		
+		#head .navi a {
+			color:#999;
+			display:block;
+			font-weight:bold;
+			line-height:2.5em;
+			padding-right:1em;
+			padding-left:1em;
+			text-decoration:none;
+		}
+		
+			#head .navi a:hover,#head .navi .current_page_item>a,#head .navi .current_page_ancestor>a {
+				color:#fff;
+			}
+	
+		#head .navi ul {
+			background-image:url('images/inkblot/navi.png');
+			display:none;
+			list-style:none;
+			margin:0;
+			padding:0;
+			position:absolute;
+		}
+	
+			#head .navi ul li {
+				float:none;
+				position:relative;
+				white-space:nowrap;
+			}
+
+
+	
+/* #foot */
+#foot {
+	background:#333;
+	color:#999;
+	line-height:2.5em;
+	padding-left:1em;
+	padding-right:1em;
+}
+
+	#foot a {
+		color:#999;
+		font-weight:bold;
+		text-decoration:none;
+	}
+	
+		#foot a:hover {
+			color:#fff;
+		}
+
+
+
+/* #body */
+#body {
+	background-color:#fff;
+}
+
+
+
+/* #comic */
+#comic {
+	text-align:center;
+}
+	#comic img {
+		vertical-align:bottom;
+	}
+	
+	#comic h1 {
+		display:none;
+	}
+	
+	#comic .navi {
+		background-color:#333;
+		color:#999;
+		font-weight:bold;
+		line-height:2.5em;
+		padding-left:.5em;
+		padding-right:.5em;
+	}
+	
+		#comic .navi a {
+			color:#999;
+			margin-left:.5em;
+			margin-right:.5em;
+			text-decoration:none;
+		}
+		
+			#comic .navi a:hover {
+				color:#fff;
+			}
+
+	#comic .current-comic {
+		display:none;
+	}
+
+
+
+/* Blog Title */
+.blog-title {
+	font-family:'Palatino Linotype','Book Antiqua',serif;
+	font-size: 300%;
+	line-height: 1em;
+	margin-bottom: .5em;
+}
+
+
+	
+/* Posts */
+.post .navi {
+	font-weight:bold;
+}
+
+	.post .navi a {
+		text-decoration:none;
+	}
+	
+		.post .navi a:hover {
+			color:#999;
+		}
+
+.post .date {
+	font-size:115%;
+	margin-top:-1em;
+	margin-bottom:1.3em;
+}
+
+.post .foot {
+	font-size:115%;
+	margin-bottom:2.6em;
+	text-align:right;
+}
+
+.post .meta {
+	background:#eee;
+	border-width:.1em;
+	border-style:solid;
+	border-color:#ddd;
+	font-weight:normal;
+	font-size:85%;
+	padding:.5em;
+}
+
+.sticky {
+	background-color:#333;
+	color:#999;
+	margin-bottom:3em;
+	padding:1em;
+}
+
+	.sticky a {
+		color:#999;
+	}
+	
+		.sticky a:hover {
+			color:#fff;
+		}
+
+	.sticky .foot {
+		margin:0;
+	}
+
+
+	
+/* Page Navigation */
+.page-navi {
+	font-weight:bold;
+}
+
+	.page-navi a {
+		text-decoration:none;
+	}
+	
+	.page-navi a:hover {
+		color:#999;
+	}
+
+
+	
+/* archive comics */
+a.comic {
+	background-color:#333;
+	color:#999;
+	display:block;
+	margin-bottom:1.5em;
+	padding:1.5em;
+	text-align:center;
+	text-decoration:none;
+}
+
+		a.comic:hover {
+			color:#fff;
+		}
+
+		a.comic .title {
+			display:block;
+			font-family: 'Palatino Linotype','Book Antiqua',serif;
+			font-size:200%;
+			line-height:1em;
+		}
+
+
+	
+/* Comic Transcripts */
+.comic-transcript-title {
+	cursor:pointer;
+	font-weight:bold;
+	margin-bottom:.75em;
+}
+
+	.comic-transcript-title:hover {
+		color:#999;
+	}
+	
+.comic-transcript {
+	display:none;
+	border-width:.1em;
+	border-style:solid;
+	border-color:#ddd;
+	margin-bottom:1.5em;
+	padding-left:1.5em;
+	padding-right:1.5em;
+	padding-top:1.5em;
+}
+
+	#comic-transcript-form label {
+		display:block;
+		font-weight:bold;
+	}
+
+	.comic-transcript-submit-error,
+	.comic-transcript-submit-success {
+		color:#fff;
+		display:block;
+		font-weight:bold;
+		margin-bottom:1.5em;
+		padding:.5em;
+		text-align:center;
+	}
+	
+	.comic-transcript-submit-error {
+		background-color:#bf0000;
+	}
+
+	.comic-transcript-submit-success {
+		background-color:#30bf00;
+	}
+
+	
+/* Attachments */
+.attachment .navi {
+	margin-bottom:1.5em;
+	position:static;
+}
+
+	.attachment .navi .meta {
+		background:#eee;
+		border-width:.1em;
+		border-style:solid;
+		border-color:#ddd;
+		font-weight:normal;
+		font-size:85%;
+		margin-right:8em;
+		margin-bottom:1.5em;
+		margin-left:8em;
+		padding:.5em;
+	}
+	
+	.attachment .navi .thumb a {
+		border-color:#ddd;
+		border-style:solid;
+		border-width:.1em;
+		display:inline-block;
+		padding:.5em;
+	}
+	
+		.attachment .navi .thumb a:hover {
+			border-color:#333;
+		}
+	
+	.attachment .navi .thumb img {
+		height:5em;
+		vertical-align:bottom;
+		width:5em;
+	}
+
+.attachment .attachment {
+	border-width:.1em;
+	border-style:solid;
+	text-align:center;
+}
+
+	.attachment .attachment a {
+		background-color:#333;
+		display:block;
+		padding:1.5em;
+	}
+
+
+
+/* Comic Embed Code */
+.embed-title {
+	cursor:pointer;
+	font-weight:bold;
+	margin-bottom:.75em;
+}
+
+	.embed-title:hover {
+		color:#999;
+	}
+
+.comic-embed-code {
+	width:96%;
+}
+
+
+	
+/* Comments */
+.commentlist                                          {
+	list-style: none; margin: 0 0 1.5em; padding: 0;
+}
+	.commentlist .comment.bypostauthor                    {
+		background: #eee url('images/inkblot/bypostauthor.png') no-repeat;
+	}
+	
+	.commentlist .comment                                 {
+		border: .1em solid #ddd; margin: 0 0 2.5em; padding: .75em .75em 0;
+	}
+	
+		.commentlist .comment .vcard {
+			font-size: 115%; font-weight: bold;
+		}
+		
+		.commentlist .comment .vcard img.avatar               {
+			float:left; margin:0 1em 1em 0;
+		}
+		
+		.commentlist .comment .vcard span.says {
+			display: none;
+		}
+		
+		.commentlist .comment .comment-meta {
+			padding: 0 0 1.5em;
+		}
+		
+		.commentlist .comment .comment-meta a {
+			color: #999;
+		}
+		
+		.commentlist .comment .reply {
+			padding-bottom: .75em;
+		}
+		
+		.commentlist .comment .children {
+			list-style:none;
+			margin: 0;
+			padding: 0;
+		}
+		
+	.commentlist .even {
+		background: #fff;
+	}
+	.commentlist .odd {
+		background: #eee;
+	}
+
+#comment {
+	width:96%;
+}
+
+
+	
+/* Comic Archive Page */
+.comic-archive {
+	margin-top:-.75em;
+}
+	
+	.comic-archive col {
+		border:0;
+	}
+	
+	.comic-archive col.date {
+		border-right-width:.25em;
+		border-right-style:double;
+		border-right-color:#ddd;
+		width:30%;
+	}
+
+	.comic-archive tr {
+		border:0;
+	}
+
+	.comic-archive tr.alt {
+		background: #eee;
+	}
+
+		.comic-archive th {
+			padding:0;
+		}
+.comic-library {
+	list-style:none;
+	margin-left:0;
+	padding:0;
+}
+	.comic-library a {
+		cursor:pointer;
+		display:block;
+		font-size:200%;
+		line-height:1em;
+		margin-bottom:.75em;
+		text-decoration:none;
+	}
+	
+		.comic-series-volumes {
+			display:none;
+			list-style:decimal;
+		}
+			
+			.comic-volume-chapters {
+				display:none;
+				list-style:decimal;
+			}
+				.comic-volume-chapters a {
+					font-size: 150%;
+				}
+				.comic-volume-chapters p {
+					margin-bottom:.75em;
+				}
+				.comic-chapter-pages {
+					display:none;
+					list-style:decimal-leading-zero;
+					margin-bottom:1.5em;
+				}
+					.comic-chapter-pages a {
+						display:inline;
+						font-size:100%;
+					}
+
+
+
+/* .recent-list-404 */
+.recent-list-404 {
+	list-style:none;
+	margin-left:0;
+	padding:0;
+	text-align:center;
+}
+
+	.recent-list-404 li {
+		display:inline;
+		margin-right:.75em;
+	}
+
+
+
+/* #sidebar */
+#sidebar1,#sidebar2 {
+	font-size:85%;
+}
+
+	#sidebar1 ul,#sidebar2 ul {
+		list-style:none;
+		margin:0;
+	}
+	
+		#sidebar1 ul ul,#sidebar2 ul ul {
+			list-style:square;
+			margin-bottom:1.5em;
+			margin-left:1.5em;
+			padding-bottom:1.5em;
+		}
+		
+			#sidebar1 ul ul ul,#sidebar2 ul ul ul {
+				margin-bottom: 0;
+				padding-bottom: 0;
+			}
+			
+	#sidebar1 .cloud,#sidebar2 .cloud {
+		margin-bottom:1.5em;
+		padding-bottom:1.5em;
+	}
+
+
+
+/* Widget - Comic Archive */
+#comic-archive .comic-library a {
+	font-size:150%;
+}
+	#comic-archive .comic-volume-chapters a {
+		font-size:125%;
+	}
+		#comic-archive .comic-chapter-pages a {
+			font-size:100%;
+		}
+
+
+
+/* Widget - Comic Bookmark */
+#inkblot-bookmark {
+	font-size:115%;
+	font-weight:bold;
+}
+
+	#inkblot-bookmark a {
+		cursor:pointer;
+		line-height:2.5em;
+		padding-left:1em;
+		padding-right:1em;
+		text-decoration:none;
+	}
+	
+		#inkblot-bookmark a:hover {
+			color:#999;
+		}
+
+		#inkblot-bookmark a.goto-bookmark,#inkblot-bookmark a.clear-bookmark {
+			display:none;
+		}
+
+
+	
+/* Widget - WP-Calendar */
+#calendar .widgettitle {
+	display:none;
+}
+
+#wp-calendar {
+	border-collapse:separate;
+	border-spacing:.25em;
+	caption-side:top;
+	margin-bottom:1.5em;
+	text-align:center;
+	width:100%;
+}
+	
+	#wp-calendar caption {
+		font-family:'Palatino Linotype','Book Antiqua',serif;
+		font-size:200%;
+		line-height:1em;
+	}
+	
+	#wp-calendar tfoot {
+		background:#fff;
+		color:#000;
+	}
+	
+	#wp-calendar tbody td {
+		border-width:.1em;
+		border-style:solid;
+		border-color:#ddd;
+		padding:0;
+	}
+
+	#wp-calendar th {
+		font-weight:bold;
+		padding:0;
+		text-align:center;
+	}
+	
+	#wp-calendar #today {
+		background-color:#eee;
+		font-weight:bold;
+	}
+	
+	#wp-calendar .pad {
+		padding:0;
+	}
+	
+
+	#wp-calendar a {
+		background:#333;
+		color:#999;
+		display:block;
+		text-decoration:none;
+	}
+	
+		#wp-calendar a:hover {
+			color:#fff;
+		}
+
+
+	
+/* Shortcode - WP-Captions */
+.wp-caption {
+	background-color:#eee;
+	border-width:.1em;
+	border-style:solid;
+	border-color:#ddd;
+	margin:1em;
+	padding-top:.25em;
+	text-align:center;
+}
+
+	.wp-caption a {
+		text-decoration:none;
+	}
+
+	.wp-caption img {
+		margin:0;
+		padding:0;
+	}
+
+	.wp-caption p.wp-caption-text {
+		font-size:85%;
+		line-height:2em;
+		margin:0;
+		padding-right:.25em;
+		padding-left: .25em;
+	}
+	
+.aligncenter {
+	display:block;
+	margin-right:auto;
+	margin-left:auto;
+}
+
+	
+/* Shortcode - WP-Gallery */
+#body .gallery a {
+	text-decoration:none;
+}
+
+#body .gallery img {
+	border-width:.1em;
+	border-style:solid;
+	border-color:#333;
+}
