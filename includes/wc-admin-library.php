@@ -470,7 +470,7 @@ function comic_page_library(){
 		
 		$paged_output = '<div class="tablenav-pages"><span class="displaying-num">'.sprintf(__('Displaying %1$d &#8211; %2$d of %3$d','webcomic'),$from_post_num,$to_post_num,$total_post_num).'</span>';
 		if($paged != 1)
-			$paged_output .= '<a href="admin.php?page=webcomic/includes/wc-admin.php&amp;paged='.$previous.'" class="prev page-numbers">&laquo;</a> ';
+			$paged_output .= '<a href="admin.php?page=webcomic/includes/wc-admin.php&amp;series_view='.$the_series.'&amp;paged='.$previous.'" class="prev page-numbers">&laquo;</a> ';
 		while($i<=$max_num_pages):
 			if(($i != 1 && $i < $paged-2) || ($i != $max_num_pages && $i > $paged+2)):
 				if($i == 2 || $i == $max_num_pages-1)
@@ -478,11 +478,11 @@ function comic_page_library(){
 				$i++;
 				continue;
 			endif;
-			$paged_output .= ($paged == $i) ? '<span class="page-numbers current">'.$i.'</span> ' : '<a href="admin.php?page=webcomic/includes/wc-admin.php&paged='.$i.'" class="page-numbers">'.$i.'</a> ';
+			$paged_output .= ($paged == $i) ? '<span class="page-numbers current">'.$i.'</span> ' : '<a href="admin.php?page=webcomic/includes/wc-admin.php&amp;series_view='.$the_series.'&amp;paged='.$i.'" class="page-numbers">'.$i.'</a> ';
 			$i++;
 		endwhile;
 		if($paged < $max_num_pages)
-			$paged_output .= '<a href="admin.php?page=webcomic/includes/wc-admin.php&amp;paged='.$next.'" class="next page-numbers">&raquo;</a>';
+			$paged_output .= '<a href="admin.php?page=webcomic/includes/wc-admin.php&amp;series_view='.$the_series.'&amp;paged='.$next.'" class="next page-numbers">&raquo;</a>';
 		$paged_output .= '</div>'; $i = 0;
 	endif;
 	
