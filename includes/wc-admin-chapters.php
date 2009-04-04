@@ -54,7 +54,7 @@ function comic_page_chapters(){
 			$error = 3;
 		else:
 			wp_insert_term($chapter_name,'chapter',array('description' => $chapter_description, 'parent' => $chapter_parent, 'slug' => $chapter_nicename));
-			echo '<div id="message" class="updated fade"><p>'.sprintf(__('Added new chapter <q>%s</q>','webcomic'),stripslashes($chapter_name)).'</p></div>';
+			echo '<div id="message" class="updated fade"><p>'.sprintf(__('Added new chapter "%s"','webcomic'),stripslashes($chapter_name)).'</p></div>';
 		endif;
 	endif;
 	
@@ -86,7 +86,7 @@ function comic_page_chapters(){
 			wp_delete_term($_REQUEST['chapter'],'chapter');
 		endif;
 		
-		echo '<div id="message" class="updated fade"><p>'.sprintf(__('Deleted <q>%s</q>','webcomic'),$the_chapter['title']).$extra.'</p></div>';
+		echo '<div id="message" class="updated fade"><p>'.sprintf(__('Deleted "%s"','webcomic'),$the_chapter['title']).$extra.'</p></div>';
 	endif;
 	
 	/** Attempts to modify the selected chapters. */
@@ -136,7 +136,7 @@ function comic_page_chapters(){
 		endif;
 		
 		if(!$update_error && !is_wp_error(wp_update_term($_REQUEST['chapter_id'],'chapter',array('name' => $chapter_name, 'slug' => $chapter_nicename, 'parent' => $chapter_parent, 'description' => $chapter_description))))
-			echo '<div id="message" class="updated fade"><p>'.sprintf(__('Updted chapter <q>%1$s</q>','webcomic'),$chapter_name).'</p></div>';
+			echo '<div id="message" class="updated fade"><p>'.sprintf(__('Updted chapter "%1$s"','webcomic'),$chapter_name).'</p></div>';
 		elseif(1 == $update_error)
 			echo '<div id="message" class="error"><p>'.__('A chapter name must be provided.','webcomic').'</p></div>';
 		elseif(2 == $update_error)
@@ -260,7 +260,7 @@ function comic_page_chapters(){
 						?>
 							<tr<?php if($i%2) echo' class="alt"'; ?>>
 								<th scope="row" class="check-column"><input type="checkbox" name="chapters[]" value="<?php echo $volume['id'] ?>" /></th>
-								<td><?php if($volume['pages']): ?><a href="<?php echo $volume['link'] ?>" title="<?php echo $volume['title'] ?>"><strong>&mdash; <?php echo $volume['title'] ?></strong></a><?php else: ?><strong>&mdash; <?php echo $volume['title'] ?></strong><?php endif; ?><div class="row-actions"><a href="admin.php?page=comic-chapters<?php echo $series_link; ?>&amp;action=edit_chapter&amp;volume=1&amp;chapter=<?php echo $volume['id'] ?>"><?php _e('Edit','webcomic') ?></a> | <span class="delete"><a href="<?php echo wp_nonce_url('admin.php?page=comic-chapters'.$series_link.'&amp;action=delete_chapter&amp;volume=1&amp;chapter='.$volume['id'],'delete_chapter') ?>" onclick="if(confirm('<?php printf(__("You are about to delete \'%s\'. Any chapters in this volume will also be deleted.\\n \'Cancel\' to stop, \'OK\' to delete.","webcomic"),$volume['title']) ?>')) { return true;}return false;" title="<?php _e('Delete this volume','webcomic') ?>"><?php _e('Delete','webcomic') ?></a></span></div></td>
+								<td><?php if($volume['pages']): ?><a href="<?php echo $volume['link'] ?>" title="<?php echo $volume['title'] ?>"><strong>&mdash; <?php echo $volume['title'] ?></strong></a><?php else: ?><strong>&mdash; <?php echo $volume['title'] ?></strong><?php endif; ?><div class="row-actions"><a href="admin.php?page=comic-chapters<?php echo $series_link; ?>&amp;action=edit_chapter&amp;volume=1&amp;chapter=<?php echo $volume['id'] ?>"><?php _e('Edit','webcomic') ?></a> | <span class="delete"><a href="<?php echo wp_nonce_url('admin.php?page=comic-chapters'.$series_link.'&amp;action=delete_chapter&amp;volume=1&amp;chapter='.$volume['id'],'delete_chapter') ?>" onclick="if(confirm('<?php echo js_escape(sprintf(__("You are about to delete '%s'. Any chapters in this volume will also be deleted.\n 'Cancel' to stop, 'OK' to delete.","webcomic"),$volume['title'])) ?>')) { return true;}return false;" title="<?php _e('Delete this volume','webcomic') ?>"><?php _e('Delete','webcomic') ?></a></span></div></td>
 								<td><?php echo $volume['description'] ?></td>
 								<td><?php echo $volume['slug']; ?></td>
 								<td class="num"><?php echo $volume['pages'] ?></td>
@@ -268,7 +268,7 @@ function comic_page_chapters(){
 							<?php foreach($volume['chapters'] as $chapter): $i++; ?>
 							<tr<?php if($i%2) echo' class="alt"'; if($chapter['id'] == $current_chapter) echo ' style="background-color:#fdf9c6;"'?>
 								<th scope="row" class="check-column"><input type="checkbox" name="chapters[]" value="<?php echo $chapter['id'] ?>" /></th>
-								<td><?php if($chapter['pages']): ?><a href="<?php echo $chapter['link'] ?>" title="<?php echo $chapter['title'] ?>"><strong>&mdash; &mdash; <?php echo $chapter['title'] ?></strong></a><?php else: ?><strong>&mdash; &mdash; <?php echo $chapter['title'] ?></strong><?php endif; ?><div class="row-actions"><a href="admin.php?page=comic-chapters<?php echo $series_link; ?>&amp;action=edit_chapter&amp;chapter=<?php echo $chapter['id'] ?>"><?php _e('Edit','webcomic') ?></a><?php if($chapter['id'] != $current_chapter): ?> | <a href="<?php echo wp_nonce_url('admin.php?page=comic-chapters'.$series_link.'&amp;action=set_current_chapter&amp;series='.$the_series.'&amp;chapter='.$chapter['id'],'set_current_chapter') ?>" title="<?php _e("New posts will be assigned to this chapter",'webcomic') ?>"><?php _e('Make Current','webcomic'); ?></a><?php else: ?> | <a href="<?php echo wp_nonce_url('admin.php?page=comic-chapters'.$series_link.'&amp;action=remove_current_chapter&amp;series='.$the_series.'&amp;chapter='.$chapter['id'],'remove_current_chapter') ?>" title="<?php _e("New posts will not be assigned to a chapter",'webcomic') ?>"><?php _e('Remove Current','webcomic'); ?></a><?php endif; ?> | <span class="delete"><a href="<?php echo wp_nonce_url('admin.php?page=comic-chapters'.$series_link.'&amp;action=delete_chapter&amp;chapter='.$chapter['id'],'delete_chapter') ?>" onclick="if(confirm('<?php printf(__("You are about to delete \'%s\'\\n \'Cancel\' to stop, \'OK\' to delete.","webcomic"),$chapter['title']) ?>')) { return true;}return false;" title="<?php _e('Delete this chapter','webcomic') ?>"><?php _e('Delete','webcomic') ?></a></span></div></td>
+								<td><?php if($chapter['pages']): ?><a href="<?php echo $chapter['link'] ?>" title="<?php echo $chapter['title'] ?>"><strong>&mdash; &mdash; <?php echo $chapter['title'] ?></strong></a><?php else: ?><strong>&mdash; &mdash; <?php echo $chapter['title'] ?></strong><?php endif; ?><div class="row-actions"><a href="admin.php?page=comic-chapters<?php echo $series_link; ?>&amp;action=edit_chapter&amp;chapter=<?php echo $chapter['id'] ?>"><?php _e('Edit','webcomic') ?></a><?php if($chapter['id'] != $current_chapter): ?> | <a href="<?php echo wp_nonce_url('admin.php?page=comic-chapters'.$series_link.'&amp;action=set_current_chapter&amp;series='.$the_series.'&amp;chapter='.$chapter['id'],'set_current_chapter') ?>" title="<?php _e("New posts will be assigned to this chapter",'webcomic') ?>"><?php _e('Make Current','webcomic'); ?></a><?php else: ?> | <a href="<?php echo wp_nonce_url('admin.php?page=comic-chapters'.$series_link.'&amp;action=remove_current_chapter&amp;series='.$the_series.'&amp;chapter='.$chapter['id'],'remove_current_chapter') ?>" title="<?php _e("New posts will not be assigned to a chapter",'webcomic') ?>"><?php _e('Remove Current','webcomic'); ?></a><?php endif; ?> | <span class="delete"><a href="<?php echo wp_nonce_url('admin.php?page=comic-chapters'.$series_link.'&amp;action=delete_chapter&amp;chapter='.$chapter['id'],'delete_chapter') ?>" onclick="if(confirm('<?php echo js_escape(sprintf(__("You are about to delete '%s'\n 'Cancel' to stop, 'OK' to delete.","webcomic"),$chapter['title'])) ?>')) { return true;}return false;" title="<?php _e('Delete this chapter','webcomic') ?>"><?php _e('Delete','webcomic') ?></a></span></div></td>
 								<td><?php echo $chapter['description']; ?></td>
 								<td><?php echo $chapter['slug']; ?></td>
 								<td class="num"><?php echo $chapter['pages']; ?></td>
