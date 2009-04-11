@@ -3,7 +3,7 @@
 Plugin Name: WebComic
 Plugin URI: http://maikeruon.com/wcib/
 Description: WebComic makes any WordPress theme webcomic ready by adding additional template tags and widgets specifically designed for publishing webcomics.
-Version: 1.8
+Version: 1.9
 Author: Michael Sisk
 Author URI: http://maikeruon.com/
 
@@ -50,7 +50,7 @@ function load_webcomic_domain(){
  * @package WebComic
  * @since 1.0
  */
-if(!get_option('webcomic_version') || '1.8' != get_option('webcomic_version')):
+if(!get_option('webcomic_version') || '1.9' != get_option('webcomic_version')):
 	function comic_upgrade(){
 		load_webcomic_domain();
 		
@@ -84,33 +84,29 @@ if(!get_option('webcomic_version') || '1.8' != get_option('webcomic_version')):
 		if(!file_exists(get_comic_directory('abs',true)))
 			mkdir(get_comic_directory('abs',true),0775);
 		
-		/** Make sure our Comic Category has a Series, upgrading older collections as necessary. The upgrade will be removed in the next version. */
-		$chapters     = get_terms('chapter',array('hide_empty' => false));
-		$first_series = get_term(get_comic_category(),'category');
-		$the_series   = wp_insert_term($first_series->name,'chapter');
-		if($chapters):
-			$series = get_term($the_series['term_id'],'chapter');
-			foreach($chapters as $chapter):
-				if(!$chapter->parent)
-					wp_update_term($chapter->term_id,'chapter',array('parent' => $series->term_id));
-			endforeach;
+		if ( !is_array( get_option( 'comic_category' ) ) ) {
+			$collection  = get_the_collection( 'hide_empty=0' );
+			$has_volumes = ( is_array( $collection ) ) ? array_pop( $collection ) : 0;
 			
-			$collection = get_the_collection();
-			$new_tax    = array();
-			
-			foreach($collection as $series):
-				foreach($series['volumes'] as $volume):
-					foreach($volume['chapters'] as $chapter):
-						foreach($chapter['posts'] as $the_post):
-							$new_tax[0] = $series['slug'];
-							$new_tax[1] = $volume['slug'];
-							$new_tax[2] = $chapter['slug'];
-							wp_set_object_terms($the_post['id'],$new_tax,'chapter');
-						endforeach;
-					endforeach;
-				endforeach;
-			endforeach;
-		endif;
+			if ( $collection && is_array( $has_volumes ) && array_key_exists( 'volumes', $has_volumes ) ) {
+				$first_series = get_term( get_comic_category(), 'category' );
+				$the_series   = wp_insert_term( $first_series->name, 'chapter' );
+				$series       = get_term($the_series['term_id'],'chapter');
+				$chapters     = get_terms( 'chapter', array( 'hide_empty' => 0 ) );
+				$collection   = get_the_collection( 'hide_empty=0' );
+				
+				foreach ( $chapters as $chapter )
+					if ( !$chapter->parent )
+						wp_update_term( $chapter->term_id, 'chapter', array( 'parent' => $series->term_id ) );
+				
+				foreach ( array_keys( $collection ) as $s_key )
+					foreach ( array_keys( $collection[ $s_key ][ 'volumes' ] ) as $v_key )
+						foreach( array_keys( $collection[ $s_key ][ 'volumes' ][ $v_key ][ 'chapters' ] ) as $c_key )
+							foreach( array_keys( $collection[ $s_key ][ 'volumes' ][ $v_key ][ 'chapters' ][ $c_key ][ 'posts' ] ) as $p_key )
+								add_post_to_chapter( $collection[ $s_key ][ 'volumes' ][ $v_key ][ 'chapters' ][ $c_key ][ 'posts' ][ $p_key ][ 'id' ], $collection[ $s_key ][ 'volumes' ][ $v_key ][ 'chapters' ][ $c_key ][ 'id' ] );
+			}
+		}
+		
 		
 		/** Upgrade old Comic Category and Current Chapter settings. This will be removed in the next version. */
 		if(!is_array(get_option('comic_current_chapter')))
@@ -120,9 +116,9 @@ if(!get_option('webcomic_version') || '1.8' != get_option('webcomic_version')):
 		
 		/** Add or update the 'webcomic_version' setting. */
 		if(get_option('webcomic_version'))
-			update_option('webcomic_version','1.8');		
+			update_option('webcomic_version','1.9');		
 		else
-			add_option('webcomic_version','1.8');
+			add_option('webcomic_version','1.9');
 		
 		echo '<div class="updated fade"><p>'.sprintf(__('Thanks for choosing WebComic! Please <a href="%s">update your settings</a>.','webcomic'),'admin.php?page=comic-settings').'</p></div>';
 	}
@@ -357,7 +353,7 @@ function comic_transcript_submit() {
 	if ( $_POST[ 'comic_trans_submit' ] ) {
 		global $comic_trans_message;
 		
-		if ( $_POST[ 'comic_trans_human' ] || 7 == $_POST[ 'comic_trans_captcha' ] ) {
+		if ( $_POST[ 'comic_trans_human' ] || 'hot' == $_POST[ 'comic_trans_captcha' ] ) {
 			if ( !$_POST[ 'comic_trans_from' ] || !$_POST[ 'comic_trans_mail' ] || !$_POST[ 'comic_trans_script' ] )
 				$errors = 1;
 			

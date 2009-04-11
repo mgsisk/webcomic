@@ -4,7 +4,7 @@ Donate link: http://maikeruon.com/wcib/
 Tags: webcomic, comic, multi-comic, file manager, taxonomy, chapters, volumes, series
 Requires at least: 2.5
 Tested up to: 2.7.1
-Stable tag: 1.8
+Stable tag: 1.9
 
 Webcomic Makes any WordPress theme webcomic-ready by adding new functionality designed specificaly to make publishing webcomics a breeze.
 
@@ -12,23 +12,20 @@ Webcomic Makes any WordPress theme webcomic-ready by adding new functionality de
 
 Webcomic makes any WordPress theme webcomic-ready by adding new functionality designed specificaly to make publishing webcomics a breeze. With WebComic, you can turn any WordPress theme into a webcomic site.
 
-= New in 1.8 =
+= New in 1.9 =
 
-* __Multi-Comic Support:__ WebComic can now manage any number of webcomics on a single WordPress installation, each with it's own Library and Chapter hierarchy. All WebComic features and functions have been upgraded to fully support multiple webcomics.
-* __User-Submittable Transcripts:__ WebComic has a new option (transcript e-mail) that, when provided, allows users to submit individual comic transcripts to the e-mail address you specify.
-* __Enhanced Chapter System:__ Chapters now take full advantage of the WordPress Taxonomy API, allowing for Chapter archive pages and chapter feeds.
-* __Enhanced Template Tags:__ All core WebComic template tags have been upgraded to enhance performance and enable multi-comic support.
-* __Enhanced Navigation Options:__ WebComic can now make comic images clickable next or previous comic links, limit first/back/next/last comic navigation to the current storyline (chapter or volume), and more.
-* __WordPress MU Support:__ WebComic now properly supports WordPress MU.
-* __New Template Tags:__ in\_comic\_category(), get_post\_comic\_category(), get\_post\_chapters(), single\_chapter\_title(), chapter\_description(), chapters\_nav\_link(), first\_chapter\_link(), previous\_chapter\_link(), next\_chapter\_link(), last\_chapter\_link(), the\_chapter\_link() (replases the\_chapter() and the\_volume()).
+* Includes a critical bug fix that caused Series to be set as their own parent when editing them from the Chapter's page, resulting in numerous Chapter-related problems.
+* Includes numerous fixes related to I18n functions (internationalization support) to correct strings that could not be correctly translated. Many thanks to Gemnoc.
+* random\_comic() has been deprecated and will be removed in the next release. Use random\_comic\_link() instead.
+* Various minor bug fixes and feature enhancements.
 
 = Major Features =
 * __Multi-Comic Support:__ WebComic can manage any number of webcomics on a single WordPress site, each with it's own Library and Chapter hierarchy.
+* __Internationalization Support:__ WebComic makes use of WordPress' I18n functions, allowing it to be translated into any language.
 * __Flexible File Names:__ WebComic can match comic files with posts based on a custom date format, post slugs, or entirely custom values defined by you using custom fields.
 * __Manage Your Library:__ The Library allows you to manage your comics and associated posts from within WordPress. Upload, rename, and delete comics, view all of your comics and which posts they're associated with, see which comics don't have a post (and which posts don't have a comic), automatically generate posts during upload or missing posts for orphaned comics, and more.
 * __Organize Your Stories:__ Take advantage of WebComics Chapters feature to organize your comics into unique volumes and chapters with titles, descriptions, page counts, archive pages, and feeds. WebComic has a number of functiosn designed specifically to take advantage of the new "chapter" taxonomy.
 * __Template Tags for WordPress Themes:__ Leverage WebComic's new template tags to turn any WordPress theme into a webcomic site.
-* __Internationalization Support:__ WebComic makes use of WordPress' I18n functions, allowing it to be translated into any language.
 
 WebComic also takes advantage of WordPress custom fields to provide a simple way of adding custom comic descriptions and comic transcripts, both of which are fully searchable using the standard WordPress search funcitons.
 
@@ -62,6 +59,12 @@ Please see the [WebComic & InkBlot Codex](http://maikeruon.com/wcib/codex/) for 
 4. Meta Box
 
 == Release Notes ==
+
+= 1.9 April 8, 2009 =
+* Includes a critical bug fix that caused Series to be set as their own parent when editing them from the Chapter's page, resulting in numerous Chapter-related problems.
+* Includes numerous fixes related to I18n functions (internationalization support) to correct strings that could not be correctly translated.
+* random_comic() has been deprecated and will be removed in the next release. Use random_comic_link() instead.
+* Various minor bug fixes and feature enhancements.
 
 = 1.8 - March 19, 2009 =
 
