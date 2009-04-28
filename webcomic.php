@@ -115,10 +115,16 @@ if(!get_option('webcomic_version') || '1.9' != get_option('webcomic_version')):
 			update_option('comic_category',array(get_option('comic_category')));
 		
 		/** Add or update the 'webcomic_version' setting. */
-		if(get_option('webcomic_version'))
+		if(get_option('webcomic_version')):
 			update_option('webcomic_version','1.9');		
-		else
+		else:
 			add_option('webcomic_version','1.9');
+			
+			if ( !get_the_collection( 'hide_empty=0&depth=1' ) ):
+				$first_series = get_term( 1, 'category' );
+				wp_insert_term( $first_series->name, 'chapter' );
+			endif;
+		endif;
 		
 		echo '<div class="updated fade"><p>'.sprintf(__('Thanks for choosing WebComic! Please <a href="%s">update your settings</a>.','webcomic'),'admin.php?page=comic-settings').'</p></div>';
 	}
