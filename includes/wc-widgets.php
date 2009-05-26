@@ -349,7 +349,7 @@ function widget_init_comic_archive(){
 		extract( $args );
 		
 		$options = get_option( 'widget_comic_archive' );
-		$args    = 'group=' . $options[ 'groupby' ];
+		$args    = 'groupby=' . $options[ 'groupby' ];
 		$args   .= '&format=' . $options[ 'format' ];
 		$args   .= ( $options[ 'post_order' ] ) ? '&post_order=ASC' : '';
 		$args   .= '&series=' . $options[ 'series' ];
