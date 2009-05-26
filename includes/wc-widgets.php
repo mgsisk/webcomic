@@ -371,16 +371,16 @@ function widget_init_comic_archive(){
 		$options = get_option( 'widget_comic_archive' );
 		
 		if ( $_POST[ 'comic-archive-submit' ] ) {
-			$newoptions[ 'title' ]       = strip_tags( stripslashes( $_POST[ 'comic-archive-title' ] ) );
-			$newoptions[ 'groupby' ]       = $_POST[ 'comic-archive-group' ];
-			$newoptions[ 'format' ]      = $_POST[ 'comic-archive-format' ];
-			$newoptions[ 'post_order' ]  = $_POST[ 'comic-archive-post-order' ];
-			$newoptions[ 'series' ]      = $_POST[ 'comic-archive-series' ];
-			$newoptions[ 'orderby' ]     = $_POST[ 'comic-archive-orderby' ];
-			$newoptions[ 'order' ]       = $_POST[ 'comic-archive-order' ];
-			$newoptions[ 'bound' ]       = $_POST[ 'comic-archive-bound' ];
+			$newoptions[ 'title' ]        = strip_tags( stripslashes( $_POST[ 'comic-archive-title' ] ) );
+			$newoptions[ 'groupby' ]      = $_POST[ 'comic-archive-groupby' ];
+			$newoptions[ 'format' ]       = $_POST[ 'comic-archive-format' ];
+			$newoptions[ 'post_order' ]   = $_POST[ 'comic-archive-post-order' ];
+			$newoptions[ 'series' ]       = $_POST[ 'comic-archive-series' ];
+			$newoptions[ 'orderby' ]      = $_POST[ 'comic-archive-orderby' ];
+			$newoptions[ 'order' ]        = $_POST[ 'comic-archive-order' ];
+			$newoptions[ 'bound' ]        = $_POST[ 'comic-archive-bound' ];
 			$newoptions[ 'descriptions' ] = $_POST[ 'comic-archive-descriptions' ];
-			$newoptions[ 'pages' ]       = $_POST[ 'comic-archive-pages' ];
+			$newoptions[ 'pages' ]        = $_POST[ 'comic-archive-pages' ];
 			
 			if ( $options != $newoptions ) {
 				$options = $newoptions;
