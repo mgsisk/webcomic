@@ -281,6 +281,9 @@ function get_the_comic( $id = false, $limit = false, $chapter = false ) {
 		
 		$comic_files = glob( get_comic_directory( 'abs', 0, $comic_dir ) . '*.*' );
 		
+		if ( !$comic_files )
+			return; //No comic files could be globbed
+		
 		foreach( array_keys( $comic_files ) as $key ) {
 			if ( false !== strpos( basename( $comic_files[ $key ] ), $comic_name ) ) {
 				$output->file = ( get_option( 'comic_secure_paths' ) ) ? get_settings( 'home' ) . '?comic_object=' . $output->ID : get_comic_directory( 'url', 0, $comic_dir ) . rawurlencode( basename( $comic_files[ $key ] ) );
