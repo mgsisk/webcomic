@@ -226,7 +226,7 @@ function widget_init_dropdown_comics(){
 		$args   .= ( $options[ 'post_order' ] ) ? '&post_order=ASC' : '';
 		$args   .= '&number=' . $options[ 'number' ];
 		$args   .= '&series=' . $options[ 'series' ];
-		$args   .= '&group=' . $options[ 'groupby' ];
+		$args   .= '&groupby=' . $options[ 'groupby' ];
 		$args   .= '&orderby=' . $options[ 'orderby' ];
 		$args   .= ( $options[ 'order' ] ) ? '&order=DESC' : '';
 		$args   .= '&bound=' . $options[ 'bound' ];

@@ -4,7 +4,7 @@ Donate link: http://maikeruon.com/wcib/
 Tags: webcomic, comic, multiple comics, inkblot, storylines, chapters, library, management, themes, posts, publish
 Requires at least: 2.7
 Tested up to: 2.8b2
-Stable tag: 2.0.0
+Stable tag: 2.0.1
 
 WebComic adds a collection of new features to WordPress geared specifically at publishing webcomics.
 
@@ -19,6 +19,11 @@ WebComic adds a collection of new features to WordPress geared specifically at p
 = InkBlot 1.x Users =
 
 **[Please read this documentation page before upgrading.](http://maikeruon.com/wcib/documentation/inkblot/inkblot-1x-and-webcomic-2x/)**
+
+= 2.0.1 Update =
+
+- Includes bug fix to address a Comic Archive widget bug that prevented comics from being organized by chapters.
+- Includes bug fix to address an array keys errror in wc-core.php.
 
 = Feature Highlights =
 
