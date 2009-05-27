@@ -481,7 +481,7 @@ function get_series_by_path() {
 			$sid = $chapter->term_id;
 		}
 	} else {
-		$pid = $_GET[ 'p' ];
+		$pid = ( $_GET[ 'p' ] ) ? $_GET[ 'p' ] : $_GET[ 'page_id' ];
 		$cid = $_GET[ 'cat' ];
 	}
 	
