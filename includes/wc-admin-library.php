@@ -17,9 +17,8 @@ function comic_page_library() {
 	$view_link  = '?page=' . $page . '&amp;series=' . $series . '&amp;paged=' . $paged;
 	$collection = get_the_collection( 'hide_empty=0&depth=3&series=' . $series );
 	$categories = get_comic_category( true );
-	$comic_dir  = $series;
-	$file_path  = get_comic_directory( 'abs', false, $comic_dir );
-	$thumb_path = get_comic_directory( 'abs', true, $comic_dir );
+	$file_path  = get_comic_directory( 'abs', false, $series );
+	$thumb_path = get_comic_directory( 'abs', true, $series );
 	
 	/** Set or update the library view */
 	if ( !get_usermeta( $current_user->ID, 'comic_library_view' ) )
@@ -980,14 +979,14 @@ function comic_page_library() {
 				<?php if ( $thumb_col ) { ?>
 				<td style="text-align:center">
 				<?php if ( 'swf' == $orphan_info[ 'extension' ] ) { ?>
-					<object type="application/x-shockwave-flash" data="<?php echo get_comic_directory( 'url', false, $comic_dir ) . $orphan_info[ 'basename' ]; ?>" height="<?php echo get_option( 'comic_thumb_size_h' ); ?>" width="<?php echo get_option( 'comic_thumb_size_w' ); ?>"><param name="movie" value="<?php echo get_comic_directory( 'url', false, $comic_dir ) . $orphan_info[ 'basename' ]; ?>" /></object>
+					<object type="application/x-shockwave-flash" data="<?php echo get_comic_directory( 'url', false, $series ) . $orphan_info[ 'basename' ]; ?>" height="<?php echo get_option( 'comic_thumb_size_h' ); ?>" width="<?php echo get_option( 'comic_thumb_size_w' ); ?>"><param name="movie" value="<?php echo get_comic_directory( 'url', false, $series ) . $orphan_info[ 'basename' ]; ?>" /></object>
 				<?php } else { ?>
-					<img src="<?php echo get_comic_directory( 'url', true, $comic_dir ) . $orphan_info[ 'filename' ] . '-thumb.' . $orphan_info[ 'extension' ]; ?>" alt="<?php echo $orphan_info[ 'basename' ]; ?>" />
+					<img src="<?php echo get_comic_directory( 'url', true, $series ) . $orphan_info[ 'filename' ] . '-thumb.' . $orphan_info[ 'extension' ]; ?>" alt="<?php echo $orphan_info[ 'basename' ]; ?>" />
 				<?php } ?>
 				</td>
 				<?php } ?>
 				<td>
-					<a href="<?php echo get_comic_directory( 'url', false, $comic_dir ) . $orphan_info[ 'basename' ]; ?>" title="<?php _e( 'View ', 'webcomic' ); echo $orphan_info[ 'basename' ]; ?>" class="row-title"><?php echo $orphan_info[ 'basename' ] ?></a>
+					<a href="<?php echo get_comic_directory( 'url', false, $series ) . $orphan_info[ 'basename' ]; ?>" title="<?php _e( 'View ', 'webcomic' ); echo $orphan_info[ 'basename' ]; ?>" class="row-title"><?php echo $orphan_info[ 'basename' ] ?></a>
 					<div class="row-actions"><span class="delete"><a href="<?php echo wp_nonce_url( $view_link . '&amp;action=comic_delete&amp;file=' . $orphan_info[ 'basename' ], 'comic_delete' ) ?>" onclick="if (confirm('<?php echo js_escape( sprintf( __( "You are about to delete '%s'\n 'Cancel' to stop, 'OK' to delete.", "webcomic" ), $orphan_info[ 'basename' ] ) ); ?>')) {return true;}return false;" title="<?php _e( 'Delete this comic', 'webcomic' ); ?>"><?php _e( 'Delete', 'webcomic' ); ?></a></span></div>
 				</td>
 				<td>

@@ -111,7 +111,7 @@ function comic_post_meta_box_save( $id, $post ) {
 	if ( $the_post = wp_is_post_revision( $id ) )
 		$id = $the_post;
 	
-	$comic_dir  = ( 1 < count( get_option( 'comic_category' ) ) ) ? get_post_comic_category( $id ) : false;
+	$comic_dir  = get_post_comic_category( $id );
 	$file_path  = get_comic_directory( 'abs', false, $comic_dir );
 	$thumb_path = get_comic_directory( 'abs', true, $comic_dir );
 	
@@ -159,7 +159,7 @@ function comic_post_meta_box_save( $id, $post ) {
 					chmod( $target_path, 0664 );
 				
 				//Get the file information
-				$img_dim  = getimagesize( urlencode( $target_path ) );
+				$img_dim  = getimagesize( $target_path );
 				
 				//Add or update the post custom filed for the new file
 				if ( !add_post_meta( $id, 'comic_file', basename( $target_path ), true ) )

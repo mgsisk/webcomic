@@ -4,7 +4,7 @@ Text Domain: webcomic
 Plugin Name: WebComic
 Plugin URI: http://maikeruon.com/wcib/
 Description: WebComic adds a collection of new features to WordPress geared specifically at publishing webcomics.
-Version: 2.0.1
+Version: 2.0.2
 Author: Michael Sisk
 Author URI: http://maikeruon.com/
 

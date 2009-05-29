@@ -285,7 +285,7 @@ function generate_comic_thumbnails( $id = false, $target_path = false, $img_dim 
 	$img_tw     = get_option( 'comic_thumb_size_w' );
 	$img_th     = get_option( 'comic_thumb_size_h' );
 	$img_crop   = get_option( 'comic_thumb_crop' ) ? true : false;
-	$thumb_path = get_comic_directory( 'abs', true, $comic_dir );
+	$thumb_path = get_comic_directory( 'abs', true, get_post_comic_category( $id ) );
 	
 	//Generate a new large size image and add or update the post custom field, or delete the post custom field
 	if ( $img_dim[ 0 ] > $img_lw || $img_dim[ 1 ] > $img_lh ) {
