@@ -4,7 +4,7 @@ Text Domain: webcomic
 Plugin Name: WebComic
 Plugin URI: http://maikeruon.com/wcib/
 Description: WebComic adds a collection of new features to WordPress geared specifically at publishing webcomics.
-Version: 2.0.2
+Version: 2.0.3
 Author: Michael Sisk
 Author URI: http://maikeruon.com/
 
@@ -567,7 +567,7 @@ function webcomic_template_redirect() {
 		} else {
 			header( 'Last-Modified: ' . gmdate( 'D, d M Y H:i:s', filemtime( $size ) ) . ' GMT', true, 200 );
 			header( 'Content-Length: ' . filesize( $size ) );
-			header( 'Content-Type: ' . $comic->file_data->mime );
+			header( 'Content-Type: ' . $comic->file_data[ 'mime' ] );
 			
 			die( readfile( $size ) );
 		}
