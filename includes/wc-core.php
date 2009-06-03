@@ -579,7 +579,7 @@ function the_comic_transcript( $title = '', $submit = '' ) {
 				<div id="comic-trans-message">' . $comic_trans_message . '</div>
 				<p><label for="comic_trans_from">' . __( 'Name', 'webcomic' ) . '</label><input type="text" name="comic_trans_from" id="comic_trans_from" /></p>
 				<p><label for="comic_trans_mail">' . __( 'E-mail', 'webcomic' ) . '</label><input type="text" name="comic_trans_mail" id="comic_trans_mail" /></p>
-				<noscript><p><label for="comic_trans_captcha">' . __( "What's three plus four?", "webcomic" ) . '</label><input type="text" maxlength="1" name="comic_trans_captcha" id="comic_trans_captcha" /></p></noscript>
+				<p><label for="comic_trans_captcha">' . __( "What's three plus four?", "webcomic" ) . '</label><input type="text" maxlength="1" name="comic_trans_captcha" id="comic_trans_captcha" /></p>
 				<p><label for="comic_trans_script">' . __( 'Transcript', 'webcomic' ) . '</label><textarea rows="7" cols="40" name="comic_trans_script" id="comic_trans_script"></textarea></p>
 				<p>' . sprintf( __( 'Transcripts can be formatted using <a href="%s">HTML</a> or <a href="%s">Markdown</a> <a href="%s">Extra</a>.', 'webcomic' ), 'http://www.w3schools.com/html/default.asp', 'http://daringfireball.net/projects/markdown/syntax', 'http://michelf.com/projects/php-markdown/extra/' ) . '</p>
 				<p>
@@ -854,7 +854,7 @@ function next_comic_link($limit=false,$label=''){
  * @param str $label The link text or image size (one of 'thumb', 'medium', 'large', or 'full').
  * @param str $series A specific comic category to randomly select comics from.
  */
-function random_comic($label=false,$series=false){
+function random_comic_link($label=false,$series=false){
 	if(!$series):
 		$comic_cats = get_comic_category('all');
 		$random_key = array_rand($comic_cats);
@@ -879,6 +879,10 @@ function random_comic($label=false,$series=false){
 		
 		echo '<a href="'.$comic['link'].'" title="'.$comic['description'].'">'.$the_comic.'</a>';
 	endif;
+}
+/** Deprecated; use random_comic_link() above. */
+function random_comic($label=false,$series=false){
+	random_comic_link($label,$serires);
 }
 
 //
