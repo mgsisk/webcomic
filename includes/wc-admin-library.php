@@ -210,7 +210,7 @@ function comic_page_library() {
 					$post_status   = ( get_option( 'comic_post_draft' ) ) ? 'draft' : 'publish';
 					
 					$new_post = wp_insert_post( array(
-						'post_content' => '&nbsp;',
+						'post_content' => '&hellip;',
 						'post_status' => $post_status,
 						'post_category' => array( $series ),
 						'post_date' => $post_date_std,
@@ -459,7 +459,7 @@ function comic_page_library() {
 				$post_status   = ( get_option( 'comic_post_draft' ) ) ? 'draft' : 'publish';
 				
 				$new_post = wp_insert_post( array(
-					'post_content' => '&nbsp;',
+					'post_content' => '&hellip;',
 					'post_status' => $post_status,
 					'post_category' => array( $series ),
 					'post_date' => $post_date_std,
@@ -580,7 +580,7 @@ function comic_page_library() {
 		$post_status   = ( get_option( 'comic_post_draft' ) ) ? 'draft' : 'publish';
 		
 		$new_post = wp_insert_post( array(
-			'post_content' => '&nbsp;',
+			'post_content' => '&hellip;',
 			'post_status' => $post_status,
 			'post_category' => array( $series ),
 			'post_date' => $post_date_std,
