@@ -4,7 +4,7 @@ Text Domain: webcomic
 Plugin Name: WebComic
 Plugin URI: http://maikeruon.com/wcib/
 Description: WebComic adds a collection of new features to WordPress geared specifically at publishing webcomics.
-Version: 2.0.4
+Version: 2.0.5
 Author: Michael Sisk
 Author URI: http://maikeruon.com/
 
@@ -47,7 +47,7 @@ function load_webcomic_domain() { load_plugin_textdomain( 'webcomic', PLUGINDIR 
  * @package WebComic
  * @since 1.0.0
  */
-if ( !get_option( 'webcomic_version' ) || '2.0.4' != get_option( 'webcomic_version' ) ) {
+if ( !get_option( 'webcomic_version' ) || '2.0.5' != get_option( 'webcomic_version' ) ) {
 	function webcomic_install() {
 		load_webcomic_domain();
 		
@@ -91,9 +91,9 @@ if ( !get_option( 'webcomic_version' ) || '2.0.4' != get_option( 'webcomic_versi
 			if ( get_option( 'webcomic_version' ) < 2 )
 				echo '<div class="updated fade"><p>' . sprintf( __( 'Upgrading? Please take a moment to <a href="%s">read about some important differences</a> between WebComic 1.x and WebComic 2.x.', 'webcomic' ), 'http://maikeruon.com/wcib/documentation/webcomic/1x-vs-2x/' ) . '</p></div>';
 			
-			update_option( 'webcomic_version', '2.0.4' );
+			update_option( 'webcomic_version', '2.0.5' );
 		} else {
-			add_option( 'webcomic_version', '2.0.4' );
+			add_option( 'webcomic_version', '2.0.5' );
 			
 			if ( !get_the_collection( 'hide_empty=0&depth=1' ) ) {
 				$first_series = get_term( $default_category, 'category' );
