@@ -1801,7 +1801,6 @@ function comic_archive( $args = '' ) {
 			}
 			
 			$tr_class = ( !( $i % 2 ) ) ? ' class="alt"' : '';
-			echo $i;
 			
 			if ( $args[ 'format' ] && 'number' != $args[ 'format' ]) {
 				if ( $the_month != get_the_time( 'm' ) ) {
