@@ -206,7 +206,7 @@ function comic_page_library() {
 				//Attempt to automatically generate a post
 				if ( $_REQUEST[ 'new_comic_publish' ] ) {
 					$post_date_std = $_REQUEST[ 'aa' ] . '-' . $_REQUEST[ 'mm' ] . '-' . $_REQUEST[ 'jj' ] . ' ' . $_REQUEST[ 'hh' ] . ':' . $_REQUEST[ 'mn' ] . ':' . $_REQUEST[ 'ss' ];
-					$post_date_gmt = get_gmt_from_date( $post_date );
+					$post_date_gmt = get_gmt_from_date( $post_date_std );
 					$post_status   = ( get_option( 'comic_post_draft' ) ) ? 'draft' : 'publish';
 					
 					$new_post = wp_insert_post( array(
@@ -455,7 +455,7 @@ function comic_page_library() {
 					$file[ 'filename' ] = substr( $orphan, 0, strpos( $orphan, '.') );
 				
 				$post_date_std = date( 'Y-m-d H:i:s', $base_time );
-				$post_date_gmt = get_gmt_from_date( $post_date );
+				$post_date_gmt = get_gmt_from_date( $post_date_std );
 				$post_status   = ( get_option( 'comic_post_draft' ) ) ? 'draft' : 'publish';
 				
 				$new_post = wp_insert_post( array(
@@ -576,7 +576,7 @@ function comic_page_library() {
 			$file[ 'filename' ] = $_REQUEST[ 'comic_name' ];
 
 		$post_date_std = $_REQUEST[ 'aa' ] . '-' . $_REQUEST[ 'mm' ] . '-' . $_REQUEST[ 'jj' ] . ' ' . $_REQUEST[ 'hh' ] . ':' . $_REQUEST[ 'mn' ] . ':' . $_REQUEST[ 'ss' ];
-		$post_date_gmt = get_gmt_from_date( $post_date );
+		$post_date_gmt = get_gmt_from_date( $post_date_std );
 		$post_status   = ( get_option( 'comic_post_draft' ) ) ? 'draft' : 'publish';
 		
 		$new_post = wp_insert_post( array(
