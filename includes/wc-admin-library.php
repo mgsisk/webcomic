@@ -160,7 +160,7 @@ function comic_page_library() {
 		} elseif ( !$invalid_format ) {
 			//Set the filename key for older versions of PHP
 			if ( !$file[ 'filename' ] )
-				$file[ 'filename' ] = strstr( $file[ 'basename' ], 0, strlen( '.' . $file[ 'extension' ] ) );
+				$file[ 'filename' ] = substr( $file[ 'basename' ], 0, strlen( $file[ 'basename' ] ) - strlen( $file[ 'extension' ] ) - 1 );
 			
 			//Generate a file hash if secure filenames are enabled
 			$hash = ( get_option( 'comic_secure_names' ) ) ? '-' . substr( md5( uniqid( rand() ) ), 0, 7) : '';
@@ -271,7 +271,7 @@ function comic_page_library() {
 						$thumbs = glob( $thumb_path . '*.*' );
 						
 						if ( !$file[ 'filename' ] )
-							$file[ 'filename' ] = substr( $_REQUEST[ 'file' ], 0, strpos( get_post_meta( $comic, 'comic_file', true ), '.' ) );
+							$file[ 'filename' ] = substr( $file[ 'basename' ], 0, strlen( $file[ 'basename' ] ) - strlen( $file[ 'extension' ] ) - 1 );
 						
 						foreach ( $thumbs as $thumb )
 							if ( false !== strpos( $thumb, $file[ 'filename' ] ) )
@@ -294,11 +294,11 @@ function comic_page_library() {
 						$comic_file = get_post_meta( $comic, 'comic_file', true );
 						
 						if ( is_file( $file_path . $comic_file ) ) {
-							$file   = pathinfo( $file_path .$comic_file );
+							$file   = pathinfo( $file_path . $comic_file );
 							$thumbs = glob( $thumb_path . '*.*' );
 							
 							if ( !$file[ 'filename' ] )
-								$file[ 'filename' ] = substr( $comic_file, 0, strrpos( $comic_file, '.' ) );
+								$file[ 'filename' ] = substr( $file[ 'basename' ], 0, strlen( $file[ 'basename' ] ) - strlen( $file[ 'extension' ] ) - 1 );
 								
 							unlink( $file_path .$comic_file );
 							
@@ -399,7 +399,7 @@ function comic_page_library() {
 			$thumbs = glob( $thumb_path . '*.*' );
 			
 			if ( !$file[ 'filename' ] )
-				$file[ 'filename' ] = substr( $_REQUEST[ 'file' ], 0, strpos( get_post_meta( $_REQUEST[ 'post' ], 'comic_file', true ), '.' ) );
+				$file[ 'filename' ] = substr( $file[ 'basename' ], 0, strlen( $file[ 'basename' ] ) - strlen( $file[ 'extension' ] ) - 1 );
 			
 			foreach ( $thumbs as $thumb )
 				if ( false !== strpos( $thumb, $file[ 'filename' ] ) )
@@ -420,7 +420,7 @@ function comic_page_library() {
 			$thumbs = glob( $thumb_path . '*.*' );
 			
 			if ( !$file[ 'filename' ] )
-				$file[ 'filename' ] = substr( $_REQUEST[ 'file' ], 0, strrpos( $_REQUEST[ 'file' ], '.' ) );
+				$file[ 'filename' ] = substr( $file[ 'basename' ], 0, strlen( $file[ 'basename' ] ) - strlen( $file[ 'extension' ] ) - 1 );
 				
 			unlink( $file_path . $_REQUEST[ 'file' ] );
 			
@@ -452,7 +452,7 @@ function comic_page_library() {
 				$file = pathinfo( $file_path . $orphan );
 				
 				if ( !$file[ 'filename' ] )
-					$file[ 'filename' ] = substr( $orphan, 0, strpos( $orphan, '.') );
+					$file[ 'filename' ] = substr( $file[ 'basename' ], 0, strlen( $file[ 'basename' ] ) - strlen( $file[ 'extension' ] ) - 1 );
 				
 				$post_date_std = date( 'Y-m-d H:i:s', $base_time );
 				$post_date_gmt = get_gmt_from_date( $post_date_std );
@@ -573,7 +573,7 @@ function comic_page_library() {
 		$file = pathinfo( $file_path . $_REQUEST[ 'comic_name' ] . '.' . $_REQUEST[ 'comic_ext' ] );
 				
 		if ( !$file[ 'filename' ] )
-			$file[ 'filename' ] = $_REQUEST[ 'comic_name' ];
+			$file[ 'filename' ] = substr( $file[ 'basename' ], 0, strlen( $file[ 'basename' ] ) - strlen( $file[ 'extension' ] ) - 1 );
 
 		$post_date_std = $_REQUEST[ 'aa' ] . '-' . $_REQUEST[ 'mm' ] . '-' . $_REQUEST[ 'jj' ] . ' ' . $_REQUEST[ 'hh' ] . ':' . $_REQUEST[ 'mn' ] . ':' . $_REQUEST[ 'ss' ];
 		$post_date_gmt = get_gmt_from_date( $post_date_std );

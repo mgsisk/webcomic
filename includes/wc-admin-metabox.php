@@ -132,7 +132,7 @@ function comic_post_meta_box_save( $id, $post ) {
 		if ( !$invalid_format ) {
 			//Set the filename key for older versions of PHP
 			if ( !$file[ 'filename' ] )
-				$file[ 'filename' ] = substr( $file[ 'basename' ], 0, strrpos( $file[ 'basename' ], '.' ) );
+				$file[ 'filename' ] = substr( $file[ 'basename' ], 0, strlen( $file[ 'basename' ] ) - strlen( $file[ 'extension' ] ) - 1 );
 			
 			//Generate a file hash if secure filenames are enabled
 			$hash = ( get_option( 'comic_secure_names' ) ) ? '-' . substr( md5( uniqid( rand() ) ), 0, 7) : '';
@@ -203,7 +203,7 @@ function comic_post_meta_box_save( $id, $post ) {
 					$file = pathinfo( $file_path . $_REQUEST[ 'comic_file' ] . $_REQUEST[ 'comic_ext' ] ); 
 					
 					if ( !$file[ 'filename' ] )
-						$file[ 'filename' ] = $_REQUEST[ 'comic_file' ];
+						$file[ 'filename' ] = substr( $file[ 'basename' ], 0, strlen( $file[ 'basename' ] ) - strlen( $file[ 'extension' ] ) - 1 );
 					
 					if ( is_file( $thumb_path . get_post_meta( $id, 'comic_large', true ) ) && !is_file( $thumb_path . $file[ 'filename' ] . '-large.' . $file[ 'extension' ] ) )
 						if ( rename( $thumb_path . get_post_meta( $id, 'comic_large', true ), $thumb_path . $file[ 'filename' ] . '-large.' . $file[ 'extension' ] ) )
