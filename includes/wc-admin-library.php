@@ -631,6 +631,9 @@ function comic_page_library() {
 	//Get all the comic files
 	$comic_files = glob( $file_path . '*.*' );
 	
+	if ( !is_array ( $comic_files ) )
+		$comic_files = array();
+			
 	//Get just the comic files associated with a post
 	$comic_posts = array();
 	$comics = comic_loop( -1, $series );

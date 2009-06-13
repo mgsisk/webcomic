@@ -3,8 +3,8 @@ Contributors: mgsisk
 Donate link: http://maikeruon.com/wcib/
 Tags: webcomic, comic, multiple comics, inkblot, storylines, chapters, library, management, themes, posts, publish
 Requires at least: 2.7
-Tested up to: 2.8b RC1
-Stable tag: 2.0.6
+Tested up to: 2.8
+Stable tag: 2.0.7
 
 WebComic adds a collection of new features to WordPress geared specifically at publishing webcomics.
 
@@ -20,9 +20,9 @@ WebComic adds a collection of new features to WordPress geared specifically at p
 
 **[Please read this documentation page before upgrading.](http://maikeruon.com/wcib/documentation/inkblot/inkblot-1x-and-webcomic-2x/)**
 
-= 2.0.6 Update =
+= 2.0.7 Update =
 
-- Includes minor fixes upload functions related to getting the correct filename in older versions of PHP.
+- Includes minor fixes to various Library and Core functions.
 
 = Feature Highlights =
 
