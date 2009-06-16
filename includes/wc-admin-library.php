@@ -748,7 +748,7 @@ function comic_page_library() {
 		</p>
 	</form>
 	<?php }
-		if ( $fallback_comics && current_user_can( 'edit_others_posts' ) && 1 < get_option( 'comic_press_compatibility' ) )
+		if ( $fallback_comics && current_user_can( 'edit_others_posts' ) && 1 > get_option( 'comic_press_compatibility' ) )
 			echo '<div class="updated" style="clear:right;"><p>' . sprintf( __ngettext( '%d comic is being matched using the fallback method and <a href="%s">should be updated</a>.', '%d comics are being matched using the fallback method and <a href="%s">should be updated</a>.', $fallback_comics, 'webcomic' ), $fallback_comics, $view_link . '&amp;action=comic_fallback_update' ) . '</p></div>';
 		if ( $orphan_posts && current_user_can( 'edit_others_posts' ) )
 			echo '<div class="error" style="clear:right;"><p>' . sprintf( __ngettext( '%d post is not linked to and cannot be matched with a comic.', '%d posts are not linked to and cannot be matched with a comic.', $orphan_posts, 'webcomic' ), $orphan_posts ) . '</p></div>';
