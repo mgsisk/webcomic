@@ -1,10 +1,10 @@
-<?php
+\<?php
 /*
 Text Domain: webcomic
 Plugin Name: WebComic
 Plugin URI: http://maikeruon.com/wcib/
 Description: WebComic adds a collection of new features to WordPress geared specifically at publishing webcomics.
-Version: 2.0.8
+Version: 2.0.9
 Author: Michael Sisk
 Author URI: http://maikeruon.com/
 
@@ -47,7 +47,7 @@ function load_webcomic_domain() { load_plugin_textdomain( 'webcomic', PLUGINDIR 
  * @package WebComic
  * @since 1.0.0
  */
-if ( !get_option( 'webcomic_version' ) || '2.0.8' != get_option( 'webcomic_version' ) ) {
+if ( !get_option( 'webcomic_version' ) || '2.0.9' != get_option( 'webcomic_version' ) ) {
 	function webcomic_install() {
 		load_webcomic_domain();
 		
@@ -91,9 +91,9 @@ if ( !get_option( 'webcomic_version' ) || '2.0.8' != get_option( 'webcomic_versi
 			if ( get_option( 'webcomic_version' ) < 2 )
 				echo '<div class="updated fade"><p>' . sprintf( __( 'Upgrading? Please take a moment to <a href="%s">read about some important differences</a> between WebComic 1.x and WebComic 2.x.', 'webcomic' ), 'http://maikeruon.com/wcib/documentation/webcomic/1x-vs-2x/' ) . '</p></div>';
 			
-			update_option( 'webcomic_version', '2.0.8' );
+			update_option( 'webcomic_version', '2.0.9' );
 		} else {
-			add_option( 'webcomic_version', '2.0.8' );
+			add_option( 'webcomic_version', '2.0.9' );
 			
 			if ( !get_the_collection( 'hide_empty=0&depth=1' ) ) {
 				$first_series = get_term( $default_category, 'category' );
@@ -418,19 +418,19 @@ function webcomic_posts_where( $where ) {
  * @param str $template The current template string.
  * @return str New theme directory or $template
  */
-function webcomic_series_template( $template ) {
+function webcomic_series_template() {
 	global $webcomic_series;
-		
-	$root   = get_theme_root();
-	$series = get_series_by_path();
 	
-	$webcomic_series = $series;
+	$webcomic_series = get_series_by_path();
 	
-	if ( $series && is_dir( $root . '/webcomic-' . $series->slug ) )
-		return 'webcomic-' . $series->slug;
-	
-	return $template;
-} add_filter( 'stylesheet', 'webcomic_series_template' );
+	if ( $webcomic_series && is_dir( get_theme_root() . '/webcomic-' . $webcomic_series->slug ) ) {
+		function load_series_template() {
+			global $webcomic_series;
+			
+			return 'webcomic-' . $webcomic_series->slug;
+		} add_filter( 'stylesheet', 'load_series_template' );
+	}
+} add_action( 'template_redirect', 'webcomic_series_template' );
 
 /**
  * Returns the current webcomic series ID based on the requested path.
