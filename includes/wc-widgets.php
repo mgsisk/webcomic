@@ -1,10 +1,26 @@
 <?php
 /**
- * This document contains all of the new widgets provided by WebComic.
+ * This document contains all of the new widgets provided by Webcomic.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 1.0.0
  */
+ 
+/**
+ * Registers the Webcomic widgets.
+ * 
+ * @package Webcomic
+ * @since 2.1.0
+ */
+function webcomic_widgets_init() {
+	register_widget( 'WP_Widget_Bookmark_Comic' );
+	register_widget( 'WP_Widget_Comic_Buffer' );
+	register_widget( 'WP_Widget_Random_Comic' );
+	register_widget( 'WP_Widget_Recent_Comics' );
+	register_widget( 'WP_Widget_Dropdown_Comics' );
+	register_widget( 'WP_Widget_Comic_Archive' );
+	register_widget( 'WP_Widget_Webcomic_Recent_Posts' );
+} add_action( 'widgets_init', 'webcomic_widgets_init' );
 
 /**
  * Initializes and displays the Bookmark Comic widget.
@@ -14,23 +30,95 @@
  * 
  * @uses bookmark_comic()
  */
-function widget_init_bookmark_comic(){
-	if ( !function_exists( 'register_sidebar_widget' ) || !function_exists( 'register_widget_control' ) ) return;
+class WP_Widget_Bookmark_Comic extends WP_Widget {
+	//constructor
+	function WP_Widget_Bookmark_Comic() {
+		$widget_ops = array( 'description' => __( 'Displays comic bookmark links that allow readers to save their place and return later', 'webcomic' ) );
+		$this->WP_Widget( 'bookmark-comic', __( 'Bookmark Comic', 'webcomic' ), $widget_ops );
+	}
 	
-	load_webcomic_domain();
-	
-	/** Display the Random Comic Widget */
-	function widget_bookmark_comic() {
+	//display
+	function widget( $args, $instance ) {
 		echo $before_widget;
 		bookmark_comic();
 		echo $after_widget;
-		
-		echo $output;
+	}
+}
+
+/**
+ * Initializes, manages, and displays the Comic Buffer widget.
+ * 
+ * @package @ebComic
+ * @since 2.1.0
+ * 
+ * @uses the_comic_buffer()
+ */
+class WP_Widget_Comic_Buffer extends WP_Widget {
+	//constructor
+	function WP_Widget_Comic_Buffer() {
+		$widget_ops = array( 'description' => __( 'Displays buffer comic information', 'webcomic' ) );
+		$this->WP_Widget( 'comic-buffer', __( 'Comic Buffer', 'webcomic' ), $widget_ops );
 	}
 	
-	$widget_ops = array( 'description' => __( 'Displays comic bookmark links that allow readers to save their place and return later', 'webcomic' ) );
-	wp_register_sidebar_widget( 'bookmark-comic', __( 'Bookmark Comic', 'webcomic' ), 'widget_bookmark_comic', $widget_ops );
-} add_action( 'widgets_init', 'widget_init_bookmark_comic' );
+	//display
+	function widget( $args, $instance ) {
+		extract( $args );
+		
+		echo $before_widget;
+		if ( !empty( $instance[ 'title' ] ) ) echo $before_title . $instance[ 'title' ] . $after_title;
+		the_comic_buffer( $instance[ 'type' ], $instance[ 'series' ] );
+		echo $after_widget;
+	}
+	
+	//update
+	function update( $new, $old ) {
+		if ( !isset( $new[ 'submit' ] ) )
+			return;
+		
+		$instance = $old;
+		$instance[ 'title' ]  = strip_tags( stripslashes( $new[ 'title' ] ) );
+		$instance[ 'type' ]   = $new[ 'type' ];
+		$instance[ 'series' ] = $new[ 'series' ];
+		
+		return $instance;
+	}
+	
+	//form
+	function form( $instance ) {
+		load_webcomic_domain();
+		
+		$instance = wp_parse_args( ( array ) $instance, array( 'title' => __( 'Buffer Comics', 'webcomic'), 'type' => 'count', 'series' => 0 ) );
+		
+		$title  = htmlspecialchars( $instance[ 'title' ], ENT_QUOTES );
+		$type   = $instance[ 'type' ];
+		$series = $instance[ 'series' ];
+		?>
+			<p><label><?php _e( 'Title:', 'webcomic' ); ?><input type="text" class="widefat" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo $title; ?>" /></label></p>
+			<p>
+				<label>
+					<?php _e( 'Type:', 'webcomic' ); ?>
+					<select name="<?php echo $this->get_field_name( 'type' ); ?>" class="widefat">
+						<option value="count"><?php _e( 'Count', 'webcomic' ); ?></option>
+						<option value="date"<?php if ( 'date' == $type ) echo ' selected="selected"'; ?>><?php _e( 'Date', 'webcomic' ); ?></option>
+						<option value="datetime"<?php if ( 'datetime' == $type ) echo ' selected="selected"'; ?>><?php _e( 'Date and Time', 'webcomic' ); ?></option>
+					</select>
+				</label>
+			</p>
+			<p>
+				<label>
+					<?php _e( 'Series:', 'webcomic' ); ?>
+					<select name="<?php echo $this->get_field_name( 'series' ); ?>" class="widefat">
+						<option value="0"><?php _e( 'Current', 'webcomic' ); ?></option>
+					<?php $categories = get_comic_category( 'all' ); foreach ( $categories as $cat ) { ?>
+						<option value="<?php echo $cat ?>"<?php if ( $series == $cat ) echo ' selected="selected"'; echo '>' . get_term_field( 'name', $cat, 'chapter' ); ?></option>
+					<?php } ?>
+					</select>
+				</label>
+			</p>
+			<input type="hidden" name="<?php echo $this->get_field_name( 'submit' ); ?>" value="1" />
+		<?php
+	}
+}
 
 /**
  * Initializes, manages, and displays the Random Comic widget.
@@ -44,50 +132,53 @@ function widget_init_bookmark_comic(){
  * 
  * @uses random_comic_link()
  */
-function widget_init_random_comic(){
-	if ( !function_exists( 'register_sidebar_widget' ) || !function_exists( 'register_widget_control' ) ) return;
-	load_webcomic_domain();
-	
-	/** Display the Random Comic Widget */
-	function widget_random_comic( $args ) {
-		extract( $args );
-		
-		$options = get_option( 'widget_random_comic' );
-		
-		echo $before_widget;
-		if ( !empty( $options[ 'title' ] ) )	echo $before_title . $options[ 'title' ] . $after_title;
-		random_comic_link( $options[ 'label' ], $options[ 'limit' ] );
-		echo $after_widget;
-		
-		echo $output;
-	}
-	
-	/** Display settings for the Random Comic Widget */
-	function widget_random_comic_control(){
+class WP_Widget_Random_Comic extends WP_Widget {
+	//contructor
+	function WP_Widget_Random_Comic() {
 		load_webcomic_domain();
 		
-		$options = get_option( 'widget_random_comic' );
+		$widget_ops = array( 'description' => __( 'Displays a link to a single, randomly selected comic', 'webcomic' ) );
+		$this->WP_Widget( 'random-comic', __( 'Random Comic', 'webcomic' ), $widget_ops );
+	}
+	
+	//display
+	function widget( $args, $instance ) {
+		extract( $args );
 		
-		if ( $_POST[ 'random-comic-submit' ] ) {
-			$newoptions[ 'title']  = strip_tags( stripslashes( $_POST[ 'random-comic-title' ] ) );
-			$newoptions[ 'label'] = $_POST[ 'random-comic-label' ];
-			$newoptions[ 'limit'] = $_POST[ 'random-comic-limit' ];
-			
-			if ( $options != $newoptions ) {
-				$options = $newoptions;
-				update_option( 'widget_random_comic', $options );
-			}
-		}
+		echo $before_widget;
+		if ( !empty( $instance[ 'title' ] ) ) echo $before_title . $instance[ 'title' ] . $after_title;
+		random_comic_link( $instance[ 'label' ], $instance[ 'limit' ] );
+		echo $after_widget;
+	}
+	
+	//update
+	function update( $new, $old ) {
+		if ( !isset( $new[ 'submit' ] ) )
+			return;
 		
-		$title = htmlspecialchars( $options[ 'title' ], ENT_QUOTES );
-		$label = $options[ 'label' ];
-		$limit = $options[ 'limit' ];
+		$instance = $old;
+		$instance[ 'title' ] = strip_tags( stripslashes( $new[ 'title' ] ) );
+		$instance[ 'label' ] = $new[ 'label' ];
+		$instance[ 'limit' ] = $new[ 'limit' ];
+		
+		return $instance;
+	}
+	
+	//form
+	function form( $instance ) {
+		load_webcomic_domain();
+		
+		$instance = wp_parse_args( ( array ) $instance, array( 'title' => __( 'Random Comic', 'webcomic'), 'label' => '', 'limit' => 0 ) );
+		
+		$title = htmlspecialchars( $instance[ 'title' ], ENT_QUOTES );
+		$label = $instance[ 'label' ];
+		$limit = $instance[ 'limit' ];
 		?>
-			<p><label><?php _e( 'Title:', 'webcomic' ); ?><input type="text" class="widefat" id="random-comic-title" name="random-comic-title" value="<?php echo $title; ?>" /></label></p>
+			<p><label><?php _e( 'Title:', 'webcomic' ); ?><input type="text" class="widefat" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo $title; ?>" /></label></p>
 			<p>
 				<label>
 					<?php _e( 'Format:', 'webcomic' ); ?>
-					<select name="random-comic-label" id="random-comic-label" class="widefat">
+					<select name="<?php echo $this->get_field_name( 'label' ); ?>" class="widefat">
 						<option value=""><?php _e( 'Text', 'webcomic' ); ?></option>
 						<option value="thumb"<?php if ( 'thumb' == $label ) echo ' selected="selected"'; ?>><?php _e( 'Thumbnail', 'webcomic' ); ?></option>
 						<option value="medium"<?php if ( 'medium' == $label ) echo ' selected="selected"'; ?>><?php _e( 'Medium Image', 'webcomic' ); ?></option>
@@ -99,7 +190,7 @@ function widget_init_random_comic(){
 			<p>
 				<label>
 					<?php _e( 'Series:', 'webcomic' ); ?>
-					<select name="random-comic-limit" class="widefat">
+					<select name="<?php echo $this->get_field_name( 'limit' ); ?>" class="widefat">
 						<option value="0"><?php _e( 'All', 'webcomic' ); ?></option>
 					<?php $categories = get_comic_category( 'all' ); foreach ( $categories as $cat ) { ?>
 						<option value="<?php echo $cat ?>"<?php if ( $limit == $cat ) echo ' selected="selected"'; echo '>' . get_term_field( 'name', $cat, 'chapter' ); ?></option>
@@ -107,14 +198,10 @@ function widget_init_random_comic(){
 					</select>
 				</label>
 			</p>
-			<input type="hidden" name="random-comic-submit" id="random-comic-submit" value="1" />
+			<input type="hidden" name="<?php echo $this->get_field_name( 'submit' ); ?>" value="1" />
 		<?php
 	}
-	
-	$widget_ops = array( 'description' => __( 'Displays a link to a single, randomly selected comic', 'webcomic' ) );
-	wp_register_sidebar_widget( 'random-comic', __( 'Random Comic', 'webcomic' ), 'widget_random_comic', $widget_ops );
-	wp_register_widget_control( 'random-comic', __( 'Random Comic', 'webcomic' ), 'widget_random_comic_control', $widget_ops );
-} add_action( 'widgets_init', 'widget_init_random_comic' );
+}
 
 /**
  * Initializes, manages, and displays the Recent Comics widget.
@@ -128,64 +215,68 @@ function widget_init_random_comic(){
  * 
  * @uses recent_comics()
  */
-function widget_init_recent_comics(){
-	if ( !function_exists( 'register_sidebar_widget' ) || !function_exists( 'register_widget_control' ) ) return;
-	load_webcomic_domain();
+class WP_Widget_Recent_Comics extends WP_Widget {
+	//constructor
+	function WP_Widget_Recent_Comics() {
+		load_webcomic_domain();
+		
+		$widget_ops = array( 'description' => __( 'Displays a list of recently posted comics', 'webcomic' ) );
+		$this->WP_Widget( 'recent-comics', __( 'Recent Comics', 'webcomic' ), $widget_ops );
+	}
 	
-	function widget_recent_comics( $args ) {
+	//display
+	function widget( $args, $instance ) {
 		extract( $args );
 		
-		$options = get_option( 'widget_recent_comics' );
-		
 		echo $before_widget;
-		if ( !empty( $options[ 'title' ] ) )	echo $before_title . $options[ 'title' ] . $after_title;
+		if ( !empty( $instance[ 'title' ] ) ) echo $before_title . $instance[ 'title' ] . $after_title;
 		echo '<ul>';
-		recent_comics( $options[ 'number' ], $options[ 'format' ], $options[ 'limit' ] );
+		recent_comics( $instance[ 'number' ], $instance[ 'label' ], $instance[ 'limit' ] );
 		echo '</ul>' . $after_widget;
 	}
 	
-	function widget_recent_comics_control() {
+	//update
+	function update( $new, $old ) {
+		if ( !isset( $new[ 'submit' ] ) )
+			return;
+		
+		$instance = $old;
+		$instance[ 'title' ]  = strip_tags( stripslashes( $new[ 'title' ] ) );
+		$instance[ 'number' ] = ( int ) $new[ 'number' ];
+		$instance[ 'label' ]  = $new[ 'label' ];
+		$instance[ 'limit' ]  = $new[ 'limit' ];
+		
+		return $instance;
+	}
+	
+	//form
+	function form( $instance ) {
 		load_webcomic_domain();
 		
-		$options = get_option( 'widget_recent_comics' );
+		$instance = wp_parse_args( ( array ) $instance, array( 'title' => __( 'Recent Comics', 'webcomic' ), 'number' => 5, 'label' => '', 'limit' => 0 ) );
 		
-		if ( $_POST[ 'recent-comics-submit' ] ) {
-			$newoptions[ 'title' ]  = strip_tags( stripslashes( $_POST[ 'recent-comics-title' ] ) );
-			$newoptions[ 'number' ] = ( int ) $_POST[ 'recent-comics-number' ];
-			$newoptions[ 'format' ] = $_POST[ 'recent-comics-format' ];
-			$newoptions[ 'limit' ]  = $_POST[ 'recent-comics-limit' ];
-			if ( $options != $newoptions ) {
-				$options = $newoptions;
-				update_option( 'widget_recent_comics', $options );
-			}
-		}
-		
-		$title   = htmlspecialchars( $options[ 'title' ], ENT_QUOTES );
-		$format = $options[ 'format' ];
-		$limit  = $options[ 'limit' ];
-		
-		if ( !$options[ 'number' ] )
-			$number = 5;
-		else
-			$number = $options[ 'number' ];
+		$title  = htmlspecialchars( $instance[ 'title' ], ENT_QUOTES );
+		$number = $instance[ 'number' ];
+		$label  = $instance[ 'label' ];
+		$limit  = $instance[ 'limit' ];
 		?>
-			<p><label><?php _e( 'Title: ', 'webcomic' ); ?><input type="text" class="widefat" id="recent-comics-title" name="recent-comics-title" value="<?php echo $title; ?>" /></label></p>
-			<p><label><?php _e( 'Number of comics to show: ', 'webcomic'); ?><input type="text" name="recent-comics-number" id="recent-comics-number" style="width: 25px; text-align: center;" value="<?php echo $number; ?>" /></label></p>
+			<p><label><?php _e( 'Title: ', 'webcomic' ); ?><input type="text" class="widefat" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo $title; ?>" /></label></p>
+			<p><label><?php _e( 'Number of comics to show: ', 'webcomic'); ?><input type="text" name="<?php echo $this->get_field_name( 'number' ); ?>" style="width: 25px; text-align: center;" value="<?php echo $number; ?>" /></label></p>
 			<p>
-				<label><?php _e( 'Format:', 'webcomic' ); ?>
-					<select name="recent-comics-format" id="recent-comics-format" class="widefat">
+				<label><?php _e( 'Label:', 'webcomic' ); ?>
+					<select name="<?php echo $this->get_field_name( 'label' ); ?>" class="widefat">
 						<option value=""><?php _e( 'Text', 'webcomic' ); ?></option>
-						<option value="thumb"<?php if ( 'thumb' == $format ) echo ' selected="selected"'; ?>><?php _e( 'Thumbnails', 'webcomic' ); ?></option>
-						<option value="medium"<?php if ( 'medium' == $format ) echo ' selected="selected"'; ?>><?php _e( 'Medium Images', 'webcomic' ); ?></option>
-						<option value="large"<?php if ( 'large' == $format ) echo ' selected="selected"'; ?>><?php _e( 'Large Images', 'webcomic' ); ?></option>
-						<option value="full"<?php if ( 'full' == $format ) echo ' selected="selected"'; ?>><?php _e( 'Full Images', 'webcomic' ); ?></option>
+						<option value="thumb"<?php if ( 'thumb' == $label ) echo ' selected="selected"'; ?>><?php _e( 'Thumbnails', 'webcomic' ); ?></option>
+						<option value="medium"<?php if ( 'medium' == $label ) echo ' selected="selected"'; ?>><?php _e( 'Medium Images', 'webcomic' ); ?></option>
+						<option value="large"<?php if ( 'large' == $label ) echo ' selected="selected"'; ?>><?php _e( 'Large Images', 'webcomic' ); ?></option>
+						<option value="full"<?php if ( 'full' == $label ) echo ' selected="selected"'; ?>><?php _e( 'Full Images', 'webcomic' ); ?></option>
 					</select>
 				</label>
 			</p>
 			<p>
 				<label><?php _e( 'Series:', 'webcomic' ); ?>
 					<?php _e( 'Series:', 'webcomic' ); ?>
-					<select name="recent-comics-limit" class="widefat">
+					<select name="<?php echo $this->get_field_name( 'limit' ); ?>" class="widefat">
 						<option value="0"><?php _e( 'All', 'webcomic' ); ?></option>
 					<?php $categories = get_comic_category( 'all' ); foreach ( $categories as $cat ) { ?>
 						<option value="<?php echo $cat ?>"<?php if ( $limit == $cat ) echo ' selected="selected"'; echo '>' . get_term_field( 'name', $cat, 'chapter' ); ?></option>
@@ -193,14 +284,10 @@ function widget_init_recent_comics(){
 					</select>
 				</label>
 			</p>
-			<input type="hidden" name="recent-comics-submit" id="recent-comics-submit" value="1" />
-		<?php
+			<input type="hidden" name="<?php echo $this->get_field_name( 'submit' ); ?>" value="1" />
+		<?php	
 	}
-	
-	$widget_ops = array( 'description' => __( 'Displays a list of recently posted comics', 'webcomic' ) );
-	wp_register_sidebar_widget( 'recent-comics', __( 'Recent Comics', 'webcomic'), 'widget_recent_comics', $widget_ops );
-	wp_register_widget_control( 'recent-comics', __( 'Recent Comics', 'webcomic'), 'widget_recent_comics_control', $widget_ops );
-} add_action( 'widgets_init', 'widget_init_recent_comics' );
+}
 
 /**
  * Initializes, manages, and displays the Dropdown Comics widget.
@@ -214,70 +301,80 @@ function widget_init_recent_comics(){
  * 
  * @uses dropdown_comics()
  */
-function widget_init_dropdown_comics(){
-	if ( !function_exists( 'register_sidebar_widget' ) || !function_exists( 'register_widget_control' ) ) return;
-	load_webcomic_domain();
+class WP_Widget_Dropdown_Comics extends WP_Widget {
+	//constructor
+	function WP_Widget_Dropdown_Comics() {
+		load_webcomic_domain();
+		
+		$widget_ops = array( 'description' => __( 'Displays a dropdown list of comic posts', 'webcomic' ) );
+		$this->WP_Widget( 'dropdown-comics', __( 'Dropdown Comics', 'webcomic' ), $widget_ops );
+	}
 	
-	function widget_dropdown_comics( $args ) {
+	//display
+	function widget( $args, $instance ) {
+		load_webcomic_domain();
+		
 		extract( $args );
 		
-		$options = get_option( 'widget_dropdown_comics' );
-		$args    = ( $options[ 'label' ] ) ? 'label=' . $options[ 'label' ] : 'label=' . __( 'Quick Archive', 'webcomic' );
-		$args   .= ( $options[ 'post_order' ] ) ? '&post_order=ASC' : '';
-		$args   .= '&number=' . $options[ 'number' ];
-		$args   .= '&series=' . $options[ 'series' ];
-		$args   .= '&groupby=' . $options[ 'groupby' ];
-		$args   .= '&orderby=' . $options[ 'orderby' ];
-		$args   .= ( $options[ 'order' ] ) ? '&order=DESC' : '';
-		$args   .= '&bound=' . $options[ 'bound' ];
-		$args   .= '&pages=' . $options[ 'pages' ];
+		$args    = ( $instance[ 'label' ] ) ? 'label=' . $instance[ 'label' ] : 'label=' . __( 'Quick Archive', 'webcomic' );
+		$args   .= ( $instance[ 'post_order' ] ) ? '&post_order=ASC' : '';
+		$args   .= '&number=' . $instance[ 'number' ];
+		$args   .= '&series=' . $instance[ 'series' ];
+		$args   .= '&groupby=' . $instance[ 'groupby' ];
+		$args   .= '&orderby=' . $instance[ 'orderby' ];
+		$args   .= ( $instance[ 'order' ] ) ? '&order=DESC' : '';
+		$args   .= '&bound=' . $instance[ 'bound' ];
+		$args   .= '&pages=' . $instance[ 'pages' ];
 		
 		echo $before_widget;
-		if ( !empty( $options[ 'title' ] ) ) echo $before_title . $options[ 'title' ] . $after_title;
+		if ( !empty( $instance[ 'title' ] ) ) echo $before_title . $instance[ 'title' ] . $after_title;
 		dropdown_comics( $args );
 		echo $after_widget;
 	}
 	
-	function widget_dropdown_comics_control(){
+	//update
+	function update( $new, $old ) {
+		if ( !isset( $new[ 'submit' ] ) )
+			return;
+		
+		$instance = $old;
+		$instance[ 'title' ]      = strip_tags( stripslashes( $new[ 'title' ] ) );
+		$instance[ 'label' ]      = strip_tags( stripslashes ($new[ 'label' ] ) );
+		$instance[ 'post_order' ] = $new[ 'post_order' ];
+		$instance[ 'number' ]     = $new[ 'number' ];
+		$instance[ 'series' ]     = $new[ 'series' ];
+		$instance[ 'groupby' ]    = $new[ 'groupby' ];
+		$instance[ 'orderby' ]    = $new[ 'orderby' ];
+		$instance[ 'bound' ]      = $new[ 'bound' ];
+		$instance[ 'order' ]      = $new[ 'order' ];
+		$instance[ 'pages' ]      = $new[ 'pages' ];
+		
+		return $instance;
+	}
+	
+	//form
+	function form( $instance ) {
 		load_webcomic_domain();
 		
-		$options = get_option( 'widget_dropdown_comics' );
+		$instance = wp_parse_args( ( array ) $instance, array( 'title' => __( 'Dropdown Comics', 'webcomic'), 'label' => __( 'Quick Archive', 'webcomic' ) ) );
 		
-		if ( $_POST[ 'dropdown-comics-submit' ] ) {
-			$newoptions[ 'title' ]      = strip_tags( stripslashes( $_POST[ 'dropdown-comics-title' ] ) );
-			$newoptions[ 'label' ]      = strip_tags( stripslashes ($_POST[ 'dropdown-comics-label' ] ) );
-			$newoptions[ 'post_order' ] = $_POST[ 'dropdown-comics-post-order' ];
-			$newoptions[ 'number' ]     = $_POST[ 'dropdown-comics-number' ];
-			$newoptions[ 'series' ]     = $_POST[ 'dropdown-comics-series' ];
-			$newoptions[ 'groupby' ]      = $_POST[ 'dropdown-comics-groupby' ];
-			$newoptions[ 'orderby' ]    = $_POST[ 'dropdown-comics-orderby' ];
-			$newoptions[ 'bound' ]      = $_POST[ 'dropdown-comics-bound' ];
-			$newoptions[ 'order' ]      = $_POST[ 'dropdown-comics-order' ];
-			$newoptions[ 'pages' ]      = $_POST[ 'dropdown-comics-pages' ];
-			
-			if ( $options != $newoptions ) {
-				$options = $newoptions;
-				update_option( 'widget_dropdown_comics', $options );
-			}
-		}
-		
-		$title      = htmlspecialchars( $options[ 'title' ], ENT_QUOTES );
-		$label      = $options[ 'label' ];
-		$post_order = $options[ 'post_order' ];
-		$number     = $options[ 'number' ];
-		$series     = $options[ 'series' ];
-		$groupby    = $options[ 'groupby' ];
-		$orderby    = $options[ 'orderby' ];
-		$order      = $options[ 'order' ];
-		$bound      = $options[ 'bound' ];
-		$pages      = $options[ 'pages' ];
+		$title      = htmlspecialchars( $instance[ 'title' ], ENT_QUOTES );
+		$label      = $instance[ 'label' ];
+		$post_order = $instance[ 'post_order' ];
+		$number     = $instance[ 'number' ];
+		$series     = $instance[ 'series' ];
+		$groupby    = $instance[ 'groupby' ];
+		$orderby    = $instance[ 'orderby' ];
+		$order      = $instance[ 'order' ];
+		$bound      = $instance[ 'bound' ];
+		$pages      = $instance[ 'pages' ];
 		?>
-			<p><label><?php _e( 'Title: ', 'webcomic' ) ?><input type="text" class="widefat" id="dropdown-comics-title" name="dropdown-comics-title" value="<?php echo $title; ?>" /></label></p>
-			<p><label><?php _e( 'Label: ', 'webcomic' ) ?><input type="text" class="widefat" id="dropdown-comics-label" name="dropdown-comics-label" value="<?php echo $label; ?>" /></label></p>
+			<p><label><?php _e( 'Title: ', 'webcomic' ) ?><input type="text" class="widefat" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo $title; ?>" /></label></p>
+			<p><label><?php _e( 'Label: ', 'webcomic' ) ?><input type="text" class="widefat" name="<?php echo $this->get_field_name( 'label' ); ?>" value="<?php echo $label; ?>" /></label></p>
 			<p>
 				<label>
 					<?php _e( 'Series:', 'webcomic' ); ?>
-					<select name="dropdown-comics-series" class="widefat">
+					<select name="<?php echo $this->get_field_name( 'series' ); ?>" class="widefat">
 						<option value="0"><?php _e( 'All', 'webcomic' ); ?></option>
 					<?php $categories = get_comic_category( 'all' ); foreach ( $categories as $cat ) { ?>
 						<option value="<?php echo $cat ?>"<?php if ( $series == $cat ) echo ' selected="selected"'; echo '>' . get_term_field( 'name', $cat, 'chapter' ); ?></option>
@@ -288,7 +385,7 @@ function widget_init_dropdown_comics(){
 			<p>
 				<label>
 					<?php _e('Group By:','webcomic') ?>
-					<select id="dropdown-comics-groupby" name="dropdown-comics-groupby" class="widefat">
+					<select name="<?php echo $this->get_field_name( 'groupby' ); ?>" class="widefat">
 						<option value="0"<?php if ( !$groupby ) echo ' selected="selected"'; ?>><?php _e( 'None', 'webcomic' ); ?></option>
 						<option value="chapter"<?php if ( 'chapter' == $groupby ) echo ' selected="selected"'; ?>><?php _e( 'Chapters', 'webcomic' ); ?></option>
 						<option value="volume"<?php if ( 'volume' == $groupby ) echo ' selected="selected"'; ?>><?php _e( 'Volumes', 'webcomi' ); ?></option>
@@ -299,7 +396,7 @@ function widget_init_dropdown_comics(){
 			<p>
 				<label>
 					<?php _e('Order Chapters By:','webcomic') ?>
-					<select id="dropdown-comics-orderby" name="dropdown-comics-orderby" class="widefat">
+					<select name="<?php echo $this->get_field_name( 'orderby' ); ?>" class="widefat">
 						<option value="id"<?php if ( 'id' == $orderby ) echo ' selected="selected"'; ?>><?php _e( 'Default', 'webcomic' ); ?></option>
 						<option value="name"<?php if ( 'name' == $orderby ) echo ' selected="selected"'; ?>><?php _e( 'Title', 'webcomic' ); ?></option>
 						<option value="count"<?php if ( 'count' == $orderby ) echo ' selected="selected"'; ?>><?php _e( 'Page Count', 'webcomi' ); ?></option>
@@ -309,25 +406,21 @@ function widget_init_dropdown_comics(){
 			<p>
 				<label>
 					<?php _e('Chapters Should Link To:','webcomic') ?>
-					<select id="dropdown-comics-bound" name="dropdown-comics-bound" class="widefat">
+					<select name="<?php echo $this->get_field_name( 'bound' ); ?>" class="widefat">
 						<option value="first"<?php if ( 'first' == $bound ) echo ' selected="selected"'; ?>><?php _e( 'First Comic', 'webcomic' ); ?></option>
 						<option value="last"<?php if ( 'last' == $bound ) echo ' selected="selected"'; ?>><?php _e( 'Last Comic', 'webcomic' ); ?></option>
 						<option value="page"<?php if ( 'page' == $bound ) echo ' selected="selected"'; ?>><?php _e( 'Archive Page', 'webcomi' ); ?></option>
 					</select>
 				</label>
 			</p>
-			<p><label><input type="checkbox" id="dropdown-comics-number" name="dropdown-comics-number" value="1"<?php if ( $number ) echo ' checked="checked"' ?> /> <?php _e( 'Automatically number posts and chapters', 'webcomic' ); ?></label></p>
-			<p><label><input type="checkbox" id="dropdown-comics-post-order" name="dropdown-comics-post-order" value="1"<?php if ( $post_order ) echo ' checked="checked"' ?> /> <?php _e( 'Show posts in reverse order', 'webcomic' ); ?></label></p>
-			<p><label><input type="checkbox" id="dropdown-comics-order" name="dropdown-comics-order" value="1"<?php if ( $order ) echo ' checked="checked"' ?> /> <?php _e( 'Show volumes and chapters in reverse order', 'webcomic' ); ?></label></p>
-			<p><label><input type="checkbox" id="dropdown-comics-pages" name="dropdown-comics-pages" value="1"<?php if ( $pages ) echo ' checked="checked"' ?> /> <?php _e( 'Show volume and chapter page counts', 'webcomic' ); ?></label></p>
-			<input type="hidden" name="dropdown-comics-submit" id="dropdown-comics-submit" value="1" />
+			<p><label><input type="checkbox" name="<?php echo $this->get_field_name( 'number' ); ?>" value="1"<?php if ( $number ) echo ' checked="checked"' ?> /> <?php _e( 'Automatically number posts and chapters', 'webcomic' ); ?></label></p>
+			<p><label><input type="checkbox" name="<?php echo $this->get_field_name( 'post_order' ); ?>" value="1"<?php if ( $post_order ) echo ' checked="checked"' ?> /> <?php _e( 'Show posts in reverse order', 'webcomic' ); ?></label></p>
+			<p><label><input type="checkbox" name="<?php echo $this->get_field_name( 'order' ); ?>" value="1"<?php if ( $order ) echo ' checked="checked"' ?> /> <?php _e( 'Show volumes and chapters in reverse order', 'webcomic' ); ?></label></p>
+			<p><label><input type="checkbox" name="<?php echo $this->get_field_name( 'pages' ); ?>" value="1"<?php if ( $pages ) echo ' checked="checked"' ?> /> <?php _e( 'Show volume and chapter page counts', 'webcomic' ); ?></label></p>
+			<input type="hidden" name="<?php echo $this->get_field_name( 'submit' ); ?>" value="1" />
 		<?php
 	}
-	
-	$widget_ops = array( 'description' => __( 'Displays a dropdown list of comic posts', 'webcomic' ) );
-	wp_register_sidebar_widget( 'dropdown-comics', __( 'Dropdown Comics', 'webcomic' ), 'widget_dropdown_comics', $widget_ops );
-	wp_register_widget_control( 'dropdown-comics', __( 'Dropdown Comics', 'webcomic' ), 'widget_dropdown_comics_control', $widget_ops );
-} add_action( 'widgets_init', 'widget_init_dropdown_comics' );
+}
 
 /**
  * Initializes, manages, and displays the Comic Archive widget.
@@ -340,70 +433,80 @@ function widget_init_dropdown_comics(){
  * @since 1.0
  * 
  * @uses dropdown_comics()
- */
-function widget_init_comic_archive(){
-	if ( !function_exists( 'register_sidebar_widget' ) || !function_exists( 'register_widget_control' ) ) return;
-	load_webcomic_domain();
+ *
+class WP_Widget_Comic_Archive extends WP_Widget {
+}*/
+class WP_Widget_Comic_Archive extends WP_Widget {
+	//constructor
+	function WP_Widget_Comic_Archive() {
+		load_webcomic_domain();
+		
+		$widget_ops = array( 'description' => __( 'Displays an archive of your comics', 'webcomic' ) );
+		$this->WP_Widget( 'comic-archive', __( 'Comic Archive', 'webcomic' ), $widget_ops );
+	}
 	
-	function widget_comic_archive( $args ) {
+	//display
+	function widget( $args, $instance ) {
 		extract( $args );
 		
-		$options = get_option( 'widget_comic_archive' );
-		$args    = 'groupby=' . $options[ 'groupby' ];
-		$args   .= '&format=' . $options[ 'format' ];
-		$args   .= ( $options[ 'post_order' ] ) ? '&post_order=ASC' : '';
-		$args   .= '&series=' . $options[ 'series' ];
-		$args   .= '&orderby=' . $options[ 'orderby' ];
-		$args   .= ( $options[ 'order' ] ) ? '&order=DESC' : '';
-		$args   .= '&bound=' . $options[ 'bound' ];
-		$args   .= '&descriptions=' . $options[ 'descriptions' ];
-		$args   .= '&pages=' . $options[ 'pages' ];
+		$args  = 'groupby=' . $instance[ 'groupby' ];
+		$args .= '&format=' . $instance[ 'format' ];
+		$args .= ( $instance[ 'post_order' ] ) ? '&post_order=ASC' : '';
+		$args .= '&series=' . $instance[ 'series' ];
+		$args .= '&orderby=' . $instance[ 'orderby' ];
+		$args .= ( $instance[ 'order' ] ) ? '&order=DESC' : '';
+		$args .= '&bound=' . $instance[ 'bound' ];
+		$args .= '&descriptions=' . $instance[ 'descriptions' ];
+		$args .= '&pages=' . $instance[ 'pages' ];
 		
 		echo $before_widget;
-		if ( !empty( $options[ 'title' ] ) ) echo $before_title . $options[ 'title' ] . $after_title;
+		if ( !empty( $instance[ 'title' ] ) ) echo $before_title . $instance[ 'title' ] . $after_title;
 		comic_archive( $args );
 		echo $after_widget;
 	}
 	
-	function widget_comic_archive_control() {
+	//update
+	function update( $new, $old ) {
+		if ( !isset( $new[ 'submit' ] ) )
+			return;
+		
+		$instance = $old;
+		$instance[ 'title' ]        = strip_tags( stripslashes( $new[ 'title' ] ) );
+		$instance[ 'groupby' ]      = $new[ 'groupby' ];
+		$instance[ 'format' ]       = $new[ 'format' ];
+		$instance[ 'post_order' ]   = $new[ 'post_order' ];
+		$instance[ 'series' ]       = $new[ 'series' ];
+		$instance[ 'orderby' ]      = $new[ 'orderby' ];
+		$instance[ 'order' ]        = $new[ 'order' ];
+		$instance[ 'bound' ]        = $new[ 'bound' ];
+		$instance[ 'descriptions' ] = $new[ 'descriptions' ];
+		$instance[ 'pages' ]        = $new[ 'pages' ];
+		
+		return $instance;
+	}
+	
+	//form
+	function form( $instance ) {
 		load_webcomic_domain();
 		
-		$options = get_option( 'widget_comic_archive' );
+		$instance = wp_parse_args( ( array ) $instance, array( 'title' => __( 'Comic Archive', 'webcomic') ) );
 		
-		if ( $_POST[ 'comic-archive-submit' ] ) {
-			$newoptions[ 'title' ]        = strip_tags( stripslashes( $_POST[ 'comic-archive-title' ] ) );
-			$newoptions[ 'groupby' ]      = $_POST[ 'comic-archive-groupby' ];
-			$newoptions[ 'format' ]       = $_POST[ 'comic-archive-format' ];
-			$newoptions[ 'post_order' ]   = $_POST[ 'comic-archive-post-order' ];
-			$newoptions[ 'series' ]       = $_POST[ 'comic-archive-series' ];
-			$newoptions[ 'orderby' ]      = $_POST[ 'comic-archive-orderby' ];
-			$newoptions[ 'order' ]        = $_POST[ 'comic-archive-order' ];
-			$newoptions[ 'bound' ]        = $_POST[ 'comic-archive-bound' ];
-			$newoptions[ 'descriptions' ] = $_POST[ 'comic-archive-descriptions' ];
-			$newoptions[ 'pages' ]        = $_POST[ 'comic-archive-pages' ];
-			
-			if ( $options != $newoptions ) {
-				$options = $newoptions;
-				update_option( 'widget_comic_archive', $options );
-			}
-		}
-		
-		$title        = htmlspecialchars( $options[ 'title' ], ENT_QUOTES );
-		$groupby      = $options[ 'groupby' ];
-		$format       = $options[ 'format' ];
-		$post_order   = $options[ 'post_order' ];
-		$series       = $options[ 'series' ];
-		$orderby      = $options[ 'orderby' ];
-		$order        = $options[ 'order' ];
-		$bound        = $options[ 'bound' ];
-		$descriptions = $options[ 'descriptions' ];
-		$pages        = $options[ 'pages' ];
+		$title        = htmlspecialchars( $instance[ 'title' ], ENT_QUOTES );
+		$groupby      = $instance[ 'groupby' ];
+		$format       = $instance[ 'format' ];
+		$post_order   = $instance[ 'post_order' ];
+		$series       = $instance[ 'series' ];
+		$orderby      = $instance[ 'orderby' ];
+		$order        = $instance[ 'order' ];
+		$bound        = $instance[ 'bound' ];
+		$descriptions = $instance[ 'descriptions' ];
+		$pages        = $instance[ 'pages' ];
 		?>
-			<p><label><?php _e( 'Title: ', 'webcomic' ) ?><input type="text" class="widefat" id="comic-archive-title" name="comic-archive-title" value="<?php echo $title; ?>" /></label></p>
+			<p><label><?php _e( 'Title: ', 'webcomic' ) ?><input type="text" class="widefat" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo $title; ?>" /></label></p>
 			<p>
 				<label>
 					<?php _e( 'Group Comics By:', 'webcomic' ) ?>
-					<select name="comic-archive-groupby" id="comic-archive-groupby" class="widefat">
+					<select name="<?php echo $this->get_field_name( 'groupby' ); ?>" class="widefat">
 						<option value="date"><?php _e( 'Year, Month, and Day', 'webcomic' ); ?></option>
 						<option value="chapter"<?php if ( 'chapter' == $groupby ) echo ' selected="selected"'; ?>><?php _e( 'Series, Volume, and Chapter', 'webcomic' ); ?></option>
 					</select>
@@ -412,7 +515,7 @@ function widget_init_comic_archive(){
 			<p>
 				<label>
 					<?php _e( 'Display Links As:', 'webcomic' ) ?>
-					<select name="comic-archive-format" id="comic-archive-format" class="widefat">
+					<select name="<?php echo $this->get_field_name( 'format' ); ?>" class="widefat">
 						<option value=""><?php _e( 'Text', 'webcomic' ); ?></option>
 						<option value="number"<?php if ( 'number' == $format ) echo ' selected="selected"'; ?>><?php _e( 'Numbers (Chapters Only)', 'webcomic' ); ?></option>
 						<option value="thumb"<?php if ( 'thumb' == $format ) echo ' selected="selected"'; ?>><?php _e( 'Thumbnail Images', 'webcomic' ); ?></option>
@@ -425,7 +528,7 @@ function widget_init_comic_archive(){
 			<p>
 				<label>
 					<?php _e( 'Series:', 'webcomic' ); ?>
-					<select name="comic-archive-series" class="widefat">
+					<select name="<?php echo $this->get_field_name( 'series' ); ?>" class="widefat">
 						<option value="0"><?php _e( 'All', 'webcomic' ); ?></option>
 					<?php $categories = get_comic_category( 'all' ); foreach ( $categories as $cat ) { ?>
 						<option value="<?php echo $cat ?>"<?php if ( $series == $cat ) echo ' selected="selected"'; echo '>' . get_term_field( 'name', $cat, 'chapter' ); ?></option>
@@ -436,7 +539,7 @@ function widget_init_comic_archive(){
 			<p>
 				<label>
 					<?php _e('Order Chapters By:','webcomic') ?>
-					<select id="comic-archive-orderby" name="comic-archive-orderby" class="widefat">
+					<select name="<?php echo $this->get_field_name( 'orderby' ); ?>" class="widefat">
 						<option value="id"<?php if ( 'id' == $orderby ) echo ' selected="selected"'; ?>><?php _e( 'Default', 'webcomic' ); ?></option>
 						<option value="name"<?php if ( 'name' == $orderby ) echo ' selected="selected"'; ?>><?php _e( 'Title', 'webcomic' ); ?></option>
 						<option value="count"<?php if ( 'count' == $orderby ) echo ' selected="selected"'; ?>><?php _e( 'Page Count', 'webcomi' ); ?></option>
@@ -446,25 +549,21 @@ function widget_init_comic_archive(){
 			<p>
 				<label>
 					<?php _e('Chapters Should Link To:','webcomic') ?>
-					<select id="comic-archive-bound" name="comic-archive-bound" class="widefat">
+					<select name="<?php echo $this->get_field_name( 'bound' ); ?>" class="widefat">
 						<option value="first"<?php if ( 'first' == $bound ) echo ' selected="selected"'; ?>><?php _e( 'First Comic', 'webcomic' ); ?></option>
 						<option value="last"<?php if ( 'last' == $bound ) echo ' selected="selected"'; ?>><?php _e( 'Last Comic', 'webcomic' ); ?></option>
 						<option value="page"<?php if ( 'page' == $bound ) echo ' selected="selected"'; ?>><?php _e( 'Archive Page', 'webcomi' ); ?></option>
 					</select>
 				</label>
 			</p>
-			<p><label><input type="checkbox" id="comic-archive-post-order" name="comic-archive-post-order" value="1"<?php if ( $post_order ) echo ' checked="checked"' ?> /> <?php _e( 'Show posts in reverse order', 'webcomic' ); ?></label></p>
-			<p><label><input type="checkbox" id="comic-archive-order" name="comic-archive-order" value="1"<?php if ( $order ) echo ' checked="checked"' ?> /> <?php _e( 'Show series, volumes, and chapters in reverse order', 'webcomic' ); ?></label></p>
-			<p><label><input type="checkbox" id="comic-archive-descriptions" name="comic-archive-descriptions" value="1"<?php if ( $descriptions ) echo ' checked="checked"' ?> /> <?php _e( 'Show series, volume, and chapter descriptions', 'webcomic' ); ?></label></p>
-			<p><label><input type="checkbox" id="comic-archive-pages" name="comic-archive-pages" value="1"<?php if ( $pages ) echo ' checked="checked"' ?> /> <?php _e( 'Show series, volume, and chapter page counts', 'webcomic' ); ?></label></p>
-			<input type="hidden" name="comic-archive-submit" id="comic-archive-submit" value="1" />
+			<p><label><input type="checkbox" name="<?php echo $this->get_field_name( 'post_order' ); ?>" value="1"<?php if ( $post_order ) echo ' checked="checked"' ?> /> <?php _e( 'Show posts in reverse order', 'webcomic' ); ?></label></p>
+			<p><label><input type="checkbox" name="<?php echo $this->get_field_name( 'order' ); ?>" value="1"<?php if ( $order ) echo ' checked="checked"' ?> /> <?php _e( 'Show series, volumes, and chapters in reverse order', 'webcomic' ); ?></label></p>
+			<p><label><input type="checkbox" name="<?php echo $this->get_field_name( 'descriptions' ); ?>" value="1"<?php if ( $descriptions ) echo ' checked="checked"' ?> /> <?php _e( 'Show series, volume, and chapter descriptions', 'webcomic' ); ?></label></p>
+			<p><label><input type="checkbox" name="<?php echo $this->get_field_name( 'pages' ); ?>" value="1"<?php if ( $pages ) echo ' checked="checked"' ?> /> <?php _e( 'Show series, volume, and chapter page counts', 'webcomic' ); ?></label></p>
+			<input type="hidden" name="<?php echo $this->get_field_name( 'submit' ); ?>" value="1" />
 		<?php
 	}
-	
-	$widget_ops = array( 'description' => __( 'Displays an archive of your comics', 'webcomic' ) );
-	wp_register_sidebar_widget( 'comic-archive', __( 'Comic Archive', 'webcomic' ), 'widget_comic_archive', $widget_ops );
-	wp_register_widget_control( 'comic-archive', __( 'Comic Archive', 'webcomic' ), 'widget_comic_archive_control', $widget_ops );
-} add_action( 'widgets_init', 'widget_init_comic_archive' );
+}
 
 /**
  * Initializes, manages, and displays a modified Recent Posts widget.
@@ -477,58 +576,57 @@ function widget_init_comic_archive(){
  * 
  * @uses ignore_comics()
  */
-function widget_webcomic_recent_posts_init(){
-	if ( !function_exists( 'register_sidebar_widget' ) || !function_exists( 'register_widget_control' ) ) return;
-	load_webcomic_domain();
+class WP_Widget_Webcomic_Recent_Posts extends WP_Widget {
+	//constructor
+	function WP_Widget_Webcomic_Recent_Posts() {
+		$widget_ops = array( 'description' => __( 'The most recent posts on your blog (ignores comic posts)', 'webcomic' ) );
+		$this->WP_Widget( 'recent-posts', __( 'Recent Posts', 'webcomic' ), $widget_ops );
+	}
 	
-	function widget_webcomic_recent_posts( $args ) {
+	//display
+	function widget( $args, $instance ) {
 		extract( $args );
 		
-		$options             = get_option( 'widget_webcomic_recent_posts' );
-		$options[ 'number' ] = ( $options[ 'number' ] ) ? $options[ 'number' ] : 5;
-		$posts               = ignore_comics( $options[ 'number' ] );
+		$posts               = ignore_comics( $instance[ 'number' ] );
 		
 		echo $before_widget;
-		if ( !empty( $options[ 'title' ] ) )
-			echo $before_title . $options[ 'title' ] . $after_title;
+		if ( !empty( $instance[ 'title' ] ) ) echo $before_title . $instance[ 'title' ] . $after_title;
 		if ( $posts->have_posts() ) :
 			echo '<ul>';
 			while ( $posts->have_posts() ) :
 				$posts->the_post();
-				echo '<li><a href="' . get_permalink() . '" title="'.__('Permanent link to ','webcomic') . the_title_attribute( 'echo=0' ) . '">' . the_title_attribute( 'echo=0' ) . '</a></li>';
+				echo '<li><a href="' . get_permalink() . '" title="' . __( 'Permanent link to ', 'webcomic' ) . the_title_attribute( 'echo=0' ) . '">' . the_title_attribute( 'echo=0' ) . '</a></li>';
 			endwhile;
 			echo '</ul>';
 		endif;
 		echo $after_widget;
 	}
 	
-	function widget_webcomic_recent_posts_control() {
+	//update
+	function update( $new, $old ) {
+		if ( !isset( $new[ 'submit' ] ) )
+			return;
+		
+		$instance = $old;
+		$instance[ 'title' ]  = strip_tags( stripslashes( $new[ 'title' ] ) );
+		$instance[ 'number' ] = ( int ) $new[ 'number' ];
+		
+		return $instance;
+	}
+	
+	//form
+	function form( $instance ) {
 		load_webcomic_domain();
 		
-		$options = get_option( 'widget_webcomic_recent_posts' );
+		$instance = wp_parse_args( ( array ) $instance, array( 'title' => __( 'Recent Posts', 'webcomic'), 'number' => 5 ) );
 		
-		if ( $_POST[ 'webcomic-recent-posts-submit' ] ) {
-			$newoptions[ 'title' ] = strip_tags( stripslashes( $_POST[ 'webcomic-recent-posts-title' ] ) );
-			$newoptions[ 'number' ] = ( int ) $_POST[ 'webcomic-recent-posts-number' ];
-			if ( $options != $newoptions ) {
-				$options = $newoptions;
-				update_option( 'widget_webcomic_recent_posts', $options );
-			}
-		}
-		
-		$title  = htmlspecialchars( $options[ 'title' ], ENT_QUOTES );
-		if ( !$options[ 'number' ] )
-			$number = 5;
-		else
-			$number = $options[ 'number' ];
+		$title  = $instance[ 'title' ];
+		$number = $instance[ 'number' ];
 		?>
-			<p><label><?php _e( 'Title: ', 'webcomic' ); ?><input type="text" class="widefat" id="webcomic-recent-posts-title" name="webcomic-recent-posts-title" value="<?php echo $title; ?>" /></label></p>
-			<p><label><?php _e( 'Number of posts to show: ', 'webcomic' ); ?><input name="webcomic-recent-posts-number" id="webcomic-recent-posts-number" style="width: 25px; text-align: center;" value="<?php echo $number; ?>" /></label></p>
-			<input type="hidden" name="webcomic-recent-posts-submit" id="webcomic-recent-posts-submit" value="1" />
+			<p><label><?php _e( 'Title: ', 'webcomic' ); ?><input type="text" class="widefat" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo $title; ?>" /></label></p>
+			<p><label><?php _e( 'Number of posts to show: ', 'webcomic' ); ?><input name="<?php echo $this->get_field_name( 'number' ); ?>" style="width: 25px; text-align: center;" value="<?php echo $number; ?>" /></label></p>
+			<input type="hidden" name="<?php echo $this->get_field_name( 'submit' ); ?>" value="1" />
 		<?php
 	}
-	$widget_ops = array( 'description' => __( 'The most recent posts on your blog (ignores comic posts)', 'webcomic' ) );
-	wp_register_sidebar_widget( 'recent-posts', __( 'Recent Posts', 'webcomic' ), 'widget_webcomic_recent_posts', $widget_ops );
-	wp_register_widget_control( 'recent-posts', __( 'Recent Posts', 'webcomic' ), 'widget_webcomic_recent_posts_control', $widget_ops );
-} add_action( 'widgets_init', 'widget_webcomic_recent_posts_init' );
+}
 ?>

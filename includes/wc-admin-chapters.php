@@ -2,7 +2,7 @@
 /**
  * Contains all functions related to the Chapters page.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 1.4.0
  */
  
@@ -105,8 +105,8 @@ function comic_page_chapters(){
 			foreach ( $children as $chapter ) {
 				$posts = get_objects_in_term( $chapter, 'chapter' );
 				
-				foreach ( $posts as $the_post )
-					wp_delete_object_term_relationships( $the_post, 'chapter' );
+				foreach ( $posts as $_post )
+					wp_delete_object_term_relationships( $_post, 'chapter' );
 				
 				if ( $chapter == $current_chapters[ $the_series ] )
 					$current_chapters[ $the_series ] = -1;
@@ -121,8 +121,8 @@ function comic_page_chapters(){
 			
 			$posts = get_objects_in_term( $_REQUEST[ 'chapter' ], 'chapter' );
 			
-			foreach ( $posts as $the_post )
-				wp_delete_object_term_relationships( $the_post, 'chapter' );
+			foreach ( $posts as $_post )
+				wp_delete_object_term_relationships( $_post, 'chapter' );
 			
 			if ( $_REQUEST[ 'chapter' ] == $current_chapters[ $the_series ] ) {
 				$current_chapters[ $the_series ] = -1;
@@ -142,15 +142,12 @@ function comic_page_chapters(){
 	if ( $error )
 		echo '<div id="message" class="error"><p>' . $error	. '</p></div>';
 	
-	if ( 0 < get_option( 'comic_press_compatibility' ) )
-		echo '<div class="updated fade"><p>' . __( '<strong>ComicPress Compatibility</strong> is currently enabled.', 'webcomic' ) . '</p></div>';
-	
 	$collection = get_the_collection( 'hide_empty=0&depth=3&series=' . $series );
 ?>
 <div class="wrap">
 	<div id="icon-webcomic" class="icon32"><img src="<?php echo webcomic_include_url( 'webcomic.png' ); ?>" alt="icon" /></div>
 <?php
-	if ( 'chapter_edit' == $_REQUEST[ 'action' ] ) {
+	if ( 'chapter_edit' == $_REQUEST[ 'action' ] ) { //Display the Edit Chapter page
 		$the_chapter = get_term_to_edit( $_REQUEST[ 'chapter' ], 'chapter' );
 		
 		if ( $_REQUEST[ 'is_series' ] )
@@ -204,25 +201,21 @@ function comic_page_chapters(){
 				<input type="hidden" name="series" value="<?php echo $series; ?>" />
 			</p> 
 		</form>
-<?php } else { //Display the "Chapters" page ?>
-	<h2><?php _e( 'Chapters', 'webcomic' ); ?></h2>
+<?php } else { //Display the Chapters page ?>
+	<h2><?php _e( 'Comic Chapters', 'webcomic' ); ?></h2>
+	<form action="" method="get" class="search-form topmargin">
+		<p class="alignright">
+			<input type="hidden" name="page" value="<?php echo $page; ?>" />
+			<select name="series">
+			<?php foreach ( $categories as $cat ) { ?>
+				<option value="<?php echo $cat ?>"<?php if ( $series == $cat ) echo ' selected="selected"'; echo '>' . get_term_field( 'name', $cat, 'chapter' ); ?></option>
+			<?php } ?>
+			</select>
+			<input type="submit" value="<?php _e( 'Change Series', 'webcomic' ); ?>" class="button-secondary action" />
+		</p>
+	</form>
 	<div id="col-right">
 		<div class="col-wrap">
-			<div class="tablenav">
-			<?php if ( 1 < count( $categories ) ) { ?>
-				<form action="" method="get">
-					<div class="alignright actions">
-						<input type="hidden" name="page" value="<?php echo $page; ?>" />
-						<select name="series">
-						<?php foreach ( $categories as $cat ) { ?>
-							<option value="<?php echo $cat ?>"<?php if ( $series == $cat ) echo ' selected="selected"'; echo '>' . get_term_field( 'name', $cat, 'chapter' ); ?></option>
-						<?php } ?>
-						</select>
-						<input type="submit" value="<?php _e( 'Change Series', 'webcomic' ); ?>" class="button-secondary action" />
-					</div>
-				</form>
-			<?php } ?>
-			</div>
 			<table class="widefat">
 				<thead>
 					<tr>
@@ -283,11 +276,7 @@ function comic_page_chapters(){
 				</tbody>
 			</table>
 			<?php if ( !count( get_object_vars( $collection->$series->volumes ) ) ) { ?>
-			<h3><?php _e( 'Using Chapters', 'webcomic' ); ?></h3>
-			<p><?php _e( 'Chapters are a useful way of categorizing your comics, similar to post categories. You can create new chapters or modify existing ones here and assign comics to them from the Library or Edit Post pages.', 'webcomic' ); ?></p>
-			<p><?php _e( "Above you'll see your first <em>series</em>. Each series corresponds to one of your selected comic categories, and series are automatically created or destroyed (along with any volumes and chapters they contain) when updating your comic categories on the Settings page.", 'webcomic' ); ?></p>
-			<p><?php _e( "To start using chapters, you'll need to create two of them: the first will be a <em>volume</em> assigned to the current series, which can contain any number of <em>chapters</em>. You should assign the second chapter to your newly created volume using the Chapter Volume option.", 'webcomic' ); ?></p>
-			<p><?php _e( 'After creating a chapter, you can set it as the <em>current chapter</em> by clicking <em>Set Current</em> just underneath the chapter title. Any new posts in this series will be automatically assigned to that chapter.', 'webcomic' ); ?></p>
+			<h3><a href="http://code.google.com/p/webcomic/wiki/Chapters"><?php _e( 'How to Use Chapters', 'webcomic' ); ?> &raquo;</a></h3>
 			<?php } ?>
 		</div>
 	</div>

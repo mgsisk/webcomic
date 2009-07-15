@@ -2,47 +2,97 @@
 /**
  * Contains various administration related functions.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 1.0.0
  */
 
 /**
- * Registers the WebComic administrative pages and adds contextual help links.
+ * Registers the Webcomic administrative pages and adds contextual help links.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 1.0.0
  */
-function comic_admin_pages_add() {
+function webcomic_admin_menu() {
 	load_webcomic_domain();
 	
-	add_menu_page( __( 'WebComic', 'webcomic' ), __( 'WebComic', 'webcomic' ), 'upload_files', __FILE__, 'comic_page_library', webcomic_include_url( 'webcomic-small.png' ) );
-	$library  = add_submenu_page( __FILE__, __( 'WebComic Library', 'webcomic'), __( 'Library', 'webcomic' ),'upload_files',__FILE__,'comic_page_library' );
-	$chapters = add_submenu_page( __FILE__, __( 'WebComic Chapters', 'webcomic'), __( 'Chapters', 'webcomic' ), 'manage_categories', 'comic-chapters', 'comic_page_chapters' );
-	$settings = add_submenu_page( __FILE__, __( 'WebComic Settings', 'webcomic'), __( 'Settings', 'webcomic' ), 'manage_options', 'comic-settings', 'comic_page_settings' );
+	add_menu_page( __( 'Webcomic', 'webcomic' ), __( 'Webcomic', 'webcomic' ), 'upload_files', 'comic-library', 'comic_page_library', webcomic_include_url( 'webcomic-small.png' ) );
 	
-	add_meta_box( 'webcomic', __( 'WebComic', 'webcomic' ), 'comic_post_meta_box', 'post', 'normal', 'high' );
-	add_meta_box( 'webcomic', __( 'WebComic', 'webcomic' ), 'comic_page_meta_box', 'page', 'normal', 'high' );
+	$library  = add_submenu_page( 'comic-library', __( 'Webcomic Library', 'webcomic'), __( 'Library', 'webcomic' ), 'upload_files', 'comic-library', 'comic_page_library' );
+	$chapters = add_submenu_page( 'comic-library', __( 'Webcomic Chapters', 'webcomic'), __( 'Chapters', 'webcomic' ), 'manage_categories', 'comic-chapters', 'comic_page_chapters' );
+	$settings = add_submenu_page( 'comic-library', __( 'Webcomic Settings', 'webcomic'), __( 'Settings', 'webcomic' ), 'manage_options', 'comic-settings', 'comic_page_settings' );
 	
-	$help[0] = '<a href="http://maikeruon.com/wcib/documentation/webcomic/library/" target="_blank">' . __( 'Library Documentation', 'webcomic' ) . '</a>';
-	$help[1] = '<a href="http://maikeruon.com/wcib/documentation/webcomic/library/" target="_blank">' . __( 'Chapters Documentation', 'webcomic' ) . '</a>';
-	$help[2] = '<a href="http://maikeruon.com/wcib/documentation/webcomic/library/" target="_blank">' . __( 'Settings Documentation', 'webcomic' ) . '</a>';
+	add_meta_box( 'webcomic', __( 'Webcomic', 'webcomic' ), 'comic_post_meta_box', 'post', 'normal', 'high' );
+	add_meta_box( 'webcomic', __( 'Webcomic', 'webcomic' ), 'comic_page_meta_box', 'page', 'normal', 'high' );
+	
+	$help[0] = '<a href="http://code.google.com/p/webcomic/wiki/Library" target="_blank">' . __( 'Library Documentation', 'webcomic' ) . '</a>';
+	$help[1] = '<a href="http://code.google.com/p/webcomic/wiki/Chapters" target="_blank">' . __( 'Chapters Documentation', 'webcomic' ) . '</a>';
+	$help[2] = '<a href="http://code.google.com/p/webcomic/wiki/Settings" target="_blank">' . __( 'Settings Documentation', 'webcomic' ) . '</a>';
 	
 	foreach ( $help as $key => $value )
-		$help[ $key ] .= '<br /><a href="http://maikeruon.com/wcib/documentation/webcomic/" target="_blank">' . __( 'WebComic Documentation', 'webcomic' ) . '</a><br /><a href="http://maikeruon.com/wcib/forum/" target="_blank">' . __( 'WebComic &amp; InkBlot Support Forum', 'webcomic' ) . '</a>';
+		$help[ $key ] .= '<br /><a href="http://code.google.com/p/webcomic/w/list" target="_blank">' . __( 'Webcomic Documentation', 'webcomic' ) . '</a><br /><a href="http://maikeruon.com/wcib/forum/" target="_blank">' . __( 'Webcomic Support Forum', 'webcomic' ) . '</a>';
 	
-	add_contextual_help( $library, $help[0] );
-	add_contextual_help( $chapters, $help[1] );
-	add_contextual_help( $settings, $help[2] );
-} add_action( 'admin_menu', 'comic_admin_pages_add' );
+	add_contextual_help( $library, $help[ 0 ] );
+	add_contextual_help( $chapters, $help[ 1 ] );
+	add_contextual_help( $settings, $help[ 2 ] );
+	
+	register_column_headers( $library, array( 'collection' => __( 'Collection', 'webcomic' ), 'comments' => '<div class="vers"><img alt="Comments" src="images/comment-grey-bubble.png" /></div>', 'date' => __( 'Date', 'webcomic' ) ) );
+} add_action( 'admin_menu', 'webcomic_admin_menu' );
+
+/**
+ * Corrects the pagenow javascript variable for dynamically
+ * saving Library hidden column information.
+ * 
+ * @package Webcomic
+ * @since 2.1.0
+ */
+function webcomic_admin_enqueue_scripts( $suffix ) {
+	if ( false !== strpos( $suffix, 'comic-library' ) ) 
+		echo "<script type='text/javascript'>\n//<![CDATA[\nvar pagenow = '$suffix';\n//]]>\n</script>";
+} add_action( 'admin_enqueue_scripts', 'webcomic_admin_enqueue_scripts' );
+
+/**
+ * Checks if the current column is hidden and outputs CSS as necessary.
+ * 
+ * @package Webcomic
+ * @since 2.1.0
+ * 
+ * @param str $column Column ID
+ */
+function webcomic_hide_column( $column ) {
+	$hidden = get_hidden_columns( 'toplevel_page_comic-library' );
+	
+	if ( in_array( $column, $hidden ) )
+		echo ' style="display:none"';
+}
+
+function webcomic_print_cells( $item ) {
+	if ( !$item )
+		return;
+	
+	$hidden = get_hidden_columns( 'toplevel_page_comic-library' );
+	
+	if ( in_array( 'collection', $hidden ) )
+		$hide_collection = ' style="display:none"';
+	
+	if ( in_array( 'comments', $hidden ) )
+		$hide_comments = ' style="display:none"';
+	
+	if ( in_array( 'date', $hidden ) )
+		$hide_date = ' style="display:none"';
+	
+	echo '<td class="collection column-collection"' . $hide_collection . '>' . $item->chapter . $item->volume . '</td>' . "\n";
+	echo '<td class="comments column-comments"' . $hide_comments . '><div class="post-com-count-wrapper">' . $item->comments . '</div></td>' . "\n";
+	echo '<td class="date column-date"' . $hide_date . '>' . $item->date . '<br />' . $item->status . '</td>' . "\n";
+}
 
 /**
  * Adds contextual help links to various administrative pages.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 2.0.0
  */
 function webcomic_contextual_help_list( $_wp_contextual_help ) {
-	$help = '<p><a href="http://maikeruon.com/wcib/documentation/webcomic/metaboxes/" target="_blank">' . __( 'Using the WebComic Metabox', 'webcomic' ) . '</a><br /><a href="http://maikeruon.com/wcib/documentation/webcomic/" target="_blank">' . __( 'WebComic Documentation', 'webcomic' ) . '</a><br /><a href="http://maikeruon.com/wcib/forum/" target="_blank">' . __( 'WebComic &amp; InkBlot Support Forum', 'webcomic' ) . '</a></p>';
+	$help = '<p><a href="http://code.google.com/p/webcomic/wiki/Metaboxes" target="_blank">' . __( 'Using the Webcomic Metabox', 'webcomic' ) . '</a><br /><a href="http://code.google.com/p/webcomic/w/list" target="_blank">' . __( 'Webcomic Documentation', 'webcomic' ) . '</a><br /><a href="http://maikeruon.com/wcib/forum/" target="_blank">' . __( 'Webcomic Support Forum', 'webcomic' ) . '</a></p>';
 	
 	if ( $_wp_contextual_help[ 'post' ] )
 		$_wp_contextual_help[ 'post' ] .= $help;
@@ -56,23 +106,22 @@ function webcomic_contextual_help_list( $_wp_contextual_help ) {
 /**
  * Registers plugin settings and ensures the correct javascript files are enqueued.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 1.0.0
  */
 function webcomic_admin_init() {
-	register_setting( 'webcomic_options', 'comic_press_compatibility' );
 	register_setting( 'webcomic_options', 'comic_category' );
 	register_setting( 'webcomic_options', 'comic_directory' );
-	register_setting( 'webcomic_options', 'comic_feed_size' );
-	register_setting( 'webcomic_options', 'comic_name_format' );
-	register_setting( 'webcomic_options', 'comic_name_format_date' );
 	register_setting( 'webcomic_options', 'comic_secure_paths' );
 	register_setting( 'webcomic_options', 'comic_secure_names' );
 	register_setting( 'webcomic_options', 'comic_post_draft' );
-	register_setting( 'webcomic_options', 'comic_feed' );
 	register_setting( 'webcomic_options', 'comic_transcripts_allowed' );
 	register_setting( 'webcomic_options', 'comic_transcripts_required' );
 	register_setting( 'webcomic_options', 'comic_transcripts_loggedin' );
+	register_setting( 'webcomic_options', 'comic_feed' );
+	register_setting( 'webcomic_options', 'comic_feed_size' );
+	register_setting( 'webcomic_options', 'comic_buffer' );
+	register_setting( 'webcomic_options', 'comic_buffer_alert' );
 	register_setting( 'webcomic_options', 'comic_thumb_crop' );
 	register_setting( 'webcomic_options', 'comic_thumb_size_w' );
 	register_setting( 'webcomic_options', 'comic_thumb_size_h' );
@@ -80,7 +129,6 @@ function webcomic_admin_init() {
 	register_setting( 'webcomic_options', 'comic_medium_size_h' );
 	register_setting( 'webcomic_options', 'comic_large_size_w' );
 	register_setting( 'webcomic_options', 'comic_large_size_h' );
-	wp_enqueue_script( 'admin-forms' );
 } add_action( 'admin_init', 'webcomic_admin_init' );
 
 /**
@@ -91,7 +139,7 @@ function webcomic_admin_init() {
  * assigned to the defined comic category and, if so, assigns
  * it to the specified chapter.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 1.0.0
  * 
  * @param int $id Post ID.
@@ -100,7 +148,7 @@ function webcomic_admin_init() {
  */
 function add_post_to_chapter( $id, $chapter, $overwrite = 1 ) {
 	if ( get_post_comic_category( $id ) ) {
-		$post_chapters = get_post_chapters( $id );
+		$post_chapters = get_post_comic_chapters( $id );
 		
 		if ( $post_chapters ) {
 			if ( $overwrite )
@@ -129,7 +177,7 @@ function add_post_to_chapter( $id, $chapter, $overwrite = 1 ) {
 /**
  * Removes a comic post from a chapter.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 1.0.0
  * 
  * @param int $id Post ID.
@@ -145,7 +193,7 @@ add_action( 'delete_post', 'remove_post_from_chapter' );
  * This function adds any newly created comic posts to the defined
  * current chapter for a given series.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 1.0.0
  * 
  * @param int $id Post ID.
@@ -167,7 +215,7 @@ function add_post_to_current_chapter( $id ) {
  * This function automatically removes series information
  * when a corresponding Category is deleted.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 2.0.0
  * 
  * @param int $id Category ID.
@@ -207,7 +255,7 @@ function webcomic_category_delete( $id ) {
  * will also require changing the categories associated comic 
  * directory to match the new slug name.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 2.0.0
  * 
  * @param obj $category The category object for the selected category.
@@ -215,7 +263,7 @@ function webcomic_category_delete( $id ) {
 function webcomic_edit_category_form_pre( $category ) {
 	$categories = get_comic_category( true );
 	
-	$cat = array_search( $category->term_id, $categories );
+	array_search( $category->term_id, $categories );
 	
 	if ( false !== $cat )
 		echo '<div id="message" class="updated fade"><p>' . sprintf( __( 'This is a comic category. Changing the <strong>Category Slug</strong> will also rename the directory <a href="%s">%s</a> to match the new slug.', 'webcomic'), get_comic_directory( 'url', false, $category->term_id ), get_comic_directory( 'url', false, $category->term_id ) ) . '</p></div>';
@@ -225,11 +273,11 @@ function webcomic_edit_category_form_pre( $category ) {
  * Adds the 'comic_directory' hidden field to the Edit Category page.
  * 
  * This function adds the 'comic_directory' hidden field to the Edit
- * Category page. When detected, WebComic copmares the existing directory
+ * Category page. When detected, Webcomic copmares the existing directory
  * path to the one in 'comic_directory' and renames comic subdirectories
  * as necessary.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 2.0.0
  * 
  * @param obj $category The category object for the selected category.
@@ -248,9 +296,9 @@ function webcomic_edit_category_form( $category ) {
  * 
  * This function compares the value of a unique hidden field
  * to an existing comic subdirectory; if the two don't match,
- * WebComic renames the old directory using the new name.
+ * Webcomic renames the old directory using the new name.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 2.0.0
  * 
  * @param int $id Category ID.
@@ -266,14 +314,13 @@ function webcomic_rename_subdirectory( $id ) {
  * This is a utility function used to generate comic thumbnails from a
  * source comic file and link them with the associated comic post.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 2.0.0
  * 
  * @param int $id Post ID.
  * @param str $target_path Source file.
  * @param arr $img_dim Source file information as generated by getimagesize().
  */
-
 function generate_comic_thumbnails( $id = false, $target_path = false, $img_dim = false ) {
 	if ( !$id || !$target_path || !$img_dim )
 		return;
@@ -315,58 +362,6 @@ function generate_comic_thumbnails( $id = false, $target_path = false, $img_dim 
 			update_post_meta( $id, 'comic_thumb', $comic_thumb );
 	} elseif ( get_post_meta( $id, 'comic_thumb', true ) ) {
 		delete_post_meta( $id, 'comic_thumb' );
-	}
-}
-
-/**
- * Upgrades settings from previous versions of WebComic.
- * 
- * This is a run-once function that should only be called when WebComic
- * is first activated, checking to see if certain critical WebComic settings
- * need to be upgraded and upgrades them as necessary.
- * necessary.
- * 
- * @package WebComic
- * @since 2.0.0
- */
-function webcomic_upgrade() {
-	//1.8.0: Make sure our Comic Category has a Series, upgrading older collections as necessary, and update the 'current chapter' and 'comic category' settings
-	if ( !is_array( get_option( 'comic_category' ) ) ) {
-		$category    = get_comic_category();
-		$collection  = get_the_collection( 'hide_empty=0depth=1' );
-		
-		if ( $collection ) {
-			$first_series = get_term( ( int ) get_option( 'comic_category' ), 'category' );
-			$new_series   = wp_insert_term( $first_series->name, 'chapter' );
-			$the_series   = get_term( ( int ) $new_series[ 'term_id' ], 'chapter' );
-			$chapters     = get_terms( 'chapter', array( 'hide_empty' => 0 ) );
-			$collection   = get_the_collection( 'hide_empty=0' );
-			
-			foreach ( $chapters as $the_chapter )
-				if ( !$the_chapter->parent )
-					wp_update_term( $the_chapter->term_id, 'chapter', array( 'parent' => $the_series->term_id ) );
-			
-			foreach ( array_keys( get_object_vars( $collection ) ) as $series )
-				foreach ( array_keys( get_object_vars( $collection->$series->volumes ) ) as $volume )
-					foreach( array_keys( get_object_vars( $collection->$series->volumes->$volume->chapters ) ) as $chapter )
-						foreach( array_keys( get_object_vars( $collection->$series->volumes->$volume->chapters->$chapter->posts ) ) as $post )
-							add_post_to_chapter( $collection->$series->volumes->$volume->chapters->$chapter->posts->$post->ID, $collection->$series->volumes->$volume->chapters->$chapter->ID );
-		}
-		
-		update_option( 'comic_current_chapter', array( get_option( 'comic_category' ) => get_option( 'comic_current_chapter' ) ) );
-		update_option( 'comic_category', array( get_option( 'comic_category' ) ) );
-	}
-	
-	// 2.0.0: Upgrade 'thumbnail' settings to 'thumb' settings replace the 'transcript_email' setting with 'transcripts_allowed'
-	if ( false !== get_option( 'comic_thumbnail_size_h' ) || false !== get_option( 'comic_thumbnail_size_w' ) || false !== get_option('comic_thumbnail_crop') || get_option( 'comic_transcript_email' ) ) {
-		update_option( 'comic_thumb_size_h', get_option( 'comic_thumbnail_size_h' ) );
-		update_option( 'comic_thumb_size_w', get_option( 'comic_thumbnail_size_w' ) );
-		update_option( 'comic_thumb_crop', get_option( 'comic_thumbnail_crop' ) );
-		update_option( 'comic_transcripts_allowed', '1' );
-		delete_option( 'comic_thumbnail_size_w' );
-		delete_option( 'comic_thumbnail_size_h' );
-		delete_option( 'comic_thumbnail_crop' );
-		delete_option( 'comic_transcript_email' );
 	}
 }
 ?>

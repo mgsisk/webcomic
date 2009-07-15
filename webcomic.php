@@ -1,10 +1,10 @@
 <?php
 /*
 Text Domain: webcomic
-Plugin Name: WebComic
-Plugin URI: http://maikeruon.com/wcib/
-Description: WebComic adds a collection of new features to WordPress geared specifically at publishing webcomics.
-Version: 2.0.10
+Plugin Name: Webcomic
+Plugin URI: http://maikeruon.com/webcomic/
+Description: Webcomic adds a collection of new features to WordPress designed specifically for publishing webcomics, developing webcomic themes, and managing webcomic sites.
+Version: 2.1.0b
 Author: Michael Sisk
 Author URI: http://maikeruon.com/
 
@@ -32,42 +32,40 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 /**
  * Loads the webcomic domain for translations.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 1.6.0
  */
 function load_webcomic_domain() { load_plugin_textdomain( 'webcomic', PLUGINDIR . '/' . dirname( plugin_basename( __FILE__ ) ), dirname( plugin_basename( __FILE__ ) ) ); }
 
 /**
- * Creates the default WebComic settings.
+ * Creates the default Webcomic settings.
  * 
  * This funciton should only run when the plugin is first activated.
- * It will attempt to create all of the default WebComic settings and
+ * It will attempt to create all of the default Webcomic settings and
  * standard comic directories, and upgrade older features as necessary.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 1.0.0
  */
-if ( !get_option( 'webcomic_version' ) || '2.0.10' != get_option( 'webcomic_version' ) ) {
+if ( !get_option( 'webcomic_version' ) || '2.1.0' != get_option( 'webcomic_version' ) ) {
 	function webcomic_install() {
 		load_webcomic_domain();
 		
 		$default_category = get_option( 'default_category' );
 		
 		/** Make sure all of our default options have a value. */
-		add_option( 'comic_press_compatibility', '' );
 		add_option( 'comic_category', array( $default_category ) );
 		add_option( 'comic_directory', 'comics' );
 		add_option( 'comic_current_chapter', array( $default_category => '-1' ) );
-		add_option( 'comic_name_format', 'date' );
-		add_option( 'comic_name_format_date', 'Y-m-d' );
 		add_option( 'comic_secure_paths', '' );
 		add_option( 'comic_secure_names', '' );
-		add_option( 'comic_post_draft', '' );
-		add_option( 'comic_feed', '1' );
-		add_option( 'comic_feed_size', 'full' );
 		add_option( 'comic_transcripts_allowed', '' );
 		add_option( 'comic_transcripts_required', '' );
 		add_option( 'comic_transcripts_loggedin', '' );
+		add_option( 'comic_feed', '1' );
+		add_option( 'comic_feed_size', 'full' );
+		add_option( 'comic_buffer', '1' );
+		add_option( 'comic_buffer_alert', '7' );
 		add_option( 'comic_thumb_crop', '' );
 		add_option( 'comic_large_size_w', get_option( 'large_size_w' ) );
 		add_option( 'comic_large_size_h', get_option( 'large_size_h' ) );
@@ -81,19 +79,14 @@ if ( !get_option( 'webcomic_version' ) || '2.0.10' != get_option( 'webcomic_vers
 			mkdir( BLOGUPLOADDIR, 0775, true );
 		
 		if ( !file_exists( get_comic_directory( 'abs', true ) ) )
-			mkdir( get_comic_directory( 'abs', true ), 0775, true );
+			if ( !mkdir( get_comic_directory( 'abs', true ), 0775, true ) )
+				$mkdir_error = sprintf( __( 'Webcomic was not able to create the default comic directories. If this problem persists after <a href="%s">update your settings</a> you will need to create them yourself.', 'webcomic' ), 'admin.php?page=comic-settings' );
 		
-		/** Upgrade older features */
-		webcomic_upgrade();
-		
-		/** Add or update the 'webcomic_version' setting and create the first series, if necessary */
+		/** Add or update the 'webcomic_version' setting and create the first series as necessary */
 		if ( get_option( 'webcomic_version' ) ) {
-			if ( get_option( 'webcomic_version' ) < 2 )
-				echo '<div class="updated fade"><p>' . sprintf( __( 'Upgrading? Please take a moment to <a href="%s">read about some important differences</a> between WebComic 1.x and WebComic 2.x.', 'webcomic' ), 'http://maikeruon.com/wcib/documentation/webcomic/1x-vs-2x/' ) . '</p></div>';
-			
-			update_option( 'webcomic_version', '2.0.10' );
+			update_option( 'webcomic_version', '2.1.0' );
 		} else {
-			add_option( 'webcomic_version', '2.0.10' );
+			add_option( 'webcomic_version', '2.1.0' );
 			
 			if ( !get_the_collection( 'hide_empty=0&depth=1' ) ) {
 				$first_series = get_term( $default_category, 'category' );
@@ -101,7 +94,14 @@ if ( !get_option( 'webcomic_version' ) || '2.0.10' != get_option( 'webcomic_vers
 			}
 		}
 		
-		echo '<div class="updated fade"><p>' . sprintf( __( 'Thanks for choosing WebComic! Please <a href="%s">update your settings</a>.', 'webcomic' ), 'admin.php?page=comic-settings' ) . '</p></div>';
+		/** Setup our buffer alert scheduled task hook */
+		if ( !wp_next_scheduled( 'webcomic_buffer_alert' ) )
+			wp_schedule_event( 0, 'daily', 'webcomic_buffer_alert' );
+		
+		echo '<div class="updated fade"><p>' . sprintf( __( 'Thanks for choosing Webcomic! Please <a href="%s">update your settings</a>.', 'webcomic' ), 'admin.php?page=comic-settings' ) . '</p></div>';
+		
+		if ( $mkdir_error )
+			echo '<div id="message" class="error"><p>' . $mkdir_error . '</p></div>';
 	} add_action( 'admin_notices', 'webcomic_install' );
 }
 
@@ -116,10 +116,10 @@ if ( !get_option( 'webcomic_version' ) || '2.0.10' != get_option( 'webcomic_vers
  * 
  * This is an internal utility function for determining the correct
  * path (absolute path, relative path, or url path) to a file in
- * WebComic's "includes" directory based on it's installed location:
+ * Webcomic's "includes" directory based on it's installed location:
  * either a regular plugins folder or WordPress MU's special "mu-plugins" folder.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 2.0.0
  * 
  * @param str $file The file to include (required).
@@ -133,14 +133,14 @@ function webcomic_include_url( $file = false, $type = false ) {
 	
 	if ( strstr( $mu_check[ 'dirname' ], 'mu-plugins' ) ) {
 		switch ( $type ) {
-			case 'abs' : return ABSPATH . '/wp-content/mu-plugins/includes/' . $file;
+			case 'abs' : return WP_CONTENT_DIR . '/mu-plugins/includes/' . $file;
 			case 'rel' : return 'includes/' . $file;
 			case 'url' :
-			default     : return get_option( 'home' ) . '/' . 'wp-content/mu-plugins/includes/' . $file;
+			default    : return WP_CONTENT_URL . '/mu-plugins/includes/' . $file;
 		}
 	} else {
 		switch ( $type ) {
-			case 'abs' : return ABSPATH . PLUGINDIR . '/webcomic/includes/' . $file;
+			case 'abs' : return WP_PLUGIN_DIR . '/webcomic/includes/' . $file;
 			case 'rel' : return 'webcomic/includes/' . $file;
 			case 'url' :
 			default    : return plugins_url( 'webcomic/includes/' . $file );
@@ -155,7 +155,7 @@ function webcomic_include_url( $file = false, $type = false ) {
  * 'id' is specified, the first comic category is returned. An array
  * containing all comic categories is returned if 'id' is set to 'all'.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 1.0.0
  * 
  * @param bool $all Return all comic categories as an array.
@@ -190,7 +190,7 @@ function get_comic_category( $all = false, $format = false ) {
  * directory. This function can return either the absolute or url
  * path to the comic root or 'thumbs' directory.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 1.0.0
  * 
  * @param str $type The type of path to return, 'abs' or 'url'.
@@ -210,7 +210,7 @@ function get_comic_directory( $type = 'abs', $thumbs = false, $category = false 
 	$catid  = ( $category ) ? $category : get_comic_category();
 	$cat    = &get_category( $catid );
 	
-	$catdir = ( 0 < get_option( 'comic_press_compatibility' ) ) ? '' : '/' . $cat->slug;
+	$catdir = '/' . $cat->slug;
 	
 	if ( $thumbs )
 		return $prepend . get_option( 'comic_directory' ) . $catdir . '/thumbs/';
@@ -225,7 +225,7 @@ function get_comic_directory( $type = 'abs', $thumbs = false, $category = false 
  * specified comic series, or all current chapters if $series is set
  * to 'all'.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 1.0.0
  * 
  * @param int|str $series ID of a specific comic category or -1.
@@ -243,37 +243,13 @@ function get_comic_current_chapter( $series = false ) {
 }
 
 /**
- * Returns the Comic Library view.
- * 
- * This is a utility funciton for retriving the user-selected Library view.
- * 
- * @package WebComic
- * @since 1.0.0
- * 
- * @param bool $class Displays the "current" class for the active view.
- * @return str The current useres selected view or the "current" class.
- */
-function get_comic_library_view( $class = false ) {
-	global $current_user;
-	
-	if ( $class ) {
-		if ( $class == get_usermeta( $current_user->ID, 'comic_library_view' ) )
-			echo ' class="current"';
-		else
-			return;
-	}
-	
-	return get_usermeta( $current_user->ID, 'comic_library_view' );
-}
-
-/**
  * Retrieves the comic category for a given post.
  * 
  * This is a utility function to determine which (if any) comic category
  * a given post belongs to. If a match is found, the comic category ID
  * is returned immediately.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 1.8.0
  * 
  * @param int $id Post ID.
@@ -300,13 +276,13 @@ function get_post_comic_category( $id = false ) {
  * This is a utility function used to generate an object of taxonomy
  * objects for the specified or current posts chapter, volume, and series.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 1.8.0
  * 
  * @param int $id A valid post ID.
  * @return obj Object containg chapter taxonomy objects.
  */
-function get_post_chapters( $id = false ) {
+function get_post_comic_chapters( $id = false ) {
 	global $post;
 	
 	$id = ( $id ) ? ( int ) $id : $post->ID;
@@ -330,108 +306,6 @@ function get_post_chapters( $id = false ) {
 	return $post_chapters;
 }
 
-
-
-//
-// Search Unification
-//
-
-/**
- * Removes duplicates from search results.
- * 
- * @package WebComic
- * @since 1.5.0
- */
-function webcomic_post_request( $query ) {
-	global $wp_query;
-	
-	if ( $wp_query->is_search && false === strpos( $where, 'DISTINCT' ) )
-		$query = str_replace( 'SELECT', 'SELECT DISTINCT', $query );
-	
-	return $query;
-} add_filter( 'posts_request', 'webcomic_post_request' );
-
-/**
- * Adds post meta data to the search query.
- * 
- * @package WebComic
- * @since 1.5.0
- */
-function webcomic_posts_join( $join ) {
-	global $wp_query, $wpdb;
-	
-	if ( $wp_query->is_search )
-		$join .= " LEFT JOIN $wpdb->postmeta ON $wpdb->posts.ID = $wpdb->postmeta.post_id ";
-	
-	return $join;
-} add_filter( 'posts_join', 'webcomic_posts_join' );
-
-/**
- * Adds specific checks for finding content based on the 'comic_description'
- * and 'comic_transcript' custom field matches.
- * 
- * @package WebComic
- * @since 1.5.0
- */
-function webcomic_posts_where( $where ) {
-	global $wp_query, $wpdb;
-	
-	$query_terms = explode( ' ', $wp_query->query_vars[ 's' ] );
-	
-	$or = '(';
-	
-	foreach ( $query_terms as $query_term ) {
-		if ( $Query_term !== '' ) {
-			$or .= "(($wpdb->posts.post_title LIKE '%" . $wpdb->escape( $query_term ) . "%') OR ($wpdb->posts.post_content LIKE '%" . $wpdb->escape( $query_term ) . "%') OR (($wpdb->postmeta.meta_key = 'comic_transcript' OR $wpdb->postmeta.meta_key = 'comic_description') AND $wpdb->postmeta.meta_value LIKE '%" . $wpdb->escape( $query_term ) . "%')) OR ";
-			$i++;
-		}
-	}
-	
-	if ( $i > 1 )
-		$or .= "(($wpdb->posts.post_title LIKE '" . $wpdb->escape( $wp_query->query_vars[ 's' ] ) . "') OR ($wpdb->posts.post_content LIKE '" . $wpdb->escape( $wp_query->query_vars[ 's' ] ) . "') OR (($wpdb->postmeta.meta_key = 'comic_transcript' OR $wpdb->postmeta.meta_key = 'comic_description') AND $wpdb->postmeta.meta_value LIKE '%" . $wpdb->escape( $wp_query->query_vars[ 's' ] ) . "%')))";
-	else
-		$or = rtrim( $or, ' OR ') . ')';
-	
-	$where = preg_replace( "/\(\(\(.*\)\)/i", $or, $where, 1 );
-	
-	return $where;
-} add_filter( 'posts_where', 'webcomic_posts_where' );
-
-
-
-//
-// Comic Templates
-//
-
-/**
- * Loads a comic-specific template and sets the $webcomic_series global.
- * 
- * This function checks the requested url to see if the
- * requested page is either directly related to a specific
- * comic category or has the 'comic_series' custom field set.
- * If either is true, it will check if a template exists in
- * "webcomic-cat-slug" and load that template instead, if one exists.
- * 
- * @package WebComic
- * @since 2.0.0
- * 
- * @param str $template The current template string.
- * @return str New theme directory or $template
- */
-function webcomic_series_template() {
-	global $webcomic_series;
-	
-	$webcomic_series = get_series_by_path();
-	
-	if ( $webcomic_series && is_dir( get_theme_root() . '/webcomic-' . $webcomic_series->slug ) ) {
-		function load_series_template() {
-			global $webcomic_series;
-			
-			return 'webcomic-' . $webcomic_series->slug;
-		} add_filter( 'stylesheet', 'load_series_template' );
-	}
-} add_action( 'template_redirect', 'webcomic_series_template' );
-
 /**
  * Returns the current webcomic series ID based on the requested path.
  * 
@@ -440,7 +314,7 @@ function webcomic_series_template() {
  * pages is associated with. If the page is associated witha comic
  * series the series ID is returned.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 2.0.0
  * 
  * @return Category ID.
@@ -452,7 +326,6 @@ function get_series_by_path() {
 		
 		$port = ( '80' == $_SERVER[ 'SERVER_PORT' ] ) ? '' : ':' . $_SERVER[ 'SERVER_PORT' ];
 		$url  = "http$s://" . $_SERVER[ 'SERVER_NAME' ] . $port . $_SERVER[ 'REQUEST_URI' ];
-		
 		list( $url ) = explode( '?', $url );
 		
 		$pid = url_to_postid( $url );
@@ -501,13 +374,115 @@ function get_series_by_path() {
 
 
 //
+// Search Unification
+//
+
+/**
+ * Removes duplicates from search results.
+ * 
+ * @package Webcomic
+ * @since 1.5.0
+ */
+function webcomic_post_request( $query ) {
+	global $wp_query;
+	
+	if ( $wp_query->is_search && false === strpos( $where, 'DISTINCT' ) )
+		$query = str_replace( 'SELECT', 'SELECT DISTINCT', $query );
+	
+	return $query;
+} add_filter( 'posts_request', 'webcomic_post_request' );
+
+/**
+ * Adds post meta data to the search query.
+ * 
+ * @package Webcomic
+ * @since 1.5.0
+ */
+function webcomic_posts_join( $join ) {
+	global $wp_query, $wpdb;
+	
+	if ( $wp_query->is_search )
+		$join .= " LEFT JOIN $wpdb->postmeta ON $wpdb->posts.ID = $wpdb->postmeta.post_id ";
+	
+	return $join;
+} add_filter( 'posts_join', 'webcomic_posts_join' );
+
+/**
+ * Adds specific checks for finding content based on the 'comic_description'
+ * and 'comic_transcript' custom field matches.
+ * 
+ * @package Webcomic
+ * @since 1.5.0
+ */
+function webcomic_posts_where( $where ) {
+	global $wp_query, $wpdb;
+	
+	$query_terms = explode( ' ', $wp_query->query_vars[ 's' ] );
+	
+	$or = '(';
+	
+	foreach ( $query_terms as $query_term ) {
+		if ( $Query_term !== '' ) {
+			$or .= "(($wpdb->posts.post_title LIKE '%" . $wpdb->escape( $query_term ) . "%') OR ($wpdb->posts.post_content LIKE '%" . $wpdb->escape( $query_term ) . "%') OR (($wpdb->postmeta.meta_key = 'comic_transcript' OR $wpdb->postmeta.meta_key = 'comic_description') AND $wpdb->postmeta.meta_value LIKE '%" . $wpdb->escape( $query_term ) . "%')) OR ";
+			$i++;
+		}
+	}
+	
+	if ( $i > 1 )
+		$or .= "(($wpdb->posts.post_title LIKE '" . $wpdb->escape( $wp_query->query_vars[ 's' ] ) . "') OR ($wpdb->posts.post_content LIKE '" . $wpdb->escape( $wp_query->query_vars[ 's' ] ) . "') OR (($wpdb->postmeta.meta_key = 'comic_transcript' OR $wpdb->postmeta.meta_key = 'comic_description') AND $wpdb->postmeta.meta_value LIKE '%" . $wpdb->escape( $wp_query->query_vars[ 's' ] ) . "%')))";
+	else
+		$or = rtrim( $or, ' OR ') . ')';
+	
+	$where = preg_replace( "/\(\(\(.*\)\)/i", $or, $where, 1 );
+	
+	return $where;
+} add_filter( 'posts_where', 'webcomic_posts_where' );
+
+
+
+//
+// Comic Templates
+//
+
+/**
+ * Loads a comic-specific template and sets the $webcomic_series global.
+ * 
+ * This function checks the requested url to see if the
+ * requested page is either directly related to a specific
+ * comic category or has the 'comic_series' custom field set.
+ * If either is true, it will check if a template exists in
+ * "webcomic-cat-slug" and load that template instead, if one exists.
+ * 
+ * @package Webcomic
+ * @since 2.0.0
+ * 
+ * @param str $template The current template string.
+ * @return str New theme directory or $template
+ */
+function webcomic_series_template() {
+	global $webcomic_series;
+	
+	$webcomic_series = get_series_by_path();
+	
+	if ( $webcomic_series && is_dir( get_theme_root() . '/webcomic-' . $webcomic_series->slug ) ) {
+		function load_series_template() {
+			global $webcomic_series;
+			
+			return 'webcomic-' . $webcomic_series->slug;
+		} add_filter( 'stylesheet', 'load_series_template' );
+	}
+} add_action( 'template_redirect', 'webcomic_series_template' );
+
+
+
+//
 // Other Stuff
 //
 
 /**
  * Registers the 'chapter' taxonomy.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 2.0.0
  */
 function webcomic_init() {
@@ -517,7 +492,7 @@ function webcomic_init() {
 /**
  * Displays the comic in the site feed.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 1.0.0
  */
 if ( get_option( 'comic_feed' ) ) {
@@ -530,9 +505,31 @@ if ( get_option( 'comic_feed' ) ) {
 }
 
 /**
+ * Sends buffer comic notifications on a daily basis.
+ * 
+ * @package Webcomic
+ * @since 2.1.0
+ */
+if ( get_option( 'comic_buffer' ) ) {
+	function webcomic_buffer_alert() {
+		$cats = get_comic_category( true );
+		$now  = time();
+		
+		foreach ( $cats as $cat ) {
+			$buffer = get_comic_buffer( $cat );
+			$info   = get_term( $cat, 'category' );
+			$eta    = floor( ( $buffer->timestamp - $now ) / 86400 );
+			
+			if ( $buffer && $eta == get_option( 'comic_buffer_alert' ) )
+				@wp_mail( get_option( 'admin_email' ), sprintf( __( '[%s] Buffer Alert for %s', 'webcomic' ), html_entity_decode( get_option( 'blogname' ) ), html_entity_decode( $info->name ) ), sprintf( __( 'This is an automated reminder that your buffer for %s will run out on %s ($d days away).', 'webcomic' ), html_entity_decode( $info->name ), $buffer->datetime, get_option( 'comic_buffer_alert' ) - $eta ) );
+		}
+	} add_action( 'webcomic_buffer_alert', 'webcomic_buffer_alert' );
+}
+
+/**
  * Handles secure URL's, transcript.php form requests, and enqueue's necessary javascript.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 2.0.0
  */
 function webcomic_template_redirect() {
@@ -540,11 +537,8 @@ function webcomic_template_redirect() {
 	if ( $_GET[ 'comic_object' ] ) {
 		$info  = explode( '/', $_GET[ 'comic_object' ] );
 		$comic = get_the_comic( $info[ 0 ] );
-		
-		if ( !$comic )
-			die();
-		
-		$headers = getallheaders();
+			
+		$headers = ( function_exists( 'getallheaders' ) ) ? getallheaders() : false;
 		$size    = ( $info[ 1 ] ) ? $info[ 1 ] : 'full';
 		$dir     = get_post_comic_category( $comic->ID );
 		$fpath   = get_comic_directory( 'abs', false, $dir );
@@ -562,7 +556,7 @@ function webcomic_template_redirect() {
 		if ( 'thumb' == $size )
 			$size = ( $comic->thumb ) ? $tpath . $comic->thumb_name : $fpath . $comic->file_name;
 		
-		if ( isset( $headers[ 'If-Modified-Since' ] ) && ( strtotime( $headers[ 'If-Modified-Since' ] ) == filemtime( $size ) ) ) {
+		if ( $headers && isset( $headers[ 'If-Modified-Since' ] ) && ( strtotime( $headers[ 'If-Modified-Since' ] ) == filemtime( $size ) ) ) {
 			header( 'Last-Modified: ' . gmdate( 'D, d M Y H:i:s', filemtime( $size ) ) . ' GMT', true, 304 );
 		} else {
 			header( 'Last-Modified: ' . gmdate( 'D, d M Y H:i:s', filemtime( $size ) ) . ' GMT', true, 200 );
@@ -573,7 +567,7 @@ function webcomic_template_redirect() {
 		}
 	}
 	
-	//Enqueue javascript required for various WebComic features
+	//Enqueue javascript required for various Webcomic features
 	wp_enqueue_script( 'jquery-cookie', webcomic_include_url( 'jquery.cookie.js' ), array( 'jquery' ) );
 	wp_enqueue_script( 'jquery-konami', webcomic_include_url( 'jquery.konami.js' ), array( 'jquery' ) );
 	wp_enqueue_script( 'webcomic-scripts', webcomic_include_url( 'scripts.js' ), array( 'jquery', 'jquery-form', 'jquery-cookie' ) );
@@ -604,8 +598,10 @@ function webcomic_template_redirect() {
 				
 				add_post_meta( $_POST[ 'trans_id' ], 'comic_transcript_draft', $postmeta, true );
 				
-				if ( 1 < $_POST[ 'trans_type' ] )
+				if ( 1 < $_POST[ 'trans_type' ] ) {
+					add_post_meta( $_POST[ 'trans_id' ], 'comic_transcript_backup', get_post_meta( $_POST[ 'trans_id' ], 'comic_transcript_pending', true ), true );
 					delete_post_meta( $_POST[ 'trans_id' ], 'comic_transcript_pending' );
+				}
 				
 				@wp_mail( get_option( 'admin_email' ), sprintf( __( '[%s] New Transcript for "%s"', 'webcomic' ), html_entity_decode( get_option( 'blogname' ) ), html_entity_decode( $title ) ), $message );
 				
@@ -630,6 +626,13 @@ function webcomic_template_redirect() {
 } add_action( 'template_redirect', 'webcomic_template_redirect' );
 
 /**
+ * Enqueue's necessary javascript for administrative pages.
+ */
+function webcomic_admin_print_scripts() {
+	wp_enqueue_script( 'webcomic-admin-scripts', webcomic_include_url( 'admin-scripts.js' ), array( 'jquery' ) );
+} add_action( 'admin_print_scripts', 'webcomic_admin_print_scripts' );
+
+/**
  * wc-core.php           contains all of the new template tags.
  * wc-widgets.php        contains all of the new widgets.
  * wc-admin.php          initializes core administrative functions.
@@ -642,9 +645,9 @@ require_once( 'includes/wc-core.php' );
 require_once( 'includes/wc-widgets.php' );
 if ( is_admin() ) {
 	require_once( 'includes/wc-admin.php' );
-	require_once( 'includes/wc-admin-settings.php' );
 	require_once( 'includes/wc-admin-library.php' );
 	require_once( 'includes/wc-admin-chapters.php' );
+	require_once( 'includes/wc-admin-settings.php' );
 	require_once( 'includes/wc-admin-metabox.php' );
 }
 ?>

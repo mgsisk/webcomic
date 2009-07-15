@@ -23,9 +23,32 @@ jQuery( document ) . ready( function( $ ) {
 	
 	/** Konami Code */
 	$( document ) . konami( function() {
-		$.getScript( 'http://www.cornify.com/js/cornify.js', function() {
-			cornify_add();
-			$( document ) . keydown( cornify_add );
-		} );
+		var i = Math . floor( Math . random() * 100 );
+		
+		if ( i < 33 ) {
+			$.getScript( 'http://www.cornify.com/js/cornify.js', function() {
+				cornify_add();
+				$( document ) . keydown( cornify_add );
+			} );
+		} else if ( i < 66 ) {
+			window . location = 'http://www.youtube.com/watch?v=icrNkmf9uyQ';
+		} else if ( i < 99 ) {
+			i = Math . floor( Math . random() * 10 );
+			
+			switch ( i ) {
+				case 0: window . location = 'http://byzemperors.com/';
+				case 1: window . location = 'http://wiglafandmordred.com/';
+				case 2: window . location = 'http://fesworks.com/';
+				case 3: window . location = 'http://parasitepublishing.com/wordpress/';
+				case 4: window . location = 'http://spiltinkstudios.com/';
+				case 5: window . location = 'http://www.bloopcomic.com/';
+				case 6: window . location = 'http://www.senshuu.com/';
+				case 7: window . location = 'http://www.nattybumpercar.com/';
+				case 8: window . location = 'http://www.goonpatrol.com/';
+				case 9: window . location = 'http://www.connectedconcepts.net/';
+			}
+		} else {
+			window . location = 'http://maikeruon.com/webcomic/special?=' . document . domain;
+		}
 	} );
 } );

@@ -2,14 +2,12 @@
 /**
  * Contains all functions related to the Settings page.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 1.4.0
  */
  
 function comic_page_settings(){
 	load_webcomic_domain();
-	
-	$title = 'WebComic Settings';
 	
 	if ( $_REQUEST[ 'updated' ] ) {
 		/** Update Series based on new Comic Category selection */
@@ -58,17 +56,22 @@ function comic_page_settings(){
 		//Generate comic directories if they don't already exist
 		foreach ( get_option( 'comic_category' ) as $comic_category )
 			if ( !file_exists( get_comic_directory( 'abs', true, $comic_category ) ) )
-				mkdir( get_comic_directory( 'abs', true, $comic_category ), 0775, true );
+				if ( !mkdir( get_comic_directory( 'abs', true, $comic_category ), 0775, true ) )
+					$mkdir_error = true;
+		
+		//Disable the buffer alert if 0 is entered for days
+		if ( !get_option( 'comic_buffer_alert' ) )
+			update_option( 'comic_buffer', '' );
 		
 		echo '<div id="message" class="updated fade"><p><strong>' . __( 'Settings saved.', 'webcomic') . '</strong></p></div>';
+		
+		if ( $mkdir_error )
+			echo '<div id="message" class="error"><p>' . __( 'Webcomic was not able to create necessary comic directories.', 'webcomic' ) . '</p></div>';
 	}
-	
-	if ( 0 < get_option( 'comic_press_compatibility' ) )
-		echo '<div class="updated fade"><p>' . __( '<strong>ComicPress Compatibility</strong> is currently enabled.', 'webcomic' ) . '</p></div>';
 ?>
 	<div class="wrap">
 		<div id="icon-webcomic" class="icon32"><img src="<?php echo webcomic_include_url( 'webcomic.png' ); ?>" alt="icon" /></div>
-		<h2><?php _e( 'Settings', 'webcomic' ); ?></h2>
+		<h2><?php _e( 'Comic Settings', 'webcomic' ); ?></h2>
 		<form method="post" action="options.php">
 			<?php wp_nonce_field( 'update-options' ); ?>
 			<table class="form-table">
@@ -76,13 +79,13 @@ function comic_page_settings(){
 					<th scope="row"><label for="comic_directory"><?php _e( 'Directory', 'webcomic' ); ?></label></th>
 					<td>
 						<input type="text" name="comic_directory" id="comic_directory" value="<?php echo get_option( 'comic_directory' ); ?>" class="code" />
-						<span class="setting-description"><?php _e( 'WebComic will look for your files in', 'webcomic'); ?> <a href="<?php echo get_comic_directory( 'root' ); ?>"><?php echo get_comic_directory( 'root' ); ?></a></span><br />
+						<span class="description"><?php _e( 'Comic files will be stored in subdirectories of', 'webcomic'); ?> <a href="<?php echo get_comic_directory( 'root' ); ?>"><?php echo get_comic_directory( 'root' ); ?></a></span><br />
 					</td>
 				</tr>
 				<tr>
 					<th scope="row">
 						<label for="comic_category"><?php _e( 'Categories', 'webcomic' ); ?></label>
-						<p class="setting-description"><?php _e( 'Hold down <code>Ctrl</code> or <code>Command</code> to select multiple categories.', 'webcomic' ); ?></p>
+						<p class="description"><?php _e( 'Hold down <code>Ctrl</code> or <code>Command</code> to select multiple categories.', 'webcomic' ); ?></p>
 					</th>
 					<td>
 						<select name="comic_category[]" id="comic_category" multiple="multiple" style="height: 10em;"> 
@@ -108,8 +111,7 @@ function comic_page_settings(){
 					<th scope="row"><label for="comic_secure_names"><?php _e( 'Files', 'webcomic' ); ?></label></th>
 					<td>
 						<label><input type="checkbox" name="comic_secure_names" id="comic_secure_names" value="1"<?php if ( get_option( 'comic_secure_names' ) ) echo ' checked="checked"'; ?> /> <?php _e( 'Secure filenames during upload to prevent archive scraping', 'webcomic' ); ?></label><br />
-						<label><input type="checkbox" name="comic_secure_paths" value="1"<?php if ( get_option( 'comic_secure_paths' ) ) echo ' checked="checked"'; ?> /> <?php _e( "Secure URL's to obscure the location and name of comic files", 'webcomic' ); ?></label><br />
-						<label><input type="checkbox" name="comic_post_draft" id="comic_post_draft" value="1"<?php if ( get_option( 'comic_post_draft' ) ) echo ' checked="checked"'; ?> /> <?php _e( 'Save posts automatically generated for comic files as drafts', 'webcomic' ); ?></label>
+						<label><input type="checkbox" name="comic_secure_paths" value="1"<?php if ( get_option( 'comic_secure_paths' ) ) echo ' checked="checked"'; ?> /> <?php _e( "Secure URL's to obscure the location and name of comic files", 'webcomic' ); ?></label>
 					</td>
 				</tr>
 				<tr>
@@ -132,8 +134,19 @@ function comic_page_settings(){
 						</select>
 					<?php _e( 'comics in feeds', 'webcomic' ); ?></label></td>
 				</tr>
+				<tr>
+					<th scope="row"><label for="comic_buffer"><?php _e( 'Buffers', 'webcomic' ); ?></label></th>
+					<td>
+						<input type="checkbox" name="comic_buffer" id="comic_buffer" value="1"<?php if ( get_option( 'comic_buffer' ) ) echo ' checked="checked"'; ?> />
+						<label>
+							<?php _e( 'Send an e-mail notification', 'webcomic' ); ?>
+							<input type="text" name="comic_buffer_alert" value="<?php echo get_option( 'comic_buffer_alert' ); ?>" class="small-text" />
+							<?php _e( 'days before a buffer runs out', 'webcomic' ); ?>
+						</label>
+					</td>
+				</tr>
 			</table>
-			<h3><?php _e( 'Image Sizes', 'webcomic' ); ?></h3>
+			<h3><?php _e( 'Dimensions', 'webcomic' ); ?></h3>
 			<p><?php _e( 'The sizes listed below determine the maximum dimensions in pixels to use when generating thumbnail images, or the exact dimensions to use when displaying Flash files.', 'webcomic' ); ?></p>
 			<table class="form-table">
 				<tr>
@@ -159,46 +172,8 @@ function comic_page_settings(){
 					</td>
 				</tr>
 			</table>
-			<h3><?php _e( 'Fallback Matching', 'webcomic' ) ?></h3>
-			<p><?php _e( 'The criteria selected below will be used when attempting to match comic files with posts that are not already linked to a file.', 'webcomic' ); ?></p>
-			<table class="form-table">
-				<tr>
-					<th scope="row"><label><input type="radio" name="comic_name_format" value="date"<?php if ( 'date' == get_option( 'comic_name_format' ) ) echo ' checked="checked"'; ?> /> <?php _e( 'Date', 'webcomic' ); ?></label></th>
-					<td><input type="text" name="comic_name_format_date" value="<?php echo get_option( 'comic_name_format_date' ); ?>" class="small-text" /> <?php printf( __( 'Your comics must have the <a href="%1$s" title="Documentation on Date Formatting">post date</a> somewhere in the filename, in the format of', 'webcomic' ), 'http://codex.wordpress.org/Formatting_Date_and_Time' ); echo ' ' . date( get_option( 'comic_name_format_date' ) ); ?></td>
-				</tr>
-				<tr>
-					<th scope="row"><label><input type="radio" name="comic_name_format" value="slug"<?php if ( 'slug' == get_option( 'comic_name_format' ) ) echo ' checked="checked"'; ?> /> <?php _e( 'Slug', 'webcomic' ); ?></label></th>
-					<td><?php printf( __( 'Your comics must have the <a href="%1$s" title="Documentation on Post Slugs">post slug</a> somewhere in the filename.', 'webcomic' ), 'http://lorelle.wordpress.com/2007/09/02/understanding-the-wordpress-post-title-and-post-slug/' ); ?></td>
-				</tr>
-				<tr>
-					<th scope="row"><label><input type="radio" name="comic_name_format" value="unid"<?php if ( 'unid' == get_option( 'comic_name_format' ) ) echo ' checked="checked"'; ?> /> <?php _e( 'ID', 'webcomic' ); ?></label></th>
-					<td><?php _e( 'Your comics must have the post ID somewhere in the filename.', 'webcomic' ); ?></td>
-				</tr>
-				<tr>
-					<th scope="row"><label><input type="radio" name="comic_name_format" value="meta"<?php if ( 'meta' == get_option( 'comic_name_format' ) ) echo ' checked="checked"'; ?> /> <?php _e( 'Custom', 'webcomic' ); ?></label></th>
-					<td><?php printf( __( 'Your comics must have the value of a <a href="%1$s" title="Documentation on Custom Fields">post custom field</a> called <code>comic_filename</code> somewhere in the filename.', 'webcomic' ), 'http://codex.wordpress.org/Using_Custom_Fields' ); ?></td>
-				</tr>
-			</table>
-		<?php if ( 0 <= get_option( 'comic_press_compatibility' ) ) { ?>
-			<h3><?php _e( 'ComicPress Compatibility', 'webcomic' ); ?></h3>
-			<p><?php _e( "If you are trying WebComic &amp; InkBlot on an existing ComicPress site you should <strong>Enable</strong> this option. Otherwise it should be <strong>Permanently Disabled</strong>.", "webcomic" ); ?></p>
-			<table class="form-table">
-				<tr>
-					<th scope="row"><label><input type="radio" name="comic_press_compatibility" value="1"<?php if ( get_option( 'comic_press_compatibility' ) ) echo ' checked="checked"'; ?> /> <?php _e( 'Enabled', 'webcomic' ); ?></label></th>
-					<td><?php _e( 'Enables ComicPress Compability, allowing you to test WebComic &amp; InkBlot on an existing ComicPress site.', 'webcomic' ); ?></td>
-				</tr>
-				<tr>
-					<th scope="row"><label><input type="radio" name="comic_press_compatibility" value="0"<?php if ( !get_option( 'comic_press_compatibility' ) ) echo ' checked="checked"'; ?> /> <?php _e( 'Disabled', 'webcomic' ); ?></label></th>
-					<td><?php _e( 'ComicPress Compatibility is disabled by default.', 'webcomic' ); ?></td>
-				</tr>
-				<tr>
-					<th scope="row"><label><input type="radio" name="comic_press_compatibility" value="-1" /> <?php _e( 'Permanently Disabled', 'webcomic' ); ?></label></th>
-					<td><?php _e( 'Permanently disables ComicPress Compatibility and removes the option from the Settings page.', 'webcomic' ); ?></td>
-				</tr>
-			</table>
-		<?php } ?>
 			<p class="submit">
-				<input type="submit" name="Submit" class="button-primary" value="<?php _e( 'Save Changes', 'webcomic'); ?>" /> <span class="alignright setting-description"><?php printf( __( 'WebComic Version %s', 'webcomic' ), get_option( 'webcomic_version' ) ); ?></span>
+				<input type="submit" name="Submit" class="button-primary" value="<?php _e( 'Save Changes', 'webcomic'); ?>" /> <span class="alignright description"><?php printf( __( '<a href="%s" title="Show your support by donating">Donate</a> | Webcomic Version %s', 'webcomic' ), 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5683100', get_option( 'webcomic_version' ) ); ?></span>
 				<input type="hidden" name="action" value="update" />
 				<?php settings_fields( 'webcomic_options' ); ?>
 			</p>

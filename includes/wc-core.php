@@ -1,8 +1,8 @@
 <?php
 /**
- * Contains all of the new template tags provided by WebComic.
+ * Contains all of the new template tags provided by Webcomic.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 1.0
  */
 //
@@ -16,7 +16,7 @@
  * from the specified comic category. If the $include parameter is unset, comic_loop
  * will include comic posts from all series.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 1.0.0
  * 
  * @param int $number The number of posts to return.
@@ -25,12 +25,12 @@
  * @return object New WordPress query object.
  */
 function comic_loop( $number = 1, $include = false, $query = false ) {
-	global $wp_query, $paged;
+	global $wp_query;
 	
 	$include = ( $include ) ? $include : get_comic_category( true, 'include' );
 	
 	$comics = new WP_Query;
-	$comics->query( 'posts_per_page=' . $number . '&cat=' . $include . '&paged=' . $paged . $query );
+	$comics->query( 'posts_per_page=' . $number . '&cat=' . $include . $query );
 	
 	return $comics;
 }
@@ -44,7 +44,7 @@ function comic_loop( $number = 1, $include = false, $query = false ) {
  * is unset, ignore_comics will remove all comic posts from the standard loop. If the
  * $number parameter is set, ignore_comics returns a new WP_query Object.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 1.0.0
  * 
  * @param int $number The number of posts to return in a new WP_Query object.
@@ -59,7 +59,7 @@ function ignore_comics( $number = false, $exclude = false, $query = false ) {
 	
 	if ( $number ) {
 		$new_query = new WP_Query;
-		$new_query->query( 'posts_per_page=' . $number . '&cat=' . $exclude . '&paged=' . $paged . $query);
+		$new_query->query( 'posts_per_page=' . $number . '&cat=' . $exclude . $query);
 		return $new_query;
 	}
 	
@@ -73,7 +73,7 @@ function ignore_comics( $number = false, $exclude = false, $query = false ) {
  * comic category. The optional $id parameter allows checking for a specific
  * comic category. Must be used within The Loop.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 1.8.0
  * 
  * @uses get_post_comic_category()
@@ -108,7 +108,7 @@ function in_comic_category( $category = false, $_post = null ) {
  * comic chapter. The optional $id parameter allows checking for a specific
  * comic chapter. Must be used within The Loop.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 1.8.0
  * 
  * @uses get_post_comic_category()
@@ -118,19 +118,21 @@ function in_comic_category( $category = false, $_post = null ) {
  * @return bool True if the current post is in any of the given chapters.
  */
 function in_comic_chapter( $chapter = false, $_post = null ) {
-	$chapter = ( $chapter ) ? $chapter : get_post_chapters();
-	
-	if ( empty( $chapter ) )
-		return;
+	if ( empty( $chapter ) ) {
+		if ( get_post_comic_chapters() )
+			return true;
+		else
+			return;
+	}
 	
 	if ( $_post )
 		$_post = get_post( $_post );
 	else
 		$_post =& $GLOBALS[ 'post' ];
-
+	
 	if ( !$_post )
 		return;
-
+	
 	$r = is_object_in_term( $_post->ID, 'chapter', $chapter );
 	
 	if ( is_wp_error( $r ) )
@@ -161,7 +163,7 @@ function in_comic_chapter( $chapter = false, $_post = null ) {
  * When used outside a WordPress Loop and $id is 'random' and no $limit is set get_the_comic
  * will randomly select from the list of available comic categories.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 1.0.0
  * 
  * @param int|str $id Post ID or one of 'first', 'previous', 'next', 'last', or 'random'.
@@ -178,50 +180,50 @@ function get_the_comic( $id = false, $limit = false, $chapter = false ) {
 		switch ( $id ) {
 			case 'first':
 				$order = ' p.post_date ASC'; break;
+			case 'last':
+				$order = ' p.post_date DESC'; break;
 			case 'previous':
 				$order = ' p.post_date DESC LIMIT 1';
 				$op    =  " p.post_date < '$post->post_date' AND"; break;
 			case 'next':
 				$order = ' p.post_date ASC LIMIT 1';
 				$op    =  " p.post_date > '$post->post_date' AND"; break;
-			case 'last':
-				$order = ' p.post_date DESC'; break;
 			case 'random':
 				$order = ' RAND()'; break;
 		}
 		
 		if ( $order ) {
-			if ( $limit && !is_numeric( $limit )  ) {
-				if ( !$chapter ) {
-					$chapters = get_post_chapters();
-					$chapter = ( $chapters ) ? $chapters->$limit->term_id : false;
-				}
-				
-				if ( !$chapter )
-					return; //No chapter could be found
-				
-				$join     = " AND tt.taxonomy = 'chapter' AND tt.term_id IN ($chapter)";
-			} else {
-				if ( 'random' == $id && !$limit && !$wp_query->in_the_loop )
-					$limit = get_comic_category( true, 'random' );
-				
-				$category = ( is_numeric( $limit ) && 0 != $limit ) ? $limit : get_post_comic_category();
-				
-				$join     = " AND tt.taxonomy = 'category' AND tt.term_id IN ($category)";
+			$taxonomy = ( $limit && is_string( $limit ) ) ? 'chapter' : 'category';
+						
+			if ( 'chapter' == $taxonomy ) {
+				if ( $chapter )
+					$tax_id = $chapter;
+				elseif ( in_comic_chapter() )
+					$tax_id = get_post_comic_chapters()->$limit->term_id;
 			}
+			
+			if ( 'category' == $taxonomy || !$tax_id ) {
+				if ( $limit && is_numeric( $limit ) )
+					$tax_id = $limit;
+				elseif ( 'random' == $id && !$wp_query->in_the_loop )
+					$tax_id = get_comic_category( true, 'random' );
+				elseif ( in_comic_category() )
+					$tax_id = get_post_comic_category();
+				else
+					return; //No taxonomy information could be found
+			}
+			
+			$join = " AND tt.taxonomy = '$taxonomy' AND tt.term_id IN ($tax_id)";
 			
 			$new_post = $wpdb->get_var( "SELECT p.id FROM $wpdb->posts AS p INNER JOIN $wpdb->term_relationships AS tr ON p.ID = tr.object_id INNER JOIN $wpdb->term_taxonomy tt ON tr.term_taxonomy_id = tt.term_taxonomy_id $join WHERE $op p.post_type = 'post' AND p.post_status = 'publish' ORDER BY $order" );
 		}
 		
-		$new_post = &get_post( $new_post );
-	}
-	
-	if ( $id && !$new_post )
-		return; //Specified post could not be found
-	elseif ( $id )
-		$comic_post =& $new_post;
-	else
+		$comic_post = &get_post( $new_post );
+	} elseif ( in_comic_category() ) {
 		$comic_post =& $post;
+	} else {
+		return; //Not a comic post
+	}
 	
 	$comic_dir = ( $category ) ? $category : get_post_comic_category( $comic_post->ID );
 	
@@ -246,7 +248,6 @@ function get_the_comic( $id = false, $limit = false, $chapter = false ) {
 	}
 	
 	if ( is_file( get_comic_directory( 'abs', false, $comic_dir ) . get_post_meta( $comic_post->ID, 'comic_file', true ) ) ) {
-		
 		$output->file        = ( get_option( 'comic_secure_paths' ) ) ? get_settings( 'home' ) . '?comic_object=' . $output->ID : get_comic_directory( 'url', false, $comic_dir ) . rawurlencode( get_post_meta( $comic_post->ID, 'comic_file', true ) );
 		$output->file_name   = get_post_meta( $comic_post->ID, 'comic_file', true );
 		$output->file_data   = getimagesize( get_comic_directory( 'abs', false, $comic_dir ) . $output->file_name );
@@ -269,64 +270,63 @@ function get_the_comic( $id = false, $limit = false, $chapter = false ) {
 			$output->thumb_name = get_post_meta( $comic_post->ID, 'comic_thumb', true );
 			$output->thumb_data = getimagesize( get_comic_directory( 'abs', true, $comic_dir ) . $output->thumb_name );
 		}
-	} else {
-		switch ( get_option( 'comic_name_format' ) ) {
-			case 'date': $comic_name = mysql2date( get_option( 'comic_name_format_date' ), $comic_post->post_date ); break;
-			case 'slug': $comic_name = $comic_post->post_name; break;
-			case 'unid': $comic_name = $comic_post->ID; break;
-			default:     $comic_name = get_post_meta( $comic_post->ID, 'comic_filename', true );
-		}
+	} elseif ( $comic_files = glob( get_comic_directory( 'abs', 0, $comic_dir ) . '*.*' ) ) {
+		if ( get_option( 'comic_name_format_date' ) )
+			$date_format = get_option( 'comic_name_format_date' );
+		elseif ( get_option( 'comicpress-manager-cpm-date-format' ) )
+			$date_format = get_option( 'comicpress-manager-cpm-date-format' );
+		elseif ( get_option( 'stripshow_date_format' ) )
+			$date_format = get_option( 'stripshow_date_format' );
+		else
+			$date_format = 'Y-m-d';
 		
-		if ( !$comic_name )
-			return; //No comic name could be found
-		
-		$comic_files = glob( get_comic_directory( 'abs', 0, $comic_dir ) . '*.*' );
-		
-		if ( !$comic_files )
-			return; //No comic files could be globbed
+		$date_id = mysql2date( $date_format, $comic_post->post_date );
+		$slug_id = $comic_post->post_name;
+		$meta_id = get_post_meta( $comic_post->ID, 'comic_filename', true );
 		
 		foreach( array_keys( $comic_files ) as $key ) {
-			if ( false !== strpos( basename( $comic_files[ $key ] ), $comic_name ) ) {
-				$output->file = ( get_option( 'comic_secure_paths' ) ) ? get_settings( 'home' ) . '?comic_object=' . $output->ID : get_comic_directory( 'url', 0, $comic_dir ) . rawurlencode( basename( $comic_files[ $key ] ) );
+			if ( ( $date_id && false !== strpos( basename( $comic_files[ $key ] ), $date_id ) ) || ( $slug_id && false !== strpos( basename( $comic_files[ $key ] ), $slug_id ) ) || ( $meta_id && false !== strpos( basename( $comic_files[ $key ] ), $meta_id ) ) ) {
+				$output->file      = ( get_option( 'comic_secure_paths' ) ) ? get_settings( 'home' ) . '?comic_object=' . $output->ID : get_comic_directory( 'url', 0, $comic_dir ) . rawurlencode( basename( $comic_files[ $key ] ) );
 				$output->file_name = basename( $comic_files[ $key ] );
 				$output->file_data = getimagesize( $comic_files[ $key ] );
 				break;
 			}
 		}
 		
-		if ( $output->file )
+		if ( $output->file ) {
 			$output->fallback = true;
-		else
-			return; //The post could not be matched with a comic file
 		
-		$output->flash = ( 'application/x-shockwave-flash' == $output->file_data[ 'mime' ] ) ? true : false;
-		
-		if ( $comic_thumb_files = glob( get_comic_directory( 'abs', true, $comic_dir ) . '*.*' ) ) {
-			$comic_thumbs = array();
-		
-			foreach ( array_keys( $comic_thumb_files ) as $key )
-				if ( false !== strpos( basename( $comic_thumb_files[ $key ] ), $comic_name ) )
-					array_push( $comic_thumbs, basename( $comic_thumb_files[ $key ] ) );
+			$output->flash = ( 'application/x-shockwave-flash' == $output->file_data[ 'mime' ] ) ? true : false;
 			
-			foreach ( $comic_thumbs as $comic_thumb ) {
-				if ( strpos( $comic_thumb, 'large' ) && !$output->large ) {
-					$output->large      = ( get_option( 'comic_secure_paths' ) ) ? get_settings( 'home' ) . '?comic_object=' . $output->ID . '/large' : get_comic_directory( 'url', true, $comic_dir ) . $comic_thumb;
-					$output->large_name = $comic_thumb;
-					$output->large_data = getimagesize( get_comic_directory( 'abs', true, $comic_dir ) . $comic_thumb );
-				}
+			if ( $comic_thumb_files = glob( get_comic_directory( 'abs', true, $comic_dir ) . '*.*' ) ) {
+				$comic_thumbs = array();
+			
+				foreach ( array_keys( $comic_thumb_files ) as $key )
+					if ( ( $date_id && false !== strpos( basename( $comic_files[ $key ] ), $date_id ) ) || ( $slug_id && false !== strpos( basename( $comic_files[ $key ] ), $slug_id ) ) || ( $meta_id && false !== strpos( basename( $comic_files[ $key ] ), $meta_id ) ) )
+						array_push( $comic_thumbs, basename( $comic_thumb_files[ $key ] ) );
 				
-				if ( strpos( $comic_thumb, 'medium' ) && !$output->medium ) {
-					$output->medium      = ( get_option( 'comic_secure_paths' ) ) ? get_settings( 'home' ) . '?comic_object=' . $output->ID . '/medium' : get_comic_directory( 'url', true, $comic_dir ) . $comic_thumb;
-					$output->medium_name = $comic_thumb;
-					$output->medium_data = getimagesize( get_comic_directory( 'abs', true, $comic_dir ) . $comic_thumb );
-				}
-				
-				if ( strpos( $comic_thumb, 'thumb' ) && !$output->thumb ) {
-					$output->thumb      = ( get_option( 'comic_secure_paths' ) ) ? get_settings( 'home' ) . '?comic_object=' . $output->ID . '/thumb' : get_comic_directory( 'url', true, $comic_dir ) . $comic_thumb;
-					$output->thumb_name = $comic_thumb;
-					$output->thumb_data = getimagesize( get_comic_directory( 'abs', true, $comic_dir ) . $comic_thumb );
+				foreach ( $comic_thumbs as $comic_thumb ) {
+					if ( strpos( $comic_thumb, 'large' ) && !$output->large ) {
+						$output->large      = ( get_option( 'comic_secure_paths' ) ) ? get_settings( 'home' ) . '?comic_object=' . $output->ID . '/large' : get_comic_directory( 'url', true, $comic_dir ) . $comic_thumb;
+						$output->large_name = $comic_thumb;
+						$output->large_data = getimagesize( get_comic_directory( 'abs', true, $comic_dir ) . $comic_thumb );
+					}
+					
+					if ( strpos( $comic_thumb, 'medium' ) && !$output->medium ) {
+						$output->medium      = ( get_option( 'comic_secure_paths' ) ) ? get_settings( 'home' ) . '?comic_object=' . $output->ID . '/medium' : get_comic_directory( 'url', true, $comic_dir ) . $comic_thumb;
+						$output->medium_name = $comic_thumb;
+						$output->medium_data = getimagesize( get_comic_directory( 'abs', true, $comic_dir ) . $comic_thumb );
+					}
+					
+					if ( strpos( $comic_thumb, 'thumb' ) && !$output->thumb ) {
+						$output->thumb      = ( get_option( 'comic_secure_paths' ) ) ? get_settings( 'home' ) . '?comic_object=' . $output->ID . '/thumb' : get_comic_directory( 'url', true, $comic_dir ) . $comic_thumb;
+						$output->thumb_name = $comic_thumb;
+						$output->thumb_data = getimagesize( get_comic_directory( 'abs', true, $comic_dir ) . $comic_thumb );
+					}
 				}
 			}
+		} else {
+			$output->file = false;
 		}
 	}
 	
@@ -345,7 +345,7 @@ function get_the_comic( $id = false, $limit = false, $chapter = false ) {
  * comic thumbnail can be retrieved (or no size is specified) the
  * standard comic file is used.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 1.7.0
  * 
  * @param object $comic A comic object generated by get_the_comic.
@@ -355,7 +355,10 @@ function get_the_comic( $id = false, $limit = false, $chapter = false ) {
  */
 function get_comic_object(  $comic = false, $size = false, $secure = false ) {
 	if ( !$comic || !is_object( $comic ) )
-		return; //A $comic object is required
+		return; //A $comic object with a file is required
+	
+	if ( !$comic->file )
+		return $comic->title; //No comic file, return the post title instead
 	
 	$size = ( $size ) ? $size : 'full';
 	
@@ -406,10 +409,61 @@ function get_comic_object(  $comic = false, $size = false, $secure = false ) {
 }
 
 /**
+ * Returns buffer comic information.
+ * 
+ * This function retrieves information related to "buffer" comics.
+ * For Webcomic's purposes a buffer comic is a post that is:
+ * 
+ * 1. Scheduled to post some time in the future
+ * 2. Associated with a comic file
+ * 
+ * @package Webcomic
+ * @since 2.1.0
+ * 
+ * @param int $series Category ID.
+ * @return obj An object containing buffer comic information.
+ */
+function get_comic_buffer( $series = false ) {
+	global $webcomic_series;
+	
+	$series = ( $series ) ? $series : $webcomic_series;
+	
+	if ( !$series )
+		return; //No series defined;
+	
+	$posts = get_objects_in_term( $series, 'category' );
+	
+	if ( !$posts )
+		return; //No posts
+	
+	foreach ( array_keys( $posts ) as $key ) {
+		$_post = get_post( $posts[ $key ] );
+		
+		if ( 'future' == $_post->post_status && 'post' == $_post->post_type && get_the_comic( $_post->ID )->file )
+			$posts_sort[] = strtotime( $_post->post_date );
+	}
+	
+	if ( !$posts_sort )
+		return; //No scheduled posts
+	
+	natsort( $posts_sort );
+	$last = array_reverse( $posts_sort );
+	
+	$output            = new stdClass();
+	$output->count     = ( int ) count( $last );
+	$output->date      = date( get_option( 'date_format' ), $last[ 0 ] );
+	$output->time      = date( get_option( 'time_format' ), $last[ 0 ] );
+	$output->datetime  = date( get_option( 'date_format' ), $last[ 0 ] ) . ' @ ' . date( get_option( 'time_format' ), $last[ 0 ] );
+	$output->timestamp = $last[ 0 ];
+	
+	return $output;
+}
+
+/**
  * Returns information associated with the specified chapter.
  * 
  * This function retrieves information related to the specified chapter
- * from WebComic's "chapter" taxonomy. The taxonomy itself is split into
+ * from Webcomic's "chapter" taxonomy. The taxonomy itself is split into
  * chapters, volumes, and series.
  * 
  * When used inside a WordPress Loop, this function returns the chapter
@@ -418,11 +472,11 @@ function get_comic_object(  $comic = false, $size = false, $secure = false ) {
  * or 'series' will let the function know that we want the volume or series
  * the current post belongs to inestead of the chapter.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 1.0.0
  * 
  * @uses get_the_comic()
- * @uses get_post_chapters()
+ * @uses get_post_comic_chapters()
  * 
  * @param int|str $chapter Chapter ID or one of 'chapter, 'volume', or 'series'.
  * @return object An object containing chapter information.
@@ -442,7 +496,7 @@ function get_the_chapter( $id = false ) {
 		else
 			$css = 'volume';
 	} else {
-		$chapters = get_post_chapters( $post->ID );
+		$chapters = get_post_comic_chapters( $post->ID );
 		$chapter  = $chapters->$id;
 		$css      = $id;
 	}
@@ -457,11 +511,11 @@ function get_the_chapter( $id = false ) {
 	$output->description = $chapter->description;
 	$output->count       = ( int ) $chapter->count;
 	$output->parent      = ( int ) $chapter->parent;
-	$output->class       = 'comic-'.$css.'-item comic-'.$css.'-item-'.$output->ID;
-	$output->link        = get_term_link( $output->ID, 'chapter' );
+	$output->class       = 'comic-' . $css . '-item comic-' . $css . '-item-' . $chapter->term_id;
+	$output->link        = get_term_link( ( int ) $chapter->term_id, 'chapter' );
 	$output->feed        = $output->link . 'feed/';
-	$output->first       = get_the_comic( 'first', $css, $output->ID );
-	$output->last        = get_the_comic( 'last', $css, $output->ID );
+	$output->first       = get_the_comic( 'first', $css, $chapter->term_id );
+	$output->last        = get_the_comic( 'last', $css, $chapter->term_id );
 	
 	return $output;
 }
@@ -491,7 +545,7 @@ function get_the_chapter( $id = false ) {
  * 
  * post_order - What order posts should be returned in. Defaults to 'ASC'.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 1.4.0
  * 
  * @uses get_the_comic()
@@ -563,8 +617,8 @@ function get_the_collection( $args = '' ) {
 						
 						$posts_order = ( 'DESC' == $args[ 'post_order' ] ) ? array_reverse( $posts_sort, true ) : $posts_sort;
 						
-						foreach( array_keys( $posts_order ) as $the_post )
-							$chapter_posts->$the_post = get_the_comic( $the_post );
+						foreach( array_keys( $posts_order ) as $_post )
+							$chapter_posts->$_post = get_the_comic( $_post );
 						
 						$chapters[ $key ]->posts = $chapter_posts;
 					}
@@ -595,7 +649,7 @@ function get_the_collection( $args = '' ) {
  * current post. The comic may optionally be linked to an adjacent comic post
  * if it is not a Flash comic.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 1.0.0
  * 
  * @uses get_the_comic()
@@ -610,8 +664,7 @@ function the_comic( $size = false, $link = false, $limit = false ) {
 	if ( !in_comic_category() )
 		return; //Not a comic post
 	
-	$comic  = get_the_comic();
-	$object = get_comic_object( $comic, $size );
+	$comic = get_the_comic();
 	
 	if ( $link && !$comic->flash ) {
 		if ( 'self' == $link ) {
@@ -624,7 +677,7 @@ function the_comic( $size = false, $link = false, $limit = false ) {
 		$after     = '</a>';
 	}
 	
-	echo $before . $object . $after;
+	echo $before . get_comic_object( $comic, $size ) . $after;
 }
 
 /**
@@ -634,23 +687,86 @@ function the_comic( $size = false, $link = false, $limit = false ) {
  * current comic on other websites (embed code). It must be used within a
  * WordPress Loop.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 1.0.0
  * 
  * @uses get_the_comic()
  * @uses get_comic_object()
  * 
  * @param str $size The size of the comic image the embed code will display, one of 'full', 'large', 'medium', or 'thumb'.
- * @return bool False if not a comic post.
+ * @param str $format The markup to use for the display code, one of 'html' or 'bbcode'.
+ * @return bool False if not a comic post or $format = bbcode and the comic is a flash file.
  */
-function the_comic_embed( $size = 'medium' ) {
+function the_comic_embed( $size = 'medium', $format = false ) {
 	if ( !in_comic_category() )
 		return; //Not a comic post
 	
 	$comic  = get_the_comic();
 	$object = get_comic_object( $comic, $size, true );
 	
-	echo '<input class="comic-embed-code" typ="text" readonly="readonly" value="' . htmlspecialchars( '<div class="embedded-comic"><p>' . $object . '</p><p><cite><a href="' . $comic->link . '" title="' . $comic->description . '">' . $comic->title . '</a> | <a href="' . get_option( 'home' ) . '" title="' . get_option( 'blogdescription' ) . '">' . get_option( 'blogname' ) . '</a></cite></p></div>' ) . '" />';
+	switch ( $format ) {
+		case 'bbcode': if ( !$comic->flash ) $output = '[url=' . $comic->link . '][img]' . get_option( 'home' ) . '?comic_object=' . $comic->ID . '/' . $size . '[/img][/url]'; else return; break;
+		case 'html'  : 
+		default      : $output = htmlspecialchars( '<div class="embedded-comic"><p>' . $object . '</p><p><cite><a href="' . $comic->link . '" title="' . $comic->description . '">' . $comic->title . '</a> | <a href="' . get_option( 'home' ) . '" title="' . get_option( 'blogdescription' ) . '">' . get_option( 'blogname' ) . '</a></cite></p></div>' ); break;
+	}
+	
+	echo '<input class="comic-embed-code" typ="text" readonly="readonly" value="' . $output . '" />';
+}
+
+/**
+ * Displays buffer comic information.
+ * 
+ * This function displays various comic buffer related information.
+ * 
+ * @package Webcomic
+ * @since 2.1.0
+ * 
+ * @param str $type The information to return, one of 'count', 'date', 'time', 'datetime', or 'timestamp'
+ * @param int $series Category ID.
+ */
+function the_comic_buffer( $type = 'count', $series = false ) {
+	global $webcomic_series;
+	
+	$series = ( $series ) ? $series : $webcomic_series;
+	
+	if ( $buffer = get_comic_buffer( $series ) )
+		echo $buffer->$type;
+}
+
+/**
+ * Displays a comic series link for the current post.
+ * 
+ * This function displays a category link for the comic category
+ * the current post belongs to.
+ * 
+ * @package Webcomic
+ * @since 2.1.0
+ * 
+ * 
+ * @param str $label The text to display for the link, or one of 'full', 'large', 'medium', or 'thumb'.
+ * @return bool False if not a comic post.
+ */
+function the_comic_series( $label = false ) {
+	if ( !in_comic_category() )
+		return; //Not a comic post
+	
+	$term_id = get_post_comic_category();
+	$series  = get_term( $term_id, 'category' );
+	
+	if ( 'thumb' == $label || 'medium' == $label || 'large' == $label || 'full' == $label ) {
+		if ( $comic->flash ) {
+			$image = get_comic_object( get_the_comic( 'random', $series->ID ), $label ) . '<br />';
+			$link  = $series->name;
+		} else {
+			$link = get_comic_object( get_the_comic( 'random', $series->ID ), $label );
+		}
+	} elseif ( $label ) {
+		$link = $label;
+	} else {
+		$link = $series->name;
+	}
+	
+	echo '<a href="' . get_term_link( $term_id, 'category' ) . '" title="' . __( 'View all posts in ', 'webcomic' ) . $series->name . '">' . $link . '</a>';
 }
 
 
@@ -663,29 +779,29 @@ function the_comic_embed( $size = 'medium' ) {
  * Displays the comic transcript template.
  * 
  * This function includes the 'transcript.php' file included with a
- * theme and intended for use with WebComic's comic transcripts. If
+ * theme and intended for use with Webcomic's comic transcripts. If
  * no 'transcript.php' file exists in the current theme, the default
- * template included with WebComic is used.
+ * template included with Webcomic is used.
  * 
  * Themes should provide their own transcript.php template, using the
- * transcript.php provided with WebComic as a general guideline.
+ * transcript.php provided with Webcomic as a general guideline.
  *  
- * @package WebComic
+ * @package Webcomic
  * @since 2.0.0
  * 
  * @param str $file The template file to look for, defaults to '/transcript.php'.
  * @return False if not a comic post.
  */
 function transcript_template( $file = '/transcript.php' ) {
-	global $user_ID, $user_identity, $transcript_status, $transcript_response;
-	
 	if ( !in_comic_category() )
 		return; //Not a comic post
-		
+	
+	global $user_identity, $transcript_status, $transcript_response;
+	
+	$req               = get_option( 'comic_transcripts_required' );
 	$comic             = get_the_comic();
 	$transcript        = $comic->transcript;
 	$transcript_status = $comic->transcript_status;
-	$req               = get_option( 'comic_transcripts_required' );
 	
 	if ( $transcript_response )
 		echo '<div id="transcript-response">' . $transcript_response . '</div>';
@@ -698,13 +814,33 @@ function transcript_template( $file = '/transcript.php' ) {
 }
 
 /**
+ * Checks the status of a transcript.
+ *
+ * This function checks the status of the transcript associated
+ * with the current post and should only be used in the transcript
+ * template file.
+ * 
+ * @package Webcomic
+ * @since 2.1.0
+ * 
+ * @param str $status The transcript status, one of 'publish', 'pending', or 'draft'
+ * @return True if the $status equals $transcript_status
+ */
+function have_transcript( $status = false ) {
+	global $transcript_status;
+	
+	if ( $transcript_status == $status )
+		return true;
+}
+
+/**
  * Displays the comic transcript form title.
  * 
  * This function displays the correct form title based on whether
  * no transcript exists (submitting a new transcript) or the author
  * is requesting improvement of an existing transcript.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 2.0.0
  * 
  * @param str $new The text to use for "new transcript" forms.
@@ -733,7 +869,7 @@ function transcript_form_title( $new = false, $improve = false ) {
  * If provided, transcript_id_fields hashes the answer and then compares the hash
  * to the hash of the submitted trans_captcha field to validate human submissions.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 2.0.0
  * 
  * @param str $captcha The specified answer to a user-specified "captcha" question.
@@ -776,7 +912,7 @@ function transcript_id_fields( $captcha = false ) {
  * navigation links (first, back, next, last). Must be used within a
  * WordPress Loop.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 1.0.0
  * 
  * @uses first_comic_link()
@@ -790,17 +926,43 @@ function transcript_id_fields( $captcha = false ) {
  * @param str $prelabel The text to display for the previous comic link.
  * @param str $nxtlabel The text to display for the next comic link.
  * @param str $lstlabel The text to display for the last comic link.
+ * @return bool False if not a comic post.
  */
-function comics_nav_link( $limit = false, $sep = false, $fstlabel = false, $prelabel = false, $nxtlabel = false, $lstlabel = false ){
-	if ( $sep ) $sep = '<span class="comic-link-separator">' . $sep . '</span>';
+function comics_nav_link( $args = '' ) {
+	if ( !in_comic_category() )
+		return; //Not a comic post
 	
-	first_comic_link( $fstlabel, $limit );
+	$defaults = array(
+		'sep'      => false,
+		'limit'    => false,
+		'label'    => false,
+		'bookend'  => false,
+		'fstlabel' => false,
+		'prelabel' => false,
+		'nxtlabel' => false,
+		'lstlabel' => false,
+		'fstbookend' => false,
+		'lstbookend' => false
+	);
+	
+	$args = wp_parse_args( $args, $defaults );
+	
+	if ( $args[ 'sep' ] )
+		$sep = '<span class="comic-link-separator">' . $args[ 'sep' ] . '</span>';
+	
+	if ( $args[ 'bookend' ] )
+		$args[ 'fstbookend' ] = $args[ 'lstbookend' ] = $args[ 'bookend' ];
+	
+	if ( $args[ 'label' ] )
+		$args[ 'fstlabel' ] = $args[ 'prelabel' ] = $args[ 'nxtlabel' ] = $args[ 'lstlabel' ] = $args[ 'label' ];
+	
+	first_comic_link( $args[ 'fstlabel' ], $args[ 'limit' ], $args[ 'fstbookend' ] );
 	echo $sep;
-	previous_comic_link( $prelabel, $limit );
+	previous_comic_link( $args[ 'prelabel' ], $args[ 'limit' ], $args[ 'fstbookend' ] );
 	echo $sep;
-	next_comic_link( $nxtlabel, $limit );
+	next_comic_link( $args[ 'nxtlabel' ], $args[ 'limit' ], $args[ 'lstbookend' ] );
 	echo $sep;
-	last_comic_link( $lstlabel, $limit );
+	last_comic_link( $args[ 'lstlabel' ], $args[ 'limit' ], $args[ 'lstbookend' ] );
 }
 
 /**
@@ -813,7 +975,7 @@ function comics_nav_link( $limit = false, $sep = false, $fstlabel = false, $prel
  * in the current comic series to first in the current volume or chapter. Must
  * be used within a WordPress Loop.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 1.0.0
  * 
  * @uses get_the_comic()
@@ -822,21 +984,27 @@ function comics_nav_link( $limit = false, $sep = false, $fstlabel = false, $prel
  * 
  * @param str $label The text to display for the link, or one of 'full', 'large', 'medium', 'thumb', or 'title'.
  * @param int|str $limit Category ID or one of 'chapter', 'volume', or 'series'.
- * @param int $chapter Chapter ID. Required when outside the loop and $limit is 'chapter' or 'volume'.
+ * @param int $bookend Post or Page ID.
+ * @return bool False if not a comic post.
  */
-function first_comic_link( $label = false, $limit = false, $chapter = false ) {
+function first_comic_link( $label = false, $limit = false, $bookend = false ) {
+	if ( !in_comic_category() )
+		return; //Not a comic post
+	
 	load_webcomic_domain();
 	
 	global $post;
 	
-	$comic   = get_the_comic( 'first', $limit, $chapter );
+	$comic   = get_the_comic( 'first', $limit );
 	$chapter = ( $limit ) ? get_the_chapter( $limit ) : false;
 	
-	if ( $comic->flash && ( 'thumb' == $label || 'medium' == $label || 'large' == $label || 'full' == $label ) ) {
-		$object = get_comic_object( $comic, $label );
-		$link   = $comic->title;
-	} elseif ( 'thumb' == $label || 'medium' == $label || 'large' == $label || 'full' == $label ) {
-		$link = get_comic_object( $comic, $label );
+	if ( 'thumb' == $label || 'medium' == $label || 'large' == $label || 'full' == $label ) {
+		if ( $comic->flash ) {
+			$object = get_comic_object( $comic, $label );
+			$link   = $comic->title;
+		} else {
+			$link = get_comic_object( $comic, $label );
+		}
 	} elseif ( 'title' == $label ) {
 		$link = $comic->title;
 	} else {
@@ -844,7 +1012,13 @@ function first_comic_link( $label = false, $limit = false, $chapter = false ) {
 	}
 	
 	$current = ( ( $limit && $post->ID == $chapter->first->ID ) || ( $post->ID == $comic->ID ) ) ? ' current-comic' : '';
-	$class   = 'first-comic-link' . $current;
+	
+	if ( $current && $bookend && $permalink = get_permalink( $bookend ) ) {
+		$comic->link = $permalink;
+		$current     = '';
+	}
+	
+	$class = 'first-comic-link' . $current;
 	
 	echo $object . '<a href="' . $comic->link . '" title="' . $comic->description . '" class="' . $class . '"><span>' . $link . '</span></a>';
 }
@@ -859,30 +1033,36 @@ function first_comic_link( $label = false, $limit = false, $chapter = false ) {
  * in the current comic series to last in the current volume or chapter. Must
  * be used within a WordPress Loop.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 1.0.0
  * 
  * @uses get_the_comic()
  * @uses get_comic_object()
  * @uses get_the_chapter()
  * 
- * @param str $label The text to display for the link.
+ * @param str $label The text to display for the link, or one of 'full', 'large', 'medium', 'thumb', or 'title'.
  * @param int|str $limit Category ID or one of 'chapter', 'volume', or 'series'.
- * @param int $chapter Chapter ID. Required when outside the loop and $limit is 'chapter' or 'volume'.
+ * @param int $bookend Post or Page ID.
+ * @return bool False if not a comic post.
  */
-function last_comic_link( $label = false, $limit = false, $chapter = false ) {
+function last_comic_link( $label = false, $limit = false, $bookend = false ) {
+	if ( !in_comic_category() )
+		return; //Not a comic post
+	
 	load_webcomic_domain();
 	
 	global $post;
 	
-	$comic   = get_the_comic( 'last', $limit, $chapter );
+	$comic   = get_the_comic( 'last', $limit );
 	$chapter = ( $limit ) ? get_the_chapter( $limit ) : false;
 	
-	if ( $comic->flash && ( 'thumb' == $label || 'medium' == $label || 'large' == $label || 'full' == $label ) ) {
-		$object = get_comic_object( $comic, $label );
-		$link   = $comic->title;
-	} elseif ( 'thumb' == $label || 'medium' == $label || 'large' == $label || 'full' == $label ) {
-		$link = get_comic_object( $comic, $label );
+	if ( 'thumb' == $label || 'medium' == $label || 'large' == $label || 'full' == $label ) {
+		if ( $comic->flash ) {
+			$object = get_comic_object( $comic, $label );
+			$link   = $comic->title;
+		} else {
+			$link = get_comic_object( $comic, $label );
+		}
 	} elseif ( 'title' == $label ) {
 		$link = $comic->title;
 	} else {
@@ -890,7 +1070,13 @@ function last_comic_link( $label = false, $limit = false, $chapter = false ) {
 	}
 	
 	$current = ( ( $limit && $post->ID == $chapter->last->ID ) || ( $post->ID == $comic->ID ) ) ? ' current-comic' : '';
-	$class   = 'last-comic-link' . $current;
+	
+	if ( $current && $bookend && $permalink = get_permalink( $bookend ) ) {
+		$comic->link = $permalink;
+		$current     = '';
+	}
+	
+	$class = 'last-comic-link' . $current;
 	
 	echo $object . '<a href="' . $comic->link . '" title="' . $comic->description . '" class="' . $class . '"><span>' . $link . '</span></a>';
 }
@@ -905,17 +1091,22 @@ function last_comic_link( $label = false, $limit = false, $chapter = false ) {
  * If the optional $limit parameter is set, 'previous' is limited to the current
  * volume or chapter. Must be used within a WordPress Loop.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 1.0.0
  * 
  * @uses get_the_comic()
  * @uses get_comic_object()
  * @uses get_the_chapter()
  * 
- * @param str $label The text to display for the link
- * @param str $limit Navigation link boundary, one of 'chapter or 'volume'.
+ * @param str $label The text to display for the link, or one of 'full', 'large', 'medium', 'thumb', or 'title'.
+ * @param str $limit Navigation link boundary, one of 'chapter or 'volume'
+ * @param int $bookend Post or Page ID.
+ * @return bool False if not a comic post.
  */
-function previous_comic_link( $label = false, $limit = false ) {
+function previous_comic_link( $label = false, $limit = false, $bookend = false ) {
+	if ( !in_comic_category() )
+		return; //Not a comic post
+	
 	load_webcomic_domain();
 	
 	global $post;
@@ -923,11 +1114,13 @@ function previous_comic_link( $label = false, $limit = false ) {
 	$comic   = get_the_comic( 'previous', $limit );
 	$chapter = ( $limit ) ? get_the_chapter( $limit ) : false;
 	
-	if ( $comic->flash && ( 'thumb' == $label || 'medium' == $label || 'large' == $label || 'full' == $label ) ) {
-		$object = get_comic_object( $comic, $label );
-		$link   = $comic->title;
-	} elseif ( 'thumb' == $label || 'medium' == $label || 'large' == $label || 'full' == $label ) {
-		$link = get_comic_object( $comic, $label );
+	if ( 'thumb' == $label || 'medium' == $label || 'large' == $label || 'full' == $label ) {
+		if ( $comic->flash ) {
+			$object = get_comic_object( $comic, $label );
+			$link   = $comic->title;
+		} else {
+			$link = get_comic_object( $comic, $label );
+		}
 	} elseif ( 'title' == $label ) {
 		$link = $comic->title;
 	} else {
@@ -935,7 +1128,13 @@ function previous_comic_link( $label = false, $limit = false ) {
 	}
 	
 	$current = ( ( $limit && $post->ID == $chapter->first->ID ) || ( $post->ID == $comic->ID ) ) ? ' current-comic' : '';
-	$class   = 'previous-comic-link' . $current;
+	
+	if ( $current && $bookend && $permalink = get_permalink( $bookend ) ) {
+		$comic->link = $permalink;
+		$current     = '';
+	}
+	
+	$class = 'previous-comic-link' . $current;
 	
 	echo $object . '<a href="' . $comic->link . '" title="' . $comic->description . '" class="' . $class . '"><span>' . $link . '</span></a>';
 }
@@ -950,17 +1149,22 @@ function previous_comic_link( $label = false, $limit = false ) {
  * If the optional $limit parameter is set, 'next' is limited to the current
  * volume or chapter. Must be used within a WordPress Loop.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 1.0.0
  * 
  * @uses get_the_comic()
  * @uses get_comic_object()
  * @uses get_the_chapter()
  * 
- * @param str $label The text to display for the link.
+ * @param str $label The text to display for the link, or one of 'full', 'large', 'medium', 'thumb', or 'title'.
  * @param str $limit Navigation link boundary, one of 'chapter or 'volume'.
+ * @param int $bookend Post or Page ID.
+ * @return bool False if not a comic post.
  */
-function next_comic_link( $label = false, $limit = false ) {
+function next_comic_link( $label = false, $limit = false, $bookend = false ) {
+	if ( !in_comic_category() )
+		return; //Not a comic post
+	
 	load_webcomic_domain();
 	
 	global $post;
@@ -968,11 +1172,13 @@ function next_comic_link( $label = false, $limit = false ) {
 	$comic   = get_the_comic( 'next', $limit );
 	$chapter = ( $limit ) ? get_the_chapter( $limit ) : false;
 	
-	if ( $comic->flash && ( 'thumb' == $label || 'medium' == $label || 'large' == $label || 'full' == $label ) ) {
-		$object = get_comic_object( $comic, $label );
-		$link   = $comic->title;
-	} elseif ( 'thumb' == $label || 'medium' == $label || 'large' == $label || 'full' == $label ) {
-		$link = get_comic_object( $comic, $label );
+	if ( 'thumb' == $label || 'medium' == $label || 'large' == $label || 'full' == $label ) {
+		if ( $comic->flash ) {
+			$object = get_comic_object( $comic, $label );
+			$link   = $comic->title;
+		} else {
+			$link = get_comic_object( $comic, $label );
+		}
 	} elseif ( 'title' == $label ) {
 		$link = $comic->title;
 	} else {
@@ -980,7 +1186,13 @@ function next_comic_link( $label = false, $limit = false ) {
 	}
 	
 	$current = ( ( $limit && $post->ID == $chapter->last->ID ) || ( $post->ID == $comic->ID ) ) ? ' current-comic' : '';
-	$class   = 'next-comic-link' . $current;
+	
+	if ( $current && $bookend && $permalink = get_permalink( $bookend ) ) {
+		$comic->link = $permalink;
+		$current     = '';
+	}
+	
+	$class = 'next-comic-link' . $current;
 	
 	echo $object . '<a href="' . $comic->link . '" title="' . $comic->description . '" class="' . $class . '"><span>' . $link . '</span></a>';
 }
@@ -993,7 +1205,7 @@ function next_comic_link( $label = false, $limit = false ) {
  * select from the available comic series, or use the current comic series when
  * used in the Loop.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 1.0.0
  * 
  * @uses get_the_comic()
@@ -1006,21 +1218,20 @@ function next_comic_link( $label = false, $limit = false ) {
 function random_comic_link( $label = false, $limit = false, $chapter = false ) {
 	$comic = get_the_comic( 'random', $limit, $chapter );
 	
-	if ( $comic ) {
-		if ( 'thumb' == $label || 'medium' == $label || 'large' == $label || 'full' == $label )
-			$link = get_comic_object( $comic, $label );
-		elseif ( $label )
-			$link = $label;
-		else
-			$link = $comic->title;
-		
-		if ( $comic->flash && ( 'thumb' == $label || 'medium' == $label || 'large' == $label || 'full' == $label ) ) {
-			$image = $link . '<br />';
+	if ( 'thumb' == $label || 'medium' == $label || 'large' == $label || 'full' == $label ) {
+		if ( $comic->flash ) {
+			$image = get_comic_object( $comic, $label ) . '<br />';
 			$link  = $comic->title;
+		} else {
+			$link = get_comic_object( $comic, $label );
 		}
-		
-		echo $image . '<a href="' . $comic->link . '" title="' . $comic->description . '" class="random-comic-link"><span>' . $link . '</span></a>';
+	} elseif ( $label ) {
+		$link = $label;
+	} else {
+		$link = $comic->title;
 	}
+	
+	echo $image . '<a href="' . $comic->link . '" title="' . $comic->description . '" class="random-comic-link"><span>' . $link . '</span></a>';
 }
 
 /**
@@ -1034,7 +1245,7 @@ function random_comic_link( $label = false, $limit = false, $chapter = false ) {
  * 
  * The javascrip that powers this function can be found in scripts.js.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 2.0.0
  * 
  * @uses get_series_by_path
@@ -1060,9 +1271,9 @@ function bookmark_comic( $sep = false, $bookmark = false, $return = false, $clea
 		
 		echo '
 		<div class="bookmark-comic">
-			<a class="bookmark-this" title="' . __( 'Save your place so you can continue reading from here later.', 'webcomic' ) . '" rel="-series-' . $series . '"><span>' . $bookmark . '</span></a>' . $sep . '
-			<a class="bookmark-goto" title="' . __( 'Return to your bookmarked comic.', 'webcomic' ) . '" rel="-series-' . $series . '"><span>' . $return . '</span></a>' . $sep . '
-			<a class="bookmark-clear" title="' . __( 'Remove your comic bookmark.', 'webcomic' ) . '" rel="-series-' . $series . '"><span>' . $clear . '</span></a>
+			<a class="bookmark-this" title="' . __( 'Save your place so you can continue reading later.', 'webcomic' ) . '" rel="-series-' . $series . '"><span>' . $bookmark . '</span></a>' . $sep . '
+			<a class="bookmark-goto" title="' . __( 'Return to your bookmark.', 'webcomic' ) . '" rel="-series-' . $series . '"><span>' . $return . '</span></a>' . $sep . '
+			<a class="bookmark-clear" title="' . __( 'Remove your bookmark.', 'webcomic' ) . '" rel="-series-' . $series . '"><span>' . $clear . '</span></a>
 		</div>';
 	}
 }
@@ -1079,7 +1290,7 @@ function bookmark_comic( $sep = false, $bookmark = false, $return = false, $clea
  * This is a shortcut function for displaying the standard set of chapter
  * navigation links (first, back, next, last).
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 1.8.0
  * 
  * @uses first_chapter_link()
@@ -1095,19 +1306,44 @@ function bookmark_comic( $sep = false, $bookmark = false, $return = false, $clea
  * @param str $nxtlabel The text to display for the next chapter link.
  * @param str $lstlabel The text to display for the last chapter link.
  */
-function chapters_nav_link( $volume = false, $bound = 'first', $sep = false, $fstlabel = false, $prelabel = false, $nxtlabel = false, $lstlabel = false ) {
-	if ( $sep ) {
-		$type = ( $volume ) ? 'volume' : 'chapter';
-		$sep  = '<span class="' . $type . '-link-separator">' . $sep . '</span>';
+function chapters_nav_link( $args = '' ) {
+	if ( !in_comic_category() )
+		return; //Not a comic post
+	
+	$defaults = array(
+		'sep'        => false,
+		'type'       => false,
+		'label'      => false,
+		'bound'      => false,
+		'bookend'    => false,
+		'fstlabel'   => false,
+		'prelabel'   => false,
+		'nxtlabel'   => false,
+		'lstlabel'   => false,
+		'fstbookend' => false,
+		'lstbookend' => false
+	);
+	
+	$args = wp_parse_args( $args, $defaults );
+	
+	if ( $args[ 'sep' ] ) {
+		$type = ( $args[ 'type' ] ) ? $args[ 'type' ] : 'chapter';
+		$sep  = '<span class="' . $type . '-link-separator">' . $args[ 'sep' ] . '</span>';
 	}
 	
-	first_chapter_link( $volume, $bound, $fstlabel );
+	if ( $args[ 'label' ] )
+		$args[ 'fstlabel' ] = $args[ 'prelabel' ] = $args[ 'nxtlabel' ] = $args[ 'lstlabel' ] = $args[ 'label' ];
+	
+	if ( $args[ 'bookend' ] )
+		$args[ 'fstbookend' ] = $args[ 'lstbookend' ] = $args[ 'bookend' ];
+	
+	first_chapter_link( $args[ 'fstlabel' ], $args[ 'type' ], $args[ 'bound' ], $args[ 'fstbookend' ] );
 	echo $sep;
-	previous_chapter_link( $volume, $bound, $prelabel );
+	previous_chapter_link( $args[ 'prelabel' ], $args[ 'type' ], $args[ 'bound' ], $args[ 'fstbookend' ] );
 	echo $sep;
-	next_chapter_link( $volume, $bound, $nxtlabel);
+	next_chapter_link( $args[ 'nxtlabel' ], $args[ 'type' ], $args[ 'bound' ], $args[ 'lstbookend' ] );
 	echo $sep;
-	last_chapter_link( $volume, $bound, $lstlabel );
+	last_chapter_link( $args[ 'lstlabel' ], $args[ 'type' ], $args[ 'bound' ], $args[ 'lstbookend' ] );
 }
 
 /**
@@ -1123,65 +1359,57 @@ function chapters_nav_link( $volume = false, $bound = 'first', $sep = false, $fs
  * 
  * @uses get_the_chapter()
  * @uses get_comic_object()
- * @uses get_post_chapters()
+ * @uses get_post_comic_chapters()
  * @uses get_post_comic_category()
  * 
- * @param str $volume The chapter link to display, one of false or 'volume'
+ * @param str $label The text to display for the link, or one of 'full', 'large', 'medium', 'thumb', or 'title'.
+ * @param str $type The chapter link to display, one of 'chapter' or 'volume'.
  * @param str $bound Where the link should point to, one of 'first','last', or 'page'.
- * @param str $label The text to display for the link.
  */
-function first_chapter_link( $volume = false, $bound = 'first', $label = false ) {
-	load_webcomic_domain();
+function first_chapter_link( $label = false, $type = false, $bound = false, $bookend = false ) {
+	if ( in_comic_category() && $post_chapters = get_post_comic_chapters( $post->ID ) ) {
+		load_webcomic_domain();
 	
-	global $wpdb, $post;
+		global $wpdb, $post;
 	
-	$post_chapters = get_post_chapters( $post->ID );
+		$type     = ( $type ) ? $type : 'chapter';
+		$bound    = ( $bound ) ? $bound : 'first';
+		$preview  = ( 'thumb' == $label || 'medium' == $label || 'large' == $label || 'full' == $label ) ? true : false;
+		$chapters = get_post_comic_chapters( $wpdb->get_var( "SELECT p.id FROM $wpdb->posts AS p INNER JOIN $wpdb->term_relationships AS tr ON p.ID = tr.object_id INNER JOIN $wpdb->term_taxonomy tt ON tr.term_taxonomy_id = tt.term_taxonomy_id AND tt.taxonomy = 'category' AND tt.term_id IN (" . get_post_comic_category( $post->ID ) . ") WHERE p.post_type = 'post' AND p.post_status = 'publish' ORDER BY p.post_date ASC" ) );
+		$chapter  = get_the_chapter( $chapters->$type->term_id );
+		
+		if ( 'page' == $bound ) {
+			$url   = $chapter->link;
+			$title = sprintf( __( 'Go to the %s archive', 'webcomic' ), $chapter->title );
+			$comic = ( $preview ) ? get_comic_object( get_the_comic( 'random', $type, $chapter->ID ), $label ) : false;
+		} else {
+			$url   = ( 'first' == $bound ) ? $chapter->first->link : $chapter->last->link;
+			$title = ( 'first' == $bound ) ? sprintf( __( 'Go to the beginning of %s', 'webcomic' ), $chapter->title ) : sprintf( __( 'Go to the end of %s', 'webcomic' ), $chapter->title );
+			$comic = ( $preview ) ? get_comic_object( $chapter->$bound, $label ) : false;
+		}
+		
+		if ( false !== strpos( $comic, '<o' ) ) {
+			$object = $link . '<br />';
+			$link   = $chapter->title;
+		} elseif ( $comic ) {
+			$link = $comic;
+		} elseif ( 'title' == $label ) {
+			$link = $chapter->title;
+		} else {
+			$link = ( $label ) ? $label : sprintf( __( '&laquo; First %s', 'webcomic' ), ucfirst( $type ) );
+		}
+		
+		$current = ( $post_chapters->$type->term_id == $chapter->ID ) ? ' current-' . $type : '';
 	
-	if ( !$post_chapters )
-		return; //No chapters found
-	
-	$type           = ( $volume ) ? 'volume' : 'chapter';
-	$category       = get_post_comic_category( $post->ID );
-	$first_chapters = get_post_chapters( $wpdb->get_var( "SELECT p.id FROM $wpdb->posts AS p INNER JOIN $wpdb->term_relationships AS tr ON p.ID = tr.object_id INNER JOIN $wpdb->term_taxonomy tt ON tr.term_taxonomy_id = tt.term_taxonomy_id AND tt.taxonomy = 'category' AND tt.term_id IN ($category) WHERE p.post_type = 'post' AND p.post_status = 'publish' ORDER BY p.post_date ASC" ) );
-	$chapter        = get_the_chapter( $first_chapters->$type->term_id );
-	
-	switch ( $bound ) {
-		case 'page':
-			$url    = $chapter->link;
-			$title  = sprintf( __( 'Go to the %s archive', 'webcomic' ), $chapter->title );
-			$rcomic = ( 'thumb' == $label || 'medium' == $label || 'large' == $label || 'full' == $label ) ? get_the_comic( 'random', $type, $chapter->ID ) : false;
-			$comic  = ( $rcomic ) ? get_comic_object( $rcomic, $label ) : false;
-			$ctitle = ( $rcomic ) ? $rcomic->title : false;
-		break;
-		case 'last':
-			$url    = $chapter->last->link;
-			$title  = sprintf( __( 'Go to the end of %s', 'webcomic' ), $chapter->title );
-			$comic  = ( 'thumb' == $label || 'medium' == $label || 'large' == $label || 'full' == $label ) ? get_comic_object( $chapter->last, $label ) : false;
-			$ctitle = $chapter->last->title;
-		break;
-		default:
-			$url    = $chapter->first->link;
-			$title  = sprintf( __( 'Go to the beginning of %s', 'webcomic' ), $chapter->title );
-			$comic  = ( 'thumb' == $label || 'medium' == $label || 'large' == $label || 'full' == $label ) ? get_comic_object( $chapter->first, $label ) : false;
-			$ctitle = $chapter->first->title;
+		if ( $current && $bookend && $permalink = get_permalink( $bookend ) ) {
+			$url     = $permalink;
+			$current = '';
+		}
+		
+		$class = $chapter->class . ' first-' . $type . '-link' . $current;
+		
+		echo $object . '<a href="' . $url . '" title="' . $title . '" class="' . $class . '"><span>' . $link . '</span></a>';
 	}
-	
-	if ( false !== strpos( $comic, '<o' ) ) {
-		$object = $link . '<br />';
-		$link  = $ctitle;
-	} elseif ( $comic ) {
-		$link = $comic;
-	}
-	
-	if ( 'title' == $label )
-		$link = $chapter->title;
-	elseif ( !$link )
-		$link = ( $label ) ? $label : sprintf( __( '&laquo; First %s', 'webcomic' ), ucfirst( $type ) );
-	
-	$css   = ( $post_chapters->$type->term_id == $chapter->ID ) ? ' current-' . $type : '';
-	$class = $chapter->class . ' first-' . $type . '-link' . $css;
-	
-	echo $object . '<a href="' . $url . '" title="' . $title . '" class="' . $class . '"><span>' . $link . '</span></a>';
 }
 
 /**
@@ -1197,65 +1425,57 @@ function first_chapter_link( $volume = false, $bound = 'first', $label = false )
  * 
  * @uses get_the_chapter()
  * @uses get_comic_object()
- * @uses get_post_chapters()
+ * @uses get_post_comic_chapters()
  * @uses get_post_comic_category()
  * 
- * @param str $volume The chapter link to display, one of false or 'volume'
+ * @param str $label The text to display for the link, or one of 'full', 'large', 'medium', 'thumb', or 'title'.
+ * @param str $type The chapter link to display, one of 'chapter' or 'volume'.
  * @param str $bound Where the link should point to, one of 'first','last', or 'page'.
- * @param str $label The text to display for the link.
  */
-function last_chapter_link( $volume = false, $bound = 'first', $label = false ) {
-	load_webcomic_domain();
+function last_chapter_link( $label = false, $type = false, $bound = false, $bookend = false ) {
+	if ( in_comic_category() && $post_chapters = get_post_comic_chapters( $post->ID ) ) {
+		load_webcomic_domain();
+		
+		global $wpdb, $post;
+		
+		$type     = ( $type ) ? $type : 'chapter';
+		$bound    = ( $bound ) ? $bound : 'first';
+		$preview  = ( 'thumb' == $label || 'medium' == $label || 'large' == $label || 'full' == $label ) ? true : false;
+		$chapters = get_post_comic_chapters( $wpdb->get_var( "SELECT p.id FROM $wpdb->posts AS p INNER JOIN $wpdb->term_relationships AS tr ON p.ID = tr.object_id INNER JOIN $wpdb->term_taxonomy tt ON tr.term_taxonomy_id = tt.term_taxonomy_id AND tt.taxonomy = 'category' AND tt.term_id IN (" . get_post_comic_category( $post->ID ) . ") WHERE p.post_type = 'post' AND p.post_status = 'publish' ORDER BY p.post_date DESC" ) );
+		$chapter  = get_the_chapter( $chapters->$type->term_id );
+		
+		if ( 'page' == $bound ) {
+			$url   = $chapter->link;
+			$title = sprintf( __( 'Go to the %s archive', 'webcomic' ), $chapter->title );
+			$comic = ( $preview ) ? get_comic_object( get_the_comic( 'random', $type, $chapter->ID ), $label ) : false;
+		} else {
+			$url   = ( 'first' == $bound ) ? $chapter->first->link : $chapter->last->link;
+			$title = ( 'first' == $bound ) ? sprintf( __( 'Go to the beginning of %s', 'webcomic' ), $chapter->title ) : sprintf( __( 'Go to the end of %s', 'webcomic' ), $chapter->title );
+			$comic = ( $preview ) ? get_comic_object( $chapter->$bound, $label ) : false;
+		}
+		
+		if ( false !== strpos( $comic, '<o' ) ) {
+			$object = $link . '<br />';
+			$link   = $chapter->title;
+		} elseif ( $comic ) {
+			$link = $comic;
+		} elseif ( 'title' == $label ) {
+			$link = $chapter->title;
+		} else {
+			$link = ( $label ) ? $label : sprintf( __( 'Last %s &raquo;', 'webcomic' ), ucfirst( $type ) );
+		}
+		
+		$current = ( $post_chapters->$type->term_id == $chapter->ID ) ? ' current-' . $type : '';
 	
-	global $wpdb, $post;
-	
-	$post_chapters = get_post_chapters( $post->ID );
-	
-	if ( !$post_chapters )
-		return; //No chapters found
-	
-	$type          = ( $volume ) ? 'volume' : 'chapter';
-	$category      = get_post_comic_category( $post->ID );
-	$last_chapters = get_post_chapters( $wpdb->get_var( "SELECT p.id FROM $wpdb->posts AS p INNER JOIN $wpdb->term_relationships AS tr ON p.ID = tr.object_id INNER JOIN $wpdb->term_taxonomy tt ON tr.term_taxonomy_id = tt.term_taxonomy_id AND tt.taxonomy = 'category' AND tt.term_id IN ($category) WHERE p.post_type = 'post' AND p.post_status = 'publish' ORDER BY p.post_date DESC" ) );
-	$chapter       = get_the_chapter( $last_chapters->$type->term_id );
-	
-	switch ( $bound ) {
-		case 'page':
-			$url    = $chapter->link;
-			$title  = sprintf( __( 'Go to the %s archive', 'webcomic' ), $chapter->title );
-			$rcomic = ( 'thumb' == $label || 'medium' == $label || 'large' == $label || 'full' == $label ) ? get_the_comic( 'random', $type, $chapter->ID ) : false;
-			$comic  = ( $rcomic ) ? get_comic_object( $rcomic, $label ) : false;
-			$ctitle = ( $rcomic ) ? $rcomic->title : false;
-		break;
-		case 'last':
-			$url    = $chapter->last->link;
-			$title  = sprintf( __( 'Go to the end of %s', 'webcomic' ), $chapter->title );
-			$comic  = ( 'thumb' == $label || 'medium' == $label || 'large' == $label || 'full' == $label ) ? get_comic_object( $chapter->last, $label ) : false;
-			$ctitle = $chapter->last->title;
-		break;
-		default:
-			$url    = $chapter->first->link;
-			$title  = sprintf( __( 'Go to the beginning of %s', 'webcomic' ), $chapter->title );
-			$comic  = ( 'thumb' == $label || 'medium' == $label || 'large' == $label || 'full' == $label ) ? get_comic_object( $chapter->first, $label ) : false;
-			$ctitle = $chapter->first->title;
+		if ( $current && $bookend && $permalink = get_permalink( $bookend ) ) {
+			$url     = $permalink;
+			$current = '';
+		}
+		
+		$class = $chapter->class . ' last-' . $type . '-link' . $current;
+		
+		echo $object . '<a href="' . $url . '" title="' . $title . '" class="' . $class . '"><span>' . $link . '</span></a>';
 	}
-	
-	if ( false !== strpos( $comic, '<o' ) ) {
-		$object = $link . '<br />';
-		$link  = $ctitle;
-	} elseif ( $comic ) {
-		$link = $comic;
-	}
-	
-	if ( 'title' == $label )
-		$link = $chapter->title;
-	elseif ( !$link )
-		$link = ( $label ) ? $label : sprintf( __( 'Last %s &raquo;', 'webcomic' ), ucfirst( $type ) );
-	
-	$css   = ( $post_chapters->$type->term_id == $chapter->ID ) ? ' current-' . $type : '';
-	$class = $chapter->class . ' last-' . $type . '-link' . $css;
-	
-	echo $object . '<a href="' . $url . '" title="' . $title . '" class="' . $class . '"><span>' . $link . '</span></a>';
 }
 
 /**
@@ -1271,67 +1491,58 @@ function last_chapter_link( $volume = false, $bound = 'first', $label = false ) 
  * 
  * @uses get_the_chapter()
  * @uses get_comic_object()
- * @uses get_post_chapters()
+ * @uses get_post_comic_chapters()
  * @uses get_post_comic_category()
  * 
- * @param str $volume The chapter link to display, one of false or 'volume'
+ * @param str $label The text to display for the link, or one of 'full', 'large', 'medium', 'thumb', or 'title'.
+ * @param str $type The chapter link to display, one of 'chapter' or 'volume'.
  * @param str $bound Where the link should point to, one of 'first','last', or 'page'.
- * @param str $label The text to display for the link.
  */
-function previous_chapter_link( $volume = false, $bound = 'first', $label = false ) {
-	load_webcomic_domain();
+function previous_chapter_link( $label = false, $type = false, $bound = false, $bookend = false ) {
+	if ( in_comic_category() && $post_chapters = get_post_comic_chapters( $post->ID ) ) {
+		load_webcomic_domain();
+		
+		global $wpdb, $post;
+		
+		$type     = ( $type ) ? $type : 'chapter';
+		$bound    = ( $bound ) ? $bound : 'first';
+		$preview  = ( 'thumb' == $label || 'medium' == $label || 'large' == $label || 'full' == $label ) ? true : false;
+		$_post    = get_post( get_the_chapter( $post_chapters->$type->term_id )->first->ID );
+		$chapters = get_post_comic_chapters( $wpdb->get_var( "SELECT p.id FROM $wpdb->posts AS p INNER JOIN $wpdb->term_relationships AS tr ON p.ID = tr.object_id INNER JOIN $wpdb->term_taxonomy tt ON tr.term_taxonomy_id = tt.term_taxonomy_id AND tt.taxonomy = 'category' AND tt.term_id IN (" . get_post_comic_category( $post->ID ) . ") WHERE p.post_date < '$_post->post_date' AND p.post_type = 'post' AND p.post_status = 'publish' ORDER BY p.post_date DESC LIMIT 1" ) );
+		$chapter  = get_the_chapter( $chapters->$type->term_id );
+		
+		if ( 'page' == $bound ) {
+			$url   = $chapter->link;
+			$title = sprintf( __( 'Go to the %s archive', 'webcomic' ), $chapter->title );
+			$comic = ( $preview ) ? get_comic_object( get_the_comic( 'random', $type, $chapter->ID ), $label ) : false;
+		} else {
+			$url   = ( 'first' == $bound ) ? $chapter->first->link : $chapter->last->link;
+			$title = ( 'first' == $bound ) ? sprintf( __( 'Go to the beginning of %s', 'webcomic' ), $chapter->title ) : sprintf( __( 'Go to the end of %s', 'webcomic' ), $chapter->title );
+			$comic = ( $preview ) ? get_comic_object( $chapter->$bound, $label ) : false;
+		}
+		
+		if ( false !== strpos( $comic, '<o' ) ) {
+			$object = $link . '<br />';
+			$link   = $chapter->title;
+		} elseif ( $comic ) {
+			$link = $comic;
+		} elseif ( 'title' == $label ) {
+			$link = $chapter->title;
+		} else {
+			$link = ( $label ) ? $label : sprintf( __( '&lsaquo; Previous %s', 'webcomic' ), ucfirst( $type ) );
+		}
+		
+		$current = ( $post_chapters->$type->term_id == $chapter->ID ) ? ' current-' . $type : '';
 	
-	global $wpdb, $post;
-	
-	$post_chapters = get_post_chapters( $post->ID );
-	
-	if ( !$post_chapters )
-		return; //No chapters found
-	
-	$type          = ( $volume ) ? 'volume' : 'chapter';
-	$category      = get_post_comic_category( $post->ID );
-	$chapter_id    = $post_chapters->$type->term_id;
-	$first_post    = &get_post( $wpdb->get_var( "SELECT p.id FROM $wpdb->posts AS p INNER JOIN $wpdb->term_relationships AS tr ON p.ID = tr.object_id INNER JOIN $wpdb->term_taxonomy tt ON tr.term_taxonomy_id = tt.term_taxonomy_id AND tt.taxonomy = 'chapter' AND tt.term_id IN ($chapter_id) WHERE p.post_type = 'post' AND p.post_status = 'publish' ORDER BY p.post_date ASC" ) );
-	$prev_chapters = get_post_chapters( $wpdb->get_var( "SELECT p.id FROM $wpdb->posts AS p INNER JOIN $wpdb->term_relationships AS tr ON p.ID = tr.object_id INNER JOIN $wpdb->term_taxonomy tt ON tr.term_taxonomy_id = tt.term_taxonomy_id AND tt.taxonomy = 'category' AND tt.term_id IN ($category) WHERE p.post_date < '$first_post->post_date' AND p.post_type = 'post' AND p.post_status = 'publish' ORDER BY p.post_date DESC LIMIT 1" ) );
-	$chapter       = get_the_chapter( $prev_chapters->$type->term_id );
-	
-	switch ( $bound ) {
-		case 'page':
-			$url    = $chapter->link;
-			$title  = sprintf( __( 'Go to the %s archive', 'webcomic' ), $chapter->title );
-			$rcomic = ( 'thumb' == $label || 'medium' == $label || 'large' == $label || 'full' == $label ) ? get_the_comic( 'random', $type, $chapter->ID ) : false;
-			$comic  = ( $rcomic ) ? get_comic_object( $rcomic, $label ) : false;
-			$ctitle = ( $rcomic ) ? $rcomic->title : false;
-		break;
-		case 'last':
-			$url    = $chapter->last->link;
-			$title  = sprintf( __( 'Go to the end of %s', 'webcomic' ), $chapter->title );
-			$comic  = ( 'thumb' == $label || 'medium' == $label || 'large' == $label || 'full' == $label ) ? get_comic_object( $chapter->last, $label ) : false;
-			$ctitle = $chapter->last->title;
-		break;
-		default:
-			$url    = $chapter->first->link;
-			$title  = sprintf( __( 'Go to the beginning of %s', 'webcomic' ), $chapter->title );
-			$comic  = ( 'thumb' == $label || 'medium' == $label || 'large' == $label || 'full' == $label ) ? get_comic_object( $chapter->first, $label ) : false;
-			$ctitle = $chapter->first->title;
+		if ( $current && $bookend && $permalink = get_permalink( $bookend ) ) {
+			$url     = $permalink;
+			$current = '';
+		}
+		
+		$class = $chapter->class . ' previous-' . $type . '-link' . $current;
+		
+		echo $object . '<a href="' . $url . '" title="' . $title . '" class="' . $class . '"><span>' . $link . '</span></a>';
 	}
-	
-	if ( false !== strpos( $comic, '<o' ) ) {
-		$object = $link . '<br />';
-		$link  = $ctitle;
-	} elseif ( $comic ) {
-		$link = $comic;
-	}
-	
-	if ( 'title' == $label )
-		$link = $chapter->title;
-	elseif ( !$link )
-		$link = ( $label ) ? $label : sprintf( __( '&lsaquo; Previous %s', 'webcomic' ), ucfirst( $type ) );
-	
-	$css   = ( $post_chapters->$type->term_id == $chapter->ID ) ? ' current-' . $type : '';
-	$class = $chapter->class . ' previous-' . $type . '-link' . $css;
-	
-	echo $object . '<a href="' . $url . '" title="' . $title . '" class="' . $class . '"><span>' . $link . '</span></a>';
 }
 
 /**
@@ -1347,67 +1558,58 @@ function previous_chapter_link( $volume = false, $bound = 'first', $label = fals
  * 
  * @uses get_the_chapter()
  * @uses get_comic_object()
- * @uses get_post_chapters()
+ * @uses get_post_comic_chapters()
  * @uses get_post_comic_category()
  * 
- * @param str $volume The chapter link to display, one of false or 'volume'
+ * @param str $label The text to display for the link, or one of 'full', 'large', 'medium', 'thumb', or 'title'.
+ * @param str $type The chapter link to display, one of 'chapter' or 'volume'.
  * @param str $bound Where the link should point to, one of 'first','last', or 'page'.
- * @param str $label The text to display for the link.
  */
-function next_chapter_link( $volume = false, $bound = 'first', $label = false ) {
-	load_webcomic_domain();
+function next_chapter_link( $label = false, $type = false, $bound = false, $bookend = false ) {
+	if ( in_comic_category() && $post_chapters = get_post_comic_chapters( $post->ID ) ) {
+		load_webcomic_domain();
+		
+		global $wpdb, $post;
+		
+		$type     = ( $type ) ? $type : 'chapter';
+		$bound    = ( $bound ) ? $bound : 'first';
+		$preview  = ( 'thumb' == $label || 'medium' == $label || 'large' == $label || 'full' == $label ) ? true : false;
+		$_post    = get_post( get_the_chapter( $post_chapters->$type->term_id )->last->ID );
+		$chapters = get_post_comic_chapters( $wpdb->get_var( "SELECT p.id FROM $wpdb->posts AS p INNER JOIN $wpdb->term_relationships AS tr ON p.ID = tr.object_id INNER JOIN $wpdb->term_taxonomy tt ON tr.term_taxonomy_id = tt.term_taxonomy_id AND tt.taxonomy = 'category' AND tt.term_id IN (" . get_post_comic_category( $post->ID ) . ") WHERE p.post_date > '$_post->post_date' AND p.post_type = 'post' AND p.post_status = 'publish' ORDER BY p.post_date ASC LIMIT 1" ) );
+		$chapter  = get_the_chapter( $chapters->$type->term_id );
+		
+		if ( 'page' == $bound ) {
+			$url   = $chapter->link;
+			$title = sprintf( __( 'Go to the %s archive', 'webcomic' ), $chapter->title );
+			$comic = ( $preview ) ? get_comic_object( get_the_comic( 'random', $type, $chapter->ID ), $label ) : false;
+		} else {
+			$url   = ( 'first' == $bound ) ? $chapter->first->link : $chapter->last->link;
+			$title = ( 'first' == $bound ) ? sprintf( __( 'Go to the beginning of %s', 'webcomic' ), $chapter->title ) : sprintf( __( 'Go to the end of %s', 'webcomic' ), $chapter->title );
+			$comic = ( $preview ) ? get_comic_object( $chapter->$bound, $label ) : false;
+		}
+		
+		if ( false !== strpos( $comic, '<o' ) ) {
+			$object = $link . '<br />';
+			$link   = $chapter->title;
+		} elseif ( $comic ) {
+			$link = $comic;
+		} elseif ( 'title' == $label ) {
+			$link = $chapter->title;
+		} else {
+			$link = ( $label ) ? $label : sprintf( __( 'Next %s &rsaquo;', 'webcomic' ), ucfirst( $type ) );
+		}
+		
+		$current = ( $post_chapters->$type->term_id == $chapter->ID ) ? ' current-' . $type : '';
 	
-	global $wpdb, $post;
-	
-	$post_chapters = get_post_chapters( $post->ID );
-	
-	if ( !$post_chapters )
-		return; //No chapters found
-	
-	$type          = ( $volume ) ? 'volume' : 'chapter';
-	$category      = get_post_comic_category( $post->ID );
-	$post_chapter  = get_the_chapter( $post_chapters->$type->term_id );
-	$last_post     = &get_post( $post_chapter->last->ID );
-	$next_chapters = get_post_chapters( $wpdb->get_var( "SELECT p.id FROM $wpdb->posts AS p INNER JOIN $wpdb->term_relationships AS tr ON p.ID = tr.object_id INNER JOIN $wpdb->term_taxonomy tt ON tr.term_taxonomy_id = tt.term_taxonomy_id AND tt.taxonomy = 'category' AND tt.term_id IN ($category) WHERE p.post_date > '$last_post->post_date' AND p.post_type = 'post' AND p.post_status = 'publish' ORDER BY p.post_date ASC LIMIT 1" ) );
-	$chapter       = get_the_chapter( $next_chapters->$type->term_id );
-	
-	switch ( $bound ) {
-		case 'page':
-			$url    = $chapter->link;
-			$title  = sprintf( __( 'Go to the %s archive', 'webcomic' ), $chapter->title );
-			$rcomic = ( 'thumb' == $label || 'medium' == $label || 'large' == $label || 'full' == $label ) ? get_the_comic( 'random', $type, $chapter->ID ) : false;
-			$comic  = ( $rcomic ) ? get_comic_object( $rcomic, $label ) : false;
-			$ctitle = ( $rcomic ) ? $rcomic->title : false;
-		break;
-		case 'last':
-			$url    = $chapter->last->link;
-			$title  = sprintf( __( 'Go to the end of %s', 'webcomic' ), $chapter->title );
-			$comic  = ( 'thumb' == $label || 'medium' == $label || 'large' == $label || 'full' == $label ) ? get_comic_object( $chapter->last, $label ) : false;
-			$ctitle = $chapter->last->title;
-		break;
-		default:
-			$url    = $chapter->first->link;
-			$title  = sprintf( __( 'Go to the beginning of %s', 'webcomic' ), $chapter->title );
-			$comic  = ( 'thumb' == $label || 'medium' == $label || 'large' == $label || 'full' == $label ) ? get_comic_object( $chapter->first, $label ) : false;
-			$ctitle = $chapter->first->title;
+		if ( $current && $bookend && $permalink = get_permalink( $bookend ) ) {
+			$url     = $permalink;
+			$current = '';
+		}
+		
+		$class = $chapter->class . ' next-' . $type . '-link' . $current;
+		
+		echo $object . '<a href="' . $url . '" title="' . $title . '" class="' . $class . '"><span>' . $link . '</span></a>';
 	}
-	
-	if ( false !== strpos( $comic, '<o' ) ) {
-		$object = $link . '<br />';
-		$link  = $ctitle;
-	} elseif ( $comic ) {
-		$link = $comic;
-	}
-	
-	if ( 'title' == $label )
-		$link = $chapter->title;
-	elseif ( !$link )
-		$link = ( $label ) ? $label : sprintf( __( 'Next %s &rsaquo;', 'webcomic' ), ucfirst( $type ) );
-	
-	$css   = ( $post_chapters->$type->term_id == $chapter->ID ) ? ' current-' . $type : '';
-	$class = $chapter->class . ' next-' . $type . '-link' . $css;
-	
-	echo $object . '<a href="' . $url . '" title="' . $title . '" class="' . $class . '"><span>' . $link . '</span></a>';
 }
 
 /**
@@ -1417,62 +1619,50 @@ function next_chapter_link( $volume = false, $bound = 'first', $label = false ) 
  * or archive page  of the chapter, volume, or series associated with the
  * current post and must be used within a WordPress Loop.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 1.0.0
  * 
  * @uses get_the_chapter()
  * @uses get_comic_object()
- * @uses get_post_chapters()
+ * @uses get_post_comic_chapters()
  * 
- * @param str $chapter The chapter link to display, one of 'chapter', 'volume', or 'series'.
+ * @param str $label The text to display for the link, or one of 'full', 'large', 'medium', 'thumb', or 'title'.
+ * @param str $type The chapter link to display, one of 'chapter' or 'volume'.
  * @param str $bound Where the link should point to, one of 'first','last', or 'page'.
- * @param str $label The text to display for the link.
  */
-function the_chapter_link( $chapter = 'chapter', $bound = 'first', $label = false ) {
-	load_webcomic_domain();
-	
-	global $post;
-	
-	if ( !get_post_chapters( $post->ID ) )
-		return; //No chapters found.
-	
-	$css     = ( $chapter ) ? $chapter : 'chapter';
-	$chapter = get_the_chapter( $chapter );
-	
-	switch ( $bound ) {
-		case 'page':
-			$url    = $chapter->link;
-			$title  = sprintf( __( 'Go to the %s archive', 'webcomic' ), $chapter->title );
-			$rcomic = ( 'thumb' == $label || 'medium' == $label || 'large' == $label || 'full' == $label ) ? get_the_comic( 'random', $type, $chapter->ID ) : false;
-			$comic  = ( $rcomic ) ? get_comic_object( $rcomic, $label ) : false;
-			$ctitle = ( $rcomic ) ? $rcomic->title : false;
-		break;
-		case 'last':
-			$url    = $chapter->last->link;
-			$title  = sprintf( __( 'Go to the end of %s', 'webcomic' ), $chapter->title );
-			$comic  = ( 'thumb' == $label || 'medium' == $label || 'large' == $label || 'full' == $label ) ? get_comic_object( $chapter->last, $label ) : false;
-			$ctitle = $chapter->last->title;
-		break;
-		default:
-			$url    = $chapter->first->link;
-			$title  = sprintf( __( 'Go to the beginning of %s', 'webcomic' ), $chapter->title );
-			$comic  = ( 'thumb' == $label || 'medium' == $label || 'large' == $label || 'full' == $label ) ? get_comic_object( $chapter->first, $label ) : false;
-			$ctitle = $chapter->first->title;
-	}
-	
-	if ( false !== strpos( $comic, '<o' ) ) {
-		$object = $link . '<br />';
-		$link  = $ctitle;
-	} elseif ( $comic ) {
-			$link = $comic;
+function the_chapter_link( $label = false, $type = false, $bound = false ) {
+	if ( in_comic_category() && $chapter = get_the_chapter( $type ) ) {
+		load_webcomic_domain();
+		
+		global $post;
+		
+		$type    = ( $type ) ? $type : 'chapter';
+		$bound   = ( $bound ) ? $bound : 'first';
+		$preview = ( 'thumb' == $label || 'medium' == $label || 'large' == $label || 'full' == $label ) ? true : false;
+		
+		if ( 'page' == $bound ) {
+			$url   = $chapter->link;
+			$title = sprintf( __( 'Go to the %s archive', 'webcomic' ), $chapter->title );
+			$comic = ( $preview ) ? get_comic_object( get_the_comic( 'random', $type, $chapter->ID ), $label ) : false;
+		} else {
+			$url   = ( 'first' == $bound ) ? $chapter->first->link : $chapter->last->link;
+			$title = ( 'first' == $bound ) ? sprintf( __( 'Go to the beginning of %s', 'webcomic' ), $chapter->title ) : sprintf( __( 'Go to the end of %s', 'webcomic' ), $chapter->title );
+			$comic = ( $preview ) ? get_comic_object( $chapter->$bound, $label ) : false;
 		}
-	
-	if ( !$link )
-		$link = ( $label ) ? $label : $chapter->title;
-	
-	$class = 'current-' . $css . '-link';
-	
-	echo $object . '<a href="' . $url . '" title="' . $title . '" class="' . $class . '"><span>' . $link . '</span></a>';
+		
+		if ( false !== strpos( $comic, '<o' ) ) {
+			$object = $link . '<br />';
+			$link  = $chapter->title;
+		} elseif ( $comic ) {
+			$link = $comic;
+		} else {
+			$link = ( $label ) ? $label : $chapter->title;
+		}
+		
+		$class = 'current-' . $type . '-link';
+		
+		echo $object . '<a href="' . $url . '" title="' . $title . '" class="' . $class . '"><span>' . $link . '</span></a>';
+	}
 }
 
 
@@ -1487,7 +1677,7 @@ function the_chapter_link( $chapter = 'chapter', $bound = 'first', $label = fals
  * This function displays the chapter title on chapter archive pages. Like
  * single_cat_title() it accepts both $prefix and $display parameters.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 1.8.0
  * 
  * @param str $prefix Prefix to prepend to the chapter name.
@@ -1510,16 +1700,14 @@ function single_chapter_title( $prefix = false, $display = true ) {
  * a chapter archive page with no defined $chapter the current chapter
  * description is returned.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 1.8.0
  * 
  * @param int $id Chapter ID.
  * @return str The chapter description.
  */
 function chapter_description( $id = false ) {
-	$chapter = ( $id ) ? get_term( $id ) : get_term_by( 'slug', get_query_var( 'chapter' ), 'chapter' );
-	
-	return $chapter->description;
+	return term_description( $id, 'chapter' );
 }
 
 
@@ -1534,7 +1722,7 @@ function chapter_description( $id = false ) {
  * This is a shortcut function for displaying a list of recently posted comics
  * using comic_loop() and get_the_comic().
  * 
- * @package WebComic
+ * @package Webcomic
  * @since   1.0.0
  * 
  * @uses comic_loop()
@@ -1542,28 +1730,23 @@ function chapter_description( $id = false ) {
  * @uses get_comic_object()
  * 
  * @param int $number The number of comics to display.
- * @param str $format The image size, one of 'full', 'large', 'medium', or 'thumb'.
+ * @param str $label The image size, one of 'full', 'large', 'medium', or 'thumb'.
  * @param str $limit Comma separated list of category ID's.
- * @param str $before Text to display before each comic.
- * @param str $after Text to display after each comic.
  */
-function recent_comics( $number = 5, $format = false, $limit = false, $before = '<li>', $after = '</li>' ) {
+function recent_comics( $number = 5, $label = false, $limit = false ) {
 	$comics = comic_loop( $number, $limit );
 	
 	if ( $comics->have_posts() ) : while ( $comics->have_posts() ) : $comics->the_post();
 		$comic = get_the_comic();
 		
-		if ( $format )
-			$link = get_comic_object( $comic, $format );
-		else
-			$link = $comic->title;
+		$link = ( $label ) ? get_comic_object( $comic, $label ) : $comic->title;
 		
-		if ( $comic->flash && $format ) {
+		if ( $comic->flash && $label ) {
 			$object = $link . '<br />';
 			$link  = $comic->title;
 		}
 		
-		$output .= $before . $object . '<a href="' . $comic->link . '" title="' . $comic->description . '" class="recent-comic recent-comic-' .  $comic->ID . '"><span>' . $link . '</span></a>' . $after;
+		$output .= '<li>' . $object . '<a href="' . $comic->link . '" title="' . $comic->description . '" class="recent-comic recent-comic-' .  $comic->ID . '"><span>' . $link . '</span></a>' . '</li>';
 	endwhile; wp_reset_query(); endif;
 	
 	echo $output;
@@ -1584,7 +1767,7 @@ function recent_comics( $number = 5, $format = false, $limit = false, $before = 
  * number - Whether or not to prepend each post or chapter with a number.
  * Defaults to 0 (false).
  * 
- * group - Group posts by chapter, chapters, by volume, or volumes by series. One
+ * groupby - Group posts by chapter, chapters, by volume, or volumes by series. One
  * of 'chapter', 'volume', or 'series'.
  * 
  * orderby - The field used to order chapters. Defaults to 'id'.
@@ -1598,7 +1781,7 @@ function recent_comics( $number = 5, $format = false, $limit = false, $before = 
  * 
  * pages - Whether to append chapter titles with page counts. Defaults to false.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 1.0.0
  * 
  * @uses comic_loop()
@@ -1610,15 +1793,15 @@ function dropdown_comics( $args = '' ) {
 	load_webcomic_domain();
 	
 	$defaults = array(
-		'label' => __( 'Quick Archive', 'webcomic' ),
-		'post_order' => 'DESC',
-		'number' => false,
-		'series' => false,
-		'groupby' => false,
-		'orderby' => 'id',
-		'order' => 'ASC',
-		'bound' => 'first',
-		'pages' => false
+		'label'      => __( 'Quick Archive', 'webcomic' ),
+		'pages'      => false,
+		'order'      => 'ASC',
+		'bound'      => 'first',
+		'number'     => false,
+		'series'     => false,
+		'groupby'    => false,
+		'orderby'    => 'id',
+		'post_order' => 'DESC'
 	);
 	
 	$args = wp_parse_args( $args, $defaults );
@@ -1628,60 +1811,62 @@ function dropdown_comics( $args = '' ) {
 	if ( !$args[ 'groupby' ] ) {
 		$comics = comic_loop( -1, $args[ 'series' ], '&order=' . $args[ 'post_order' ] );
 		
-		if ( $args[ 'number' ] )
+		if ( $args[ 'number' ] ) {
 			$i = ( 'ASC' == $args[ 'post_order' ] ) ? 1 : $comics->post_count;
-		
-		if ( $comics->have_posts() ) : while( $comics->have_posts() ) : $comics->the_post();
-			$prepend = ( $i ) ? $i . '. ' : '';
-			$output .= '<option value="' . get_permalink() . '">' . $prepend . get_the_title() . '</option>';
-			
-			if ( $args[ 'number' ] )
-				$i = ( 'ASC' == $args[ 'post_order' ] ) ? $i + 1 : $i - 1;
-		endwhile; endif;
-	} else {
-		switch( $args[ 'groupby' ] ) {
-			case 'series': $args[ 'depth' ] = '&depth=2'; break;
-			case 'volume': $args[ 'depth' ] = '&depth=3'; break;
+			$p = '.';
 		}
 		
-		$collection = get_the_collection( 'order=' . $args[ 'order' ] . '&orderby=' . $args[ 'orderby' ] . '&series=' . $args[ 'series' ] . '&post_order=' . $args[ 'post_order' ] . $args[ 'depth' ] );
+		if ( $comics->have_posts() ) : while( $comics->have_posts() ) : $comics->the_post();
+			$output .= '<option value="' . get_permalink() . '">' . $i . $p . get_the_title() . '</option>';
+			
+			if ( $args[ 'number' ] ) $i = ( 'ASC' == $args[ 'post_order' ] ) ? $i + 1 : $i - 1;
+		endwhile; wp_reset_query(); endif;
+	} else {
+		switch( $args[ 'groupby' ] ) {
+			case 'series' : $args[ 'depth' ] = '2'; break;
+			case 'volume' : $args[ 'depth' ] = '3'; break;
+			default       : $args[ 'depth' ] = '4';
+		}
+		
+		$collection = get_the_collection( 'order=' . $args[ 'order' ] . '&orderby=' . $args[ 'orderby' ] . '&series=' . $args[ 'series' ] . '&post_order=' . $args[ 'post_order' ] . '&depth=' . $args[ 'depth' ] );
 		
 		if ( $collection ) {
 			foreach ( array_keys( get_object_vars( $collection ) ) as $series ) {
 				if ( 'series' == $args[ 'groupby' ] ) {
-					$append = ( $args[ 'pages' ] ) ? ' (' . $collection->$series->count . ')' : '';
+					$append  = ( $args[ 'pages' ] ) ? ' (' . $collection->$series->count . ')' : '';
 					$output .= '<optgroup label="' . $collection->$series->title . $append . '">';
 					
-					if ( $args[ 'number' ] )
+					if ( $args[ 'number' ] ) {
 						$i = ( 'DESC' == $args[ 'order' ] ) ? 1 : count( $collection->$series->volumes );
+						$p = '.';
+					}
 					
 					foreach ( array_keys( get_object_vars( $collection->$series->volumes ) ) as $volume ) {
-						$prepend = ( $i ) ? $i . '. ' : '';
 						$append  = ( $args[ 'pages' ] ) ? ' (' . $collection->$series->volumes->$volume->count . ')' : '';
 						
 						switch ( $args[ 'bound' ] ) {
-							case 'page': $link = $collection->$series->volumes->$volume->link; break;
-							case 'last': $link = $collection->$series->volumes->$volume->last->link;break;
-							default:     $link = $collection->$series->volumes->$volume->first->link;
+							case 'page' : $link = $collection->$series->volumes->$volume->link; break;
+							case 'last' : $link = $collection->$series->volumes->$volume->last->link;break;
+							default     : $link = $collection->$series->volumes->$volume->first->link;
 						}
 						
-						$output .= '<option value="' . $link . '">' . $prepend . $collection->$series->volumes->$volume->title . $append . '</option>';
+						$output .= '<option value="' . $link . '">' . $i . $p . $collection->$series->volumes->$volume->title . $append . '</option>';
 						
-						if ( $args[ 'number' ] )
-							$i = ( 'DESC' == $args[ 'order' ] ) ? $i - 1 : $i + 1;
+						if ( $args[ 'number' ] ) $i = ( 'DESC' == $args[ 'order' ] ) ? $i - 1 : $i + 1;
 					}
 					
 					$output .= '</optgroup>';
 				} elseif ( 'volume' == $args[ 'groupby' ] ) {
 					foreach ( array_keys( get_object_vars( $collection->$series->volumes ) ) as $volume ) {
-						$append = ( $args[ 'pages' ] ) ? ' (' . $collection->$series->volumes->$volume->count . ')' : '';
+						$append  = ( $args[ 'pages' ] ) ? ' (' . $collection->$series->volumes->$volume->count . ')' : '';
 						$output .= '<optgroup label="' . $collection->$series->volumes->$volume->title . $append . '">';
 						
-						if ( $args[ 'number' ] )
+						if ( $args[ 'number' ] ) {
 							$i = ( 'DESC' == $args[ 'order' ] ) ? 1 : count( $collection->$series->volumes->$volume->chapters );
+							$p = '.';
+						}
 						
 						foreach ( array_keys( get_object_vars( $collection->$series->volumes->$volume->chapters ) ) as $chapter ) {
-							$prepend = ( $i ) ? $i . '. ' : '';
 							$append  = ( $args[ 'pages' ] ) ? ' (' . $collection->$series->volumes->$volume->chapters->$chapter->count . ')' : '';
 							
 							switch ( $args[ 'bound' ] ) {
@@ -1690,10 +1875,9 @@ function dropdown_comics( $args = '' ) {
 								default:     $link = $collection->$series->volumes->$volume->chapters->$chapter->first->link;
 							}
 							
-							$output .= '<option value="' . $link . '">' . $prepend . $collection->$series->volumes->$volume->chapters->$chapter->title . $append . '</option>';
+							$output .= '<option value="' . $link . '">' . $i . $p . $collection->$series->volumes->$volume->chapters->$chapter->title . $append . '</option>';
 							
-							if ( $args[ 'number' ] )
-								$i = ( 'DESC' == $args[ 'order' ] ) ? $i - 1 : $i + 1;
+							if ( $args[ 'number' ] ) $i = ( 'DESC' == $args[ 'order' ] ) ? $i - 1 : $i + 1;
 						}
 						
 						$output .= '</optgroup>';
@@ -1701,19 +1885,18 @@ function dropdown_comics( $args = '' ) {
 				} elseif ( 'chapter' == $args[ 'groupby' ] ) {
 					foreach ( array_keys( get_object_vars( $collection->$series->volumes ) ) as $volume ) {
 						foreach ( array_keys( get_object_vars( $collection->$series->volumes->$volume->chapters ) ) as $chapter ) {
-							$append = ( $args[ 'pages' ] ) ? ' (' . $collection->$series->volumes->$volume->chapters->$chapter->count . ')' : '';
+							$append  = ( $args[ 'pages' ] ) ? ' (' . $collection->$series->volumes->$volume->chapters->$chapter->count . ')' : '';
 							$output .= '<optgroup label="' . $collection->$series->volumes->$volume->chapters->$chapter->title . $append . '">';
 							
-							if ( $args[ 'number' ] )
+							if ( $args[ 'number' ] ) {
 								$i = ( 'ASC' == $args[ 'post_order' ] ) ? 1 : count( $collection->$series->volumes->$volume->chapters->$chapter->posts );
+								$p = '.';
+							}
 							
 							foreach ( array_keys( get_object_vars( $collection->$series->volumes->$volume->chapters->$chapter->posts ) ) as $post ) {
-								$prepend = ( $i ) ? $i . '. ' : '';
+								$output .= '<option value="' . $collection->$series->volumes->$volume->chapters->$chapter->posts->$post->link . '">' . $i . $p . $collection->$series->volumes->$volume->chapters->$chapter->posts->$post->title . '</option>';
 								
-								$output .= '<option value="' . $collection->$series->volumes->$volume->chapters->$chapter->posts->$post->link . '">' . $prepend . $collection->$series->volumes->$volume->chapters->$chapter->posts->$post->title . '</option>';
-								
-								if ( $args[ 'number' ] )
-									$i = ( 'ASC' == $args[ 'post_order' ] ) ? $i + 1 : $i - 1;
+								if ( $args[ 'number' ] ) $i = ( 'ASC' == $args[ 'post_order' ] ) ? $i + 1 : $i - 1;
 							}
 							
 							$output .= '</optgroup>';
@@ -1761,7 +1944,7 @@ function dropdown_comics( $args = '' ) {
  * pages - Whether to display series, volume, and chapter page counts.
  * Defaults to false.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 1.0.0
  * 
  * @uses comic_loop()
@@ -1772,16 +1955,16 @@ function dropdown_comics( $args = '' ) {
  */
 function comic_archive( $args = '' ) {
 	$defaults = array(
-		'groupby' => 'date',
-		'format' => false,
-		'post_order' => 'DESC',
-		'series' => false,
-		'orderby' => 'id',
-		'order' => 'ASC',
-		'depth' => 4,
-		'bound' => 'first',
-		'descriptions' => false,
-		'pages' => false
+		'order'        => 'ASC',
+		'depth'        => 4,
+		'bound'        => 'first',
+		'pages'        => false,
+		'series'       => false,
+		'format'       => false,
+		'groupby'      => 'date',
+		'orderby'      => 'id',
+		'post_order'   => 'DESC',
+		'descriptions' => false
 	);
 	
 	$args = wp_parse_args( $args, $defaults );
@@ -1833,7 +2016,7 @@ function comic_archive( $args = '' ) {
 			
 				$i++;
 			}
-		endwhile; $output .= ( $args[ 'format' ] ) ? '</td></tr></table>' : '</table>'; endif;
+		endwhile; $output .= ( $args[ 'format' ] ) ? '</td></tr></table>' : '</table>'; wp_reset_query(); endif;
 	} elseif ( 'chapter' == $args[ 'groupby' ] ) {
 		$collection = get_the_collection( 'order=' . $args[ 'order' ] . '&orderby=' . $args[ 'orderby' ] . '&series=' . $args[ 'series' ] . '&post_order=' . $args[ 'post_order' ] . '&depth=' . $args[ 'depth' ] );
 		

@@ -1,8 +1,8 @@
 <?php
 /**
- * Contains all of the functions related to the WebComic Metaboxes.
+ * Contains all of the functions related to the Webcomic Metaboxes.
  * 
- * @package WebComic
+ * @package Webcomic
  * @since 1.6.0
  */
 
@@ -10,20 +10,63 @@ function comic_post_meta_box( $post ) {
 	load_webcomic_domain();
 	
 	$series        = get_post_comic_category();
-	$post_chapters = get_post_chapters();
-	$collection    = get_the_collection( 'hide_empty=0' );
+	$file_path     = get_comic_directory( 'abs', false, $series );
+	$post_chapters = get_post_comic_chapters();
+	$collection    = get_the_collection( 'hide_empty=0&depth=3&series=' . $series );
 	?>
 	<script type="text/javascript">jQuery('form#post').attr('enctype','multipart/form-data').attr('encoding','multipart/form-data')</script>
 	
-	<?php if ( 0 < get_option( 'comic_press_compatibility' ) ) echo '<p class="updated fade">' . __( '<strong>ComicPress Compatibility</strong> is currently enabled.', 'webcomic' ) . '</p>'; ?>
-	
-	<?php if ( get_post_comic_category( $post->ID ) && get_the_comic() ) { $comic = get_the_comic(); if ( $comic->fallback ) { ?>
-		<p class="updated"><?php _e( 'Comic files are being matched with this post using the fallback method.', 'webcomic' ) ?></p>
+	<?php if ( $series && get_the_comic()->file ) { $comic = get_the_comic(); if ( $comic->fallback ) { ?>
+		<p class="updated"><?php _e( 'Files are being matched with this post using the fallback method.', 'webcomic' ) ?></p>
 	<?php } ?>
 		<div class="alignright"><p><?php the_comic( 'thumb' ); ?></p><a href="<?php echo $comic->link; ?>" title="<?php echo $comic->description; ?>"><?php _e( 'View', 'webcomic' ); ?></a></div>
-	<?php } elseif ( get_post_comic_category( $post->ID ) && !get_the_comic() ) { ?>
-		<p class="error"><?php _e( 'WebComic could not match this post with a comic.', 'webcomic' ); ?></p>
-	<?php } ?>
+	<?php } elseif ( $series && !get_the_comic()->file ) { ?>
+		<p class="error"><?php _e( 'This post is not linked to and cannot be matched with a file.', 'webcomic' ); ?></p>
+		<?php
+			//Get all the comic files
+			$comic_files = glob( $file_path . '*.*' );
+			
+			if ( !is_array( $comic_files ) )
+				$comic_files = arrar();
+			
+			//Get just the comic files associated with a post
+			$comics      = comic_loop( -1, $series );
+			$comic_posts = array();
+			
+			while ( $comics->have_posts() ) : $comics->the_post();
+				$the_comic = get_the_comic();
+				
+				if ( $the_comic->file )
+					array_push( $comic_posts, $file_path . $the_comic->file_name );
+			endwhile;
+			
+			//Compare our lists to see if there are any orphaned files
+			$comic_orphans = array_diff( $comic_files, $comic_posts );
+			natsort( $comic_orphans );
+			
+			if ( $comic_orphans ) {
+		?>
+		<p><?php _e( 'Select an orphan or upload a new file below:', 'webcomic' ); ?></p>
+		<div style="height:<?php echo get_option( 'comic_thumb_size_h' ); ?>px;overflow:auto">
+			<?php
+				foreach ( $comic_orphans as $orphan ) {
+					$orphan_info = pathinfo( $orphan );
+					
+					if ( !$orphan_info[ 'filename' ] )
+						$orphan_info[ 'filename' ] = substr( $orphan_info[ 'basename' ], 0, strrpos( $orphan_info[ 'basename' ], '.' ) );
+					
+					if ( 'swf' == $orphan_info[ 'extension' ] ) {
+						$preview = '<object type="application/x-shockwave-flash" data="' . get_comic_directory( 'url', false, $series ) . $orphan_info[ 'basename' ] . '" height="' . get_option( 'comic_thumb_size_h' ) . '" width="' . get_option( 'comic_thumb_size_w' ) . '"><param name="movie" value="' . get_comic_directory( 'url', false, $series ) . $orphan_info[ 'basename' ] . '" /></object>';
+					} else {
+						$img     = ( is_file( get_comic_directory( 'abs', true, $series ) . $orphan_info[ 'filename' ] . '-thumb.' . $orphan_info[ 'extension' ] ) ) ? get_comic_directory( 'url', true, $series ) . $orphan_info[ 'filename' ] . '-thumb.' . $orphan_info[ 'extension' ] : get_comic_directory( 'url', false, $series ) . $orphan_info[ 'filename' ] . '.' . $orphan_info[ 'extension' ];
+						$preview = '<img src="' . $img . '" alt="' . $orphan_info[ 'basename' ] . '" title="' . $orphan_info[ 'basename' ] . '" style="vertical-align:top" />';
+					}
+					
+					echo '<label style="float:left;margin:0 1em 1em 0"><input type="radio" name="comic_orphan" value="' . $orphan_info[ 'basename' ] . '" /> ' . $preview . '</label>';
+				}
+			?>
+		</div>
+	<?php } } ?>
 		<p>
 			<input type="file" name="new_comic_file" id="new_comic_file" />
 			<input type="hidden" name="MAX_FILE_SIZE" value="20000000" />
@@ -32,7 +75,7 @@ function comic_post_meta_box( $post ) {
 		</p>
 		<p><?php if ( $comic && !$comic->fallback ) _e( 'Any files currently associated with this post will be deleted when uploading a new file.', 'webcomic' ); ?></p>
 		<br />
-	<?php if ( $comic && !$comic->fallback ) { $file = pathinfo( get_comic_directory( 'abs', false, $comic_dir ) . $comic->file_name ); ?>
+	<?php if ( $comic && !$comic->fallback ) { $file = pathinfo( get_comic_directory( 'abs', false, $series ) . $comic->file_name ); ?>
 		<p style="width:50%">
 			<label for="comic_file"><strong><?php _e( 'File', 'webcomic' ); ?></strong></label><br />
 			<input type="text" name="comic_file" id="comic_file" style="width:60%" value="<?php echo substr( $file[ 'basename' ], 0, strrpos( $file[ 'basename' ], '.' ) ); ?>" />
@@ -83,7 +126,9 @@ function comic_post_meta_box( $post ) {
 				<option value="publish"<?php if ( 'publish' == $comic->transcript_status ) echo 'selected="selected"'; ?>><?php _e( 'Publish', 'webcomic' ); ?></option>
 				<option value="pending"<?php if ( 'pending' == $comic->transcript_status ) echo 'selected="selected"'; ?>><?php _e( 'Request Improvement', 'webcomic' ); ?></option>
 				<option value="draft"<?php if ( 'draft' == $comic->transcript_status ) echo 'selected="selected"'; ?>><?php _e( 'Save as Draft', 'webcomic' ); ?></option>
-			<?php if ( $comic->transcript ) { ?>
+			<?php if ( get_post_meta( $post->ID, 'comic_transcript_backup', true ) ) { ?>
+				<option value="restore"><?php _e( 'Restore Previous', 'webcomic' ); ?></option>
+			<?php } if ( $comic->transcript ) { ?>
 				<option value="delete"><?php _e( 'Delete', 'webcomic' ); ?></option>
 			<?php } ?>
 			</select>
@@ -108,18 +153,18 @@ function comic_post_meta_box_save( $id, $post ) {
 		return; //User did not manually update the post
 	
 	//Make sure we're working with the post, not a revisions
-	if ( $the_post = wp_is_post_revision( $id ) )
-		$id = $the_post;
+	if ( $_post = wp_is_post_revision( $id ) )
+		$id = $_post;
 	
-	$comic_dir  = get_post_comic_category( $id );
-	$file_path  = get_comic_directory( 'abs', false, $comic_dir );
-	$thumb_path = get_comic_directory( 'abs', true, $comic_dir );
+	$series     = get_post_comic_category( $id );
+	$file_path  = get_comic_directory( 'abs', false, $series );
+	$thumb_path = get_comic_directory( 'abs', true, $series );
 	
 	/** Attempt to upload the selected comic file and generate comic thumbnails if necessary */
 	if ( 0 === $_FILES[ 'new_comic_file' ][ 'error' ] ) {
 		$file = pathinfo( $_FILES[ 'new_comic_file' ][ 'name' ] );
 		
-		//Validate the file format. Files must be gif, jpg, jpeg, png, or swf.
+		//Validate the file format. Files must be gif, jpg, jpeg, png, or swf (bulk upload not supported for metabox uploads).
 		switch ( strtolower( $file[ 'extension' ] ) ) {
 			case 'gif':
 			case 'jpg':
@@ -218,6 +263,48 @@ function comic_post_meta_box_save( $id, $post ) {
 							update_post_meta( $id, 'comic_thumb', $file[ 'filename' ] . '-thumb.' . $file[ 'extension' ] );
 				}
 			}
+		} elseif ( $_REQUEST[ 'comic_orphan' ] ) {
+			$file   = pathinfo( $file_path . $_REQUEST[ 'comic_orphan' ] );
+			$thumbs = glob( $thumb_path . '*.*' );
+			$sizes  = array();
+			
+			if ( !$file[ 'filename' ] )
+				$file[ 'filename' ] = substr( $file[ 'basename' ], 0, strlen( $file[ 'basename' ] ) - strlen( $file[ 'extension' ] ) - 1 );
+			
+			if ( !add_post_meta( $id, 'comic_file', $file[ 'basename' ], true ) )
+				update_post_meta( $id, 'comic_file', $file[ 'basename' ] );
+			
+			foreach ( $thumbs as $thumb ) {
+				if ( strpos( $thumb, $file[ 'filename' ] . '-large' ) ) {
+					if ( !add_post_meta( $id, 'comic_large', basename( $thumb ), true ) )
+						update_post_meta( $id, 'comic_large', basename( $thumb ) );
+					
+					$sizes[ 'large' ] = true;
+				}
+				
+				if ( strpos( $thumb, $file[ 'filename' ] . '-medium' ) ) {
+					if ( !add_post_meta( $id, 'comic_medium', basename( $thumb ), true ) )
+						update_post_meta( $id, 'comic_medium', basename( $thumb ) );
+					
+					$sizes[ 'medium' ] = true;
+				}
+				
+				if ( strpos( $thumb, $file[ 'filename' ] . '-thumb' ) ) {
+					if ( !add_post_meta( $id, 'comic_thumb', basename( $thumb ), true ) )
+						update_post_meta( $id, 'comic_thumb', basename( $thumb ) );
+					
+					$sizes[ 'thumb' ] = true;
+				}
+			}
+			
+			if ( !$sizes[ 'large' ] )
+				delete_post_meta( $id, 'comic_large' );
+			
+			if ( !$sizes[ 'medium' ] )
+				delete_post_meta( $id, 'comic_medium' );
+			
+			if ( !$sizes[ 'thumb' ] )
+				delete_post_meta( $id, 'comic_thumb' );
 		}
 	}
 	
@@ -238,8 +325,18 @@ function comic_post_meta_box_save( $id, $post ) {
 		delete_post_meta( $id, 'comic_transcript' );
 		delete_post_meta( $id, 'comic_transcript_pending' );
 		delete_post_meta( $id, 'comic_transcript_draft' );
+		delete_post_meta( $id, 'comic_transcript_backup' );
 	} elseif ( $_REQUEST[ 'comic_transcript' ] ) {
-		if ( 'draft' == $_REQUEST[ 'comic_transcript_action' ] ) {
+		if ( 'restore' == $_REQUEST[ 'comic_transcript_action' ] ) {
+			if ( $backup = get_post_meta( $id, 'comic_transcript_backup', true ) ) {
+				if ( !add_post_meta( $id, 'comic_transcript_draft', $backup, true ) )
+					update_post_meta( $id, 'comic_transcript_draft', $backup );
+				
+				delete_post_meta( $id, 'comic_transcript' );
+				delete_post_meta( $id, 'comic_transcript_pending' );
+				delete_post_meta( $id, 'comic_transcript_backup' );
+			}
+		} elseif ( 'draft' == $_REQUEST[ 'comic_transcript_action' ] ) {
 			if ( 'draft' != $_REQUEST[ 'comic_transcript_type' ] || $_REQUEST[ 'comic_transcript' ] != get_post_meta( $id, 'comic_transcript_draft', true ) ) 
 				if ( !add_post_meta( $id, 'comic_transcript_draft', $_REQUEST[ 'comic_transcript' ], true ) )
 					update_post_meta( $id, 'comic_transcript_draft', $_REQUEST[ 'comic_transcript' ] );
@@ -253,6 +350,7 @@ function comic_post_meta_box_save( $id, $post ) {
 			
 			delete_post_meta( $id, 'comic_transcript' );
 			delete_post_meta( $id, 'comic_transcript_draft' );
+			delete_post_meta( $id, 'comic_transcript_backup' );
 		} else {
 			if ( 'publish' != $_REQUEST[ 'comic_transcript_type' ] || $_REQUEST[ 'comic_transcript' ] != get_post_meta( $id, 'comic_transcript', true ) ) 
 				if ( !add_post_meta( $id, 'comic_transcript', $_REQUEST[ 'comic_transcript' ], true ) )
@@ -260,15 +358,13 @@ function comic_post_meta_box_save( $id, $post ) {
 			
 			delete_post_meta( $id, 'comic_transcript_pending' );
 			delete_post_meta( $id, 'comic_transcript_draft' );
+			delete_post_meta( $id, 'comic_transcript_backup' );
 		}
 	}
 } add_action( 'save_post', 'comic_post_meta_box_save', 10, 2 );
 
 function comic_page_meta_box( $post ) {
 	$categories = get_comic_category( true );
-	
-	if ( 0 < get_option( 'comic_press_compatibility' ) )
-		echo '<p class="updated fade">' . __( '<strong>ComicPress Compatibility</strong> is currently enabled.', 'webcomic' ) . '</p>';
 	?>
 	<p>
 		<label for="comic_series"><strong><?php _e( 'Comic Series', 'webcomic' ); ?></strong></label><br />
@@ -287,8 +383,8 @@ function comic_page_meta_box_save( $id ) {
 		return; //User did not manually update the post
 	
 	//Make sure we're working with the post, not a revisions
-	if ( $the_post = wp_is_post_revision( $id ) )
-		$id = $the_post;
+	if ( $_post = wp_is_post_revision( $id ) )
+		$id = $_post;
 	
 	/** Attempt to update the comic description */
 	if ( !$_REQUEST[ 'comic_series' ] ) {
