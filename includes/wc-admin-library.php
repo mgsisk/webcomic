@@ -94,15 +94,16 @@ function comic_page_library() {
 					$target_path = $file_path . zip_entry_name( $zip_entry );
 					
 					if ( ( !is_file( $target_path ) || $_REQUEST[ 'new_comic_overwrite' ] ) && zip_entry_open( $zip, $zip_entry ) ) {
-						$zip_content = zip_entry_read( $zip_entry, zip_entry_filesize( $zip_entry ) );
+						$zip_content   = zip_entry_read( $zip_entry, zip_entry_filesize( $zip_entry ) );
+						$zip_extension = substr( strrchr( zip_entry_name( $zip_entry ), '.' ), 1 );
 						
-						if ( false !== stripos( $zip_content, 'gif' ) ) {
+						if ( 'gif' == $zip_extension ) {
 							$new_comic = imagegif( imagecreatefromstring( $zip_content ), $target_path );
-						} elseif ( false !== stripos( $zip_content, 'jpg' ) || false !== stripos( $zip_content, 'jpeg' ) ) {
+						} elseif ( 'jpg' == $zip_extension || 'jpeg' == $zip_extension ) {
 							$new_comic = imagejpeg( imagecreatefromstring( $zip_content ), $target_path );
-						} elseif ( false !== stripos( $zip_content, 'png' ) ) {
+						} elseif ( 'png' == $zip_extension ) {
 							$new_comic = imagepng( imagecreatefromstring( $zip_content ), $target_path );
-						} elseif ( false !== stripos( $zip_content, 'cws' ) ) { //Flash comic
+						} elseif ( 'swf' == $zip_extension ) { //Flash comic
 							$new_comic = fopen( $target_path, 'w' );
 							fwrite( $new_comic, $zip_content );
 							fclose( $new_comic );
@@ -152,7 +153,10 @@ function comic_page_library() {
 					}
 				}
 				
-				$updated = sprintf( __( '%s comics successfully extracted from the archive.', 'webcomic' ), $i );
+				if ( $i )
+					$updated = sprintf( __( '%s comics successfully extracted from the archive.', 'webcomic' ), $i );
+				else
+					$error = sprintf( __( 'No comics could be extracted from the archive.', 'webcomic' ), $i );
 			} else {
 				switch ( $zip ) {
 					default: $error = __( 'An error occurred.', 'webcomic' );
@@ -820,7 +824,7 @@ function comic_page_library() {
 			</tfoot>
 			<tbody>
 			<?php foreach ( $library as $item ) { ?>
-				<tr<?php if ( $item->comic && !( $i % 2 ) ) echo ' class="alt"'; elseif ( $item->fallback ) echo ' style="background:#fffbcc'; elseif ( !$item->comic ) echo ' style="background:#fdd"'; ?>>
+				<tr<?php if ( $item->comic && !( $i % 2 ) && !$item->fallback ) echo ' class="alt"'; elseif ( $item->fallback ) echo ' style="background:#fffbcc"'; elseif ( !$item->comic ) echo ' style="background:#fdd"'; ?>>
 					<th scope="row" class="check-column"><?php if ( $item->comic && !$item->fallback && ( current_user_can( 'edit_others_posts' ) || $current_user->ID == $item->author_id ) ) { ?><input type="checkbox" name="comics[]" value="<?php echo $item->ID; ?>" /><?php } ?></th>
 					<?php if ( 'thumbnail' == $lib_view ) { ?><td class="thumbnail column-thumbnail" style="text-align:center"><?php echo $item->thumb; ?></td><?php } ?>
 					<td>

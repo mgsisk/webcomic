@@ -122,6 +122,7 @@ function webcomic_admin_init() {
 	register_setting( 'webcomic_options', 'comic_feed_size' );
 	register_setting( 'webcomic_options', 'comic_buffer' );
 	register_setting( 'webcomic_options', 'comic_buffer_alert' );
+	register_setting( 'webcomic_options', 'comic_keyboard_shortcuts' );
 	register_setting( 'webcomic_options', 'comic_thumb_crop' );
 	register_setting( 'webcomic_options', 'comic_thumb_size_w' );
 	register_setting( 'webcomic_options', 'comic_thumb_size_h' );

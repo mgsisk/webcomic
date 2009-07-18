@@ -21,6 +21,13 @@ jQuery( document ) . ready( function( $ ) {
 	$( '#transcriptform' ) . ajaxForm( { target: '#transcript-response' } );
 	$( '#transcriptform input[name=comic_transcript_submit]' ) . attr( 'value', '2' );
 	
+	/** Keyboard Shotcuts */
+	$.hotkeys.add( 'shift+down', { disableInInput: true }, function() { if ( $( '.random-comic-link.kbd-shortcut' ) . attr( 'href' ) ) window . location = $( '.random-comic-link' ) . attr( 'href' ); } );
+	$.hotkeys.add( 'shift+left', { disableInInput: true }, function() { if ( $( '.first-comic-link.kbd-shortcut' ) . attr( 'href' ) ) window . location = $( '.first-comic-link' ) . attr( 'href' ); } );
+	$.hotkeys.add( 'shift+right', { disableInInput: true }, function() { if ( $( '.last-comic-link.kbd-shortcut' ) . attr( 'href' ) ) window . location = $( '.last-comic-link' ) . attr( 'href' ); } );
+	$.hotkeys.add( 'left', { disableInInput: true }, function() { if ( $( '.previous-comic-link.kbd-shortcut' ) . attr( 'href' ) ) window . location = $( '.previous-comic-link' ) . attr( 'href' ); } );
+	$.hotkeys.add( 'right', { disableInInput: true }, function() { if ( $( '.next-comic-link.kbd-shortcut' ) . attr( 'href' ) ) window . location = $( '.next-comic-link' ) . attr( 'href' ); } );
+	
 	/** Konami Code */
 	$( document ) . konami( function() {
 		var i = Math . floor( Math . random() * 100 );

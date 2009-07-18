@@ -1011,14 +1011,15 @@ function first_comic_link( $label = false, $limit = false, $bookend = false ) {
 		$link = ( $label ) ? $label : __( '&laquo; First', 'webcomic' );
 	}
 	
-	$current = ( ( $limit && $post->ID == $chapter->first->ID ) || ( $post->ID == $comic->ID ) ) ? ' current-comic' : '';
+	$current  = ( ( $limit && $post->ID == $chapter->first->ID ) || ( $post->ID == $comic->ID ) ) ? ' current-comic' : '';
+	$shortcut = ( get_option( 'comic_keyboard_shortcuts' ) ) ? ' kbd-shortcut' : '';
 	
 	if ( $current && $bookend && $permalink = get_permalink( $bookend ) ) {
 		$comic->link = $permalink;
 		$current     = '';
 	}
 	
-	$class = 'first-comic-link' . $current;
+	$class = 'first-comic-link' . $current . $shortcut;
 	
 	echo $object . '<a href="' . $comic->link . '" title="' . $comic->description . '" class="' . $class . '"><span>' . $link . '</span></a>';
 }
@@ -1069,14 +1070,15 @@ function last_comic_link( $label = false, $limit = false, $bookend = false ) {
 		$link = ( $label ) ? $label : __( 'Last &raquo;', 'webcomic' );
 	}
 	
-	$current = ( ( $limit && $post->ID == $chapter->last->ID ) || ( $post->ID == $comic->ID ) ) ? ' current-comic' : '';
+	$current  = ( ( $limit && $post->ID == $chapter->last->ID ) || ( $post->ID == $comic->ID ) ) ? ' current-comic' : '';
+	$shortcut = ( get_option( 'comic_keyboard_shortcuts' ) ) ? ' kbd-shortcut' : '';
 	
 	if ( $current && $bookend && $permalink = get_permalink( $bookend ) ) {
 		$comic->link = $permalink;
 		$current     = '';
 	}
 	
-	$class = 'last-comic-link' . $current;
+	$class = 'last-comic-link' . $current . $shortcut;
 	
 	echo $object . '<a href="' . $comic->link . '" title="' . $comic->description . '" class="' . $class . '"><span>' . $link . '</span></a>';
 }
@@ -1127,14 +1129,15 @@ function previous_comic_link( $label = false, $limit = false, $bookend = false )
 		$link = ( $label ) ? $label : __( '&lsaquo; Previous', 'webcomic' );
 	}
 	
-	$current = ( ( $limit && $post->ID == $chapter->first->ID ) || ( $post->ID == $comic->ID ) ) ? ' current-comic' : '';
+	$current  = ( ( $limit && $post->ID == $chapter->first->ID ) || ( $post->ID == $comic->ID ) ) ? ' current-comic' : '';
+	$shortcut = ( get_option( 'comic_keyboard_shortcuts' ) ) ? ' kbd-shortcut' : '';
 	
 	if ( $current && $bookend && $permalink = get_permalink( $bookend ) ) {
 		$comic->link = $permalink;
 		$current     = '';
 	}
 	
-	$class = 'previous-comic-link' . $current;
+	$class = 'previous-comic-link' . $current . $shortcut;
 	
 	echo $object . '<a href="' . $comic->link . '" title="' . $comic->description . '" class="' . $class . '"><span>' . $link . '</span></a>';
 }
@@ -1185,14 +1188,15 @@ function next_comic_link( $label = false, $limit = false, $bookend = false ) {
 		$link = ( $label ) ? $label : __( 'Next &rsaquo;', 'webcomic' );
 	}
 	
-	$current = ( ( $limit && $post->ID == $chapter->last->ID ) || ( $post->ID == $comic->ID ) ) ? ' current-comic' : '';
+	$current  = ( ( $limit && $post->ID == $chapter->last->ID ) || ( $post->ID == $comic->ID ) ) ? ' current-comic' : '';
+	$shortcut = ( get_option( 'comic_keyboard_shortcuts' ) ) ? ' kbd-shortcut' : '';
 	
 	if ( $current && $bookend && $permalink = get_permalink( $bookend ) ) {
 		$comic->link = $permalink;
 		$current     = '';
 	}
 	
-	$class = 'next-comic-link' . $current;
+	$class = 'next-comic-link' . $current . $shortcut;
 	
 	echo $object . '<a href="' . $comic->link . '" title="' . $comic->description . '" class="' . $class . '"><span>' . $link . '</span></a>';
 }
@@ -1231,7 +1235,9 @@ function random_comic_link( $label = false, $limit = false, $chapter = false ) {
 		$link = $comic->title;
 	}
 	
-	echo $image . '<a href="' . $comic->link . '" title="' . $comic->description . '" class="random-comic-link"><span>' . $link . '</span></a>';
+	$shortcut = ( get_option( 'comic_keyboard_shortcuts' ) ) ? ' kbd-shortcut' : '';
+	
+	echo $image . '<a href="' . $comic->link . '" title="' . $comic->description . '" class="random-comic-link' . $shortcut . '"><span>' . $link . '</span></a>';
 }
 
 /**

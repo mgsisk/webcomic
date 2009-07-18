@@ -79,7 +79,7 @@ function comic_page_settings(){
 					<th scope="row"><label for="comic_directory"><?php _e( 'Directory', 'webcomic' ); ?></label></th>
 					<td>
 						<input type="text" name="comic_directory" id="comic_directory" value="<?php echo get_option( 'comic_directory' ); ?>" class="code" />
-						<span class="description"><?php _e( 'Comic files will be stored in subdirectories of', 'webcomic'); ?> <a href="<?php echo get_comic_directory( 'root' ); ?>"><?php echo get_comic_directory( 'root' ); ?></a></span><br />
+						<span class="description"><?php _e( 'Comic files will be stored in subdirectories of', 'webcomic'); ?> <a href="<?php echo get_comic_directory( 'root' ); ?>" target="_blank"><?php echo get_comic_directory( 'root' ); ?></a></span><br />
 					</td>
 				</tr>
 				<tr>
@@ -145,6 +145,12 @@ function comic_page_settings(){
 						</label>
 					</td>
 				</tr>
+				<tr>
+					<th scope="row"><label for="comic_keyboard_shortcuts"><?php _e( 'Shortcuts', 'webcomic' ); ?></label></th>
+					<td>
+						<label><input type="checkbox" name="comic_keyboard_shortcuts" id="comic_keyboard_shortcuts" value="1"<?php if ( get_option( 'comic_keyboard_shortcuts' ) ) echo ' checked="checked"'; ?> /> <?php printf( __( 'Enable <a href="%s" target="_blank">keyboard shortcuts</a> for comic navigation', 'webcomic' ), 'http://code.google.com/p/webcomic/wiki/Settings#Buffers' ); ?></label>
+					</td>
+				</tr>
 			</table>
 			<h3><?php _e( 'Dimensions', 'webcomic' ); ?></h3>
 			<p><?php _e( 'The sizes listed below determine the maximum dimensions in pixels to use when generating thumbnail images, or the exact dimensions to use when displaying Flash files.', 'webcomic' ); ?></p>
@@ -173,7 +179,7 @@ function comic_page_settings(){
 				</tr>
 			</table>
 			<p class="submit">
-				<input type="submit" name="Submit" class="button-primary" value="<?php _e( 'Save Changes', 'webcomic'); ?>" /> <span class="alignright description"><?php printf( __( '<a href="%s" title="Show your support by donating">Donate</a> | Webcomic Version %s', 'webcomic' ), 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5683100', get_option( 'webcomic_version' ) ); ?></span>
+				<input type="submit" name="Submit" class="button-primary" value="<?php _e( 'Save Changes', 'webcomic'); ?>" /> <span class="alignright description"><?php printf( __( '<a href="%s" target="_blank" title="Show your support by donating">Donate</a> | Webcomic Version %s', 'webcomic' ), 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5683100', get_option( 'webcomic_version' ) ); ?></span>
 				<input type="hidden" name="action" value="update" />
 				<?php settings_fields( 'webcomic_options' ); ?>
 			</p>

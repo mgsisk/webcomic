@@ -4,7 +4,7 @@ Text Domain: webcomic
 Plugin Name: Webcomic
 Plugin URI: http://maikeruon.com/webcomic/
 Description: Webcomic adds a collection of new features to WordPress designed specifically for publishing webcomics, developing webcomic themes, and managing webcomic sites.
-Version: 2.1.0b
+Version: 2.1.0
 Author: Michael Sisk
 Author URI: http://maikeruon.com/
 
@@ -66,6 +66,7 @@ if ( !get_option( 'webcomic_version' ) || '2.1.0' != get_option( 'webcomic_versi
 		add_option( 'comic_feed_size', 'full' );
 		add_option( 'comic_buffer', '1' );
 		add_option( 'comic_buffer_alert', '7' );
+		add_option( 'comic_keyboard_shortcuts', '' );
 		add_option( 'comic_thumb_crop', '' );
 		add_option( 'comic_large_size_w', get_option( 'large_size_w' ) );
 		add_option( 'comic_large_size_h', get_option( 'large_size_h' ) );
@@ -497,8 +498,7 @@ function webcomic_init() {
  */
 if ( get_option( 'comic_feed' ) ) {
 	function webcomic_feed( $content ) {
-		if ( is_feed() )
-			$prepend = ( in_comic_category() ) ? '<p>' . get_comic_object( get_the_comic(), get_option( 'comic_feed_size' ) ) . '</p>' : '';
+		if ( is_feed() ) $prepend = ( in_comic_category() ) ? '<p>' . get_comic_object( get_the_comic(), get_option( 'comic_feed_size' ) ) . '</p>' : '';
 		
 		return $prepend . $content; 
 	} add_filter( 'the_content', 'webcomic_feed' );
@@ -570,7 +570,7 @@ function webcomic_template_redirect() {
 	//Enqueue javascript required for various Webcomic features
 	wp_enqueue_script( 'jquery-cookie', webcomic_include_url( 'jquery.cookie.js' ), array( 'jquery' ) );
 	wp_enqueue_script( 'jquery-konami', webcomic_include_url( 'jquery.konami.js' ), array( 'jquery' ) );
-	wp_enqueue_script( 'webcomic-scripts', webcomic_include_url( 'scripts.js' ), array( 'jquery', 'jquery-form', 'jquery-cookie' ) );
+	wp_enqueue_script( 'webcomic-scripts', webcomic_include_url( 'scripts.js' ), array( 'jquery', 'jquery-hotkeys', 'jquery-form', 'jquery-cookie' ) );
 	
 	//Handle transcript.php form requests
 	if ( $_POST[ 'comic_transcript_submit' ] ) {
@@ -624,6 +624,56 @@ function webcomic_template_redirect() {
 			$transcript_response = $before . $message . $after;
 	}	
 } add_action( 'template_redirect', 'webcomic_template_redirect' );
+
+/**
+ * Add webcomic-specific CSS classes to body element.
+ * 
+ * @package Webcomic
+ * @since 2.1.0
+ * 
+ * @param arr $classes Body class array.
+ * @return arr The updated $classes array.
+ */
+function webcomic_body_class( $classes ) {
+	global $webcomic_series;
+	
+	//Must be a Webcomic powered site
+	$classes[] = 'webcomic';
+	
+	//Add the webcomic series class
+	if ( $webcomic_series ) $classes[] = 'webcomic-' . $webcomic_series->slug;
+	
+	return $classes;
+} add_filter( 'body_class', 'webcomic_body_class' );
+
+/**
+ * Add webcomic-specific CSS classes to post elements.
+ * 
+ * @package Webcomic
+ * @since 2.1.0
+ * 
+ * @param arr $classes Post class array.
+ * @return arr The updated $classes array.
+ */
+function webcomic_post_class( $classes ) {
+	global $post;
+	
+	//Change the post type for comics
+	if ( in_comic_category() ) {
+		$classes[ 0 ] = 'comic-' . $post->ID;
+		$classes[ 1 ] = 'comic';
+	}
+	
+	//Add chapter calsses for comic posts assigned to a chapter
+	if ( $chapters = get_post_comic_chapters() ) {
+		$classes[] = 'series-' . $chapters->series->slug;
+		$classes[] = 'volume-' . $chapters->volume->slug;
+		$classes[] = 'chapter-' . $chapters->chapter->slug;
+	}
+	
+	return $classes;
+} add_filter( 'post_class', 'webcomic_post_class' );
+	
 
 /**
  * Enqueue's necessary javascript for administrative pages.

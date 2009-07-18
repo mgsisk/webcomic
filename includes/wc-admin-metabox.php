@@ -13,10 +13,11 @@ function comic_post_meta_box( $post ) {
 	$file_path     = get_comic_directory( 'abs', false, $series );
 	$post_chapters = get_post_comic_chapters();
 	$collection    = get_the_collection( 'hide_empty=0&depth=3&series=' . $series );
+	$comic         = get_the_comic();
 	?>
 	<script type="text/javascript">jQuery('form#post').attr('enctype','multipart/form-data').attr('encoding','multipart/form-data')</script>
 	
-	<?php if ( $series && get_the_comic()->file ) { $comic = get_the_comic(); if ( $comic->fallback ) { ?>
+	<?php if ( $series && $comic->file ) { if ( $comic->fallback ) { ?>
 		<p class="updated"><?php _e( 'Files are being matched with this post using the fallback method.', 'webcomic' ) ?></p>
 	<?php } ?>
 		<div class="alignright"><p><?php the_comic( 'thumb' ); ?></p><a href="<?php echo $comic->link; ?>" title="<?php echo $comic->description; ?>"><?php _e( 'View', 'webcomic' ); ?></a></div>
@@ -75,7 +76,7 @@ function comic_post_meta_box( $post ) {
 		</p>
 		<p><?php if ( $comic && !$comic->fallback ) _e( 'Any files currently associated with this post will be deleted when uploading a new file.', 'webcomic' ); ?></p>
 		<br />
-	<?php if ( $comic && !$comic->fallback ) { $file = pathinfo( get_comic_directory( 'abs', false, $series ) . $comic->file_name ); ?>
+	<?php if ( $comic->file && !$comic->fallback ) { $file = pathinfo( get_comic_directory( 'abs', false, $series ) . $comic->file_name ); ?>
 		<p style="width:50%">
 			<label for="comic_file"><strong><?php _e( 'File', 'webcomic' ); ?></strong></label><br />
 			<input type="text" name="comic_file" id="comic_file" style="width:60%" value="<?php echo substr( $file[ 'basename' ], 0, strrpos( $file[ 'basename' ], '.' ) ); ?>" />
