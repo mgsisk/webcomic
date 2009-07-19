@@ -12,7 +12,7 @@ Webcomic adds a collection of new features to WordPress designed specifically fo
 
 Webcomic adds a collection of new features to WordPress designed specifically for publishing webcomics, developing webcomic themes, and managing webcomic sites.
 
-**Inkblot Users** - Remember to download the most recent version of Inkblot from the new [Google Code site](http://code.google.com/p/webcomic/downloads/list) and update your theme files before isntalling Webcomic 2.1
+**Inkblot Users** - Remember to download the most recent version of Inkblot from the new [Google Code site](http://code.google.com/p/webcomic/downloads/list) and update your theme files before installing Webcomic 2.1
 
 = New in 2.1 =
 
