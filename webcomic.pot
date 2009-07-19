@@ -1,0 +1,1531 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Michael Sisk
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/webcomic\n"
+"POT-Creation-Date: 2009-07-18 01:46+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: includes/transcript.php:14
+msgid ""
+"This post is password protected. Enter the password to view the transcript."
+msgstr ""
+
+#: includes/transcript.php:23 includes/wc-admin-metabox.php:137
+msgid "Transcript"
+msgstr ""
+
+#: includes/transcript.php:31
+#, php-format
+msgid "You must be <a href=\"%s\">logged in</a> to transcribe."
+msgstr ""
+
+#: includes/transcript.php:36
+#, php-format
+msgid "Transcribing as <a href=\"%s\">%s</a>"
+msgstr ""
+
+#: includes/transcript.php:36
+msgid "Log Out &raquo;"
+msgstr ""
+
+#: includes/transcript.php:38 includes/wc-admin-chapters.php:222
+#: includes/wc-admin-chapters.php:230
+msgid "Name"
+msgstr ""
+
+#: includes/transcript.php:38 includes/transcript.php:39
+msgid " (required)"
+msgstr ""
+
+#: includes/transcript.php:39
+msgid "E-mail"
+msgstr ""
+
+#: includes/transcript.php:40
+msgid "Is fire hot or cold?"
+msgstr ""
+
+#: includes/transcript.php:43
+msgid "XHTML Allowed:"
+msgstr ""
+
+#: includes/transcript.php:44
+msgid "Transcribe"
+msgstr ""
+
+#: includes/wc-admin-chapters.php:64
+#, php-format
+msgid "Updated chapter &#8220;%s&#8220;"
+msgstr ""
+
+#: includes/wc-admin-chapters.php:66
+msgid "A chapter name must be provided."
+msgstr ""
+
+#: includes/wc-admin-chapters.php:68
+msgid "A chapter with that name already exists."
+msgstr ""
+
+#: includes/wc-admin-chapters.php:70
+msgid "A chapter with that slug already exists."
+msgstr ""
+
+#: includes/wc-admin-chapters.php:72
+msgid "The chapter could not be updated."
+msgstr ""
+
+#: includes/wc-admin-chapters.php:92
+#, php-format
+msgid "Added new chapter &#8220;%s&#8220;"
+msgstr ""
+
+#: includes/wc-admin-chapters.php:103
+msgid " and all the chapters it contained."
+msgstr ""
+
+#: includes/wc-admin-chapters.php:135
+#, php-format
+msgid "Deleted &#8220;%1$s&#8220;%2$s"
+msgstr ""
+
+#: includes/wc-admin-chapters.php:154
+#, php-format
+msgid ""
+"This is a comic series. Changing the <strong>Chapter Slug</strong> will also "
+"rename the directory <a href=\"%s\">%s</a> to match the new slug."
+msgstr ""
+
+#: includes/wc-admin-chapters.php:156
+msgid "Edit Chapter"
+msgstr ""
+
+#: includes/wc-admin-chapters.php:161 includes/wc-admin-chapters.php:291
+msgid "Chapter Name"
+msgstr ""
+
+#: includes/wc-admin-chapters.php:163 includes/wc-admin-chapters.php:293
+msgid "The name is used to identify the chapter almost everywhere."
+msgstr ""
+
+#: includes/wc-admin-chapters.php:166 includes/wc-admin-chapters.php:298
+msgid "Chapter Slug"
+msgstr ""
+
+#: includes/wc-admin-chapters.php:168
+msgid ""
+"The &#8220;slug&#8220; is the URL-friendly version of the name. It is "
+"usually all lowercase and contains only letters, numbers, and hyphens."
+msgstr ""
+
+#: includes/wc-admin-chapters.php:172 includes/wc-admin-chapters.php:303
+msgid "Chapter Volume"
+msgstr ""
+
+#: includes/wc-admin-chapters.php:175 includes/wc-admin-chapters.php:305
+#: includes/wc-widgets.php:389
+msgid "None"
+msgstr ""
+
+#: includes/wc-admin-chapters.php:185
+msgid "Select the volume that this chapter belongs to."
+msgstr ""
+
+#: includes/wc-admin-chapters.php:190
+msgid "Descriptions"
+msgstr ""
+
+#: includes/wc-admin-chapters.php:193 includes/wc-admin-chapters.php:313
+msgid ""
+"Useful for providing a brief overview of the events covered in this chapter."
+msgstr ""
+
+#: includes/wc-admin-chapters.php:198
+msgid "Update Chapter"
+msgstr ""
+
+#: includes/wc-admin-chapters.php:205
+msgid "Comic Chapters"
+msgstr ""
+
+#: includes/wc-admin-chapters.php:214 includes/wc-admin-library.php:732
+msgid "Change Series"
+msgstr ""
+
+#: includes/wc-admin-chapters.php:223 includes/wc-admin-chapters.php:231
+#: includes/wc-admin-chapters.php:311 includes/wc-admin-metabox.php:117
+msgid "Description"
+msgstr ""
+
+#: includes/wc-admin-chapters.php:224 includes/wc-admin-chapters.php:232
+msgid "Slug"
+msgstr ""
+
+#: includes/wc-admin-chapters.php:225 includes/wc-admin-chapters.php:233
+msgid "Pages"
+msgstr ""
+
+#: includes/wc-admin-chapters.php:239 includes/wc-admin-chapters.php:249
+#: includes/wc-admin-chapters.php:260
+#, php-format
+msgid "Edit \"%s\""
+msgstr ""
+
+#: includes/wc-admin-chapters.php:240 includes/wc-admin-chapters.php:250
+#: includes/wc-admin-chapters.php:262 includes/wc-admin-library.php:836
+#: includes/wc-admin-library.php:851
+msgid "Edit"
+msgstr ""
+
+#: includes/wc-admin-chapters.php:251
+#, php-format
+msgid ""
+"You are about to delete '%s'. Any chapters in this volume will also be "
+"deleted.\n"
+" 'Cancel' to stop, 'OK' to delete."
+msgstr ""
+
+#: includes/wc-admin-chapters.php:251 includes/wc-admin-chapters.php:268
+#: includes/wc-admin-library.php:840 includes/wc-admin-library.php:852
+#: includes/wc-admin-library.php:902 includes/wc-admin-library.php:974
+#: includes/wc-admin-library.php:986 includes/wc-admin-metabox.php:84
+#: includes/wc-admin-metabox.php:119 includes/wc-admin-metabox.php:133
+msgid "Delete"
+msgstr ""
+
+#: includes/wc-admin-chapters.php:264
+msgid "Set Current"
+msgstr ""
+
+#: includes/wc-admin-chapters.php:266
+msgid "Unset Current"
+msgstr ""
+
+#: includes/wc-admin-chapters.php:268 includes/wc-admin-library.php:840
+#: includes/wc-admin-library.php:852 includes/wc-admin-library.php:974
+#: includes/wc-admin-library.php:986
+#, php-format
+msgid ""
+"You are about to delete '%s'\n"
+" 'Cancel' to stop, 'OK' to delete."
+msgstr ""
+
+#: includes/wc-admin-chapters.php:279
+msgid "How to Use Chapters"
+msgstr ""
+
+#: includes/wc-admin-chapters.php:286 includes/wc-admin-chapters.php:316
+msgid "Add Chapter"
+msgstr ""
+
+#: includes/wc-admin-chapters.php:287
+msgid ""
+"The chapter you are trying to create already exists. Chapter names must be "
+"unique across all series."
+msgstr ""
+
+#: includes/wc-admin-chapters.php:296
+msgid ""
+"A chapter with that slug already exists. Chapter slugs must be unique across "
+"all series."
+msgstr ""
+
+#: includes/wc-admin-chapters.php:300
+msgid ""
+"The &#8220;slug&#8221; is the URL-friendly version of the name. It is "
+"usually all lowercase and contains only letters, numbers, and hyphens."
+msgstr ""
+
+#: includes/wc-admin-chapters.php:308
+msgid ""
+"Select <strong>None</strong> to turn this chapter into a new volume that you "
+"can assign other chapters to."
+msgstr ""
+
+#: includes/wc-admin-library.php:67
+#, php-format
+msgid "%d fallback comics updated."
+msgstr ""
+
+#: includes/wc-admin-library.php:157
+#, php-format
+msgid "%s comics successfully extracted from the archive."
+msgstr ""
+
+#: includes/wc-admin-library.php:159
+msgid "No comics could be extracted from the archive."
+msgstr ""
+
+#: includes/wc-admin-library.php:162
+msgid "An error occurred."
+msgstr ""
+
+#: includes/wc-admin-library.php:237
+msgid "A post could not be automatically generated."
+msgstr ""
+
+#: includes/wc-admin-library.php:241
+msgid "New comic uploaded."
+msgstr ""
+
+#: includes/wc-admin-library.php:243
+msgid "A comic with that name already exists."
+msgstr ""
+
+#: includes/wc-admin-library.php:246
+msgid "Invalid file format. Comics must be gif, jpg, jpeg, png, or swf."
+msgstr ""
+
+#: includes/wc-admin-library.php:251
+msgid "The file is too large to upload."
+msgstr ""
+
+#: includes/wc-admin-library.php:252
+msgid "The file was only partially uploaded."
+msgstr ""
+
+#: includes/wc-admin-library.php:253
+msgid "Your servers temporary directory could not be found."
+msgstr ""
+
+#: includes/wc-admin-library.php:254
+msgid "The file could not be saved properly after upload."
+msgstr ""
+
+#: includes/wc-admin-library.php:255
+msgid "The upload was halted by a PHP extensions."
+msgstr ""
+
+#: includes/wc-admin-library.php:271
+msgid "Selected comics removed from chapters."
+msgstr ""
+
+#: includes/wc-admin-library.php:271
+msgid "Selected comics assigned to new chapter."
+msgstr ""
+
+#: includes/wc-admin-library.php:299
+#, php-format
+msgid "Thumbnails regenerated for %d file."
+msgid_plural "Thumbnails regenerated for %d files."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/wc-admin-library.php:301
+msgid "No thumbnails could be regenerated."
+msgstr ""
+
+#: includes/wc-admin-library.php:339
+#, php-format
+msgid "%d file deleted."
+msgid_plural "%d files deleted."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/wc-admin-library.php:341
+msgid "None of the selected files could be deleted."
+msgstr ""
+
+#: includes/wc-admin-library.php:344
+#, php-format
+msgid "%d post deleted."
+msgid_plural "%d posts deleted."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/wc-admin-library.php:346
+msgid "None of the selected posts could be deleted."
+msgstr ""
+
+#: includes/wc-admin-library.php:349
+msgid "None of the selected files or posts could be deleted."
+msgstr ""
+
+#: includes/wc-admin-library.php:352
+#, php-format
+msgid "%d file"
+msgid_plural "%d files"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/wc-admin-library.php:355
+#, php-format
+msgid "%d post"
+msgid_plural "%d posts"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/wc-admin-library.php:358
+msgid " and "
+msgstr ""
+
+#: includes/wc-admin-library.php:358 includes/wc-admin-library.php:360
+#: includes/wc-admin-library.php:362
+msgid " deleted."
+msgstr ""
+
+#: includes/wc-admin-library.php:392
+#, php-format
+msgid "%d file renamed."
+msgid_plural "%d files renamed."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/wc-admin-library.php:394
+msgid "None of the selected files could be renamed."
+msgstr ""
+
+#: includes/wc-admin-library.php:397
+msgid ""
+"You must select at least one day to publish on when generating posts for "
+"multiple files."
+msgstr ""
+
+#: includes/wc-admin-library.php:485
+#, php-format
+msgid "%d post automatically generated."
+msgid_plural "%d posts automatically generated."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/wc-admin-library.php:487
+msgid "No posts could be automatically generated."
+msgstr ""
+
+#: includes/wc-admin-library.php:491
+msgid "Please select at least one comic."
+msgstr ""
+
+#: includes/wc-admin-library.php:514
+#, php-format
+msgid "%s thumbnails regenerated."
+msgstr ""
+
+#: includes/wc-admin-library.php:542
+#, php-format
+msgid "Deleted %s"
+msgstr ""
+
+#: includes/wc-admin-library.php:544
+#, php-format
+msgid "%s could not be deleted because it does not exist."
+msgstr ""
+
+#: includes/wc-admin-library.php:612
+#, php-format
+msgid "%s pending"
+msgstr ""
+
+#: includes/wc-admin-library.php:625
+msgid "Unpublished"
+msgstr ""
+
+#: includes/wc-admin-library.php:627
+msgid "Y/m/d g:i:s A"
+msgstr ""
+
+#: includes/wc-admin-library.php:635
+#, php-format
+msgid "%s from now"
+msgstr ""
+
+#: includes/wc-admin-library.php:643
+#, php-format
+msgid "%s ago"
+msgstr ""
+
+#: includes/wc-admin-library.php:645
+msgid "Y/m/d"
+msgstr ""
+
+#: includes/wc-admin-library.php:652
+msgid "Published"
+msgstr ""
+
+#: includes/wc-admin-library.php:655
+msgid "Missed schedule"
+msgstr ""
+
+#: includes/wc-admin-library.php:657
+msgid "Scheduled"
+msgstr ""
+
+#: includes/wc-admin-library.php:659
+msgid "Last Modified"
+msgstr ""
+
+#: includes/wc-admin-library.php:663
+msgid "Password protected"
+msgstr ""
+
+#: includes/wc-admin-library.php:665
+msgid "Private"
+msgstr ""
+
+#: includes/wc-admin-library.php:668
+msgid "Pending"
+msgstr ""
+
+#: includes/wc-admin-library.php:671
+msgid "Draft"
+msgstr ""
+
+#: includes/wc-admin-library.php:687
+#, php-format
+msgid "Displaying %1$d &#8211; %2$d of %3$d"
+msgstr ""
+
+#: includes/wc-admin-library.php:717
+msgid "Comic Library"
+msgstr ""
+
+#: includes/wc-admin-library.php:720
+#, php-format
+msgid ""
+"%d comic is being matched using the fallback method and <a href=\"%s"
+"\">should be updated</a>."
+msgid_plural ""
+"%d comics are being matched using the fallback method and <a href=\"%s"
+"\">should be updated</a>."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/wc-admin-library.php:722
+#, php-format
+msgid "%d post is not linked to and cannot be matched with a comic."
+msgid_plural "%d posts are not linked to and cannot be matched with a comic."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/wc-admin-library.php:740
+msgid "Don't Post"
+msgstr ""
+
+#: includes/wc-admin-library.php:741 includes/wc-admin-library.php:930
+msgid "Save Draft"
+msgstr ""
+
+#: includes/wc-admin-library.php:742 includes/wc-admin-library.php:929
+#: includes/wc-admin-metabox.php:127
+msgid "Publish"
+msgstr ""
+
+#: includes/wc-admin-library.php:746 includes/wc-admin-library.php:909
+msgid "Jan"
+msgstr ""
+
+#: includes/wc-admin-library.php:747 includes/wc-admin-library.php:910
+msgid "Feb"
+msgstr ""
+
+#: includes/wc-admin-library.php:748 includes/wc-admin-library.php:911
+msgid "Mar"
+msgstr ""
+
+#: includes/wc-admin-library.php:749 includes/wc-admin-library.php:912
+msgid "Apr"
+msgstr ""
+
+#: includes/wc-admin-library.php:750 includes/wc-admin-library.php:913
+msgid "May"
+msgstr ""
+
+#: includes/wc-admin-library.php:751 includes/wc-admin-library.php:914
+msgid "Jun"
+msgstr ""
+
+#: includes/wc-admin-library.php:752 includes/wc-admin-library.php:915
+msgid "Jul"
+msgstr ""
+
+#: includes/wc-admin-library.php:753 includes/wc-admin-library.php:916
+msgid "Aug"
+msgstr ""
+
+#: includes/wc-admin-library.php:754 includes/wc-admin-library.php:917
+msgid "Sep"
+msgstr ""
+
+#: includes/wc-admin-library.php:755 includes/wc-admin-library.php:918
+msgid "Oct"
+msgstr ""
+
+#: includes/wc-admin-library.php:756 includes/wc-admin-library.php:919
+msgid "Nov"
+msgstr ""
+
+#: includes/wc-admin-library.php:757 includes/wc-admin-library.php:920
+msgid "Dec"
+msgstr ""
+
+#: includes/wc-admin-library.php:766 includes/wc-admin-metabox.php:75
+msgid "Overwrite"
+msgstr ""
+
+#: includes/wc-admin-library.php:768
+msgid "Upload"
+msgstr ""
+
+#: includes/wc-admin-library.php:781 includes/wc-admin-library.php:866
+#: includes/wc-admin-library.php:901
+msgid "Bulk Actions"
+msgstr ""
+
+#: includes/wc-admin-library.php:782 includes/wc-admin-library.php:838
+#: includes/wc-admin-library.php:867
+msgid "Regenerate Thumbnails"
+msgstr ""
+
+#: includes/wc-admin-library.php:783 includes/wc-admin-library.php:868
+msgid "Delete&hellip;"
+msgstr ""
+
+#: includes/wc-admin-library.php:784 includes/wc-admin-library.php:869
+#: includes/wc-admin-settings.php:111
+msgid "Files"
+msgstr ""
+
+#: includes/wc-admin-library.php:785 includes/wc-admin-library.php:870
+msgid "Posts"
+msgstr ""
+
+#: includes/wc-admin-library.php:786 includes/wc-admin-library.php:871
+msgid "Files &amp; Posts"
+msgstr ""
+
+#: includes/wc-admin-library.php:788 includes/wc-admin-library.php:873
+msgid "Update Collection"
+msgstr ""
+
+#: includes/wc-admin-library.php:789 includes/wc-admin-library.php:874
+#: includes/wc-admin-metabox.php:105
+msgid "N\\A"
+msgstr ""
+
+#: includes/wc-admin-library.php:797 includes/wc-admin-library.php:882
+#: includes/wc-admin-library.php:941 includes/wc-admin-library.php:997
+msgid "Apply"
+msgstr ""
+
+#: includes/wc-admin-library.php:798
+#, php-format
+msgid "%d buffer comic remains. The buffer runs out on %s @ %s"
+msgid_plural "%d buffer comics remain. The buffer runs out on %s @ %s"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/wc-admin-library.php:802
+msgid "List View"
+msgstr ""
+
+#: includes/wc-admin-library.php:803
+msgid "Thumbnail View"
+msgstr ""
+
+#: includes/wc-admin-library.php:811 includes/wc-admin-library.php:820
+#: includes/wc-admin-library.php:953 includes/wc-admin-metabox.php:81
+msgid "File"
+msgstr ""
+
+#: includes/wc-admin-library.php:812 includes/wc-admin-library.php:821
+msgid "Post"
+msgstr ""
+
+#: includes/wc-admin-library.php:832
+msgid "Edit this file"
+msgstr ""
+
+#: includes/wc-admin-library.php:836
+msgid "Edit this comic"
+msgstr ""
+
+#: includes/wc-admin-library.php:838
+msgid "Regenerate thumbnails for this file"
+msgstr ""
+
+#: includes/wc-admin-library.php:840 includes/wc-admin-library.php:974
+#: includes/wc-admin-library.php:986
+msgid "Delete this file"
+msgstr ""
+
+#: includes/wc-admin-library.php:842 includes/wc-admin-library.php:854
+#: includes/wc-admin-library.php:975 includes/wc-admin-library.php:987
+#: includes/wc-admin-metabox.php:23
+msgid "View"
+msgstr ""
+
+#: includes/wc-admin-library.php:847 includes/wc-admin-library.php:851
+msgid "Edit this post"
+msgstr ""
+
+#: includes/wc-admin-library.php:852
+msgid "Delete this post"
+msgstr ""
+
+#: includes/wc-admin-library.php:893
+msgid "No posts have been assigned to this series yet."
+msgstr ""
+
+#: includes/wc-admin-library.php:895
+msgid "Orphaned Files"
+msgstr ""
+
+#: includes/wc-admin-library.php:903
+msgid "Rename"
+msgstr ""
+
+#: includes/wc-admin-library.php:904
+msgid "Generate Posts"
+msgstr ""
+
+#: includes/wc-admin-library.php:907
+msgid "Start on"
+msgstr ""
+
+#: includes/wc-admin-library.php:927
+msgid "and"
+msgstr ""
+
+#: includes/wc-admin-library.php:932
+msgid "every"
+msgstr ""
+
+#: includes/wc-admin-library.php:933
+msgid "Sunday"
+msgstr ""
+
+#: includes/wc-admin-library.php:933 includes/wc-admin-library.php:939
+msgid "S"
+msgstr ""
+
+#: includes/wc-admin-library.php:934
+msgid "Monday"
+msgstr ""
+
+#: includes/wc-admin-library.php:934
+msgid "M"
+msgstr ""
+
+#: includes/wc-admin-library.php:935
+msgid "Tuesday"
+msgstr ""
+
+#: includes/wc-admin-library.php:935
+msgid "T"
+msgstr ""
+
+#: includes/wc-admin-library.php:936
+msgid "Wednesday"
+msgstr ""
+
+#: includes/wc-admin-library.php:936
+msgid "W"
+msgstr ""
+
+#: includes/wc-admin-library.php:937
+msgid "Thursday"
+msgstr ""
+
+#: includes/wc-admin-library.php:937
+msgid "R"
+msgstr ""
+
+#: includes/wc-admin-library.php:938
+msgid "Friday"
+msgstr ""
+
+#: includes/wc-admin-library.php:938
+msgid "F"
+msgstr ""
+
+#: includes/wc-admin-library.php:939
+msgid "Saturday"
+msgstr ""
+
+#: includes/wc-admin-library.php:953
+msgid "Select All"
+msgstr ""
+
+#: includes/wc-admin-library.php:997
+msgid "Options"
+msgstr ""
+
+#: includes/wc-admin-library.php:997
+msgid "Comics per page:"
+msgstr ""
+
+#: includes/wc-admin-metabox.php:21
+msgid "Files are being matched with this post using the fallback method."
+msgstr ""
+
+#: includes/wc-admin-metabox.php:25
+msgid "This post is not linked to and cannot be matched with a file."
+msgstr ""
+
+#: includes/wc-admin-metabox.php:50
+msgid "Select an orphan or upload a new file below:"
+msgstr ""
+
+#: includes/wc-admin-metabox.php:75
+msgid "Overwrite an existing file with the same name"
+msgstr ""
+
+#: includes/wc-admin-metabox.php:77
+msgid ""
+"Any files currently associated with this post will be deleted when uploading "
+"a new file."
+msgstr ""
+
+#: includes/wc-admin-metabox.php:84
+msgid "Delete this comic"
+msgstr ""
+
+#: includes/wc-admin-metabox.php:90
+msgid "Large, Medium, and Thumbnail sizes available."
+msgstr ""
+
+#: includes/wc-admin-metabox.php:92
+msgid "Medium and Thumbnail sizes available."
+msgstr ""
+
+#: includes/wc-admin-metabox.php:94
+msgid "Thumbnail size available."
+msgstr ""
+
+#: includes/wc-admin-metabox.php:96
+msgid "No additional sizes available."
+msgstr ""
+
+#: includes/wc-admin-metabox.php:103
+msgid "Chapter"
+msgstr ""
+
+#: includes/wc-admin-metabox.php:115
+msgid "This comic currently belongs to "
+msgstr ""
+
+#: includes/wc-admin-metabox.php:119
+msgid "Delete this description"
+msgstr ""
+
+#: includes/wc-admin-metabox.php:123
+msgid ""
+"If provided, the comic description will replace the post title as the hover "
+"text for links to and images of the comic."
+msgstr ""
+
+#: includes/wc-admin-metabox.php:125
+msgid "Action"
+msgstr ""
+
+#: includes/wc-admin-metabox.php:128
+msgid "Request Improvement"
+msgstr ""
+
+#: includes/wc-admin-metabox.php:129
+msgid "Save as Draft"
+msgstr ""
+
+#: includes/wc-admin-metabox.php:131
+msgid "Restore Previous"
+msgstr ""
+
+#: includes/wc-admin-metabox.php:371
+msgid "Comic Series"
+msgstr ""
+
+#: includes/wc-admin-metabox.php:373 includes/wc-widgets.php:194
+#: includes/wc-widgets.php:280 includes/wc-widgets.php:378
+#: includes/wc-widgets.php:532
+msgid "All"
+msgstr ""
+
+#: includes/wc-admin-settings.php:66
+msgid "Settings saved."
+msgstr ""
+
+#: includes/wc-admin-settings.php:69
+msgid "Webcomic was not able to create necessary comic directories."
+msgstr ""
+
+#: includes/wc-admin-settings.php:74
+msgid "Comic Settings"
+msgstr ""
+
+#: includes/wc-admin-settings.php:79
+msgid "Directory"
+msgstr ""
+
+#: includes/wc-admin-settings.php:82
+msgid "Comic files will be stored in subdirectories of"
+msgstr ""
+
+#: includes/wc-admin-settings.php:87
+msgid "Categories"
+msgstr ""
+
+#: includes/wc-admin-settings.php:88
+msgid ""
+"Hold down <code>Ctrl</code> or <code>Command</code> to select multiple "
+"categories."
+msgstr ""
+
+#: includes/wc-admin-settings.php:113
+msgid "Secure filenames during upload to prevent archive scraping"
+msgstr ""
+
+#: includes/wc-admin-settings.php:114
+msgid "Secure URL's to obscure the location and name of comic files"
+msgstr ""
+
+#: includes/wc-admin-settings.php:118
+msgid "Transcripts"
+msgstr ""
+
+#: includes/wc-admin-settings.php:120
+msgid "Allow people to submit transcripts for individual comics"
+msgstr ""
+
+#: includes/wc-admin-settings.php:121
+msgid "Transcript author must provide a name and e-mail"
+msgstr ""
+
+#: includes/wc-admin-settings.php:122
+msgid "Users must be registered and logged in to transcribe"
+msgstr ""
+
+#: includes/wc-admin-settings.php:126
+msgid "Feeds"
+msgstr ""
+
+#: includes/wc-admin-settings.php:128
+msgid "Include"
+msgstr ""
+
+#: includes/wc-admin-settings.php:130
+msgid "full"
+msgstr ""
+
+#: includes/wc-admin-settings.php:131
+msgid "large"
+msgstr ""
+
+#: includes/wc-admin-settings.php:132
+msgid "medium"
+msgstr ""
+
+#: includes/wc-admin-settings.php:133
+msgid "thumbnail"
+msgstr ""
+
+#: includes/wc-admin-settings.php:135
+msgid "comics in feeds"
+msgstr ""
+
+#: includes/wc-admin-settings.php:138
+msgid "Buffers"
+msgstr ""
+
+#: includes/wc-admin-settings.php:142
+msgid "Send an e-mail notification"
+msgstr ""
+
+#: includes/wc-admin-settings.php:144
+msgid "days before a buffer runs out"
+msgstr ""
+
+#: includes/wc-admin-settings.php:149
+msgid "Shortcuts"
+msgstr ""
+
+#: includes/wc-admin-settings.php:151
+#, php-format
+msgid ""
+"Enable <a href=\"%s\" target=\"_blank\">keyboard shortcuts</a> for comic "
+"navigation"
+msgstr ""
+
+#: includes/wc-admin-settings.php:155
+msgid "Dimensions"
+msgstr ""
+
+#: includes/wc-admin-settings.php:156
+msgid ""
+"The sizes listed below determine the maximum dimensions in pixels to use "
+"when generating thumbnail images, or the exact dimensions to use when "
+"displaying Flash files."
+msgstr ""
+
+#: includes/wc-admin-settings.php:159
+msgid "Thumbnail Size"
+msgstr ""
+
+#: includes/wc-admin-settings.php:161
+msgid "Width"
+msgstr ""
+
+#: includes/wc-admin-settings.php:162
+msgid "Height"
+msgstr ""
+
+#: includes/wc-admin-settings.php:163
+msgid ""
+"Crop thumbnail to exact dimensions (normally thumbnails are proportional)"
+msgstr ""
+
+#: includes/wc-admin-settings.php:167
+msgid "Medium Size"
+msgstr ""
+
+#: includes/wc-admin-settings.php:169 includes/wc-admin-settings.php:176
+msgid "Max Width"
+msgstr ""
+
+#: includes/wc-admin-settings.php:170 includes/wc-admin-settings.php:177
+msgid "Max Height"
+msgstr ""
+
+#: includes/wc-admin-settings.php:174
+msgid "Large Size"
+msgstr ""
+
+#: includes/wc-admin-settings.php:182
+msgid "Save Changes"
+msgstr ""
+
+#: includes/wc-admin-settings.php:182
+#, php-format
+msgid ""
+"<a href=\"%s\" target=\"_blank\" title=\"Show your support by donating"
+"\">Donate</a> | Webcomic Version %s"
+msgstr ""
+
+#. #-#-#-#-#  plugin.pot (PACKAGE VERSION)  #-#-#-#-#
+#. Plugin Name of an extension
+#: includes/wc-admin.php:18 includes/wc-admin.php:24 includes/wc-admin.php:25
+msgid "Webcomic"
+msgstr ""
+
+#: includes/wc-admin.php:20
+msgid "Webcomic Library"
+msgstr ""
+
+#: includes/wc-admin.php:20
+msgid "Library"
+msgstr ""
+
+#: includes/wc-admin.php:21
+msgid "Webcomic Chapters"
+msgstr ""
+
+#: includes/wc-admin.php:21 includes/wc-widgets.php:390
+msgid "Chapters"
+msgstr ""
+
+#: includes/wc-admin.php:22
+msgid "Webcomic Settings"
+msgstr ""
+
+#: includes/wc-admin.php:22
+msgid "Settings"
+msgstr ""
+
+#: includes/wc-admin.php:27
+msgid "Library Documentation"
+msgstr ""
+
+#: includes/wc-admin.php:28
+msgid "Chapters Documentation"
+msgstr ""
+
+#: includes/wc-admin.php:29
+msgid "Settings Documentation"
+msgstr ""
+
+#: includes/wc-admin.php:32 includes/wc-admin.php:95
+msgid "Webcomic Documentation"
+msgstr ""
+
+#: includes/wc-admin.php:32 includes/wc-admin.php:95
+msgid "Webcomic Support Forum"
+msgstr ""
+
+#: includes/wc-admin.php:38
+msgid "Collection"
+msgstr ""
+
+#: includes/wc-admin.php:38 includes/wc-widgets.php:102
+msgid "Date"
+msgstr ""
+
+#: includes/wc-admin.php:95
+msgid "Using the Webcomic Metabox"
+msgstr ""
+
+#: includes/wc-admin.php:270
+#, php-format
+msgid ""
+"This is a comic category. Changing the <strong>Category Slug</strong> will "
+"also rename the directory <a href=\"%s\">%s</a> to match the new slug."
+msgstr ""
+
+#: includes/wc-core.php:769
+msgid "View all posts in "
+msgstr ""
+
+#: includes/wc-core.php:854
+msgid "Improve Transcript"
+msgstr ""
+
+#: includes/wc-core.php:856
+msgid "Submit Transcript"
+msgstr ""
+
+#: includes/wc-core.php:1011
+msgid "&laquo; First"
+msgstr ""
+
+#: includes/wc-core.php:1070
+msgid "Last &raquo;"
+msgstr ""
+
+#: includes/wc-core.php:1129
+msgid "&lsaquo; Previous"
+msgstr ""
+
+#: includes/wc-core.php:1188
+msgid "Next &rsaquo;"
+msgstr ""
+
+#: includes/wc-core.php:1270
+msgid "Bookmark"
+msgstr ""
+
+#: includes/wc-core.php:1271
+msgid "Return"
+msgstr ""
+
+#: includes/wc-core.php:1272
+msgid "Clear"
+msgstr ""
+
+#: includes/wc-core.php:1280
+msgid "Save your place so you can continue reading later."
+msgstr ""
+
+#: includes/wc-core.php:1281
+msgid "Return to your bookmark."
+msgstr ""
+
+#: includes/wc-core.php:1282
+msgid "Remove your bookmark."
+msgstr ""
+
+#: includes/wc-core.php:1389 includes/wc-core.php:1455
+#: includes/wc-core.php:1522 includes/wc-core.php:1589
+#: includes/wc-core.php:1651 includes/wc-core.php:2040
+#: includes/wc-core.php:2061 includes/wc-core.php:2084
+#, php-format
+msgid "Go to the %s archive"
+msgstr ""
+
+#: includes/wc-core.php:1393 includes/wc-core.php:1459
+#: includes/wc-core.php:1526 includes/wc-core.php:1593
+#: includes/wc-core.php:1655 includes/wc-core.php:2048
+#: includes/wc-core.php:2069 includes/wc-core.php:2092
+#, php-format
+msgid "Go to the beginning of %s"
+msgstr ""
+
+#: includes/wc-core.php:1393 includes/wc-core.php:1459
+#: includes/wc-core.php:1526 includes/wc-core.php:1593
+#: includes/wc-core.php:1655 includes/wc-core.php:2044
+#: includes/wc-core.php:2065 includes/wc-core.php:2088
+#, php-format
+msgid "Go to the end of %s"
+msgstr ""
+
+#: includes/wc-core.php:1405
+#, php-format
+msgid "&laquo; First %s"
+msgstr ""
+
+#: includes/wc-core.php:1471
+#, php-format
+msgid "Last %s &raquo;"
+msgstr ""
+
+#: includes/wc-core.php:1538
+#, php-format
+msgid "&lsaquo; Previous %s"
+msgstr ""
+
+#: includes/wc-core.php:1605
+#, php-format
+msgid "Next %s &rsaquo;"
+msgstr ""
+
+#: includes/wc-core.php:1802 includes/wc-widgets.php:319
+#: includes/wc-widgets.php:359
+msgid "Quick Archive"
+msgstr ""
+
+#: includes/wc-core.php:2020
+#, php-format
+msgid "Permanent Link to %s"
+msgstr ""
+
+#: includes/wc-widgets.php:36
+msgid ""
+"Displays comic bookmark links that allow readers to save their place and "
+"return later"
+msgstr ""
+
+#: includes/wc-widgets.php:37
+msgid "Bookmark Comic"
+msgstr ""
+
+#: includes/wc-widgets.php:59
+msgid "Displays buffer comic information"
+msgstr ""
+
+#: includes/wc-widgets.php:60
+msgid "Comic Buffer"
+msgstr ""
+
+#: includes/wc-widgets.php:90
+msgid "Buffer Comics"
+msgstr ""
+
+#: includes/wc-widgets.php:96 includes/wc-widgets.php:177
+msgid "Title:"
+msgstr ""
+
+#: includes/wc-widgets.php:99
+msgid "Type:"
+msgstr ""
+
+#: includes/wc-widgets.php:101
+msgid "Count"
+msgstr ""
+
+#: includes/wc-widgets.php:103
+msgid "Date and Time"
+msgstr ""
+
+#: includes/wc-widgets.php:109 includes/wc-widgets.php:192
+#: includes/wc-widgets.php:277 includes/wc-widgets.php:278
+#: includes/wc-widgets.php:376 includes/wc-widgets.php:530
+msgid "Series:"
+msgstr ""
+
+#: includes/wc-widgets.php:111
+msgid "Current"
+msgstr ""
+
+#: includes/wc-widgets.php:140
+msgid "Displays a link to a single, randomly selected comic"
+msgstr ""
+
+#: includes/wc-widgets.php:141 includes/wc-widgets.php:171
+msgid "Random Comic"
+msgstr ""
+
+#: includes/wc-widgets.php:180
+msgid "Format:"
+msgstr ""
+
+#: includes/wc-widgets.php:182 includes/wc-widgets.php:268
+#: includes/wc-widgets.php:519
+msgid "Text"
+msgstr ""
+
+#: includes/wc-widgets.php:183
+msgid "Thumbnail"
+msgstr ""
+
+#: includes/wc-widgets.php:184
+msgid "Medium Image"
+msgstr ""
+
+#: includes/wc-widgets.php:185
+msgid "Large Image"
+msgstr ""
+
+#: includes/wc-widgets.php:186
+msgid "Full Image"
+msgstr ""
+
+#: includes/wc-widgets.php:223
+msgid "Displays a list of recently posted comics"
+msgstr ""
+
+#: includes/wc-widgets.php:224 includes/wc-widgets.php:256
+msgid "Recent Comics"
+msgstr ""
+
+#: includes/wc-widgets.php:263 includes/wc-widgets.php:372
+#: includes/wc-widgets.php:505 includes/wc-widgets.php:626
+msgid "Title: "
+msgstr ""
+
+#: includes/wc-widgets.php:264
+msgid "Number of comics to show: "
+msgstr ""
+
+#: includes/wc-widgets.php:266
+msgid "Label:"
+msgstr ""
+
+#: includes/wc-widgets.php:269
+msgid "Thumbnails"
+msgstr ""
+
+#: includes/wc-widgets.php:270 includes/wc-widgets.php:522
+msgid "Medium Images"
+msgstr ""
+
+#: includes/wc-widgets.php:271 includes/wc-widgets.php:523
+msgid "Large Images"
+msgstr ""
+
+#: includes/wc-widgets.php:272 includes/wc-widgets.php:524
+msgid "Full Images"
+msgstr ""
+
+#: includes/wc-widgets.php:309
+msgid "Displays a dropdown list of comic posts"
+msgstr ""
+
+#: includes/wc-widgets.php:310 includes/wc-widgets.php:359
+msgid "Dropdown Comics"
+msgstr ""
+
+#: includes/wc-widgets.php:373
+msgid "Label: "
+msgstr ""
+
+#: includes/wc-widgets.php:387
+msgid "Group By:"
+msgstr ""
+
+#: includes/wc-widgets.php:391
+msgid "Volumes"
+msgstr ""
+
+#: includes/wc-widgets.php:392
+msgid "Series"
+msgstr ""
+
+#: includes/wc-widgets.php:398 includes/wc-widgets.php:541
+msgid "Order Chapters By:"
+msgstr ""
+
+#: includes/wc-widgets.php:400 includes/wc-widgets.php:543
+msgid "Default"
+msgstr ""
+
+#: includes/wc-widgets.php:401 includes/wc-widgets.php:544
+msgid "Title"
+msgstr ""
+
+#: includes/wc-widgets.php:402 includes/wc-widgets.php:545
+msgid "Page Count"
+msgstr ""
+
+#: includes/wc-widgets.php:408 includes/wc-widgets.php:551
+msgid "Chapters Should Link To:"
+msgstr ""
+
+#: includes/wc-widgets.php:410 includes/wc-widgets.php:553
+msgid "First Comic"
+msgstr ""
+
+#: includes/wc-widgets.php:411 includes/wc-widgets.php:554
+msgid "Last Comic"
+msgstr ""
+
+#: includes/wc-widgets.php:412 includes/wc-widgets.php:555
+msgid "Archive Page"
+msgstr ""
+
+#: includes/wc-widgets.php:416
+msgid "Automatically number posts and chapters"
+msgstr ""
+
+#: includes/wc-widgets.php:417 includes/wc-widgets.php:559
+msgid "Show posts in reverse order"
+msgstr ""
+
+#: includes/wc-widgets.php:418
+msgid "Show volumes and chapters in reverse order"
+msgstr ""
+
+#: includes/wc-widgets.php:419
+msgid "Show volume and chapter page counts"
+msgstr ""
+
+#: includes/wc-widgets.php:444
+msgid "Displays an archive of your comics"
+msgstr ""
+
+#: includes/wc-widgets.php:445 includes/wc-widgets.php:492
+msgid "Comic Archive"
+msgstr ""
+
+#: includes/wc-widgets.php:508
+msgid "Group Comics By:"
+msgstr ""
+
+#: includes/wc-widgets.php:510
+msgid "Year, Month, and Day"
+msgstr ""
+
+#: includes/wc-widgets.php:511
+msgid "Series, Volume, and Chapter"
+msgstr ""
+
+#: includes/wc-widgets.php:517
+msgid "Display Links As:"
+msgstr ""
+
+#: includes/wc-widgets.php:520
+msgid "Numbers (Chapters Only)"
+msgstr ""
+
+#: includes/wc-widgets.php:521
+msgid "Thumbnail Images"
+msgstr ""
+
+#: includes/wc-widgets.php:560
+msgid "Show series, volumes, and chapters in reverse order"
+msgstr ""
+
+#: includes/wc-widgets.php:561
+msgid "Show series, volume, and chapter descriptions"
+msgstr ""
+
+#: includes/wc-widgets.php:562
+msgid "Show series, volume, and chapter page counts"
+msgstr ""
+
+#: includes/wc-widgets.php:582
+msgid "The most recent posts on your blog (ignores comic posts)"
+msgstr ""
+
+#: includes/wc-widgets.php:583 includes/wc-widgets.php:621
+msgid "Recent Posts"
+msgstr ""
+
+#: includes/wc-widgets.php:598
+msgid "Permanent link to "
+msgstr ""
+
+#: includes/wc-widgets.php:627
+msgid "Number of posts to show: "
+msgstr ""
+
+#: webcomic.php:84
+#, php-format
+msgid ""
+"Webcomic was not able to create the default comic directories. If this "
+"problem persists after <a href=\"%s\">update your settings</a> you will need "
+"to create them yourself."
+msgstr ""
+
+#: webcomic.php:102
+#, php-format
+msgid ""
+"Thanks for choosing Webcomic! Please <a href=\"%s\">update your settings</a>."
+msgstr ""
+
+#: webcomic.php:524
+#, php-format
+msgid "[%s] Buffer Alert for %s"
+msgstr ""
+
+#: webcomic.php:524
+#, php-format
+msgid ""
+"This is an automated reminder that your buffer for %s will run out on %s ($d "
+"days away)."
+msgstr ""
+
+#: webcomic.php:587
+msgid "Error: all fields are required."
+msgstr ""
+
+#: webcomic.php:587
+msgid "Error: please type a transcript."
+msgstr ""
+
+#: webcomic.php:590
+msgid "Error: invalid e-mail address."
+msgstr ""
+
+#: webcomic.php:593
+msgid "Anonymous"
+msgstr ""
+
+#: webcomic.php:596
+#, php-format
+msgid ""
+"%1$s has submitted a new transcript for %2$s.%3$sYou can approve, edit, or "
+"delete this transcript by visiting: %4$s"
+msgstr ""
+
+#: webcomic.php:597
+#, php-format
+msgid "{ Submitted by %1$s on %2$s }"
+msgstr ""
+
+#: webcomic.php:606
+#, php-format
+msgid "[%s] New Transcript for \"%s\""
+msgstr ""
+
+#: webcomic.php:609
+msgid "Thanks! Your transcript has been submitted for approval."
+msgstr ""
+
+#: webcomic.php:613
+msgid "Error: a transcript has already been approved."
+msgstr ""
+
+#: webcomic.php:613
+msgid "Error: a transcript is already awaiting approval."
+msgstr ""
+
+#: webcomic.php:616
+msgid "Error: human check failed, please try again."
+msgstr ""
+
+#. Plugin URI of an extension
+msgid "http://maikeruon.com/webcomic/"
+msgstr ""
+
+#. Description of an extension
+msgid ""
+"Webcomic adds a collection of new features to WordPress designed "
+"specifically for publishing webcomics, developing webcomic themes, and "
+"managing webcomic sites."
+msgstr ""
+
+#. Author of an extension
+msgid "Michael Sisk"
+msgstr ""
+
+#. Author URI of an extension
+msgid "http://maikeruon.com/"
+msgstr ""
