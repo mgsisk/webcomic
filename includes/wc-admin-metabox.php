@@ -28,7 +28,7 @@ function comic_post_meta_box( $post ) {
 			$comic_files = glob( $file_path . '*.*' );
 			
 			if ( !is_array( $comic_files ) )
-				$comic_files = arrar();
+				$comic_files = array();
 			
 			//Get just the comic files associated with a post
 			$comics      = comic_loop( -1, $series );
