@@ -264,9 +264,7 @@ function webcomic_category_delete( $id ) {
 function webcomic_edit_category_form_pre( $category ) {
 	$categories = get_comic_category( true );
 	
-	array_search( $category->term_id, $categories );
-	
-	if ( false !== $cat )
+	if ( false !== array_search( $category->term_id, $categories ) )
 		echo '<div id="message" class="updated fade"><p>' . sprintf( __( 'This is a comic category. Changing the <strong>Category Slug</strong> will also rename the directory <a href="%s">%s</a> to match the new slug.', 'webcomic'), get_comic_directory( 'url', false, $category->term_id ), get_comic_directory( 'url', false, $category->term_id ) ) . '</p></div>';
 } add_action( 'edit_category_form_pre', 'webcomic_edit_category_form_pre' );
 
@@ -286,9 +284,7 @@ function webcomic_edit_category_form_pre( $category ) {
 function webcomic_edit_category_form( $category ) {
 	$categories = get_comic_category( true );
 	
-	$cat = array_search( $category->term_id, $categories );
-	
-	if ( false !== $cat )
+	if ( false !== array_search( $category->term_id, $categories ) )
 		echo '<input type="hidden" name="webcomic_subdirectory" value="' . get_comic_directory( 'abs', false, $category->term_id ) . '" />';
 } add_action( 'edit_category_form', 'webcomic_edit_category_form' );
 

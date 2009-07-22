@@ -3,8 +3,8 @@ Contributors: mgsisk
 Donate link: http://maikeruon.com/webcomic/
 Tags: webcomic, comic, multiple comics, inkblot, archimedes, hydrogen, silkscreen, storylines, chapters, library, management, themes, posts, publish
 Requires at least: 2.8
-Tested up to: 2.8
-Stable tag: 2.1.0
+Tested up to: 2.8.1
+Stable tag: 2.1.1
 
 Webcomic adds a collection of new features to WordPress designed specifically for publishing webcomics.
 
@@ -13,6 +13,12 @@ Webcomic adds a collection of new features to WordPress designed specifically fo
 Webcomic adds a collection of new features to WordPress designed specifically for publishing webcomics, developing webcomic themes, and managing webcomic sites.
 
 **Inkblot Users** - Remember to download the most recent version of Inkblot from the new [Google Code site](http://code.google.com/p/webcomic/downloads/list) and update your theme files before installing Webcomic 2.1
+
+= 2.1.1 Updates =
+
+- Fixed "arrar" error
+- Fixed "This is a comic category" message showing up for non-comic categories on the Edit Category page.
+- *New* Thanks to improvements in WordPress core and the removal of some now-unnecessary validations Chapter names no longer have to be unique across all series. You can now have chapters and volumes with the same names in the same series or different series.
 
 = New in 2.1 =
 
@@ -76,7 +82,7 @@ You can certainly try, but the Webcomic developer does not in any way endorse th
 	- **New** Buffer Alert. When enabled, Webcomic will send an e-mail reminder the specified number of days prior to any comic buffer running out.
 	- **New** Keyboard Shortcuts. When enabled, users can quickly browser a comic series using the left and right arrow keys to see the previous or next comic. The key combinations shift+left, shift+right, and shift+down take users to the first, last, or a random comic in the series, respectively.
 	- A small donate link has been added next to the Webcomic version information.
-	- Slight reorganization for easier use. Save psots as drafts, Fallback Matching, and ComicPress Compatibility options have been removed.
+	- Slight reorganization for easier use. Save posts as drafts, Fallback Matching, and ComicPress Compatibility options have been removed.
 - Library page updates:
 	- **New** Screen Options. Users can now toggle displaying the collection, comments, and date columns, as well as set the number of comics listed per page.
 	- **New** Grid View for Orphan Files. When Thumbnail view is selected orphaned files are now displayed in a more practical grid view.

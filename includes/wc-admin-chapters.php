@@ -50,23 +50,18 @@ function comic_page_chapters(){
 		else
 			$chapter_parent = $series;
 		
-		$chapter_name_check  = ( $_REQUEST[ 'is_series' ] ) ? is_term( $_REQUEST[ 'chapter_name' ], 'category' ) : is_term( $_REQUEST[ 'chapter_name' ], 'chapter' );
 		$chapter_slug_check  = ( $_REQUEST[ 'chapter_nicename' ] ) ? is_term( $_REQUEST[ 'chapter_nicename' ], 'chapter' ) : false;
 		
 		if ( !$chapter_name )
 			$update_error = 1;
-		elseif ( $chapter_name_check && $_REQUEST[ 'chapter' ] != $chapter_name_check[ 'term_id' ] )
-			$update_error = 2;
 		elseif ( $chapter_slug_check && $_REQUEST[ 'chapter' ] != $chapter_slug_check[ 'term_id' ] )
-			$update_error = 3;
+			$update_error = 2;
 		
 		if ( !$update_error && !is_wp_error( wp_update_term( $_REQUEST[ 'chapter' ], 'chapter', array( 'name' => $chapter_name, 'slug' => $chapter_nicename, 'parent' => $chapter_parent, 'description' => $chapter_description ) ) ) )
 			$updated = sprintf( __( 'Updated chapter &#8220;%s&#8220;', 'webcomic'), $chapter_name );
 		elseif ( 1 == $update_error )
 			$error = __( 'A chapter name must be provided.', 'webcomic' );
 		elseif ( 2 == $update_error )
-			$error = __( 'A chapter with that name already exists.', 'webcomic' );
-		elseif ( 3 == $update_error )
 			$error = __( 'A chapter with that slug already exists.', 'webcomic' );
 		else
 			$error = __( 'The chapter could not be updated.', 'webcomic' );
@@ -83,13 +78,13 @@ function comic_page_chapters(){
 		
 		if ( !$chapter_name ) {
 			$add_error = 1;
-		} elseif ( is_term( $chapter_name, 'chapter' ) ) {
-			$add_error = 2;
 		} elseif ( $_REQUEST[ 'chapter_nicename' ] && is_term( $chapter_nicename, 'chapter' ) ) {
-			$add_error = 3;
+			$add_error = 2;
 		} else {
-			wp_insert_term( $chapter_name, 'chapter', array( 'description' => $chapter_description, 'parent' => $chapter_parent, 'slug' => $chapter_nicename ) );
-			$updated = sprintf( __( 'Added new chapter &#8220;%s&#8220;', 'webcomic' ), $chapter_name );
+			if ( !is_wp_error( wp_insert_term( $chapter_name, 'chapter', array( 'description' => $chapter_description, 'parent' => $chapter_parent, 'slug' => $chapter_nicename ) ) ) )
+				$updated = sprintf( __( 'Added new chapter &#8220;%s&#8220;', 'webcomic' ), $chapter_name );
+			else
+				$error = __( 'The chapter could not be added.', 'webcomic' );
 		}
 	}
 	
@@ -284,12 +279,11 @@ function comic_page_chapters(){
 		<div class="col-wrap">
 			<div class="form-wrap">  
 				<h3><?php _e( 'Add Chapter', 'webcomic' ); ?></h3>
-				<?php if ( 2 == $add_error ) echo '<div style="background:#ffebe8;border:1px solid #c00;margin:5px 0;padding:0 7px"><p>' . __( 'The chapter you are trying to create already exists. Chapter names must be unique across all series.', 'webcomic' ) . '</p></div>'; ?>
 				<form action="" method="post">
 					<?php wp_nonce_field( 'chapter_add' );	?>
-					<div class="form-field form-required"<?php if ( 1 == $add_error || 2 == $add_error ) echo ' style="background:#ffebe8"'; ?>>
+					<div class="form-field form-required"<?php if ( 1 == $add_error ) echo ' style="background:#ffebe8"'; ?>>
 						<label for="chapter_name"><?php _e( 'Chapter Name', 'webcomic' ); ?></label>
-						<input name="chapter_name" id="chapter_name" type="text" value="<?php if ( $add_error ) echo $_REQUEST[ 'chapter_name' ]; ?>" size="40"<?php if ( 1 == $add_error || 2 == $add_error ) echo ' style="border-color:#c00"'; ?> />
+						<input name="chapter_name" id="chapter_name" type="text" value="<?php if ( $add_error ) echo $_REQUEST[ 'chapter_name' ]; ?>" size="40"<?php if ( 1 == $add_error ) echo ' style="border-color:#c00"'; ?> />
 						<p><?php _e( 'The name is used to identify the chapter almost everywhere.', 'webcomic' ); ?></p>
 					</div>
 					<?php 

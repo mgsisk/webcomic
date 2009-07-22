@@ -4,7 +4,7 @@ Text Domain: webcomic
 Plugin Name: Webcomic
 Plugin URI: http://maikeruon.com/webcomic/
 Description: Webcomic adds a collection of new features to WordPress designed specifically for publishing webcomics, developing webcomic themes, and managing webcomic sites.
-Version: 2.1.0
+Version: 2.1.1
 Author: Michael Sisk
 Author URI: http://maikeruon.com/
 
@@ -47,7 +47,7 @@ function load_webcomic_domain() { load_plugin_textdomain( 'webcomic', PLUGINDIR 
  * @package Webcomic
  * @since 1.0.0
  */
-if ( !get_option( 'webcomic_version' ) || '2.1.0' != get_option( 'webcomic_version' ) ) {
+if ( !get_option( 'webcomic_version' ) || '2.1.1' != get_option( 'webcomic_version' ) ) {
 	function webcomic_install() {
 		load_webcomic_domain();
 		
@@ -85,9 +85,9 @@ if ( !get_option( 'webcomic_version' ) || '2.1.0' != get_option( 'webcomic_versi
 		
 		/** Add or update the 'webcomic_version' setting and create the first series as necessary */
 		if ( get_option( 'webcomic_version' ) ) {
-			update_option( 'webcomic_version', '2.1.0' );
+			update_option( 'webcomic_version', '2.1.1' );
 		} else {
-			add_option( 'webcomic_version', '2.1.0' );
+			add_option( 'webcomic_version', '2.1.1' );
 			
 			if ( !get_the_collection( 'hide_empty=0&depth=1' ) ) {
 				$first_series = get_term( $default_category, 'category' );
