@@ -38,7 +38,7 @@ Webcomic adds a collection of new features to WordPress designed specifically fo
 - **Chapter Organization:** Take control of your storylines. Webcomic's Chapter system utilizes the WordPress Taxonomy API to provide an entirely new, independent method of organizing comic posts that doesn't interfere with post categories and tags. Use all three to create infinitely complext storylines.
 - **Library Management:** Config files? Dates in filenames? Not here. Webcomic provides a simple configuration page and robust but easy-to-use comic management right through WordPress. Name your comics whatever you want, automatically generate posts for orphaned comics, and more.
 - **Internationalization Support:** The world is a big place, and Webcomic understands that. It might even speak your lanuage. If it doesn't, though, that's alright. Webcomic utilizes WordPress' I18n functions for localization, allowing it to be fully translated into a language near you.
-- **Much More:** For a complete overview of all the features Webcomic provides please see the [comparison](http://maikeruon.com/wcib/documentation/comparison/), [release notes](http://maikeruon.com/wcib/documentation/webcomic/release-notes/), and [documentation](http://maikeruon.com/wcib/documentation/webcomic/).
+- **Much More:** For a complete overview of all the features Webcomic provides please see the [documentation](http://code.google.com/p/webcomic/wiki/Requirements).
 
 == Installation ==
 
@@ -57,11 +57,11 @@ If building themes isn't your thing, check out [the official plugin website](htt
 
 = Where can I get help with this? =
 
-Please see [the Webcomic project page](http://code.google.com/p/webcomic/) at Google Code for complete documentation or the [Webcomic Support Forum](http://www.maikeruon.com/wcib/forum/viewforum.php?f=4) for more direct assistance.
+Please see [the Webcomic project page](http://code.google.com/p/webcomic/) at Google Code for complete documentation or the [Webcomic Google Group](http://groups.google.com/group/webcomic-discuss) for more direct assistance.
 
 = Wouldn't it be great if...? =
 
-All feature suggestions are taken seriously; Webcomic owes most of it's features to helpful users that have pointed out shortomings, suggested improvements, or hacked together features that eventually found their way into an official release. That doesn't mean *every* feature suggested will end up in Webcomic, but a suggestion never hurt. Feature suggestions can be posted on the [Support Forum](http://www.maikeruon.com/wcib/forum/viewforum.php?f=4) or more formal enhancment issues can be filed at the [Google Code project page](http://code.google.com/p/webcomic/).
+All feature suggestions are taken seriously; Webcomic owes most of it's features to helpful users that have pointed out shortomings, suggested improvements, or hacked together features that eventually found their way into an official release. That doesn't mean *every* feature suggested will end up in Webcomic, but a suggestion never hurt. Feature suggestions can be posted on the [Google Group](http://groups.google.com/group/webcomic-discuss) or more formal enhancment issues can be filed at the [Google Code project page](http://code.google.com/p/webcomic/).
 
 = Can I use Webcomic for a comic/manga/graphic novel hosting site? =
 
