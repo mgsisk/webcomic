@@ -3,7 +3,7 @@ Contributors: mgsisk
 Donate link: http://maikeruon.com/webcomic/
 Tags: webcomic, comic, multiple comics, inkblot, archimedes, hydrogen, silkscreen, storylines, chapters, library, management, themes, posts, publish
 Requires at least: 2.8
-Tested up to: 2.8.1
+Tested up to: 2.8.4
 Stable tag: 2.1.1
 
 Webcomic adds a collection of new features to WordPress designed specifically for publishing webcomics.
