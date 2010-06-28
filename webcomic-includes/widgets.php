@@ -642,6 +642,8 @@ class webcomic_Widget_Archive extends WP_Widget {
 		$instance[ 'before' ] = ( !empty( $instance[ 'title' ] ) ) ? $before_widget . $before_title . $instance[ 'title' ] . $after_title : $before_widget;
 		$instance[ 'after' ]  = $after_widget;
 		
+		$instance[ 'order' ] = ( $instance[ 'order' ] ) ? 'DESC' : 'ASC';
+		
 		echo $webcomic->get_the_webcomic_archive( $instance );
 	}
 	
@@ -658,6 +660,9 @@ class webcomic_Widget_Archive extends WP_Widget {
 		$instance[ 'term_group' ] = $new[ 'term_group' ];
 		$instance[ 'limit' ]      = intval( $new[ 'limit' ] );
 		$instance[ 'order' ]      = ( $new[ 'order' ] ) ? false : true;
+		
+		if ( 'grid' == $instance[ 'format' ] && ( 'storyline' == $instance[ 'group' ] || 'character' == $instance[ 'group' ] ) )
+			$instance[ 'format' ] = 'ulist';
 		
 		return $instance;
 	}

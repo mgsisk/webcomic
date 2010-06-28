@@ -170,7 +170,7 @@ class webcomic_Walker_ArchiveList extends Walker {
 				}
 				
 				foreach ( $posts as $p ) {
-					if ( get_post_status( $p ) != 'publish' )
+					if ( 'publish' != get_post_status( $p ) )
 						continue;
 					
 					$wc = ( isset( $wc ) ) ? $wc : current( wp_get_object_terms( $p, 'webcomic_collection' ) );
@@ -224,8 +224,12 @@ class webcomic_Walker_ArchiveDropdown extends Walker {
 				if ( 'DESC' == $args[ 'order' ] )
 					$posts = array_reverse( $posts );
 				
-				foreach ( $posts as $p )
+				foreach ( $posts as $p ) {
+					if ( 'publish' != get_post_status( $p ) )
+						continue;
+					
 					$output .= '<option class="level-' . $depth . ' webcomic-archive-item webcomic-archive-item-' . $p . '" value="' . get_permalink( $p ) . '">' . str_repeat( '&nbsp;', ( $depth + 1 ) * 3 ) . get_the_title( $p ) . '</option>';
+				}
 			}
 		}
 	}
