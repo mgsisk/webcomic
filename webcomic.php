@@ -4,7 +4,7 @@ Text Domain: webcomic
 Plugin Name: Webcomic
 Plugin URI: http://webcomicms.net/
 Description: Comic publishing power for WordPress. Create, manage, and share your webcomics like never before.
-Version: 3
+Version: 3.0.1
 Author: Michael Sisk
 Author URI: http://maikeruon.com/
 
@@ -42,7 +42,7 @@ if ( !class_exists( 'mgs_core' ) ) require_once( 'webcomic-includes/mgs-core.php
 class webcomic extends mgs_core {
 	/** Override mgs_core variables */
 	protected $name    = 'webcomic';
-	protected $version = '3';
+	protected $version = '3.0.1';
 	protected $file    = __FILE__;
 	protected $type    = 'plugin';
 	
@@ -124,6 +124,9 @@ class webcomic extends mgs_core {
 		$this->domain();
 		
 		$this->option( 'version', $this->version );
+		
+		if ( !is_array( $this->option( 'term_meta' ) ) )
+			$this->option( 'term_meta', array( 'collection' => array(), 'storyline' => array(), 'character' => array() ) );
 		
 		$this->update[ 'upgraded' ] = sprintf( __( 'Thanks again for choosing Webcomic! Your <a href="%s">support</a> is much appreciated.', 'webcomic' ), 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=R6SH66UF6F9DG' );
 	}
@@ -2007,7 +2010,7 @@ class webcomic extends mgs_core {
 		elseif ( !$format )
 			$format = 'ulist';
 		
-		if ( !$format || 'ulist' == $format || 'olist' == $format ) {
+		if ( !$format || 'ulist' == $format || 'olist' == $format || 'dropdown' == $format ) {
 			$walker = ( 'dropdown' == $format ) ? new webcomic_Walker_TermDropdown() : new webcomic_Walker_TermList();
 			
 			if ( 'ulist' == $format || 'olist' == $format ) {
@@ -3341,7 +3344,6 @@ class webcomic extends mgs_core {
 		global $wpdb;
 		
 		if ( !empty( $args[ 'term_group' ] ) ) {
-			
 			if ( !empty( $args[ 'require_group' ] ) ) {
 				$term_groups = "'" . implode( "','", preg_split( '/[\s,]+/', $args[ 'term_group' ] ) ) . "'";
 				$exclusions .= " AND t.term_group IN ($term_groups) ";
@@ -3436,7 +3438,7 @@ class webcomic extends mgs_core {
 		if ( 'webcomic_collection' == $taxonomy || 'webcomic_storyline' == $taxonomy || 'webcomic_character' == $taxonomy ) {
 			$term_meta = $this->option( 'term_meta' );
 			$type = end( explode( '_', $taxonomy ) );
-			$key  = ( 'collection' == $type ) ? $term->term_id : $term->term_group;
+			$key  = ( 'webcomic_collection' == $taxonomy ) ? $term->term_id : $term->term_group;
 			
 			if ( isset( $term_meta[ 'collection' ][ $key ] ) )
 				$term->webcomic_files = $this->retrieve( $term->term_id, $type, $term_meta[ 'collection' ][ $key ][ 'slug' ] );
@@ -3446,11 +3448,11 @@ class webcomic extends mgs_core {
 			else
 				$term->webcomic_default = $term_meta[ $type ][ $term->term_id ][ 'default' ];
 			
-			if ( 'collection' == $type ) {
-				$term->webcomic_bookend  = ( isset( $term_meta[ $type ][ $term->term_id ][ 'bookend' ] ) ) ? $term_meta[ $type ][ $term->term_id ][ 'bookend' ] : NULL;
-				$term->webcomic_restrict = ( isset( $term_meta[ $type ][ $term->term_id ][ 'restrict' ] ) ) ? $term_meta[ $type ][ $term->term_id ][ 'restrict' ] : NULL;
-				$term->webcomic_paypal   = ( isset( $term_meta[ $type ][ $term->term_id ][ 'paypal' ] ) ) ? $term_meta[ $type ][ $term->term_id ][ 'paypal' ] : NULL;
-			} elseif ( 'storyline' == $type )
+			if ( 'webcomic_collection' == $taxonomy ) {
+				$term->webcomic_bookend  = ( isset( $term_meta[ $type ][ $term->term_id ][ 'bookend' ] ) ) ? $term_meta[ $type ][ $term->term_id ][ 'bookend' ] : false;
+				$term->webcomic_restrict = ( isset( $term_meta[ $type ][ $term->term_id ][ 'restrict' ] ) ) ? $term_meta[ $type ][ $term->term_id ][ 'restrict' ] : false;
+				$term->webcomic_paypal   = ( isset( $term_meta[ $type ][ $term->term_id ][ 'payapl' ] ) ) ? $term_meta[ $type ][ $term->term_id ][ 'paypal' ] : false;
+			} elseif ( 'webcomic_storyline' == $taxonomy )
 				$term->webcomic_order = $term_meta[ $type ][ $term->term_id ][ 'order' ];
 		}
 		
@@ -3513,7 +3515,7 @@ class webcomic extends mgs_core {
 				$type = end( explode( '_', $term->taxonomy ) );
 				$key  = ( 'collection' == $type ) ? $term->term_id : $term->term_group;
 				
-				$term->webcomic_files   = $this->retrieve( $term->term_id, $type, $term_meta[ 'collection' ][ $key ][ 'slug' ] );
+				$term->webcomic_files = $this->retrieve( $term->term_id, $type, $term_meta[ 'collection' ][ $key ][ 'slug' ] );
 			
 				if ( 'webcomic_collection' == $term->taxonomy )
 					$term->webcomic_default = ( $term->term_id == $this->option( 'default_collection' ) ) ? true : false;

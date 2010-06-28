@@ -111,7 +111,8 @@ class webcomic_admin extends webcomic {
 						} elseif ( get_post_meta( $p, 'comic_transcript_draft', true ) ) {
 							$status = 'draft';
 							$text   = get_post_meta( $p, 'comic_transcript_draft', true );
-						}
+						} else
+							$status = $text = false;
 						
 						if ( !( 'publish' == $status || 'pending' == $status ) && get_post_meta( $p, 'comic_transcript_backup', true ) )
 							$backup = get_post_meta( $p, 'comic_transcript_backup', true );
@@ -125,7 +126,7 @@ class webcomic_admin extends webcomic {
 							'paypal' => array( 'prints' => $paypal_toggle )
 						);
 						
-						if ( $backup )
+						if ( isset( $backup ) )
 							$meta[ 'transcripts' ][ $lkey ][ 'backup' ] = $backup;
 						
 						if ( empty( $meta[ 'files' ][ 'full' ] ) )
@@ -141,7 +142,7 @@ class webcomic_admin extends webcomic {
 						
 						update_post_meta( $p, 'webcomic', $meta );
 						
-						unset( $status, $text, $backup );
+						unset( $status, $text, $backup, $meta );
 						
 						$i++;
 					}
@@ -285,15 +286,16 @@ class webcomic_admin extends webcomic {
 		} elseif ( 6 == $step ) {
 			global $wpdb;
 			
-			clean_term_cache( array(), array( 'webcomic_storyline' ) );
+			clean_term_cache( array(), 'webcomic_storyline' );
 			
 			$term_meta = $this->option( 'term_meta' );
 			
 			$w = new webcomic_Walker_AdminTermNormalize();
 			
-			$term_meta = $w->walk( get_terms( 'webcomic_storyline', 'get=all' ), 0, array( 'term_meta' => $term_meta ) );
+			$normalized = $w->walk( get_terms( 'webcomic_storyline', 'get=all' ), 0, array( 'term_meta' => $term_meta ) );
 			
-			$this->option( 'term_meta', $term_meta );
+			if ( is_array( $normalized ) )
+				$this->option( 'term_meta', $normalized );
 			
 			$wpdb->query( "DELETE FROM $wpdb->postmeta WHERE meta_key IN ( 'comic_file', 'comic_large', 'comic_medium', 'comic_thumb', 'comic_description', 'comic_transcript', 'comic_transcript_pending', 'comic_transcript_draft', 'comic_transcript_backup' )" );
 			
@@ -579,9 +581,11 @@ class webcomic_admin extends webcomic {
 			check_admin_referer( 'move_webcomic_term' );
 			
 			$term  = get_term( $_REQUEST[ 'webcomic_term' ], $_REQUEST[ 'page' ] );
-			$sibs  = get_terms( $_REQUEST[ 'page' ], 'hide_empty=0&webcomic_order=1&parent=' . $term->parent ); // . '&term_group=' . $wc->term_id
+			$sibs  = get_terms( $_REQUEST[ 'page' ], 'hide_empty=0&webcomic_order=1&term_group=' . $_REQUEST[ 'webcomic_collection' ] . '&parent=' . $term->parent );
 			$last  = end( $sibs );
 			$first = reset( $sibs );
+			
+			echo $term->term_id . ' = ' . $last->term_id;
 			
 			if ( ( 'up' == $_REQUEST[ 'direction' ] && $term->term_id == $first->term_id ) || ( 'dn' == $_REQUEST[ 'direction' ] && $term->term_id == $last->term_id ) ) {
 				$d = ( 'up' == $_REQUEST[ 'direction' ] ) ? __( 'first', 'webcomic' ) : __( 'last', 'webcomic' );
