@@ -41,6 +41,8 @@ function dropdown_comics( $args = false ) { global $webcomic; $defaults = array(
 function comic_archive( $args = false ) { global $webcomic; $defaults = array( 'format' => 'grid', 'last_only' => true ); $args = wp_parse_args( $args, $defaults ); if ( 'chapter' == $args[ 'groupby' ] ) $args[ 'format' ] = 'olist'; $args[ 'order' ] = $args[ 'post_order' ]; $args[ 'group_order' ] = $args[ 'order' ]; $args[ 'show_description' ] = $args[ 'descriptions' ]; $args[ 'show_count' ] = $args[ 'pages' ]; echo $webcomic->get_the_webcomic_archive( $args ); }
 
 /* These functions have no direct equivalent in Webcomic 3 */
+function random_comic() { return false; }
+function get_post_comic_category() { return false; }
 function get_comic_category() { return false; }
 function get_the_collection( $args = false ) { return arrray(); }
 function the_comic_buffer( $i = false, $terms = false ) { return false; }
