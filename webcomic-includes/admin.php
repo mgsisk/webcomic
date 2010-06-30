@@ -99,7 +99,7 @@ class webcomic_admin extends webcomic {
 						rename( $file, substr_replace( $file, '-small.', strrpos( $file, '-thumb.' ), 7 ) );
 				
 				if ( $posts = get_objects_in_term( $cat_id, 'category' ) ) {
-					$wpdb->query( "UPDATE $wpdb->posts SET post_type = 'webcomic_post' WHERE ID IN (" . implode( ',', $posts ) . ")" );
+					$wpdb->query( "UPDATE $wpdb->posts SET post_type = 'webcomic_post' WHERE ID IN (" . implode( ',', $posts ) . ") AND post_type = 'post'" );
 					
 					foreach ( $posts as $p ) {
 						if ( get_post_meta( $p, 'comic_transcript', true ) ) {
@@ -1373,6 +1373,7 @@ class webcomic_admin extends webcomic {
 		$term_meta[ 'collection' ][ $term_id ] = array(
 			'files'    => array(),
 			'slug'     => $term->slug,
+			'theme'    => false,
 			'restrict' => false,
 			'bookend'  => array(
 				'first' => false,
@@ -1486,6 +1487,7 @@ class webcomic_admin extends webcomic {
 		$f = ( 'sub' == $_REQUEST[ 'webcomic_paypal_shipping_type_o' ] ) ? intval( 0 - $_REQUEST[ 'webcomic_paypal_shipping_o' ] ) : intval( $_REQUEST[ 'webcomic_paypal_shipping_o' ] );
 		
 		$term_meta[ 'collection' ][ $term_id ][ 'slug' ]     = $term->slug;
+		$term_meta[ 'collection' ][ $term_id ][ 'theme' ]    = ( empty( $_REQUEST[ 'webcomic_theme' ] ) ) ? false : $_REQUEST[ 'webcomic_theme' ];
 		$term_meta[ 'collection' ][ $term_id ][ 'restrict' ] = ( isset( $_REQUEST[ 'webcomic_restrict' ] ) ) ? true : false;
 		$term_meta[ 'collection' ][ $term_id ][ 'bookend' ]  = array(
 			'first' => $_REQUEST[ 'webcomic_bookend_first' ],
@@ -2985,6 +2987,26 @@ class webcomic_admin extends webcomic {
 								<th scope="row" class="label"><label for="webcomic_restrict"><?php _e( 'Restrict', 'webcomic' ); ?></label></th>
 								<td>
 									<label><input type="checkbox" name="webcomic_restrict" id="webcomic_restrict"<?php if ( $term->webcomic_restrict ) echo ' checked';?>> <?php printf( __( 'Users must be registered and logged-in to view webcomics in this %s', 'webcomic' ), strtolower( $taxonomy->labels->singular_name ) ); ?></label>
+								</td>
+							</tr>
+							<tr class="form-field">
+								<th scope="row" class="label"><label for="webcomic_theme"><?php _e( 'Theme', 'webcomic' ); ?></label></th>
+								<td>
+									<select name="webcomic_theme" id="webcomic_theme">
+										<option value="0"><?php _e( '&ndash; Current Theme &ndash;', 'webcomic' ); ?></option>
+										<?php
+											$default = get_option( 'stylesheet' );
+											$themes  = get_themes();
+											
+											foreach ( $themes as $t ) {
+												if ( $t[ 'Stylesheet' ] == $default )
+													continue;
+												
+												echo '<option value="' . $t[ 'Stylesheet' ] . '"' . ( ( $t[ 'Stylesheet' ] == $term->webcomic_theme ) ? ' selected' : '' ) . '>' . $t[ 'Name' ] . '</option>';
+											}
+										?>
+									</select><br>
+									<?php printf( __( 'The stylesheet from this theme will be used for any pages related to this %s.', 'webcomic' ), strtolower( $taxonomy->labels->singular_name ) ); ?>
 								</td>
 							</tr>
 							<tr class="form-field">
