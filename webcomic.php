@@ -4,7 +4,7 @@ Text Domain: webcomic
 Plugin Name: Webcomic
 Plugin URI: http://webcomicms.net/
 Description: Comic publishing power for WordPress. Create, manage, and share your webcomics like never before.
-Version: 3.0.1
+Version: 3.0.2
 Author: Michael Sisk
 Author URI: http://maikeruon.com/
 
@@ -42,7 +42,7 @@ if ( !class_exists( 'mgs_core' ) ) require_once( 'webcomic-includes/mgs-core.php
 class webcomic extends mgs_core {
 	/** Override mgs_core variables */
 	protected $name    = 'webcomic';
-	protected $version = '3.0.1';
+	protected $version = '3.0.2';
 	protected $file    = __FILE__;
 	protected $type    = 'plugin';
 	
@@ -1835,7 +1835,7 @@ class webcomic extends mgs_core {
 		if ( !( $term = ( $term ) ? $term : get_query_var( $taxonomy ) ) || !$this->verify() )
 			return false;
 		
-		$ck = $taxonomy . '_' . hash( 'md5', implode( ( array ) $term, '' ) . $orderby . $hide_empty );
+		$ck = $taxonomy . '_' . hash( 'md5', implode( ( array ) $term, '' ) . $orderby . $hide_empty . $term->term_group );
 		
 		if ( $r = wp_cache_get( $ck, 'get_relative_webcomic_terms' ) )
 			return $r;
@@ -1852,9 +1852,11 @@ class webcomic extends mgs_core {
 		
 		$hide_empty = ( $hide_empty ) ? '' : '&hide_empty=0';
 		
+		$order = ( 'webcomic_collection' != $taxonomy ) ? str_pad( '&order=ASC', $term->term_group ) : '';
+		
 		$r = array();
 		
-		if ( !is_wp_error( $terms = get_terms( $taxonomy, $orderby . '&term_group=' . $term->term_group . $hide_empty ) ) && $terms ) {
+		if ( !is_wp_error( $terms = get_terms( $taxonomy, $orderby . '&term_group=' . $term->term_group . $hide_empty . $order ) ) && !empty( $terms ) ) {
 			foreach ( array_keys( $terms ) as $k ) {
 				if ( $terms[ $k ]->term_id == $term->term_id ) {
 					$key = $k;
@@ -1991,6 +1993,8 @@ class webcomic extends mgs_core {
 			if ( 'webcomic_storyline' == $taxonomy )
 				$args[ 'webcomic_order' ] = true;
 		}
+		
+		$args[ 'order' ] = str_pad( $args[ 'order' ], $args[ 'term_group' ] );
 		
 		if ( !$args[ 'selected' ] && $slug = get_query_var( $taxonomy ) ) {
 			$term = get_term_by( 'slug', $slug, $taxonomy );
@@ -2420,6 +2424,7 @@ class webcomic extends mgs_core {
 		
 		return apply_filters( 'webcomic_get_the_archive', $r, $args );
 	}
+
 	
 	
 	
@@ -2948,6 +2953,15 @@ class webcomic extends mgs_core {
 		
 		wp_enqueue_script( 'webcomic-scripts', $this->url . 'webcomic-includes/scripts.js', array( 'jquery', 'jquery-hotkeys' ), '', true );
 		
+		if ( ( $wc = $this->get_collection_by_path() ) && !empty( $wc->webcomic_theme ) && is_dir( get_theme_root() . '/' . $wc->webcomic_theme ) ) {
+			global $webcomic_theme;
+			
+			$webcomic_theme = $wc->webcomic_theme;
+			
+			add_filter( 'template', create_function( '', 'global $webcomic_theme; return $webcomic_theme;' ) );
+			add_filter( 'stylesheet', create_function( '', 'global $webcomic_theme; return $webcomic_theme;' ) );
+		}
+		
 		if ( !$this->verify( 'restrict' ) )
 			auth_redirect();
 		
@@ -3030,15 +3044,28 @@ class webcomic extends mgs_core {
 		if ( is_tax( 'webcomic_collection' ) )
 			$classes[] = 'webcomic_collection webcomic_collection-' . get_query_var( 'webcomic_collection' );
 		
-		if ( is_tax( 'webcomic_storyline' ) )
+		if ( is_tax( 'webcomic_storyline' ) ) {
+			$st = get_term_by( 'slug', get_query_var( 'webcomic_storyline' ), 'webcomic_storyline' );
+			$wc = get_term( $st->term_group, 'webcomic_collection' );
+			$classes[] = 'webcomic_collection-' . $wc->slug;
 			$classes[] = 'webcomic_storyline webcomic_storyline-' . get_query_var( 'webcomic_storyline' );
+		}
 		
-		if ( is_tax( 'webcomic_character' ) )
+		if ( is_tax( 'webcomic_character' ) ) {
+			$st = get_term_by( 'slug', get_query_var( 'webcomic_character' ), 'webcomic_character' );
+			$wc = get_term( $st->term_group, 'webcomic_collection' );
+			$classes[] = 'webcomic_collection-' . $wc->slug;
 			$classes[] = 'webcomic_character webcomic_character-' . get_query_var( 'webcomic_character' );
-		
-		if ( ( is_singular( 'webcomic_post' ) || is_page() ) && $wc = current( wp_get_object_terms( $post->ID, 'webcomic_collection' ) ) ) {
-			if ( !is_tax( 'webcomic_collection' ) )
+		}
+				
+		if ( ( is_singular( 'webcomic_post' ) || is_page() ) ) {
+			if ( $wc = current( wp_get_object_terms( $post->ID, 'webcomic_collection' ) ))
 				$classes[] = 'webcomic_collection-' . sanitize_html_class( $wc->slug, $wc->term_id );
+			elseif ( $id = current( get_post_meta( $post->ID, 'webcomic_collection' ) ) ) {
+				$wc = get_term( $id, 'webcomic_collection' );
+				$classes[] = 'webcomic_collection-' . sanitize_html_class( $wc->slug, $wc->term_id );
+			}
+			
 			
 			if ( isset( $_REQUEST[ 'purchase_webcomic_print' ] ) )
 				$classes[] = 'webcomic-purchase';
@@ -3449,6 +3476,7 @@ class webcomic extends mgs_core {
 				$term->webcomic_default = $term_meta[ $type ][ $term->term_id ][ 'default' ];
 			
 			if ( 'webcomic_collection' == $taxonomy ) {
+				$term->webcomic_theme    = ( isset( $term_meta[ $type ][ $term->term_id ][ 'theme' ] ) ) ? $term_meta[ $type ][ $term->term_id ][ 'theme' ] : false;
 				$term->webcomic_bookend  = ( isset( $term_meta[ $type ][ $term->term_id ][ 'bookend' ] ) ) ? $term_meta[ $type ][ $term->term_id ][ 'bookend' ] : false;
 				$term->webcomic_restrict = ( isset( $term_meta[ $type ][ $term->term_id ][ 'restrict' ] ) ) ? $term_meta[ $type ][ $term->term_id ][ 'restrict' ] : false;
 				$term->webcomic_paypal   = ( isset( $term_meta[ $type ][ $term->term_id ][ 'payapl' ] ) ) ? $term_meta[ $type ][ $term->term_id ][ 'paypal' ] : false;
@@ -3484,6 +3512,7 @@ class webcomic extends mgs_core {
 					$term->webcomic_default = $term_meta[ $type ][ $term->term_id ][ 'default' ];
 				
 				if ( 'collection' == $type ) {
+					$term->webcomic_theme    = $term_meta[ $type ][ $term->term_id ][ 'theme' ];
 					$term->webcomic_bookend  = $term_meta[ $type ][ $term->term_id ][ 'bookend' ];
 					$term->webcomic_restrict = $term_meta[ $type ][ $term->term_id ][ 'restrict' ];
 					$term->webcomic_paypal   = $term_meta[ $type ][ $term->term_id ][ 'paypal' ];
@@ -3523,6 +3552,7 @@ class webcomic extends mgs_core {
 					$term->webcomic_default = $term_meta[ $type ][ $term->term_id ][ 'default' ];
 				
 				if ( 'collection' == $type ) {
+					$term->webcomic_theme    = $term_meta[ $type ][ $term->term_id ][ 'theme' ];
 					$term->webcomic_bookend  = $term_meta[ $type ][ $term->term_id ][ 'bookend' ];
 					$term->webcomic_restrict = $term_meta[ $type ][ $term->term_id ][ 'restrict' ];
 					$term->webcomic_paypal   = $term_meta[ $type ][ $term->term_id ][ 'paypal' ];
@@ -3896,6 +3926,74 @@ class webcomic extends mgs_core {
 		}
 		
 		return $output;
+	}
+	
+	/**
+	 * Attempts to retrieve a webcomic collection
+	 * ID based on the current URL. Borrowed from
+	 * category.php > get_category_by_path.
+	 * 
+	 * @package webcomic
+	 * @since 3
+	 */
+	function get_collection_by_path( $collection_path = false, $full_match = true, $output = OBJECT ) {
+		$wc = false;
+		
+		if ( get_option( 'permalink_structure' ) ) {
+			$s    = ( isset( $_SERVER[ 'HTTPS' ] ) && 'on' == $_SERVER[ 'HTTPS' ] ) ? 's' : '';
+			$port = ( '80' == $_SERVER[ 'SERVER_PORT' ] ) ? '' : ':' . $_SERVER[ 'SERVER_PORT' ];
+			
+			if ( $id = url_to_postid( rawurlencode( urldecode( "http$s://" . $_SERVER[ 'SERVER_NAME' ] . $port . $_SERVER[ 'REQUEST_URI' ] ) ) ) ) {
+				$pm = current( get_post_meta( $id, 'webcomic_collection' ) );
+				$wc = get_term( $pm, 'webcomic_collection' );
+				break;
+			} else {
+				global $wp_taxonomies, $wp_post_types;
+				$path  ='/' . trim( str_replace( '%20', ' ', str_replace( '%2F', '/', rawurlencode( urldecode( "http$s://" . $_SERVER[ 'SERVER_NAME' ] . $port . $_SERVER[ 'REQUEST_URI' ] ) ) ) ), '/' );
+				$parts = explode( '/', $path );
+				$leaf  = sanitize_title( basename( $path ) );
+				
+				foreach ( $parts as $part ) {
+					if ( $part == $wp_taxonomies[ 'webcomic_collection' ]->rewrite[ 'slug' ] ) {
+						$wc = get_term_by( 'slug', $leaf, 'webcomic_collection' );
+						break;
+					} elseif ( $part == $wp_taxonomies[ 'webcomic_storyline' ]->rewrite[ 'slug' ] ) {
+						$st = get_term_by( 'slug', $leaf, 'webcomic_storyline' );
+						$wc = get_term( $st->term_group, 'webcomic_collection' );
+						break;
+					} elseif ( $part == $wp_taxonomies[ 'webcomic_character' ]->rewrite[ 'slug' ] ) {
+						$ch = get_term_by( 'slug', $leaf, 'webcomic_character' );
+						$wc = get_term( $st->term_group, 'webcomic_collection' );
+						break;
+					} elseif ( $part == $wp_post_types[ 'webcomic_post' ]->rewrite[ 'slug' ] ) {
+						$ps = current( get_posts( 'post_type=webcomic_post&numberposts=1&name=' . $leaf ) );
+						$wc = current( wp_get_object_terms( $ps->ID, 'webcomic_collection' ) );
+						break;
+					}
+				}
+			}
+		} else {
+			if ( isset( $_GET[ 'webcomic_collection' ] ) ) {
+				$wc = get_term_by( 'slug', $_GET[ 'webcomic_collection' ], 'webcomic_collection' );
+			} elseif ( isset( $_GET[ 'webcomic_storyline' ] ) ) {
+				$st = get_term_by( 'slug', $_GET[ 'webcomic_storyline' ], 'webcomic_storyline' );
+				$wc = get_term( $st->term_group, 'webcomic_collection' );
+			} elseif ( isset( $_GET[ 'webcomic_character' ] ) ) {
+				$ch = get_term_by( 'slug', $_GET[ 'webcomic_character' ], 'webcomic_character' );
+				$wc = get_term( $ch->term_group, 'webcomic_collection' );
+			} elseif ( isset( $_GET[ 'webcomic_post' ] ) ) {
+				$ps = current( get_posts( 'post_type=webcomic_post&numberposts=1&name=' . $_GET[ 'webcomic_post' ] ) );
+				$wc = current( wp_get_object_terms( $ps->ID, 'webcomic_collection' ) );
+			} elseif ( isset( $_GET[ 'page_id' ] ) ) {
+				$pm = current( get_post_meta( $_GET[ 'page_id' ], 'webcomic_collection' ) );
+				$wc = get_term( $pm, 'webcomic_collection' );
+			}
+		}
+		
+		if ( !is_wp_error( $wc ) )
+			return  $wc;
+		else
+			return false;
 	}
 } global $webcomic;
 

@@ -4,7 +4,7 @@ Donate link: http://webcomicms.net/
 Tags: webcomic, comic, multiple comics, storylines, chapters, library, management, themes, posts, publish, custom post type, custom taxonomy, template tags, widgets
 Requires at least: 3.0
 Tested up to: 3.0
-Stable tag: 3.0.1
+Stable tag: 3.0.2
 
 Comic publishing power for WordPress.
 
@@ -14,7 +14,7 @@ Please see the [official Webcomic site](http://webcomicms.net/) for the users ma
 
 = Upgrading? =
 
-**Back up everything.** WordPress has a really handy export tool you can use to backup your data that we highly suggest you use before you attempt to upgrade. You should also take note of the order of your chapters and anything else you'd really, really hate to lose, and watch this video:
+**Back up everything.** WordPress has a really handy export tool you can use to backup your data that we highly suggest you use before you attempt to upgrade. Upgrading directly from Webcomic 1 is *not* supported. Please upgrade to Webcomic 2 before you attempt to upgrade to Webcomic 3. You should also take note of the order of your chapters and anything else you'd really, really hate to lose, and watch this video:
 
 [vimeo http://vimeo.com/12500716]
 
