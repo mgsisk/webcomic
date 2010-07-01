@@ -4,7 +4,7 @@ Donate link: http://webcomicms.net/
 Tags: webcomic, comic, multiple comics, storylines, chapters, library, management, themes, posts, publish, custom post type, custom taxonomy, template tags, widgets
 Requires at least: 3.0
 Tested up to: 3.0
-Stable tag: 3.0.2
+Stable tag: 3.0.3
 
 Comic publishing power for WordPress.
 

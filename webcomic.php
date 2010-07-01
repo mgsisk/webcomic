@@ -4,7 +4,7 @@ Text Domain: webcomic
 Plugin Name: Webcomic
 Plugin URI: http://webcomicms.net/
 Description: Comic publishing power for WordPress. Create, manage, and share your webcomics like never before.
-Version: 3.0.2
+Version: 3.0.3
 Author: Michael Sisk
 Author URI: http://maikeruon.com/
 
@@ -42,7 +42,7 @@ if ( !class_exists( 'mgs_core' ) ) require_once( 'webcomic-includes/mgs-core.php
 class webcomic extends mgs_core {
 	/** Override mgs_core variables */
 	protected $name    = 'webcomic';
-	protected $version = '3.0.2';
+	protected $version = '3.0.3';
 	protected $file    = __FILE__;
 	protected $type    = 'plugin';
 	
