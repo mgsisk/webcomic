@@ -4,7 +4,7 @@ Text Domain: webcomic
 Plugin Name: Webcomic
 Plugin URI: http://webcomicms.net/
 Description: Comic publishing power for WordPress. Create, manage, and share your webcomics like never before.
-Version: 3.0.3
+Version: 3.0.4
 Author: Michael Sisk
 Author URI: http://maikeruon.com/
 
@@ -42,7 +42,7 @@ if ( !class_exists( 'mgs_core' ) ) require_once( 'webcomic-includes/mgs-core.php
 class webcomic extends mgs_core {
 	/** Override mgs_core variables */
 	protected $name    = 'webcomic';
-	protected $version = '3.0.3';
+	protected $version = '3.0.4';
 	protected $file    = __FILE__;
 	protected $type    = 'plugin';
 	
@@ -348,6 +348,7 @@ class webcomic extends mgs_core {
 	 * @param str $taxonomy A taxonomy to limit the returned ID's to.
 	 * @param int|arr $terms A term ID or array of term ID's. Required if $taxonomy is not false.
 	 * @param int $id Webcomic ID that returned ID's will be relative to.
+	 * @param bool $global Uses URL parameters instead of regular permalink if true.
 	 * @return An array of webcomic ID's, or false on error.
 	 */
 	function get_relative_webcomics( $taxonomy = false, $terms = false, $id = false, $global = false ) {
