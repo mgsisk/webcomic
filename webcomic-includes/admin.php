@@ -399,7 +399,11 @@ class webcomic_admin extends webcomic {
 		$this->domain();
 		
 		if ( !$this->option( 'uninstall' ) ) {
-			add_menu_page( __( 'Webcomic', 'webcomic' ), __( 'Webcomic', 'webcomic' ), 'upload_files', 'webcomic_files', array( &$this, 'admin_files' ), $this->url . 'webcomic-includes/icon-small.png', 3 );
+			global $menu;
+			
+			$p = ( isset( $menu[ 3 ] ) ) ? false : 3;
+			
+			add_menu_page( __( 'Webcomic', 'webcomic' ), __( 'Webcomic', 'webcomic' ), 'upload_files', 'webcomic_files', array( &$this, 'admin_files' ), $this->url . 'webcomic-includes/icon-small.png', $p );
 			$pages[ 'webcomics' ]   = add_submenu_page( 'webcomic_files', __( 'Webcomic Files', 'webcomic' ), __( 'Webcomics', 'webcomic' ), 'upload_files', 'webcomic_files', array( &$this, 'admin_files' ) );
 			$pages[ 'storylines' ]  = add_submenu_page( 'webcomic_files', __( 'Webcomic Storylines', 'webcomic' ), __( 'Storylines', 'webcomic' ), 'manage_categories', 'webcomic_storyline', array( &$this, 'admin_terms' ) );
 			$pages[ 'characters' ]  = add_submenu_page( 'webcomic_files', __( 'Webcomic Characters', 'webcomic' ), __( 'Characters', 'webcomic' ), 'manage_categories', 'webcomic_character', array( &$this, 'admin_terms' ) );
