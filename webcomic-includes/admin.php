@@ -401,15 +401,13 @@ class webcomic_admin extends webcomic {
 		if ( !$this->option( 'uninstall' ) ) {
 			global $menu;
 			
-			$p = ( isset( $menu[ 3 ] ) ) ? false : 3;
-			
-			add_menu_page( __( 'Webcomic', 'webcomic' ), __( 'Webcomic', 'webcomic' ), 'upload_files', 'webcomic_files', array( &$this, 'admin_files' ), $this->url . 'webcomic-includes/icon-small.png', $p );
+			add_menu_page( __( 'Webcomic', 'webcomic' ), __( 'Webcomic', 'webcomic' ), 'upload_files', 'webcomic_files', array( &$this, 'admin_files' ), $this->url . '/webcomic-includes/icon-small.png', $p );
 			$pages[ 'webcomics' ]   = add_submenu_page( 'webcomic_files', __( 'Webcomic Files', 'webcomic' ), __( 'Webcomics', 'webcomic' ), 'upload_files', 'webcomic_files', array( &$this, 'admin_files' ) );
 			$pages[ 'storylines' ]  = add_submenu_page( 'webcomic_files', __( 'Webcomic Storylines', 'webcomic' ), __( 'Storylines', 'webcomic' ), 'manage_categories', 'webcomic_storyline', array( &$this, 'admin_terms' ) );
 			$pages[ 'characters' ]  = add_submenu_page( 'webcomic_files', __( 'Webcomic Characters', 'webcomic' ), __( 'Characters', 'webcomic' ), 'manage_categories', 'webcomic_character', array( &$this, 'admin_terms' ) );
 			$pages[ 'collections' ] = add_submenu_page( 'webcomic_files', __( 'Webcomic Collections', 'webcomic' ), __( 'Collections', 'webcomic' ), 'upload_files', 'webcomic_collection', array( &$this, 'admin_terms' ) );
 		} else
-			add_menu_page( __( 'Webcomic', 'webcomic' ), __( 'Webcomic', 'webcomic' ), 'manage_options', 'webcomic_tools', array( &$this, 'admin_tools' ), $this->url . 'webcomic-includes/icon-small.png', 3 );
+			add_menu_page( __( 'Webcomic', 'webcomic' ), __( 'Webcomic', 'webcomic' ), 'manage_options', 'webcomic_tools', array( &$this, 'admin_tools' ), $this->url . '/webcomic-includes/icon-small.png', 3 );
 		
 		$pages[ 'tools' ] = add_submenu_page( 'webcomic_files', __( 'Webcomic Tools', 'webcomic' ), __( 'Tools', 'webcomic' ), 'manage_options', 'webcomic_tools', array( &$this, 'admin_tools' ) );
 		
@@ -493,6 +491,11 @@ class webcomic_admin extends webcomic {
 			wp_redirect( admin_url( 'admin.php?page=webcomic_files&webcomic_post_trashed=1&webcomic_collection=' . $wc ) );
 			die();
 		}
+		
+		$dc = $this->option( 'default_collection' );
+		
+		if ( empty( $dc ) )
+			$this->errors[ 'no_default_collection' ] = sprintf( __( "It looks like you don't have a default webcomic collection set. Please <a href='%s'>set a default webcomic collection</a> now." ), 'admin.php?page=webcomic_collection' );
 		
 		if ( isset( $_REQUEST[ 'webcomic_post_trashed' ] ) )
 			$this->update[ 'deleted_post' ] = __( 'Post moved to the trash', 'webcomic' );
@@ -1066,6 +1069,68 @@ class webcomic_admin extends webcomic {
 				$this->bind( $_REQUEST[ 'id' ], $_REQUEST[ 'type' ], $files, true );
 					
 			$this->update[ 'edit_files' ] = sprintf( __( 'If you uploaded any new files you may need to <a href="%s">go back and manually refresh the page</a> to see them.', 'webcomic' ), $_REQUEST[ 'referer' ] );
+		}
+		
+		if ( 'convert_webcomic_characters' == $_REQUEST[ 'action' ] ) {
+			check_admin_referer( 'convert_webcomic_characters' );
+			
+			$_REQUEST[ 'webcomic_converted_terms' ]   = array();
+			$_REQUEST[ 'webcomic_unconverted_terms' ] = array();
+			
+			if ( !empty( $_REQUEST[ 'webcomic_convert_tags' ] ) ) {
+				foreach ( $_REQUEST[ 'webcomic_convert_tags' ] as $tag ) {
+					$tag = get_term( $tag, 'post_tag' );
+					
+					if ( !( $character = get_term_by( 'slug', $tag->slug, 'webcomic_character' ) ) ) {
+						if ( is_wp_error( $new_term = wp_insert_term( $tag->name, 'webcomic_character', array( 'slug' => $tag->slug, 'description' => $tag->description ) ) ) )
+							$_REQUEST[ 'webcomic_unconverted_terms' ][] = $tag;
+						else
+							$_REQUEST[ 'webcomic_converted_terms' ][ 'generated' ][] = $new_term[ 'term_id' ];
+					} else
+							$_REQUEST[ 'webcomic_converted_terms' ][ 'existing' ][] = $character->term_id;
+					
+					$id = ( $character ) ? $character->term_id : $new_term[ 'term_id' ];
+					
+					if ( $posts = get_posts( 'post_type=webcomic_post&numberposts=-1&tag=' . $tag->slug ) )
+						foreach ( $posts as $p )
+							wp_set_object_terms( $p->ID, ( int ) $id, 'webcomic_character', true );
+				}
+			}
+			
+			if ( !empty( $_REQUEST[ 'webcomic_convert_categories' ] ) ) {
+				foreach ( $_REQUEST[ 'webcomic_convert_categories' ] as $category ) {
+					$category = get_term( $category, 'category' );
+					
+					if ( !( $character = get_term_by( 'slug', $category->slug, 'webcomic_character' ) ) ) {
+						if ( is_wp_error( $new_term = wp_insert_term( $category->name, 'webcomic_character', array( 'slug' => $category->slug, 'description' => $category->description ) ) ) )
+							$_REQUEST[ 'webcomic_unconverted_terms' ][] = $category;
+						else
+							$_REQUEST[ 'webcomic_converted_terms' ][ 'generated' ][] = $new_term[ 'term_id' ];
+					} else
+							$_REQUEST[ 'webcomic_converted_terms' ][ 'existing' ][] = $character->term_id;
+					
+					$id = ( $character ) ? $character->term_id : $new_term[ 'term_id' ];
+					
+					if ( $posts = get_posts( 'post_type=webcomic_post&numberposts=-1&category=' . $category->term_id ) )
+						foreach ( $posts as $p )
+							wp_set_object_terms( $p->ID, ( int ) $id, 'webcomic_character', true );
+				}
+			}
+			
+			if ( !empty( $_REQUEST[ 'webcomic_converted_terms' ][ 'generated' ] ) ) {
+				$c = count( $_REQUEST[ 'webcomic_converted_terms' ][ 'generated' ] );
+				$this->update[ 'characters_converted' ] = sprintf( _n( '%s term converted to a character.', '%s terms converted to characters.', $c, 'webcomic' ), $c );
+			}
+			
+			if ( !empty( $_REQUEST[ 'webcomic_converted_terms' ][ 'existing' ] ) ) {
+				$c = count( $_REQUEST[ 'webcomic_converted_terms' ][ 'existing' ] );
+				$this->update[ 'characters_existing' ] = sprintf( _n( '%s existing character updated.', '%s existing characters updated.', $c, 'webcomic' ), $c );
+			}
+			
+			if ( !empty( $_REQUEST[ 'webcomic_unconverted_terms' ] ) ) {
+				$c = count( $_REQUEST[ 'webcomic_unconverted_terms' ][ 'tags' ] ) + count( $_REQUEST[ 'webcomic_unconverted_terms' ][ 'categories' ] );
+				$this->errors[ 'characters_unconverted' ] = sprintf( _n( '%s term could not be converted or updated.', '%s terms could not be converted or updated.', $c, 'webcomic' ), $c );
+			}
 		}
 		
 		if ( 'upgrade_legacy_webcomic' == $_REQUEST[ 'action' ] ) {
@@ -2165,7 +2230,7 @@ class webcomic_admin extends webcomic {
 		if ( 'webcomic_collection' != $page && ( !$wc || is_wp_error( $wc ) ) ) {
 		?>
 		<div class="wrap">
-			<div id="icon-webcomic" class="icon32"><img src="<?php echo $this->url . 'webcomic-includes/icon.png'; ?>" alt="icon"></div>
+			<div id="icon-webcomic" class="icon32"><img src="<?php echo $this->url . '/webcomic-includes/icon.png'; ?>" alt="icon"></div>
 			<h2><?php _e( 'Webcomic Error', 'webcomc' ); ?></h2>
 			<p><?php printf( __( "Hold up: it looks like you don't have any collections! You should definitely <a href='%s'>create a collection</a> before you go any further.", 'webcomic' ), admin_url( 'admin.php?page=webcomic_collection' ) ); ?></p>
 		</div>
@@ -2173,7 +2238,7 @@ class webcomic_admin extends webcomic {
 		} elseif ( isset( $_REQUEST[ 'action' ] ) && 'bulk_webcomic_upload' == $_REQUEST[ 'action' ] ) { $i = 0; ?>
 		<style>#screen-options-link-wrap{display:none}.widefat img{max-height:<?php echo $this->option( 'small_h' ); ?>px;max-width:<?php echo $this->option( 'small_w' ); ?>px}.form-field input{width:auto}</style>
 		<div class="wrap">
-			<div id="icon-webcomic" class="icon32"><img src="<?php echo $this->url . 'webcomic-includes/icon.png'; ?>" alt="icon"></div>
+			<div id="icon-webcomic" class="icon32"><img src="<?php echo $this->url . '/webcomic-includes/icon.png'; ?>" alt="icon"></div>
 			<h2><?php printf( __( 'Upload Files to %s', 'webcomic' ), $wc->name ); ?></h2>
 			<form action="<?php echo $view; ?>" method="post" enctype="multipart/form-data">
 				<?php wp_nonce_field( 'bulk_webcomic_upload' ); ?>
@@ -2246,7 +2311,7 @@ class webcomic_admin extends webcomic {
 		<?php } elseif ( !empty( $_REQUEST[ 'action' ] ) && !empty( $_REQUEST[ 'bulk' ] ) && ( isset( $_REQUEST[ 'action-1' ] ) || isset( $_REQUEST[ 'action-2' ] ) ) && ( $action = ( !empty( $_REQUEST[ 'submit-1' ] ) ) ? $_REQUEST[ 'action-1' ] : $_REQUEST[ 'action-2' ] ) && 'batch_post' == $action ) { $i = 0; ?>
 		<style>#screen-options-link-wrap{display:none}</style>
 		<div class="wrap">
-			<div id="icon-webcomic" class="icon32"><img src="<?php echo $this->url . 'webcomic-includes/icon.png'; ?>" alt="icon"></div>
+			<div id="icon-webcomic" class="icon32"><img src="<?php echo $this->url . '/webcomic-includes/icon.png'; ?>" alt="icon"></div>
 			<h2><?php printf( __( 'Editing Posts in %s', 'webcomic' ), $wc->name ); ?></h2>
 			<form action="<?php echo $view; ?>" method="post">
 				<?php wp_nonce_field( 'batch_webcomic_posts' ); ?>
@@ -2431,7 +2496,7 @@ class webcomic_admin extends webcomic {
 		?>
 		<style>#screen-options-link-wrap{display:none}.form-field input[type=checkbox]{width:auto}.widefat img{max-height:<?php echo $this->option( 'small_h' ); ?>px;max-width:<?php echo $this->option( 'small_w' ); ?>px}</style>
 		<div class="wrap">
-			<div id="icon-webcomic" class="icon32"><img src="<?php echo $this->url . 'webcomic-includes/icon.png'; ?>" alt="icon"></div>
+			<div id="icon-webcomic" class="icon32"><img src="<?php echo $this->url . '/webcomic-includes/icon.png'; ?>" alt="icon"></div>
 			<h2><?php printf( __( 'Post Files in %s', 'webcomic' ), $wc->name ); ?></h2>
 			<form action="<?php echo $view; ?>" method="post">
 				<?php wp_nonce_field( 'batch_webcomic_files' ); ?>
@@ -2649,7 +2714,7 @@ class webcomic_admin extends webcomic {
 		?>
 		<style>.widefat img{max-height:<?php echo $this->option( 'small_h' ); ?>px;max-width:<?php echo $this->option( 'small_w' ); ?>px}#availablethemes img{height:auto;max-height:<?php echo $this->option( 'small_h' ); ?>px;max-width:<?php echo $this->option( 'small_w' ); ?>px;width:auto}#availablethemes input[type=checkbox]{display:none}#availablethemes label{border:1px solid transparent;display:inline-block;padding:.25em}#availablethemes input:checked + label{background:#ffffe0;border:1px solid #e6db55}hr{border:3px double #ddd}</style>
 		<div class="wrap">
-			<div id="icon-webcomic" class="icon32"><img src="<?php echo $this->url . 'webcomic-includes/icon.png'; ?>" alt="icon"></div>
+			<div id="icon-webcomic" class="icon32"><img src="<?php echo $this->url . '/webcomic-includes/icon.png'; ?>" alt="icon"></div>
 			<h2><?php printf( __( '%s in %s', 'webcomic' ), $post_object->labels->name, $wc->name ); ?> <a href="post-new.php?post_type=webcomic_post&amp;webcomic_collection=<?php echo $wc->term_id; ?>" class="button add-new-h2"><?php echo $post_object->labels->add_new; ?></a><?php if ( current_user_can( 'manage_categories' ) ) { ?><a href="<?php echo wp_nonce_url( $view . '&amp;action=bulk_webcomic_upload', 'bulk_webcomic_upload' ); ?>" class="button add-new-h2"><?php _e( 'Upload', 'webcomic' ); ?></a><?php } ?></h2>
 			<form action="<?php echo $view; ?>" method="post">
 			<p class="search-box">
@@ -2894,7 +2959,7 @@ class webcomic_admin extends webcomic {
 		if ( 'webcomic_collection' != $page && ( !$wc || is_wp_error( $wc ) ) ) {
 		?>
 		<div class="wrap">
-			<div id="icon-webcomic" class="icon32"><img src="<?php echo $this->url . 'webcomic-includes/icon.png'; ?>" alt="icon"></div>
+			<div id="icon-webcomic" class="icon32"><img src="<?php echo $this->url . '/webcomic-includes/icon.png'; ?>" alt="icon"></div>
 			<h2><?php _e( 'Webcomic Error', 'webcomc' ); ?></h2>
 			<p><?php printf( __( "Hold up: it looks like you don't have any collections! You should definitely <a href='%s'>create a collection</a> before you go any further.", 'webcomic' ), admin_url( 'admin.php?page=webcomic_collection' ) ); ?></p>
 		</div>
@@ -2904,7 +2969,7 @@ class webcomic_admin extends webcomic {
 		?>
 		<style>#screen-options-link-wrap{display:none}th img{height:auto;max-height:<?php echo $this->option( 'small_h' ); ?>px;max-width:<?php echo $this->option( 'small_w' ); ?>px;width:auto}.form-field input[type=checkbox]{width:auto}</style>
 		<div class="wrap">
-			<div id="icon-webcomic" class="icon32"><img src="<?php echo $this->url . 'webcomic-includes/icon.png'; ?>" alt="icon"></div>
+			<div id="icon-webcomic" class="icon32"><img src="<?php echo $this->url . '/webcomic-includes/icon.png'; ?>" alt="icon"></div>
 			<h2><?php echo $taxonomy->labels->edit_item; ?></h2>
 			<form action="<?php echo $view; ?>" method="post" enctype="multipart/form-data" class="media-upload-form">
 				<?php wp_nonce_field( 'update_webcomic_term' ); ?>
@@ -3149,7 +3214,7 @@ class webcomic_admin extends webcomic {
 		<?php } else { $wco = ( 'webcomic_storyline' == $page ) ? true : false; $search = ( !empty( $_REQUEST[ 's' ] ) ) ? '&search=' . $_REQUEST[ 's' ] : ''; $tg = ( 'webcomic_collection' != $page ) ? '&term_group=' . $wc->term_id : ''; $terms = get_terms( $page, 'hide_empty=0&webcomic_order=' . $wco . $tg . $search ); $num_term = count( get_terms( $page, 'hide_empty=0&parent=0&term_group=' . $wc->term_id ) ); $max_term = ( $num_term < ( $pagenum * $tpp ) ) ? $num_term : $pagenum * $tpp; ?>
 		<style>.widefat .term-description{display:none}.widefat .term-description-toggle{cursor:pointer}.widefat th.column-characters,.widefat th.column-storylines{text-align:center}</style>
 		<div class="wrap">
-			<div id="icon-webcomic" class="icon32"><img src="<?php echo $this->url . 'webcomic-includes/icon.png'; ?>" alt="icon"></div>
+			<div id="icon-webcomic" class="icon32"><img src="<?php echo $this->url . '/webcomic-includes/icon.png'; ?>" alt="icon"></div>
 			<h2>
 			<?php
 				if ( 'webcomic_collection' == $page )
@@ -3257,7 +3322,7 @@ class webcomic_admin extends webcomic {
 								</div>
 								<?php if ( 'webcomic_storyline' == $page || 'webcomic_character' == $page ) { ?>
 								<div class="form-field">
-									<label for="webcomic_parent"><?php _e( 'Parent', 'wecomic' ); ?></label>
+									<label for="webcomic_parent"><?php _e( 'Parent', 'webcomic' ); ?></label>
 									<select name="webcomic_parent" id="webcomic_parent">
 										<option value="0"><?php _e( 'None', 'webcomic' ); ?></option>
 										<?php
@@ -3317,7 +3382,7 @@ class webcomic_admin extends webcomic {
 				$file[ 'small' ]  = ( !empty( $files[ 'small' ][ $_REQUEST[ 'key' ] ] ) ) ? $files[ 'small' ][ $_REQUEST[ 'key' ] ] : array();
 		?>
 		<div class="wrap">
-			<div id="icon-webcomic" class="icon32"><img src="<?php echo $this->url . 'webcomic-includes/icon.png'; ?>" alt="icon"></div>
+			<div id="icon-webcomic" class="icon32"><img src="<?php echo $this->url . '/webcomic-includes/icon.png'; ?>" alt="icon"></div>
 			<h2><?php printf( __( 'Editing %s', 'webcomic' ), $file[ 'full' ][ 'filename' ] ); ?></h2>
 			<form action="<?php echo $view; ?>&type=<?php echo $_REQUEST[ 'type' ]; ?>&src=<?php echo $_REQUEST[ 'src' ]; ?>&id=<?php echo $_REQUEST[ 'id' ]; ?>&key=<?php echo $_REQUEST[ 'key' ]; ?>" method="post" enctype="multipart/form-data">
 				<?php wp_nonce_field( 'edit_webcomic_files' ); ?>
@@ -3360,9 +3425,112 @@ class webcomic_admin extends webcomic {
 				<input type="hidden" name="action" value="edit_webcomic_files">
 			</form>
 		</div>
-		<?php } } elseif ( $subpage && 'upgrade_webcomic' == $_REQUEST[ 'subpage' ] ) { ?>
+		<?php } } elseif ( $subpage && 'convert_webcomic_characters' == $_REQUEST[ 'subpage' ] ) { ?>
 		<div class="wrap">
-			<div id="icon-webcomic" class="icon32"><img src="<?php echo $this->url . 'webcomic-includes/icon.png'; ?>" alt="icon"></div>
+			<div id="icon-webcomic" class="icon32"><img src="<?php echo $this->url . '/webcomic-includes/icon.png'; ?>" alt="icon"></div>
+			<h2><?php _e( 'Convert Characters', 'webcomic' ); ?></h2><div id="col-container" style="clear:both">
+				<div id="col-right">
+					<div class="col-wrap">
+					<?php if ( isset( $_REQUEST[ 'webcomic_converted_terms' ] ) ) { $collection = get_term( $_REQUEST[ 'webcomic_collection' ], 'webcomic_collection' ); ?>
+						<table class="widefat">
+							<thead>
+								<tr>
+									<th><?php _e( 'Name', 'webcomic' ); ?></th>
+									<th><?php _e( 'Webcomics', 'webcomic' ); ?></th>
+								</tr>
+							</thead>
+							<tfoot>
+								<tr>
+									<th><?php _e( 'Name', 'webcomic' ); ?></th>
+									<th><?php _e( 'Webcomics', 'webcomic' ); ?></th>
+								</tr>
+							</tfoot>
+							<tbody>
+							<?php if ( !empty( $_REQUEST[ 'webcomic_converted_terms' ][ 'generated' ] ) ) { ?>
+								<tr><th colspan="2" style="background:#ffffe0;"><?php printf( __( 'New %s Characters', 'webcomic' ), $collection->name ); ?></th></tr>
+							<?php foreach ( $_REQUEST[ 'webcomic_converted_terms' ][ 'generated' ] as $c ) { $c = get_term( $c, 'webcomic_character' ); $alt = ( !( $i % 2 ) ) ? ' class="alt"' : ''; ?>
+								<tr<?php echo $alt; ?>>
+									<td>
+										<span class="row-title"><?php echo $c->name; ?></span>
+									</td>
+									<td><?php echo $c->count; ?></td>
+								</tr>
+							<?php $i++; } } $i = 0; if ( !empty( $_REQUEST[ 'webcomic_converted_terms' ][ 'existing' ] ) ) { ?>
+								<tr><th colspan="2" style="background:#ffffe0;"><?php printf( __( 'Existing %s Characters', 'webcomic' ), $collection->name ); ?></th></tr>
+							<?php foreach ( $_REQUEST[ 'webcomic_converted_terms' ][ 'existing' ] as $c ) { $c = get_term( $c, 'webcomic_character' ); $alt = ( !( $i % 2 ) ) ? ' class="alt"' : ''; ?>
+								<tr<?php echo $alt; ?>>
+									<td>
+										<span class="row-title"><?php echo $c->name; ?></span>
+									</td>
+									<td><?php echo $c->count; ?></td>
+								</tr>
+							<?php $i++; } } $i = 0; if ( !empty( $_REQUEST[ 'webcomic_unconverted_terms' ] ) ) { ?>
+								<tr><th colspan="2" style="background:#ffffe0;"><?php _e( 'Unaffected Terms', 'webcomic' ); ?></th></tr>
+							<?php foreach ( $_REQUEST[ 'webcomic_unconverted_terms' ] as $c ) { $alt = ( !( $i % 2 ) ) ? ' class="alt"' : ''; ?>
+								<tr<?php echo $alt; ?>>
+									<td>
+										<span class="row-title"><?php echo $c->name; ?></span>
+									</td>
+									<td>&mdash;</td>
+								</tr>
+							<?php $i++; } } ?>
+							</tbody>
+							</tbody>
+						</table>
+					<?php } ?>
+					</div>
+				</div>
+				<div id="col-left">
+					<div class="col-wrap">
+						<div class="form-wrap">
+							<p><?php _e( "Select the terms you'd like to convert in the lists below. Webcomic will first attempt to match the terms to existing characters (based on the term slug) and assign webcomic posts to them appropriately. If no character can be matched to a term Webcomic will create a new character for the term.", 'webcomic' ); ?></p>
+							<form action="<?php echo $view; ?>" method="post" enctype="multipart/form-data">
+								<?php wp_nonce_field( 'convert_webcomic_characters' ); ?>
+								<h3><?php printf( __( 'Collection', 'webcomic' ), ucfirst( end( explode( '_', $page ) ) ) ); ?></h3>
+								<div class="form-field">
+									<select name="webcomic_collection">
+									<?php
+										$walker = new webcomic_Walker_AdminTermDropdown();
+										echo $walker->walk( get_terms( 'webcomic_collection', 'get=all' ), 0, array( 'selected' => array( $wc->term_id ) ) );
+									?>
+									</select>
+								</div>
+								<?php if ( $tags = get_terms( 'post_tag', 'hide_empty=0' ) ) { ?>
+								<h3><?php printf( __( 'Tags', 'webcomic' ), ucfirst( end( explode( '_', $page ) ) ) ); ?></h3>
+								<div class="form-field">
+									<select name="webcomic_convert_tags[]" size="2" multiple style="height:10em;width:50%">
+										<?php
+											$walker   = new webcomic_Walker_AdminTermDropdown();
+											echo $walker->walk( $tags, 0, array( 'selected' => array(), 'no_def' => true ) );
+										?>
+									</select>
+									<p><?php _e( 'Hold <code>Ctrl</code> or <code>Command</code> to select multiple tags.', 'webcomic' ); ?></p>
+								</div>
+								<?php } if ( $categories = get_terms( 'category', 'hide_empty=0' ) ) { ?>
+								<h3><?php printf( __( 'Categories', 'webcomic' ), ucfirst( end( explode( '_', $page ) ) ) ); ?></h3>
+								<div class="form-field">
+									<select name="webcomic_convert_categories[]" size="2" multiple style="height:10em;width:50%">
+										<?php
+											$walker   = new webcomic_Walker_AdminTermDropdown();
+											echo $walker->walk( $categories, 0, array( 'selected' => array(), 'no_def' => true ) );
+										?>
+									</select>
+									<p><?php _e( 'Hold <code>Ctrl</code> or <code>Command</code> to select multiple categories.', 'webcomic' ); ?></p>
+								</div>
+								<?php } ?>
+								<p class="submit">
+									<input type="submit" class="button" name="submit" value="<?php _e( 'Convert Terms', 'webcomic' ); ?>">
+									<input type="hidden" name="action" value="convert_webcomic_characters">
+								</p>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<?php } elseif ( $subpage && 'upgrade_webcomic' == $_REQUEST[ 'subpage' ] ) { ?>
+		<div class="wrap">
+			<div id="icon-webcomic" class="icon32"><img src="<?php echo $this->url . '/webcomic-includes/icon.png'; ?>" alt="icon"></div>
 			<h2><?php _e( 'Upgrade Webcomic', 'webcomic' ); ?></h2>
 			<div id="col-wrap">
 				<div id="col-left">
@@ -3407,7 +3575,7 @@ class webcomic_admin extends webcomic {
 		</div>
 		<?php } elseif ( $subpage && 'uninstall_webcomic' == $_REQUEST[ 'subpage' ] || $this->option( 'uninstall' ) ) { ?>
 		<div class="wrap">
-			<div id="icon-webcomic" class="icon32"><img src="<?php echo $this->url . 'webcomic-includes/icon.png'; ?>" alt="icon"></div>
+			<div id="icon-webcomic" class="icon32"><img src="<?php echo $this->url . '/webcomic-includes/icon.png'; ?>" alt="icon"></div>
 			<h2><?php _e( 'Uninstall Webcomic', 'webcomic' ); ?></h2>
 			<div id="col-wrap">
 				<div id="col-left">
@@ -3437,7 +3605,7 @@ class webcomic_admin extends webcomic {
 		</div>
 		<?php } else { ?>
 		<div class="wrap">
-			<div id="icon-webcomic" class="icon32"><img src="<?php echo $this->url . 'webcomic-includes/icon.png'; ?>" alt="icon"></div>
+			<div id="icon-webcomic" class="icon32"><img src="<?php echo $this->url . '/webcomic-includes/icon.png'; ?>" alt="icon"></div>
 			<h2><?php _e( 'Tools', 'webcomic' ); ?></h2>
 			<table class="widefat" cellspacing="0">
 				<?php if ( get_option( 'webcomic_version' ) ) { ?>
@@ -3445,8 +3613,13 @@ class webcomic_admin extends webcomic {
 					<th scope="row" class="import-system row-title"><a href="<?php echo $view . '&amp;subpage=upgrade_webcomic'; ?> "><?php _e( 'Upgrade Webcomic', 'webcomic' ); ?></a></th>
 					<td class="desc" style="vertical-align:middle"><?php _e( 'Upgrade from legacy versions of Webcomic.', 'webcomic' ); ?></td>
 				</tr>
+				<?php } else { ?>
+				<tr class="alternate">
+					<th scope="row" class="import-system row-title"><a href="<?php echo $view . '&amp;subpage=convert_webcomic_characters'; ?> "><?php _e( 'Convert Characters', 'webcomic' ); ?></a></th>
+					<td class="desc" style="vertical-align:middle"><?php _e( 'Convert existing categories and/or tags into Webcomic Characters.', 'webcomic' ); ?></td>
+				</tr>
 				<?php } if ( !$this->option( 'uninstall' ) ) { ?>
-				<tr<?php if ( !get_option( 'webcomic_version' ) ) echo ' class="alternate"'; ?>>
+				<tr>
 					<th scope="row" class="import-system row-title delete"><a href="<?php echo $view . '&amp;subpage=uninstall_webcomic'; ?> "><?php _e( 'Uninstall Webcomic', 'webcomic' ); ?></a></th>
 					<td class="desc" style="vertical-align:middle"><?php _e( 'Remove all files and information related to Webcomic.', 'webcomic' ); ?></td>
 				</tr>
@@ -3471,7 +3644,7 @@ class webcomic_admin extends webcomic {
 		natcasesort( $languages );
 		?>
 		<div class="wrap">
-			<div id="icon-webcomic" class="icon32"><img src="<?php echo $this->url . 'webcomic-includes/icon.png'; ?>" alt="icon"></div>
+			<div id="icon-webcomic" class="icon32"><img src="<?php echo $this->url . '/webcomic-includes/icon.png'; ?>" alt="icon"></div>
 			<h2><?php _e( 'Settings', 'webcomic' ); ?></h2>
 			<form method="post" action="">
 				<?php wp_nonce_field( 'webcomic_settings' ); ?>
@@ -3758,7 +3931,7 @@ class webcomic_admin extends webcomic {
 					</tr>
 				</tbody>
 			</table>
-			<style>#icon-edit{background:url('<?php echo $this->url . 'webcomic-includes/icon.png'; ?>') 50% 50% no-repeat;}</style>
+			<style>#icon-edit{background:url('<?php echo $this->url . '/webcomic-includes/icon.png'; ?>') 50% 50% no-repeat;}</style>
 			<div id="webcomic_orphans">
 			<?php
 				if ( $wc ) {
