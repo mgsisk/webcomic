@@ -12,7 +12,7 @@
  * @since 3
  */
 
-global $webocmic; $webcomic->domain();
+global $webcomic; $webcomic->domain();
 ?>
 
 <?php the_post(); get_header(); ?>

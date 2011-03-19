@@ -58,18 +58,18 @@ abstract class mgs_core {
 		if ( !$this->type )    $this->type    = 'plugin';
 		
 		$this->base    = ( 'plugin' == $this->type ) ? plugin_basename( $this->file ) : dirname( $this->file );
-		$this->cdir    = ( is_multisite() ) ? trailingslashit( BLOGUPLOADDIR ) : trailingslashit( WP_CONTENT_DIR );
-		$this->curl    = ( is_multisite() ) ? trailingslashit( trailingslashit( get_bloginfo( 'url' ) ) . 'files' ) : trailingslashit( WP_CONTENT_URL );
+		$this->cdir    = ( is_multisite() ) ? BLOGUPLOADDIR : WP_CONTENT_DIR;
+		$this->curl    = ( is_multisite() ) ? trailingslashit( get_bloginfo( 'url' ) ) . 'files' : WP_CONTENT_URL;
 		$this->update  = array();
 		$this->errors  = array();
 		$this->options = $this->option();
 		
 		if ( 'plugin' == $this->type ) {
-			$this->dir = ( realpath( dirname( $this->file ) ) !== realpath( WPMU_PLUGIN_DIR ) ) ? trailingslashit( trailingslashit( WP_PLUGIN_DIR ) . dirname( $this->base ) ) : trailingslashit( trailingslashit( WPMU_PLUGIN_DIR ) );
-			$this->url = ( realpath( dirname( $this->file ) ) !== realpath( WPMU_PLUGIN_DIR ) ) ? trailingslashit( trailingslashit( WP_PLUGIN_URL ) . str_replace( basename( $this->file ), '', $this->base ) ) : trailingslashit( trailingslashit( WPMU_PLUGIN_URL ) . str_replace( basename( $this->file ), '', $this->base ) );
+			$this->dir = ( realpath( dirname( $this->file ) ) !== realpath( WPMU_PLUGIN_DIR ) ) ? trailingslashit( WP_PLUGIN_DIR ) . dirname( $this->base ) : WPMU_PLUGIN_DIR;
+			$this->url = ( realpath( dirname( $this->file ) ) !== realpath( WPMU_PLUGIN_DIR ) ) ? trailingslashit( WP_PLUGIN_URL ) . str_replace( '/' . basename( $this->file ), '', $this->base ) : trailingslashit( WPMU_PLUGIN_URL ) . str_replace( '/' . basename( $this->file ), '', $this->base );
 		} else {
-			$this->dir = trailingslashit( TEMPLATEPATH );
-			$this->url = trailingslashit( get_template_directory_uri() );
+			$this->dir = TEMPLATEPATH;
+			$this->url = get_template_directory_uri();
 		}
 		
 		$class   = new ReflectionClass( get_class( $this ) );
@@ -94,8 +94,10 @@ abstract class mgs_core {
 		
 		if ( empty( $this->options ) )
 			add_filter( 'init', array( &$this, 'install' ) );
-		elseif ( $this->options[ 'version' ] != $this->version )
+		elseif ( $this->options[ 'version' ] < $this->version )
 			add_filter( 'init', array( &$this, 'upgrade' ) );
+		elseif ( $this->options[ 'version' ] > $this->version )
+			add_filter( 'init', array( &$this, 'downgrade' ) );
 		elseif ( !empty( $this->options[ 'uninstall' ] ) && 'plugin' == $this->type )
 			register_deactivation_hook( $this->file, array( &$this, 'deactivate' ) );
 	}
@@ -129,14 +131,14 @@ abstract class mgs_core {
 	 */
 	final function domain() {
 		if ( 'plugin' == $this->type && realpath( dirname( $this->file ) ) !== realpath( WPMU_PLUGIN_DIR ) )
-			load_muplugin_textdomain( $this->name, $this->dir . $this->name . '-includes/languages' );
+			load_muplugin_textdomain( $this->name, $this->dir . '/' . $this->name . '-includes/languages' );
 		elseif ( 'plugin' == $this->type )
-			load_plugin_textdomain( $this->name, $this->dir . $this->name . '-includes/languages', dirname( $this->base ) );
+			load_plugin_textdomain( $this->name, $this->dir . '/' . $this->name . '-includes/languages', dirname( $this->base ) );
 		elseif ( 'theme' == $this->type ) {
-			load_theme_textdomain( $this->name, $this->dir . 'languages' );
+			load_theme_textdomain( $this->name, $this->dir . '/' . 'languages' );
 			
 			$l  = get_locale();
-			$lf = $this->dir . "languages/$l.php";
+			$lf = $this->dir . "/languages/$l.php";
 			
 			if ( is_readable( $lf ) ) require_once( $lf );
 		} else
@@ -189,8 +191,11 @@ abstract class mgs_core {
 	 * Install is a run-once function that should, at the very least,
 	 * set plugin or theme options with a 'version' key.
 	 * 
-	 * Upgrade is run any time there's a mismatch between the class $version
-	 * and the version stored in the plugin or theme options.
+	 * Upgrade is run if the class $version is greater than the version
+	 * stored in the plugin or theme options.
+	 * 
+	 * Downgrade is run if the class $version is less than the version
+	 * stored in the plugin or theme options.
 	 * 
 	 * Uninstall must be called by another class method and should, at the
 	 * very least, set the 'uninstall' option to true.
@@ -200,6 +205,7 @@ abstract class mgs_core {
 	 */
 	abstract function install();
 	abstract function upgrade();
+	abstract function downgrade();
 	abstract function uninstall();
 }
 ?>

@@ -10,7 +10,7 @@
 function get_webcomic_post( $id = false ) { global $webcomic; return $webcomic->get_webcomic_post( $id ); }
 function get_webcomic_object( $size = 'full', $type = false, $key = false, $id = false, $format = false ) { global $webcomic; return $webcomic->get_webcomic_object( $size, $type, $key, $id, $format ); }
 function the_webcomic_object( $size = 'full', $link = false, $taxonomy = false, $terms = false, $key = false, $id = false ) { global $webcomic; echo $webcomic->get_the_webcomic_object( $size, $link, $taxonomy, $terms, $key, $id ); }
-function get_webcomic_embed( $format = 'shtml', $size = 'small', $key = false, $id = false ) { global $webcomic; return $webocmic->get_webcomic_embed( $format, $size, $key, $id ); }
+function get_webcomic_embed( $format = 'shtml', $size = 'small', $key = false, $id = false ) { global $webcomic; return $webcomic->get_webcomic_embed( $format, $size, $key, $id ); }
 function the_webcomic_embed( $format = 'shtml', $size = 'small', $key = false, $id = false ) { global $webcomic; echo $webcomic->get_the_webcomic_embed( $format, $size, $key, $id ); }
 function random_webcomic_url( $taxonomy = false, $terms = false, $id = false, $global = false ) { global $webcomic; echo $webcomic->get_relative_webcomic_url( 'random', $taxonomy, $terms, $id, $global ); }
 function first_webcomic_url( $taxonomy = false, $terms = false, $id = false, $global = false ) { global $webcomic; echo $webcomic->get_relative_webcomic_url( 'first', $taxonomy, $terms, $id, $global ); }

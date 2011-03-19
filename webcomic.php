@@ -4,7 +4,7 @@ Text Domain: webcomic
 Plugin Name: Webcomic
 Plugin URI: http://webcomicms.net/
 Description: Comic publishing power for WordPress. Create, manage, and share your webcomics like never before.
-Version: 3.0.4
+Version: 3.0.5
 Author: Michael Sisk
 Author URI: http://maikeruon.com/
 
@@ -42,7 +42,7 @@ if ( !class_exists( 'mgs_core' ) ) require_once( 'webcomic-includes/mgs-core.php
 class webcomic extends mgs_core {
 	/** Override mgs_core variables */
 	protected $name    = 'webcomic';
-	protected $version = '3.0.4';
+	protected $version = '3.0.5';
 	protected $file    = __FILE__;
 	protected $type    = 'plugin';
 	
@@ -129,6 +129,16 @@ class webcomic extends mgs_core {
 			$this->option( 'term_meta', array( 'collection' => array(), 'storyline' => array(), 'character' => array() ) );
 		
 		$this->update[ 'upgraded' ] = sprintf( __( 'Thanks again for choosing Webcomic! Your <a href="%s">support</a> is much appreciated.', 'webcomic' ), 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=R6SH66UF6F9DG' );
+	}
+	
+	/**
+	 * Downgrades newer versions. Reserved for future use.
+	 * 
+	 * @package webcomic
+	 * @since 3
+	 */
+	function downgrade() {
+		
 	}
 	
 	/**
@@ -1266,7 +1276,7 @@ class webcomic extends mgs_core {
 			return false;
 		
 		$file = ( $file ) ? $file : 'webcomic_transcripts.php';
-		$form = locate_template( array( $file ) ) ? locate_template( array( $file ) ) : $this->dir . 'webcomic-includes/template-transcripts.php';
+		$form = locate_template( array( $file ) ) ? locate_template( array( $file ) ) : $this->dir . '/webcomic-includes/template-transcripts.php';
 		
 		require_once( $form );
 	}
@@ -2177,7 +2187,7 @@ class webcomic extends mgs_core {
 		
 		global $wpdb;
 		
-		$before = $p1 = $l = $p2 = $after = false;
+		$p1 = $l = $p2 = false;
 		
 		if ( 'collection' == $group || 'storyline' == $group || 'character' == $group ) {
 			if ( 'storyline' == $group )
@@ -2725,8 +2735,6 @@ class webcomic extends mgs_core {
 		if ( get_option( 'webcomic_version' ) )
 			register_taxonomy( 'chapter', array( 'post', 'webcomic_post' ), array( 'label' => __( 'Chapter', 'webcomic' ), 'hierarchical' => true, 'public' => true, 'show_ui' => false, 'update_count_callback' => '_update_post_term_count' ) );
 		
-		flush_rewrite_rules();
-		
 		wp_enqueue_script( 'swfobject', '', '', '', true );
 		
 		remove_filter( 'pre_term_description', 'wp_filter_kses' );
@@ -2739,7 +2747,7 @@ class webcomic extends mgs_core {
 			$pass = true;
 			$type = $_REQUEST[ 'webcomic_paypal_ipn' ];
 			$req  = 'cmd=_notify-validate';
-			$log  = ( $this->option( 'paypal_log' ) ) ? fopen( $this->dir . 'webcomic-includes/ipnlog-' . $id . '.txt', 'a' ) : false;
+			$log  = ( $this->option( 'paypal_log' ) ) ? fopen( $this->dir . '/webcomic-includes/ipnlog-' . $id . '.txt', 'a' ) : false;
 			
 			foreach ( $_POST as $key => $value ) {
 				$value = urlencode( stripslashes( $value ) );
@@ -2767,7 +2775,7 @@ class webcomic extends mgs_core {
 				
 				while ( !feof( $fp ) ) {
 					$res  = fgets ( $fp, 1024 );
-					$file = file_get_contents( $this->dir . 'webcomic-includes/ipnlog-' . $id . '.txt' );
+					$file = file_get_contents( $this->dir . '/webcomic-includes/ipnlog-' . $id . '.txt' );
 					
 					if ( 0 == strcmp( $res, "VERIFIED" ) ) {
 						if ( 'Completed' != $payment_status ) {
@@ -2952,7 +2960,7 @@ class webcomic extends mgs_core {
 	function hook_template_redirect() {
 		global $post;
 		
-		wp_enqueue_script( 'webcomic-scripts', $this->url . 'webcomic-includes/scripts.js', array( 'jquery', 'jquery-hotkeys' ), '', true );
+		wp_enqueue_script( 'webcomic-scripts', $this->url . '/webcomic-includes/scripts.js', array( 'jquery', 'jquery-hotkeys' ), '', true );
 		
 		if ( ( $wc = $this->get_collection_by_path() ) && !empty( $wc->webcomic_theme ) && is_dir( get_theme_root() . '/' . $wc->webcomic_theme ) ) {
 			global $webcomic_theme;
@@ -2975,8 +2983,8 @@ class webcomic extends mgs_core {
 			$v = apply_filters( 'webcomic_verify_age_template', 'webcomic_verifyage.php' );
 			$f = apply_filters( 'webcomic_verify_fail_template', 'webcomic_verifyfail.php' );
 			
-			$form = ( locate_template( array( $v ) ) ) ? locate_template( array( $v ) ) : $this->dir . 'webcomic-includes/template-verify-age.php';
-			$fail = ( locate_template( array( $f ) ) ) ? locate_template( array( $f ) ) : $this->dir . 'webcomic-includes/template-verify-fail.php';
+			$form = ( locate_template( array( $v ) ) ) ? locate_template( array( $v ) ) : $this->dir . '/webcomic-includes/template-verify-age.php';
+			$fail = ( locate_template( array( $f ) ) ) ? locate_template( array( $f ) ) : $this->dir . '/webcomic-includes/template-verify-fail.php';
 			
 			if ( !$this->age() ) {
 				require_once( $form );
@@ -2993,7 +3001,7 @@ class webcomic extends mgs_core {
 			if ( locate_template( array( $v ) ) )
 				$p = locate_template( array( $v ) );
 			else
-				$p = $this->dir . 'webcomic-includes/template-purchase-print.php';
+				$p = $this->dir . '/webcomic-includes/template-purchase-print.php';
 			
 			require_once( $p );
 			die();
@@ -3672,8 +3680,8 @@ class webcomic extends mgs_core {
 	 */
 	function directory( $type = null, $sub = null ) {
 		switch ( $type ) {
-			case 'abs': if ( $sub ) return $this->cdir . 'webcomic/' . $sub . '/'; else return $this->cdir . 'webcomic/';
-			case 'url': if ( $sub ) return $this->curl . 'webcomic/' . $sub . '/'; else return $this->curl . 'webcomic/';
+			case 'abs': if ( $sub ) return $this->cdir . '/webcomic/' . $sub . '/'; else return $this->cdir . '/webcomic/';
+			case 'url': if ( $sub ) return $this->curl . '/webcomic/' . $sub . '/'; else return $this->curl . '/webcomic/';
 			default: return false;
 		}
 	}

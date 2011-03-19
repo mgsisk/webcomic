@@ -11,7 +11,7 @@ function comic_loop( $num = 1, $dep1 = false, $q = false ) { global $webcomic; $
 function ignore_comics() { return false; }
 function in_comic_category( $terms = false, $id = false ) { global $webcomic; return $webcomic->in_webcomic_term( 'webcomic_collection', $terms, $id ); }
 function in_comic_chapter( $terms = false, $id = false ) { global $webcomic; return $webcomic->in_webcomic_term( 'webcomic_storyline', $terms, $id ); }
-function get_the_comic( $id = false, $dep1 = false, $dep2 = false ) { global $webcomic; return $webocmic->get_webcomic_post( $id ); }
+function get_the_comic( $id = false, $dep1 = false, $dep2 = false ) { global $webcomic; return $webcomic->get_webcomic_post( $id ); }
 function get_the_chapter( $id ) { return get_term( $id, 'webcomic_storyline' ); }
 function get_comic_object( $id = false, $size = false, $dep1 = false ) { global $webcomic; $size = ( 'thumb' == $size ) ? 'small' : $size; return $webcomic->get_webcomic_object( $size, 'post', false, $id ); }
 function get_comic_buffer( $term = false ) { global $webcomic; return $webcomic->get_webcomic_buffer( $term ); }
