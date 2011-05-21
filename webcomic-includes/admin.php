@@ -1439,6 +1439,14 @@ class webcomic_admin extends webcomic {
 		if ( !@mkdir( $tabs, 0755, true ) )
 			$this->errors[ 'no_directory' ] = sprintf( __( 'The collection directory could not be created. You will need to create the following directory (if it does not already exist) before you can manage webcomics for this collection: %s', 'webcomic' ), $tabs );
 		
+		if ( $this->option( 'secure_toggle' ) ) {
+			if ( ( $index1 = fopen( $this->directory( 'abs', $term->slug ) . '/index.php', 'w' ) ) and ( $index2 = fopen( $tabs . '/index.php', 'w' ) ) ) {
+				fclose( $index1 );
+				fclose( $index2 );
+			} else
+				$this->errors[ 'no_directory' ] = sprintf( __( 'Index files could not be created. You will need to create index files in %s and %s to prevent users from directly browsing your webcomic files.', 'webcomic' ), $this->directory( 'abs', $term->slug ), $tabs );
+		}
+		
 		$term_meta[ 'collection' ][ $term_id ] = array(
 			'files'    => array(),
 			'slug'     => $term->slug,
@@ -2638,6 +2646,9 @@ class webcomic_admin extends webcomic {
 			
 			$count[ 'all' ] = $count[ 'future' ] = $count[ 'publish' ] = $count[ 'private' ] = $count[ 'pending' ] = $count[ 'draft' ] = $count[ 'trash' ] = $count[ 'orphaned' ] = $count[ 'matched' ] = 0;
 			
+			if ( false !== ( $index_key = array_search( $abs . 'index.php', $files ) ) )
+				unset( $files[ $index_key ] );
+			
 			foreach ( $term_meta as $taxonomy )
 				foreach ( $taxonomy as $term )
 					if ( !empty( $term[ 'files' ] ) )
@@ -3659,7 +3670,7 @@ class webcomic_admin extends webcomic {
 					</tr>
 					<tr>
 						<th scope="row"><label for="secure_toggle"><?php _e( 'Security', 'webcomic' ); ?></label></th>
-						<td><label><input type="checkbox" name="secure_toggle" value="1" id="secure_toggle"<?php if ( $this->option( 'secure_toggle' ) ) echo ' checked'; ?>> <?php _e( 'Secure filenames and obscure the location of files', 'webcomic' ); ?></label></td>
+						<td><label><input type="checkbox" name="secure_toggle" value="1" id="secure_toggle"<?php if ( $this->option( 'secure_toggle' ) ) echo ' checked'; ?>> <?php _e( 'Secure filenames and hide collection directory contents', 'webcomic' ); ?></label></td>
 					</tr>
 					<tr>
 						<th scope="row"><label for="age_toggle"><?php _e( 'Verification', 'webcomic' ); ?></label></th>
