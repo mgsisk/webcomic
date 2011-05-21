@@ -4,7 +4,7 @@ Text Domain: webcomic
 Plugin Name: Webcomic
 Plugin URI: http://webcomicms.net/
 Description: Comic publishing power for WordPress. Create, manage, and share your webcomics like never before.
-Version: 3.0.5
+Version: 3.0.6
 Author: Michael Sisk
 Author URI: http://maikeruon.com/
 
@@ -42,7 +42,7 @@ if ( !class_exists( 'mgs_core' ) ) require_once( 'webcomic-includes/mgs-core.php
 class webcomic extends mgs_core {
 	/** Override mgs_core variables */
 	protected $name    = 'webcomic';
-	protected $version = '3.0.5';
+	protected $version = '3.0.6';
 	protected $file    = __FILE__;
 	protected $type    = 'plugin';
 	
@@ -127,6 +127,23 @@ class webcomic extends mgs_core {
 		
 		if ( !is_array( $this->option( 'term_meta' ) ) )
 			$this->option( 'term_meta', array( 'collection' => array(), 'storyline' => array(), 'character' => array() ) );
+		
+		//3.0.6 - Add index files to directories.
+		if ( $this->option( 'secure_toggle' ) ) {
+			$collections = get_terms( 'webcomic_collection', 'get=all' );
+			
+			foreach ( $collections as $collection ) {
+				if ( !file_exists( $this->directory( 'abs', $collection->slug ) . '/index.php' ) ) {
+					$index = @fopen( $this->directory( 'abs', $collection->slug ) . '/index.php', 'w' );
+					@fclose( $index );
+				}
+				
+				if ( !file_exists( $this->directory( 'abs', $collection->slug ) . '/thumbs/index.php' ) ) {
+					$index = @fopen( $this->directory( 'abs', $collection->slug ) . '/thumbs/index.php', 'w' );
+					@fclose( $index );
+				}
+			}
+		}
 		
 		$this->update[ 'upgraded' ] = sprintf( __( 'Thanks again for choosing Webcomic! Your <a href="%s">support</a> is much appreciated.', 'webcomic' ), 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=R6SH66UF6F9DG' );
 	}
@@ -3031,6 +3048,17 @@ class webcomic extends mgs_core {
 		}
 	}
 	
+	/**
+	 * Adds a "generator" <meta> tag to the site header
+	 * for easy identification of Webcomic users.
+	 * 
+	 * @package webcomic
+	 * @since 3
+	 */
+	function hook_wp_head() {
+		printf( '<meta name="generator" content="Webcomic %s">', $this->version );
+	}
+	
 	
 	
 	////
@@ -3869,8 +3897,7 @@ class webcomic extends mgs_core {
 					continue;
 				
 				$output[ $s ][ $k ] = array_merge( getimagesize( ( ( 'full' == $s ) ? $abs : $tabs ) . $files[ $s ][ $k ] ), pathinfo( ( ( 'full' == $s ) ? $abs : $tabs ) . $files[ $s ][ $k ] ) );
-				$output[ $s ][ $k ][ 'url' ]  = ( ( 'full' == $s ) ? $url : $turl ) . $files[ $s ][ $k ];
-				$output[ $s ][ $k ][ 'surl' ] = get_bloginfo( 'url' ) . '/?webcomic_object=' . $type . '/' . $id . '/' . $s . '/' . $k;
+				$output[ $s ][ $k ][ 'url' ] = $output[ $s ][ $k ][ 'surl' ] = ( ( 'full' == $s ) ? $url : $turl ) . $files[ $s ][ $k ];
 				
 				$obj = ( 'application/x-shockwave-flash' == $output[ $s ][ $k ][ 'mime' ] ) ? str_replace( '%des', $des, str_replace( '%alt', $alt, str_replace( '%size', $s, str_replace( '%width', $output[ $s ][ $k ][ 0 ], str_replace( '%height', $output[ $s ][ $k ][ 1 ], str_replace( '%uid', hash( 'md5', $output[ $s ][ $k ][ 'url' ] ), $flash ) ) ) ) ) ) : str_replace( '%des', $des, str_replace( '%alt', $alt, str_replace( '%size', $s, str_replace( '%heightwidth', $output[ $s ][ $k ][ 3 ], str_replace( '%uid', hash( 'md5', $output[ $s ][ $k ][ 'url' ] ), $image ) ) ) ));
 				
