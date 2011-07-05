@@ -437,7 +437,7 @@ class webcomic_admin extends webcomic {
 	 * @since 3
 	 */
 	function hook_admin_notices() {
-		echo '<style>#menu-posts-webcomicpost{display:none}</style>';
+		echo '<style>#menu-posts-webcomic_post{display:none}</style>';
 		if ( $this->update ) { ?><div id="message" class="updated fade"><p><?php echo implode( '</p><p>', $this->update ); ?></p></div><?php }
 		if ( $this->errors ) { ?><div id="message" class="error"><p><?php echo implode( '</p><p>', $this->errors ); ?></p></div><?php }
 	}
@@ -3953,6 +3953,9 @@ class webcomic_admin extends webcomic {
 					$files     = glob( $abs . '*.*' );
 					$posts     = get_objects_in_term( $wc->term_id, 'webcomic_collection' );
 					$term_meta = $this->option( 'term_meta' );
+					
+					if ( false !== ( $index_key = array_search( $abs . 'index.php', $files ) ) )
+						unset( $files[ $index_key ] );
 					
 					foreach ( $term_meta as $taxonomy )
 						foreach ( $taxonomy as $term )
