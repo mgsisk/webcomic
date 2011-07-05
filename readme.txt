@@ -3,8 +3,8 @@ Contributors: mgsisk
 Donate link: http://webcomicms.net/
 Tags: webcomic, comic, multiple comics, storylines, chapters, library, management, themes, posts, publish, custom post type, custom taxonomy, template tags, widgets
 Requires at least: 3.0
-Tested up to: 3.1.2
-Stable tag: 3.0.6
+Tested up to: 3.2
+Stable tag: 3.0.7
 
 Comic publishing power for WordPress.
 
@@ -14,7 +14,7 @@ Please see the [official Webcomic site](http://webcomicms.net/) for the users ma
 
 = &#10030; Inkblot &amp; Archimedes Users &#10030; =
 
-*If you are upgrading from Webcomic 3.0.4* you must update your theme functions.php file and the mgs_core.php file found in the theme `/includes` directory after updating to Webcomic 3.0.5. You can download the latest versions of both Inkblot and Archimedes at [http://webcomicms.net/themes/](http://webcomicms.net/themes/).
+*If you are upgrading from Webcomic 3.0.4* you must update your theme functions.php file and the mgs_core.php file found in the theme `/includes` directory after updating. You can download the latest versions of both Inkblot and Archimedes at [http://webcomicms.net/themes/](http://webcomicms.net/themes/).
 
 = Upgrading from Webcomic 1 or 2? =
 
