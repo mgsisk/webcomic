@@ -1,20 +1,20 @@
 === Webcomic ===
 Contributors: mgsisk
-Donate link: http://webcomicms.net/
+Donate link: http://mgsisk.com/webcomicms.net/
 Tags: webcomic, comic, multiple comics, storylines, chapters, library, management, themes, posts, publish, custom post type, custom taxonomy, template tags, widgets
 Requires at least: 3.0
-Tested up to: 3.2
-Stable tag: 3.0.7
+Tested up to: 3.2.1
+Stable tag: 3.0.8
 
 Comic publishing power for WordPress.
 
 == Description ==
 
-Please see the [official Webcomic site](http://webcomicms.net/) for the users manual, video tutorials, support forum, bug reports, and feature requests. For more direct assistance, contact [&#115;&#117;&#112;&#112;&#111;&#114;&#116;&#064;&#119;&#101;&#098;&#099;&#111;&#109;&#105;&#099;&#109;&#115;&#046;&#110;&#101;&#116;](&#109;&#097;&#105;&#108;&#116;&#111;:&#115;&#117;&#112;&#112;&#111;&#114;&#116;&#064;&#119;&#101;&#098;&#099;&#111;&#109;&#105;&#099;&#109;&#115;&#046;&#110;&#101;&#116;).
+Please see the [official Webcomic site](http://mgsisk.com/webcomicms.net/) for the users manual, video tutorials, support forum, bug reports, and feature requests. For more direct assistance, contact [&#115;&#117;&#112;&#112;&#111;&#114;&#116;&#064;&#119;&#101;&#098;&#099;&#111;&#109;&#105;&#099;&#109;&#115;&#046;&#110;&#101;&#116;](&#109;&#097;&#105;&#108;&#116;&#111;:&#115;&#117;&#112;&#112;&#111;&#114;&#116;&#064;&#119;&#101;&#098;&#099;&#111;&#109;&#105;&#099;&#109;&#115;&#046;&#110;&#101;&#116;).
 
 = &#10030; Inkblot &amp; Archimedes Users &#10030; =
 
-*If you are upgrading from Webcomic 3.0.4* you must update your theme functions.php file and the mgs_core.php file found in the theme `/includes` directory after updating. You can download the latest versions of both Inkblot and Archimedes at [http://webcomicms.net/themes/](http://webcomicms.net/themes/).
+*If you are upgrading from Webcomic 3.0.4* you must update your theme functions.php file and the mgs_core.php file found in the theme `/includes` directory after updating. You can download the latest versions of both Inkblot and Archimedes at [http://mgsisk.com/webcomicms.net/themes/](http://mgsisk.com/webcomicms.net/themes/).
 
 = Upgrading from Webcomic 1 or 2? =
 
@@ -44,7 +44,7 @@ If you can't use the *Install Plugins* page for whatever reason, follow these st
 
 = Using Webcomic =
 
-Webcomic's *Integrate* feature allows it to be used with any WordPress theme right out of the box, but to get the most out of Webcomic you may want to check out one of the [official Webcomic themes](http://webcomicms.net/support/manual/themes) or build your own theme using Webcomic's extensive selection of widgets, template tags, actions, and filters.
+Webcomic's *Integrate* feature allows it to be used with any WordPress theme right out of the box, but to get the most out of Webcomic you may want to check out one of the [official Webcomic themes](http://mgsisk.com/webcomicms.net/support/manual/themes) or build your own theme using Webcomic's extensive selection of widgets, template tags, actions, and filters.
 
 == Upgrade Notice ==
 
