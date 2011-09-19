@@ -437,7 +437,6 @@ class webcomic_admin extends webcomic {
 	 * @since 3
 	 */
 	function hook_admin_notices() {
-		echo '<style>#menu-posts-webcomic_post{display:none}</style>';
 		if ( $this->update ) { ?><div id="message" class="updated fade"><p><?php echo implode( '</p><p>', $this->update ); ?></p></div><?php }
 		if ( $this->errors ) { ?><div id="message" class="error"><p><?php echo implode( '</p><p>', $this->errors ); ?></p></div><?php }
 	}
@@ -2913,7 +2912,7 @@ class webcomic_admin extends webcomic {
 							<input type="hidden" name="webcomic_oldname[<?php echo hash( 'md5', $orphan[ 'full' ][ 0 ][ 'basename' ] ); ?>]" value="<?php echo $orphan[ 'full' ][ 0 ][ 'filename' ]; ?>">
 							<br>
 							<a href="<?php echo wp_nonce_url( $view . '&amp;action=regen_webcomic_file&amp;webcomic_key=0&amp;orphan=' . $orphan[ 'full' ][ 0 ][ 'basename' ], 'regen_webcomic_file' ); ?>"><?php _e( 'Regenerate Thumbnails', 'webcomic' ); ?></a> |
-							<a href="<?php echo wp_nonce_url( $view . '&amp;action=delete_webcomic_file&amp;webcomic_key=0&amp;orphan=' . $orphan[ 'full' ][ 0 ][ 'basename' ], 'delete_webcomic_file' ); ?>" onclick="if(confirm('<?php echo esc_js( sprintf( __( "You are about to delete the orphaned file '%s'\n 'Cancel' to stop, 'OK' to delete.", "webcomic" ), $orphan[ 'full' ][ 0 ][ 'basename' ] ) ); ?>')){return true;}return false;"><?php _e( 'Delete', 'webcomic' ); ?></a> |
+							<a href="<?php echo wp_nonce_url( $view . '&amp;action=delete_webcomic_file&amp;webcomic_key=0&amp;orphan=' . $orphan[ 'full' ][ 0 ][ 'basename' ], 'delete_webcomic_file' ); ?>" onClick="if(confirm('<?php echo esc_js( sprintf( __( "You are about to delete the orphaned file '%s'\n 'Cancel' to stop, 'OK' to delete.", "webcomic" ), $orphan[ 'full' ][ 0 ][ 'basename' ] ) ); ?>')){return true;}return false;"><?php _e( 'Delete', 'webcomic' ); ?></a> |
 							<a href="<?php echo $orphan[ 'full' ][ 0 ][ 'url' ]; ?>" target="_blank"><?php _e( 'View', 'webcomic' ); ?></a>
 							<?php } ?>
 						</td>
