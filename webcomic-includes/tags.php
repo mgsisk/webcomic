@@ -57,7 +57,6 @@ function webcomic_transcribe_form_languages() { global $webcomic; echo $webcomic
 function webcomic_transcript_info( $i = false ) { global $webcomic; echo $webcomic->get_webcomic_transcript_info( $i ); }
 function webcomic_transcript_class( $class = false ) { global $webcomic; echo $webcomic->get_webcomic_transcript_class( $class ); }
 function in_webcomic_collection( $terms = false, $id = false ) { global $webcomic; return $webcomic->in_webcomic_term( 'webcomic_collection', $terms, $id ); }
-function get_webcomic_post_collections( $id = false ) { global $webcomic; return $webcomic->get_webcomic_post_terms( 'webcomic_collection', $id ); }
 function the_webcomic_post_collections( $args = false ) { global $webcomic; echo $webcomic->get_the_webcomic_post_terms( 'webcomic_collection', $args ); }
 function get_webcomic_collection_info( $i = false, $term = false ) { global $webcomic; echo $webcomic->get_webcomic_term_info( $i, 'webcomic_collection', $term ); }
 function the_webcomic_collections( $args = false ) { global $webcomic; echo $webcomic->get_the_webcomic_terms( 'webcomic_collection', $args ); }
@@ -72,7 +71,6 @@ function last_webcomic_collection_link( $format = '%link', $link = '%label', $te
 function previous_webcomic_collection_link( $format = '%link', $link = '%label', $term = false, $orderby = false, $hide_empty = true ) { global $webcomic; echo $webcomic->get_relative_webcomic_term_link( 'previous', 'webcomic_collection', $format, $link, $term, $orderby, $hide_empty ); }
 function next_webcomic_collection_link( $format = '%link', $link = '%label', $term = false, $orderby = false, $hide_empty = true ) { global $webcomic; echo $webcomic->get_relative_webcomic_term_link( 'next', 'webcomic_collection', $format, $link, $term, $orderby, $hide_empty ); }
 function in_webcomic_storyline( $terms = false, $id = false ) { global $webcomic; return $webcomic->in_webcomic_term( 'webcomic_storyline', $terms, $id ); }
-function get_webcomic_post_storylines( $id = false ) { global $webcomic; return $webcomic->get_webcomic_post_terms( 'webcomic_storyline', $id ); }
 function the_webcomic_post_storylines( $args = false ) { global $webcomic; echo $webcomic->get_the_webcomic_post_terms( 'webcomic_storyline', $args ); }
 function get_webcomic_storyline_info( $i = false, $term = false ) { global $webcomic; echo $webcomic->get_webcomic_term_info( $i, 'webcomic_storyline', $term ); }
 function the_webcomic_storylines( $args = false ) { global $webcomic; echo $webcomic->get_the_webcomic_terms( 'webcomic_storyline', $args ); }
@@ -87,7 +85,6 @@ function last_webcomic_storyline_link( $format = '%link', $link = '%label', $ter
 function previous_webcomic_storyline_link( $format = '%link', $link = '%label', $term = false, $orderby = false, $hide_empty = true ) { global $webcomic; echo $webcomic->get_relative_webcomic_term_link( 'previous', 'webcomic_storyline', $format, $link, $term, $orderby, $hide_empty ); }
 function next_webcomic_storyline_link( $format = '%link', $link = '%label', $term = false, $orderby = false, $hide_empty = true ) { global $webcomic; echo $webcomic->get_relative_webcomic_term_link( 'next', 'webcomic_storyline', $format, $link, $term, $orderby, $hide_empty ); }
 function in_webcomic_character( $terms = false, $id = false ) { global $webcomic; return $webcomic->in_webcomic_term( 'webcomic_character', $terms, $id ); }
-function get_webcomic_post_characters( $id = false ) { global $webcomic; return $webcomic->get_webcomic_post_terms( 'webcomic_character', $id ); }
 function the_webcomic_post_characters( $args = false ) { global $webcomic; echo $webcomic->get_the_webcomic_post_terms( 'webcomic_character', $args ); }
 function webcomic_character_info( $i = false, $term = false ) { global $webcomic; echo $webcomic->get_webcomic_term_info( $i, 'webcomic_character', $term ); }
 function the_webcomic_characters( $args = false ) { global $webcomic; echo $webcomic->get_the_webcomic_terms( 'webcomic_character', $args ); }
@@ -102,4 +99,8 @@ function last_webcomic_character_link( $format = '%link', $link = '%label', $ter
 function previous_webcomic_character_link( $format = '%link', $link = '%label', $term = false, $orderby = false, $hide_empty = true ) { global $webcomic; echo $webcomic->get_relative_webcomic_term_link( 'previous', 'webcomic_character', $format, $link, $term, $orderby, $hide_empty ); }
 function next_webcomic_character_link( $format = '%link', $link = '%label', $term = false, $orderby = false, $hide_empty = true ) { global $webcomic; echo $webcomic->get_relative_webcomic_term_link( 'next', 'webcomic_character', $format, $link, $term, $orderby, $hide_empty ); }
 function webcomic_archive( $args = false ) { global $webcomic; echo $webcomic->get_the_webcomic_archive( $args ); }
-?>
+
+/* Deprecated */
+function get_webcomic_post_collections( $id = false ) { return get_the_terms( $id, 'webcomic_collection' ); }
+function get_webcomic_post_storylines( $id = false ) { return get_the_terms( $id, 'webcomic_storyline' ); }
+function get_webcomic_post_characters( $id = false ) { return get_the_terms( $id, 'webcomic_character' ); }

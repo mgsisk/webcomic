@@ -1686,40 +1686,6 @@ class webcomic extends mgs_core {
 	}
 	
 	/**
-	 * Returns terms related to the specified post in the specified taxonomy.
-	 * 
-	 * Although technically generic, we alway return false
-	 * if the specified taxonomy is not a Webcomic taxonomy.
-	 * 
-	 * @package webcomic
-	 * @since 3
-	 */
-	function get_webcomic_post_terms( $taxonomy, $id = false ) {
-		if ( !( 'webcomic_collection' == $taxonomy || 'webcomic_storyline' == $taxonomy || 'webcomic_character' == $taxonomy ) )
-			return false;
-		
-		global $post;
-	
-		$id    = ( intval( $id ) > 0 ) ? $id : $post->ID;
-		$terms = get_object_term_cache( $id, $taxonomy );
-		
-		if ( false === $terms ) {
-			$terms = wp_get_object_terms( $id, $taxonomy );
-			wp_cache_add( $id, $terms, $taxonomy . '_post_relationships' );
-		}
-		
-		if ( !empty( $terms ) ) {
-			if ( 'webcomic_storyline' == $taxonomy )
-				usort( $terms, array( &$this, 'usort_storylines' ) );
-			else
-				usort( $terms, '_usort_terms_by_name' );
-		} else
-			$terms = array();
-		
-		return apply_filters( 'webcomic_get_post_terms', $terms, $taxonomy, $id );
-	}
-	
-	/**
 	 * Returns a formatted list of terms related to the specified object in the specified taxonomy.
 	 * 
 	 * @package webcomic
@@ -1746,7 +1712,7 @@ class webcomic extends mgs_core {
 			'id'         => false  //int ID of the object to retrieve terms for.
 		); $args = wp_parse_args( $args, $defaults ); extract( $args );
 		
-		$terms = $this->get_webcomic_post_terms( $taxonomy, $id );
+		$terms = get_the_terms( $id, $taxonomy );
 		
 		if ( empty( $terms ) || !$this->verify() )
 			return false;
