@@ -1580,9 +1580,9 @@ class webcomic extends mgs_core {
 		elseif ( 'id' == $i )
 			$r = $post->ID . '-' . $webcomic_transcript->language_code;
 		elseif ( 'the_date' == $i )
-			$r = date( get_option( 'date_format' ), $webcomic_transcript->time );
+			$r = date( get_option( 'date_format' ), ( $webcomic_transcript->time + ( get_option( 'gmt_offset' ) * 3600 ) ) );
 		elseif ( 'the_time' == $i )
-			$r = date( get_option( 'time_format' ), $webcomic_transcript->time );
+			$r = date( get_option( 'time_format' ), ( $webcomic_transcript->time + ( get_option( 'gmt_offset' ) * 3600 ) ) );
 		else
 			$r = false;
 		
