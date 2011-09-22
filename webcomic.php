@@ -2,13 +2,13 @@
 /*
 Text Domain: webcomic
 Plugin Name: Webcomic
-Plugin URI: http://mgsisk.com/webcomicms.net/
-Description: Comic publishing power for WordPress. Create, manage, and share your webcomics like never before.
+Plugin URI: http://webcomicms.net/
+Description: Comic publishing power for WordPress. Create, manage, and share webcomics like never before.
 Version: 3.0.8
 Author: Michael Sisk
-Author URI: http://maikeruon.com/
+Author URI: http://mgsisk.com/
 
-Copyright 2008 Michael Sisk (email: mike@maikeruon.com)
+Copyright 2008 Michael Sisk (email: contact@mgsisk.com)
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
