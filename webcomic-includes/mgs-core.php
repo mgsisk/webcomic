@@ -57,9 +57,11 @@ abstract class mgs_core {
 		if ( !$this->file )    $this->file    = __FILE__;
 		if ( !$this->type )    $this->type    = 'plugin';
 		
+		$upload = wp_upload_dir();
+		
 		$this->base    = ( 'plugin' == $this->type ) ? plugin_basename( $this->file ) : dirname( $this->file );
-		$this->cdir    = ( is_multisite() ) ? BLOGUPLOADDIR : WP_CONTENT_DIR;
-		$this->curl    = ( is_multisite() ) ? trailingslashit( get_bloginfo( 'url' ) ) . 'files' : WP_CONTENT_URL;
+		$this->cdir    = $upload[ 'basdir' ];
+		$this->curl    = $upload[ 'baseurl' ];
 		$this->update  = array();
 		$this->errors  = array();
 		$this->options = $this->option();
