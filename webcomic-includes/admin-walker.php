@@ -17,7 +17,7 @@ class webcomic_Walker_AdminFileList extends Walker {
 	var $tree_type = 'webcomic_post';
 	var $db_fields = array( 'parent' => 'post_parent', 'id' => 'ID' );
 	
-	function start_el( &$output, $obj, $depth, $args ) {
+	public function start_el( &$output, $obj, $depth, $args ) {
 		global $current_user, $webcomic;
 		static $i = 0;
 		
@@ -152,7 +152,7 @@ class webcomic_Walker_AdminTermList extends Walker {
 	var $tree_type = 'webcomic_term';
 	var $db_fields = array( 'parent' => 'parent', 'id' => 'term_id' );
 	
-	function start_el( &$output, $term, $depth, $args ) {
+	public function start_el( &$output, $term, $depth, $args ) {
 		global $webcomic;
 		
 		static $i = 0;
@@ -223,7 +223,7 @@ class webcomic_Walker_AdminTermDropdown extends Walker {
 	var $tree_type = 'webcomic_collection';
 	var $db_fields = array( 'parent' => 'parent', 'id' => 'term_id' );
 	
-	function start_el( &$output, $term, $depth, $args ) {
+	public function start_el( &$output, $term, $depth, $args ) {
 		$output .= '<option value="' . $term->term_id . '"';
 		
 		if ( ( ( empty( $args[ 'selected' ] ) && !$args[ 'no_def' ] && $term->webcomic_default ) || in_array( $term->term_id, $args[ 'selected' ] ) ) )
@@ -243,7 +243,7 @@ class webcomic_Walker_AdminTermParent extends Walker {
 	var $tree_type = 'webcomic_term';
 	var $db_fields = array( 'parent' => 'parent', 'id' => 'term_id' );
 	
-	function start_el( &$output, $term, $depth, $args ) {
+	public function start_el( &$output, $term, $depth, $args ) {
 		$output .= '<option value="' . $term->term_id . '"';
 		
 		if ( $term->term_id == $args[ 'parent' ] )
@@ -263,7 +263,7 @@ class webcomic_Walker_AdminTermNormalize extends Walker {
 	var $tree_type = 'webcomic_term';
 	var $db_fields = array( 'parent' => 'parent', 'id' => 'term_id' );
 	
-	function start_el( &$output, $term, $depth, $args ) {
+	public function start_el( &$output, $term, $depth, $args ) {
 		global $webcomic;
 		
 		static $x = array();

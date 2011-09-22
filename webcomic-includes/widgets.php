@@ -6,7 +6,7 @@
  * @since 3
  */
 class webcomic_Widget_Donation extends WP_Widget {
-	function webcomic_Widget_Donation() {
+	public function webcomic_Widget_Donation() {
 		global $webcomic;
 		
 		$webcomic->domain();
@@ -15,7 +15,7 @@ class webcomic_Widget_Donation extends WP_Widget {
 		$this->WP_Widget( 'webcomic-donation'	, __( 'Webcomic Donation', 'webcomic' ), $o );
 	}
 	
-	function widget( $args, $instance ) {
+	public function widget( $args, $instance ) {
 		global $webcomic;
 		
 		extract( $args );
@@ -37,7 +37,7 @@ class webcomic_Widget_Donation extends WP_Widget {
 		echo $after_widget;
 	}
 	
-	function update( $new, $old ) {
+	public function update( $new, $old ) {
 		if ( !isset( $new[ 'submit' ] ) )
 			return false;
 		
@@ -50,7 +50,7 @@ class webcomic_Widget_Donation extends WP_Widget {
 		return $instance;
 	}
 	
-	function form( $instance ) {
+	public function form( $instance ) {
 		global $webcomic;
 		
 		$webcomic->domain();
@@ -82,7 +82,7 @@ class webcomic_Widget_Donation extends WP_Widget {
  * @since 3
  */
 class webcomic_Widget_Relative extends WP_Widget {
-	function webcomic_Widget_Relative() {
+	public function webcomic_Widget_Relative() {
 		global $webcomic;
 		
 		$webcomic->domain();
@@ -91,7 +91,7 @@ class webcomic_Widget_Relative extends WP_Widget {
 		$this->WP_Widget( 'relative-webcomic', __( 'Relative Webcomic', 'webcomic' ), $o );
 	}
 	
-	function widget( $args, $instance ) {
+	public function widget( $args, $instance ) {
 		global $webcomic;
 		
 		extract( $args );
@@ -101,7 +101,7 @@ class webcomic_Widget_Relative extends WP_Widget {
 		echo $webcomic->get_relative_webcomic_link( $instance[ 'key' ], $before_widget . '%link' . $after_widget, $instance[ 'format' ], $instance[ 'taxonomy' ], $instance[ 'term' ], false, true );
 	}
 	
-	function update( $new, $old ) {
+	public function update( $new, $old ) {
 		if ( !isset( $new[ 'submit' ] ) )
 			return false;
 		
@@ -115,7 +115,7 @@ class webcomic_Widget_Relative extends WP_Widget {
 		return $instance;
 	}
 	
-	function form( $instance ) {
+	public function form( $instance ) {
 		global $webcomic;
 		
 		$webcomic->domain();
@@ -169,7 +169,7 @@ class webcomic_Widget_Relative extends WP_Widget {
  * @since 3
  */
 class webcomic_Widget_Buffer extends WP_Widget {
-	function webcomic_Widget_Buffer() {
+	public function webcomic_Widget_Buffer() {
 		global $webcomic;
 		
 		$webcomic->domain();
@@ -178,7 +178,7 @@ class webcomic_Widget_Buffer extends WP_Widget {
 		$this->WP_Widget( 'buffer-webcomics', __( 'Webcomic Buffer', 'webcomic' ), $o );
 	}
 	
-	function widget( $args, $instance ) {
+	public function widget( $args, $instance ) {
 		global $webcomic;
 		
 		extract( $args );
@@ -189,7 +189,7 @@ class webcomic_Widget_Buffer extends WP_Widget {
 		echo $webcomic->get_the_buffer_webcomics( $instance );
 	}
 	
-	function update( $new, $old ) {
+	public function update( $new, $old ) {
 		if ( !isset( $new[ 'submit' ] ) )
 			return false;
 		
@@ -204,7 +204,7 @@ class webcomic_Widget_Buffer extends WP_Widget {
 		return $instance;
 	}
 	
-	function form( $instance ) {
+	public function form( $instance ) {
 		global $webcomic;
 		
 		$webcomic->domain();
@@ -262,7 +262,7 @@ class webcomic_Widget_Buffer extends WP_Widget {
  * @since 3
  */
 class webcomic_Widget_Bookmark extends WP_Widget {
-	function webcomic_Widget_Bookmark() {
+	public function webcomic_Widget_Bookmark() {
 		global $webcomic;
 		
 		$webcomic->domain();
@@ -271,7 +271,7 @@ class webcomic_Widget_Bookmark extends WP_Widget {
 		$this->WP_Widget( 'bookmark-webcomic', __( 'Webcomic Bookmark', 'webcomic' ), $o );
 	}
 	
-	function widget( $args, $instance ) {
+	public function widget( $args, $instance ) {
 		global $webcomic;
 		
 		extract( $args );
@@ -288,7 +288,7 @@ class webcomic_Widget_Bookmark extends WP_Widget {
 		echo  $after_widget;
 	}
 	
-	function update( $new, $old ) {
+	public function update( $new, $old ) {
 		if ( !isset( $new[ 'submit' ] ) )
 			return false;
 		
@@ -301,7 +301,7 @@ class webcomic_Widget_Bookmark extends WP_Widget {
 		return $instance;
 	}
 	
-	function form( $instance ) {
+	public function form( $instance ) {
 		global $webcomic;
 		
 		$webcomic->domain();
@@ -333,7 +333,7 @@ class webcomic_Widget_Bookmark extends WP_Widget {
  * @since 3
  */
 class webcomic_Widget_Collections extends WP_Widget {
-	function webcomic_Widget_Collections() {
+	public function webcomic_Widget_Collections() {
 		global $webcomic;
 		
 		$webcomic->domain();
@@ -342,7 +342,7 @@ class webcomic_Widget_Collections extends WP_Widget {
 		$this->WP_Widget( 'webcomic-collections', __( 'Webcomic Collections', 'webcomic' ), $o );
 	}
 	
-	function widget( $args, $instance ) {
+	public function widget( $args, $instance ) {
 		global $webcomic;
 		
 		extract( $args );
@@ -353,7 +353,7 @@ class webcomic_Widget_Collections extends WP_Widget {
 		echo $webcomic->get_the_webcomic_terms( 'webcomic_collection', $instance );
 	}
 	
-	function update( $new, $old ) {
+	public function update( $new, $old ) {
 		if ( !isset( $new[ 'submit' ] ) )
 			return false;
 		
@@ -367,7 +367,7 @@ class webcomic_Widget_Collections extends WP_Widget {
 		return $instance;
 	}
 	
-	function form( $instance ) {
+	public function form( $instance ) {
 		global $webcomic;
 		
 		$webcomic->domain();
@@ -421,7 +421,7 @@ class webcomic_Widget_Collections extends WP_Widget {
  * @since 3
  */
 class webcomic_Widget_Storylines extends WP_Widget {
-	function webcomic_Widget_Storylines() {
+	public function webcomic_Widget_Storylines() {
 		global $webcomic;
 		
 		$webcomic->domain();
@@ -430,7 +430,7 @@ class webcomic_Widget_Storylines extends WP_Widget {
 		$this->WP_Widget( 'webcomic-storylines', __( 'Webcomic Storylines', 'webcomic' ), $o );
 	}
 	
-	function widget( $args, $instance ) {
+	public function widget( $args, $instance ) {
 		global $webcomic;
 		
 		extract( $args );
@@ -441,7 +441,7 @@ class webcomic_Widget_Storylines extends WP_Widget {
 		echo $webcomic->get_the_webcomic_terms( 'webcomic_storyline', $instance );
 	}
 	
-	function update( $new, $old ) {
+	public function update( $new, $old ) {
 		if ( !isset( $new[ 'submit' ] ) )
 			return false;
 		
@@ -456,7 +456,7 @@ class webcomic_Widget_Storylines extends WP_Widget {
 		return $instance;
 	}
 	
-	function form( $instance ) {
+	public function form( $instance ) {
 		global $webcomic;
 		
 		$webcomic->domain();
@@ -523,7 +523,7 @@ class webcomic_Widget_Storylines extends WP_Widget {
  * @since 3
  */
 class webcomic_Widget_Characters extends WP_Widget {
-	function webcomic_Widget_Characters() {
+	public function webcomic_Widget_Characters() {
 		global $webcomic;
 		
 		$webcomic->domain();
@@ -532,7 +532,7 @@ class webcomic_Widget_Characters extends WP_Widget {
 		$this->WP_Widget( 'webcomic-characters', __( 'Webcomic Characters', 'webcomic' ), $o );
 	}
 	
-	function widget( $args, $instance ) {
+	public function widget( $args, $instance ) {
 		global $webcomic;
 		
 		extract( $args );
@@ -543,7 +543,7 @@ class webcomic_Widget_Characters extends WP_Widget {
 		echo $webcomic->get_the_webcomic_terms( 'webcomic_character', $instance );
 	}
 	
-	function update( $new, $old ) {
+	public function update( $new, $old ) {
 		if ( !isset( $new[ 'submit' ] ) )
 			return false;
 		
@@ -558,7 +558,7 @@ class webcomic_Widget_Characters extends WP_Widget {
 		return $instance;
 	}
 	
-	function form( $instance ) {
+	public function form( $instance ) {
 		global $webcomic;
 		
 		$webcomic->domain();
@@ -625,7 +625,7 @@ class webcomic_Widget_Characters extends WP_Widget {
  * @since 3
  */
 class webcomic_Widget_Archive extends WP_Widget {
-	function webcomic_Widget_Archive() {
+	public function webcomic_Widget_Archive() {
 		global $webcomic;
 		
 		$webcomic->domain();
@@ -634,7 +634,7 @@ class webcomic_Widget_Archive extends WP_Widget {
 		$this->WP_Widget( 'webcomic-archive', __( 'Webcomic Archive', 'webcomic' ), $o );
 	}
 	
-	function widget( $args, $instance ) {
+	public function widget( $args, $instance ) {
 		global $webcomic;
 		
 		extract( $args );
@@ -647,7 +647,7 @@ class webcomic_Widget_Archive extends WP_Widget {
 		echo $webcomic->get_the_webcomic_archive( $instance );
 	}
 	
-	function update( $new, $old ) {
+	public function update( $new, $old ) {
 		if ( !isset( $new[ 'submit' ] ) )
 			return false;
 		
@@ -667,7 +667,7 @@ class webcomic_Widget_Archive extends WP_Widget {
 		return $instance;
 	}
 	
-	function form( $instance ) {
+	public function form( $instance ) {
 		global $webcomic;
 		
 		$webcomic->domain();

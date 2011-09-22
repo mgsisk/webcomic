@@ -15,7 +15,7 @@ class webcomic_admin extends webcomic {
 	 * 
 	 * @param int $step The step of the upgrade process to run.
 	 */
-	function upgrade_legacy( $step = 0 ) {
+	public function upgrade_legacy( $step = 0 ) {
 		if ( !is_admin() || !get_option( 'webcomic_version' ) )
 			return false;
 		
@@ -344,7 +344,7 @@ class webcomic_admin extends webcomic {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function hook_right_now_content_table_end() {
+	public function hook_right_now_content_table_end() {
 		$np   = wp_count_posts( 'webcomic_post' );
 		$num  = number_format_i18n( $np->publish );
 		$text = _n( __( 'Webcomic', 'webcomic' ), __( 'Webcomics', 'webcomic' ), intval( $np->publish ) );
@@ -363,7 +363,7 @@ class webcomic_admin extends webcomic {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function hook_favorite_actions( $actions ) {
+	public function hook_favorite_actions( $actions ) {
 		global $post_type_object, $post;
 		
 		$this->domain();
@@ -395,7 +395,7 @@ class webcomic_admin extends webcomic {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function hook_admin_menu() {
+	public function hook_admin_menu() {
 		$this->domain();
 		
 		if ( !$this->option( 'uninstall' ) ) {
@@ -436,7 +436,7 @@ class webcomic_admin extends webcomic {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function hook_admin_notices() {
+	public function hook_admin_notices() {
 		if ( $this->update ) { ?><div id="message" class="updated fade"><p><?php echo implode( '</p><p>', $this->update ); ?></p></div><?php }
 		if ( $this->errors ) { ?><div id="message" class="error"><p><?php echo implode( '</p><p>', $this->errors ); ?></p></div><?php }
 	}
@@ -452,7 +452,7 @@ class webcomic_admin extends webcomic {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function hook_nav_menu_meta_box_object( $tax ) {
+	public function hook_nav_menu_meta_box_object( $tax ) {
 		$taxonomies = get_taxonomies( array( 'public' => true ), 'object' );
 
 		if ( !$taxonomies )
@@ -475,7 +475,7 @@ class webcomic_admin extends webcomic {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function hook_admin_init() {
+	public function hook_admin_init() {
 		$this->admin_ajax();
 		$this->domain();
 		
@@ -1207,7 +1207,7 @@ class webcomic_admin extends webcomic {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function hook_profile_update( $id ) {
+	public function hook_profile_update( $id ) {
 		$user_meta = ( current( get_user_meta( $id, 'webcomic' ) ) ) ? current( get_user_meta( $id, 'webcomic' ) ) : array();
 		
 		$user_meta[ 'birthday' ] = ( $_REQUEST[ 'webcomic_birth_year' ] && $_REQUEST[ 'webcomic_birth_month' ] && $_REQUEST[ 'webcomic_birth_day' ] ) ? strtotime( $_REQUEST[ 'webcomic_birth_year' ] . '/' . $_REQUEST[ 'webcomic_birth_month' ] . '/' . $_REQUEST[ 'webcomic_birth_day' ] ) : '';
@@ -1221,7 +1221,7 @@ class webcomic_admin extends webcomic {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function hook_show_user_profile( $user ) {
+	public function hook_show_user_profile( $user ) {
 		$this->domain();
 		
 		$user_meta = current( get_user_meta( $user->ID, 'webcomic' ) );
@@ -1279,7 +1279,7 @@ class webcomic_admin extends webcomic {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function hook_save_post( $id, $post ) {
+	public function hook_save_post( $id, $post ) {
 		if ( empty( $_REQUEST[ 'original_publish' ] ) || wp_is_post_autosave( $id ) || wp_is_post_revision( $id ) )
 			return false;
 		
@@ -1428,7 +1428,7 @@ class webcomic_admin extends webcomic {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function hook_created_webcomic_collection( $term_id, $tt_id ) {
+	public function hook_created_webcomic_collection( $term_id, $tt_id ) {
 		$this->domain();
 		
 		$term_meta = $this->option( 'term_meta' );
@@ -1473,7 +1473,7 @@ class webcomic_admin extends webcomic {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function hook_created_webcomic_storyline( $term_id, $tt_id ) {
+	public function hook_created_webcomic_storyline( $term_id, $tt_id ) {
 		$term_meta = $this->option( 'term_meta' );
 		$term_meta[ 'storyline' ][ $term_id ] = array(
 			'files'   => array(),
@@ -1492,7 +1492,7 @@ class webcomic_admin extends webcomic {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function hook_created_webcomic_character( $term_id, $tt_id ) {
+	public function hook_created_webcomic_character( $term_id, $tt_id ) {
 		$term_meta = $this->option( 'term_meta' );
 		$term_meta[ 'character' ][ $term_id ] = array(
 			'files'   => array(),
@@ -1509,7 +1509,7 @@ class webcomic_admin extends webcomic {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function hook_edited_term( $term_id, $tt_id, $taxonomy ) {
+	public function hook_edited_term( $term_id, $tt_id, $taxonomy ) {
 		$this->domain();
 		
 		if ( 'webcomic_collection' == $taxonomy || 'webcomic_storyline' == $taxonomy || 'webcomic_character' == $taxonomy ) {
@@ -1542,7 +1542,7 @@ class webcomic_admin extends webcomic {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function hook_edited_webcomic_collection( $term_id, $tt_id ) {
+	public function hook_edited_webcomic_collection( $term_id, $tt_id ) {
 		$this->domain();
 		
 		$term_meta = $this->option( 'term_meta' );
@@ -1590,7 +1590,7 @@ class webcomic_admin extends webcomic {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function hook_edited_webcomic_storyline( $term_id, $tt_id ) {
+	public function hook_edited_webcomic_storyline( $term_id, $tt_id ) {
 		$term_meta = $this->option( 'term_meta' );
 		$term = get_term( $term_id, 'webcomic_storyline' );
 		
@@ -1629,7 +1629,7 @@ class webcomic_admin extends webcomic {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function hook_delete_webcomic_collection( $term_id, $tt_id ) {
+	public function hook_delete_webcomic_collection( $term_id, $tt_id ) {
 		$this->domain();
 		
 		global $wpdb;
@@ -1656,7 +1656,7 @@ class webcomic_admin extends webcomic {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function hook_delete_webcomic_storyline( $term_id, $tt_id ) {
+	public function hook_delete_webcomic_storyline( $term_id, $tt_id ) {
 		$this->domain();
 		
 		$term_meta  = $this->option( 'term_meta' );
@@ -1683,7 +1683,7 @@ class webcomic_admin extends webcomic {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function hook_delete_webcomic_character( $term_id, $tt_id ) {
+	public function hook_delete_webcomic_character( $term_id, $tt_id ) {
 		$this->domain();
 		
 		$term_meta  = $this->option( 'term_meta' );
@@ -1715,7 +1715,7 @@ class webcomic_admin extends webcomic {
 	 * @param bool $method How to handle the uploaded file.
 	 * @return arr|bool An array of filenames, or false on error.
 	 */	
-	function upload( $src, $method = false ) {
+	public function upload( $src, $method = false ) {
 		$uploads = array();
 		
 		if ( empty( $_FILES[ 'webcomic_file' ] ) )
@@ -1887,7 +1887,7 @@ class webcomic_admin extends webcomic {
 	 * @param str $directory The directory to save the resized file to.
 	 * @return str|bool The name of the resized file, or false on error.
 	 */	
-	function resize( $file, $width, $height, $crop, $suffix, $directory ) {
+	public function resize( $file, $width, $height, $crop, $suffix, $directory ) {
 		if ( !is_file( $file ) || !is_resource( $image = imagecreatefromstring( file_get_contents( $file ) ) ) || !( $size = getimagesize( $file ) ) || ( $width <= 0 && $height <= 0 ) )
 			return false;
 		
@@ -1994,7 +1994,7 @@ class webcomic_admin extends webcomic {
 	 * @param bool $altdes Maintain alternative and descripttive text associations if true.
 	 * @return bool False if a non-standard type is specified, true otherwise.
 	 */
-	function bind( $id, $type, $files = array(), $altdes = true ) {
+	public function bind( $id, $type, $files = array(), $altdes = true ) {
 		$files = ( empty( $files[ 'full' ] ) ) ? array() : $files;
 		
 		if ( !empty( $files ) )
@@ -2043,7 +2043,7 @@ class webcomic_admin extends webcomic {
 	 * @param int $key The key that points to the file associated with the specified object.
 	 * @return bool|arr True on success, false if no files can be found. Array of files that could not be renamed on error.
 	 */
-	function rename( $id, $type, $src, $filename, $key = false ) {
+	public function rename( $id, $type, $src, $filename, $key = false ) {
 		if ( false === $key )
 			return false;
 		
@@ -2095,7 +2095,7 @@ class webcomic_admin extends webcomic {
 	 * @param int $key The key that points to the file associated with the specified object. If not specified, all file thumbnails are regenerated.
 	 * @return bool|arr True on success, false if no files can be found. Array of files that could not be regenerated on error.
 	 */
-	function regen( $id, $type, $src, $key = false ) {
+	public function regen( $id, $type, $src, $key = false ) {
 		$match = ( 'post' == $type || 'orphan' == $type ) ? true : false;
 		
 		if ( !( $files = $this->fetch( $id, $type, $src, $match ) ) )
@@ -2163,7 +2163,7 @@ class webcomic_admin extends webcomic {
 	 * @param str $size The size of the file to be deleted. Can be combined with $key to target a singular file in the files array.
 	 * @return str|bool|arr String of comma-separated filenames on success, false if no files can be found. An array of filenames that could not be deleted on error.
 	 */
-	function delete( $id, $type, $src, $key = false, $size = false ) {
+	public function delete( $id, $type, $src, $key = false, $size = false ) {
 		$match = ( 'post' == $type || 'orphan' == $type ) ? true : false;
 		
 		if ( !( $files = $this->fetch( $id, $type, $src, $match ) ) )
@@ -2221,7 +2221,7 @@ class webcomic_admin extends webcomic {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function admin_files() {
+	public function admin_files() {
 		$this->domain();
 		
 		global $current_user, $wpdb;
@@ -2937,7 +2937,7 @@ class webcomic_admin extends webcomic {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function admin_terms() {
+	public function admin_terms() {
 		$this->domain();
 		
 		global $current_user;
@@ -3373,7 +3373,7 @@ class webcomic_admin extends webcomic {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function admin_tools() {
+	public function admin_tools() {
 		$this->domain();
 		
 		$page    = $_REQUEST[ 'page' ];
@@ -3648,7 +3648,7 @@ class webcomic_admin extends webcomic {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function admin_settings() {
+	public function admin_settings() {
 		$this->domain();
 		
 		$languages = array( 'aa' => __( 'Afar', 'webcomic' ), 'ab' => __( 'Abkhazian', 'webcomic' ), 'ae' => __( 'Avestan', 'webcomic' ), 'af' => __( 'Afrikaans', 'webcomic' ), 'ak' => __( 'Akan', 'webcomic' ), 'am' => __( 'Amharic', 'webcomic' ), 'an' => __( 'Aragonese', 'webcomic' ), 'ar' => __( 'Arabic', 'webcomic' ), 'as' => __( 'Assamese', 'webcomic' ), 'av' => __( 'Avaric', 'webcomic' ), 'ay' => __( 'Aymara', 'webcomic' ), 'az' => __( 'Azerbaijani', 'webcomic' ), 'ba' => __( 'Bashkir', 'webcomic' ), 'be' => __( 'Belarusian', 'webcomic' ), 'bg' => __( 'Bulgarian', 'webcomic' ), 'bh' => __( 'Bihari', 'webcomic' ), 'bi' => __( 'Bislama', 'webcomic' ), 'bm' => __( 'Bambara', 'webcomic' ), 'bn' => __( 'Bengali', 'webcomic' ), 'bo' => __( 'Tibetan', 'webcomic' ), 'br' => __( 'Breton', 'webcomic' ), 'bs' => __( 'Bosnian', 'webcomic' ), 'ca' => __( 'Catalan', 'webcomic' ), 'ce' => __( 'Chechen', 'webcomic' ), 'ch' => __( 'Chamorro', 'webcomic' ), 'co' => __( 'Corsican', 'webcomic' ), 'cr' => __( 'Cree', 'webcomic' ), 'cs' => __( 'Czech', 'webcomic' ), 'cu' => __( 'Church Slavic', 'webcomic' ), 'cv' => __( 'Chuvash', 'webcomic' ), 'cy' => __( 'Welsh', 'webcomic' ), 'da' => __( 'Danish', 'webcomic' ), 'de' => __( 'German', 'webcomic' ), 'dv' => __( 'Divehi', 'webcomic' ), 'dz' => __( 'Dzongkha', 'webcomic' ), 'ee' => __( 'Ewe', 'webcomic' ), 'el' => __( 'Greek', 'webcomic' ), 'en' => __( 'English', 'webcomic' ), 'eo' => __( 'Esperanto', 'webcomic' ), 'es' => __( 'Spanish', 'webcomic' ), 'et' => __( 'Estonian', 'webcomic' ), 'eu' => __( 'Basque', 'webcomic' ), 'fa' => __( 'Persian', 'webcomic' ), 'ff' => __( 'Fulah', 'webcomic' ), 'fi' => __( 'Finnish', 'webcomic' ), 'fj' => __( 'Fijian', 'webcomic' ), 'fo' => __( 'Faroese', 'webcomic' ), 'fr' => __( 'French', 'webcomic' ), 'fy' => __( 'Western Frisian', 'webcomic' ), 'ga' => __( 'Irish', 'webcomic' ), 'gd' => __( 'Scottish Gaelic', 'webcomic' ), 'gl' => __( 'Galician', 'webcomic' ), 'gn' => __( 'Guarani', 'webcomic' ), 'gu' => __( 'Gujarati', 'webcomic' ), 'gv' => __( 'Manx', 'webcomic' ), 'ha' => __( 'Hausa', 'webcomic' ), 'he' => __( 'Hebrew', 'webcomic' ), 'hi' => __( 'Hindi', 'webcomic' ), 'ho' => __( 'Hiri Motu', 'webcomic' ), 'hr' => __( 'Croatian', 'webcomic' ), 'ht' => __( 'Haitian', 'webcomic' ), 'hu' => __( 'Hungarian', 'webcomic' ), 'hy' => __( 'Armenian', 'webcomic' ), 'hz' => __( 'Herero', 'webcomic' ), 'ia' => __( 'Interlingua', 'webcomic' ), 'id' => __( 'Indonesian', 'webcomic' ), 'ie' => __( 'Interlingue', 'webcomic' ), 'ig' => __( 'Igbo', 'webcomic' ), 'ii' => __( 'Sichuan Yi', 'webcomic' ), 'ik' => __( 'Inupiaq', 'webcomic' ), 'io' => __( 'Ido', 'webcomic' ), 'is' => __( 'Icelandic', 'webcomic' ), 'it' => __( 'Italian', 'webcomic' ), 'iu' => __( 'Inuktitut', 'webcomic' ), 'ja' => __( 'Japanese', 'webcomic' ), 'jv' => __( 'Javanese', 'webcomic' ), 'ka' => __( 'Georgian', 'webcomic' ), 'kg' => __( 'Kongo', 'webcomic' ), 'ki' => __( 'Kikuyu', 'webcomic' ), 'kj' => __( 'Kwanyama', 'webcomic' ), 'kk' => __( 'Kazakh', 'webcomic' ), 'kl' => __( 'Kalaallisut', 'webcomic' ), 'km' => __( 'Khmer', 'webcomic' ), 'kn' => __( 'Kannada', 'webcomic' ), 'ko' => __( 'Korean', 'webcomic' ), 'kr' => __( 'Kanuri', 'webcomic' ), 'ks' => __( 'Kashmiri', 'webcomic' ), 'ku' => __( 'Kurdish', 'webcomic' ), 'kv' => __( 'Komi', 'webcomic' ), 'kw' => __( 'Cornish', 'webcomic' ), 'ky' => __( 'Kirghiz', 'webcomic' ), 'la' => __( 'Latin', 'webcomic' ), 'lb' => __( 'Luxembourgish', 'webcomic' ), 'lg' => __( 'Ganda', 'webcomic' ), 'li' => __( 'Limburgish', 'webcomic' ), 'ln' => __( 'Lingala', 'webcomic' ), 'lo' => __( 'Lao', 'webcomic' ), 'lt' => __( 'Lithuanian', 'webcomic' ), 'lu' => __( 'Luba-Katanga', 'webcomic' ), 'lv' => __( 'Latvian', 'webcomic' ), 'mg' => __( 'Malagasy', 'webcomic' ), 'mh' => __( 'Marshallese', 'webcomic' ), 'mi' => __( 'Maori', 'webcomic' ), 'mk' => __( 'Macedonian', 'webcomic' ), 'ml' => __( 'Malayalam', 'webcomic' ), 'mn' => __( 'Mongolian', 'webcomic' ), 'mr' => __( 'Marathi', 'webcomic' ), 'ms' => __( 'Malay', 'webcomic' ), 'mt' => __( 'Maltese', 'webcomic' ), 'my' => __( 'Burmese', 'webcomic' ), 'na' => __( 'Nauru', 'webcomic' ), 'nb' => __( 'Norwegian Bokmal', 'webcomic' ), 'nd' => __( 'North Ndebele', 'webcomic' ), 'ne' => __( 'Nepali', 'webcomic' ), 'ng' => __( 'Ndonga', 'webcomic' ), 'nl' => __( 'Dutch', 'webcomic' ), 'nn' => __( 'Norwegian Nynorsk', 'webcomic' ), 'no' => __( 'Norwegian', 'webcomic' ), 'nr' => __( 'South Ndebele', 'webcomic' ), 'nv' => __( 'Navajo', 'webcomic' ), 'ny' => __( 'Chichewa', 'webcomic' ), 'oc' => __( 'Occitan', 'webcomic' ), 'oj' => __( 'Ojibwa', 'webcomic' ), 'om' => __( 'Oromo', 'webcomic' ), 'or' => __( 'Oriya', 'webcomic' ), 'os' => __( 'Ossetian', 'webcomic' ), 'pa' => __( 'Panjabi', 'webcomic' ), 'pi' => __( 'Pali', 'webcomic' ), 'pl' => __( 'Polish', 'webcomic' ), 'ps' => __( 'Pashto', 'webcomic' ), 'pt' => __( 'Portuguese', 'webcomic' ), 'qu' => __( 'Quechua', 'webcomic' ), 'rm' => __( 'Raeto-Romance', 'webcomic' ), 'rn' => __( 'Kirundi', 'webcomic' ), 'ro' => __( 'Romanian', 'webcomic' ), 'ru' => __( 'Russian', 'webcomic' ), 'rw' => __( 'Kinyarwanda', 'webcomic' ), 'sa' => __( 'Sanskrit', 'webcomic' ), 'sc' => __( 'Sardinian', 'webcomic' ), 'sd' => __( 'Sindhi', 'webcomic' ), 'se' => __( 'Northern Sami', 'webcomic' ), 'sg' => __( 'Sango', 'webcomic' ), 'si' => __( 'Sinhala', 'webcomic' ), 'sk' => __( 'Slovak', 'webcomic' ), 'sl' => __( 'Slovenian', 'webcomic' ), 'sm' => __( 'Samoan', 'webcomic' ), 'sn' => __( 'Shona', 'webcomic' ), 'so' => __( 'Somali', 'webcomic' ), 'sq' => __( 'Albanian', 'webcomic' ), 'sr' => __( 'Serbian', 'webcomic' ), 'ss' => __( 'Swati', 'webcomic' ), 'st' => __( 'Southern Sotho', 'webcomic' ), 'su' => __( 'Sundanese', 'webcomic' ), 'sv' => __( 'Swedish', 'webcomic' ), 'sw' => __( 'Swahili', 'webcomic' ), 'ta' => __( 'Tamil', 'webcomic' ), 'te' => __( 'Telugu', 'webcomic' ), 'tg' => __( 'Tajik', 'webcomic' ), 'th' => __( 'Thai', 'webcomic' ), 'ti' => __( 'Tigrinya', 'webcomic' ), 'tk' => __( 'Turkmen', 'webcomic' ), 'tl' => __( 'Tagalog', 'webcomic' ), 'tn' => __( 'Tswana', 'webcomic' ), 'to' => __( 'Tonga', 'webcomic' ), 'tr' => __( 'Turkish', 'webcomic' ), 'ts' => __( 'Tsonga', 'webcomic' ), 'tt' => __( 'Tatar', 'webcomic' ), 'tw' => __( 'Twi', 'webcomic' ), 'ty' => __( 'Tahitian', 'webcomic' ), 'ug' => __( 'Uighur', 'webcomic' ), 'uk' => __( 'Ukrainian', 'webcomic' ), 'ur' => __( 'Urdu', 'webcomic' ), 'uz' => __( 'Uzbek', 'webcomic' ), 've' => __( 'Venda', 'webcomic' ), 'vi' => __( 'Vietnamese', 'webcomic' ), 'vo' => __( 'Volapuk', 'webcomic' ), 'wa' => __( 'Walloon', 'webcomic' ), 'wo' => __( 'Wolof', 'webcomic' ), 'xh' => __( 'Xhosa', 'webcomic' ), 'yi' => __( 'Yiddish', 'webcomic' ), 'yo' => __( 'Yoruba', 'webcomic' ), 'za' => __( 'Zhuang', 'webcomic' ), 'zh' => __( 'Chinese', 'webcomic' ), 'zu' => __( 'Zulu', 'webcomic' ) );
@@ -3881,7 +3881,7 @@ class webcomic_admin extends webcomic {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function admin_metabox( $post ) {
+	public function admin_metabox( $post ) {
 		$this->domain();
 		
 		global $current_user;
@@ -4248,7 +4248,7 @@ class webcomic_admin extends webcomic {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function admin_ajax() {
+	public function admin_ajax() {
 		$this->domain();
 		
 		if ( empty( $_REQUEST[ 'webcomic_ajax' ] ) )
@@ -4435,7 +4435,7 @@ class webcomic_admin extends webcomic {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function admin_footer_files() {
+	public function admin_footer_files() {
 		global $post, $current_user;
 		
 		/** We have to avoid using wp_tiny_mce() here as it conflicts with the main editor, so let's call tinyMCE.init directly. */

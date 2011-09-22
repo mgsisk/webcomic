@@ -59,7 +59,7 @@ class webcomic extends mgs_core {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function install() {
+	public function install() {
 		$this->domain();
 		
 		$this->option( array(
@@ -120,7 +120,7 @@ class webcomic extends mgs_core {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function upgrade() {
+	public function upgrade() {
 		$this->domain();
 		
 		$this->option( 'version', $this->version );
@@ -154,7 +154,7 @@ class webcomic extends mgs_core {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function downgrade(){}
+	public function downgrade(){}
 	
 	/**
 	 * Uninstalls the plugin
@@ -162,7 +162,7 @@ class webcomic extends mgs_core {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function uninstall() {
+	public function uninstall() {
 		global $wpdb;
 		
 		$this->domain();
@@ -225,7 +225,7 @@ class webcomic extends mgs_core {
 	 * @param int $id The post ID.
 	 * @return A post object with Webcomic metadata, or false on error.
 	 */
-	function get_webcomic_post( $id ) {
+	public function get_webcomic_post( $id ) {
 		return current( get_posts( array( 'p' => $id, 'post_type' => 'webcomic_post', 'post_status' => 'any', 'suppress_filters' => false ) ) );
 	}
 	
@@ -242,7 +242,7 @@ class webcomic extends mgs_core {
 	 * @param str $format The format webcomic objects should be retrieved in. May be one of 'html', 'shtml', 'bbcode', or 'sbbcode'.
 	 * @return A properly formatted webcomic object string, or false on error.
 	 */
-	function get_webcomic_object( $size, $type, $key = false, $id = false, $format = false ) {
+	public function get_webcomic_object( $size, $type, $key = false, $id = false, $format = false ) {
 		global $wpdb, $post;
 		
 		if ( !( 'full' == $size || 'large' == $size || 'medium' == $size || 'small' == $size ) || ( !$id && ( 'collection' == $type || 'storyline' == $type || 'character' == $type ) ) || ( !$id && !$post ) || !$this->verify() )
@@ -288,7 +288,7 @@ class webcomic extends mgs_core {
 	 * @param int $id The post ID to retrieve objects for. Only required when used outside of a WordPress loop.
 	 * @return The webcomic object, or false on error.
 	 */
-	function get_the_webcomic_object( $size, $link = false, $taxonomy = false, $terms = false, $key = false, $id = false ) {
+	public function get_the_webcomic_object( $size, $link = false, $taxonomy = false, $terms = false, $key = false, $id = false ) {
 		global $post;
 		
 		$id = ( intval( $id ) > 0 ) ? $id : $post->ID;
@@ -320,7 +320,7 @@ class webcomic extends mgs_core {
 	 * @param int $id The post ID to retrieve objects for. Only required when used outside of a WordPress loop.
 	 * @return Embed webcomic code for sharing, or false on error.
 	 */
-	function get_webcomic_embed( $format, $size, $key = false, $id = false ) {
+	public function get_webcomic_embed( $format, $size, $key = false, $id = false ) {
 		global $post;
 		
 		$id = ( intval( $id ) > 0 ) ? $id : $post->ID;
@@ -346,7 +346,7 @@ class webcomic extends mgs_core {
 	 * @param int $id The post ID to retrieve objects for. Only required when used outside of a WordPress loop.
 	 * @return Embed webcomic code in input field for sharing, or false on error.
 	 */
-	function get_the_webcomic_embed( $format, $size, $key = false, $id = false ) {
+	public function get_the_webcomic_embed( $format, $size, $key = false, $id = false ) {
 		global $post;
 		
 		$id = ( intval( $id ) > 0 ) ? $id : $post->ID;
@@ -376,7 +376,7 @@ class webcomic extends mgs_core {
 	 * @param bool $global Uses URL parameters instead of regular permalink if true.
 	 * @return An array of webcomic ID's, or false on error.
 	 */
-	function get_relative_webcomics( $taxonomy = false, $terms = false, $id = false, $global = false ) {
+	public function get_relative_webcomics( $taxonomy = false, $terms = false, $id = false, $global = false ) {
 		global $wpdb, $post;
 		
 		if ( !$this->verify() )
@@ -436,7 +436,7 @@ class webcomic extends mgs_core {
 	 * @param bool $global Uses URL parameters instead of regular permalink if true.
 	 * @return The permalink URL, or false on error.
 	 */
-	function get_relative_webcomic_url( $key, $taxonomy = false, $terms = false, $id = false, $global = false ) {
+	public function get_relative_webcomic_url( $key, $taxonomy = false, $terms = false, $id = false, $global = false ) {
 		if ( !( $ids = $this->get_relative_webcomics( $taxonomy, $terms, $id, $global ) ) || !$ids[ $key ] )
 			return false;
 		
@@ -467,7 +467,7 @@ class webcomic extends mgs_core {
 	 * @param bool $global Uses URL parameters instead of regular permalink if true.
 	 * @return Formatted webcomic link, or false on error.
 	 */
-	function get_relative_webcomic_link( $key, $format, $link, $taxonomy = false, $terms = false, $id = false, $global = false ) {
+	public function get_relative_webcomic_link( $key, $format, $link, $taxonomy = false, $terms = false, $id = false, $global = false ) {
 		if ( !( $ids = $this->get_relative_webcomics( $taxonomy, $terms, $id, $global ) ) || !$ids[ $key ] )
 			return false;
 		
@@ -518,7 +518,7 @@ class webcomic extends mgs_core {
 	 * @param int $id Webcomic ID to retrieve the purchase print URL for.
 	 * @return The purchase URL, or false on error.
 	 */
-	function get_purchase_webcomic_url( $id = false ) {
+	public function get_purchase_webcomic_url( $id = false ) {
 		global $wp_rewrite, $post;
 		
 		if ( ( !$post && !$id ) || !$this->option( 'paypal_business' ) || !$this->verify() )
@@ -543,7 +543,7 @@ class webcomic extends mgs_core {
 	 * @param int $id Webcomic ID to retrieve the purchase print URL for.
 	 * @return Formatted purchase webcomic link, or false on error.
 	 */
-	function get_purchase_webcomic_link( $format, $link, $id = false ) {
+	public function get_purchase_webcomic_link( $format, $link, $id = false ) {
 		global $post;
 		
 		$this->domain();
@@ -590,7 +590,7 @@ class webcomic extends mgs_core {
 	 * @param int $id Webcomic ID to retrieve the purchase print URL for.
 	 * @return The purchase URL, or false on error.
 	 */
-	function get_bookmark_webcomic_url( $key, $id = false ) {
+	public function get_bookmark_webcomic_url( $key, $id = false ) {
 		global $wp_rewrite, $post;
 		
 		if ( ( !$post && !$id ) || !$this->verify() )
@@ -617,7 +617,7 @@ class webcomic extends mgs_core {
 	 * @param int $id Webcomic ID to retrieve the bookmark URL for.
 	 * @return Formatted bookmark webcomic link, or false on error.
 	 */
-	function get_bookmark_webcomic_link( $key, $format, $link, $id = false ) {
+	public function get_bookmark_webcomic_link( $key, $format, $link, $id = false ) {
 		global $wp_rewrite, $post;
 		
 		$wc = current( wp_get_object_terms( $post->ID, 'webcomic_collection' ) );
@@ -669,7 +669,7 @@ class webcomic extends mgs_core {
 	 * @param int $id Webcomic ID to reference.
 	 * @return arr Related Webcomic ID's, or false on error.
 	 */
-	function get_related_webcomics( $storylines = true, $characters = true, $id = false ) {
+	public function get_related_webcomics( $storylines = true, $characters = true, $id = false ) {
 		global $post;
 		
 		if ( ( !$post && !$id ) || !$this->verify() )
@@ -710,7 +710,7 @@ class webcomic extends mgs_core {
 	 * @param arr|str $args An array or string of arguments (see below for full details).
 	 * @return Formatted list of related webcomics, or false on error.
 	 */
-	function get_the_related_webcomics( $args = false ) {
+	public function get_the_related_webcomics( $args = false ) {
 		$defaults = array(
 			'format'     => false, //str Format to display the terms in. Must be one of 'ulist', 'olist', or 'dropdown'
 			'separator'  => false, //str Text string to place between posts when 'format' is false.
@@ -789,7 +789,7 @@ class webcomic extends mgs_core {
 	 * @param str $taxonomy The taxonomy the term ID's belong to. Required.
 	 * @return An array of webcomic ID's, or false on error.
 	 */
-	function get_buffer_webcomics( $terms = false, $taxonomy = false ) {
+	public function get_buffer_webcomics( $terms = false, $taxonomy = false ) {
 		if ( !$this->verify() )
 			return false;
 		
@@ -829,7 +829,7 @@ class webcomic extends mgs_core {
 	 * @param arr|str $args An array or string of arguments (see below for full details).
 	 * @return Formatted list of related webcomics, or false on error.
 	 */
-	function get_the_buffer_webcomics( $args = false ) {
+	public function get_the_buffer_webcomics( $args = false ) {
 		$defaults = array(
 			'format'     => false,  //str Format to display the terms in. Must be one of 'ulist' or 'olist'
 			'separator'  => false,  //str Text string to place between posts when 'format' is false.
@@ -898,7 +898,7 @@ class webcomic extends mgs_core {
 	 * @param str $label String label to use for the submit button.
 	 * @return Formatted HTML form, or false on error.
 	 */
-	function get_webcomic_verify_form( $label = false ) {
+	public function get_webcomic_verify_form( $label = false ) {
 		global $post;
 		
 		$this->domain();
@@ -950,7 +950,7 @@ class webcomic extends mgs_core {
 	 * 
 	 * @param
 	 */
-	function get_webcomic_verify_age( $id = false ) {
+	public function get_webcomic_verify_age( $id = false ) {
 		global $post;
 		
 		$id = ( intval( $id ) > 0 ) ? $id : $post->ID;
@@ -974,7 +974,7 @@ class webcomic extends mgs_core {
 	 * @param str $sep The character to use to separate thousands. Defaults to ','.
 	 * @return Formatted donation amount string, or false on error.
 	 */
-	function get_the_webcomic_donation_amount( $dec = false, $sep = false ) {
+	public function get_the_webcomic_donation_amount( $dec = false, $sep = false ) {
 		if ( !( $cost = $this->option( 'paypal_donation' ) ) )
 			return false;
 		
@@ -994,7 +994,7 @@ class webcomic extends mgs_core {
 	 * 
 	 * @return Necessary hidden form fields, or false on error.
 	 */
-	function get_webcomic_donation_fields() {
+	public function get_webcomic_donation_fields() {
 		if ( !$this->option( 'paypal_business' ) )
 			return false;
 		
@@ -1021,7 +1021,7 @@ class webcomic extends mgs_core {
 	 * @param int $id Webcomic ID to reference for form data.
 	 * @return The complete HTML form, or false on error.
 	 */
-	function get_webcomic_donation_form( $label = false ) {
+	public function get_webcomic_donation_form( $label = false ) {
 		if ( !$this->option( 'paypal_business' ) )
 			return false;
 		
@@ -1043,7 +1043,7 @@ class webcomic extends mgs_core {
 	 * @param bool $original If true, checks to see if the original is still for sale.
 	 * @return True if prints are being sold, false otherwise.
 	 */
-	function webcomic_prints_open( $id = false, $original = false ) {
+	public function webcomic_prints_open( $id = false, $original = false ) {
 		global $post;
 		
 		if ( !$post && !$id )
@@ -1069,7 +1069,7 @@ class webcomic extends mgs_core {
 	 * @param int $id Webcomic ID to retrieve cost for.
 	 * @return float The specified cost, or false on error.
 	 */
-	function get_purchase_webcomic_cost( $cost, $type, $id = false ) {
+	public function get_purchase_webcomic_cost( $cost, $type, $id = false ) {
 		global $post;
 		
 		if ( !$post && !$id )
@@ -1113,7 +1113,7 @@ class webcomic extends mgs_core {
 	 * @param int $id Webcomic ID to retrieve cost for.
 	 * @return Formatted cost string, or false on error.
 	 */
-	function get_the_purchase_webcomic_cost( $cost, $type, $dec = false, $sep = false, $id = false ) {
+	public function get_the_purchase_webcomic_cost( $cost, $type, $dec = false, $sep = false, $id = false ) {
 		if ( !is_float( $cost = $this->get_purchase_webcomic_cost( $cost, $type, $id ) ) )
 			return false;
 		
@@ -1135,7 +1135,7 @@ class webcomic extends mgs_core {
 	 * @param str $type The type of value to return. Must be one of 'domestic', 'international', or 'original'.
 	 * @return arr Array containing adjustment information, or false on error.
 	 */
-	function get_purchase_webcomic_adjustment( $adjustment, $type, $id = false ) {
+	public function get_purchase_webcomic_adjustment( $adjustment, $type, $id = false ) {
 		global $post;
 		
 		if ( !$post && !$id )
@@ -1181,7 +1181,7 @@ class webcomic extends mgs_core {
 	 * @param int $id Webcomic ID to retrieve cost for.
 	 * @return Formatted adjustment string, or false on error.
 	 */
-	function get_the_purchase_webcomic_adjustment( $adjustment, $type, $dec = false, $sep = false, $id = false ) {
+	public function get_the_purchase_webcomic_adjustment( $adjustment, $type, $dec = false, $sep = false, $id = false ) {
 		if ( !( $a = $this->get_purchase_webcomic_adjustment( $adjustment, $type, $id ) ) )
 			return false;
 		
@@ -1205,7 +1205,7 @@ class webcomic extends mgs_core {
 	 * @param int $id Webcomic ID to reference for form data.
 	 * @return Necessary hidden form fields, or false on error.
 	 */
-	function get_purchase_webcomic_fields( $type, $cart = false, $id = false ) {
+	public function get_purchase_webcomic_fields( $type, $cart = false, $id = false ) {
 		global $post;
 		
 		if ( ( !$post && !$id ) || !$this->option( 'paypal_business' ) || !$this->verify() )
@@ -1253,7 +1253,7 @@ class webcomic extends mgs_core {
 	 * @param int $id Webcomic ID to reference for form data.
 	 * @return The complete HTML form, or false on error.
 	 */
-	function get_purchase_webcomic_form( $type, $label = false, $cart = false, $id = false ) {
+	public function get_purchase_webcomic_form( $type, $label = false, $cart = false, $id = false ) {
 		global $post;
 		
 		if ( ( !$post && !$id ) || !$this->option( 'paypal_business' ) || !( $fields = $this->get_purchase_webcomic_fields( $type, $id ) ) )
@@ -1284,7 +1284,7 @@ class webcomic extends mgs_core {
 	 * @param str $file The filename to retrieve.
 	 * @return False on error.
 	 */
-	function webcomic_transcripts_template( $file = false ) {
+	public function webcomic_transcripts_template( $file = false ) {
 		global $with_webcomic_transcripts, $webcomic_transcript, $post, $wpdb, $user_login, $user_ID, $user_identity;
 		
 		if ( !( is_single() || is_page() || $with_webcomic_transcripts ) || !$post || !$this->verify() )
@@ -1305,7 +1305,7 @@ class webcomic extends mgs_core {
 	 * @param str $status The status to check for. Must be one of 'draft', 'pending', or 'publish'.
 	 * @return True or the number of transcripts, false otherwise.
 	 */
-	function have_webcomic_transcripts( $status = false ) {
+	public function have_webcomic_transcripts( $status = false ) {
 		global $post;
 		
 		if ( !$post )
@@ -1336,7 +1336,7 @@ class webcomic extends mgs_core {
 	 * 
 	 * @return True if transcribing is allowed, false otherwise.
 	 */
-	function webcomic_transcripts_open() {
+	public function webcomic_transcripts_open() {
 		global $post;
 		
 		if ( !$post )
@@ -1363,7 +1363,7 @@ class webcomic extends mgs_core {
 	 * @param int $id Webcomic ID to display transcribe form for.
 	 * @return False if no Webcomic ID can be found.
 	 */
-	function webcomic_transcribe_form( $args = false ) {
+	public function webcomic_transcribe_form( $args = false ) {
 		if ( !$this->webcomic_transcripts_open() ) {
 			do_action( 'webcomic_transcribe_form_closed' );
 			return false;
@@ -1470,7 +1470,7 @@ class webcomic extends mgs_core {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function get_webcomic_transcribe_form_fields() {
+	public function get_webcomic_transcribe_form_fields() {
 		global $current_user, $post;
 		
 		if ( !$post )
@@ -1497,7 +1497,7 @@ class webcomic extends mgs_core {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function get_webcomic_transcribe_form_languages() {
+	public function get_webcomic_transcribe_form_languages() {
 		global $post;
 		
 		$post_meta = current( get_post_meta( $post->ID, 'webcomic' ) );
@@ -1529,7 +1529,7 @@ class webcomic extends mgs_core {
 	 * @param arr|str $args An array or string of arguments (see below for full details).
 	 * @return False if no webcomic ID can be found.
 	 */
-	function list_webcomic_transcripts( $args = array() ) {
+	public function list_webcomic_transcripts( $args = array() ) {
 		global $post, $in_webcomic_transcript_loop;
 		
 		if ( !$post )
@@ -1569,7 +1569,7 @@ class webcomic extends mgs_core {
 	 * @param str $i The information to return. One of 'text', 'time', 'the_time', 'the_date', 'language', 'language_code', 'author', or 'id'
 	 * @return The specified information, or false on error.
 	 */
-	function get_webcomic_transcript_info( $i ) {
+	public function get_webcomic_transcript_info( $i ) {
 		global $post, $webcomic_transcript, $in_webcomic_transcript_loop;
 		
 		if ( !$in_webcomic_transcript_loop )
@@ -1597,7 +1597,7 @@ class webcomic extends mgs_core {
 	 * 
 	 * @param arr|str $class Additional CSS classes.
 	 */
-	function get_webcomic_transcript_class( $class = false ) {
+	public function get_webcomic_transcript_class( $class = false ) {
 		global $post, $webcomic_transcript, $in_webcomic_transcript_loop;
 		
 		if ( !$in_webcomic_transcript_loop )
@@ -1633,7 +1633,7 @@ class webcomic extends mgs_core {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function in_webcomic_term( $taxonomy, $terms = false, $id = false ) {
+	public function in_webcomic_term( $taxonomy, $terms = false, $id = false ) {
 		if ( !( 'webcomic_collection' == $taxonomy || 'webcomic_storyline' == $taxonomy || 'webcomic_character' == $taxonomy ) )
 			return false;
 		
@@ -1664,7 +1664,7 @@ class webcomic extends mgs_core {
 	 * @param str Slug of the term to retrive. Optional; if no slug is provided, will attempt to use query_var.
 	 * @return The requested information in it's original format, or false on error.
 	 */
-	function get_webcomic_term_info( $i, $taxonomy, $term = false ) {
+	public function get_webcomic_term_info( $i, $taxonomy, $term = false ) {
 		$term = ( $term ) ? $term : get_query_var( $taxonomy );
 		$r = false;
 		
@@ -1697,7 +1697,7 @@ class webcomic extends mgs_core {
 	 * @param arr|str $args A string or array of arguments.
 	 * @return Formatted list of terms, or false on error.
 	 */
-	function get_the_webcomic_post_terms( $taxonomy, $args = false ) {
+	public function get_the_webcomic_post_terms( $taxonomy, $args = false ) {
 		$defaults = array(
 			'format'     => false, //str Format to display the terms in. Must be one of 'ulist', 'olist', 'dropdown', 'cloud', 'grid', or false.
 			'separator'  => false, //str Text string to place between terms when 'format' is false.
@@ -1823,7 +1823,7 @@ class webcomic extends mgs_core {
 	 * @param bool $hide_empty Wether to exclude empty terms. Defaults to true.
 	 * @return arr An array of webcomic ID's, or false on error.
 	 */
-	function get_relative_webcomic_terms( $taxonomy, $term = false, $orderby = false , $hide_empty = true) {
+	public function get_relative_webcomic_terms( $taxonomy, $term = false, $orderby = false , $hide_empty = true) {
 		if ( !( $term = ( $term ) ? $term : get_query_var( $taxonomy ) ) || !$this->verify() )
 			return false;
 		
@@ -1883,7 +1883,7 @@ class webcomic extends mgs_core {
 	 * @param bool $hide_empty Wether to exclude empty terms. Defaults to true.
 	 * @return The permalink URL, or false on error.
 	 */
-	function get_relative_webcomic_term_url( $key, $taxonomy, $term = false, $orderby = false, $hide_empty = true ) {
+	public function get_relative_webcomic_term_url( $key, $taxonomy, $term = false, $orderby = false, $hide_empty = true ) {
 		if ( !( $ids = $this->get_relative_webcomic_terms( $taxonomy, $terms, $orderby, $hide_empty ) ) || !$ids[ $key ] )
 			return false;
 		
@@ -1909,7 +1909,7 @@ class webcomic extends mgs_core {
 	 * @param bool $hide_empty Wether to exclude empty terms. Defaults to true.
 	 * @return Formatted term link, or false on error.
 	 */
-	function get_relative_webcomic_term_link( $key, $taxonomy, $format, $link, $term = false, $orderby = false, $hide_empty = true ) {
+	public function get_relative_webcomic_term_link( $key, $taxonomy, $format, $link, $term = false, $orderby = false, $hide_empty = true ) {
 		if ( !( $term = ( $term ) ? $term : get_query_var( $taxonomy ) ) || !( $ids = $this->get_relative_webcomic_terms( $taxonomy, $term, $orderby, $hide_empty ) ) || !$ids[ $key ] )
 			return false;
 		
@@ -1960,7 +1960,7 @@ class webcomic extends mgs_core {
 	 * @param arr|str $args A string or array of arguments.
 	 * @return Formatted list of terms, or false on error.
 	 */
-	function get_the_webcomic_terms( $taxonomy, $args = false ) {
+	public function get_the_webcomic_terms( $taxonomy, $args = false ) {
 		$defaults = array(
 			'format'       => false, //str     Format to display the terms in. Must be one of 'ulist', 'olist', 'dropdown', 'cloud', 'grid', or false.
 			'separator'    => false, //str     Text string to place between terms when 'format' is false.
@@ -2144,7 +2144,7 @@ class webcomic extends mgs_core {
 	 * @param arr|str $args A string or array of arguments.
 	 * @return Formatted archive of webcomic posts, or false on error.
 	 */
-	function get_the_webcomic_archive( $args = false ) {
+	public function get_the_webcomic_archive( $args = false ) {
 		$defaults = array(
 			'format'           => false, //str Format to display the terms in. Must be one of 'ulist', 'olist', 'dropdown', 'grid' (when group is not 'collection', 'storyline', or 'character'), or false.
 			'group'            => false, //str How to group the webcomics. May be one of 'day', 'month, 'year', 'collection', 'storyline', or 'character'.
@@ -2433,7 +2433,7 @@ class webcomic extends mgs_core {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function short_webcomic( $atts, $content = false ) {
+	public function short_webcomic( $atts, $content = false ) {
 		extract( shortcode_atts( array(
 			'size'     => 'full',
 			'link'     => false,
@@ -2451,7 +2451,7 @@ class webcomic extends mgs_core {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function short_random_webcomic_link( $atts, $content = false ) {
+	public function short_random_webcomic_link( $atts, $content = false ) {
 		extract( shortcode_atts( array(
 			'link'     => '%link',
 			'format'   => '%label',
@@ -2467,7 +2467,7 @@ class webcomic extends mgs_core {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function short_first_webcomic_link( $atts, $content = false ) {
+	public function short_first_webcomic_link( $atts, $content = false ) {
 		extract( shortcode_atts( array(
 			'link'     => '%link',
 			'format'   => '%label',
@@ -2484,7 +2484,7 @@ class webcomic extends mgs_core {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function short_previous_webcomic_link( $atts, $content = false ) {
+	public function short_previous_webcomic_link( $atts, $content = false ) {
 		extract( shortcode_atts( array(
 			'link'     => '%link',
 			'format'   => '%label',
@@ -2501,7 +2501,7 @@ class webcomic extends mgs_core {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function short_next_webcomic_link( $atts, $content = false ) {
+	public function short_next_webcomic_link( $atts, $content = false ) {
 		extract( shortcode_atts( array(
 			'link'     => '%link',
 			'format'   => '%label',
@@ -2518,7 +2518,7 @@ class webcomic extends mgs_core {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function short_last_webcomic_link( $atts, $content = false ) {
+	public function short_last_webcomic_link( $atts, $content = false ) {
 		extract( shortcode_atts( array(
 			'link'     => '%link',
 			'format'   => '%label',
@@ -2535,7 +2535,7 @@ class webcomic extends mgs_core {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function short_purchase_webcomic_link( $atts, $content = false ) {
+	public function short_purchase_webcomic_link( $atts, $content = false ) {
 		extract( shortcode_atts( array(
 			'link'   => '%link',
 			'format' => '%label',
@@ -2551,7 +2551,7 @@ class webcomic extends mgs_core {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function short_get_related_webcomics( $atts, $content = false ) {
+	public function short_get_related_webcomics( $atts, $content = false ) {
 		extract( shortcode_atts( array(
 			'format'     => false,
 			'separator'  => false,
@@ -2587,7 +2587,7 @@ class webcomic extends mgs_core {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function short_webcomic_collections( $atts, $content = false ) {
+	public function short_webcomic_collections( $atts, $content = false ) {
 		extract( shortcode_atts( array(
 			'format'    => false,
 			'separator' => false,
@@ -2619,7 +2619,7 @@ class webcomic extends mgs_core {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function short_webcomic_storylines( $atts, $content = false ) {
+	public function short_webcomic_storylines( $atts, $content = false ) {
 		extract( shortcode_atts( array(
 			'format'    => false,
 			'separator' => false,
@@ -2651,7 +2651,7 @@ class webcomic extends mgs_core {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function short_webcomic_characters( $atts, $content = false ) {
+	public function short_webcomic_characters( $atts, $content = false ) {
 		extract( shortcode_atts( array(
 			'format'    => false,
 			'separator' => false,
@@ -2693,7 +2693,7 @@ class webcomic extends mgs_core {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function hook_init() {
+	public function hook_init() {
 		global $wp_rewrite;
 		
 		$this->domain();
@@ -2921,7 +2921,7 @@ class webcomic extends mgs_core {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function hook_widgets_init() {
+	public function hook_widgets_init() {
 		register_widget( 'webcomic_Widget_Buffer' );
 		register_widget( 'webcomic_Widget_Donation' );
 		register_widget( 'webcomic_Widget_Relative' );
@@ -2938,7 +2938,7 @@ class webcomic extends mgs_core {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function hook_template_redirect() {
+	public function hook_template_redirect() {
 		global $post;
 		
 		wp_enqueue_script( 'webcomic-scripts', $this->url . '/webcomic-includes/scripts.js', array( 'jquery', 'jquery-hotkeys' ), '', true );
@@ -3019,7 +3019,7 @@ class webcomic extends mgs_core {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function hook_wp_head() {
+	public function hook_wp_head() {
 		printf( '<meta name="generator" content="Webcomic %s">', $this->version );
 	}
 	
@@ -3039,7 +3039,7 @@ class webcomic extends mgs_core {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function hook_body_class( $classes, $class ) {
+	public function hook_body_class( $classes, $class ) {
 		global $post;
 		
 		if ( is_tax( 'webcomic_collection' ) )
@@ -3087,7 +3087,7 @@ class webcomic extends mgs_core {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function hook_post_class( $classes, $class, $id ) {
+	public function hook_post_class( $classes, $class, $id ) {
 		if ( in_array( 'type-webcomic_post', $classes ) && ( $wc = current( wp_get_object_terms( $id, 'webcomic_collection' ) ) ) ) {
 			$classes[] = 'webcomic_collection-' . sanitize_html_class( $wc->slug, $wc->term_id );
 			
@@ -3115,7 +3115,7 @@ class webcomic extends mgs_core {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function hook_the_post( $post ) {
+	public function hook_the_post( $post ) {
 		if ( !$post || 'webcomic_post' != $post->post_type )
 			return $post;
 		
@@ -3138,7 +3138,7 @@ class webcomic extends mgs_core {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function hook_the_posts( $posts ) {
+	public function hook_the_posts( $posts ) {
 		foreach ( $posts as $post ) {
 			if ( 'webcomic_post' != $post->post_type )
 				continue;
@@ -3163,7 +3163,7 @@ class webcomic extends mgs_core {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function hook_loop_start() {
+	public function hook_loop_start() {
 		if ( !$this->option( 'integrate_toggle' ) )
 			return false;
 		
@@ -3215,7 +3215,7 @@ class webcomic extends mgs_core {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function hook_the_content( $content ) {
+	public function hook_the_content( $content ) {
 		$this->domain();
 		
 		global $post;
@@ -3279,7 +3279,7 @@ class webcomic extends mgs_core {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function hook_request( $q ) {
+	public function hook_request( $q ) {
 		if ( isset( $q[ 'feed' ] ) && !isset( $q[ 'post_type' ] ) )
 			$q[ 'post_type' ] = array( 'post', 'webcomic_post' );
 		
@@ -3292,7 +3292,7 @@ class webcomic extends mgs_core {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function hook_posts_request( $query ) {
+	public function hook_posts_request( $query ) {
 		global $wp_query;
 		
 		if ( $wp_query->is_search && false === strpos( $query, 'DISTINCT' ) )
@@ -3307,7 +3307,7 @@ class webcomic extends mgs_core {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function hook_posts_join( $join ) {
+	public function hook_posts_join( $join ) {
 		global $wp_query, $wpdb;
 		
 		if ( $wp_query->is_search )
@@ -3322,7 +3322,7 @@ class webcomic extends mgs_core {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function hook_posts_where( $where ) {
+	public function hook_posts_where( $where ) {
 		global $wp_query, $wpdb;
 		
 		if ( $wp_query->is_archive )
@@ -3368,7 +3368,7 @@ class webcomic extends mgs_core {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function hook_list_terms_exclusions( $exclusions, $args ) {
+	public function hook_list_terms_exclusions( $exclusions, $args ) {
 		global $wpdb;
 		
 		if ( !empty( $args[ 'term_group' ] ) ) {
@@ -3451,7 +3451,7 @@ class webcomic extends mgs_core {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function hook_get_terms_orderby( $orderby, $args ) {
+	public function hook_get_terms_orderby( $orderby, $args ) {
 		$orderby = ( 'term_group_name' == $args[ 'orderby' ] ) ? 't.term_group,t.name' : $orderby;
 		return $orderby;
 	}
@@ -3462,7 +3462,7 @@ class webcomic extends mgs_core {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function hook_get_term( $term, $taxonomy ) {
+	public function hook_get_term( $term, $taxonomy ) {
 		if ( 'webcomic_collection' == $taxonomy || 'webcomic_storyline' == $taxonomy || 'webcomic_character' == $taxonomy ) {
 			$term_meta = $this->option( 'term_meta' );
 			$type = end( explode( '_', $taxonomy ) );
@@ -3494,7 +3494,7 @@ class webcomic extends mgs_core {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function hook_get_terms( $terms, $taxonomies, $args ) {
+	public function hook_get_terms( $terms, $taxonomies, $args ) {
 		if ( in_array( 'webcomic_collection', $taxonomies ) || in_array( 'webcomic_storyline', $taxonomies ) || in_array( 'webcomic_character', $taxonomies ) ) {
 			$term_meta = $this->option( 'term_meta' );
 			
@@ -3534,7 +3534,7 @@ class webcomic extends mgs_core {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function hook_wp_get_object_terms( $terms, $object_ids, $taxonomies, $args ) {
+	public function hook_wp_get_object_terms( $terms, $object_ids, $taxonomies, $args ) {
 		if ( 'all' == $args[ 'fields' ] || 'all_with_object_id' == $args[ 'fields' ] ) {
 			$term_meta = $this->option( 'term_meta' );
 			
@@ -3581,7 +3581,7 @@ class webcomic extends mgs_core {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function hook_webcomic_buffer_alert() {
+	public function hook_webcomic_buffer_alert() {
 		if ( !$this->option( 'buffer_toggle' ) )
 			return false;
 		
@@ -3619,7 +3619,7 @@ class webcomic extends mgs_core {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function usort_storylines( $a, $b ) {
+	public function usort_storylines( $a, $b ) {
 		if ( $a->webcomic_order > $b->webcomic_order )
 			return 1;
 		elseif ( $a->webcomic_order < $b->webcomic_order )
@@ -3634,7 +3634,7 @@ class webcomic extends mgs_core {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function usort_terms_by_collection( $a, $b ) {
+	public function usort_terms_by_collection( $a, $b ) {
 		if ( $a->term_group > $b->term_group )
 			return 1;
 		elseif ( $a->term_group < $b->term_group )
@@ -3649,7 +3649,7 @@ class webcomic extends mgs_core {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function usort_term_objects_by_date( $a, $b ) {
+	public function usort_term_objects_by_date( $a, $b ) {
 		$a = get_the_time( 'U', $a );
 		$b = get_the_time( 'U', $b );
 		
@@ -3670,7 +3670,7 @@ class webcomic extends mgs_core {
 	 * @param str $type One of 'abs' or 'url'.
 	 * @param str $sub Name of the subdirectory to retrieve.
 	 */
-	function directory( $type = null, $sub = null ) {
+	public function directory( $type = null, $sub = null ) {
 		switch ( $type ) {
 			case 'abs': if ( $sub ) return $this->cdir . '/webcomic/' . $sub . '/'; else return $this->cdir . '/webcomic/';
 			case 'url': if ( $sub ) return $this->curl . '/webcomic/' . $sub . '/'; else return $this->curl . '/webcomic/';
@@ -3684,7 +3684,7 @@ class webcomic extends mgs_core {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function age() {
+	public function age() {
 		global $current_user;
 		
 		$user_meta = ( is_array( $a = get_user_meta( $current_user->ID, 'webcomic' ) ) ) ? current( $a ) : array();
@@ -3706,7 +3706,7 @@ class webcomic extends mgs_core {
 	 * @param str $id The post ID to get verification info from.
 	 * @return True if the user is verified, false otherwise.
 	 */
-	function verify( $type = false, $id = false ) {
+	public function verify( $type = false, $id = false ) {
 		global $post;
 		
 		$collection = $storyline = $character = false;
@@ -3759,7 +3759,7 @@ class webcomic extends mgs_core {
 	 * @param arr $rate An array of str rates, one for each amount. Must be 'fixed' or 'percent'.
 	 * @return float|bool The final price, rounded to two decimal places, or false on error.
 	 */
-	function price( $base, $amount, $rate = false ) {
+	public function price( $base, $amount, $rate = false ) {
 		$output = abs( floatval( $base ) );
 		$m = $c = 0;
 		
@@ -3795,7 +3795,7 @@ class webcomic extends mgs_core {
 	 * @param bool $match Attempt to match the object with posts if no posts are associated with it.
 	 * @return arr Array of filenames, or false on error.
 	 */
-	function fetch( $id, $type, $src, $match = false ) {
+	public function fetch( $id, $type, $src, $match = false ) {
 		$abs  = $this->directory( 'abs', $src );
 		$tabs = $abs . 'thumbs/';
 		
@@ -3833,7 +3833,7 @@ class webcomic extends mgs_core {
 	 * @param bool $match Attempt to match the object with posts if no posts are associated with it.
 	 * @return arr Array of file data, or false on error.
 	 */
-	function retrieve( $id, $type, $src, $match = false ) {
+	public function retrieve( $id, $type, $src, $match = false ) {
 		if ( !( $files = $this->fetch( $id, $type, $src, $match ) ) )
 			return false;
 		
@@ -3893,7 +3893,7 @@ class webcomic extends mgs_core {
 	 * @param str $src The directory to search for matching files.
 	 * @return arr An array of files, or false if no match can be found.
 	 */
-	function match( $id, $src ) {
+	public function match( $id, $src ) {
 		$key    = apply_filters( 'webcomic_match_key', get_the_time( 'Y-m-d', $id ), $id, get_term_by( 'slug', $src, 'webcomic_collection' ) );
 		$abs    = $this->directory( 'abs', $src );
 		$tabs   = $abs . 'thumbs/';
@@ -3936,7 +3936,7 @@ class webcomic extends mgs_core {
 	 * @package webcomic
 	 * @since 3
 	 */
-	function get_collection_by_path( $collection_path = false, $full_match = true, $output = OBJECT ) {
+	public function get_collection_by_path( $collection_path = false, $full_match = true, $output = OBJECT ) {
 		$wc = false;
 		
 		if ( get_option( 'permalink_structure' ) ) {

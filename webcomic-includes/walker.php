@@ -17,24 +17,24 @@ class webcomic_Walker_TermList extends Walker {
 	var $tree_type = 'webcomic_term';
 	var $db_fields = array( 'parent' => 'parent', 'id' => 'term_id' );
 	
-	function start_lvl( &$output, $depth, $args ) {
+	public function start_lvl( &$output, $depth, $args ) {
 		if ( !$args[ 'separator' ] )
 			$output .= '<' . $args[ 'x' ] . 'l class="children">';
 	}
 	
-	function end_lvl( &$output, $depth, $args ) {
+	public function end_lvl( &$output, $depth, $args ) {
 		if ( !$args[ 'separator' ] )
 			$output .= '</' . $args[ 'x' ] . 'l>';
 	}
 	
-	function end_el( &$output, $page, $depth, $args ) {
+	public function end_el( &$output, $page, $depth, $args ) {
 		if ( $args[ 'separator' ] )
 			$output .= $args[ 'separator' ];
 		else
 			$output .= '</li>';
 	}
 	
-	function start_el( &$output, $term, $depth, $args ) {
+	public function start_el( &$output, $term, $depth, $args ) {
 		global $webcomic;
 		
 		$webcomic->domain();
@@ -97,7 +97,7 @@ class webcomic_Walker_TermDropdown extends Walker {
 	var $tree_type = 'webcomic_term';
 	var $db_fields = array ( 'parent' => 'parent', 'id' => 'term_id' );
 	
-	function start_el( &$output, $term, $depth, $args ) {
+	public function start_el( &$output, $term, $depth, $args ) {
 		$term_name = esc_attr( $term->name );
 		
 		$output .= '<option class="level-' . $depth . ' webcomic-term-item webcomic-' . $args[ 'taxonomy' ] . '-item webcomic-' . $args[ 'taxonomy' ] . '-item-' . $term->term_id . '" value="' . get_term_link( ( int ) $term->term_id, $args[ 'taxonomy' ] ) . '"';
@@ -116,24 +116,24 @@ class webcomic_Walker_ArchiveList extends Walker {
 	var $tree_type = 'webcomic_term';
 	var $db_fields = array ( 'parent' => 'parent', 'id' => 'term_id' );
 	
-	function start_lvl( &$output, $depth, $args ) {
+	public function start_lvl( &$output, $depth, $args ) {
 		if ( !$args[ 'separator' ] || ( 'collection' == $args[ 'group' ] || 'storyline' == $args[ 'group' ] || 'character' == $args[ 'group' ] ) )
 			$output .= '<' . $args[ 'x' ] . 'l class="children">';
 	}
 	
-	function end_lvl( &$output, $depth, $args ) {
+	public function end_lvl( &$output, $depth, $args ) {
 		if ( !$args[ 'separator' ] || ( 'collection' == $args[ 'group' ] || 'storyline' == $args[ 'group' ] || 'character' == $args[ 'group' ] ) )
 			$output .= '</' . $args[ 'x' ] . 'l>';
 	}
 	
-	function end_el( &$output, $page, $depth, $args ) {
+	public function end_el( &$output, $page, $depth, $args ) {
 		if ( $args['separator'] && !( 'collection' == $args[ 'group' ] || 'storyline' == $args[ 'group' ] || 'character' == $args[ 'group' ] ) )
 			$output .= $args[ 'separator' ];
 		else
 			$output .= '</li>';
 	}
 	
-	function start_el( &$output, $term, $depth, $args ) {
+	public function start_el( &$output, $term, $depth, $args ) {
 		global $webcomic;
 		
 		$webcomic->domain();
@@ -207,7 +207,7 @@ class webcomic_Walker_ArchiveDropdown extends Walker {
 	var $tree_type = 'webcomic_term';
 	var $db_fields = array ( 'parent' => 'parent', 'id' => 'term_id' );
 	
-	function start_el( &$output, $term, $depth, $args ) {
+	public function start_el( &$output, $term, $depth, $args ) {
 		global $webcomic;
 		
 		$term_name = esc_attr( $term->name );
@@ -245,7 +245,7 @@ class webcomic_Walker_Transcripts extends Walker {
 	var $tree_type = 'webcomic_transcripts';
 	var $db_fields = array ( 'parent' => 'language', 'id' => 'language_code' );
 	
-	function start_el( &$output, $transcript, $depth, $args ) {
+	public function start_el( &$output, $transcript, $depth, $args ) {
 		global $webcomic, $post, $webcomic_transcript;
 		
 		$webcomic_transcript = $transcript;

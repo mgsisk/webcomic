@@ -51,7 +51,7 @@ abstract class mgs_core {
 	 * @package mgs_core
 	 * @version 1
 	 */
-	final function __construct() {
+	final public function __construct() {
 		if ( !$this->name )    $this->name    = 'mgs_core';
 		if ( !$this->version ) $this->version = 1;
 		if ( !$this->file )    $this->file    = __FILE__;
@@ -116,7 +116,7 @@ abstract class mgs_core {
 	 * @package mgs_core
 	 * @since 1
 	 */
-	final function deactivate( $t = false ) {
+	final public function deactivate( $t = false ) {
 		$this->option( null );
 	}
 	
@@ -131,7 +131,7 @@ abstract class mgs_core {
 	 * @package mgs_core
 	 * @since 1
 	 */
-	final function domain() {
+	final public function domain() {
 		if ( 'plugin' == $this->type && realpath( dirname( $this->file ) ) !== realpath( WPMU_PLUGIN_DIR ) )
 			load_muplugin_textdomain( $this->name, $this->dir . '/' . $this->name . '-includes/languages' );
 		elseif ( 'plugin' == $this->type )
@@ -161,7 +161,7 @@ abstract class mgs_core {
 	 * @param str|null The new value for the option specified in $o, or null to delete the option.
 	 * @return Return all options, the specified options, true when updating options, or false on error.
 	 */
-	final function option( $o = false, $v = false ) {
+	final public function option( $o = false, $v = false ) {
 		if ( false === $o ) {
 			return get_option( $this->name . '_options', array() );
 		} elseif ( null === $o ) {
@@ -205,9 +205,9 @@ abstract class mgs_core {
 	 * @package mgs_core
 	 * @since 1
 	 */
-	abstract function install();
-	abstract function upgrade();
-	abstract function downgrade();
-	abstract function uninstall();
+	abstract public function install();
+	abstract public function upgrade();
+	abstract public function downgrade();
+	abstract public function uninstall();
 }
 ?>
