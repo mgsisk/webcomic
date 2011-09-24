@@ -60,7 +60,7 @@ abstract class mgs_core {
 		$upload = wp_upload_dir();
 		
 		$this->base    = ( 'plugin' == $this->type ) ? plugin_basename( $this->file ) : dirname( $this->file );
-		$this->cdir    = $upload[ 'basdir' ];
+		$this->cdir    = $upload[ 'basedir' ];
 		$this->curl    = $upload[ 'baseurl' ];
 		$this->update  = array();
 		$this->errors  = array();
