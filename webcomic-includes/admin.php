@@ -651,10 +651,15 @@ class webcomic_admin extends webcomic {
 				} elseif ( 'delete' == $action ) {
 					$i = 0;
 					
-					foreach ( $_REQUEST[ 'bulk' ] as $bulk )
-						if ( $old_term = get_term( $bulk, $type ) )
-							if ( !is_wp_error( $deleted = wp_delete_term( $bulk, $_REQUEST[ 'page' ] ) ) )
+					foreach ( $_REQUEST[ 'bulk' ] as $bulk ) {
+						if ( $old_term = get_term( $bulk, "webcomic_$type" ) ) {
+							if ( $old_term->webcomic_default ) {
+								continue;
+							} else if ( !is_wp_error( $deleted = wp_delete_term( $bulk, $_REQUEST[ 'page' ] ) ) ) {
 								$i++;
+							}
+						}
+					}
 					
 					if ( $i )
 						$this->update[ 'deleted_term' ] = sprintf( _n( '%d term deleted', '%d terms deleted', $i, 'webcomic' ), $i );
