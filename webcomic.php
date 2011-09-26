@@ -3280,7 +3280,7 @@ class webcomic extends mgs_core {
 	 * @since 3
 	 */
 	public function hook_request( $q ) {
-		if ( isset( $q[ 'feed' ] ) && !isset( $q[ 'post_type' ] ) )
+		if ( isset( $q[ 'feed' ] ) and !isset( $q[ 'post_type' ] ) and !isset( $q[ 'pagename' ] ) )
 			$q[ 'post_type' ] = array( 'post', 'webcomic_post' );
 		
 		return $q;
