@@ -600,7 +600,7 @@ class webcomic extends mgs_core {
 		$wc  = current( wp_get_object_terms( $id, 'webcomic_collection' ) );
 		$url = get_permalink( $id );
 		
-		$r = ( is_object( $wp_rewrite ) && $wp_rewrite->using_permalinks() ) ? $url . '?bookmark_webcomic=' . $id . '/' . $key . '/' . $wc->term_id : $url . '&amp;purchase_webcomic_print=' . $id . '/' . $key . '/' . $wc->term_id;
+		$r = ( is_object( $wp_rewrite ) && $wp_rewrite->using_permalinks() ) ? $url . '?bookmark_webcomic=' . $id . '/' . $key . '/' . $wc->term_id : $url . '&amp;bookmark_webcomic=' . $id . '/' . $key . '/' . $wc->term_id;
 		
 		return apply_filters( 'webcomic_get_bookmark_url', $r, $key, $id );
 	}
