@@ -1385,7 +1385,7 @@ class webcomic extends mgs_core {
 				'webcomic_transcribe_default_fields',
 				array(
 					'author' => '
-						<p class="webcomic-transcribe-auther">
+						<p class="webcomic-transcribe-author">
 							<label for="webcomic_transcript_author">' . __( 'Name', 'webcomic' ) . '</label> ' .
 							( $req ? '<span class="required">*</span>' : '' ) .
 							'<input type="text" name="webcomic_transcript_author" value="' . esc_attr( $transcriber[ 'comment_author' ] ) . '" id="webcomic_transcript_author">
@@ -1394,7 +1394,7 @@ class webcomic extends mgs_core {
 						<p class="webcomic-transcribe-email">' .
 							'<label for="webcomic_transcript_email">' . __( 'Email', 'webcomic' ) . '</label> ' .
 							( $req ? '<span class="required">*</span>' : '' ) .
-							'<input type="text" name="webcomic_transcript_author" value="' . esc_attr(  $transcriber['comment_author_email'] ) . '" id="webcomic_transcript_email">
+							'<input type="text" name="webcomic_transcript_email" value="' . esc_attr(  $transcriber['comment_author_email'] ) . '" id="webcomic_transcript_email">
 						</p>'
 				), $args, $req
 			),
