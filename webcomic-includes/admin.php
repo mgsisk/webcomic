@@ -1390,7 +1390,7 @@ class webcomic_admin extends webcomic {
 			elseif ( !empty( $files ) && !$_REQUEST[ 'webcomic_orphan' ] ) {
 				if ( isset( $_REQUEST[ 'webcomic_filename' ] ) )
 					foreach ( $_REQUEST[ 'webcomic_filename' ] as $k => $v )
-						if ( $v && $files[ 'full' ][ $k ] != $v . $_REQUEST[ 'webcomic_extension' ][ $k ] && is_array( $names = $this->rename( $id, 'post', $wc->slug, $v, $k ) ) )
+						if ( $v && $_REQUEST[ 'webcomic_original_filename' ][ $k ] != $v . $_REQUEST[ 'webcomic_extension' ][ $k ] && is_array( $names = $this->rename( $id, 'post', $wc->slug, $v, $k ) ) )
 							$this->errors[ "no_rename_$k" ] = sprintf( __( 'The following files could not be renamed:<br><br>%s', 'webcomic' ), implode( '<br>', $names ) );
 				
 				if ( !empty( $_REQUEST[ 'webcomic_action' ] ) ) {
@@ -2917,7 +2917,7 @@ class webcomic_admin extends webcomic {
 							<input type="hidden" name="webcomic_oldname[<?php echo hash( 'md5', $orphan[ 'full' ][ 0 ][ 'basename' ] ); ?>]" value="<?php echo $orphan[ 'full' ][ 0 ][ 'filename' ]; ?>">
 							<br>
 							<a href="<?php echo wp_nonce_url( $view . '&amp;action=regen_webcomic_file&amp;webcomic_key=0&amp;orphan=' . $orphan[ 'full' ][ 0 ][ 'basename' ], 'regen_webcomic_file' ); ?>"><?php _e( 'Regenerate Thumbnails', 'webcomic' ); ?></a> |
-							<a href="<?php echo wp_nonce_url( $view . '&amp;action=delete_webcomic_file&amp;webcomic_key=0&amp;orphan=' . $orphan[ 'full' ][ 0 ][ 'basename' ], 'delete_webcomic_file' ); ?>" onClick="if(confirm('<?php echo esc_js( sprintf( __( "You are about to delete the orphaned file '%s'\n 'Cancel' to stop, 'OK' to delete.", "webcomic" ), $orphan[ 'full' ][ 0 ][ 'basename' ] ) ); ?>')){return true;}return false;"><?php _e( 'Delete', 'webcomic' ); ?></a> |
+							<a href="<?php echo wp_nonce_url( $view . '&amp;action=delete_webcomic_file&amp;webcomic_key=0&amp;orphan=' . $orphan[ 'full' ][ 0 ][ 'basename' ], 'delete_webcomic_file' ); ?>" onclick="if(confirm('<?php echo esc_js( sprintf( __( "You are about to delete the orphaned file '%s'\n 'Cancel' to stop, 'OK' to delete.", "webcomic" ), $orphan[ 'full' ][ 0 ][ 'basename' ] ) ); ?>')){return true;}return false;"><?php _e( 'Delete', 'webcomic' ); ?></a> |
 							<a href="<?php echo $orphan[ 'full' ][ 0 ][ 'url' ]; ?>" target="_blank"><?php _e( 'View', 'webcomic' ); ?></a>
 							<?php } ?>
 						</td>
@@ -4104,6 +4104,7 @@ class webcomic_admin extends webcomic {
 							<input type="text" name="webcomic_alternate[<?php echo $k; ?>]" value="<?php echo ( isset( $post_meta[ 'alternate' ][ $k ] ) ) ? $post_meta[ 'alternate' ][ $k ] : ''; ?>" id="webcomic_alternate[<?php echo $k; ?>]"><br>
 							<label for="webcomic_description[<?php echo $k; ?>]"><b><?php _e( 'Description', 'webcomic' ); ?></b><?php _e( ' - The description is displayed when a user hovers over this file.', 'webcomic' ); ?></label><br>
 							<input type="text" name="webcomic_description[<?php echo $k; ?>]" value="<?php echo ( isset( $post_meta[ 'description' ][ $k ] ) ) ? $post_meta[ 'description' ][ $k ] : ''; ?>" id="webcomic_description[<?php echo $k; ?>]">
+							<input type="hidden" name="webcomic_original_filename[<?php echo $k; ?>]" value="<?php echo $v[ 'filename' ], '.', $v[ 'extension' ]; ?>">
 						</td>
 					</tr>
 					<tr><td colspan="2"><hr style="border:3px double #ddd"></td></tr>
