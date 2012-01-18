@@ -4139,7 +4139,7 @@ class webcomic_admin extends webcomic {
 									<?php } ?>
 								</select>
 							</span>
-							<div id="webcomic_transcript[webcomic_lang_<?php echo $k; ?>]" style="celar:both"><textarea rows="7" cols="25" name="webcomic_transcript[<?php echo $k; ?>]" id="webcomic_transcript[<?php echo $k; ?>]" class="webcomic_tinymce"><?php echo ( isset( $post_meta[ 'transcripts' ][ $k ][ 'text' ] ) ) ? $post_meta[ 'transcripts' ][ $k ][ 'text' ] : ''; ?></textarea></div>
+							<div id="webcomic_transcript[webcomic_lang_<?php echo $k; ?>]" style="celar:both"><?php wp_editor( ( isset( $post_meta[ 'transcripts' ][ $k ][ 'text' ] ) ) ? $post_meta[ 'transcripts' ][ $k ][ 'text' ] : '', "webcomic_transcript[{$k}]", array( 'media_buttons' => false, 'teeny' => true ) ); ?></div>
 							<input type="hidden" name="webcomic_transcript_author[<?php echo $k; ?>]" value="<?php if ( !empty( $post_meta[ 'transcripts' ][ $k ][ 'author' ] ) ) echo $post_meta[ 'transcripts' ][ $k ][ 'author' ]; else echo $current_user->display_name; ?>">
 							<input type="hidden" name="webcomic_transcript_time[<?php echo $k; ?>]" value="<?php if ( !empty( $post_meta[ 'transcripts' ][ $k ][ 'time' ] ) ) echo $post_meta[ 'transcripts' ][ $k ][ 'time' ]; else echo time(); ?>">
 							<textarea name="webcomic_transcript_backup[<?php echo $k; ?>]" style="display:none"><?php echo ( !empty( $post_meta[ 'transcripts' ][ $k ][ 'backup' ] ) ) ? $post_meta[ 'transcripts' ][ $k ][ 'backup' ] : ''; ?></textarea>
