@@ -2917,7 +2917,7 @@ class webcomic_admin extends webcomic {
 							<input type="hidden" name="webcomic_oldname[<?php echo hash( 'md5', $orphan[ 'full' ][ 0 ][ 'basename' ] ); ?>]" value="<?php echo $orphan[ 'full' ][ 0 ][ 'filename' ]; ?>">
 							<br>
 							<a href="<?php echo wp_nonce_url( $view . '&amp;action=regen_webcomic_file&amp;webcomic_key=0&amp;orphan=' . $orphan[ 'full' ][ 0 ][ 'basename' ], 'regen_webcomic_file' ); ?>"><?php _e( 'Regenerate Thumbnails', 'webcomic' ); ?></a> |
-							<a href="<?php echo wp_nonce_url( $view . '&amp;action=delete_webcomic_file&amp;webcomic_key=0&amp;orphan=' . $orphan[ 'full' ][ 0 ][ 'basename' ], 'delete_webcomic_file' ); ?>" onclick="if(confirm('<?php echo esc_js( sprintf( __( "You are about to delete the orphaned file '%s'\n 'Cancel' to stop, 'OK' to delete.", "webcomic" ), $orphan[ 'full' ][ 0 ][ 'basename' ] ) ); ?>')){return true;}return false;"><?php _e( 'Delete', 'webcomic' ); ?></a> |
+							<a href="<?php echo wp_nonce_url( $view . '&amp;action=delete_webcomic_file&amp;webcomic_key=0&amp;orphan=' . $orphan[ 'full' ][ 0 ][ 'basename' ], 'delete_webcomic_file' ); ?>" onClick="if(confirm('<?php echo esc_js( sprintf( __( "You are about to delete the orphaned file '%s'\n 'Cancel' to stop, 'OK' to delete.", "webcomic" ), $orphan[ 'full' ][ 0 ][ 'basename' ] ) ); ?>')){return true;}return false;"><?php _e( 'Delete', 'webcomic' ); ?></a> |
 							<a href="<?php echo $orphan[ 'full' ][ 0 ][ 'url' ]; ?>" target="_blank"><?php _e( 'View', 'webcomic' ); ?></a>
 							<?php } ?>
 						</td>
@@ -4139,7 +4139,10 @@ class webcomic_admin extends webcomic {
 									<?php } ?>
 								</select>
 							</span>
-							<div id="webcomic_transcript[webcomic_lang_<?php echo $k; ?>]" style="celar:both"><?php wp_editor( ( isset( $post_meta[ 'transcripts' ][ $k ][ 'text' ] ) ) ? $post_meta[ 'transcripts' ][ $k ][ 'text' ] : '', "webcomic_transcript[{$k}]", array( 'media_buttons' => false, 'teeny' => true ) ); ?></div>
+							<div id="webcomic_transcript[webcomic_lang_<?php echo $k; ?>]" style="celar:both">
+								<style scoped>.form-field input{width:auto}</style>
+								<?php wp_editor( ( isset( $post_meta[ 'transcripts' ][ $k ][ 'text' ] ) ) ? $post_meta[ 'transcripts' ][ $k ][ 'text' ] : '', "webcomic_transcript[{$k}]", array( 'media_buttons' => false, 'teeny' => true ) ); ?>
+							</div>
 							<input type="hidden" name="webcomic_transcript_author[<?php echo $k; ?>]" value="<?php if ( !empty( $post_meta[ 'transcripts' ][ $k ][ 'author' ] ) ) echo $post_meta[ 'transcripts' ][ $k ][ 'author' ]; else echo $current_user->display_name; ?>">
 							<input type="hidden" name="webcomic_transcript_time[<?php echo $k; ?>]" value="<?php if ( !empty( $post_meta[ 'transcripts' ][ $k ][ 'time' ] ) ) echo $post_meta[ 'transcripts' ][ $k ][ 'time' ]; else echo time(); ?>">
 							<textarea name="webcomic_transcript_backup[<?php echo $k; ?>]" style="display:none"><?php echo ( !empty( $post_meta[ 'transcripts' ][ $k ][ 'backup' ] ) ) ? $post_meta[ 'transcripts' ][ $k ][ 'backup' ] : ''; ?></textarea>
