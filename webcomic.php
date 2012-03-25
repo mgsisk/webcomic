@@ -418,9 +418,11 @@ class webcomic extends mgs_core {
 			}
 		}
 		
+		$r = apply_filters( 'webcomic_get_relative', $r, $id, $taxonomy, $terms );
+		
 		wp_cache_add( $ck, $r, 'get_relative_webcomics' );
 		
-		return apply_filters( 'webcomic_get_relative', $r, $id, $taxonomy, $terms );
+		return $r;
 	}
 	
 	/**
@@ -815,9 +817,11 @@ class webcomic extends mgs_core {
 		if ( empty( $query ) )
 			return false;
 		
+		$query = apply_filters( 'webcomic_get_buffer', $query, $term, $taxonomy );
+		
 		wp_cache_add( $ck, $query, 'get_buffer_webcomics' );
 		
-		return apply_filters( 'webcomic_get_buffer', $query, $term, $taxonomy );
+		return $query;
 	}
 	
 	/**
@@ -1865,9 +1869,11 @@ class webcomic extends mgs_core {
 			}
 		}
 		
+		$r = apply_filters( 'webcomic_get_relative_terms', $r, $taxonomy, $term, $orderby );
+		
 		wp_cache_add( $ck, $r, 'get_relative_webcomic_terms' );
 		
-		return apply_filters( 'webcomic_get_relative_terms', $r, $taxonomy, $term, $orderby );
+		return $r;
 	}
 	
 	/**
