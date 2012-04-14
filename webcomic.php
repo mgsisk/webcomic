@@ -60,8 +60,6 @@ class webcomic extends mgs_core {
 	 * @since 3
 	 */
 	public function install() {
-		$this->domain();
-		
 		$this->option( array(
 			'version'             => $this->version,
 			'default_collection'  => false,
@@ -121,8 +119,6 @@ class webcomic extends mgs_core {
 	 * @since 3
 	 */
 	public function upgrade() {
-		$this->domain();
-		
 		$this->option( 'version', $this->version );
 		
 		if ( !is_array( $this->option( 'term_meta' ) ) )
@@ -164,8 +160,6 @@ class webcomic extends mgs_core {
 	 */
 	public function uninstall() {
 		global $wpdb;
-		
-		$this->domain();
 		
 		$cat = ( int ) get_option( 'default_category' );
 		
@@ -475,8 +469,6 @@ class webcomic extends mgs_core {
 		
 		global $post;
 		
-		$this->domain();
-		
 		switch ( $key ) {
 			case 'random'       : $label = '<span>' . __( '&infin; Random &infin;', 'webcomic' ) . '</span>'; break;
 			case 'first'        :
@@ -547,8 +539,6 @@ class webcomic extends mgs_core {
 	 */
 	public function get_purchase_webcomic_link( $format, $link, $id = false ) {
 		global $post;
-		
-		$this->domain();
 		
 		if ( !$post && !$id )
 			return false;
@@ -626,8 +616,6 @@ class webcomic extends mgs_core {
 		
 		if ( ( !$post && !$id ) || empty( $wc ) || is_wp_error( $wc ) || !is_singular() || 'webcomic_post' != $post->post_type )
 			return false;
-		
-		$this->domain();
 		
 		$id = ( intval( $id ) > 0 ) ? $id : $post->ID;
 		
@@ -904,8 +892,6 @@ class webcomic extends mgs_core {
 	 */
 	public function get_webcomic_verify_form( $label = false ) {
 		global $post;
-		
-		$this->domain();
 		
 		$i = 1;
 		$day = $year = false;
@@ -1721,8 +1707,6 @@ class webcomic extends mgs_core {
 		if ( empty( $terms ) || !$this->verify() )
 			return false;
 		
-		$this->domain();
-		
 		if ( $separator )
 			$format = false;
 		elseif ( !$format )
@@ -1919,8 +1903,6 @@ class webcomic extends mgs_core {
 		if ( !( $term = ( $term ) ? $term : get_query_var( $taxonomy ) ) || !( $ids = $this->get_relative_webcomic_terms( $taxonomy, $term, $orderby, $hide_empty ) ) || !$ids[ $key ] )
 			return false;
 		
-		$this->domain();
-		
 		if ( 'webcomic_storyline' == $taxonomy )
 			$l = __( 'Storyline', 'webcomic' );
 		elseif ( 'webcomic_character' == $taxonomy )
@@ -2004,8 +1986,6 @@ class webcomic extends mgs_core {
 		
 		if ( empty( $terms ) )
 			return false;
-		
-		$this->domain();
 		
 		if ( $separator )
 			$format = false;
@@ -2702,7 +2682,7 @@ class webcomic extends mgs_core {
 	public function hook_init() {
 		global $wp_rewrite;
 		
-		$this->domain();
+		load_plugin_textdomain( 'webcomic', '', dirname( plugin_basename( __FILE__ ) ) . '/webcomic-includes/languages' );
 		
 		$rewrite = array();
 		
@@ -3222,8 +3202,6 @@ class webcomic extends mgs_core {
 	 * @since 3
 	 */
 	public function hook_the_content( $content ) {
-		$this->domain();
-		
 		global $post;
 		
 		if ( 'webcomic_post' == get_post_type( $post ) ) {
@@ -3590,8 +3568,6 @@ class webcomic extends mgs_core {
 	public function hook_webcomic_buffer_alert() {
 		if ( !$this->option( 'buffer_toggle' ) )
 			return false;
-		
-		$this->domain();
 		
 		global $wpdb;
 		
