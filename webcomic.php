@@ -2257,8 +2257,7 @@ class webcomic extends mgs_core {
 						
 						$l .= '<li class="webcomic-archive-' . $group . ' webcomic-archive-' . $group . '-' . str_replace( ' ', '-', get_the_time( $f, $id ) ) . '"><a href="' . $u . '"><span>' . get_the_time( $f, $id ) . '</span></a><' . $x . 'l class="webcomic-archive-items">';
 						$d  = get_the_time( $f, $id );
-					} else
-						$l .= '</li>';
+					}
 					
 					if ( $image ) {
 						$link = $wc = $img = false;
