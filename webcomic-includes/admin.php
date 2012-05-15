@@ -4283,7 +4283,7 @@ class webcomic_admin extends webcomic {
 				$url       = $this->directory( 'url', $wc->slug );
 				$tabs      = $abs . 'thumbs/';
 				$turl      = $url . 'thumbs/';
-				$files     = glob( $abs . '*.*' );
+				$files     = ( array ) glob( $abs . '*.*' );
 				$posts     = get_objects_in_term( $wc->term_id, 'webcomic_collection' );
 				$term_meta = $this->option( 'term_meta' );
 					
