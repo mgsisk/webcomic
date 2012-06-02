@@ -1,0 +1,963 @@
+<?php
+/** Contains the WebcomicHelp class.
+ * 
+ * @package Webcomic
+ */
+
+/** Provide contextual assistance.
+ * 
+ * @package Webcomic
+ */
+class WebcomicHelp extends Webcomic {
+	/** Add contextual help information.
+	 * 
+	 * @param object $screen Current screen object.
+	 * @uses WebcomicHelp::sidebar()
+	 * @uses WebcomicHelp::media_sizes()
+	 * @uses WebcomicHelp::generator_overview()
+	 * @uses WebcomicHelp::settings_general()
+	 * @uses WebcomicHelp::settings_collections()
+	 * @uses WebcomicHelp::transcripts_overview()
+	 * @uses WebcomicHelp::transcripts_screen()
+	 * @uses WebcomicHelp::transcripts_actions()
+	 * @uses WebcomicHelp::transcripts_bulk()
+	 * @uses WebcomicHelp::edit_transcript_customize()
+	 * @uses WebcomicHelp::edit_transcript_editor()
+	 * @uses WebcomicHelp::edit_transcript_publish()
+	 * @uses WebcomicHelp::edit_transcript_parent()
+	 * @uses WebcomicHelp::webcomics_overview()
+	 * @uses WebcomicHelp::webcomics_screen()
+	 * @uses WebcomicHelp::webcomics_actions()
+	 * @uses WebcomicHelp::webcomics_bulk()
+	 * @uses WebcomicHelp::edit_webcomic_customize()
+	 * @uses WebcomicHelp::edit_webcomic_media()
+	 * @uses WebcomicHelp::edit_webcomic_editor()
+	 * @uses WebcomicHelp::edit_webcomic_publish()
+	 * @uses WebcomicHelp::edit_webcomic_commerce()
+	 * @uses WebcomicHelp::edit_webcomic_transcripts()
+	 * @uses WebcomicHelp::edit_webcomic_discussion()
+	 * @uses WebcomicHelp::storylines_overview()
+	 * @uses WebcomicHelp::storylines_adding()
+	 * @uses WebcomicHelp::storylines_moving()
+	 * @uses WebcomicHelp::characters_overview()
+	 * @uses WebcomicHelp::characters_adding()
+	 * @uses WebcomicHelp::languages_overview()
+	 * @uses WebcomicHelp::languages_adding()
+	 * @uses WebcomicHelp::collection_settings_information()
+	 * @uses WebcomicHelp::collection_settings_general()
+	 * @uses WebcomicHelp::collection_settings_commerce()
+	 * @uses WebcomicHelp::collection_settings_access()
+	 * @uses WebcomicHelp::collection_settings_slugs()
+	 * @uses WebcomicHelp::collection_settings_twitter()
+	 */
+	public function __construct( $screen ) {
+		if ( 'options-media' !== $screen->id ) {
+			$screen->set_help_sidebar( $this->sidebar() );
+		}
+		
+		if ( 'options-media' === $screen->id ) {
+			$screen->add_help_tab( array(
+				'id'      => 'webcomic-sizes',
+				'title'   => __( 'Additional Image Sizes', 'webcomic' ),
+				'content' => $this->media_sizes()
+			) );
+		} else if ( 'media_page_webcomic-generator' === $screen->id ) {
+			$screen->add_help_tab( array(
+				'id'      => 'overview',
+				'title'   => __( 'Overview', 'webcomic' ),
+				'content' => $this->generator_overview()
+			) );
+		} else if ( 'settings_page_webcomic' === $screen->id ) {
+			$screen->add_help_tab( array(
+				'id'      => 'general-settings',
+				'title'   => __( 'General Settings', 'webcomic' ),
+				'content' => $this->settings_general()
+			) );
+			
+			$screen->add_help_tab( array(
+				'id'      => 'collections-list',
+				'title'   => __( 'Collections', 'webcomic' ),
+				'content' => $this->settings_collections()
+			) );
+		} else if ( 'edit-webcomic_transcript' === $screen->id ) {
+			$screen->add_help_tab( array(
+				'id'      => 'overview',
+				'title'   => __( 'Overview', 'webcomic' ),
+				'content' => $this->transcripts_overview()
+			) );
+			
+			$screen->add_help_tab( array(
+				'id'      => 'screen-content',
+				'title'   => __( 'Screen Content', 'webcomic' ),
+				'content' => $this->transcripts_screen()
+			) );
+			
+			$screen->add_help_tab( array(
+				'id'      => 'available-actions',
+				'title'   => __( 'Available Actions', 'webcomic' ),
+				'content' => $this->transcripts_actions()
+			) );
+			
+			$screen->add_help_tab( array(
+				'id'      => 'bulk-actions',
+				'title'   => __( 'Bulk Actions', 'webcomic' ),
+				'content' => $this->transcripts_bulk()
+			) );
+		} else if( 'webcomic_transcript' === $screen->id ) {
+			$screen->add_help_tab( array(
+				'id'      => 'customizing-this-display',
+				'title'   => __( 'Customizing This Display', 'webcomic' ),
+				'content' => $this->edit_transcript_customize()
+			) );
+			
+			$screen->add_help_tab( array(
+				'id'      => 'transcript-editor',
+				'title'   => __( 'Transcript Editor', 'webcomic' ),
+				'content' => $this->edit_transcript_editor()
+			) );
+			
+			$screen->add_help_tab( array(
+				'id'      => 'publish-box',
+				'title'   => __( 'Publish Box', 'webcomic' ),
+				'content' => $this->edit_transcript_publish()
+			) );
+			
+			$screen->add_help_tab( array(
+				'id'      => 'parent-webcomic',
+				'title'   => __( 'Parent Webcomic', 'webcomic' ),
+				'content' => $this->edit_transcript_parent()
+			) );
+			
+			$screen->add_help_tab( array(
+				'id'      => 'transcript-authors',
+				'title'   => __( 'Transcript Authors', 'webcomic' ),
+				'content' => $this->edit_transcript_authors()
+			) );
+		} else if ( "edit-{$screen->post_type}" === $screen->id ) {
+			$screen->add_help_tab( array(
+				'id'      => 'overview',
+				'title'   => __( 'Overview', 'webcomic' ),
+				'content' => $this->webcomics_overview( $screen )
+			) );
+			
+			$screen->add_help_tab( array(
+				'id'      => 'screen-content',
+				'title'   => __( 'Screen Content', 'webcomic' ),
+				'content' => $this->webcomics_screen()
+			) );
+			
+			$screen->add_help_tab( array(
+				'id'      => 'available-actions',
+				'title'   => __( 'Available Actions', 'webcomic' ),
+				'content' => $this->webcomics_actions()
+			) );
+			
+			$screen->add_help_tab( array(
+				'id'      => 'bulk-actions',
+				'title'   => __( 'Bulk Actions', 'webcomic' ),
+				'content' => $this->webcomics_bulk()
+			) );
+		} else if ( $screen->post_type === $screen->id ) {
+			$screen->add_help_tab( array(
+				'id'      => 'customizing-this-display',
+				'title'   => __( 'Customizing This Display', 'webcomic' ),
+				'content' => $this->edit_webcomic_customize()
+			) );
+			
+			$screen->add_help_tab( array(
+				'id'      => 'media-management',
+				'title'   => __( 'Media Management', 'webcomic' ),
+				'content' => $this->edit_webcomic_media()
+			) );
+			
+			$screen->add_help_tab( array(
+				'id'      => 'title-and-post-editor',
+				'title'   => __( 'Title and Post Editor', 'webcomic' ),
+				'content' => $this->edit_webcomic_editor()
+			) );
+			
+			$screen->add_help_tab( array(
+				'id'      => 'publish-box',
+				'title'   => __( 'Publish Box', 'webcomic' ),
+				'content' => $this->edit_webcomic_publish()
+			) );
+			
+			$screen->add_help_tab( array(
+				'id'      => 'comerce-settings',
+				'title'   => __( 'Commerce Settings', 'webcomic' ),
+				'content' => $this->edit_webcomic_commerce()
+			) );
+			
+			$screen->add_help_tab( array(
+				'id'      => 'transcripts-settings',
+				'title'   => __( 'Transcripts Settings', 'webcomic' ),
+				'content' => $this->edit_webcomic_transcripts()
+			) );
+			
+			$screen->add_help_tab( array(
+				'id'      => 'discussion-settings',
+				'title'   => __( 'Discussion Settings', 'webcomic' ),
+				'content' => $this->edit_webcomic_discussion()
+			) );
+		} else if ( "edit-{$screen->post_type}_storyline" === $screen->id and empty( $_GET[ 'tag_ID' ] ) ) {
+			$screen->add_help_tab( array(
+				'id'      => 'overview',
+				'title'   => __( 'Overview', 'webcomic' ),
+				'content' => $this->storylines_overview()
+			) );
+			
+			$screen->add_help_tab( array(
+				'id'      => 'adding-storylines',
+				'title'   => __( 'Adding Storylines', 'webcomic' ),
+				'content' => $this->storylines_adding()
+			) );
+			
+			$screen->add_help_tab( array(
+				'id'      => 'moving-storylines',
+				'title'   => __( 'Moving Storylines', 'webcomic' ),
+				'content' => $this->storylines_moving()
+			) );
+		} else if ( "edit-{$screen->post_type}_character" === $screen->id and empty( $_GET[ 'tag_ID' ] ) ) {
+			$screen->add_help_tab( array(
+				'id'      => 'overview',
+				'title'   => __( 'Overview', 'webcomic' ),
+				'content' => $this->characters_overview()
+			) );
+			
+			$screen->add_help_tab( array(
+				'id'      => 'adding-characters',
+				'title'   => __( 'Adding Characters', 'webcomic' ),
+				'content' => $this->characters_adding()
+			) );
+		} else if ( 'edit-webcomic_language' === $screen->id and empty( $_GET[ 'tag_ID' ] ) ) {
+			$screen->add_help_tab( array(
+				'id'      => 'overview',
+				'title'   => __( 'Overview', 'webcomic' ),
+				'content' => $this->languages_overview()
+			) );
+			
+			$screen->add_help_tab( array(
+				'id'      => 'adding-languages',
+				'title'   => __( 'Adding Languages', 'webcomic' ),
+				'content' => $this->languages_adding()
+			) );
+		} else if ( "{$screen->post_type}_page_{$screen->post_type}-options" === $screen->id ) {
+			$screen->add_help_tab( array(
+				'id'      => 'general-settings',
+				'title'   => __( 'General Settings', 'webcomic' ),
+				'content' => $this->collection_settings_general()
+			) );
+			
+			$screen->add_help_tab( array(
+				'id'      => 'transcript-settings',
+				'title'   => __( 'Transcript Settings', 'webcomic' ),
+				'content' => $this->collection_settings_transcripts( $screen )
+			) );
+			
+			$screen->add_help_tab( array(
+				'id'      => 'commerce-settings',
+				'title'   => __( 'Commerce Settings', 'webcomic' ),
+				'content' => $this->collection_settings_commerce()
+			) );
+			
+			$screen->add_help_tab( array(
+				'id'      => 'access-settings',
+				'title'   => __( 'Access Settings', 'webcomic' ),
+				'content' => $this->collection_settings_access()
+			) );
+			
+			$screen->add_help_tab( array(
+				'id'      => 'post-settings',
+				'title'   => __( 'Post Settings', 'webcomic' ),
+				'content' => $this->collection_settings_posts()
+			) );
+			
+			$screen->add_help_tab( array(
+				'id'      => 'permalink-settings',
+				'title'   => __( 'Permalink Settings', 'webcomic' ),
+				'content' => $this->collection_settings_permalinks( $screen )
+			) );
+			
+			$screen->add_help_tab( array(
+				'id'      => 'twitter-settings',
+				'title'   => __( 'Twitter Settings', 'webcomic' ),
+				'content' => $this->collection_settings_twitter( $screen )
+			) );
+		}
+	}
+	
+	/** Return help sidebar.
+	 * 
+	 * @return string
+	 */
+	private function sidebar() {
+		return sprintf( '
+			<p><strong>%s</strong></p>
+			<p><a href="//vimeo.com/channels/webcomic" target="_blank">%s</a></p>
+			<p><a href="//webcomic.nu/support" target="_blank">%s</a></p>
+			<p><a href="//webcomic.nu/docs" target="_blank">%s</a></p>
+			<p><a href="//github.com/mgsisk/webcomic/issues" target="_blank">%s</a></p>
+			<hr>
+			<p><a href="support@webcomic.nu">%s</a></p>',
+			__( 'For more information:', 'webcomic' ),
+			__( 'Video Tutorials', 'webcomic' ),
+			__( 'Support Forum', 'webcomic' ),
+			__( 'Technical Documentation', 'webcomic' ),
+			__( 'Issue Tracker', 'webcomic' ),
+			__( 'Email Support', 'webcomic' )
+		);
+	}
+	
+	/** Return webcomic generator overview help.
+	 * 
+	 * @return string
+	 */
+	private function generator_overview() {
+		return sprintf( '
+			<p>%s</p>
+			<ul>
+				<li>%s</li>
+				<li>%s</li>
+				<li>%s</li>
+				<li>%s</li>
+			</ul>
+			<p>%s</p>',
+			__( 'The Webcomic Generator can assist you in publishing a large backlog of webcomics. The right column lists all of the images in your Media Library that are not attached to a post. Select the files you would like to publish using the checkboxes, then adjust the publish settings on the left:', 'webcomic' ),
+			__( '<strong>Collection</strong> specifies the collection that all of the generated webcomics will belong to.', 'webcomic' ),
+			__( '<strong>Start on&hellip;</strong> specifies the the date to begin publishing the selected images. The first selected image in the list will be published on this date.', 'webcomic' ),
+			__( '<strong>Publish every&hellip;</strong> allows you to select which days of the week to publish subsequent files. The generator will work through the list from top to bottom, publishing selected files based on the days you select.', 'webcomic' ),
+			__( '<strong>Save posts as drafts</strong> will cause all of the webcomics created by the generator to be drafted. These posts will not appear on your site until you publish them.', 'webcomic' ),
+			__( 'Webcomics created by the generator will use the image filename for the webcomic title.', 'webcomic' )
+		);
+	}
+	
+	/** Return transcript overview help.
+	 * 
+	 * @return string
+	 */
+	private function transcripts_overview() {
+		return sprintf( '<p>%s</p>', __( 'This screen provides access to all of your webcomic transcripts. You can customize the display of this screen to suit your workflow.', 'webcomic' ) );
+	}
+	
+	/** Return transcript screen help.
+	 * 
+	 * @return string
+	 */
+	private function transcripts_screen() {
+		return sprintf( '
+			<p>%s</p>
+			<ul>
+				<li>%s</li>
+				<li>%s</li>
+				<li>%s</li>
+				<li>%s</li>
+			</ul>',
+			__( "You can customize the display of this screen's contents in a number of ways:", 'webcomic' ),
+			__( 'You can hide/display columns based on your needs and decide how many transcripts to list per screen using the Screen Options tab.', 'webcomic' ),
+			__( 'You can filter the list of transcripts by status using the text links in the upper left to show All, Published, Draft, Trashed, or Orphaned transcripts. The default view is to show all transcripts.', 'webcomic' ),
+			__( 'You can view transcripts in a simple title list or with an excerpt. Choose the view you prefer by clicking on the icons at the top of the list on the right.', 'webcomic' ),
+			__( 'You can refine the list to show only transcripts containing a specific language or from a specific month by using the dropdown menus above the transcripts list. Click the Filter button after making your selection. You also can refine the list by clicking on the transcript author or language in the transcripts list.', 'webcomic' )
+		);
+	}
+	
+	/** Return transcript actions help.
+	 * 
+	 * @return string
+	 */
+	private function transcripts_actions() {
+		return sprintf( '
+			<p>%s</p>
+			<ul>
+				<li>%s</li>
+				<li>%s</li>
+				<li>%s</li>
+			</ul>',
+			__( 'Hovering over a row in the transcripts list will display action links that allow you to manage your transcript. You can perform the following actions:', 'webcomic' ),
+			__( '<strong>Edit</strong> takes you to the editing screen for that transcript. You can also reach that screen by clicking on the transcript title.', 'webcomic' ),
+			__( '<strong>Quick Edit</strong> provides inline access to the metadata of your transcript, allowing you to update transcript details without leaving this screen.', 'webcomic' ),
+			__( '<strong>Trash</strong> removes your transcript from this list and places it in the trash, from which you can permanently delete it.', 'webcomic' )
+		);
+	}
+	
+	/** Return transcript bulk help.
+	 * 
+	 * @return string
+	 */
+	private function transcripts_bulk() {
+		return sprintf( '
+			<p>%s</p>
+			<p>%s</p>',
+			__( 'You can also edit or move multiple transcripts to the trash at once. Select the transcripts you want to act on using the checkboxes, then select the action you want to take from the Bulk Actions menu and click Apply.', 'webcomic' ),
+			__( 'When using Bulk Edit, you can change the metadata (languages, author, etc.) for all selected transcripts at once. To remove a transcript from the grouping, just click the x next to its name in the Bulk Edit area that appears.', 'webcomic' )
+		);
+	}
+	
+	/** Return transcript customize help.
+	 * 
+	 * @return string
+	 */
+	private function edit_transcript_customize() {
+		return sprintf( '
+			<p>%s</p>',
+			__( 'The title field and the big Transcript Editing Area are fixed in place, but you can reposition all the other boxes using drag and drop, and can minimize or expand them by clicking the title bar of each box. Use the Screen Options tab to unhide more boxes (Slug, Author, Revisions) or to choose a 1- or 2-column layout for this screen.', 'webcomic' )
+		);
+	}
+	
+	/** Return transcript editor help.
+	 * 
+	 * @return string
+	 */
+	private function edit_transcript_editor() {
+		return sprintf( '
+			<p>%s</p>',
+			__( 'Enter the text for your transcript. There are two modes of editing: Visual and HTML. Choose the mode by clicking on the appropriate tab. Visual mode gives you a WYSIWYG editor. Click the last icon in the row to get a second row of controls. The HTML mode allows you to enter raw HTML along with your transcript text. You can insert media files by clicking the icons above the transcript editor and following the directions. You can go to the distraction-free writing screen via the Fullscreen icon in Visual mode (second to last in the top row) or the Fullscreen button in HTML mode (last in the row). Once there, you can make buttons visible by hovering over the top area. Exit Fullscreen back to the regular transcript editor.', 'webcomic' )
+		);
+	}
+	
+	/** Return transcript publish help.
+	 * 
+	 * @return string
+	 */
+	private function edit_transcript_publish() {
+		return sprintf( '
+			<p>%s</p>',
+			__( 'You can set the terms of publishing your transcript in the Publish box. For Status, Visibility, and Publish (immediately), click on the Edit link to reveal more options. Visibility includes options for password-protecting a transcript. Publish (immediately) allows you to set a future or past date and time, so you can schedule a transcript to be published in the future or backdate a transcript.', 'webcomic' )
+		);
+	}
+	
+	/** Return transcript parent help.
+	 * 
+	 * @return string
+	 */
+	private function edit_transcript_parent() {
+		return sprintf( '
+			<p>%s</p>',
+			__( 'You can set the webcomic your transcript is related to in the Parent Webcomic box. First select the collection the webcomic belgons to, then the webcomic in that collection your transcript is related to. Any attached imagery will be loaded so you can view the webcomic as you write your transcript.', 'webcomic' )
+		);
+	}
+	
+	/** Return transcript authors help.
+	 * 
+	 * @return string
+	 */
+	private function edit_transcript_authors() {
+		return sprintf( '
+			<p>%s</p>',
+			__( 'Identified but unregistered users that submit or improve a transcript will be listed in the Transcript Authors box. These additional authors may be displayed alongside (or instead of) the registered author to provide appropriate transcription credit on your site. Authors may be removed by checking the box next to their name and saving the transcript. Additional authors may be added by clicking the <em>Add Author</em> button and filling in the authors name; email, url, IP address, and transcription date are optional.', 'webcomic' )
+		);
+	}
+	
+	/** Return webcomic overview help.
+	 * 
+	 * @param object $screen Current screen object.
+	 * @return string
+	 * @uses Webcomic::$config
+	 */
+	private function webcomics_overview( $screen ) {
+		return sprintf( '<p>%s</p>', sprintf( __( 'This screen provides access to all of your %s webcomics. You can customize the display of this screen to suit your workflow.', 'webcomic' ), esc_html( self::$config[ 'collections' ][ $screen->post_type ][ 'name' ] ) ) );
+	}
+	
+	/** Return webcomic screen help.
+	 * 
+	 * @return string
+	 */
+	private function webcomics_screen() {
+		return sprintf( '
+			<p>%s</p>
+			<ul>
+				<li>%s</li>
+				<li>%s</li>
+				<li>%s</li>
+				<li>%s</li>
+			</ul>',
+			__( "You can customize the display of this screen's contents in a number of ways:", 'webcomic' ),
+			__( 'You can hide/display columns based on your needs and decide how many webcomics to list per screen using the Screen Options tab.', 'webcomic' ),
+			__( 'You can filter the list of webcomics by status using the text links in the upper left to show All, Published, Draft, Trashed, or Orphaned webcomics. The default view is to show all webcomics.', 'webcomic' ),
+			__( 'You can view webcomics in a simple title list or with an excerpt. Choose the view you prefer by clicking on the icons at the top of the list on the right.', 'webcomic' ),
+			__( 'You can refine the list to show only webcomics in a particular storyline or from a specific month by using the dropdown menus above the webcomics list. Click the Filter button after making your selection. You also can refine the list by clicking on the webcomic author, storyline, or character in the webcomics list.', 'webcomic' )
+		);
+	}
+	
+	/** Return webcomic actions help.
+	 * 
+	 * @return string
+	 */
+	private function webcomics_actions() {
+		return sprintf( '
+			<p>%s</p>
+			<ul>
+				<li>%s</li>
+				<li>%s</li>
+				<li>%s</li>
+				<li>%s</li>
+			</ul>',
+			__( 'Hovering over a row in the webcomics list will display action links that allow you to manage your webcomic. You can perform the following actions:', 'webcomic' ),
+			__( '<strong>Edit</strong> takes you to the editing screen for that webcomic. You can also reach that screen by clicking on the webcomic title.', 'webcomic' ),
+			__( '<strong>Quick Edit</strong> provides inline access to the metadata of your webcomic, allowing you to update webcomic details without leaving this screen.', 'webcomic' ),
+			__( '<strong>Trash</strong> removes your webcomic from this list and places it in the trash, from which you can permanently delete it.', 'webcomic' ),
+			__( "<strong>Preview</strong> will show you what your draft webcomic will look like if you publish it. View will take you to your live site to view the webcomic. Which link is available depends on your webcomic's status.", 'webcomic' )
+		);
+	}
+	
+	/** Return webcomic bulk help.
+	 * 
+	 * @return string
+	 */
+	private function webcomics_bulk() {
+		return sprintf( '
+			<p>%s</p>
+			<p>%s</p>',
+			__( 'You can also edit or move multiple webcomics to the trash at once. Select the webcomics you want to act on using the checkboxes, then select the action you want to take from the Bulk Actions menu and click Apply.', 'webcomic' ),
+			__( 'When using Bulk Edit, you can change the metadata (storylines, author, etc.) for all selected webcomics at once. To remove a webcomic from the grouping, just click the x next to its name in the Bulk Edit area that appears.', 'webcomic' )
+		);
+	}
+	
+	/** Return webcomic customize help.
+	 * 
+	 * @return string
+	 */
+	private function edit_webcomic_customize() {
+		return sprintf( '
+			<p>%s</p>',
+			__( 'The title field and the big Webcomic Editing Area are fixed in place, but you can reposition all the other boxes using drag and drop, and can minimize or expand them by clicking the title bar of each box. Use the Screen Options tab to unhide more boxes (Excerpt, Send Trackbacks, Custom Fields, Discussion, Slug, Author) or to choose a 1- or 2-column layout for this screen.', 'webcomic' )
+		);
+	}
+	
+	/** Return webcomic media help.
+	 * 
+	 * @return string
+	 */
+	private function edit_webcomic_media() {
+		return sprintf( '
+			<p>%s</p>',
+			__( "To attach a file to your webcomic, click <em>Add Attachments</em> in the Webcomic Media box or the <em>Upload/Insert</em> icon above the webcomic editor and follow the instructions. Webcomic will automatically recognize any images attached to your webcomic, so as long as you've enabled the <em>Integrate</em> option, are using an official Webcomic theme, or have added Webcomic's template tags to your theme you do not need to insert the images into your post. The Webcomic Media box will show previews of all the images attached to your webcomic after the media popup has been dismissed.", 'webcomic' )
+		);
+	}
+	
+	/** Return webcomic editor help.
+	 * 
+	 * @return string
+	 */
+	private function edit_webcomic_editor() {
+		return sprintf( '
+			<p>%s</p>
+			<p>%s</p>',
+			__( "<strong>Title</strong> - Enter a title for your webcomic. After you enter a title, you'll see the permalink below, which you can edit.", 'webcomic' ),
+			__( '<strong>Post Editor</strong> - Enter any accompanying text for your webcomic. There are two modes of editing: Visual and HTML. Choose the mode by clicking on the appropriate tab. Visual mode gives you a WYSIWYG editor. Click the last icon in the row to get a second row of controls. The HTML mode allows you to enter raw HTML along with your webcomic text. You can go to the distraction-free writing screen via the Fullscreen icon in Visual mode (second to last in the top row) or the Fullscreen button in HTML mode (last in the row). Once there, you can make buttons visible by hovering over the top area. Exit Fullscreen back to the regular webcomic editor.', 'webcomic' )
+		);
+	}
+	
+	/** Return webcomic publish help.
+	 * 
+	 * @return string
+	 */
+	private function edit_webcomic_publish() {
+		return sprintf( '
+			<p>%s</p>',
+			__( '<strong>Publish</strong> - You can set the terms of publishing your webcomic in the Publish box. For Status, Visibility, and Publish (immediately), click on the Edit link to reveal more options. Visibility includes options for password-protecting a webcomic. Publish (immediately) allows you to set a future or past date and time, so you can schedule a webcomic to be published in the future or backdate a webcomic.', 'webcomic' )
+		);
+	}
+	
+	/** Return webcomic commerce help.
+	 * 
+	 * @return string
+	 */
+	private function edit_webcomic_commerce() {
+		return sprintf( '
+			<p>%s</p>
+			<p>%s</p>',
+			__( "<strong>Sell Prints</strong> - Check this option to sell prints of this webcomic using your collection commerce settings. This option is unavailable if you haven't specified a business on the collection settings page.", 'webcomic' ),
+			__( 'The table in the commerce box displays the default prices and shipping for domestic, international, and original prints, as well as the total cost of each. You can adjust these prices by setting a premium or discount, and the total will adjust to show what the new price will be when you update the webcomic. Uncheck the <em>Original</em> print option if the original print (for traditional media webcomics) has been sold or is otherwise unavailable.', 'webcomic' )
+		);
+	}
+	
+	/** Return webcomic transcripts help.
+	 * 
+	 * @return string
+	 */
+	private function edit_webcomic_transcripts() {
+		return sprintf( '
+			<p>%s</p>
+			<p>%s</p>',
+			__( '<strong>Allow Transcribing</strong> - Check this option to allow user transcribing of this webcomic.', 'webcomic' ),
+			__( 'The list in the transcripts box displays the transcripts submitted for this webcomic, along with the transcript status, who it was submitted by, when it was submitted, what languages it contains, and a preview of the transcript. Click a transcript title to edit that transcript.', 'webcomic' )
+		);
+	}
+	
+	/** Return webcomic discussion help.
+	 * 
+	 * @return string
+	 */
+	private function edit_webcomic_discussion() {
+		return sprintf( '
+			<p>%s</p>
+			<p>%s</p>',
+			__( "<strong>Send Trackbacks</strong> - Trackbacks are a way to notify legacy blog systems that you've linked to them. Enter the URL(s) you want to send trackbacks to. If you link to other WordPress sites they'll be notified automatically using pingbacks, and this field is unnecessary.", 'webcomic' ),
+			__( '<strong>Discussion</strong> - You can turn comments and pings on or off, and if there are comments on the webcomic, you can see them here and moderate them.', 'webcomic' )
+		);
+	}
+	
+	/** Return storyline overview help.
+	 * 
+	 * @return string
+	 */
+	private function storylines_overview() {
+		return sprintf( '
+			<p>%s</p>',
+			__( 'You can organize your webcomics into story arcs using <strong>storylines</strong>.', 'webcomic' )
+		);
+	}
+	
+	/** Return storyline adding help.
+	 * 
+	 * @return string
+	 */
+	private function storylines_adding() {
+		return sprintf( '
+			<p>%s</p>
+			<ul>
+				<li>%s</li>
+				<li>%s</li>
+				<li>%s</li>
+				<li>%s</li>
+				<li>%s</li>
+			</ul>
+			<p>%s</p>',
+			__( "When adding a new storyline on this screen, you'll fill in the following fields:", 'webcomic' ),
+			__( '<strong>Name</strong> - The name is how it appears on your site.', 'webcomic' ),
+			__( '<strong>Slug</strong> - The "slug" is the URL-friendly version of the name. It is usually all lowercase and contains only letters, numbers, and hyphens.', 'webcomic' ),
+			__( '<strong>Parent</strong> - Storylines can have a hierarchy. You might have a Chapter 1 storyline, and under that have children storylines for each scene within that storyline. Totally optional. To create a sub-storyline, just choose another storyline from the Parent dropdown.', 'webcomic' ),
+			__( '<strong>Description</strong> - The description is not prominent by default; it may be used in various ways, however.', 'webcomic' ),
+			__( '<strong>Cover</strong> - The cover is a representative image that can be displayed on your site. Covers are uploaded to the Media Library.', 'webcomic' ),
+			__( 'You can change the display of this screen using the Screen Options tab to set how many items are displayed per screen and to display/hide columns in the table.', 'webcomic' )
+		);
+	}
+	
+	/** Return moving storylines help.
+	 * 
+	 * @return string
+	 */
+	private function storylines_moving() {
+		return sprintf( '
+			<p>%s</p>
+			',
+			__( "Hovering over a row in the storylines list will display action links that allow you to manage your storyline, including options to rearrange storylines. Use the &uarr; and &darr; arrows to move storylines up or down, respectively. Sub-storylines can only be moved within the list of storylines that share the same parent. To move a storyline outside of it's sublist you should first edit the storyline and change it's parent.", 'webcomic' )
+		);
+	}
+	
+	/** Return characters overview help.
+	 * 
+	 * @return string
+	 */
+	private function characters_overview() {
+		return sprintf( '
+			<p>%s</p>',
+			__( 'You can specify the characrters that appear in your webcomics using <strong>characters</strong>.', 'webcomic' )
+			
+		);
+	}
+	
+	/** Return characters adding help.
+	 * 
+	 * @return string
+	 */
+	private function characters_adding() {
+		return sprintf( '
+			<p>%s</p>
+			<ul>
+				<li>%s</li>
+				<li>%s</li>
+				<li>%s</li>
+				<li>%s</li>
+			</ul>
+			<p>%s</p>',
+			__( "When adding a new character on this screen, you'll fill in the following fields:", 'webcomic' ),
+			__( '<strong>Name</strong> - The name is how it appears on your site.', 'webcomic' ),
+			__( '<strong>Slug</strong> - The "slug" is the URL-friendly version of the name. It is usually all lowercase and contains only letters, numbers, and hyphens.', 'webcomic' ),
+			__( '<strong>Description</strong> - The description is not prominent by default; it may be used in various ways, however.', 'webcomic' ),
+			__( '<strong>Avatar</strong> - The avatar is a representative image that can be displayed on your site. Avatars are uploaded to the Media Library.', 'webcomic' ),
+			__( 'You can change the display of this screen using the Screen Options tab to set how many items are displayed per screen and to display/hide columns in the table.', 'webcomic' )
+		);
+	}
+	
+	/** Return languages overview help.
+	 * 
+	 * @return string
+	 */
+	private function languages_overview() {
+		return sprintf( '
+			<p>%s</p>',
+			__( 'You can specify the language used in your webcomic transcripts using <strong>languages</strong>.', 'webcomic' )
+			
+		);
+	}
+	
+	/** Return languages adding help.
+	 * 
+	 * @return string
+	 */
+	private function languages_adding() {
+		return sprintf( '
+			<p>%s</p>
+			<ul>
+				<li>%s</li>
+				<li>%s</li>
+				<li>%s</li>
+			</ul>
+			<p>%s</p>',
+			__( "When adding a new language on this screen, you'll fill in the following fields:", 'webcomic' ),
+			__( '<strong>Name</strong> - The name is how it appears on your site.', 'webcomic' ),
+			sprintf( __( '<strong>Slug</strong> - The "slug" is the URL-friendly version of the name. It should be an appropriate <a href="%s" target="_blank">language subtag</a>.', 'webcomic' ), 'http://www.iana.org/assignments/language-subtag-registry' ),
+			__( '<strong>Description</strong> - The description is not prominent by default; it may be used in various ways, however.', 'webcomic' ),
+			__( 'You can change the display of this screen using the Screen Options tab to set how many items are displayed per screen and to display/hide columns in the table.', 'webcomic' )
+		);
+	}
+	
+	/** Return collection information settings help.
+	 * 
+	 * @return string
+	 */
+	private function collection_settings_information() {
+		return sprintf( '
+			<p>%s</p>
+			<ul>
+				<li>%s</li>
+				<li>%s</li>
+				<li>%s</li>
+			</ul>'
+		);
+	}
+	
+	/** Return collection general settings help.
+	 * 
+	 * @return string
+	 */
+	private function collection_settings_general() {
+		return sprintf( '
+			<p>%s</p>
+			<ul>
+				<li>%s</li>
+				<li>%s</li>
+				<li>%s</li>
+				<li>%s</li>
+				<li>%s</li>
+				<li>%s</li>
+			</ul>',
+			__( 'These settings allow you to change some of the basic information and features related to your collection:', 'webcomic' ),
+			__( '<strong>Name</strong> - The name is how it appears on your site.', 'webcomic' ),
+			__( '<strong>Description</strong> - The description is not prominent by default; it may be used in various ways, however.', 'webcomic' ),
+			__( '<strong>Poster</strong> - The poster is a representative image that can be displayed on your site. Posters are uploaded to the Media Library.', 'webcomic' ),
+			__( '<strong>Theme</strong> - Determines what theme will be used when a user is viewing a page related to this collection.', 'webcomic' ),
+			__( '<strong>Buffers</strong> - Sends daily email reminders to the specified address starting however many days prior to the buffer expiration you specify.', 'webcomic' ),
+			__( '<strong>Feeds</strong> - Integrates webcomic posts into the main syndication feed and shows a webcomic preview of the specified size in syndication feeds.', 'webcomic' )
+		);
+	}
+	
+	/** Return collection general settings help.
+	 * 
+	 * @return string
+	 */
+	private function collection_settings_transcripts() {
+		return sprintf( '
+			<p>%s</p>
+			<ul>
+				<li>%s</li>
+				<li>%s</li>
+				<li>%s</li>
+				<li>%s</li>
+			</ul>',
+			__( 'These settings allow you to control who can submit webcomic transcripts for this collection:', 'webcomic' ),
+			__( '<strong>Default</strong> - Whether to allow people to transcribe new webcomics. Transcription can also be handled on a webcomicy-by-webcomic basis. Changing this setting does not affect existing webcomics.', 'webcomic' ),
+			__( '<strong>Permission</strong> - Who has permission to transcribe webcomics. Self-identified users must provide a name and valid email address.', 'webcomic' ),
+			__( '<strong>Notification</strong> - Sends a notification whenever a transcript is submitted to the email you specify.', 'webcomic' ),
+			__( '<strong>Languages</strong> - Specifies what languages users may submit transcripts in.', 'webcomic' )
+		);
+	}
+	
+	/** Return collection commerce settings help.
+	 * 
+	 * @return string
+	 */
+	private function collection_settings_commerce() {
+		return sprintf( '
+			<p>%s</p>
+			<ul>
+				<li>%s</li>
+				<li>%s</li>
+				<li>%s</li>
+				<li>%s</li>
+				<li>%s</li>
+				<li>%s</li>
+				<li>%s</li>
+			</ul>',
+			__( 'These settings allow you to accept print purchases and donations via PayPal:', 'webcomic' ),
+			__( '<strong>Business Email</strong> - The email address associated with the PayPal account to use for transactions. All commerce-related features will be unavailable without a valid email address.', 'webcomic' ),
+			__( '<strong>Prints</strong> - Enables print sales and original, traditional-media print sales for new webcomics (print sales can also be handled on a webcomic-by-webcomic basis). These options are disabled without a valid Business Email.', 'webcomic' ),
+			__( '<strong>Sales</strong> -  How to handle print sales. The single item method is faster, but a shopping cart makes it easier for users to purchase multiple prints at once.', 'webcomic' ),
+			__( '<strong>Prices</strong> - The default prices for domestic, international, and original (if you work in traditional media) prints. These prices can be adjusted on a webcomic-by-webcomic basis.', 'webcomic' ),
+			__( '<strong>Shipping</strong> - The cost to ship domestic, international, and original prints. These prices can be adjusted on a webcomic-by-webcomic basis.', 'webcomic' ),
+			__( '<strong>Donation</strong> - Set a specific amount donors must contribute when donating, or leave at zero to allow donors to specify their own donation amount.', 'webcomic' ),
+			__( '<strong>Currency</strong> -  The currency your transactions will use. Note that the Brazilian Real and the Malaysian Ringgit are only supported for in-country PayPal accounts.', 'webcomic' )
+		);
+	}
+	
+	/** Return collection access settings help.
+	 * 
+	 * @return string
+	 */
+	private function collection_settings_access() {
+		return sprintf( '
+			<p>%s</p>
+			<ul>
+				<li>%s</li>
+				<li>%s</li>
+			</ul>',
+			__( 'These settings control who can view pages related to this collection:', 'webcomic' ),
+			__( '<strong>Age</strong> - Requires that users be at least as many years old as you specify to view webcomics in this collection. Unverified users will be redirected to an age verification form when attempting to view webcomics in this collection.', 'webcomic' ),
+			__( '<strong>Role</strong> - Requires that users be registered and logged in to view webcomics in this collection. You may optionally select one or more specific roles a user must belong to.', 'webcomic' )
+		);
+	}
+	
+	/** Return collection post settings help.
+	 * 
+	 * @return string
+	 */
+	private function collection_settings_posts() {
+		return sprintf( '
+			<p>%s</p>',
+			__( "These settings control some of the basic features of your webcomic posts. Disabling a feature will completely remove it's associated box from the Add New Webcomic and Edit Webcomic screens.  When titles are disabled Webcomic will automatically set the title of new webcomics to their post ID. Featured images requires an active theme with featured image support.", 'webcomic' )
+		);
+	}
+	
+	/** Return collection permalink settings help.
+	 * 
+	 * @param object $screen Current screen object.
+	 * @return string
+	 */
+	private function collection_settings_permalinks( $screen ) {
+		return sprintf( '
+			<p>%s</p>
+			<p>%s</p>',
+			sprintf( __( 'These settings affect the URL structure of the collection archive, webcomics, storylines, and characters. To the right of each input is an example URL that will update when the slug options are changed. The slug for single webcomics may accept a number of tags, including %%year%%, %%monthnum%%, %%day%%, %%hour%%, %%minute%%, %%second%%, %%post_id%%, %%author%%, and %%%s%%.', 'webcomic' ), "{$screen->post_type}_storyline", "{$screen->post_type}_character" ),
+			sprintf( __( 'Be careful when modifying permalinks: incorrect settings may result in broken pages. <a href="%s" target="_blank">Read more about permalinks at the WordPress Codex &raquo;</a>', 'webcomic' ), 'http://codex.wordpress.org/Using_Permalinks' )
+		);
+		/*
+		
+		*/
+	}
+	
+	/** Return collection twitter settings help.
+	 * 
+	 * @param object $screen Current screen object.
+	 * @return string
+	 * @uses Webcomic::$config
+	 */
+	private function collection_settings_twitter( $screen ) {
+		return sprintf( '
+			<p>%s</p>
+			<p><strong>%s</strong></p>
+			<p>%s</p>
+			<p>%s</p>
+			<ul>
+				<li>%s</li>
+				<li>%s</li>
+				<li>%s</li>
+				<li>%s</li>
+				<li>%s</li>
+				<li>%s</li>
+				<li>%s</li>
+				<li>%s</li>
+				<li>%s</li>
+				<li>%s</li>
+				<li>%s</li>
+			</ul>',
+			sprintf( __( 'These settings allow you to connect a Twitter account with the collection via a Twitter Application. Anytime a new webcomic is published in this collection a status update will be made to the account you authorize in the format you specify using your Twitter Application. Visit <a href="%s" target="_blank">Twitter Developers</a> to create a new Twitter Application. The optional <strong>Callback URL</strong> setting of your Twitter Application must be set to your site URL:', 'webcomic' ), 'https://dev.twitter.com/apps/new' ),
+			home_url(),
+			__( 'Once created, go to the <strong>Settings</strong> tab for your Twitter Application and ensure that <strong>Read and Write</strong> is selected for <strong>Application Type</strong>. Then return to the <strong>Details</strong> tab and copy the <strong>Consumer Key</strong> and <strong>Consumer Secret</strong> values into their respective fields on this page. If the keys are entered correctly a <strong>Sign in with Twitter</strong> option will appear in the <strong>Authorized Account</strong> area.', 'webcomic' ),
+			__( 'The <strong>Tweet Format</strong> accepts a number of tags:', 'webcomic' ),
+			sprintf( __( '<strong>%%url</strong> - A <a href="%s" target="_blank">shortlink</a> to the webcomic post, or the full permalink of no shortlink is available. Use <strong>%%permalink</strong> to always use the full permalink.', 'webcomic' ), 'http://codex.wordpress.org/Function_Reference/the_shortlink' ),
+			__( '<strong>%date</strong> - The publish date of the webcomic.', 'webcomic' ),
+			__( '<strong>%time</strong> - The publish time of the webcomic.', 'webcomic' ),
+			__( '<strong>%title</strong> - The title of the webcomic.', 'webcomic' ),
+			__( '<strong>%author</strong> - The display name used by the author that published the webcomic.', 'webcomic' ),
+			sprintf( __( '<strong>%%site-url</strong> - The URL to your website, %s', 'webcomic' ), home_url() ),
+			sprintf( __( '<strong>%%site-name</strong> - The name of your website, %s', 'webcomic' ), get_bloginfo( 'name' ) ),
+			sprintf( __( '<strong>%%storylines</strong> - The names of all storylines the webcomic is a part of, converted to <a href="%s" target="_blank">hash tags</a>.', 'webcomic' ), 'https://support.twitter.com/entries/49309-what-are-hashtags-symbols' ),
+			sprintf( __( '<strong>%%characters</strong> - The names of all characters appearing in the webcomic, converted to <a href="%s" target="_blank">hash tags</a>.', 'webcomic' ), 'https://support.twitter.com/entries/49309-what-are-hashtags-symbols' ),
+			sprintf( __( '<strong>%%collection</strong> - The names of the collection, %s, converted to a <a href="%s" target="_blank">hash tag</a>.', 'webcomic' ), self::$config[ 'collections' ][ $screen->post_type ][ 'name' ], 'https://support.twitter.com/entries/49309-what-are-hashtags-symbols' ),
+			sprintf( __( '<strong>%%collection-name</strong> - The unhashed collection name, %s.', 'webcomic' ), self::$config[ 'collections' ][ $screen->post_type ][ 'name' ] )
+		);
+		/*
+		
+		*/
+	}
+	
+	/** Return collection general settings help.
+	 * 
+	 * @return string
+	 */
+	private function settings_general() {
+		return sprintf( '
+			<p>%s</p>
+			<ul>
+				<li>%s</li>
+				<li>
+					%s
+					<ul>
+						<li>%s</li>
+						<li>%s</li>
+						<li>%s</li>
+						<li>%s</li>
+						<li>%s</li>
+						<li>%s</li>
+					</ul>
+				</li>
+				<li>%s</li>
+			</ul>',
+			__( 'The settings on this page affect your entire site:', 'webcomic' ),
+			__( "<strong>Integrate</strong> - Webcomic will attempt to automatically integrate basic functionality into your site. Integration may not work with certain WordPress themes and plugins.", 'webcomic' ),
+			__( '<strong>Navigate</strong> - Changes how users browse through webcomics on your site. Dynamic navigation will attempt to load webcomics without refreshing the page. This makes browsing significantly faster, but may not work in all situations and will affect cost per impression advertising. When shortcuts are enabled users can press the following button combinations to navigate through webcomics:', 'webcomic' ),
+			__( '<em>&larr;</em> Previous Webcomic', 'webcomic' ),
+			__( '<em>&rarr;</em> Next Webcomic', 'webcomic' ),
+			__( '<em>Shift + &larr;</em> First Webcomic', 'webcomic' ),
+			__( '<em>Shift + &rarr;</em> Last Webcomic', 'webcomic' ),
+			__( '<em>Shift + &darr;</em> Random Webcomic', 'webcomic' ),
+			__( '<em>Shift + &uarr;</em> Purchase Webcomic', 'webcomic' ),
+			__( '<strong>Uninstall</strong> - Deletes all data associated with Webcomic when the plugin is deactivated, including settings, webcomics, storylines, characters, transcripts, and languages (this cannot be undone; uploaded media will not be deleted). You may optionally choose to convert webcomics and transcripts into posts, storylines into categories, and characters and languages into tags.', 'webcomic' )
+		);
+	}
+	
+	/** Return collection settings help.
+	 * 
+	 * @return string
+	 */
+	private function settings_collections() {
+		return sprintf( '
+			<p>%s</p>
+			<p>%s</p>',
+			__( 'The Collections section provides a general overview of all of the collections on your site. To add a new collection enter a name in the box above the list and click <em>Add Collection</em>.', 'webcomic' ),
+			__( 'To delete a collection, check the box next to it and select either <em>Delete Permanently</em> or <em>Delete and Save</em> from the Bulk Actions dropdown at the bottom of the list. If <em>Delete and Save</em> is selected the checked collections will have their webcomics and transcripts converted into posts, storylines converted into categories, and characters converted into tags before being deleted.', 'webcomic' )
+		);
+	}
+	
+	/** Return additional sizes help.
+	 * 
+	 * @return string
+	 */
+	private function media_sizes() {
+		return sprintf( ' 
+			<p>%s</p>
+			<ul>
+				<li>%s</li>
+				<li>%s</li>
+				<li>%s</li>
+			</ul>
+			<p>%s</p>',
+			__( "The Additional Image Sizes section lists the image sizes that have been added to your site beyond the WordPress defaults of thumbnail, medium, and large. To add a new size, you'll fill in the following fields at the top of the list and click <em>Save Changes</em>:", 'webcomic' ),
+			__( '<strong>Name</strong> - How the size is identified. Should be a "slug" containing only letters, numbers, and hyphens.', 'webcomic' ),
+			__( '<strong>Dimensions</strong> - The next two fields are for the maximum width and height of the new image size.', 'webcomic' ),
+			__( '<strong>Crop</strong> - Whether images should be hard cropped to the specified dimensions or proportionally resized.', 'webcomic' ),
+			__( 'Sizes may be adjusted by editing the width, height, and crop of the size within the list and clicking <em>Save Changes</em>. Sizes my be deleted by checking the box next to one or more sizes name, selecting <em>Delete</em> from the Bulk Actions dropdown below the list, and clicking <em>Save Changes</em>. Sizes added outside of this section cannot be edited, but are listed for informational purposes.', 'webcomic' )
+		);
+	}
+}
