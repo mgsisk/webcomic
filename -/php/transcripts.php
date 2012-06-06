@@ -19,6 +19,7 @@ class WebcomicTranscripts extends Webcomic {
 	 * @uses WebcomicTranscripts::admin_enqueue_scripts()
 	 * @uses WebcomicTranscripts::wp_insert_post_data()
 	 * @uses WebcomicTranscripts::manage_custom_column()
+	 * @uses WebcomicTranscripts::request()
 	 * @uses WebcomicTranscripts::posts_where()
 	 * @uses WebcomicTranscripts::view_orphans()
 	 * @uses WebcomicTranscripts::manage_columns()
@@ -36,6 +37,7 @@ class WebcomicTranscripts extends Webcomic {
 		add_action( 'wp_insert_post_data', array( $this, 'wp_insert_post_data' ), 10, 2 );
 		add_action( 'manage_webcomic_transcript_posts_custom_column', array( $this, 'manage_custom_column' ), 10, 2 );
 		
+		add_filter( 'request', array( $this, 'request' ), 10, 1 );
 		add_filter( 'posts_where', array( $this, 'posts_where' ), 10, 1 );
 		add_filter( 'views_edit-webcomic_transcript', array( $this, 'view_orphans' ), 10, 1 );
 		add_filter( 'manage_edit-webcomic_transcript_columns', array( $this, 'manage_columns' ), 10, 1 );
@@ -283,6 +285,22 @@ class WebcomicTranscripts extends Webcomic {
 				get_the_time( 'Y/m/d', $post->post_parent )
 			) : __( 'No Webcomic', 'webcomic' );
 		}
+	}
+	
+	/** Handle sorting by webcomic parent.
+	 * 
+	 * @param array $request An array of request parameters.
+	 * @return array
+	 * @hook request
+	 */
+	public function request( $request ) {
+		if ( isset( $request[ 'post_type' ], $request[ 'orderby' ] ) and 'webcomic_transcript' === $request[ 'post_type' ] and 'webcomic_parent' === $request[ 'orderby' ] ) {
+			$request = array_merge( $request, array(
+				'orderby' => 'parent'
+			) );
+		}
+		
+		return $request;
 	}
 	
 	/** Handle additional post list filters.

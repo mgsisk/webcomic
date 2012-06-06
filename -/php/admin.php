@@ -36,7 +36,7 @@ class WebcomicAdmin extends Webcomic {
 		register_activation_hook( self::$dir . 'webcomic.php', array( $this, 'activate' ) );
 		register_deactivation_hook( self::$dir . 'webcomic.php', array( $this, 'deactivate' ) );
 		
-		if ( self::$config and version_compare( self::$config[ 'version' ], '4-dev', '>=' ) ) {
+		if ( self::$config and version_compare( self::$config[ 'version' ], '4x', '>=' ) ) {
 			add_action( 'admin_init', array( $this, 'admin_init' ) );
 			add_action( 'admin_head', array( $this, 'admin_head' ) );
 			add_action( 'admin_notices', array( $this, 'admin_notices' ) );
@@ -74,11 +74,10 @@ class WebcomicAdmin extends Webcomic {
 	 * @hook webcomic.php
 	 */
 	public function activate() {
-		$legacy = get_option( 'webcomic_version' );
-		
-		if ( !self::$config or version_compare( self::$config[ 'version' ], '4-dev', '<' ) ) {
-			$name = __( 'Untitled Webcomic', 'webcomic' );
-			$slug = sanitize_title( $name );
+		if ( !self::$config or version_compare( self::$config[ 'version' ], '4x', '<' ) ) {
+			$name   = __( 'Untitled Webcomic', 'webcomic' );
+			$slug   = sanitize_title( $name );
+			$legacy = self::$config ? self::$config : get_option( 'webcomic_version' );
 			
 			self::$config = array(
 				'version'      => self::$version,
@@ -169,12 +168,10 @@ class WebcomicAdmin extends Webcomic {
 				)
 			);
 			
-			if ( !add_option( 'webcomic', self::$config ) ) {
-				add_option( 'webcomic_legacy', get_option( 'webcomic' ), '', 'no' );
+			if ( is_array( $legacy ) ) {
+				delete_option( 'webcomic_options' );
 				
 				self::$config[ 'legacy' ] = self::$config[ 'legacy_notice' ] = 3;
-				
-				update_option( 'webcomic', self::$config );
 			} else if ( $legacy ) {
 				self::$config[ 'legacy' ] = self::$config[ 'legacy_notice' ] = version_compare( $legacy, '2', '>=' ) ? 2 : 1;
 				
@@ -192,6 +189,18 @@ class WebcomicAdmin extends Webcomic {
 					'comic_medium_size_h'  => get_option( 'comic_medium_size_h' )
 				);
 				
+				delete_option( 'webcomic_version' );
+				delete_option( 'comic_category' );
+				delete_option( 'comic_directory' );
+				delete_option( 'comic_current_chapter' );
+				delete_option( 'comic_secure_names' );
+				delete_option( 'comic_feed' );
+				delete_option( 'comic_feed_size' );
+				delete_option( 'comic_large_size_w' );
+				delete_option( 'comic_large_size_h' );
+				delete_option( 'comic_medium_size_w' );
+				delete_option( 'comic_medium_size_h' );
+				
 				if ( 2 === self::$config[ 'legacy' ] ) {
 					$legacy_config = array_merge( $legacy_config, array(
 						'comic_buffer'               => get_option( 'comic_buffer' ),
@@ -205,6 +214,17 @@ class WebcomicAdmin extends Webcomic {
 						'comic_transcripts_required' => get_option( 'comic_transcripts_required' ),
 						'comic_transcripts_loggedin' => get_option( 'comic_transcripts_loggedin' )
 					) );
+					
+					delete_option( 'comic_buffer' );
+					delete_option( 'comic_thumb_crop' );
+					delete_option( 'comic_buffer_alert' );
+					delete_option( 'comic_secure_paths' );
+					delete_option( 'comic_thumb_size_w' );
+					delete_option( 'comic_thumb_size_h' );
+					delete_option( 'comic_keyboard_shortcuts' );
+					delete_option( 'comic_transcripts_allowed' );
+					delete_option( 'comic_transcripts_required' );
+					delete_option( 'comic_transcripts_loggedin' );
 				} else {
 					$legacy_config = array_merge( $legacy_config, array(
 						'comic_auto_post'        => get_option( 'comic_auto_post' ),
@@ -214,10 +234,23 @@ class WebcomicAdmin extends Webcomic {
 						'comic_thumbnail_size_w' => get_option( 'comic_thumbnail_size_w' ),
 						'comic_thumbnail_size_h' => get_option( 'comic_thumbnail_size_h' )
 					) );
+					
+					delete_option( 'comic_auto_post' );
+					delete_option( 'comic_name_format' );
+					delete_option( 'comic_thumbnail_crop' );
+					delete_option( 'comic_name_format_date' );
+					delete_option( 'comic_thumbnail_size_w' );
+					delete_option( 'comic_thumbnail_size_h' );
 				}
-				
-				add_option( 'webcomic_legacy', $legacy_config, '', 'no' );
 			}
+			
+			if ( $legacy ) {
+				delete_option( 'webcomic_legacy' );
+				
+				update_option( 'webcomic_legacy', $legacy, '', 'no' );
+			}
+			
+			add_option( 'webcomic_options', self::$config );
 			
 			wp_schedule_event( ( integer ) current_time( 'timestamp' ), 'daily', 'webcomic_buffer_alert' );
 			
@@ -307,13 +340,47 @@ class WebcomicAdmin extends Webcomic {
 			
 			wp_clear_scheduled_hook( 'webcomic_buffer_alert' );
 			
-			delete_option( 'webcomic' );
+			delete_option( 'webcomic_options' );
 			
-			if ( !empty( self::$config[ 'legacy' ] ) and version_compare( self::$config[ 'legacy' ], '3', '>=' ) and get_option( 'webcomic_legacy' ) ) {
-				add_option( 'webcomic', get_option( 'webcomic_legacy' ) );
+			if ( $legacy = get_option( 'webcomic_legacy' ) ) {
+				if ( 3 === self::$config[ 'legacy' ] ) {
+					add_option( 'webcomic_options', $legacy );
+				} else {
+					add_option( 'webcomic_version', $legacy[ 'webcomic_version' ] );
+					add_option( 'comic_category', $legacy[ 'comic_category' ] );
+					add_option( 'comic_directory', $legacy[ 'comic_directory' ] );
+					add_option( 'comic_current_chapter', $legacy[ 'comic_current_chapter' ] );
+					add_option( 'comic_secure_names', $legacy[ 'comic_secure_names' ] );
+					add_option( 'comic_feed', $legacy[ 'comic_feed' ] );
+					add_option( 'comic_feed_size', $legacy[ 'comic_feed_size' ] );
+					add_option( 'comic_large_size_w', $legacy[ 'comic_large_size_w' ] );
+					add_option( 'comic_large_size_h', $legacy[ 'comic_large_size_h' ] );
+					add_option( 'comic_medium_size_w', $legacy[ 'comic_medium_size_w' ] );
+					add_option( 'comic_medium_size_h', $legacy[ 'comic_medium_size_h' ] );
+					
+					if ( 2 === self::$config[ 'legacy' ] ) {
+						add_option( 'comic_buffer', $legacy[ 'comic_buffer' ] );
+						add_option( 'comic_thumb_crop', $legacy[ 'comic_thumb_crop' ] );
+						add_option( 'comic_buffer_alert', $legacy[ 'comic_buffer_alert' ] );
+						add_option( 'comic_secure_paths', $legacy[ 'comic_secure_paths' ] );
+						add_option( 'comic_thumb_size_w', $legacy[ 'comic_thumb_size_w' ] );
+						add_option( 'comic_thumb_size_h', $legacy[ 'comic_thumb_size_h' ] );
+						add_option( 'comic_keyboard_shortcuts', $legacy[ 'comic_keyboard_shortcuts' ] );
+						add_option( 'comic_transcripts_allowed', $legacy[ 'comic_transcripts_allowed' ] );
+						add_option( 'comic_transcripts_required', $legacy[ 'comic_transcripts_required' ] );
+						add_option( 'comic_transcripts_loggedin', $legacy[ 'comic_transcripts_loggedin' ] );
+					} else {
+						add_option( 'comic_auto_post', $legacy[ 'comic_auto_post' ] );
+						add_option( 'comic_name_format', $legacy[ 'comic_name_format' ] );
+						add_option( 'comic_thumbnail_crop', $legacy[ 'comic_thumbnail_crop' ] );
+						add_option( 'comic_name_format_date', $legacy[ 'comic_name_format_date' ] );
+						add_option( 'comic_thumbnail_size_w', $legacy[ 'comic_thumbnail_size_w' ] );
+						add_option( 'comic_thumbnail_size_h', $legacy[ 'comic_thumbnail_size_h' ] );
+					}
+				}
+				
+				delete_option( 'webcomic_legacy' );
 			}
-			
-			delete_option( 'webcomic_legacy' );
 		}
 		
 		flush_rewrite_rules();
@@ -345,7 +412,7 @@ class WebcomicAdmin extends Webcomic {
 	public function admin_head() {
 		$screen = get_current_screen();
 		
-		if ( preg_match( '/^(options-media|media_page_webcomic-generator|settings_page_webcomic|(edit-)?webcomic_(transcript|language)|(webcomic\d+_page_|edit-)?webcomic\d+(-options|_storyline|_character)?)$/', $screen->id ) ) {
+		if ( preg_match( '/^(page|options-media|media_page_webcomic-generator|settings_page_webcomic|(edit-)?webcomic_(transcript|language)|(webcomic\d+_page_|edit-)?webcomic\d+(-options|_storyline|_character)?)$/', $screen->id ) ) {
 			require_once self::$dir . '-/php/help.php';
 			
 			new WebcomicHelp( $screen );
@@ -378,11 +445,11 @@ class WebcomicAdmin extends Webcomic {
 		}
 		
 		if ( isset( self::$config[ 'thanks' ] ) ) {
-			echo '<div class="updated webcomic"><a href="//webcomic.nu" target="_blank"><b>&#x2764;</b>', sprintf( __( 'Thank you for using Webcomic %s', 'webcomic' ), self::$version ), '</a></div>';
+			echo '<div class="updated webcomic"><a href="http://webcomic.nu" target="_blank"><b>&#x2764;</b>', sprintf( __( 'Thank you for using Webcomic %s', 'webcomic' ), self::$version ), '</a></div>';
 			
 			unset( self::$config[ 'thanks' ] );
 			
-			update_option( 'webcomic', self::$config );
+			update_option( 'webcomic_options', self::$config );
 		}
 	}
 	
@@ -434,7 +501,7 @@ class WebcomicAdmin extends Webcomic {
 	public function plugin_action_links( $actions, $file, $data, $context ) {
 		if ( 'Webcomic' === $data[ 'Name' ] ) {
 			$actions[ 'settings' ] = sprintf( '<a href="%s">%s</a>', esc_url( add_query_arg( array( 'page' => 'webcomic' ), admin_url( 'options-general.php' ) ) ), __( 'Settings', 'webcomic' ) );
-			$actions[ 'support' ]  = sprintf( '<a href="//webcomic.nu/support" target="_blank">%s</a>', __( 'Support', 'webcomic' ) );
+			$actions[ 'support' ]  = sprintf( '<a href="http://webcomic.nu/support" target="_blank">%s</a>', __( 'Support', 'webcomic' ) );
 		}
 		
 		return $actions;

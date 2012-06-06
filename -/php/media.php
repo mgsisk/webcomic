@@ -193,7 +193,7 @@ class WebcomicMedia extends Webcomic {
 			if ( $v[ 'image' ] === $id ) {
 				unset( self::$config[ 'terms' ][ $k ] );
 				
-				update_option( 'webcomic', self::$config );
+				update_option( 'webcomic_options', self::$config );
 				
 				break;
 			}
@@ -203,7 +203,7 @@ class WebcomicMedia extends Webcomic {
 			if ( self::$config[ 'collections' ][ $k ][ 'image' ] === $id ) {
 				self::$config[ 'collections' ][ $k ][ 'image' ] = 0;
 				
-				update_option( 'webcomic', self::$config );
+				update_option( 'webcomic_options', self::$config );
 				
 				break;
 			}

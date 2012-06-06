@@ -17,6 +17,6 @@ class WebcomicUpgrade extends Webcomic {
 	public function __construct() {
 		self::$config[ 'version' ] = self::$version;
 		
-		update_option( 'webcomic', self::$config );
+		update_option( 'webcomic_options', self::$config );
 	}
 }

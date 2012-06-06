@@ -122,7 +122,7 @@ class WebcomicTaxonomy extends Webcomic {
 				
 				unset( self::$config[ 'terms' ][ $id ][ 'image' ] );
 				
-				update_option( 'webcomic', self::$config );
+				update_option( 'webcomic_options', self::$config );
 			}
 			
 			if ( isset( $_FILES[ 'webcomic_image' ] ) and !is_wp_error( $attachment = media_handle_upload( 'webcomic_image', 0, array( 'context' => $taxonomy ) ) ) ) {
@@ -132,7 +132,7 @@ class WebcomicTaxonomy extends Webcomic {
 				
 				self::$config[ 'terms' ][ $id ][ 'image' ] = $attachment;
 				
-				update_option( 'webcomic', self::$config );
+				update_option( 'webcomic_options', self::$config );
 			}
 			
 			if ( false !== strpos( $taxonomy, '_storyline' ) ) {
@@ -167,7 +167,7 @@ class WebcomicTaxonomy extends Webcomic {
 			if ( isset( $_FILES[ 'webcomic_image' ] ) and !is_wp_error( $attachment = media_handle_upload( 'webcomic_image', 0, array( 'context' => $taxonomy ) ) ) ) {
 				self::$config[ 'terms' ][ $id ][ 'image' ] = $attachment;
 				
-				update_option( 'webcomic', self::$config );
+				update_option( 'webcomic_options', self::$config );
 			}
 			
 			if ( false !== strpos( $taxonomy, '_storyline' ) ) {
@@ -212,14 +212,14 @@ class WebcomicTaxonomy extends Webcomic {
 				}
 			}
 			
-			update_option( 'webcomic', self::$config );
+			update_option( 'webcomic_options', self::$config );
 		} else if ( preg_match( '/^webcomic\d+_(storyline|character)$/', $taxonomy ) ) {
 			if ( isset( self::$config[ 'terms' ][ $id ] ) ) {
 				delete_post_meta( self::$config[ 'terms' ][ $id ][ 'image' ], '_wp_attachment_context' );
 				
 				unset( self::$config[ 'terms' ][ $id ] );
 				
-				update_option( 'webcomic', self::$config );
+				update_option( 'webcomic_options', self::$config );
 			}
 			
 			if ( false !== strpos( $taxonomy, '_storyline' ) ) {

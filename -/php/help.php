@@ -55,7 +55,13 @@ class WebcomicHelp extends Webcomic {
 			$screen->set_help_sidebar( $this->sidebar() );
 		}
 		
-		if ( 'options-media' === $screen->id ) {
+		if ( 'page' === $screen->id ) {
+			$screen->add_help_tab( array(
+				'id'      => 'webcomic-collection',
+				'title'   => __( 'Webcomic Collection', 'webcomic' ),
+				'content' => $this->page_collection()
+			) );
+		} else if ( 'options-media' === $screen->id ) {
 			$screen->add_help_tab( array(
 				'id'      => 'webcomic-sizes',
 				'title'   => __( 'Additional Image Sizes', 'webcomic' ),
@@ -294,8 +300,8 @@ class WebcomicHelp extends Webcomic {
 		return sprintf( '
 			<p><strong>%s</strong></p>
 			<p><a href="//vimeo.com/channels/webcomic" target="_blank">%s</a></p>
-			<p><a href="//webcomic.nu/support" target="_blank">%s</a></p>
-			<p><a href="//webcomic.nu/docs" target="_blank">%s</a></p>
+			<p><a href="http://webcomic.nu/support" target="_blank">%s</a></p>
+			<p><a href="http://webcomic.nu/docs" target="_blank">%s</a></p>
 			<p><a href="//github.com/mgsisk/webcomic/issues" target="_blank">%s</a></p>
 			<hr>
 			<p><a href="support@webcomic.nu">%s</a></p>',
@@ -824,8 +830,9 @@ class WebcomicHelp extends Webcomic {
 	 */
 	private function collection_settings_posts() {
 		return sprintf( '
+			<p>%s</p>
 			<p>%s</p>',
-			__( "These settings control some of the basic features of your webcomic posts. Disabling a feature will completely remove it's associated box from the Add New Webcomic and Edit Webcomic screens.  When titles are disabled Webcomic will automatically set the title of new webcomics to their post ID. Featured images requires an active theme with featured image support.", 'webcomic' )
+			__( "These settings control some of the basic features of your webcomic posts. Disabling a feature will completely remove it's associated box from the Add New Webcomic and Edit Webcomic screens.  When titles are disabled Webcomic will automatically set the title of new webcomics to their post ID. Featured images require an active theme with featured image support.", 'webcomic' )
 		);
 	}
 	
@@ -958,6 +965,17 @@ class WebcomicHelp extends Webcomic {
 			__( '<strong>Dimensions</strong> - The next two fields are for the maximum width and height of the new image size.', 'webcomic' ),
 			__( '<strong>Crop</strong> - Whether images should be hard cropped to the specified dimensions or proportionally resized.', 'webcomic' ),
 			__( 'Sizes may be adjusted by editing the width, height, and crop of the size within the list and clicking <em>Save Changes</em>. Sizes my be deleted by checking the box next to one or more sizes name, selecting <em>Delete</em> from the Bulk Actions dropdown below the list, and clicking <em>Save Changes</em>. Sizes added outside of this section cannot be edited, but are listed for informational purposes.', 'webcomic' )
+		);
+	}
+	
+	/** Return additional sizes help.
+	 * 
+	 * @return string
+	 */
+	private function page_collection() {
+		return sprintf( ' 
+			<p>%s</p>',
+			__( "The <strong>Webcomic Collection</strong> let's you associate your pages with a specific Webcomic Collection. Pages associated with a collection will use the theme defined in the collection settings.", 'webcomic' )
 		);
 	}
 }

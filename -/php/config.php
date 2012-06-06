@@ -68,14 +68,14 @@ class WebcomicConfig extends Webcomic {
 	 * @hook admin_init
 	 */
 	public function admin_init() {
-		register_setting( 'webcomic', 'webcomic', array( $this, 'save' ) );
+		register_setting( 'webcomic-options', 'webcomic_options', array( $this, 'save' ) );
 		
-		add_settings_section( 'webcomic-main', '', array( $this, 'section' ), 'webcomic' );
-		add_settings_field( 'webcomic_integrate', __( 'Integrate', 'webcomic' ), array( $this, 'integrate' ), 'webcomic', 'webcomic-main', array( 'label_for' => 'webcomic_integrate' ) );
-		add_settings_field( 'webcomic_navigate', __( 'Navigate', 'webcomic' ), array( $this, 'navigate' ), 'webcomic', 'webcomic-main', array( 'label_for' => 'webcomic_dynamic' ) );
-		add_settings_field( 'webcomic_uninstall', __( 'Uninstall', 'webcomic' ), array( $this, 'uninstall' ), 'webcomic', 'webcomic-main', array( 'label_for' => 'webcomic_uninstall' ) );
+		add_settings_section( 'webcomic-main', '', array( $this, 'section' ), 'webcomic-options' );
+		add_settings_field( 'webcomic_integrate', __( 'Integrate', 'webcomic' ), array( $this, 'integrate' ), 'webcomic-options', 'webcomic-main', array( 'label_for' => 'webcomic_integrate' ) );
+		add_settings_field( 'webcomic_navigate', __( 'Navigate', 'webcomic' ), array( $this, 'navigate' ), 'webcomic-options', 'webcomic-main', array( 'label_for' => 'webcomic_dynamic' ) );
+		add_settings_field( 'webcomic_uninstall', __( 'Uninstall', 'webcomic' ), array( $this, 'uninstall' ), 'webcomic-options', 'webcomic-main', array( 'label_for' => 'webcomic_uninstall' ) );
 		
-		add_settings_section( 'webcomic-collections', __( 'Collections', 'webcomic' ), array( $this, 'collections' ), 'webcomic' );
+		add_settings_section( 'webcomic-collections', __( 'Collections', 'webcomic' ), array( $this, 'collections' ), 'webcomic-options' );
 		
 		add_settings_section( 'webcomic-sizes', __( 'Additional Image Sizes', 'webcomic' ), array( $this, 'sizes' ), 'media' );
 		
@@ -144,7 +144,7 @@ class WebcomicConfig extends Webcomic {
 	 * @hook admin_menu
 	 */
 	public function admin_menu() {
-		add_submenu_page( 'options-general.php', __( 'Webcomic', 'webcomic' ), __( 'Webcomic', 'webcomic' ), 'manage_options', 'webcomic', array( $this, 'page' ) );
+		add_submenu_page( 'options-general.php', __( 'Webcomic', 'webcomic' ), __( 'Webcomic', 'webcomic' ), 'manage_options', 'webcomic-options', array( $this, 'page' ) );
 		
 		foreach ( self::$config[ 'collections' ] as $k => $v ) {
 			add_submenu_page( "edit.php?post_type={$k}", sprintf( __( '%s Settings', 'webcomic' ), esc_html( $v[ 'name' ] ) ), __( 'Settings', 'webcomic' ), 'manage_options', "{$k}-options", array( $this, 'page' ) );
@@ -159,7 +159,7 @@ class WebcomicConfig extends Webcomic {
 		$screen = get_current_screen();
 		
 		if ( preg_match( '/^webcomic\d+_page_webcomic\d+-options$/', $screen->id ) ) {
-			printf( "<script>webcomic_slug_preview( '%s' );webcomic_commerce_defaults( '%s' );webcomic_twitter_account( '%s' )</script>", admin_url(), admin_url(), admin_url() );
+			printf( "<script>webcomic_slug_preview('%s');webcomic_commerce_defaults('%s');webcomic_twitter_account('%s')</script>", admin_url(), admin_url(), admin_url() );
 		}
 	}
 	
@@ -184,24 +184,24 @@ class WebcomicConfig extends Webcomic {
 	 * @uses Webcomic::$version
 	 */
 	public function page() {
-		$page = empty( $_GET[ 'post_type' ] ) ? 'webcomic' : "{$_GET[ 'post_type' ]}-options";
+		$page = empty( $_GET[ 'post_type' ] ) ? 'webcomic-options' : "{$_GET[ 'post_type' ]}-options";
 		?>
 		<div class="wrap">
 			<div id="icon-options-general" class="icon32"></div>
-			<h2><?php echo 'webcomic' === $page ? __( 'Webcomic Settings', 'webcomic' ) : sprintf( __( '%s Settings', 'webcomic' ), esc_html( self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'name' ] ) ); ?></h2>
+			<h2><?php echo 'webcomic-options' === $page ? __( 'Webcomic Settings', 'webcomic' ) : sprintf( __( '%s Settings', 'webcomic' ), esc_html( self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'name' ] ) ); ?></h2>
 			<form action="options.php" method="post"<?php echo 'webcomic' !== $page ? ' enctype="multipart/form-data"' : ''; ?>>
 				<?php
-					settings_fields( 'webcomic' );
+					settings_fields( 'webcomic-options' );
 					do_settings_sections( $page );
 					
-					echo 'webcomic' === $page ? '<input type="hidden" name="webcomic_general" value="1">' : sprintf( '<input type="hidden" name="webcomic_collection" value="%s">', $_GET[ 'post_type' ] );
+					echo 'webcomic-options' === $page ? '<input type="hidden" name="webcomic_general" value="1">' : sprintf( '<input type="hidden" name="webcomic_collection" value="%s">', $_GET[ 'post_type' ] );
 				?>
 				<p class="submit">
 					<?php
 						submit_button( '', 'primary', '', false );
 						
-						if ( 'webcomic' === $page ) {
-							printf( '<span class="alignright">%s</span>', sprintf( __( 'Thank you for using %s', 'webcomic' ), sprintf( '<a href="//webcomic.nu" target="_blank">Webcomic %s</a>', self::$version ) ) );
+						if ( 'webcomic-options' === $page ) {
+							printf( '<span class="alignright">%s</span>', sprintf( __( 'Thank you for using %s', 'webcomic' ), sprintf( '<a href="http://webcomic.nu" target="_blank">Webcomic %s</a>', self::$version ) ) );
 						}
 					?>
 				</p>
@@ -256,7 +256,7 @@ class WebcomicConfig extends Webcomic {
 				<th>%s</th>
 				<th>%s</th>
 			</tr>',
-			__( 'Name', 'webcomic' ),
+			__( 'Collection', 'webcomic' ),
 			__( 'Webcomics', 'webcomic' ),
 			__( 'Storylines', 'webcomic' ),
 			__( 'Characters', 'webcomic' )
@@ -276,6 +276,7 @@ class WebcomicConfig extends Webcomic {
 				$i = 0;
 				
 				foreach ( self::$config[ 'collections' ] as $k => $v ) {
+					$preview    = 
 					$webcomics  = wp_count_posts( $k )->publish;
 					$storylines = wp_count_terms( "{$k}_storyline" );
 					$characters = wp_count_terms( "{$k}_character" );
@@ -286,7 +287,7 @@ class WebcomicConfig extends Webcomic {
 						<input type="checkbox" name="webcomic_collection[]" value="<?php echo $k; ?>">
 					<?php } else { echo '&nbsp;'; } ?>
 					</th>
-					<td><a href="<?php echo esc_url( add_query_arg( array( 'post_type' => $k, 'page' => "{$k}-options" ), admin_url( 'edit.php' ) ) ); ?>" class="row-title"><?php echo esc_html( $v[ 'name' ] ); ?></a></td>
+					<td><a href="<?php echo esc_url( add_query_arg( array( 'post_type' => $k, 'page' => "{$k}-options" ), admin_url( 'edit.php' ) ) ); ?>" class="row-title"><?php echo $v[ 'image' ] ? wp_get_attachment_image( $v[ 'image' ] ) : esc_html( $v[ 'name' ] ); ?></a></td>
 					<td><a href="<?php echo esc_url( add_query_arg( array( 'post_type' => $k ), admin_url( 'edit.php' ) ) ); ?>"><?php echo $webcomics; ?></a></td>
 					<td><a href="<?php echo esc_url( add_query_arg( array( 'post_type' => $k, 'taxonomy' => "{$k}_storyline" ), admin_url( 'edit-tags.php' ) ) ); ?>"><?php echo $storylines; ?></a></td>
 					<td><a href="<?php echo esc_url( add_query_arg( array( 'post_type' => $k, 'taxonomy' => "{$k}_character" ), admin_url( 'edit-tags.php' ) ) ); ?>"><?php echo $characters; ?></a></td>
@@ -965,7 +966,7 @@ class WebcomicConfig extends Webcomic {
 				self::$config[ 'collections' ][ 'webcomic' . self::$config[ 'increment' ] ] = $new;
 				self::$config[ 'increment' ]++;
 				
-				add_settings_error( 'webcomic', 'new-collection', sprintf( __( 'Added <q>%s</q>', 'webcomic' ), esc_html( $name ) ), 'updated' );
+				add_settings_error( 'webcomic_otions', 'new-collection', sprintf( __( 'Added <q>%s</q>', 'webcomic' ), esc_html( $name ) ), 'updated' );
 			} else if ( $_POST[ 'webcomic_bulk_collection' ] and isset( $_POST[ 'webcomic_collection' ] ) ) {
 				$bulk  = true;
 				$count = 0;
@@ -999,7 +1000,7 @@ class WebcomicConfig extends Webcomic {
 				}
 				
 				if ( 'delete' === $_POST[ 'webcomic_bulk_collection' ] or 'delete_save' === $_POST[ 'webcomic_bulk_collection' ] ) {
-					add_settings_error( 'webcomic', 'delete-convert-collections', sprintf( _n( 'Deleted %s collection', 'Deleted %s collections', $count, 'webcomic' ), $count ), 'updated' );
+					add_settings_error( 'webcomic-options', 'delete-convert-collections', sprintf( _n( 'Deleted %s collection', 'Deleted %s collections', $count, 'webcomic' ), $count ), 'updated' );
 				}
 			} else {
 				self::$config[ 'dynamic' ]   = isset( $_POST[ 'webcomic_dynamic' ] );
@@ -1139,7 +1140,7 @@ class WebcomicConfig extends Webcomic {
 		}
 		
 		if ( !$new and !$bulk and ( isset( $_POST[ 'webcomic_general' ] ) or isset( $_POST[ 'webcomic_collection' ] ) ) ) {
-			add_settings_error( 'webcomic', 'settings-saved', __( 'Settings saved.', 'webcomic' ), 'updated' );
+			add_settings_error( 'webcomic-options', 'settings-saved', __( 'Settings saved.', 'webcomic' ), 'updated' );
 		}
 		
 		return ( isset( $_POST[ 'webcomic_general' ] ) or isset( $_POST[ 'webcomic_collection' ] ) ) ? self::$config : $options;
@@ -1201,7 +1202,7 @@ class WebcomicConfig extends Webcomic {
 			self::$config[ 'collections' ][ $collection ][ 'twitter' ][ 'consumer_key' ]    = $consumer_key;
 			self::$config[ 'collections' ][ $collection ][ 'twitter' ][ 'consumer_secret' ] = $consumer_secret;
 			
-			update_option( 'webcomic', self::$config );
+			update_option( 'webcomic_options', self::$config );
 			
 			if ( isset( $credentials->screen_name ) ) {
 				printf( '<a href="http://twitter.com/%s" target="_blank"><b>@%s</b></a> | <a href="https://twitter.com/settings/applications" target="_blank">%s</a>',
@@ -1216,7 +1217,7 @@ class WebcomicConfig extends Webcomic {
 				self::$config[ 'collections' ][ $collection ][ 'twitter' ][ 'request_token' ]   = $request[ 'oauth_token' ];
 				self::$config[ 'collections' ][ $collection ][ 'twitter' ][ 'request_secret' ]  = $request[ 'oauth_token_secret' ];
 				
-				update_option( 'webcomic', self::$config );
+				update_option( 'webcomic_options', self::$config );
 			
 				printf( '%s<a href="%s"><img src="%s-/img/twitter.png" alt="%s"></a>',
 					( self::$config[ 'collections' ][ $collection ][ 'twitter' ][ 'oauth_token' ] and self::$config[ 'collections' ][ $collection ][ 'twitter' ][ 'oauth_secret' ]  ) ? __( '<p class="description">Your credentials could not be verified.</p>', 'webcomic' ) : '',
@@ -1264,7 +1265,7 @@ class WebcomicConfig extends Webcomic {
 				}
 			}
 			
-			update_option( 'webcomic', self::$config );
+			update_option( 'webcomic_options', self::$config );
 		}
 	}
 }

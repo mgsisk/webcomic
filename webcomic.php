@@ -4,7 +4,7 @@ Text Domain: webcomic
 Plugin Name: Webcomic
 Plugin URI: http://webcomic.nu
 Description: Comic publishing power for the web.
-Version: 4-beta
+Version: 4-beta2
 Author: Michael Sisk
 Author URI: http://mgsisk.com
 License: GPL2
@@ -37,7 +37,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * @package Webcomic
  * @copyright 2008 - 2012 Michael Sisk
  * @license http://www.gnu.org/licenses/gpl-2.0.html GPL2
- * @version 4-beta
+ * @version 4-beta2
  * @link http://webcomic.nu
  */
 
@@ -49,7 +49,7 @@ class Webcomic {
 	/** Internal version number.
 	 * @var string
 	 */
-	protected static $version = '4-beta';
+	protected static $version = '4-beta2';
 	
 	/** Absolute path to the Webcomic directory.
 	 * @var string
@@ -118,9 +118,9 @@ class Webcomic {
 	public function __construct() {
 		self::$dir    = plugin_dir_path( __FILE__ );
 		self::$url    = plugin_dir_url( __FILE__ );
-		self::$config = get_option( 'webcomic' );
+		self::$config = get_option( 'webcomic_options' );
 		
-		if ( self::$config and version_compare( self::$config[ 'version' ], '4-dev', '>=' ) ) {
+		if ( self::$config and version_compare( self::$config[ 'version' ], '4x', '>=' ) ) {
 			add_action( 'init', array( $this, 'init' ) );
 			add_action( 'webcomic_buffer_alert', array( $this, 'buffer_alert' ) );
 			
@@ -205,8 +205,9 @@ class Webcomic {
 				),
 				'description'      => esc_html( $v[ 'description' ] ),
 				'public'           => true,
-				'supports'         => $v[ 'supports' ],
 				'menu_icon'        => self::$url . '-/img/webcomic-small.png',
+				'supports'         => $v[ 'supports' ],
+				'taxonomies'       => $v[ 'taxonomies' ],
 				'has_archive'      => $v[ 'slugs' ][ 'archive' ],
 				'permalink_epmask' => EP_WEBCOMIC,
 				'rewrite' => array(
@@ -471,7 +472,7 @@ class Webcomic {
 	}
 	
 	/** Use caption for title of media objects attached to a webcomic.
-	 * 
+	 *  
 	 * @param array $attributes An array of media attributes.
 	 * @param object $attachment The media object.
 	 * @return array
@@ -1114,7 +1115,7 @@ class Webcomic {
 					self::$config[ 'collections' ][ $_GET[ 'webcomic_collection' ] ][ 'twitter' ][ 'oauth_secret' ]  = $token[ 'oauth_token_secret' ];
 					self::$config[ 'collections' ][ $_GET[ 'webcomic_collection' ] ][ 'twitter' ][ 'request_token' ] = self::$config[ 'collections' ][ $_GET[ 'webcomic_collection' ] ][ 'twitter' ][ 'request_secret' ] = '';
 					
-					update_option( 'webcomic', self::$config );
+					update_option( 'webcomic_options', self::$config );
 					
 					wp_die( sprintf( __( 'Newly published %s webcomics will be tweeted to <a href="%s">%s</a>. <a href="%s">Return to %s Settings</a>', 'webcomic' ),
 						self::$config[ 'collections' ][ $_GET[ 'webcomic_collection' ] ][ 'name' ],

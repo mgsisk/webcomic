@@ -149,7 +149,7 @@ class Widget_WebcomicLink extends WP_Widget {
 							
 							foreach ( get_intermediate_image_sizes() as $size ) {
 								$count++;
-								$sizes .= "<tr><td>%{$size}</td></tr>"; //sprintf( '', "%{$size}" );
+								$sizes .= "<tr><td>%{$size}</td></tr>";
 							}
 							
 							echo preg_replace( '/<\/td><\/tr>/', sprintf( '</td><td rowspan="%s" style="border-left:thin solid #dfdfdf">%s</td></tr>', $count, __( 'Image Preview', 'webcomic' ) ), $sizes, 1 );
