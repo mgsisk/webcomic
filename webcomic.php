@@ -3841,7 +3841,7 @@ class webcomic extends mgs_core {
 				if ( empty( $files[ $s ][ $k ] ) )
 					continue;
 				
-				$output[ $s ][ $k ] = array_merge( getimagesize( ( ( 'full' == $s ) ? $abs : $tabs ) . $files[ $s ][ $k ] ), pathinfo( ( ( 'full' == $s ) ? $abs : $tabs ) . $files[ $s ][ $k ] ) );
+				$output[ $s ][ $k ] = array_merge( ( array ) getimagesize( ( ( 'full' == $s ) ? $abs : $tabs ) . $files[ $s ][ $k ] ), pathinfo( ( ( 'full' == $s ) ? $abs : $tabs ) . $files[ $s ][ $k ] ) );
 				$output[ $s ][ $k ][ 'url' ] = $output[ $s ][ $k ][ 'surl' ] = ( ( 'full' == $s ) ? $url : $turl ) . $files[ $s ][ $k ];
 				
 				$obj = ( 'application/x-shockwave-flash' == $output[ $s ][ $k ][ 'mime' ] ) ? str_replace( '%des', $des, str_replace( '%alt', $alt, str_replace( '%size', $s, str_replace( '%width', $output[ $s ][ $k ][ 0 ], str_replace( '%height', $output[ $s ][ $k ][ 1 ], str_replace( '%uid', hash( 'md5', $output[ $s ][ $k ][ 'url' ] ), $flash ) ) ) ) ) ) : str_replace( '%des', $des, str_replace( '%alt', $alt, str_replace( '%size', $s, str_replace( '%heightwidth', $output[ $s ][ $k ][ 3 ], str_replace( '%uid', hash( 'md5', $output[ $s ][ $k ][ 'url' ] ), $image ) ) ) ));
