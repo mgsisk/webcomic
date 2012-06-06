@@ -111,6 +111,7 @@ class WebcomicConfig extends Webcomic {
 			add_settings_field( "{$k}_supports_content", __( 'Content', 'webcomic' ), array( $this, 'collection_supports_content' ), "{$k}-options", "{$k}-features", array( 'label_for' => 'webcomic_posts_title' ) );
 			add_settings_field( "{$k}_supports_discussion", __( 'Discussion', 'webcomic' ), array( $this, 'collection_supports_discussion' ), "{$k}-options", "{$k}-features", array( 'label_for' => 'webcomic_posts_comments' ) );
 			add_settings_field( "{$k}_supports_miscellanea", __( 'Miscellanea', 'webcomic' ), array( $this, 'collection_supports_miscellanea' ), "{$k}-options", "{$k}-features", array( 'label_for' => 'webcomic_posts_revisions' ) );
+			add_settings_field( "{$k}_supports_taxonomies", __( 'Taxonomies', 'webcomic' ), array( $this, 'collection_supports_taxonomies' ), "{$k}-options", "{$k}-features", array( 'label_for' => 'webcomic_posts_taxonomy' ) );
 			
 			add_settings_section( "{$k}-permalinks", __( 'Permalink Settings', 'webcomic' ), array( $this, 'section' ), "{$k}-options" );
 			add_settings_field( "{$k}_slug_archive", __( 'Archive', 'webcomic' ), array( $this, 'collection_slugs_archive' ), "{$k}-options", "{$k}-permalinks", array( 'label_for' => 'webcomic_slugs_archive' ) );
@@ -805,6 +806,29 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
+	/** Render the Posts > Taxonomies settings.
+	 * 
+	 * @uses Webcomic::$config
+	 */
+	public function collection_supports_taxonomies() {
+		$first = true;
+		
+		foreach ( get_taxonomies( array( 'public' => true ), 'objects' ) as $k => $v ) {
+			if ( 'post_format' === $v->name or 'webcomic_language' === $v->name or preg_match( '/^webcomic\d+_(storyline|character)$/', $v->name ) ) {
+				continue;
+			}
+			
+			printf( '<label><input type="checkbox" name="webcomic_taxonomies[]" value="%s"%s%s> %s</label><br>',
+				$v->name,
+				$first ? ' id="webcomic_posts_taxonomy"' : '',
+				checked( in_array( $v->name, self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'taxonomies' ] ), true, false ),
+				$v->labels->name
+			);
+			
+			$first = false;
+		}
+	}
+	
 	/** Render the Slug > Archive setting.
 	 * 
 	 * @uses Webcomic::$config
@@ -994,6 +1018,7 @@ class WebcomicConfig extends Webcomic {
 				'theme'       => $_POST[ 'webcomic_theme' ] ? $_POST[ 'webcomic_theme' ] : '',
 				'updated'     => self::$config[ 'collections' ][ $id ][ 'updated' ],
 				'supports'    => isset( $_POST[ 'webcomic_supports' ] ) ? array_merge( $_POST[ 'webcomic_supports' ], array( 'author' ) ) : array( 'author' ),
+				'taxonomies'  => isset( $_POST[ 'webcomic_taxonomies' ] ) ? $_POST[ 'webcomic_taxonomies' ] : array(),
 				'description' => $_POST[ 'webcomic_description' ],
 				'feeds' => array(
 					'hook' => isset( $_POST[ 'webcomic_feeds_hook' ] ),
