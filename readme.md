@@ -15,7 +15,7 @@ _**Everything!**_ Webcomic has been rebuilt to provide you with leaner, meaner w
 - Improved theme integration makes it easier than ever to start using Webcomic right away with almost any WordPress theme.
 - New and refactored template tags, widgets, and shortcodes for greater control and customization of your Webcomic-powered site.
 
-[**Existing Webcomic users should read this before upgrading.**](//webcomic.nu/upgrade)
+[**Existing Webcomic users should read this before upgrading.**](http://webcomic.nu/upgrade)
 
 ## Installation
 
@@ -34,14 +34,14 @@ You can install Webcomic from the **Plugins > Add New** page in the administrati
 Once installed and activated you can use Webcomic in one of three ways:
 
 1. Turn on the **Integrate** option found on the **Settings > Webcomic** page in the administrative dashboard.
-2. Use an [official Webcomic theme](//webcomic.nu/download) to get the most out of Webcomic's features with minimal hassle.
+2. Use an [official Webcomic theme](http://webcomic.nu/download) to get the most out of Webcomic's features with minimal hassle.
 3. Leverage Webcomic's new template tags, widgets, and shortcodes to [modify an existing theme](//wordpress.org/extend/themes) or [build your own](//codex.wordpress.org/Theme_Development).
 
 ### Where can I get help with Webcomic?
 
 - [Video Tutorials](//vimeo.com/channels/webcomic)
-- [Support Forum](//webcomic.nu/support)
-- [Technical Documentation](//webcomic.nu/docs)
+- [Support Forum](http://webcomic.nu/support)
+- [Technical Documentation](http://webcomic.nu/docs)
 - [Issue Tracker](//github.com/mgsisk/webcomic/issues)
 - [Email Support](mailto:support@webcomic.nu)
 
