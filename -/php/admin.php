@@ -46,6 +46,7 @@ class WebcomicAdmin extends Webcomic {
 			add_filter( 'plugin_action_links', array( $this, 'plugin_action_links' ), 10, 4 );
 			
 			require_once self::$dir . '-/php/posts.php';       new WebcomicPosts;
+			require_once self::$dir . '-/php/pages.php';       new WebcomicPages;
 			require_once self::$dir . '-/php/users.php';       new WebcomicUsers;
 			require_once self::$dir . '-/php/media.php';       new WebcomicMedia;
 			require_once self::$dir . '-/php/config.php';      new WebcomicConfig;
@@ -98,6 +99,7 @@ class WebcomicAdmin extends Webcomic {
 						'theme'       => '',
 						'updated'     => 0,
 						'supports'    => array( 'title', 'editor', 'author', 'excerpt', 'trackbacks', 'custom-fields', 'comments', 'revisions' ),
+						'taxonomies'  => array(),
 						'description' => '',
 						'feeds' => array(
 							'hook' => true,

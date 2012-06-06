@@ -14,7 +14,6 @@ class WebcomicPosts extends Webcomic {
 	 * @uses Webcomic::$config
 	 * @uses WebcomicPosts::admin_footer()
 	 * @uses WebcomicPosts::add_meta_boxes()
-	 * @uses WebcomicPosts::save_page()
 	 * @uses WebcomicPosts::pre_post_update()
 	 * @uses WebcomicPosts::update_collection()
 	 * @uses WebcomicPosts::admin_enqueue_scripts()
@@ -32,7 +31,6 @@ class WebcomicPosts extends Webcomic {
 	public function __construct() {
 		add_action( 'admin_footer', array( $this, 'admin_footer' ) );
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ) );
-		add_action( 'wp_insert_post', array( $this, 'save_page' ), 10, 2 );
 		add_action( 'pre_post_update', array( $this, 'pre_post_update' ), 10, 1 );
 		add_action( 'wp_insert_post', array( $this, 'update_collection' ), 10, 2 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
@@ -69,48 +67,19 @@ class WebcomicPosts extends Webcomic {
 		}
 	}
 	
-	/** Add webcomic and page meta boxes.
+	/** Add webcomic meta boxes.
 	 * 
 	 * @uses Webcomic::$config
-	 * @uses WebcomicPosts::page_collection()
 	 * @uses WebcomicPosts::media()
 	 * @uses WebcomicPosts::commerce()
 	 * @uses WebcomicPosts::transcripts()
 	 * @hook add_meta_boxes
 	 */
 	public function add_meta_boxes() {
-		add_meta_box( 'webcomic-collection', __( 'Webcomic Collection', 'webcomic' ), array( $this, 'page_collection' ), 'page', 'side' );
-		
 		foreach ( array_keys( self::$config[ 'collections' ] ) as $k ) {
 			add_meta_box( 'webcomic-media', __( 'Webcomic Media', 'webcomic' ), array( $this, 'media' ), $k, 'side', 'default' );
 			add_meta_box( 'webcomic-commerce', __( 'Webcomic Commerce', 'webcomic' ), array( $this, 'commerce' ), $k, 'normal', 'high' );
 			add_meta_box( 'webcomic-transcripts', __( 'Webcomic Transcripts', 'webcomic' ), array( $this, 'transcripts' ), $k, 'normal', 'high' );
-		}
-	}
-	
-	/** Save metadata with pages.
-	 * 
-	 * @param integer $id The page ID to update.
-	 * @param object $post Post object to update.
-	 * @hook wp_insert_post
-	 */
-	public function save_page( $id, $post ) {
-		if (
-			isset( $_POST[ 'webcomic_meta_collection' ], $_POST[ 'webcomic_page_collection' ] )
-			and 'page' === $post->post_type
-			and ( !defined( 'DOING_AUTOSAVE' ) or !DOING_AUTOSAVE )
-			and wp_verify_nonce( $_POST[ 'webcomic_meta_collection' ], 'webcomic_meta_collection' )
-			and current_user_can( 'edit_page', $id )
-		) {
-			if ( $post_id = wp_is_post_revision( $id ) ) {
-				$id = $post_id;
-			}
-			
-			if ( $_POST[ 'webcomic_page_collection' ] ) {
-				update_post_meta( $id, 'webcomic_collection', $_POST[ 'webcomic_page_collection' ] );
-			} else {
-				delete_post_meta( $id, 'webcomic_collection' );
-			}
 		}
 	}
 	
@@ -146,7 +115,7 @@ class WebcomicPosts extends Webcomic {
 		if ( ( !defined( 'DOING_AUTOSAVE' ) or !DOING_AUTOSAVE ) and 'publish' === $post->post_status and isset( self::$config[ 'collections' ][ $post->post_type ] ) and self::$config[ 'collections' ][ $post->post_type ][ 'updated' ] < mysql2date( 'U', $post->post_date ) ) {
 			self::$config[ 'collections' ][ $post->post_type ][ 'updated' ] = mysql2date( 'U', $post->post_date );
 			
-			update_option( 'webcomic', self::$config );
+			update_option( 'webcomic_options', self::$config );
 		}
 	}
 	
@@ -380,7 +349,7 @@ class WebcomicPosts extends Webcomic {
 	public function bulk_edit_custom_box( $column, $type ) {
 		global $post;
 		
-		if ( 'webcomic_attachments' === $column ) {
+		if ( 'webcomic_attachments' === $column and preg_match( '/^webcomic\d+$/', $type ) ) {
 			wp_nonce_field( 'webcomic_meta_bulk', 'webcomic_meta_bulk' );
 		?>
 		<fieldset class="inline-edit-col-right">
@@ -424,7 +393,7 @@ class WebcomicPosts extends Webcomic {
 	 * @hook quick_edit_custom_box
 	 */
 	public function quick_edit_custom_box( $column, $type ) {
-		if ( 'webcomic_attachments' === $column ) {
+		if ( 'webcomic_attachments' === $column and preg_match( '/^webcomic\d+$/', $type ) ) {
 			wp_nonce_field( 'webcomic_inline_save', 'webcomic_inline_save' );
 		?>
 		<fieldset class="inline-edit-col-right">
@@ -556,33 +525,6 @@ class WebcomicPosts extends Webcomic {
 		$mid[ 'webcomic_characters' ]  = __( 'Characters', 'webcomic' );
 		
 		return array_merge( $pre, $mid, $columns );
-	}
-	
-	/** Render the page collection meta box.
-	 * 
-	 * @param object $page Current page object.
-	 * @uses Webcomic::$config
-	 */
-	public function page_collection( $page ) {
-		$page_collection = get_post_meta( $page->ID, 'webcomic_collection', true );
-		
-		wp_nonce_field( 'webcomic_meta_collection', 'webcomic_meta_collection' );
-		?>
-		<p>
-			<select name="webcomic_page_collection">
-				<option value=""><?php _e( '(no collection)', 'webcomic' ); ?></option>
-				<?php
-					foreach ( self::$config[ 'collections' ] as $k => $v ) {
-						printf( '<option value="%s"%s>%s</option>',
-							$k,
-							selected( $k, $page_collection, false ),
-							esc_html( $v[ 'name' ] )
-						);
-					}
-				?>
-			</select>
-		</p>
-		<?php
 	}
 	
 	/** Render the webcomic media meta box.
@@ -812,7 +754,7 @@ class WebcomicPosts extends Webcomic {
 	 * @param boolean $transcripts Updated transcription meta value.
 	 */
 	public static function ajax_quick_save( $id, $prints, $original, $transcripts ) {
-		if ( isset( $_GET[ 'webcomic_inline_save' ] ) and wp_verify_nonce( $_GET[ 'webcomic_inline_save' ], 'webcomic_inline_save' ) and current_user_can( 'edit_page', $id ) ) {
+		if ( isset( $_GET[ 'webcomic_inline_save' ] ) and wp_verify_nonce( $_GET[ 'webcomic_inline_save' ], 'webcomic_inline_save' ) and current_user_can( 'edit_post', $id ) ) {
 			update_post_meta( $id, 'webcomic_prints', ( boolean ) $prints );
 			update_post_meta( $id, 'webcomic_original', ( boolean ) $original );
 			update_post_meta( $id, 'webcomic_transcripts', ( boolean ) $transcripts );
