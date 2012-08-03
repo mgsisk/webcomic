@@ -16,7 +16,7 @@ Webcomic provides a host of features for creating, managing, and sharing webcomi
 
 [vimeo http://vimeo.com/12500716]
 
-= ✮ New in Webcomic 4 ✮ =
+= ★ New in Webcomic 4 ★ =
 
 _**Everything!**_ Webcomic has been rebuilt to provide you with leaner, meaner webcomic management. Highlights include:
 
@@ -29,7 +29,7 @@ _**Everything!**_ Webcomic has been rebuilt to provide you with leaner, meaner w
 - Improved theme integration makes it easier than ever to start using Webcomic right away with almost any WordPress theme.
 - New and refactored template tags, widgets, and shortcodes for greater control and customization of your Webcomic-powered site.
 
-[**Existing Webcomic users should read this before upgrading.**](http://webcomic.nu/upgrade)
+[**Existing Webcomic users should read this before upgrading.**](//github.com/mgsisk/webcomic/wiki/Upgrading)
 
 == Installation ==
 
@@ -53,9 +53,9 @@ Once installed and activated you can use Webcomic in one of three ways:
 
 = Where can I get help with Webcomic? =
 
+- [Beginner's Guide](//github.com/mgsisk/webcomic/wiki)
 - [Video Tutorials](//vimeo.com/channels/webcomic)
 - [Support Forum](http://webcomic.nu/support)
-- [Technical Documentation](http://webcomic.nu/docs)
 - [Issue Tracker](//github.com/mgsisk/webcomic/issues)
 - [Email Support](mailto:support@webcomic.nu)
 
@@ -69,8 +69,8 @@ All Webcomic changes can be followed at [the master fork on GitHub](//github.com
 
 = 4 =
 
-Existing Webcomic users should read this before upgrading: [webcomic.nu/upgrade](http://webcomic.nu/upgrade)
+Existing Webcomic users should [read this before upgrading](//github.com/mgsisk/webcomic/wiki/Upgrading)
 
 == Special Thanks ==
 
-To BigBagel, Miluette, LordRembo, Vaslittlecrow, Fesworks, Naomiyaki, MatthewEbel, and Kuipou for prerelease testing and feedback, and to the thousands of users that share their amazing work with Webcomic.
+To [BigBagel](//twitter.com/DrPotatoMonster), [Miluette](//twitter.com/miluette), [LordRembo](//twitter.com/lordrembo), [Vaslittlecrow](//twitter.com/vaslittlecrow), [Fesworks](//twitter.com/fesworks), [Naomiyaki](//twitter.com/naomiyaki), [MatthewEbel](//twitter.com/matthewebel), and [Kuipou](//twitter.com/kuipou) for early testing and feedback, and to the thousands of users that share their amazing work with Webcomic.

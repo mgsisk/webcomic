@@ -247,7 +247,7 @@ class WebcomicAdmin extends Webcomic {
 			if ( $legacy ) {
 				delete_option( 'webcomic_legacy' );
 				
-				update_option( 'webcomic_legacy', $legacy, '', 'no' );
+				update_option( 'webcomic_legacy', $legacy_config, '', 'no' );
 			}
 			
 			add_option( 'webcomic_options', self::$config );
@@ -412,7 +412,7 @@ class WebcomicAdmin extends Webcomic {
 	public function admin_head() {
 		$screen = get_current_screen();
 		
-		if ( preg_match( '/^(page|options-media|media_page_webcomic-generator|settings_page_webcomic|(edit-)?webcomic_(transcript|language)|(webcomic\d+_page_|edit-)?webcomic\d+(-options|_storyline|_character)?)$/', $screen->id ) ) {
+		if ( preg_match( '/^(page|options-media|media_page_webcomic-generator|settings_page_webcomic-options|(edit-)?webcomic_(transcript|language)|(webcomic\d+_page_|edit-)?webcomic\d+(-options|_storyline|_character)?)$/', $screen->id ) ) {
 			require_once self::$dir . '-/php/help.php';
 			
 			new WebcomicHelp( $screen );

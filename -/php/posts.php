@@ -235,7 +235,7 @@ class WebcomicPosts extends Webcomic {
 	 * @param string $new New post status.
 	 * @param string $old Old post status.
 	 * @param string $post Post object to update.
-	 * @uses Webcomic::config
+	 * @uses Webcomic::$config
 	 * @hook transition_post_status
 	 * @filter string webcomic_tweet $post
 	 */
@@ -302,6 +302,7 @@ class WebcomicPosts extends Webcomic {
 	public function wp_insert_post_data( $data, $raw ) {
 		if (
 			isset( self::$config[ 'collections' ][ $raw[ 'post_type' ] ] )
+			and !empty( $raw[ 'ID' ] )
 			and current_user_can( 'edit_post', $raw[ 'ID' ] )
 		) {
 			if ( !in_array( 'title', self::$config[ 'collections' ][ $data[ 'post_type' ] ][ 'supports' ] ) ) {

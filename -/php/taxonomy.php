@@ -18,7 +18,7 @@ class WebcomicTaxonomy extends Webcomic {
 	 * @uses WebcomicTaxonomy::create_term()
 	 * @uses WebcomicTaxonomy::delete_term()
 	 * @uses WebcomicTaxonomy::admin_enqueue_scripts()
-	 * @uses WebcomicTaxonomy::get_term_args()
+	 * @uses WebcomicTaxonomy::get_terms_args()
 	 * @uses WebcomicTaxonomy::add_form_fields()
 	 * @uses WebcomicTaxonomy::edit_form_fields()
 	 * @uses WebcomicTaxonomy::storyline_row_actions()

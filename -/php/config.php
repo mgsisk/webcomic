@@ -47,16 +47,19 @@ class WebcomicConfig extends Webcomic {
 	 * @uses WebcomicConfig::collection_theme()
 	 * @uses WebcomicConfig::collection_buffer()
 	 * @uses WebcomicConfig::collection_feeds()
-	 * @uses WebcomicConfig::collection_transcripts()
-	 * @uses WebcomicConfig::collection_business()
-	 * @uses WebcomicConfig::collection_prints()
-	 * @uses WebcomicConfig::collection_sales()
-	 * @uses WebcomicConfig::collection_prices()
-	 * @uses WebcomicConfig::collection_shipping()
-	 * @uses WebcomicConfig::collection_donation()
-	 * @uses WebcomicConfig::collection_currency()
-	 * @uses WebcomicConfig::collection_age()
-	 * @uses WebcomicConfig::collection_roles()
+	 * @uses WebcomicConfig::collection_transcripts_default()
+	 * @uses WebcomicConfig::collection_transcripts_permission()
+	 * @uses WebcomicConfig::collection_transcripts_notify()
+	 * @uses WebcomicConfig::collection_transcripts_languages()
+	 * @uses WebcomicConfig::collection_commerce_business()
+	 * @uses WebcomicConfig::collection_commerce_prints()
+	 * @uses WebcomicConfig::collection_commerce_sales()
+	 * @uses WebcomicConfig::collection_commerce_prices()
+	 * @uses WebcomicConfig::collection_commerce_shipping()
+	 * @uses WebcomicConfig::collection_commerce_donation()
+	 * @uses WebcomicConfig::collection_commerce_currency()
+	 * @uses WebcomicConfig::collection_access_age()
+	 * @uses WebcomicConfig::collection_access_roles()
 	 * @uses WebcomicConfig::collection_supports_content()
 	 * @uses WebcomicConfig::collection_supports_discussion()
 	 * @uses WebcomicConfig::collection_supports_miscellanea()
@@ -264,7 +267,7 @@ class WebcomicConfig extends Webcomic {
 		?>
 		<div class="tablenav top">
 			<div class="alignleft actions">
-				<input type="text" name="webcomic_new_collection" placeholder="<?php _e( 'Name', 'webcomic' ); ?>" class="regular-text">
+				<input type="text" name="webcomic_new_collection" placeholder="<?php esc_attr_e( 'Name', 'webcomic' ); ?>" class="regular-text">
 				<?php submit_button( __( 'Add Collection', 'webcomic' ), 'secondary', 'webcomic_add_collection', false, array( 'id' => 'doaction' ) ); ?>
 			</div>
 		</div>
@@ -336,7 +339,7 @@ class WebcomicConfig extends Webcomic {
 			<tbody>
 				<tr class="alternate">
 					<th class="check-column">&nbsp;</th>
-					<td><input type="text" name="webcomic_new_size" id="webcomic_new_size" placeholder="<?php _e( 'New Size', 'webcomic' ); ?>"></td>
+					<td><input type="text" name="webcomic_new_size" id="webcomic_new_size" placeholder="<?php esc_attr_e( 'New Size', 'webcomic' ); ?>"></td>
 					<td><input type="number" name="webcomic_new_size_width" id="webcomic_new_size_width" min="0" class="small-text"></td>
 					<td><input type="number" name="webcomic_new_size_height" id="webcomic_new_size_height" min="0" class="small-text"></td>
 					<td><input type="checkbox" name="webcomic_new_size_crop" id="webcomic_new_size_crop"></td>
@@ -552,7 +555,7 @@ class WebcomicConfig extends Webcomic {
 	public function collection_transcripts_languages() {
 		?>
 		<select name="webcomic_transcripts_languages[]" id="webcomic_transcripts_languages" style="min-height:8em;vertical-align:top" multiple>
-			<optgroup label="<?php _e( 'Transcript Languages', 'webcomic' ); ?>">
+			<optgroup label="<?php esc_attr_e( 'Transcript Languages', 'webcomic' ); ?>">
 				<option value="!"<?php selected( '!' === self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'transcripts' ][ 'languages' ][ 0 ] ); ?>><?php _e( '- Any -', 'webcomic' ); ?></option>
 				<?php
 					if ( $terms = get_terms( 'webcomic_language', array( 'get' => 'all' ) ) and !is_wp_error( $terms ) ) {
@@ -595,6 +598,7 @@ class WebcomicConfig extends Webcomic {
 	}
 	
 	/** Render the Commerce > Sales setting.
+	 * @uses Webcomic::$config
 	 */
 	public function collection_commerce_sales() {
 		?>
@@ -751,7 +755,7 @@ class WebcomicConfig extends Webcomic {
 		<label><input type="checkbox" name="webcomic_access_byrole" id="webcomic_access_byrole"<?php checked( self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'access' ][ 'byrole' ] ); ?>> <?php _e( 'People must be registered and logged in to view webcomics in this collection', 'webcomic' ); ?></label><br>
 		<p>
 			<select name="webcomic_access_roles[]" style="min-height:8em;vertical-align:top" multiple>
-				<optgroup label="<?php _e( 'Allowed Roles', 'webcomic' ); ?>">
+				<optgroup label="<?php esc_attr_e( 'Allowed Roles', 'webcomic' ); ?>">
 					<option value="!"<?php selected( ( isset( self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'access' ][ 'roles' ][ 0 ]  ) and '!' === self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'access' ][ 'roles' ][ 0 ] ) ); ?>><?php _e( '- Any -', 'webcomic' ); ?></option>
 					<?php
 						$roles = get_editable_roles();
@@ -1146,8 +1150,7 @@ class WebcomicConfig extends Webcomic {
 		return ( isset( $_POST[ 'webcomic_general' ] ) or isset( $_POST[ 'webcomic_collection' ] ) ) ? self::$config : $options;
 	}
 	
-	/** Empty callback for add_settings_section().
-	 */
+	/** Empty callback for add_settings_section(). */
 	public function section(){}
 	
 	/** Handle dynamic slug previews.
@@ -1214,8 +1217,8 @@ class WebcomicConfig extends Webcomic {
 				$oauth   = new TwitterOAuth( $consumer_key, $consumer_secret );
 				$request = $oauth->getRequestToken( add_query_arg( array( 'webcomic_twitter_oauth' => true, 'webcomic_collection' => $collection ), get_site_url() ) );
 				
-				self::$config[ 'collections' ][ $collection ][ 'twitter' ][ 'request_token' ]   = $request[ 'oauth_token' ];
-				self::$config[ 'collections' ][ $collection ][ 'twitter' ][ 'request_secret' ]  = $request[ 'oauth_token_secret' ];
+				self::$config[ 'collections' ][ $collection ][ 'twitter' ][ 'request_token' ]   = isset( $request[ 'oauth_token' ] ) ? $request[ 'oauth_token' ] : '';
+				self::$config[ 'collections' ][ $collection ][ 'twitter' ][ 'request_secret' ]  = isset( $request[ 'oauth_token_secret' ] ) ? $request[ 'oauth_token_secret' ] : '';
 				
 				update_option( 'webcomic_options', self::$config );
 			
@@ -1251,12 +1254,14 @@ class WebcomicConfig extends Webcomic {
 				}
 			}
 			
-			foreach ( $_POST[ 'webcomic_size' ] as $k => $v ) {
-				self::$config[ 'sizes' ][ $k ] = array(
-					'width'  => intval( $v[ 'width' ] ),
-					'height' => intval( $v[ 'height' ] ),
-					'crop'   => isset( $v[ 'crop' ] )
-				);
+			if ( !empty( $_POST[ 'webcomic_size' ] ) ) {
+				foreach ( $_POST[ 'webcomic_size' ] as $k => $v ) {
+					self::$config[ 'sizes' ][ $k ] = array(
+						'width'  => intval( $v[ 'width' ] ),
+						'height' => intval( $v[ 'height' ] ),
+						'crop'   => isset( $v[ 'crop' ] )
+					);
+				}
 			}
 			
 			if ( $_POST[ 'webcomic_bulk_size' ] and isset( $_POST[ 'webcomic_sizes' ] ) ) {

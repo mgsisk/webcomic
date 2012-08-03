@@ -7,21 +7,33 @@
 /** Upgrade legacy Webcomic installations.
  * 
  * @package Webcomic
- * @todo Implement
  */
 class WebcomicLegacy extends Webcomic {
+	/** Stores the maximum safe script execution time.
+	 * @var integer
+	 */
+	private $limit;
+	
 	/** Register action and filter hooks.
+	 * 
+	 * Also sets the maximum "safe" script execution time, defined here
+	 * as the `max_execution_time` minus a 10% buffer.
 	 * 
 	 * @uses WebcomicLegacy::init()
 	 * @uses WebcomicLegacy::admin_init()
 	 * @uses WebcomicLegacy::admin_menu()
+	 * @uses WebcomicLegacy::admin_footer()
 	 * @uses WebcomicLegacy::admin_notices()
 	 * @uses WebcomicLegacy::admin_enqueue_scripts()
+	 * @uses WebcomicLegacy::list_term_exclusions()
 	 */
 	public function __construct() {
+		$this->limit = ( integer ) ini_get( 'max_execution_time' ) - ceil( ( integer ) ini_get( 'max_execution_time' ) * .1 );
+		
 		add_action( 'init', array( $this, 'init' ) );
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
+		add_action( 'admin_footer', array( $this, 'admin_footer' ) );
 		add_action( 'admin_notices', array( $this, 'admin_notices' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 		add_action( 'list_term_exclusions', array( $this, 'list_term_exclusions' ), 10, 2 );
@@ -70,25 +82,37 @@ class WebcomicLegacy extends Webcomic {
 	 * @hook admin_init
 	 */
 	public function admin_init() {
-		if ( isset( $_POST[ 'disable_legacy' ], $_POST[ 'webcomic_upgrade' ] ) and wp_verify_nonce( $_POST[ 'webcomic_upgrade' ], 'webcomic_upgrade' ) ) {
-			$file = plugin_basename( self::$dir . '/webcomic.php' );
-			
-			self::$config[ 'uninstall' ] = true;
-			
-			update_option( 'webcomic_options', self::$config );
-			
-			wp_redirect( html_entity_decode( wp_nonce_url( add_query_arg( array( 'action' => 'deactivate', 'plugin' => $file ), admin_url( 'plugins.php' ) ), 'deactivate-plugin_' . $file ) ) );
-			
-			die;
-		}
-		
-		if ( isset( $_POST[ 'upgrade_legacy' ], $_POST[ 'webcomic_upgrade' ] ) and wp_verify_nonce( $_POST[ 'webcomic_upgrade' ], 'webcomic_upgrade' ) ) {
-			if ( 3 === self::$config[ 'legacy' ] ) {
-				$_POST[ 'webcomic_upgrade_continue' ] = self::upgrade3();
-			} else if ( 2 === self::$config[ 'legacy' ] ) {
-				$_POST[ 'webcomic_upgrade_continue' ] = self::upgrade2();
-			} else {
-				$_POST[ 'webcomic_upgrade_continue' ] = self::upgrade1();
+		if ( isset( $_POST[ 'webcomic_upgrade' ] ) and wp_verify_nonce( $_POST[ 'webcomic_upgrade' ], 'webcomic_upgrade' ) ) {
+			if ( isset( $_POST[ 'disable_legacy' ] ) ) {
+				$file = plugin_basename( self::$dir . '/webcomic.php' );
+				
+				self::$config[ 'uninstall' ] = true;
+				
+				update_option( 'webcomic_options', self::$config );
+				
+				wp_redirect( html_entity_decode( wp_nonce_url( add_query_arg( array( 'action' => 'deactivate', 'plugin' => $file ), admin_url( 'plugins.php' ) ), 'deactivate-plugin_' . $file ) ) );
+				
+				die;
+			} else if ( isset( $_POST[ 'upgrade_legacy' ] ) ) {
+				$stage = !empty( $_POST[ 'webcomic_upgrade_stage' ] ) ? $_POST[ 'webcomic_upgrade_stage' ] : 0;
+				
+				if ( !empty( $_POST[ 'webcomic_upgrade_complete' ] ) ) {
+					unset( self::$config[ 'legacy' ] );
+					
+					delete_option( 'webcomic_legacy' );
+					
+					update_option( 'webcomic_options', self::$config );
+					
+					wp_redirect( admin_url() );
+					
+					die;
+				} else if ( 3 === self::$config[ 'legacy' ] ) {
+					$_POST[ 'webcomic_upgrade_status' ] = self::upgrade3( $stage );
+				} else if ( 2 === self::$config[ 'legacy' ] ) {
+					$_POST[ 'webcomic_upgrade_status' ] = self::upgrade2( $stage );
+				} else {
+					$_POST[ 'webcomic_upgrade_status' ] = self::upgrade1( $stage );
+				}
 			}
 		}
 	}
@@ -100,6 +124,18 @@ class WebcomicLegacy extends Webcomic {
 	 */
 	public function admin_menu() {
 		add_submenu_page( 'tools.php', __( 'Upgrade Webcomic', 'webcomic' ), __( 'Upgrade Webcomic', 'webcomic' ), 'manage_options', 'webcomic-upgrader', array( $this, 'page' ) );
+	}
+	
+	/** Render javascript for upgrade page.
+	 * 
+	 * @hook admin_footer
+	 */
+	public function admin_footer() {
+		$screen = get_current_screen();
+		
+		if ( 'tools_page_webcomic-upgrader' === $screen->id ) {
+			printf( "<script>webcomic_auto_upgrade('%s')</script>", __( 'Continuing upgrade&hellip;', 'webcomic' ) );
+		}
 	}
 	
 	/** Render upgrade tool notification.
@@ -131,6 +167,10 @@ class WebcomicLegacy extends Webcomic {
 	 * @hook admin_enqueue_scripts
 	 */
 	public function admin_enqueue_scripts() {
+		wp_register_script( 'webcomic-legacy', self::$url . '-/js/admin-legacy.js', array( 'jquery' ) );
+		
+		wp_enqueue_script( 'webcomic-legacy' );
+		
 		if ( isset( self::$config[ 'legacy_notice' ] ) ) {
 			wp_register_style( 'webcomic-google-font', 'http://fonts.googleapis.com/css?family=Maven+Pro' );
 			wp_register_style( 'webcomic-special', self::$url . '-/css/admin-special.css', array( 'webcomic-google-font' ) );
@@ -165,18 +205,38 @@ class WebcomicLegacy extends Webcomic {
 			<h2><?php _e( 'Upgrade Webcomic', 'webcomic' ); ?></h2>
 			<div id="col-left">
 				<div class="col-wrap">
-					<?php if ( isset( $_POST[ 'webcomic_upgrade_continue' ] ) and 'complete' === $_POST[ 'webcomic_upgrade_continue' ] ) { ?>
+					<?php if ( isset( $_POST[ 'webcomic_upgrade_status' ] ) and 0 === $_POST[ 'webcomic_upgrade_status' ] ) { ?>
 					
+					<h3 style="color:green;font-size:larger"><?php _e( "Just one more click!", 'webcomic' ); ?></h3>
+					<p><?php printf( __( 'Thanks again for using Webcomic! Clicking <strong>Complete the Upgrade</strong> will remove the Upgrade Webcomic tool, delete any leftover Webcomic %s data, and take you to the administrative dashboard. If you notice any problems with the upgrade please <a href="%s" target="_blank">let the developer know</a>.', 'webcomic' ), self::$config[ 'legacy' ], '//github.com/mgsisk/webcomic/issues' ); ?></p>
+					<form method="post">
+						<?php wp_nonce_field( 'webcomic_upgrade', 'webcomic_upgrade' ); ?>
+						<div class="form-wrap">
+							<?php submit_button( __( 'Complete the Upgrade', 'webcomic' ), 'primary', 'upgrade_legacy', false ); ?>
+							<input type="hidden" name="webcomic_upgrade_complete" value="1">
+						</div>
+					</form>
 					
+					<?php } else if ( isset( $_POST[ 'webcomic_upgrade_status' ] ) ) { ?>
 					
-					<?php } else if ( isset( $_POST[ 'webcomic_upgrade_continue' ] ) ) { ?>
+					<p style="color:#e66f00;font-size:larger"><strong><?php _e( 'Webcomic has paused the upgrade to prevent a timeout error.', 'webcomic' ); ?></strong></p>
+					<p><?php _e( 'The upgrade will automatically resume in 5 seconds, or you may click <strong>Continue Upgrading</strong> to resume now.', 'webcomic' ); ?></p>
+					<form method="post" class="webcomic-auto">
+						<?php wp_nonce_field( 'webcomic_upgrade', 'webcomic_upgrade' ); ?>
+						<div class="form-wrap">
+							<?php submit_button( __( 'Continue Upgrading', 'webcomic' ), 'primary', 'upgrade_legacy', false ); ?>
+							<input type="hidden" name="webcomic_upgrade_stage" value="<?php echo $_POST[ 'webcomic_upgrade_status' ]; ?>">
+							<div class="webcomic-auto-message" style="font-size:larger;font-weight:bold;"></div>
+						</div>
+					</form>
 					
-					
+					<script>
+					</script>
 					
 					<?php } else { ?>
 					
 					<p><?php printf( __( 'This tool will attempt to automatically convert your existing Webcomic %s data to Webcomic %s. Depending on the size of your site the upgrade may require multiple steps. If you do not want to upgrade click <strong>Not Interested</strong> to uninstall Webcomic %s.', 'webcomic' ), self::$config[ 'legacy' ], self::$version, self::$version ); ?></p>
-					<p style="color:#bc0b0b;font-size:larger;line-height:1.5"><strong><?php printf( __( 'Upgrades are not reversible. Please <a href="%s" target="_blank">read this</a> and <a href="%s">backup your site</a> before upgrading.', 'webcomic' ), 'http://webcomic.nu/upgrade', esc_url( admin_url( 'export.php' ) ) ); ?></strong></p>
+					<p style="color:#bc0b0b;font-size:larger"><strong><?php printf( __( 'Upgrades are not reversible. Please <a href="%s" target="_blank">read this</a> and <a href="%s">backup your site</a> before upgrading.', 'webcomic' ), '//github.com/mgsisk/webcomic/Upgrading', esc_url( admin_url( 'export.php' ) ) ); ?></strong></p>
 					<form method="post">
 						<?php wp_nonce_field( 'webcomic_upgrade', 'webcomic_upgrade' ); ?>
 						<div class="form-wrap">
@@ -193,31 +253,293 @@ class WebcomicLegacy extends Webcomic {
 	}
 	
 	/** Upgrade Webcomic 1 installations.
+	 * 
+	 * @return integer
+	 * @uses Webcomic::$config
+	 * @uses WebcomicLegacy::legacy_path()
+	 * @uses WebcomicLegacy::update_media_library()
 	 */
-	private function upgrade1() {
-		$now           = time();
-		$timelimit     = ini_get( 'max_execution_time' );
-		$upload_dir    = wp_upload_dir();
+	private function upgrade1( $stage = 0 ) {
+		global $wpdb;
+		
+		$start         = microtime( true );
 		$admin_email   = get_bloginfo( 'admin_email' );
 		$legacy_config = get_option( 'webcomic_legacy' );
+		
+		if ( !$stage ) {
+			self::$config[ 'increment' ] = 1;
+			
+			if ( get_option( 'thumbnail_size_w' ) !== $legacy_config[ 'comic_thumbnail_size_w' ] or get_option( 'thumbnail_size_h' ) !== $legacy_config[ 'comic_thumbnail_size_h' ] ) {
+				update_option( 'thumbnail_size_w', $legacy_config[ 'comic_thumbnail_size_w' ] );
+				update_option( 'thumbnail_size_h', $legacy_config[ 'comic_thumbnail_size_h' ] );
+			}
+			
+			if ( get_option( 'medium_size_w' ) !== $legacy_config[ 'comic_medium_size_w' ] or get_option( 'medium_size_h' ) !== $legacy_config[ 'comic_medium_size_h' ] ) {
+				update_option( 'medium_size_w', $legacy_config[ 'comic_medium_size_w' ] );
+				update_option( 'medium_size_h', $legacy_config[ 'comic_medium_size_h' ] );
+			}
+			
+			if ( get_option( 'large_size_w' ) !== $legacy_config[ 'comic_large_size_w' ] or get_option( 'large_size_h' ) !== $legacy_config[ 'comic_large_size_h' ] ) {
+				update_option( 'large_size_w', $legacy_config[ 'comic_large_size_w' ] );
+				update_option( 'large_size_h', $legacy_config[ 'comic_large_size_h' ] );
+			}
+			
+			update_option( 'webcomic_options', self::$config );
+			
+			$stage++;
+		}
+		
+		if ( $terms = get_terms( 'category', array( 'get' => 'all', 'include' => $legacy_config[ 'comic_category' ], 'orderby' => 'id' ) ) and !is_wp_error( $terms ) ) {
+			foreach ( $terms as $k => $v ) {
+				$collection_id = 'webcomic' . self::$config[ 'increment' ];
+				
+				if ( 1 === intval( $stage ) ) {
+					self::$config[ 'collections' ][ $collection_id ] = array(
+						'id'          => $collection_id,
+						'name'        => $v->name,
+						'image'       => 0,
+						'theme'       => '',
+						'updated'     => 0,
+						'supports'    => array( 'title', 'editor', 'author', 'excerpt', 'trackbacks', 'custom-fields', 'comments', 'revisions' ),
+						'taxonomies'  => array( 'category', 'post_tag' ),
+						'description' => $v->description,
+						'feeds' => array(
+							'hook' => ( boolean ) $legacy_config[ 'comic_feed' ],
+							'size' => $legacy_config[ 'comic_feed_size' ],
+							'main' => true
+						),
+						'slugs' => array(
+							'name'      => $v->slug,
+							'archive'   => $v->slug,
+							'webcomic'  => $v->slug,
+							'storyline' => "{$v->slug}-storyline",
+							'character' => "{$v->slug}-character"
+						),
+						'buffer' => array(
+							'hook'  => true,
+							'days'  => 7,
+							'email' => $admin_email
+						),
+						'access' => array(
+							'byage'  => false,
+							'byrole' => false,
+							'age'    => 18,
+							'roles'  => array( '!' )
+						),
+						'twitter' => array(
+							'format'          => __( '%collection-name has updated! %site-url', 'webcomic' ),
+							'oauth_token'     => '',
+							'oauth_secret'    => '',
+							'consumer_key'    => '',
+							'consumer_secret' => '',
+							'request_token'   => '',
+							'request_secret'  => ''
+						),
+						'commerce' => array(
+							'business'  => '',
+							'currency'  => 'USD',
+							'prints'    => false,
+							'originals' => false,
+							'method'    => '_xclick',
+							'donation'  => 0,
+							'price'     => array(
+								'domestic'      => 6,
+								'international' => 9,
+								'original'      => 12
+							),
+							'shipping' => array(
+								'domestic'      => 4,
+								'international' => 6,
+								'original'      => 8
+							),
+							'total' => array(
+								'domestic'      => 10,
+								'international' => 15,
+								'original'      => 20
+							)
+						),
+						'transcripts' => array(
+							'open'       => false,
+							'languages'  => array( '!' ),
+							'permission' => 'register',
+							'notify'     => array(
+								'hook'  => true,
+								'email' => $admin_email
+							)
+						)
+					);
+					
+					update_option( 'webcomic_options', self::$config );
+					
+					$stage++;
+				}
+				
+				if ( 2 === intval( $stage ) ) {
+					if ( $chapters = get_terms( 'chapter', array( 'fields' => 'ids', 'orderby' => 'term_group', 'child_of' => $v->term_id, 'get' => 'all' ) ) and !is_wp_error( $chapters ) ) {
+						$count = array();
+						
+						foreach ( $chapters as $chapter ) {
+							$chapter = get_term( $chapter, 'chapter' );
+							
+							$wpdb->update( $wpdb->terms, array( 'term_group' => isset( $count[ $chapter->parent ] ) ? $count[ $chapter->parent ] : 0 ), array( 'term_id' => $chapter->term_id ) );
+							$wpdb->update( $wpdb->term_taxonomy, array( 'taxonomy' => "{$collection_id}_storyline" ), array( 'term_id' => $chapter->term_id, 'taxonomy' => 'chapter' ) );
+							
+							if ( empty( $count[ $chapter->parent ] ) ) {
+								$count[ $chapter->parent ] = 0;
+							}
+							
+							$count[ $chapter->parent ]++;
+							
+							if ( microtime( true ) - $start >= $this->limit ) {
+								return $stage;
+							}
+						}
+					}
+					
+					$stage++;
+				}
+				
+				if ( 3 === intval( $stage ) ) {
+					$meta_files = ( array ) glob( self::legacy_path( $legacy_config[ 'comic_directory' ], 1 < count( $legacy_config[ 'comic_category' ] ) ? $v->term_id : '' ) . '*.*' );
+					
+					if ( $posts = get_posts( array(
+						'fields'      => 'ids',
+						'numberposts' => -1,
+						'post_type'   => 'post',
+						'post_status' => get_post_stati(),
+						'order'       => 'ASC',
+						'tax_query'   => array( array(
+							'taxonomy' => 'category',
+							'field'    => 'id',
+							'terms'    => $v->term_id
+						) )
+					) ) ) {
+						foreach ( $posts as $post ) {
+							if ( 'date' === $legacy_config[ 'comic_name_format' ] ) {
+								$format = get_the_time( $legacy_config[ 'comic_name_format_date' ], $post );
+							} else if ( 'slug' === $legacy_config[ 'comic_name_format' ] ) {
+								$format = '';
+							} else {
+								$format = get_post_meta( $post, 'comic_filename', true );
+							}
+							
+							$meta_file = preg_grep( "/{$format}/", $meta_files );
+							
+							if ( !empty( $meta_file ) ) {
+								self::update_media_library( $meta_file[ 0 ], ( integer ) $post, array(
+									'post_excerpt' => ( $meta_description = get_post_meta( $post, 'comic_description', true ) ) ? $meta_description : ''
+								) );
+							}
+							
+							if ( $meta_transcript = get_post_meta( $post, 'comic_transcript', true ) ) {
+								$date  = get_the_time( 'Y-m-d H:i:s', $post );
+								$title = sprintf( __( '%s Transcript', 'webcomic' ), get_the_title( $post ) );
+								
+								wp_insert_post( array(
+									'post_name'     => sanitize_title( $title ),
+									'post_type'     => 'webcomic_transcript',
+									'post_date'     => $date,
+									'post_title'    => $title,
+									'post_author'   => 1,
+									'post_parent'   => $post,
+									'post_status'   => 'publish',
+									'post_content'  => $meta_transcript,
+									'post_date_gmt' => get_gmt_from_date( $date )
+								) );
+							}
+							
+							update_post_meta( $post, 'webcomic_prints', false );
+							
+							update_post_meta( $post, 'webcomic_original', false );
+							
+							update_post_meta( $post, 'webcomic_transcripts', ( boolean ) true );
+							
+							update_post_meta( $post, 'webcomic_commerce', array(
+								'price' => array(
+									'domestic'      => 6,
+									'international' => 9,
+									'original'      => 12
+								),
+								'shipping' => array(
+									'domestic'      => 4,
+									'international' => 6,
+									'original'      => 8
+								),
+								'total'  => array(
+									'domestic'      => 10,
+									'international' => 15,
+									'original'      => 20
+								),
+								'adjust' => array(
+									'price' => array(
+										'domestic'      => 0,
+										'international' => 0,
+										'original'      => 0
+									),
+									'shipping' => array(
+										'domestic'      => 0,
+										'international' => 0,
+										'original'      => 0
+									),
+									'total'  => array(
+										'domestic'      => 0,
+										'international' => 0,
+										'original'      => 0
+									)
+								)
+							) );
+							
+							delete_post_meta( $post, 'comic_filename' );
+							delete_post_meta( $post, 'comic_transcript' );
+							delete_post_meta( $post, 'comic_description' );
+							
+							$wpdb->update( $wpdb->posts, array( 'post_type' => $collection_id ), array( 'ID' => ( integer ) $post ) );
+							
+							self::$config[ 'collections' ][ $collection_id ][ 'updated' ] = get_the_time( 'U', $post );
+							
+							update_option( 'webcomic_options', self::$config );
+							
+							if ( microtime( true ) - $start >= $this->limit ) {
+								return $stage;
+							}
+						}
+					}
+				}
+				
+				$stage = 1;
+				
+				self::$config[ 'increment' ]++;
+				
+				update_option( 'webcomic_options', self::$config );
+				
+				if ( false !== ( $key = array_search( $v->term_id, $legacy_config[ 'comic_category' ] ) ) ) {
+					unset( $legacy_config[ 'comic_category' ][ $key ] );
+					
+					update_option( 'webcomic_legacy', $legacy_config );
+				}
+				
+				if ( microtime( true ) - $start >= $this->limit ) {
+					return $stage;
+				}
+			}
+		}
+		
+		return 0;
 	}
 	
 	/** Upgrade Webcomic 2 installations.
+	 * 
+	 * @return integer
+	 * @uses Webcomic::$config
+	 * @uses WebcomicLegacy::legacy_path()
+	 * @uses WebcomicLegacy::update_media_library()
 	 */
-	private function upgrade2() {
+	private function upgrade2( $stage = 0 ) {
 		global $wpdb;
 		
-		$now           = time();
-		$timelimit     = ini_get( 'max_execution_time' );
-		$upload_dir    = wp_upload_dir();
+		$start         = microtime( true );
 		$admin_email   = get_bloginfo( 'admin_email' );
 		$legacy_config = get_option( 'webcomic_legacy' );
-		$pages         = get_posts( array(
-			'fields'      => 'ids',
-			'numberposts' => -1,
-			'post_type'   => 'page',
-			'post_status' => get_post_stati()
-		) );
 		
 		if ( $legacy_config[ 'comic_transcripts_loggedin' ] ) {
 			$transcripts_permission = 'register';
@@ -227,8 +549,9 @@ class WebcomicLegacy extends Webcomic {
 			$transcripts_permission = 'everyone';
 		}
 		
-		if ( empty( $_POST[ 'webcomic_upgrade_continue' ] ) ) {
-			self::$config[ 'webcomic' ][ 'shortcuts' ] = ( boolean ) $legacy_config[ 'comic_keyboard_shortcuts' ];
+		if ( !$stage ) {
+			self::$config[ 'increment' ] = 1;
+			self::$config[ 'shortcuts' ] = ( boolean ) $legacy_config[ 'comic_keyboard_shortcuts' ];
 			
 			if ( get_option( 'thumbnail_size_w' ) !== $legacy_config[ 'comic_thumb_size_w' ] or get_option( 'thumbnail_size_h' ) !== $legacy_config[ 'comic_thumb_size_h' ] ) {
 				update_option( 'thumbnail_size_w', $legacy_config[ 'comic_thumb_size_w' ] );
@@ -244,150 +567,66 @@ class WebcomicLegacy extends Webcomic {
 				update_option( 'large_size_w', $legacy_config[ 'comic_large_size_w' ] );
 				update_option( 'large_size_h', $legacy_config[ 'comic_large_size_h' ] );
 			}
+			
+			update_option( 'webcomic_options', self::$config );
+			
+			$stage++;
 		}
 		
-		if ( $terms = get_terms( 'category', array( 'get' => 'all', 'include' => $legacy_config[ 'comic_category' ] ) ) and !is_wp_error( $terms ) ) {
+		if ( $terms = get_terms( 'category', array( 'get' => 'all', 'include' => $legacy_config[ 'comic_category' ], 'orderby' => 'id' ) ) and !is_wp_error( $terms ) ) {
 			foreach ( $terms as $k => $v ) {
-				if ( $k ) {
-					$collection_id = 'webcomic' . self::$config[ 'increment' ];
-				} else if ( !empty( $_POST[ 'webcomic_upgrade_continue' ] ) ) {
-					$collection_id = $_POST[ 'webcomic_upgrade_continue' ];
-				} else {
-					$collection_id = 'webcomic1';
-				}
+				$collection_id = 'webcomic' . self::$config[ 'increment' ];
 				
-				self::$config[ 'webcomic' ][ 'collections' ][ $collection_id ] = array(
-					'id'          => $collection_id,
-					'name'        => $v->name,
-					'image'       => 0,
-					'theme'       => '',
-					'updated'     => 0,
-					'supports'    => array( 'title', 'editor', 'author', 'excerpt', 'trackbacks', 'custom-fields', 'comments', 'revisions' ),
-					'taxonomies'  => array( 'category', 'post_tag' ),
-					'description' => $v->description,
-					'feeds' => array(
-						'hook' => ( boolean ) $legacy_config[ 'comic_feed' ],
-						'size' => $legacy_config[ 'comic_feed_size' ],
-						'main' => true
-					),
-					'slugs' => array(
-						'name'      => $v->slug,
-						'archive'   => $v->slug,
-						'webcomic'  => $v->slug,
-						'storyline' => "{$v->slug}-storyline",
-						'character' => "{$v->slug}-character"
-					),
-					'buffer' => array(
-						'hook'  => true,
-						'days'  => 7,
-						'email' => $admin_email
-					),
-					'access' => array(
-						'byage'  => false,
-						'byrole' => false,
-						'age'    => 18,
-						'roles'  => array( '!' )
-					),
-					'twitter' => array(
-						'format'          => __( '%collection-name has updated! %site-url', 'webcomic' ),
-						'oauth_token'     => '',
-						'oauth_secret'    => '',
-						'consumer_key'    => '',
-						'consumer_secret' => '',
-						'request_token'   => '',
-						'request_secret'  => ''
-					),
-					'commerce' => array(
-						'business'  => '',
-						'currency'  => 'USD',
-						'prints'    => false,
-						'originals' => false,
-						'method'    => '_xclick',
-						'donation'  => 0,
-						'price'     => array(
-							'domestic'      => 6,
-							'international' => 9,
-							'original'      => 12
+				if ( 1 === intval( $stage ) ) {
+					self::$config[ 'collections' ][ $collection_id ] = array(
+						'id'          => $collection_id,
+						'name'        => $v->name,
+						'image'       => 0,
+						'theme'       => '',
+						'updated'     => 0,
+						'supports'    => array( 'title', 'editor', 'author', 'excerpt', 'trackbacks', 'custom-fields', 'comments', 'revisions' ),
+						'taxonomies'  => array( 'category', 'post_tag' ),
+						'description' => $v->description,
+						'feeds' => array(
+							'hook' => ( boolean ) $legacy_config[ 'comic_feed' ],
+							'size' => $legacy_config[ 'comic_feed_size' ],
+							'main' => true
 						),
-						'shipping' => array(
-							'domestic'      => 4,
-							'international' => 6,
-							'original'      => 8
+						'slugs' => array(
+							'name'      => $v->slug,
+							'archive'   => $v->slug,
+							'webcomic'  => $v->slug,
+							'storyline' => "{$v->slug}-storyline",
+							'character' => "{$v->slug}-character"
 						),
-						'total' => array(
-							'domestic'      => 10,
-							'international' => 15,
-							'original'      => 20
-						)
-					),
-					'transcripts' => array(
-						'open'       => ( boolean ) $legacy_config[ 'comic_transcripts_allowed' ],
-						'languages'  => array( '!' ),
-						'permission' => $transcripts_permission,
-						'notify'     => array(
+						'buffer' => array(
 							'hook'  => true,
+							'days'  => 7,
 							'email' => $admin_email
-						)
-					)
-				);
-				
-				if ( $chapters = get_terms( 'chapter', array( 'fields' => 'ids', 'term_group' => $v->term_id, 'get' => 'all' ) ) and !is_wp_error( $storylines ) ) {
-					// do something?
-				}
-				
-				if ( $posts = get_posts( array(
-					'fields'      => 'ids',
-					'numberposts' => -1,
-					'post_type'   => 'post',
-					'post_status' => get_post_stati(),
-					'tax_query'   => array(
-						'taxonomy' => 'category',
-						'field'    => 'id',
-						'terms'    => $v->term_id
-					)
-				) ) ) {
-					$wpdb->query( sprintf( "UPDATE {$wpdb->posts} SET post_type = '{$collection_id}' WHERE ID IN ( %s )", join( ', ', $posts ) ) );
-					
-					foreach ( $posts as $post ) {
-						if ( $meta_file = get_post_meta( $post, 'comic_file', true ) ) {
-							self::update_media_library( self::legacy_directory( $legacy_config[ 'comic_directory' ], $v->slug ) . $meta_file, $post, array(
-								'post_excerpt' => $meta_description = get_post_meta( $post, 'comic_description', true ) ? $meta_description : ''
-							) );
-						}
-						
-						if ( $meta_transcript = get_post_meta( $post, 'comic_transcript', true ) or $meta_transcript = get_post_meta( $post, 'comic_transcript_pending', true ) or $meta_transcript = get_post_meta( $post, 'comic_transcript_draft', true ) ) {
-							$date  = get_the_time( 'Y-m-d H:i:s', $v[ 'time' ] );
-							$title = sprintf( __( '%s Transcript', 'webcomic' ), get_the_title( $post ) );
-							
-							if ( get_post_meta( $post, 'comic_transcript', true ) ) {
-								$status = 'publish';
-							} else if ( get_post_meta( $post, 'comic_transcript_pending', true ) ) {
-								$status = 'pending';
-							} else {
-								$status = 'draft';
-							}
-							
-							wp_insert_post( array(
-								'post_name'     => sanitize_title( $title ),
-								'post_type'     => 'webcomic_transcript',
-								'post_date'     => $date,
-								'post_title'    => $title,
-								'post_author'   => 1,
-								'post_parent'   => $post,
-								'post_status'   => $status,
-								'post_content'  => $meta_transcript,
-								'post_date_gmt' => get_gmt_from_date( $date )
-							) );
-						}
-						
-						update_post_meta( $post, 'webcomic_prints', false );
-						
-						update_post_meta( $post, 'webcomic_original', false );
-						
-						update_post_meta( $post, 'webcomic_transcripts', ( boolean ) $legacy_config[ 'comic_transcripts_allowed' ] );
-						
-						update_post_meta( $post, 'webcomic_commerce', array(
-							'price' => array(
+						),
+						'access' => array(
+							'byage'  => false,
+							'byrole' => false,
+							'age'    => 18,
+							'roles'  => array( '!' )
+						),
+						'twitter' => array(
+							'format'          => __( '%collection-name has updated! %site-url', 'webcomic' ),
+							'oauth_token'     => '',
+							'oauth_secret'    => '',
+							'consumer_key'    => '',
+							'consumer_secret' => '',
+							'request_token'   => '',
+							'request_secret'  => ''
+						),
+						'commerce' => array(
+							'business'  => '',
+							'currency'  => 'USD',
+							'prints'    => false,
+							'originals' => false,
+							'method'    => '_xclick',
+							'donation'  => 0,
+							'price'     => array(
 								'domestic'      => 6,
 								'international' => 9,
 								'original'      => 12
@@ -397,81 +636,191 @@ class WebcomicLegacy extends Webcomic {
 								'international' => 6,
 								'original'      => 8
 							),
-							'total'  => array(
+							'total' => array(
 								'domestic'      => 10,
 								'international' => 15,
 								'original'      => 20
-							),
-							'adjust' => array(
+							)
+						),
+						'transcripts' => array(
+							'open'       => ( boolean ) $legacy_config[ 'comic_transcripts_allowed' ],
+							'languages'  => array( '!' ),
+							'permission' => $transcripts_permission,
+							'notify'     => array(
+								'hook'  => true,
+								'email' => $admin_email
+							)
+						)
+					);
+					
+					update_option( 'webcomic_options', self::$config );
+					
+					$stage++;
+				}
+				
+				if ( 2 === intval( $stage ) ) {
+					if ( $chapters = get_terms( 'chapter', array( 'fields' => 'ids', 'orderby' => 'term_group', 'term_group' => $v->term_id, 'get' => 'all' ) ) and !is_wp_error( $chapters ) ) {
+						$count = array();
+						
+						foreach ( $chapters as $chapter ) {
+							$chapter = get_term( $chapter, 'chapter' );
+							
+							$wpdb->update( $wpdb->terms, array( 'term_group' => isset( $count[ $chapter->parent ] ) ? $count[ $chapter->parent ] : 0 ), array( 'term_id' => $chapter->term_id ) );
+							$wpdb->update( $wpdb->term_taxonomy, array( 'taxonomy' => "{$collection_id}_storyline" ), array( 'term_id' => $chapter->term_id, 'taxonomy' => 'chapter' ) );
+							
+							if ( empty( $count[ $chapter->parent ] ) ) {
+								$count[ $chapter->parent ] = 0;
+							}
+							
+							$count[ $chapter->parent ]++;
+							
+							if ( microtime( true ) - $start >= $this->limit ) {
+								return $stage;
+							}
+						}
+					}
+					
+					$stage++;
+				}
+				
+				if ( 3 === intval( $stage ) ) {
+					if ( $posts = get_posts( array(
+						'fields'      => 'ids',
+						'numberposts' => -1,
+						'post_type'   => 'post',
+						'post_status' => get_post_stati(),
+						'tax_query'   => array( array(
+							'taxonomy' => 'category',
+							'field'    => 'id',
+							'terms'    => $v->term_id
+						) )
+					) ) ) {
+						foreach ( $posts as $post ) {
+							if ( $meta_file = get_post_meta( $post, 'comic_file', true ) ) {
+								self::update_media_library( self::legacy_path( $legacy_config[ 'comic_directory' ], $v->slug ) . $meta_file, ( integer ) $post, array(
+									'post_excerpt' => ( $meta_description = get_post_meta( $post, 'comic_description', true ) ) ? $meta_description : ''
+								) );
+							}
+							
+							if ( $meta_transcript = get_post_meta( $post, 'comic_transcript', true ) or $meta_transcript = get_post_meta( $post, 'comic_transcript_pending', true ) or $meta_transcript = get_post_meta( $post, 'comic_transcript_draft', true ) ) {
+								$date  = get_the_time( 'Y-m-d H:i:s', $v[ 'time' ] );
+								$title = sprintf( __( '%s Transcript', 'webcomic' ), get_the_title( $post ) );
+								
+								if ( get_post_meta( $post, 'comic_transcript', true ) ) {
+									$status = 'publish';
+								} else if ( get_post_meta( $post, 'comic_transcript_pending', true ) ) {
+									$status = 'pending';
+								} else {
+									$status = 'draft';
+								}
+								
+								wp_insert_post( array(
+									'post_name'     => sanitize_title( $title ),
+									'post_type'     => 'webcomic_transcript',
+									'post_date'     => $date,
+									'post_title'    => $title,
+									'post_author'   => 1,
+									'post_parent'   => $post,
+									'post_status'   => $status,
+									'post_content'  => $meta_transcript,
+									'post_date_gmt' => get_gmt_from_date( $date )
+								) );
+							}
+							
+							update_post_meta( $post, 'webcomic_prints', false );
+							
+							update_post_meta( $post, 'webcomic_original', false );
+							
+							update_post_meta( $post, 'webcomic_transcripts', ( boolean ) $legacy_config[ 'comic_transcripts_allowed' ] );
+							
+							update_post_meta( $post, 'webcomic_commerce', array(
 								'price' => array(
-									'domestic'      => 0,
-									'international' => 0,
-									'original'      => 0
+									'domestic'      => 6,
+									'international' => 9,
+									'original'      => 12
 								),
 								'shipping' => array(
-									'domestic'      => 0,
-									'international' => 0,
-									'original'      => 0
+									'domestic'      => 4,
+									'international' => 6,
+									'original'      => 8
 								),
 								'total'  => array(
-									'domestic'      => 0,
-									'international' => 0,
-									'original'      => 0
+									'domestic'      => 10,
+									'international' => 15,
+									'original'      => 20
+								),
+								'adjust' => array(
+									'price' => array(
+										'domestic'      => 0,
+										'international' => 0,
+										'original'      => 0
+									),
+									'shipping' => array(
+										'domestic'      => 0,
+										'international' => 0,
+										'original'      => 0
+									),
+									'total'  => array(
+										'domestic'      => 0,
+										'international' => 0,
+										'original'      => 0
+									)
 								)
-							)
-						) );
-						
-						delete_post_meta( $post, 'comic_file' );
-						delete_post_meta( $post, 'comic_large' );
-						delete_post_meta( $post, 'comic_thumb' );
-						delete_post_meta( $post, 'comic_medium' );
-						delete_post_meta( $post, 'comic_transcript' );
-						delete_post_meta( $post, 'comic_description' );
-						delete_post_meta( $post, 'comic_transcript_draft' );
-						delete_post_meta( $post, 'comic_transcript_pending' );
+							) );
+							
+							delete_post_meta( $post, 'comic_file' );
+							delete_post_meta( $post, 'comic_large' );
+							delete_post_meta( $post, 'comic_thumb' );
+							delete_post_meta( $post, 'comic_medium' );
+							delete_post_meta( $post, 'comic_transcript' );
+							delete_post_meta( $post, 'comic_description' );
+							delete_post_meta( $post, 'comic_transcript_draft' );
+							delete_post_meta( $post, 'comic_transcript_pending' );
+							
+							$wpdb->update( $wpdb->posts, array( 'post_type' => $collection_id ), array( 'ID' => ( integer ) $post ) );
+							
+							self::$config[ 'collections' ][ $collection_id ][ 'updated' ] = get_the_time( 'U', $post );
+							
+							update_option( 'webcomic_options', self::$config );
+							
+							if ( microtime( true ) - $start >= $this->limit ) {
+								return $stage;
+							}
+						}
 					}
 				}
 				
-				if ( $k ) {
-					self::$config[ 'increment' ]++;
-				}
+				$stage = 1;
+				
+				self::$config[ 'increment' ]++;
 				
 				update_option( 'webcomic_options', self::$config );
 				
-				wp_delete_term( $v->term_id, 'webcomic_collection' );
-				
-				if ( microtime( true ) - $start >= $timelimit - 1 ) {
-					return 'webcomic' . self::$config[ 'increment' ];
+				if ( false !== ( $key = array_search( $v->term_id, $legacy_config[ 'comic_category' ] ) ) ) {
+					unset( $legacy_config[ 'comic_category' ][ $key ] );
+					
+					update_option( 'webcomic_legacy', $legacy_config );
 				}
 				
-				if ( $pages ) {
-					foreach ( $pages as $page ) {
-						if ( $meta_series = get_post_meta( $page, 'comic_series', true ) and ( integer ) $meta_series === ( integer ) $v->term_id ) {
-							update_post_meta( $page, 'webcomic_collection', $collection_id );
-							delete_post_meta( $page, 'comic_series' );
-						}
-					}
+				if ( microtime( true ) - $start >= $this->limit ) {
+					return $stage;
 				}
 			}
 		}
 		
-		return 'complete';
+		return 0;
 	}
 	
 	/** Upgrade Webcomic 3 installations.
 	 * 
-	 * @todo update time
-	 * @todo save new configuration
-	 * @todo convert page collections
-	 * 
+	 * @return integer
 	 * @uses Webcomic::$config
-	 * @return string
+	 * @uses WebcomicLegacy::update_media_library()
 	 */
 	private function upgrade3( $stage = 0 ) {
 		global $wpdb;
 		
 		$start         = microtime( true );
-		$timelimit     = ini_get( 'max_execution_time' );
 		$upload_dir    = wp_upload_dir();
 		$admin_email   = get_bloginfo( 'admin_email' );
 		$legacy_config = get_option( 'webcomic_legacy' );
@@ -484,9 +833,10 @@ class WebcomicLegacy extends Webcomic {
 			$transcripts_permission = 'everyone';
 		}
 		
-		if ( empty( $_POST[ 'webcomic_upgrade_continue' ] ) ) {
-			self::$config[ 'webcomic' ][ 'integrate' ] = ( boolean ) $legacy_config[ 'integrate_toggle' ];
-			self::$config[ 'webcomic' ][ 'shortcuts' ] = ( boolean ) $legacy_config[ 'shortcut_toggle' ];
+		if ( !$stage ) {
+			self::$config[ 'increment' ] = 1;
+			self::$config[ 'integrate' ] = ( boolean ) $legacy_config[ 'integrate_toggle' ];
+			self::$config[ 'shortcuts' ] = ( boolean ) $legacy_config[ 'shortcut_toggle' ];
 			
 			if ( get_option( 'thumbnail_size_w' ) !== $legacy_config[ 'small_w' ] or get_option( 'thumbnail_size_h' ) !== $legacy_config[ 'small_h' ] ) {
 				update_option( 'thumbnail_size_w', $legacy_config[ 'small_w' ] );
@@ -506,263 +856,300 @@ class WebcomicLegacy extends Webcomic {
 			foreach ( $legacy_config[ 'transcribe_language' ] as $k => $v ) {
 				wp_insert_term( $v, 'webcomic_language', array( 'slug' => $k ) );
 			}
+			
+			update_option( 'webcomic_options', self::$config );
+			
+			$stage++;
 		}
 		
-		if ( $terms = get_terms( 'webcomic_collection', array( 'get' => 'all' ) ) and !is_wp_error( $terms ) ) {
+		if ( $terms = get_terms( 'webcomic_collection', array( 'get' => 'all', 'orderby' => 'id' ) ) and !is_wp_error( $terms ) ) {
 			foreach ( $terms as $k => $v ) {
-				if ( $k ) {
-					$collection_id = 'webcomic' . self::$config[ 'increment' ];
-				} else if ( !empty( $_POST[ 'webcomic_upgrade_continue' ] ) ) {
-					$collection_id = $_POST[ 'webcomic_upgrade_continue' ];
-				} else {
-					$collection_id = 'webcomic1';
-				}
+				$collection_id = 'webcomic' . self::$config[ 'increment' ];
 				
-				$image_id                       = empty( $legacy_config[ 'term_meta' ][ 'collection' ][ $v->term_id ][ 'files' ] ) ? 0 : self::update_media_library( dirname( $upload_dir[ 'basedir' ] ) . "/webcomic/{$v->slug}/" . $legacy_config[ 'term_meta' ][ 'collection' ][ $v->term_id ][ 'files' ][ 'full' ][ 0 ], $collection_id );
-				$comerce_domestic_price         = round( $legacy_config[ 'paypal_price_d' ] * ( 1 + .01 * $legacy_config[ 'term_meta' ][ 'collection' ][ $v->term_id ][ 'paypal' ][ 'price_d' ] ), 2 );
-				$comerce_international_price    = round( $legacy_config[ 'paypal_price_i' ] * ( 1 + .01 * $legacy_config[ 'term_meta' ][ 'collection' ][ $v->term_id ][ 'paypal' ][ 'price_i' ] ), 2 );
-				$comerce_original_price         = round( $legacy_config[ 'paypal_price_o' ] * ( 1 + .01 * $legacy_config[ 'term_meta' ][ 'collection' ][ $v->term_id ][ 'paypal' ][ 'price_o' ] ), 2 );
-				$comerce_domestic_shipping      = round( $legacy_config[ 'paypal_shipping_d' ] * ( 1 + .01 * $legacy_config[ 'term_meta' ][ 'collection' ][ $v->term_id ][ 'paypal' ][ 'shipping_d' ] ), 2 );
-				$comerce_international_shipping = round( $legacy_config[ 'paypal_shipping_i' ] * ( 1 + .01 * $legacy_config[ 'term_meta' ][ 'collection' ][ $v->term_id ][ 'paypal' ][ 'shipping_i' ] ), 2 );
-				$comerce_original_shipping      = round( $legacy_config[ 'paypal_shipping_o' ] * ( 1 + .01 * $legacy_config[ 'term_meta' ][ 'collection' ][ $v->term_id ][ 'paypal' ][ 'shipping_o' ] ), 2 );
-				
-				self::$config[ 'webcomic' ][ 'collections' ][ $collection_id ] = array(
-					'id'          => $collection_id,
-					'name'        => $v->name,
-					'image'       => $image_id,
-					'theme'       => $legacy_config[ 'term_meta' ][ 'collection' ][ $v->term_id ][ 'theme' ],
-					'updated'     => 0,
-					'supports'    => array( 'title', 'editor', 'author', 'excerpt', 'trackbacks', 'custom-fields', 'comments', 'revisions' ),
-					'taxonomies'  => array( 'category', 'post_tag' ),
-					'description' => $v->description,
-					'feeds' => array(
-						'hook' => ( boolean ) $legacy_config[ 'feed_toggle' ],
-						'size' => $legacy_config[ 'feed_size' ],
-						'main' => true
-					),
-					'slugs' => array(
-						'name'      => $v->slug,
-						'archive'   => $v->slug,
-						'webcomic'  => $v->slug,
-						'storyline' => "{$v->slug}-storyline",
-						'character' => "{$v->slug}-character"
-					),
-					'buffer' => array(
-						'hook'  => $legacy_config[ 'buffer_toggle' ],
-						'days'  => $legacy_config[ 'buffer_size' ],
-						'email' => $admin_email
-					),
-					'access' => array(
-						'byage'  => ( boolean ) $legacy_config[ 'age_toggle' ],
-						'byrole' => ( boolean ) $legacy_config[ 'term_meta' ][ 'collection' ][ $v->term_id ][ 'restrict' ],
-						'age'    => $legacy_config[ 'age_size' ],
-						'roles'  => array( '!' )
-					),
-					'twitter' => array(
-						'format'          => __( '%collection-name has updated! %site-url', 'webcomic' ),
-						'oauth_token'     => '',
-						'oauth_secret'    => '',
-						'consumer_key'    => '',
-						'consumer_secret' => '',
-						'request_token'   => '',
-						'request_secret'  => ''
-					),
-					'commerce' => array(
-						'business'  => $legacy_config[ 'paypal_business' ],
-						'currency'  => $legacy_config[ 'paypal_currency' ],
-						'prints'    => ( boolean ) $legacy_config[ 'term_meta' ][ 'collection' ][ $v->term_id ][ 'paypal' ][ 'prints' ],
-						'originals' => ( boolean ) $legacy_config[ 'term_meta' ][ 'collection' ][ $v->term_id ][ 'paypal' ][ 'prints' ],
-						'method'    => $legacy_config[ 'paypal_method' ],
-						'donation'  => $legacy_config[ 'paypal_donation' ],
-						'price'     => array(
-							'domestic'      => $comerce_domestic_price,
-							'international' => $comerce_international_price,
-							'original'      => $comerce_original_price
+				if ( 1 === intval( $stage ) ) {
+					$image_id                        = empty( $legacy_config[ 'term_meta' ][ 'collection' ][ $v->term_id ][ 'files' ] ) ? 0 : self::update_media_library( dirname( $upload_dir[ 'basedir' ] ) . "/webcomic/{$v->slug}/" . $legacy_config[ 'term_meta' ][ 'collection' ][ $v->term_id ][ 'files' ][ 'full' ][ 0 ], $collection_id );
+					$commerce_domestic_price         = round( $legacy_config[ 'paypal_price_d' ] * ( 1 + .01 * $legacy_config[ 'term_meta' ][ 'collection' ][ $v->term_id ][ 'paypal' ][ 'price_d' ] ), 2 );
+					$commerce_international_price    = round( $legacy_config[ 'paypal_price_i' ] * ( 1 + .01 * $legacy_config[ 'term_meta' ][ 'collection' ][ $v->term_id ][ 'paypal' ][ 'price_i' ] ), 2 );
+					$commerce_original_price         = round( $legacy_config[ 'paypal_price_o' ] * ( 1 + .01 * $legacy_config[ 'term_meta' ][ 'collection' ][ $v->term_id ][ 'paypal' ][ 'price_o' ] ), 2 );
+					$commerce_domestic_shipping      = round( $legacy_config[ 'paypal_shipping_d' ] * ( 1 + .01 * $legacy_config[ 'term_meta' ][ 'collection' ][ $v->term_id ][ 'paypal' ][ 'shipping_d' ] ), 2 );
+					$commerce_international_shipping = round( $legacy_config[ 'paypal_shipping_i' ] * ( 1 + .01 * $legacy_config[ 'term_meta' ][ 'collection' ][ $v->term_id ][ 'paypal' ][ 'shipping_i' ] ), 2 );
+					$commerce_original_shipping      = round( $legacy_config[ 'paypal_shipping_o' ] * ( 1 + .01 * $legacy_config[ 'term_meta' ][ 'collection' ][ $v->term_id ][ 'paypal' ][ 'shipping_o' ] ), 2 );
+					
+					self::$config[ 'collections' ][ $collection_id ] = array(
+						'id'          => $collection_id,
+						'name'        => $v->name,
+						'image'       => $image_id,
+						'theme'       => $legacy_config[ 'term_meta' ][ 'collection' ][ $v->term_id ][ 'theme' ],
+						'updated'     => 0,
+						'supports'    => array( 'title', 'editor', 'author', 'excerpt', 'trackbacks', 'custom-fields', 'comments', 'revisions' ),
+						'taxonomies'  => array( 'category', 'post_tag' ),
+						'description' => $v->description,
+						'feeds' => array(
+							'hook' => ( boolean ) $legacy_config[ 'feed_toggle' ],
+							'size' => $legacy_config[ 'feed_size' ],
+							'main' => true
 						),
-						'shipping' => array(
-							'domestic'      => $comerce_domestic_shipping,
-							'international' => $comerce_international_shipping,
-							'original'      => $comerce_original_shipping
+						'slugs' => array(
+							'name'      => $v->slug,
+							'archive'   => $v->slug,
+							'webcomic'  => $v->slug,
+							'storyline' => "{$v->slug}-storyline",
+							'character' => "{$v->slug}-character"
 						),
-						'total' => array(
-							'domestic'      => round( $comerce_domestic_price + $comerce_domestic_shipping, 2 ),
-							'international' => round( $comerce_international_price + $comerce_international_price, 2 ),
-							'original'      => round( $comerce_original_price + $comerce_original_shipping, 2 )
-						)
-					),
-					'transcripts' => array(
-						'open'       => ( boolean ) $legacy_config[ 'transcribe_toggle' ],
-						'languages'  => array( '!' ),
-						'permission' => $transcripts_permission,
-						'notify'     => array(
-							'hook'  => true,
+						'buffer' => array(
+							'hook'  => $legacy_config[ 'buffer_toggle' ],
+							'days'  => $legacy_config[ 'buffer_size' ],
 							'email' => $admin_email
+						),
+						'access' => array(
+							'byage'  => ( boolean ) $legacy_config[ 'age_toggle' ],
+							'byrole' => ( boolean ) $legacy_config[ 'term_meta' ][ 'collection' ][ $v->term_id ][ 'restrict' ],
+							'age'    => $legacy_config[ 'age_size' ],
+							'roles'  => array( '!' )
+						),
+						'twitter' => array(
+							'format'          => __( '%collection-name has updated! %site-url', 'webcomic' ),
+							'oauth_token'     => '',
+							'oauth_secret'    => '',
+							'consumer_key'    => '',
+							'consumer_secret' => '',
+							'request_token'   => '',
+							'request_secret'  => ''
+						),
+						'commerce' => array(
+							'business'  => $legacy_config[ 'paypal_business' ],
+							'currency'  => $legacy_config[ 'paypal_currency' ],
+							'prints'    => ( boolean ) $legacy_config[ 'term_meta' ][ 'collection' ][ $v->term_id ][ 'paypal' ][ 'prints' ],
+							'originals' => ( boolean ) $legacy_config[ 'term_meta' ][ 'collection' ][ $v->term_id ][ 'paypal' ][ 'prints' ],
+							'method'    => $legacy_config[ 'paypal_method' ],
+							'donation'  => $legacy_config[ 'paypal_donation' ],
+							'price'     => array(
+								'domestic'      => $commerce_domestic_price,
+								'international' => $commerce_international_price,
+								'original'      => $commerce_original_price
+							),
+							'shipping' => array(
+								'domestic'      => $commerce_domestic_shipping,
+								'international' => $commerce_international_shipping,
+								'original'      => $commerce_original_shipping
+							),
+							'total' => array(
+								'domestic'      => round( $commerce_domestic_price + $commerce_domestic_shipping, 2 ),
+								'international' => round( $commerce_international_price + $commerce_international_price, 2 ),
+								'original'      => round( $commerce_original_price + $commerce_original_shipping, 2 )
+							)
+						),
+						'transcripts' => array(
+							'open'       => ( boolean ) $legacy_config[ 'transcribe_toggle' ],
+							'languages'  => array( '!' ),
+							'permission' => $transcripts_permission,
+							'notify'     => array(
+								'hook'  => true,
+								'email' => $admin_email
+							)
 						)
-					)
-				);
-				
-				if ( $storylines = get_terms( 'webcomic_storyline', array( 'fields' => 'ids', 'term_group' => $v->term_id, 'get' => 'all' ) ) and !is_wp_error( $storylines ) ) {
-					$count = array();
+					);
 					
-					$wpdb->query( sprintf( "UPDATE {$wpdb->term_taxonomy} SET taxonomy = '{$collection_id}_storyline' WHERE term_id IN ( %s )", join( ', ', $storylines ) ) );
+					update_option( 'webcomic_options', self::$config );
 					
-					foreach ( $storylines as $storyline ) {
-						if ( !empty( $legacy_config[ 'term_meta' ][ 'storyline' ][ $storyline ][ 'files' ] ) and $image_id = self::update_media_library( dirname( $upload_dir[ 'basedir' ] ) . "/webcomic/{$v->slug}/" . $legacy_config[ 'term_meta' ][ 'storyline' ][ $storyline ][ 'files' ][ 'full' ][ 0 ], "{$collection_id}_storyline" ) ) {
-							self::$config[ 'terms' ][ $storyline ][ 'image' ] = $image_id;
-						}
-						
-						if ( empty( $count[ $term->parent ] ) ) {
-							$count[ $term->parent ] = 0;
-						}
-						
-						$wpdb->update( $wpdb->terms, array( 'term_group' => $count[ $term->parent ] ), array( 'term_id' => $term->term_id ) );
-						
-						$count[ $term->parent ]++;
-					}
+					$stage++;
 				}
 				
-				if ( $characters = get_terms( 'webcomic_character', array( 'fields' => 'ids', 'term_group' => $v->term_id, 'get' => 'all' ) ) and !is_wp_error( $characters ) ) {
-					$wpdb->query( sprintf( "UPDATE {$wpdb->term_taxonomy} SET taxonomy = '{$collection_id}_character' WHERE term_id IN ( %s )", join( ', ', $characters ) ) );
-					$wpdb->query( sprintf( "UPDATE {$wpdb->terms} SET term_group = 0 WHERE term_id IN ( %s )", join( ', ', $characters ) ) );
-					
-					foreach ( $characters as $characters ) {
-						if ( !empty( $legacy_config[ 'term_meta' ][ 'character' ][ $character ][ 'files' ] ) and $image_id = self::update_media_library( dirname( $upload_dir[ 'basedir' ] ) . "/webcomic/{$v->slug}/" . $legacy_config[ 'term_meta' ][ 'character' ][ $character ][ 'files' ][ 'full' ][ 0 ], "{$collection_id}_character" ) ) {
-							self::$config[ 'terms' ][ $character ][ 'image' ] = $image_id;
-						}
-					}
-				}
-				
-				if ( $posts = get_posts( array(
-					'fields'      => 'ids',
-					'numberposts' => -1,
-					'post_type'   => 'webcomic_post',
-					'post_status' => get_post_stati(),
-					'tax_query'   => array(
-						'taxonomy' => 'webcomic_collection',
-						'field'    => 'id',
-						'terms'    => $v->term_id
-					)
-				) ) ) {
-					$wpdb->query( sprintf( "UPDATE {$wpdb->posts} SET post_type = '{$collection_id}' WHERE ID IN ( %s )", join( ', ', $posts ) ) );
-					
-					foreach ( $posts as $post ) {
-						if ( $meta = get_post_meta( $post, 'webcomic', true ) ) {
-							$post_domestic_price         = round( $commerce_domestic_price * ( 1 + .01 * $meta[ 'paypal' ][ 'price_d' ] ), 2 );
-							$post_international_price    = round( $commerce_international_price * ( 1 + .01 * $meta[ 'paypal' ][ 'price_i' ] ), 2 );
-							$post_original_price         = round( $commerce_shipping_price * ( 1 + .01 * $meta[ 'paypal' ][ 'price_o' ] ), 2 );
-							$post_domestic_shipping      = round( $commerce_domestic_shipping * ( 1 + .01 * $meta[ 'paypal' ][ 'shipping_d' ] ), 2 );
-							$post_international_shipping = round( $commerce_international_shipping * ( 1 + .01 * $meta[ 'paypal' ][ 'shipping_i' ] ), 2 );
-							$post_original_shipping      = round( $commerce_shipping_shipping * ( 1 + .01 * $meta[ 'paypal' ][ 'shipping_o' ] ), 2 );
+				if ( 2 === intval( $stage ) ) {
+					if ( $characters = get_terms( 'webcomic_character', array( 'fields' => 'ids', 'term_group' => $v->term_id, 'get' => 'all' ) ) and !is_wp_error( $characters ) ) {
+						foreach ( $characters as $character ) {
+							$character = get_term( $character, 'webcomic_character' );
 							
-							update_post_meta( $post, 'webcomic_prints', !empty( $meta[ 'paypal' ][ 'prints' ] ) );
+							$wpdb->update( $wpdb->terms, array( 'term_group' => 0 ), array( 'term_id' => $character->term_id ) );
+							$wpdb->update( $wpdb->term_taxonomy, array( 'taxonomy' => "{$collection_id}_character" ), array( 'term_id' => $character->term_id ) );
 							
-							update_post_meta( $post, 'webcomic_original', !empty( $meta[ 'paypal' ][ 'original' ] ) );
-							
-							update_post_meta( $post, 'webcomic_transcripts', !empty( $meta[ 'transcribe_toggle' ] ) );
-							
-							update_post_meta( $post, 'webcomic_commerce', array(
-								'price' => array(
-									'domestic'      => $post_domestic_price,
-									'international' => $post_international_price,
-									'original'      => $post_original_price
-								),
-								'shipping' => array(
-									'domestic'      => $post_domestic_shipping,
-									'international' => $post_international_shipping,
-									'original'      => $post_original_shipping
-								),
-								'total'  => array(
-									'domestic'      => $post_domestic_price + $post_domestic_shipping,
-									'international' => $post_international_price + $post_international_shipping,
-									'original'      => $post_original_price + $post_original_shipping
-								),
-								'adjust' => array(
-									'price' => array(
-										'domestic'      => intval( $meta[ 'paypal' ][ 'price_d' ] ),
-										'international' => intval( $meta[ 'paypal' ][ 'price_i' ] ),
-										'original'      => intval( $meta[ 'paypal' ][ 'price_o' ] )
-									),
-									'shipping' => array(
-										'domestic'      => intval( $meta[ 'paypal' ][ 'shipping_d' ] ),
-										'international' => intval( $meta[ 'paypal' ][ 'shipping_i' ] ),
-										'original'      => intval( $meta[ 'paypal' ][ 'shipping_o' ] )
-									),
-									'total'  => array(
-										'domestic'      => 0 - intval( round( ( 1 - ( $post_domestic_price + $post_domestic_shipping ) / ( $commerce_domestic_price + $commerce_domestic_shipping ) ) * 100 ) ),
-										'international' => 0 - intval( round( ( 1 - ( $post_international_price + $post_international_shipping ) / ( $commerce_international_price + $commerce_international_shipping ) ) * 100 ) ),
-										'original'      => 0 - intval( round( ( 1 - ( $post_original_price + $post_original_shipping ) / ( $commerce_original_price + $commerce_original_shipping ) ) * 100 ) )
-									)
-								)
-							) );
-							
-							if ( !empty( $meta[ 'files' ] ) ) {
-								foreach ( $meta[ 'files' ][ 'full' ] as $k => $v ) {
-									self::update_media_library( $v, $post, array(
-										'post_alt'     => empty( $meta[ 'alternate' ][ $k ] ) ? '' : $meta[ 'alternate' ][ $k ],
-										'post_excerpt' => empty( $meta[ 'description' ][ $k ] ) ? '' : $meta[ 'description' ][ $k ]
-									) );
-								}
+							if ( !empty( $legacy_config[ 'term_meta' ][ 'character' ][ $character->term_id ][ 'files' ] ) and $image_id = self::update_media_library( dirname( $upload_dir[ 'basedir' ] ) . "/webcomic/{$v->slug}/" . $legacy_config[ 'term_meta' ][ 'character' ][ $character->term_id ][ 'files' ][ 'full' ][ 0 ], "{$collection_id}_character" ) ) {
+								self::$config[ 'terms' ][ $character ][ 'image' ] = $image_id;
+								
+								update_option( 'webcomic_options', self::$config );
 							}
 							
-							if ( !empty( $meta[ 'transcripts' ] ) ) {
-								foreach ( $meta[ 'transcripts' ] as $k => $v ) {
-									$date  = date( 'Y-m-d H:i:s', $v[ 'time' ] );
-									$title = sprintf( __( '%s Transcript', 'webcomic' ), get_the_title( $post ) );
-									
-									if ( $transcript = wp_insert_post( array(
-										'post_name'     => sanitize_title( $title ),
-										'post_type'     => 'webcomic_transcript',
-										'post_date'     => $date,
-										'post_title'    => $title,
-										'post_author'   => 1,
-										'post_parent'   => $post,
-										'post_status'   => $v[ 'status' ],
-										'post_content'  => $v[ 'text' ],
-										'post_date_gmt' => get_gmt_from_date( $date )
-									) ) and !is_wp_error( $transcript ) ) {
-										add_post_meta( $new_post, 'webcomic_author', array(
-											'name'  => $v[ 'author' ],
-											'email' => '',
-											'url'   => '',
-											'ip'    => '',
-											'time'  => ( integer ) $v[ 'time' ]
+							if ( microtime( true ) - $start >= $this->limit ) {
+								return $stage;
+							}
+						}
+					}
+					
+					$stage++;
+				}
+				
+				if ( 3 === intval( $stage ) ) {
+					if ( $storylines = get_terms( 'webcomic_storyline', array( 'fields' => 'ids', 'orderby' => 'term_group', 'term_group' => $v->term_id, 'get' => 'all' ) ) and !is_wp_error( $storylines ) ) {
+						$count = array();
+						
+						foreach ( $storylines as $storyline ) {
+							$storyline = get_term( $storyline, 'webcomic_storyline' );
+							
+							$wpdb->update( $wpdb->terms, array( 'term_group' => isset( $count[ $storyline->parent ] ) ? $count[ $storyline->parent ] : 0 ), array( 'term_id' => $storyline->term_id ) );
+							$wpdb->update( $wpdb->term_taxonomy, array( 'taxonomy' => "{$collection_id}_storyline" ), array( 'term_id' => $storyline->term_id ) );
+							
+							if ( !empty( $legacy_config[ 'term_meta' ][ 'storyline' ][ $storyline->term_id ][ 'files' ] ) and $image_id = self::update_media_library( dirname( $upload_dir[ 'basedir' ] ) . "/webcomic/{$v->slug}/" . $legacy_config[ 'term_meta' ][ 'storyline' ][ $storyline->term_id ][ 'files' ][ 'full' ][ 0 ], "{$collection_id}_storyline" ) ) {
+								self::$config[ 'terms' ][ $storyline->term_id ][ 'image' ] = $image_id;
+								
+								update_option( 'webcomic_options', self::$config );
+							}
+							
+							if ( empty( $count[ $storyline->parent ] ) ) {
+								$count[ $storyline->parent ] = 0;
+							}
+							
+							$count[ $storyline->parent ]++;
+							
+							if ( microtime( true ) - $start >= $this->limit ) {
+								return $stage;
+							}
+						}
+					}
+					
+					$stage++;
+				}
+				
+				if ( 4 === intval( $stage ) ) {
+					if ( $posts = get_posts( array(
+						'fields'      => 'ids',
+						'numberposts' => -1,
+						'post_type'   => 'webcomic_post',
+						'post_status' => get_post_stati(),
+						'tax_query'   => array( array(
+							'taxonomy' => 'webcomic_collection',
+							'field'    => 'id',
+							'terms'    => $v->term_id
+						) )
+					) ) ) {
+						foreach ( $posts as $post ) {
+							if ( $meta = get_post_meta( $post, 'webcomic', true ) ) {
+								$post_domestic_price         = round( $commerce_domestic_price * ( 1 + .01 * $meta[ 'paypal' ][ 'price_d' ] ), 2 );
+								$post_international_price    = round( $commerce_international_price * ( 1 + .01 * $meta[ 'paypal' ][ 'price_i' ] ), 2 );
+								$post_original_price         = round( $commerce_original_price * ( 1 + .01 * $meta[ 'paypal' ][ 'price_o' ] ), 2 );
+								$post_domestic_shipping      = round( $commerce_domestic_shipping * ( 1 + .01 * $meta[ 'paypal' ][ 'shipping_d' ] ), 2 );
+								$post_international_shipping = round( $commerce_international_shipping * ( 1 + .01 * $meta[ 'paypal' ][ 'shipping_i' ] ), 2 );
+								$post_original_shipping      = round( $commerce_original_shipping * ( 1 + .01 * $meta[ 'paypal' ][ 'shipping_o' ] ), 2 );
+								
+								update_post_meta( $post, 'webcomic_prints', !empty( $meta[ 'paypal' ][ 'prints' ] ) );
+								
+								update_post_meta( $post, 'webcomic_original', !empty( $meta[ 'paypal' ][ 'original' ] ) );
+								
+								update_post_meta( $post, 'webcomic_transcripts', !empty( $meta[ 'transcribe_toggle' ] ) );
+								
+								update_post_meta( $post, 'webcomic_commerce', array(
+									'price' => array(
+										'domestic'      => $post_domestic_price,
+										'international' => $post_international_price,
+										'original'      => $post_original_price
+									),
+									'shipping' => array(
+										'domestic'      => $post_domestic_shipping,
+										'international' => $post_international_shipping,
+										'original'      => $post_original_shipping
+									),
+									'total'  => array(
+										'domestic'      => $post_domestic_price + $post_domestic_shipping,
+										'international' => $post_international_price + $post_international_shipping,
+										'original'      => $post_original_price + $post_original_shipping
+									),
+									'adjust' => array(
+										'price' => array(
+											'domestic'      => intval( $meta[ 'paypal' ][ 'price_d' ] ),
+											'international' => intval( $meta[ 'paypal' ][ 'price_i' ] ),
+											'original'      => intval( $meta[ 'paypal' ][ 'price_o' ] )
+										),
+										'shipping' => array(
+											'domestic'      => intval( $meta[ 'paypal' ][ 'shipping_d' ] ),
+											'international' => intval( $meta[ 'paypal' ][ 'shipping_i' ] ),
+											'original'      => intval( $meta[ 'paypal' ][ 'shipping_o' ] )
+										),
+										'total'  => array(
+											'domestic'      => 0 - intval( round( ( 1 - ( $post_domestic_price + $post_domestic_shipping ) / ( $commerce_domestic_price + $commerce_domestic_shipping ) ) * 100 ) ),
+											'international' => 0 - intval( round( ( 1 - ( $post_international_price + $post_international_shipping ) / ( $commerce_international_price + $commerce_international_shipping ) ) * 100 ) ),
+											'original'      => 0 - intval( round( ( 1 - ( $post_original_price + $post_original_shipping ) / ( $commerce_original_price + $commerce_original_shipping ) ) * 100 ) )
+										)
+									)
+								) );
+								
+								if ( !empty( $meta[ 'files' ] ) ) {
+									foreach ( $meta[ 'files' ][ 'full' ] as $a => $b ) {
+										self::update_media_library( dirname( $upload_dir[ 'basedir' ] ) . "/webcomic/{$v->slug}/{$b}", ( integer ) $post, array(
+											'post_alt'     => empty( $meta[ 'alternate' ][ $a ] ) ? '' : $meta[ 'alternate' ][ $a ],
+											'post_excerpt' => empty( $meta[ 'description' ][ $a ] ) ? '' : $meta[ 'description' ][ $a ]
 										) );
 										
-										if ( term_exists( $k, 'webcomic_language' ) ) {
-											wp_set_post_terms( $transcript, $k, 'webcomic_language' );
+										unset( $meta[ 'files' ][ 'full' ][ $a ] );
+										
+										update_post_meta( $post, 'webcomic', $meta );
+										
+										if ( microtime( true ) - $start >= $this->limit ) {
+											return $stage;
 										}
 									}
 								}
+								
+								if ( !empty( $meta[ 'transcripts' ] ) ) {
+									foreach ( $meta[ 'transcripts' ] as $a => $b ) {
+										$date  = date( 'Y-m-d H:i:s', $b[ 'time' ] );
+										$title = sprintf( __( '%s Transcript', 'webcomic' ), get_the_title( $post ) );
+										
+										if ( $new_transcript = wp_insert_post( array(
+											'post_name'     => sanitize_title( $title ),
+											'post_type'     => 'webcomic_transcript',
+											'post_date'     => $date,
+											'post_title'    => $title,
+											'post_author'   => 1,
+											'post_parent'   => $post,
+											'post_status'   => $b[ 'status' ],
+											'post_content'  => $b[ 'text' ],
+											'post_date_gmt' => get_gmt_from_date( $date )
+										) ) and !is_wp_error( $new_transcript ) ) {
+											add_post_meta( $new_transcript, 'webcomic_author', array(
+												'name'  => $b[ 'author' ],
+												'email' => '',
+												'url'   => '',
+												'ip'    => '',
+												'time'  => ( integer ) $b[ 'time' ]
+											) );
+											
+											if ( term_exists( $a, 'webcomic_language' ) ) {
+												wp_set_post_terms( $new_transcript, $a, 'webcomic_language' );
+											}
+										}
+										
+										if ( microtime( true ) - $start >= $this->limit ) {
+											return $stage;
+										}
+									}
+								}
+								
+								$wpdb->update( $wpdb->posts, array( 'post_type' => $collection_id ), array( 'ID' => ( integer ) $post ) );
+								
+								self::$config[ 'collections' ][ $collection_id ][ 'updated' ] = get_the_time( 'U', $post );
+								
+								update_option( 'webcomic_options', self::$config );
+								
+								delete_post_meta( $post, 'webcomic' );
 							}
-							
-							delete_post_meta( $post, 'webcomic' );
 						}
 					}
 				}
 				
-				if ( $pages ) {
-					foreach ( $pages as $page ) {
-						if ( $meta = get_post_meta( $page, 'webcomic_collection', true ) ) {
-							
-						}
-					}
-				}
+				$stage = 1;
 				
-				if ( $k ) {
-					self::$config[ 'increment' ]++;
-				}
+				self::$config[ 'increment' ]++;
 				
 				update_option( 'webcomic_options', self::$config );
 				
 				wp_delete_term( $v->term_id, 'webcomic_collection' );
 				
-				if ( microtime( true ) - $start >= $timelimit - 1 ) {
-					return 'webcomic' . self::$config[ 'increment' ];
+				if ( microtime( true ) - $start >= $this->limit ) {
+					return $stage;
 				}
 			}
 		}
 		
-		return 'complete';
+		return 0;
 	}
 	
 	/** Insert legacy Webcomic files into the Media Library.
@@ -810,6 +1197,6 @@ class WebcomicLegacy extends Webcomic {
 	 * @return string
 	 */
 	private function legacy_path( $directory, $category = '' ) {
-		return ABSPATH . ( $category ) ? "{$directory}/{$category}/" : "{$directory}/";
+		return ABSPATH . ( ( $category ) ? "{$directory}/{$category}/" : "{$directory}/" );
 	}
 }

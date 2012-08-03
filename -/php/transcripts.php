@@ -181,6 +181,7 @@ class WebcomicTranscripts extends Webcomic {
 		if (
 			'webcomic_transcript' === $post->post_type
 			and ( !defined( 'DOING_AUTOSAVE' ) or !DOING_AUTOSAVE )
+			and isset( $_POST[ 'webcomic_meta_authors' ] )
 			and wp_verify_nonce( $_POST[ 'webcomic_meta_authors' ], 'webcomic_meta_authors' )
 			and current_user_can( 'edit_post', $id )
 		) {
@@ -188,7 +189,8 @@ class WebcomicTranscripts extends Webcomic {
 				foreach ( $_POST[ 'webcomic_author' ] as $author ) {
 					$author   = array_map( 'stripslashes', $author );
 					$original = unserialize( $author[ 'original' ] );
-					$author[ 'time' ] = strtotime( $author[ 'date' ] . ' ' . $author[ 'time' ] );
+					
+					$author[ 'time' ] = empty( $author[ 'date' ] ) ? get_the_time( 'U', $post->ID ) : strtotime( $author[ 'date' ] . ' ' . $author[ 'time' ] );
 					
 					unset( $author[ 'date' ], $author[ 'original' ] );
 					
@@ -205,7 +207,7 @@ class WebcomicTranscripts extends Webcomic {
 					if ( empty( $author[ 'name' ] ) ) {
 						continue;
 					} else {
-						$author[ 'time' ] = strtotime( $author[ 'time' ] );
+						$author[ 'time' ] = empty( $author[ 'time' ] ) ? get_the_time( 'U', $post->ID ) : strtotime( $author[ 'time' ] );
 						
 						add_post_meta( $id, 'webcomic_author', $author );
 					}
@@ -224,6 +226,7 @@ class WebcomicTranscripts extends Webcomic {
 	public function wp_insert_post_data( $data, $raw ) {
 		if (
 			'webcomic_transcript' === $raw[ 'post_type' ]
+			and !empty( $raw[ 'ID' ] )
 			and current_user_can( 'edit_post', $raw[ 'ID' ] )
 		) {
 			if ( !empty( $_POST[ 'webcomic_post' ] ) and wp_verify_nonce( $_POST[ 'webcomic_meta_parent' ], 'webcomic_meta_parent' ) ) {
@@ -401,7 +404,9 @@ class WebcomicTranscripts extends Webcomic {
 	 * 
 	 * @param object $post Current post object.
 	 * @uses Webcomic::$config
-	 * @uses Webcomic::transcript_posts()
+	 * @uses WebcomicTranscripts::ajax_posts()
+	 * @uses WebcomicTranscripts::ajax_post_transcripts()
+	 * @uses WebcomicTranscripts::ajax_preview()
 	 */
 	public function parent( $post ) {
 		$parent_type = get_post_type( $post->post_parent );
@@ -415,7 +420,7 @@ class WebcomicTranscripts extends Webcomic {
 		<style>#webcomic_post_preview{overflow:auto}</style>
 		<p>
 			<select name="webcomic_collection" id="webcomic_collection" disabled>
-				<optgroup label="<?php _e( 'Collection', 'webcomic' ); ?>">
+				<optgroup label="<?php esc_attr_e( 'Collection', 'webcomic' ); ?>">
 				<?php
 					foreach ( self::$config[ 'collections' ] as $k => $v ) {
 						printf( '<option value="%s"%s>%s</option>',
@@ -439,7 +444,6 @@ class WebcomicTranscripts extends Webcomic {
 	 * 
 	 * @param object $post Current post object.
 	 * @uses Webcomic::$config
-	 * @uses Webcomic::transcript_posts()
 	 */
 	public function authors( $post ) {
 		$count   = 0;
@@ -483,8 +487,8 @@ class WebcomicTranscripts extends Webcomic {
 				$author[ 'email' ],
 				$author[ 'url' ],
 				$author[ 'ip' ],
-				date( get_option( 'date_format' ), $author[ 'time' ] ),
-				date( 'H:i:s', $author[ 'time' ] )
+				date( get_option( 'date_format' ), ( integer ) $author[ 'time' ] ),
+				date( 'H:i:s', ( integer ) $author[ 'time' ] )
 			);
 			
 			$count++;

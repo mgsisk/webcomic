@@ -19,7 +19,6 @@ class WebcomicPages extends Webcomic {
 	 * @uses WebcomicPages::admin_enqueue_scripts()
 	 * @uses WebcomicPages::bulk_edit_custom_box()
 	 * @uses WebcomicPages::quick_edit_custom_box()
-	 * @uses WebcomicPages::posts_where()
 	 * @uses WebcomicPages::manage_custom_column()
 	 * @uses WebcomicPages::manage_columns()
 	 * @uses WebcomicPages::manage_sortable_columns()

@@ -605,7 +605,7 @@ class WebcomicShortcode extends Webcomic {
 	 * @return string
 	 * @uses WebcomicTag::webcomic_collection_image()
 	 */
-	public function webcomic_collection_poster( $atts ) {
+	public function webcomic_collection_image( $atts ) {
 		extract( shortcode_atts( array(
 			'size'       => 'full',
 			'collection' => ''

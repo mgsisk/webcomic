@@ -4,7 +4,7 @@ Text Domain: webcomic
 Plugin Name: Webcomic
 Plugin URI: http://webcomic.nu
 Description: Comic publishing power for the web.
-Version: 4-beta2
+Version: 4
 Author: Michael Sisk
 Author URI: http://mgsisk.com
 License: GPL2
@@ -29,15 +29,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 
 /** Comic Publishing Power for the Web
  * 
- * @todo Future Release: Post-specific access settings?
- * @todo Future Release: PayPal IPN log viewer?
- * @todo Ensure actions and filters are documented.
- * @todo Ensure custom templates are documented.
+ * @todo Future: Bulk media actions; see core.trac.wordpress.org/ticket/16031
+ * @todo Future: Screen Options; see core.trac.wordpress.org/ticket/18323
+ * @todo Future: Post-specific access settings?
+ * @todo Future: Dynamic navigation widget?
+ * @todo Future: PayPal IPN log viewer?
  * 
  * @package Webcomic
  * @copyright 2008 - 2012 Michael Sisk
  * @license http://www.gnu.org/licenses/gpl-2.0.html GPL2
- * @version 4-beta2
+ * @version 4
  * @link http://webcomic.nu
  */
 
@@ -49,7 +50,7 @@ class Webcomic {
 	/** Internal version number.
 	 * @var string
 	 */
-	protected static $version = '4-beta2';
+	protected static $version = '4';
 	
 	/** Absolute path to the Webcomic directory.
 	 * @var string
@@ -397,7 +398,7 @@ class Webcomic {
 	
 	/** Handle custom permalink tokens.
 	 * 
-	 * @todo Use get_term_parents: http://core.trac.wordpress.org/ticket/17069
+	 * @todo Future: Use get_term_parents; see core.trac.wordpress.org/ticket/17069
 	 * 
 	 * @param string $link Permalink to swap tokens in.
 	 * @param object $post Post object.
@@ -493,7 +494,7 @@ class Webcomic {
 	 * [ogp.me](http://ogp.me/) for details on the Open Graph protocol.
 	 * 
 	 * @uses Webcomic::$config
-	 * @uses Webcoimc::$collection
+	 * @uses Webcomic::$collection
 	 * @uses Webcomic::get_attachments()
 	 * @hook wp_head
 	 * @filter array webcomic_opengraph $object, self::$collection
@@ -679,7 +680,6 @@ class Webcomic {
 	 * @hook template_redirect
 	 * @template role-restricted-{$collection}.php, role-restricted.php, restricted-{$collection}.php, restricted.php
 	 * @template age-restricted-{$collection}.php, age-restricted.php, restricted-{$collection}.php, restricted.php
-	 * @template age-restricted-{$collection}.php, age-restricted.php, restricted-{$collection}.php, restricted.php
 	 * @template prints-{$post->ID}.php, prints-{$post->post_name}.php, prints-{$collection}.php, prints.php
 	 * @template dynamic-{$container}-{$collection}.php, dynamic-{$container}.php, dynamic-{$collection}.php, dynamic.php
 	 */
@@ -813,21 +813,22 @@ class Webcomic {
 	 * @uses Webcomic::$config
 	 * @uses Webcomic:get_attachments()
 	 * @hook the_content_feed
-	 * @filter string the_webcomic_feed $post, $attachments
+	 * @filter string the_webcomic_feed $feeds, $content, $prepend, $append
+	 * @template feed-{$collectionID}.php, feed.php
 	 */
 	public function the_content_feed( $content ) {
 		global $post;
 		
-		if ( !empty( self::$config[ 'collections' ][ $post->post_type ][ 'feeds' ][ 'hook' ] ) and $attachments = self::get_attachments( $post->ID ) ) {
-			$prepend = '<p>';
+		if ( !empty( self::$config[ 'collections' ][ $post->post_type ][ 'feeds' ][ 'hook' ] ) ) {
+			$prepend = $append = '';
+			$feed_size = self::$config[ 'collections' ][ $post->post_type ][ 'feeds' ][ 'size' ];
 			
-			foreach ( $attachments as $attachment ) {
-				$prepend .= wp_get_attachment_image( $attachment->ID, self::$config[ 'collections' ][ $post->post_type ][ 'feeds' ][ 'size' ] );
+			
+			if ( !locate_template( array( "webcomic/feed-{$post->post_type}.php", 'webcomic/feed.php' ), true, false ) and $attachments = self::get_attachments( $post->ID ) ) {
+				require self::$dir . '-/php/integrate/feed.php';
 			}
 			
-			$prepend .= '</p>';
-			$prepend  = apply_filters( 'the_webcomic_feed', $prepend, $post, $attachments );
-			$content  = $prepend . $content;
+			$content = apply_filters( 'the_webcomic_feed', $prepend . $content . $append, $feeds, $content, $prepend, $append );
 		}
 		
 		return $content;
@@ -859,8 +860,8 @@ class Webcomic {
 	 * @uses Webcomic::$config
 	 * @uses Webcomic::$integrate
 	 * @hook loop_start
-	 * @action webcomic_loop_start
-	 * @template integrate-loop_start.php
+	 * @action webcomic_loop_start $collection
+	 * @template loop_start-{$collection}.php, loop_start.php
 	 */
 	public function loop_start( $query ) {
 		global $post;
@@ -876,9 +877,9 @@ class Webcomic {
 				return;
 			}
 			
-			do_action( 'webcomic_loop_start', is_front_page() );
+			do_action( 'webcomic_loop_start', self::$collection );
 			
-			if ( !locate_template( array( 'webcomic/integrate-loop_start.php' ), true, false ) ) {
+			if ( !locate_template( array( 'webcomic/loop_start-' . self::$collection . '.php', 'webcomic/loop_start.php' ), true, false ) ) {
 				require self::$dir . '-/php/integrate/loop_start.php';
 			}
 		}
@@ -892,8 +893,8 @@ class Webcomic {
 	 * @uses Webcomic::$config
 	 * @uses Webcomic::$integrate
 	 * @hook loop_start
-	 * @action webcomic_loop_start
-	 * @template integrate-loop_end.php
+	 * @action webcomic_loop_end $collection
+	 * @template loop_end-{$collection}.php, loop_end.php
 	 */
 	public function loop_end( $query ) {
 		global $post;
@@ -901,7 +902,7 @@ class Webcomic {
 		if ( self::$integrate and $query->is_main_query() and is_singular( array_keys( self::$config[ 'collections' ] ) ) ) {
 			do_action( 'webcomic_loop_end', self::$collection );
 			
-			if ( !locate_template( array( 'webcomic/integrate-loop_end.php' ), true, false ) ) {
+			if ( !locate_template( array( 'webcomic/loop_end=' . self::$collection . '.php', 'webcomic/loop_end.php' ), true, false ) ) {
 				require self::$dir . '-/php/integrate/loop_end.php';
 			}
 		}
@@ -914,15 +915,15 @@ class Webcomic {
 	 * @uses Webcomic::$integrate
 	 * @hook the_content
 	 * @filter string webcomic_the_content $prepend, $append
-	 * @template integrate-the_content.php
+	 * @template the_content-{$collection}.php, the_content.php
 	 */
 	public function the_content( $content ) {
 		global $wp_query, $post;
 		
-		$prepend = $append = '';
-		
-		if ( self::$integrate and in_the_loop() and $wp_query->is_main_query() and !is_feed() and isset( self::$config[ 'collections' ][ get_post_type( $post ) ] ) ) {
-			if ( !locate_template( array( 'webcomic/integrate-the_content.php' ), true, false ) ) {
+		if ( self::$integrate and in_the_loop() and $wp_query->is_main_query() and !is_feed() and $collection = get_post_type( $post ) and isset( self::$config[ 'collections' ][ $collection ] ) ) {
+			$prepend = $append = '';
+			
+			if ( !locate_template( array( "webcomic/the_content-{$collection}.php", 'webcomic/the_content.php' ), true, false ) ) {
 				require self::$dir . '-/php/integrate/the_content.php';
 			}
 			

@@ -45,9 +45,11 @@ class WebcomicHelp extends Webcomic {
 	 * @uses WebcomicHelp::languages_adding()
 	 * @uses WebcomicHelp::collection_settings_information()
 	 * @uses WebcomicHelp::collection_settings_general()
+	 * @uses WebcomicHelp::collection_settings_transcripts()
 	 * @uses WebcomicHelp::collection_settings_commerce()
 	 * @uses WebcomicHelp::collection_settings_access()
-	 * @uses WebcomicHelp::collection_settings_slugs()
+	 * @uses WebcomicHelp::collection_settings_posts()
+	 * @uses WebcomicHelp::collection_settings_permalinks()
 	 * @uses WebcomicHelp::collection_settings_twitter()
 	 */
 	public function __construct( $screen ) {
@@ -73,7 +75,7 @@ class WebcomicHelp extends Webcomic {
 				'title'   => __( 'Overview', 'webcomic' ),
 				'content' => $this->generator_overview()
 			) );
-		} else if ( 'settings_page_webcomic' === $screen->id ) {
+		} else if ( 'settings_page_webcomic-options' === $screen->id ) {
 			$screen->add_help_tab( array(
 				'id'      => 'general-settings',
 				'title'   => __( 'General Settings', 'webcomic' ),
@@ -299,16 +301,16 @@ class WebcomicHelp extends Webcomic {
 	private function sidebar() {
 		return sprintf( '
 			<p><strong>%s</strong></p>
+			<p><a href="//github.com/mgsisk/webcomic/wiki" target="_blank">%s</a></p>
 			<p><a href="//vimeo.com/channels/webcomic" target="_blank">%s</a></p>
 			<p><a href="http://webcomic.nu/support" target="_blank">%s</a></p>
-			<p><a href="http://webcomic.nu/docs" target="_blank">%s</a></p>
 			<p><a href="//github.com/mgsisk/webcomic/issues" target="_blank">%s</a></p>
 			<hr>
 			<p><a href="support@webcomic.nu">%s</a></p>',
 			__( 'For more information:', 'webcomic' ),
+			__( "Beginner's Guide", 'webcomic' ),
 			__( 'Video Tutorials', 'webcomic' ),
 			__( 'Support Forum', 'webcomic' ),
-			__( 'Technical Documentation', 'webcomic' ),
 			__( 'Issue Tracker', 'webcomic' ),
 			__( 'Email Support', 'webcomic' )
 		);
@@ -830,7 +832,6 @@ class WebcomicHelp extends Webcomic {
 	 */
 	private function collection_settings_posts() {
 		return sprintf( '
-			<p>%s</p>
 			<p>%s</p>',
 			__( "These settings control some of the basic features of your webcomic posts. Disabling a feature will completely remove it's associated box from the Add New Webcomic and Edit Webcomic screens.  When titles are disabled Webcomic will automatically set the title of new webcomics to their post ID. Featured images require an active theme with featured image support.", 'webcomic' )
 		);

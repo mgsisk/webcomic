@@ -462,9 +462,9 @@ class WebcomicTag extends Webcomic {
 	 * @return object
 	 * @uses Webcomic::$config
 	 * @uses Webcomic::$collection
-	 * @filter string get_(previous|next|first|last|random)_webcomic_join $in_same_term, $excluded_terms
-	 * @filter string get_(previous|next|first|last|random)_webcomic_where $in_same_term, $excluded_terms
-	 * @filter string get_(previous|next|first|last|random)_webcomic_sort $or
+	 * @filter string get_{$relative}_webcomic_join $in_same_term, $excluded_terms
+	 * @filter string get_{$relative}_webcomic_where $in_same_term, $excluded_terms
+	 * @filter string get_{$relative}_webcomic_sort $or
 	 */
 	public static function get_relative_webcomic( $relative = 'random', $in_same_term = false, $excluded_terms = false, $taxonomy = 'storyline', $collection = '' ) {
 		global $wpdb, $post;
@@ -553,7 +553,7 @@ class WebcomicTag extends Webcomic {
 	 * @param string $collection The collection to retrieve from. Used when retrieving first, last, or random webcomics outside of the loop.
 	 * @return string
 	 * @uses WebcomicTag::get_relative_webcomic()
-	 * @filter string get_(previous|next|first|last|random)_webcomic_link $the_post, $in_same_term, $excluded_terms, $taxonomy, $collection
+	 * @filter string get_{$relative}_webcomic_link $the_post, $in_same_term, $excluded_terms, $taxonomy, $collection
 	 */
 	public static function get_relative_webcomic_link( $relative = 'random', $in_same_term = false, $excluded_terms = false, $taxonomy = 'storyline', $collection = '' ) {
 		if ( $the_post = self::get_relative_webcomic( $relative, $in_same_term, $excluded_terms, $taxonomy, $collection ) ) {
@@ -588,7 +588,7 @@ class WebcomicTag extends Webcomic {
 	 * @uses Webcomic::get_attachments()
 	 * @uses WebcomicTag::get_relative_webcomic()
 	 * @uses WebcomicTag::get_random_webcomic_link()
-	 * @filter string (previous|next|first|last|random)_webcomic_link $link, $in_same_term, $excluded_terms, $taxonomy, $collection
+	 * @filter string {$relative}_webcomic_link $link, $in_same_term, $excluded_terms, $taxonomy, $collection
 	 */
 	public static function relative_webcomic_link( $format, $link, $relative = 'random', $in_same_term = false, $excluded_terms = false, $taxonomy = 'storyline', $collection = '' ) {
 		global $post;
@@ -784,7 +784,7 @@ class WebcomicTag extends Webcomic {
 	 * @param string $image Image size to use when displaying term images for links.
 	 * @return string
 	 * @uses WebcomicTag::get_relative_webcomic_link()
-	 * @filter string webcomic_term_link-(webcomic\d+_(storyline|character)) $terms, $before, $sep, $after, $target, $image
+	 * @filter string webcomic_term_links-webcomic\d+_{$taxonomy} $terms, $before, $sep, $after, $target, $image
 	 * @filter string the_webcomic_term_list $id, $before, $sep, $after, $target, $image, $taxonomy
 	 */
 	public static function get_the_webcomic_term_list( $id = 0, $taxonomy, $before = '', $sep = ', ', $after = '', $target = 'archive', $image = '' ) {
@@ -900,7 +900,7 @@ class WebcomicTag extends Webcomic {
 	 * @param array $args An array of arguments to pass to get_terms().
 	 * @return string
 	 * @uses WebcomicTag::get_relative_webcomic_term()
-	 * @filter string get_(previous|next|first|last|random)_webcomic_term_link $target, $term, $args
+	 * @filter string get_{$relative}_webcomic_term_link $target, $term, $args
 	 */
 	public static function get_relative_webcomic_term_link( $target = 'archive', $relative = 'random', $taxonomy = '', $args = array() ) {
 		global $wpdb;
@@ -949,7 +949,7 @@ class WebcomicTag extends Webcomic {
 	 * @uses WebcomicTag::get_relative_webcomic_term()
 	 * @uses WebcomicTag::get_relative_webcomic_term_link()
 	 * @uses WebcomicTag::get_random_webcomic_term_link()
-	 * @filter string (previous|next|first|last|random)_webcomic_term_link $link, $target, $term, $args
+	 * @filter string {$relative}_webcomic_term_link $link, $target, $term, $args
 	 */
 	public static function relative_webcomic_term_link( $format, $link, $target = 'archive', $relative = 'random', $taxonomy = '', $args = array() ) {
 		global $wpdb;
@@ -1418,7 +1418,7 @@ class WebcomicTag extends Webcomic {
 	 * @param mixed $the_post The post object or ID to get a transcript link to.
 	 * @return string
 	 * @uses WebcomicTag::webcomic_transcripts_open()
-	 * @filter string get_webcomic_transcript_link $the_post, $anchor
+	 * @filter string get_webcomic_transcripts_link $the_post, $anchor
 	 */
 	public static function get_webcomic_transcripts_link( $language = false, $the_post = false ) {
 		global $wp_rewrite;
@@ -1549,7 +1549,7 @@ class WebcomicTag extends Webcomic {
 	 * @param string $sep Separate items using this.
 	 * @param string $after After list.
 	 * @return string
-	 * @filter string the_webcomic_transcript_languages $id, $before, $sep, $after
+	 * @filter string the_webcomic_transcript_term_list $id, $before, $sep, $after
 	 */
 	public static function get_the_webcomic_transcript_term_list( $id = 0, $taxonomy, $before = '', $sep = ', ', $after = '' ) {
 		global $post;
@@ -1594,21 +1594,21 @@ class WebcomicTag extends Webcomic {
 
 	/** Render a complete transcription form for templates.
 	 * 
-	 * ** Arguments **
+	 * ### Arguments
 	 * 
-	 * - `array $fields` An array of fields for unregistered users to fill out. Each array element should have a descriptive key and the full HTML output for the value.
-	 * - `string $language_field` HTML output for the transcript language field.
-	 * - `string $transcript_field` HTML output for the transcript content field. Used when $wysiwyg_editor is `false`.
-	 * - `string $must_log_in` Error text to display when users must be logged in to transcribe.
-	 * - `string $logged_in_as` Text to display when a user is already logged in.
-	 * - `string $transcript_notes_before` Transcription notes displayed to unregistered users before the `$fields` are output.
-	 * - `string $transcript_notes_after` Transcription notes displayed at the bottom of the form before the submit button.
-	 * - `string $transcript_notes_success` Text displayed after a transcript has been successfully submitted.
-	 * - `string $transcript_notes_failure` Text displayed if an error occurs during transcript submission.
-	 * - `string $id_form` ID to use for the `<form>` element.
-	 * - `string $title_submit` Title text to display for the transcript submission form.
-	 * - `string $label_submit` Text to display for the submit button.
-	 * - `mixed $wysiwyg_editor` Whether to display a WYSIWYG transcript editor. May pass an array of arguments for `wp_editor()`.
+	 * - `array` **$fields** - An array of fields for unregistered users to fill out. Each array element should have a descriptive key and the full HTML output for the value.
+	 * - `string` **$language_field** - HTML output for the transcript language field.
+	 * - `string` **$transcript_field** - HTML output for the transcript content field. Used when $wysiwyg_editor is `false`.
+	 * - `string` **$must_log_in** - Error text to display when users must be logged in to transcribe.
+	 * - `string` **$logged_in_as** - Text to display when a user is already logged in.
+	 * - `string` **$transcript_notes_before** - Transcription notes displayed to unregistered users before the `$fields` are output.
+	 * - `string` **$transcript_notes_after** - Transcription notes displayed at the bottom of the form before the submit button.
+	 * - `string` **$transcript_notes_success** - Text displayed after a transcript has been successfully submitted.
+	 * - `string` **$transcript_notes_failure** - Text displayed if an error occurs during transcript submission.
+	 * - `string` **$id_form** - ID to use for the `<form>` element.
+	 * - `string` **$title_submit** - Title text to display for the transcript submission form.
+	 * - `string` **$label_submit** - Text to display for the submit button.
+	 * - `mixed` **$wysiwyg_editor** - Whether to display a WYSIWYG transcript editor. May pass an array of arguments for `wp_editor()`.
 	 * 
 	 * @param array $args Options for strings, fields etc in the form.
 	 * @param mixed $transcript The transcript to update on submission.
@@ -1773,26 +1773,26 @@ class WebcomicTag extends Webcomic {
 	 * may accept. Only those get_terms() arguments that differ from
 	 * their defaults are detailed here.
 	 * 
-	 * **Arguments**
+	 * ### Arguments
 	 * 
-	 * - `string $name` Value for the name attribute of the `<select>` element.
-	 * - `string $id` Value of the id attribute of the `<select>` element.
-	 * - `mixed $class` String or array of additional classes for the `<select>` element.
-	 * - `string $before` Content to display before the output.
-	 * - `string $after` Content to display after the output.
-	 * - `string $show_option_all` String to display for an "all" `<option>` (value="0").
-	 * - `string $show_option_none` String to display for a "none" `<option>` (value="-1").
-	 * - `boolean $hierarchical` Whether to indent child terms.
-	 * - `boolean $hide_empty` Whether to hide empty terms. Defaults to the opposite of WebcomicTag::webcomic_transcripts_open().
-	 * - `boolean $hide_if_empty` Whether to display the `<select>` even if it contains no `<option>'s`.
-	 * - `string $taxonomy` The taxonomy terms must belong to. Should be a valid Webcomic taxonomy.
-	 * - `string $orderby` What field to sort terms by.
-	 * - `object $walker` Custom walker object. Defaults Walker_WebcomicTerm_Dropdown.
-	 * - `integer $depth` How deep the walker should run. Defaults to 0 (all levels). A -1 depth will result in flat output.
-	 * - `integer $selected` The ID of the selected term.
+	 * - `string` **$name** - Value for the name attribute of the `<select>` element.
+	 * - `string` **$id** - Value of the id attribute of the `<select>` element.
+	 * - `mixed` **$class** - String or array of additional classes for the `<select>` element.
+	 * - `string` **$before** - Content to display before the output.
+	 * - `string` **$after** - Content to display after the output.
+	 * - `string` **$show_option_all** - String to display for an "all" `<option>` (value="0").
+	 * - `string` **$show_option_none** - String to display for a "none" `<option>` (value="-1").
+	 * - `boolean` **$hierarchical** - Whether to indent child terms.
+	 * - `boolean` **$hide_empty** - Whether to hide empty terms. Defaults to the opposite of WebcomicTag::webcomic_transcripts_open().
+	 * - `boolean` **$hide_if_empty** - Whether to display the `<select>` even if it contains no `<option>'s`.
+	 * - `string` **$taxonomy** - The taxonomy terms must belong to. Should be a valid Webcomic taxonomy.
+	 * - `string` **$orderby** - What field to sort terms by.
+	 * - `object` **$walker** - Custom walker object. Defaults Walker_WebcomicTerm_Dropdown.
+	 * - `integer` **$depth** - How deep the walker should run. Defaults to 0 (all levels). A -1 depth will result in flat output.
+	 * - `integer` **$selected** - The ID of the selected term.
 	 * 
 	 * @param array $args Array of arguments. See function description for detailed information.
-	 * @param mixed The post object or ID transcripts should be related to.
+	 * @param mixed $the_post The post object or ID transcripts should be related to.
 	 * @return string
 	 * @uses WebcomicTag::webcomic_transcripts_open()
 	 * @uses Walker_WebcomicTranscriptTerm_Dropdown
@@ -1856,20 +1856,20 @@ class WebcomicTag extends Webcomic {
 	 * may accept. Only those get_terms() arguments that differ from
 	 * their defaults are detailed here.
 	 * 
-	 * **Arguments**
+	 * ### Arguments
 	 * 
-	 * - `string $id` Value of the id attribute of the list element.
-	 * - `mixed $class` String or array of additional classes for the list element.
-	 * - `string $before` Content to display before the output.
-	 * - `string $after` Content to display after the output.
-	 * - `boolean $ordered` Use `<ol>` instead of `<ul>`.
-	 * - `boolean $hierarchical` Whether to indent child terms.
-	 * - `boolean $hide_empty` Whether to hide empty terms. Defaults to the opposite of WebcomicTag::webcomic_transcripts_open().
-	 * - `string $taxonomy` The taxonomy terms must belong to. Should be a valid Webcomic taxonomy.
-	 * - `string $orderby` What field to sort terms by.
-	 * - `object $walker` Custom walker object. Defaults Walker_WebcomicTranscriptTerm_List.
-	 * - `integer $depth` How deep the walker should run. Defaults to 0 (all levels). A -1 depth will result in flat output.
-	 * - `integer $selected` The ID of the selected term.
+	 * - `string` **$id** - Value of the id attribute of the list element.
+	 * - `mixed` **$class** - String or array of additional classes for the list element.
+	 * - `string` **$before** - Content to display before the output.
+	 * - `string` **$after** - Content to display after the output.
+	 * - `boolean` **$ordered** - Use `<ol>` instead of `<ul>`.
+	 * - `boolean` **$hierarchical** - Whether to indent child terms.
+	 * - `boolean` **$hide_empty** - Whether to hide empty terms. Defaults to the opposite of WebcomicTag::webcomic_transcripts_open().
+	 * - `string` **$taxonomy** - The taxonomy terms must belong to. Should be a valid Webcomic taxonomy.
+	 * - `string` **$orderby** - What field to sort terms by.
+	 * - `object` **$walker** - Custom walker object. Defaults Walker_WebcomicTranscriptTerm_List.
+	 * - `integer` **$depth** - How deep the walker should run. Defaults to 0 (all levels). A -1 depth will result in flat output.
+	 * - `integer` **$selected** - The ID of the selected term.
 	 * 
 	 * @param array $args Array of arguments. See function description for detailed information.
 	 * @param mixed $the_post The post object or ID transcripts should be related to.
@@ -1936,27 +1936,27 @@ class WebcomicTag extends Webcomic {
 	 * may accept. Only those get_terms() arguments that differ from
 	 * their defaults are detailed here.
 	 * 
-	 * **Arguments**
+	 * ### Arguments
 	 * 
-	 * - `string $name` Value for the name attribute of the `<select>` element.
-	 * - `string $id` Value of the id attribute of the `<select>` element.
-	 * - `mixed $class` String or array of additional classes for the `<select>` element.
-	 * - `string $before` Content to display before the output.
-	 * - `string $after` Content to display after the output.
-	 * - `string $show_option_all` String to display for an "all" `<option>` (value="0").
-	 * - `string $show_option_none` String to display for a "none" `<option>` (value="-1").
-	 * - `boolean $hierarchical` Whether to indent child terms.
-	 * - `boolean $hide_if_empty` Whether to display the `<select>` even if it contains no `<option>'s`.
-	 * - `string $taxonomy` The taxonomy terms must belong to. Should be a valid Webcomic taxonomy.
-	 * - `string $orderby` What field to sort terms by. Defaults to 'name' for characters and 'term_group' for storylines.
-	 * - `object $walker` Custom walker object. Defaults Walker_WebcomicTerm_Dropdown.
-	 * - `integer $depth` How deep the walker should run. Defaults to 0 (all levels). A -1 depth will result in flat output.
-	 * - `boolean $webcomics` Whether to display a dropdown of webcomic posts grouped by term. The 'hide_empty' argument is ignored when $webcomics is true.
-	 * - `string $webcomic_order` How to order webcomics, one of 'ASC' or 'DESC'. Defaults to 'ASC'.
-	 * - `string $webcomic_orderby` What field to order webcomics by. Defaults to 'date'. See WP_Query for details.
-	 * - `boolean $show_count` Whether to display the total number of webcomics in a term.
-	 * - `string $target` The target url for terms, one of 'archive', 'first', 'last', or 'random'. Defaults to 'archive'.
-	 * - `integer $selected` The ID of the selected term or webcomic.
+	 * - `string` **$name** - Value for the name attribute of the `<select>` element.
+	 * - `string` **$id** - Value of the id attribute of the `<select>` element.
+	 * - `mixed` **$class** - String or array of additional classes for the `<select>` element.
+	 * - `string` **$before** - Content to display before the output.
+	 * - `string` **$after** - Content to display after the output.
+	 * - `string` **$show_option_all** - String to display for an "all" `<option>` (value="0").
+	 * - `string` **$show_option_none** - String to display for a "none" `<option>` (value="-1").
+	 * - `boolean` **$hierarchical** - Whether to indent child terms.
+	 * - `boolean` **$hide_if_empty** - Whether to display the `<select>` even if it contains no `<option>'s`.
+	 * - `string` **$taxonomy** - The taxonomy terms must belong to. Should be a valid Webcomic taxonomy.
+	 * - `string` **$orderby** - What field to sort terms by. Defaults to 'name' for characters and 'term_group' for storylines.
+	 * - `object` **$walker** - Custom walker object. Defaults Walker_WebcomicTerm_Dropdown.
+	 * - `integer` **$depth** - How deep the walker should run. Defaults to 0 (all levels). A -1 depth will result in flat output.
+	 * - `boolean` **$webcomics** - Whether to display a dropdown of webcomic posts grouped by term. The 'hide_empty' argument is ignored when $webcomics is true.
+	 * - `string` **$webcomic_order** - How to order webcomics, one of 'ASC' or 'DESC'. Defaults to 'ASC'.
+	 * - `string` **$webcomic_orderby** - What field to order webcomics by. Defaults to 'date'. See WP_Query for details.
+	 * - `boolean` **$show_count** - Whether to display the total number of webcomics in a term.
+	 * - `string` **$target** - The target url for terms, one of 'archive', 'first', 'last', or 'random'. Defaults to 'archive'.
+	 * - `integer` **$selected** - The ID of the selected term or webcomic.
 	 * 
 	 * @param array $args Array of arguments. See function description for detailed information.
 	 * @return string
@@ -2012,27 +2012,27 @@ class WebcomicTag extends Webcomic {
 	
 	/** Return a `<select>` element of webcomic collections.
 	 * 
-	 * **Arguments**
+	 * ### Arguments
 	 * 
-	 * - `string $name` Value for the name attribute of the `<select>` element.
-	 * - `string $id` Value of the id attribute of the `<select>` element.
-	 * - `mixed $class` String or array of additional classes for the `<select>` element.
-	 * - `string $before` Content to display before the output.
-	 * - `string $after` Content to display after the output.
-	 * - `string $show_option_all` String to display for an "all" `<option>` (value="0").
-	 * - `string $show_option_none` String to display for a "none" `<option>` (value="-1").
-	 * - `boolean $hide_empty` Whether to hide collections with no readable posts. Defaults to true.
-	 * - `boolean $hide_if_empty` Whether to display the `<select>` even if it contains no `<option>'s`.
-	 * - `string $collection` Limits output to a single collection. Useful in combination with $webcomics.
-	 * - `string $order` How to order collections, one of 'ASC' (default) or 'DESC'.
-	 * - `string $orderby` What to sort the collections by. May be one of 'name', 'slug', 'count', or 'updated'. Defaults to collection ID.
-	 * - `string $callback` Custom callback function for generating `<option>'s`. Callback functions should accept three arguments: the collection configuration array, the function arguments array, and the posts array (if any).
-	 * - `boolean $webcomics` Whether to display a dropdown of webcomic posts grouped by collection. The 'hide_empty' argument is ignored when $webcomics is true.
-	 * - `string $webcomic_order` How to order webcomics, one of 'ASC' or 'DESC'. Defaults to 'ASC'.
-	 * - `string $webcomic_orderby` What field to order webcomics by. Defaults to 'date'. See WP_Query for details.
-	 * - `boolean $show_count` Whether to display the total number of published webcomics in a collection.
-	 * - `string $target` The target url for collections, one of 'archive', 'first', 'last', or 'random'. Defaults to 'archive'.
-	 * - `string $selected` The ID of the selected collection or webcomic.
+	 * - `string` **$name** - Value for the name attribute of the `<select>` element.
+	 * - `string` **$id** - Value of the id attribute of the `<select>` element.
+	 * - `mixed` **$class** - String or array of additional classes for the `<select>` element.
+	 * - `string` **$before** - Content to display before the output.
+	 * - `string` **$after** - Content to display after the output.
+	 * - `string` **$show_option_all** - String to display for an "all" `<option>` (value="0").
+	 * - `string` **$show_option_none** - String to display for a "none" `<option>` (value="-1").
+	 * - `boolean` **$hide_empty** - Whether to hide collections with no readable posts. Defaults to true.
+	 * - `boolean` **$hide_if_empty** - Whether to display the `<select>` even if it contains no `<option>'s`.
+	 * - `string` **$collection** - Limits output to a single collection. Useful in combination with $webcomics.
+	 * - `string` **$order** - How to order collections, one of 'ASC' (default) or 'DESC'.
+	 * - `string` **$orderby** - What to sort the collections by. May be one of 'name', 'slug', 'count', or 'updated'. Defaults to collection ID.
+	 * - `string` **$callback** - Custom callback function for generating `<option>'s`. Callback functions should accept three arguments: the collection configuration array, the function arguments array, and the posts array (if any).
+	 * - `boolean` **$webcomics** - Whether to display a dropdown of webcomic posts grouped by collection. The 'hide_empty' argument is ignored when $webcomics is true.
+	 * - `string` **$webcomic_order** - How to order webcomics, one of 'ASC' or 'DESC'. Defaults to 'ASC'.
+	 * - `string` **$webcomic_orderby** - What field to order webcomics by. Defaults to 'date'. See WP_Query for details.
+	 * - `boolean` **$show_count** - Whether to display the total number of published webcomics in a collection.
+	 * - `string` **$target** - The target url for collections, one of 'archive', 'first', 'last', or 'random'. Defaults to 'archive'.
+	 * - `string` **$selected** - The ID of the selected collection or webcomic.
 	 * 
 	 * @param array $args Array of arguments. See function description for detailed information.
 	 * @return string
@@ -2156,29 +2156,29 @@ class WebcomicTag extends Webcomic {
 	 * may accept. Only those get_terms() arguments that differ from
 	 * their defaults are detailed here.
 	 * 
-	 * **Arguments**
+	 * ### Arguments
 	 * 
-	 * - `string $id` Value of the id attribute of the list element.
-	 * - `mixed $class` String or array of additional classes for the list element.
-	 * - `string $before` Content to display before the output.
-	 * - `string $after` Content to display after the output.
-	 * - `boolean $ordered` Use `<ol>` instead of `<ul>`.
-	 * - `boolean $hierarchical` Whether to indent child terms.
-	 * - `string $taxonomy` The taxonomy terms must belong to. Should be a valid Webcomic taxonomy.
-	 * - `string $orderby` What field to sort terms by. Defaults to 'name' for characters and 'term_group' for storylines.
-	 * - `object $walker` Custom walker object. Defaults Walker_WebcomicTerm_List.
-	 * - `string $feed` Text or image URL to use for a term feed link.
-	 * - `string $feed_type` The type of feed to link to.
-	 * - `integer $depth` How deep the walker should run. Defaults to 0 (all levels). A -1 depth will result in flat output.
-	 * - `boolean $webcomics` Whether to display a list of webcomic posts grouped by term. The 'hide_empty' argument is ignored when $webcomics is true.
-	 * - `string $webcomic_order` How to order webcomics, one of 'ASC' or 'DESC'. Defaults to 'ASC'.
-	 * - `string $webcomic_orderby` What field to order webcomics by. Defaults to 'date'. See WP_Query for details.
-	 * - `string $webcomic_image` Size of the webcomic image to use for webcomic links.
-	 * - `boolean $show_count` Whether to display the total number of webcomics in a term.
-	 * - `boolean $show_description` Whether to display term descriptions.
-	 * - `boolean $show_image` Size of the term image to use for term links.
-	 * - `string $target` The target url for terms, one of 'archive', 'first', 'last', or 'random'. Defaults to 'archive'.
-	 * - `integer $selected` The ID of the selected term or webcomic.
+	 * - `string` **$id** - Value of the id attribute of the list element.
+	 * - `mixed` **$class** - String or array of additional classes for the list element.
+	 * - `string` **$before** - Content to display before the output.
+	 * - `string` **$after** - Content to display after the output.
+	 * - `boolean` **$ordered** - Use `<ol>` instead of `<ul>`.
+	 * - `boolean` **$hierarchical** - Whether to indent child terms.
+	 * - `string` **$taxonomy** - The taxonomy terms must belong to. Should be a valid Webcomic taxonomy.
+	 * - `string` **$orderby** - What field to sort terms by. Defaults to 'name' for characters and 'term_group' for storylines.
+	 * - `object` **$walker** - Custom walker object. Defaults Walker_WebcomicTerm_List.
+	 * - `string` **$feed** - Text or image URL to use for a term feed link.
+	 * - `string` **$feed_type** - The type of feed to link to.
+	 * - `integer` **$depth** - How deep the walker should run. Defaults to 0 (all levels). A -1 depth will result in flat output.
+	 * - `boolean` **$webcomics** - Whether to display a list of webcomic posts grouped by term. The 'hide_empty' argument is ignored when $webcomics is true.
+	 * - `string` **$webcomic_order** - How to order webcomics, one of 'ASC' or 'DESC'. Defaults to 'ASC'.
+	 * - `string` **$webcomic_orderby** - What field to order webcomics by. Defaults to 'date'. See WP_Query for details.
+	 * - `string` **$webcomic_image** - Size of the webcomic image to use for webcomic links.
+	 * - `boolean` **$show_count** - Whether to display the total number of webcomics in a term.
+	 * - `boolean` **$show_description** - Whether to display term descriptions.
+	 * - `boolean` **$show_image** - Size of the term image to use for term links.
+	 * - `string` **$target** - The target url for terms, one of 'archive', 'first', 'last', or 'random'. Defaults to 'archive'.
+	 * - `integer` **$selected** - The ID of the selected term or webcomic.
 	 * 
 	 * @param array $args Array of arguments. See function description for detailed information.
 	 * @return string
@@ -2235,29 +2235,29 @@ class WebcomicTag extends Webcomic {
 	
 	/** Return a list of webcomic collections.
 	 * 
-	 * **Arguments**
+	 * ### Arguments
 	 * 
-	 * - `string $id` Value of the id attribute of the list element.
-	 * - `mixed $class` String or array of additional classes for the list element.
-	 * - `string $before` Content to display before the output.
-	 * - `string $after` Content to display after the output.
-	 * - `boolean $hide_empty` Whether to hide collections with no readable posts. Defaults to true.
-	 * - `boolean $ordered` Use `<ol>` instead of `<ul>`.
-	 * - `string $collection` Limits output to a single collection. Useful in combination with $webcomics.
-	 * - `string $order` How to order collections, one of 'ASC' (default) or 'DESC'.
-	 * - `string $orderby` What to sort the collections by. May be one of 'name', 'slug', 'count', or 'updated'. Defaults to collection ID.
-	 * - `string $callback` Custom callback function for generating list items. Callback functions should accept three arguments: the collection configuration array, the function arguments array, and the posts array (if any).
-	 * - `string $feed` Text or image URL to use for a collection feed link.
-	 * - `string $feed_type` The type of feed to link to.
-	 * - `boolean $webcomics` Whether to display a list of webcomic posts grouped by collection. The 'hide_empty' argument is ignored when $webcomics is true.
-	 * - `string $webcomic_order` How to order webcomics, one of 'ASC' or 'DESC'. Defaults to 'ASC'.
-	 * - `string $webcomic_orderby` What field to order webcomics by. Defaults to 'date'. See WP_Query for details.
-	 * - `string $webcomic_image` Size of the webcomic image to use for webcomic links.
-	 * - `boolean $show_count` Whether to display the total number of webcomics in a collection.
-	 * - `boolean $show_description` Whether to display collection descriptions.
-	 * - `boolean $show_image` Size of the collection image to use for collection links.
-	 * - `string $target` The target url for collections, one of 'archive', 'first', 'last', or 'random'. Defaults to 'archive'.
-	 * - `integer $selected` The ID of the selected collection or webcomic.
+	 * - `string` **$id** - Value of the id attribute of the list element.
+	 * - `mixed` **$class** - String or array of additional classes for the list element.
+	 * - `string` **$before** - Content to display before the output.
+	 * - `string` **$after** - Content to display after the output.
+	 * - `boolean` **$hide_empty** - Whether to hide collections with no readable posts. Defaults to true.
+	 * - `boolean` **$ordered** - Use `<ol>` instead of `<ul>`.
+	 * - `string` **$collection** - Limits output to a single collection. Useful in combination with $webcomics.
+	 * - `string` **$order** - How to order collections, one of 'ASC' (default) or 'DESC'.
+	 * - `string` **$orderby** - What to sort the collections by. May be one of 'name', 'slug', 'count', or 'updated'. Defaults to collection ID.
+	 * - `string` **$callback** - Custom callback function for generating list items. Callback functions should accept three arguments: the collection configuration array, the function arguments array, and the posts array (if any).
+	 * - `string` **$feed** - Text or image URL to use for a collection feed link.
+	 * - `string` **$feed_type** - The type of feed to link to.
+	 * - `boolean` **$webcomics** - Whether to display a list of webcomic posts grouped by collection. The 'hide_empty' argument is ignored when $webcomics is true.
+	 * - `string` **$webcomic_order** - How to order webcomics, one of 'ASC' or 'DESC'. Defaults to 'ASC'.
+	 * - `string` **$webcomic_orderby** - What field to order webcomics by. Defaults to 'date'. See WP_Query for details.
+	 * - `string` **$webcomic_image** - Size of the webcomic image to use for webcomic links.
+	 * - `boolean` **$show_count** - Whether to display the total number of webcomics in a collection.
+	 * - `boolean` **$show_description** - Whether to display collection descriptions.
+	 * - `boolean` **$show_image** - Size of the collection image to use for collection links.
+	 * - `string` **$target** - The target url for collections, one of 'archive', 'first', 'last', or 'random'. Defaults to 'archive'.
+	 * - `integer` **$selected** - The ID of the selected collection or webcomic.
 	 * 
 	 * @param array $args Array of arguments. See function description for detailed information.
 	 * @return string
@@ -2394,23 +2394,23 @@ class WebcomicTag extends Webcomic {
 	 * may accept. Only those get_terms() arguments that differ from
 	 * their defaults are detailed here.
 	 * 
-	 * **Arguments**
+	 * ### Arguments
 	 * 
-	 * - `string $id` Value of the id attribute of the wrapping element.
-	 * - `mixed $class` String or array of additional classes for the wrapping element.
-	 * - `integer $smallest` The smallest font size to display links in.
-	 * - `integer $largest` The largest font size to display links in.
-	 * - `string $unit` The CSS unit to use for $smallest and $largest.
-	 * - `string $image` Size of the term image to use for term links. Modified by the number of posts in a given term and the $smallest and $largest values.
-	 * - `string $before` Content to display before the output.
-	 * - `string $after` Content to display after the output.
-	 * - `string $sep` Separator to use between links. An empty value generates an unordered list. Defaults to "\n".
-	 * - `string $taxonomy` The taxonomy terms must belong to. Should be a valid Webcomic taxonomy.
-	 * - `string $order` How to order terms. Defaults to 'RAND'.
-	 * - `mixed $callback` Callback function to use when building links.
-	 * - `boolean $show_count` Whether to display the total number of webcomics in a term.
-	 * - `string $target` The target url for terms, one of 'archive', 'first', 'last', or 'random'. Defaults to 'archive'.
-	 * - `integer $selected` The ID of the current term.
+	 * - `string` **$id** - Value of the id attribute of the wrapping element.
+	 * - `mixed` **$class** - String or array of additional classes for the wrapping element.
+	 * - `integer` **$smallest** - The smallest font size to display links in.
+	 * - `integer` **$largest** - The largest font size to display links in.
+	 * - `string` **$unit** - The CSS unit to use for $smallest and $largest.
+	 * - `string` **$image** - Size of the term image to use for term links. Modified by the number of posts in a given term and the $smallest and $largest values.
+	 * - `string` **$before** - Content to display before the output.
+	 * - `string` **$after** - Content to display after the output.
+	 * - `string` **$sep** - Separator to use between links. An empty value generates an unordered list. Defaults to "\n".
+	 * - `string` **$taxonomy** - The taxonomy terms must belong to. Should be a valid Webcomic taxonomy.
+	 * - `string` **$order** - How to order terms. Defaults to 'RAND'.
+	 * - `mixed` **$callback** - Callback function to use when building links.
+	 * - `boolean` **$show_count** - Whether to display the total number of webcomics in a term.
+	 * - `string` **$target** - The target url for terms, one of 'archive', 'first', 'last', or 'random'. Defaults to 'archive'.
+	 * - `integer` **$selected** - The ID of the current term.
 	 * 
 	 * @param array $args Array of arguments. See function description for detailed information.
 	 * @return string
@@ -2497,24 +2497,24 @@ class WebcomicTag extends Webcomic {
 	
 	/** Render a "cloud" of webcomic collections.
 	 * 
-	 * **Arguments**
+	 * ### Arguments
 	 * 
-	 * - `string $id` Value of the id attribute of the wrapping element.
-	 * - `mixed $class` String or array of additional classes for the wrapping element.
-	 * - `integer $smallest` The smallest font size to display links in.
-	 * - `integer $largest` The largest font size to display links in.
-	 * - `string $unit` The CSS unit to use for $smallest and $largest.
-	 * - `string $image` Size of the collection poster to use for collection links. Modified by the number of posts in a given term and the $smallest and $largest values.
-	 * - `string $before` Content to display before the output.
-	 * - `string $after` Content to display after the output.
-	 * - `string $sep` Separator to use between links. An empty value generates an unordered list. Defaults to "\n".
-	 * - `string $order` How to order collections, one of 'ASC' (default) or 'DESC'.
-	 * - `string $orderby` What to sort the collections by. May be one of 'name', 'slug', 'count', or 'updated'. Defaults to collection ID.
-	 * - `string $order` How to order collections. Defaults to 'RAND'.
-	 * - `mixed $callback` Callback function to use when building links.
-	 * - `boolean $show_count` Whether to display the total number of webcomics in a collection.
-	 * - `string $target` The target url for collections, one of 'archive', 'first', 'last', or 'random'. Defaults to 'archive'.
-	 * - `integer $selected` The ID of the current collection.
+	 * - `string` **$id** - Value of the id attribute of the wrapping element.
+	 * - `mixed` **$class** - String or array of additional classes for the wrapping element.
+	 * - `integer` **$smallest** - The smallest font size to display links in.
+	 * - `integer` **$largest** - The largest font size to display links in.
+	 * - `string` **$unit** - The CSS unit to use for $smallest and $largest.
+	 * - `string` **$image** - Size of the collection poster to use for collection links. Modified by the number of posts in a given term and the $smallest and $largest values.
+	 * - `string` **$before** - Content to display before the output.
+	 * - `string` **$after** - Content to display after the output.
+	 * - `string` **$sep** - Separator to use between links. An empty value generates an unordered list. Defaults to "\n".
+	 * - `string` **$order** - How to order collections, one of 'ASC' (default) or 'DESC'.
+	 * - `string` **$orderby** - What to sort the collections by. May be one of 'name', 'slug', 'count', or 'updated'. Defaults to collection ID.
+	 * - `string` **$order** - How to order collections. Defaults to 'RAND'.
+	 * - `mixed` **$callback** - Callback function to use when building links.
+	 * - `boolean` **$show_count** - Whether to display the total number of webcomics in a collection.
+	 * - `string` **$target** - The target url for collections, one of 'archive', 'first', 'last', or 'random'. Defaults to 'archive'.
+	 * - `integer` **$selected** - The ID of the current collection.
 	 * 
 	 * @param array $args Array of arguments. See function description for detailed information.
 	 * @return string
@@ -2839,7 +2839,6 @@ if ( !function_exists( 'has_webcomic_storyline' ) ) {
 	 * @package Webcomic
 	 * @param mixed $term The name, storyline ID, slug, or an array of these to check.
 	 * @param mixed $the_post Post object or ID to check for storylines.
-	 * @uses has_term()
 	 */
 	function has_webcomic_storyline( $term, $the_post = false ) {
 		$post_type = get_post_type( $the_post );
@@ -2864,7 +2863,6 @@ if ( !function_exists( 'has_webcomic_character' ) ) {
 	 * @package Webcomic
 	 * @param mixed $term The name, character ID, slug, or an array of these to check.
 	 * @param mixed $the_post Post object or ID to check for characters.
-	 * @uses has_term()
 	 */
 	function has_webcomic_character( $term, $the_post = false ) {
 		$post_type = get_post_type( $the_post );
@@ -3851,7 +3849,6 @@ if ( !function_exists( 'webcomic_collection_title' ) ) {
 	 * @package Webcomic
 	 * @param string $prefix Content to display before the title.
 	 * @param string $collection Collection ID to render a title for.
-	 * @filter string webcomic_archive_title
 	 */
 	function webcomic_collection_title( $prefix = '', $collection = '' ) {
 		echo WebcomicTag::webcomic_collection_title( $prefix, $collection );
@@ -4099,7 +4096,7 @@ if ( !function_exists( 'webcomic_transcripts_template' ) ) {
 	 * 
 	 * @param string $template The template file to load.
 	 * @package Webcomic
-	 * @uses WebcomicTag::webcomic_transcripts_template
+	 * @uses WebcomicTag::webcomic_transcripts_template()
 	 */
 	function webcomic_transcripts_template( $template = '' ) {
 		WebcomicTag::webcomic_transcripts_template();
@@ -4215,7 +4212,7 @@ if ( !function_exists( 'the_webcomic_transcript_languages' ) ) {
 	 * @param string $before Before list.
 	 * @param string $sep Separate items using this.
 	 * @param string $after After list.
-	 * @uses WebcomicTag::get_the_webcomic_transcript_term_list
+	 * @uses WebcomicTag::get_the_webcomic_transcript_term_list()
 	 */
 	function the_webcomic_transcript_languages( $before = '', $sep = ', ', $after = '' ) {
 		echo WebcomicTag::get_the_webcomic_transcript_term_list( 0, 'webcomic_language', $before, $sep, $after );
@@ -4246,21 +4243,21 @@ if ( !function_exists( 'webcomic_transcript_fields' ) ) {
 if ( !function_exists( 'webcomic_transcript_form' ) ) {
 	/** Render a complete transcription form for templates.
 	 * 
-	 * ** Arguments **
+	 * ### Arguments
 	 * 
-	 * - `array $fields` An array of fields for unregistered users to fill out. Each array element should have a descriptive key and the full HTML output for the value.
-	 * - `string $language_field` HTML output for the transcript language field.
-	 * - `string $transcript_field` HTML output for the transcript content field. Used when $wysiwyg_editor is `false`.
-	 * - `string $must_log_in` Error text to display when users must be logged in to transcribe.
-	 * - `string $logged_in_as` Text to display when a user is already logged in.
-	 * - `string $transcript_notes_before` Transcription notes displayed to unregistered users before the `$fields` are output.
-	 * - `string $transcript_notes_after` Transcription notes displayed at the bottom of the form before the submit button.
-	 * - `string $transcript_notes_success` Text displayed after a transcript has been successfully submitted.
-	 * - `string $transcript_notes_failure` Text displayed if an error occurs during transcript submission.
-	 * - `string $id_form` ID to use for the `<form>` element.
-	 * - `string $title_submit` Title text to display for the transcript submission form.
-	 * - `string $label_submit` Text to display for the submit button.
-	 * - `mixed $wysiwyg_editor` Whether to display a WYSIWYG transcript editor. May pass an array of arguments for `wp_editor()`.
+	 * - `array` **$fields** - An array of fields for unregistered users to fill out. Each array element should have a descriptive key and the full HTML output for the value.
+	 * - `string` **$language_field** - HTML output for the transcript language field.
+	 * - `string` **$transcript_field** - HTML output for the transcript content field. Used when $wysiwyg_editor is `false`.
+	 * - `string` **$must_log_in** - Error text to display when users must be logged in to transcribe.
+	 * - `string` **$logged_in_as** - Text to display when a user is already logged in.
+	 * - `string` **$transcript_notes_before** - Transcription notes displayed to unregistered users before the `$fields` are output.
+	 * - `string` **$transcript_notes_after** - Transcription notes displayed at the bottom of the form before the submit button.
+	 * - `string` **$transcript_notes_success** - Text displayed after a transcript has been successfully submitted.
+	 * - `string` **$transcript_notes_failure** - Text displayed if an error occurs during transcript submission.
+	 * - `string` **$id_form** - ID to use for the `<form>` element.
+	 * - `string` **$title_submit** - Title text to display for the transcript submission form.
+	 * - `string` **$label_submit** - Text to display for the submit button.
+	 * - `mixed` **$wysiwyg_editor** - Whether to display a WYSIWYG transcript editor. May pass an array of arguments for `wp_editor()`.
 	 * 
 	 * <code>
 	 * // render the standard transcript form
@@ -4292,22 +4289,22 @@ if ( !function_exists( 'webcomic_dropdown_transcript_languages' ) ) {
 	 * may accept. Only those get_terms() arguments that differ from
 	 * their defaults are detailed here.
 	 * 
-	 * **Arguments**
+	 * ### Arguments
 	 * 
-	 * - `string $name` Value for the name attribute of the `<select>` element.
-	 * - `string $id` Value of the id attribute of the `<select>` element.
-	 * - `mixed $class` String or array of additional classes for the `<select>` element.
-	 * - `string $before` Content to display before the output.
-	 * - `string $after` Content to display after the output.
-	 * - `string $show_option_all` String to display for an "all" `<option>` (value="0").
-	 * - `string $show_option_none` String to display for a "none" `<option>` (value="-1").
-	 * - `boolean $hierarchical` Whether to indent child terms.
-	 * - `boolean $hide_empty` Whether to hide empty terms. Defaults to the opposite of WebcomicTag::webcomic_transcripts_open().
-	 * - `boolean $hide_if_empty` Whether to display the `<select>` even if it contains no `<option>'s`.
-	 * - `string $orderby` What field to sort terms by.
-	 * - `object $walker` Custom walker object. Defaults Walker_WebcomicTerm_Dropdown.
-	 * - `integer $depth` How deep the walker should run. Defaults to 0 (all levels). A -1 depth will result in flat output.
-	 * - `integer $selected` The ID of the selected term.
+	 * - `string` **$name** - Value for the name attribute of the `<select>` element.
+	 * - `string` **$id** - Value of the id attribute of the `<select>` element.
+	 * - `mixed` **$class** - String or array of additional classes for the `<select>` element.
+	 * - `string` **$before** - Content to display before the output.
+	 * - `string` **$after** - Content to display after the output.
+	 * - `string` **$show_option_all** - String to display for an "all" `<option>` (value="0").
+	 * - `string` **$show_option_none** - String to display for a "none" `<option>` (value="-1").
+	 * - `boolean` **$hierarchical** - Whether to indent child terms.
+	 * - `boolean` **$hide_empty** - Whether to hide empty terms. Defaults to the opposite of WebcomicTag::webcomic_transcripts_open().
+	 * - `boolean` **$hide_if_empty** - Whether to display the `<select>` even if it contains no `<option>'s`.
+	 * - `string` **$orderby** - What field to sort terms by.
+	 * - `object` **$walker** - Custom walker object. Defaults Walker_WebcomicTerm_Dropdown.
+	 * - `integer` **$depth** - How deep the walker should run. Defaults to 0 (all levels). A -1 depth will result in flat output.
+	 * - `integer` **$selected** - The ID of the selected term.
 	 * 
 	 * <code>
 	 * // render a dropdown of available transcript languages
@@ -4317,8 +4314,9 @@ if ( !function_exists( 'webcomic_dropdown_transcript_languages' ) ) {
 	 * webcomic_dropdown_transcript_languages( array( 'show_option_all' => '- Languages -' ) );
 	 * </code>
 	 * 
+	 * @package Webcomic
 	 * @param array $args Array of arguments. See function description for detailed information.
-	 * @param mixed The post object or ID transcripts should be related to.
+	 * @param mixed $the_post The post object or ID transcripts should be related to.
 	 * @return string
 	 * @uses webcomic_transcripts_open()
 	 * @uses WebcomicTag::webcomic_dropdown_transcript_terms()
@@ -4355,19 +4353,19 @@ if ( !function_exists( 'webcomic_list_transcript_languages' ) ) {
 	 * may accept. Only those get_terms() arguments that differ from
 	 * their defaults are detailed here.
 	 * 
-	 * **Arguments**
+	 * ### Arguments
 	 * 
-	 * - `string $id` Value of the id attribute of the list element.
-	 * - `mixed $class` String or array of additional classes for the list element.
-	 * - `string $before` Content to display before the output.
-	 * - `string $after` Content to display after the output.
-	 * - `boolean $ordered` Use `<ol>` instead of `<ul>`.
-	 * - `boolean $hierarchical` Whether to indent child terms.
-	 * - `boolean $hide_empty` Whether to hide empty terms. Defaults to the opposite of WebcomicTag::webcomic_transcripts_open().
-	 * - `string $orderby` What field to sort terms by.
-	 * - `object $walker` Custom walker object. Defaults Walker_WebcomicTranscriptTerm_List.
-	 * - `integer $depth` How deep the walker should run. Defaults to 0 (all levels). A -1 depth will result in flat output.
-	 * - `integer $selected` The ID of the selected term.
+	 * - `string` **$id** - Value of the id attribute of the list element.
+	 * - `mixed` **$class** - String or array of additional classes for the list element.
+	 * - `string` **$before** - Content to display before the output.
+	 * - `string` **$after** - Content to display after the output.
+	 * - `boolean` **$ordered** - Use `<ol>` instead of `<ul>`.
+	 * - `boolean` **$hierarchical** - Whether to indent child terms.
+	 * - `boolean` **$hide_empty** - Whether to hide empty terms. Defaults to the opposite of WebcomicTag::webcomic_transcripts_open().
+	 * - `string` **$orderby** - What field to sort terms by.
+	 * - `object` **$walker** - Custom walker object. Defaults Walker_WebcomicTranscriptTerm_List.
+	 * - `integer` **$depth** - How deep the walker should run. Defaults to 0 (all levels). A -1 depth will result in flat output.
+	 * - `integer` **$selected** - The ID of the selected term.
 	 * 
 	 * <code>
 	 * // render a list of available transcript languages
@@ -4377,6 +4375,7 @@ if ( !function_exists( 'webcomic_list_transcript_languages' ) ) {
 	 * webcomic_list_transcript_languages( array( 'ordered' => true ) );
 	 * </code>
 	 * 
+	 * @package Webcomic
 	 * @param array $args Array of arguments. See function description for detailed information.
 	 * @param mixed $the_post The post object or ID transcripts should be related to.
 	 * @uses webcomic_transcripts_open()
@@ -4408,23 +4407,23 @@ if ( !function_exists( 'webcomic_list_transcript_languages' ) ) {
 if ( !function_exists( 'webcomic_dropdown_storylines' ) ) {
 	/** Render a `<select>` element for webcomic storylines.
 	 * 
-	 * **Arguments**
+	 * ### Arguments
 	 * 
-	 * - `string $name` Value for the name attribute of the `<select>` element.
-	 * - `string $id` Value of the id attribute of the `<select>` element.
-	 * - `mixed $class` String or array of additional classes for the `<select>` element.
-	 * - `string $show_option_all` String to display for an "all" `<option>` (value="0").
-	 * - `string $show_option_none` String to display for a "none" `<option>` (value="-1").
-	 * - `boolean $hierarchical` Whether to indent child storylines.
-	 * - `boolean $hide_if_empty` Whether to display the `<select>` even if it contains no `<option>'s`.
-	 * - `string $collection` The collection storylines must belong to.
-	 * - `string $orderby` What field to sort storylines by. Defaults to 'term_group'.
-	 * - `object $walker` Custom walker object. Defaults Walker_WebcomicTerm_Dropdown.
-	 * - `integer $depth` How deep the walker should run. Defaults to 0 (all levels). A -1 depth will result in flat output.
-	 * - `boolean $webcomics` Whether to display a dropdown of webcomic posts grouped by storyline. The 'hide_empty' argument is ignored when $webcomics is true.
-	 * - `boolean $show_count` Whether to display the total number of webcomics in a storyline.
-	 * - `string $target` The target url for storylines, one of 'archive', 'first', 'last', or 'random'. Defaults to 'archive'.
-	 * - `integer $selected` The ID of the selected term or webcomic.
+	 * - `string` **$name** - Value for the name attribute of the `<select>` element.
+	 * - `string` **$id** - Value of the id attribute of the `<select>` element.
+	 * - `mixed` **$class** - String or array of additional classes for the `<select>` element.
+	 * - `string` **$show_option_all** - String to display for an "all" `<option>` (value="0").
+	 * - `string` **$show_option_none** - String to display for a "none" `<option>` (value="-1").
+	 * - `boolean` **$hierarchical** - Whether to indent child storylines.
+	 * - `boolean` **$hide_if_empty** - Whether to display the `<select>` even if it contains no `<option>'s`.
+	 * - `string` **$collection** - The collection storylines must belong to.
+	 * - `string` **$orderby** - What field to sort storylines by. Defaults to 'term_group'.
+	 * - `object` **$walker** - Custom walker object. Defaults Walker_WebcomicTerm_Dropdown.
+	 * - `integer` **$depth** - How deep the walker should run. Defaults to 0 (all levels). A -1 depth will result in flat output.
+	 * - `boolean` **$webcomics** - Whether to display a dropdown of webcomic posts grouped by storyline. The 'hide_empty' argument is ignored when $webcomics is true.
+	 * - `boolean` **$show_count** - Whether to display the total number of webcomics in a storyline.
+	 * - `string` **$target** - The target url for storylines, one of 'archive', 'first', 'last', or 'random'. Defaults to 'archive'.
+	 * - `integer` **$selected** - The ID of the selected term or webcomic.
 	 * 
 	 * <code>
 	 * // render a dropdown of storylines with at least one webcomic in the current collection
@@ -4437,6 +4436,7 @@ if ( !function_exists( 'webcomic_dropdown_storylines' ) ) {
 	 * webcomic_dropdown_storylines( array( 'collection' => 'webcomic42', 'show_option_all' => '- Comics by Storyline -', 'webcomics' => true ) );
 	 * </code>
 	 * 
+	 * @package Webcomic
 	 * @param array $args Array of arguments. See the WebcomicTag::webcomic_dropdown_terms() function description for detailed information.
 	 * @uses WebcomicTag::get_webcomic_collection()
 	 * @uses WebcomicTag::webcomic_dropdown_terms()
@@ -4473,22 +4473,22 @@ if ( !function_exists( 'webcomic_dropdown_storylines' ) ) {
 if ( !function_exists( 'webcomic_dropdown_characters' ) ) {
 	/** Render a `<select>` element for webcomic characters.
 	 * 
-	 * **Arguments**
+	 * ### Arguments
 	 * 
-	 * - `string $name` Value for the name attribute of the `<select>` element.
-	 * - `string $id` Value of the id attribute of the `<select>` element.
-	 * - `mixed $class` String or array of additional classes for the `<select>` element.
-	 * - `string $show_option_all` String to display for an "all" `<option>` (value="0").
-	 * - `string $show_option_none` String to display for a "none" `<option>` (value="-1").
-	 * - `boolean $hide_if_empty` Whether to display the `<select>` even if it contains no `<option>'s`.
-	 * - `string $collection` The collection characters must belong to.
-	 * - `string $orderby` What field to sort characters by. Defaults to 'name'.
-	 * - `object $walker` Custom walker object. Defaults Walker_WebcomicTerm_Dropdown.
-	 * - `integer $depth` How deep the walker should run. Defaults to 0 (all levels). A -1 depth will result in flat output.
-	 * - `boolean $webcomics` Whether to display a dropdown of webcomic posts grouped by character. The 'hide_empty' argument is ignored when $webcomics is true.
-	 * - `boolean $show_count` Whether to display the total number of webcomics featuring a character.
-	 * - `string $target` The target url for characters, one of 'archive', 'first', 'last', or 'random'. Defaults to 'archive'.
-	 * - `integer $selected` The ID of the selected character or webcomic.
+	 * - `string` **$name** - Value for the name attribute of the `<select>` element.
+	 * - `string` **$id** - Value of the id attribute of the `<select>` element.
+	 * - `mixed` **$class** - String or array of additional classes for the `<select>` element.
+	 * - `string` **$show_option_all** - String to display for an "all" `<option>` (value="0").
+	 * - `string` **$show_option_none** - String to display for a "none" `<option>` (value="-1").
+	 * - `boolean` **$hide_if_empty** - Whether to display the `<select>` even if it contains no `<option>'s`.
+	 * - `string` **$collection** - The collection characters must belong to.
+	 * - `string` **$orderby** - What field to sort characters by. Defaults to 'name'.
+	 * - `object` **$walker** - Custom walker object. Defaults Walker_WebcomicTerm_Dropdown.
+	 * - `integer` **$depth** - How deep the walker should run. Defaults to 0 (all levels). A -1 depth will result in flat output.
+	 * - `boolean` **$webcomics** - Whether to display a dropdown of webcomic posts grouped by character. The 'hide_empty' argument is ignored when $webcomics is true.
+	 * - `boolean` **$show_count** - Whether to display the total number of webcomics featuring a character.
+	 * - `string` **$target** - The target url for characters, one of 'archive', 'first', 'last', or 'random'. Defaults to 'archive'.
+	 * - `integer` **$selected** - The ID of the selected character or webcomic.
 	 * 
 	 * <code>
 	 * // render a dropdown of characters featured in at least one webcomic of the current collection
@@ -4501,6 +4501,7 @@ if ( !function_exists( 'webcomic_dropdown_characters' ) ) {
 	 * webcomic_dropdown_characters( array( 'collection' => 'webcomic42', 'show_option_all' => '- Comics by Character -', 'webcomics' => true ) );
 	 * </code>
 	 * 
+	 * @package Webcomic
 	 * @param array $args Array of arguments. See the WebcomicTag::webcomic_dropdown_terms() function description for detailed information.
 	 * @uses WebcomicTag::get_webcomic_collection()
 	 * @uses WebcomicTag::webcomic_dropdown_terms()
@@ -4537,22 +4538,22 @@ if ( !function_exists( 'webcomic_dropdown_characters' ) ) {
 if ( !function_exists( 'webcomic_dropdown_collections' ) ) {
 	/** Render a `<select>` element for webcomic collections.
 	 * 
-	 * **Arguments**
+	 * ### Arguments
 	 * 
-	 * - `string $name` Value for the name attribute of the `<select>` element.
-	 * - `string $id` Value of the id attribute of the `<select>` element.
-	 * - `mixed $class` String or array of additional classes for the `<select>` element.
-	 * - `string $show_option_all` String to display for an "all" `<option>` (value="0").
-	 * - `string $show_option_none` String to display for a "none" `<option>` (value="-1").
-	 * - `boolean $hide_empty` Whether to hide collections with no readable posts. Defaults to true.
-	 * - `boolean $hide_if_empty` Whether to display the `<select>` even if it contains no `<option>'s`.
-	 * - `string $collection` Limits output to a single collection. Useful in combination with $webcomics.
-	 * - `string $orderby` What to sort the collections by. May be one of 'name', 'slug', 'count', or 'updated'. Defaults to collection ID.
-	 * - `string $callback` Custom callback function for generating `<option>'s`. Callback functions should accept three arguments: the collection configuration array, the function arguments array, and the posts array (if any).
-	 * - `boolean $webcomics` Whether to display a dropdown of webcomic posts grouped by collection. The 'hide_empty' argument is ignored when $webcomics is true.
-	 * - `boolean $show_count` Whether to display the total number of published webcomics in a collection.
-	 * - `string $target` The target url for collections, one of 'archive', 'first', 'last', or 'random'. Defaults to 'archive'.
-	 * - `string $selected` The ID of the selected collection or webcomic.
+	 * - `string` **$name** - Value for the name attribute of the `<select>` element.
+	 * - `string` **$id** - Value of the id attribute of the `<select>` element.
+	 * - `mixed` **$class** - String or array of additional classes for the `<select>` element.
+	 * - `string` **$show_option_all** - String to display for an "all" `<option>` (value="0").
+	 * - `string` **$show_option_none** - String to display for a "none" `<option>` (value="-1").
+	 * - `boolean` **$hide_empty** - Whether to hide collections with no readable posts. Defaults to true.
+	 * - `boolean` **$hide_if_empty** - Whether to display the `<select>` even if it contains no `<option>'s`.
+	 * - `string` **$collection** - Limits output to a single collection. Useful in combination with $webcomics.
+	 * - `string` **$orderby** - What to sort the collections by. May be one of 'name', 'slug', 'count', or 'updated'. Defaults to collection ID.
+	 * - `string` **$callback** - Custom callback function for generating `<option>'s`. Callback functions should accept three arguments: the collection configuration array, the function arguments array, and the posts array (if any).
+	 * - `boolean` **$webcomics** - Whether to display a dropdown of webcomic posts grouped by collection. The 'hide_empty' argument is ignored when $webcomics is true.
+	 * - `boolean` **$show_count** - Whether to display the total number of published webcomics in a collection.
+	 * - `string` **$target** - The target url for collections, one of 'archive', 'first', 'last', or 'random'. Defaults to 'archive'.
+	 * - `string` **$selected** - The ID of the selected collection or webcomic.
 	 * 
 	 * <code>
 	 * // render a dropdown of all webcomic collections with at least one post
@@ -4565,6 +4566,7 @@ if ( !function_exists( 'webcomic_dropdown_collections' ) ) {
 	 * webcomic_dropdown_collections( array( 'collection' => 'webcomic42', 'webcomics' => true ) );
 	 * </code>
 	 * 
+	 * @package Webcomic
 	 * @param array $args Array of arguments. See function description for detailed information.
 	 * @uses WebcomicTag::webcomic_dropdown_collections()
 	 */
@@ -4593,27 +4595,27 @@ if ( !function_exists( 'webcomic_dropdown_collections' ) ) {
 if ( !function_exists( 'webcomic_list_storylines' ) ) {
 	/** Render a list of webcomic storylines.
 	 * 
-	 * **Arguments**
+	 * ### Arguments
 	 * 
-	 * - `string $id` Value of the id attribute of the `<select>` element.
-	 * - `mixed $class` String or array of additional classes for the `<select>` element.
-	 * - `string $before` Content to display before the output.
-	 * - `string $after` Content to display after the output.
-	 * - `string $sep` Separator to use between links. An empty value generates an unordered list. Defaults to "\n".
-	 * - `boolean $hierarchical` Whether to indent child storylines.
-	 * - `string $collection` The collection storylines must belong to.
-	 * - `string $orderby` What field to sort storylines by. Defaults to 'term_group'.
-	 * - `object $walker` Custom walker object. Defaults Walker_WebcomicTerm_List.
-	 * - `string $feed` Text or image URL to use for a storyline feed link.
-	 * - `string $feed_type` The type of feed to link to.
-	 * - `integer $depth` How deep the walker should run. Defaults to 0 (all levels). A -1 depth will result in flat output.
-	 * - `boolean $webcomics` Whether to display a list of webcomic posts grouped by storyline. The 'hide_empty' argument is ignored when $webcomics is true.
-	 * - `string $webcomic_image` Size of the webcomic image to use for webcomic links.
-	 * - `boolean $show_count` Whether to display the total number of webcomics in a storyline.
-	 * - `boolean $show_description` Whether to display storyline descriptions.
-	 * - `boolean $show_image` Size of the storyline cover to use for storyline links.
-	 * - `string $target` The target url for storylines, one of 'archive', 'first', 'last', or 'random'. Defaults to 'archive'.
-	 * - `integer $selected` The ID of the selected storyline or webcomic.
+	 * - `string` **$id** - Value of the id attribute of the `<select>` element.
+	 * - `mixed` **$class** - String or array of additional classes for the `<select>` element.
+	 * - `string` **$before** - Content to display before the output.
+	 * - `string` **$after** - Content to display after the output.
+	 * - `string` **$sep** - Separator to use between links. An empty value generates an unordered list. Defaults to "\n".
+	 * - `boolean` **$hierarchical** - Whether to indent child storylines.
+	 * - `string` **$collection** - The collection storylines must belong to.
+	 * - `string` **$orderby** - What field to sort storylines by. Defaults to 'term_group'.
+	 * - `object` **$walker** - Custom walker object. Defaults Walker_WebcomicTerm_List.
+	 * - `string` **$feed** - Text or image URL to use for a storyline feed link.
+	 * - `string` **$feed_type** - The type of feed to link to.
+	 * - `integer` **$depth** - How deep the walker should run. Defaults to 0 (all levels). A -1 depth will result in flat output.
+	 * - `boolean` **$webcomics** - Whether to display a list of webcomic posts grouped by storyline. The 'hide_empty' argument is ignored when $webcomics is true.
+	 * - `string` **$webcomic_image** - Size of the webcomic image to use for webcomic links.
+	 * - `boolean` **$show_count** - Whether to display the total number of webcomics in a storyline.
+	 * - `boolean` **$show_description** - Whether to display storyline descriptions.
+	 * - `boolean` **$show_image** - Size of the storyline cover to use for storyline links.
+	 * - `string` **$target** - The target url for storylines, one of 'archive', 'first', 'last', or 'random'. Defaults to 'archive'.
+	 * - `integer` **$selected** - The ID of the selected storyline or webcomic.
 	 * 
 	 * <code>
 	 * // render a list of storylines with at least one webcomic in the current collection
@@ -4626,6 +4628,7 @@ if ( !function_exists( 'webcomic_list_storylines' ) ) {
 	 * webcomic_list_storylines( array( 'collection' => 'webcomic42', 'show_description' => true, 'webcomics' => true, 'webcomic_image' => 'thumbnail' ) );
 	 * </code>
 	 * 
+	 * @package Webcomic
 	 * @param array $args Array of arguments. See function description for detailed information.
 	 * @uses WebcomicTag::get_webcomic_collection()
 	 * @uses WebcomicTag::webcomic_list_terms()
@@ -4667,27 +4670,27 @@ if ( !function_exists( 'webcomic_list_storylines' ) ) {
 if ( !function_exists( 'webcomic_list_characters' ) ) {
 	/** Render a list of webcomic characters.
 	 * 
-	 * **Arguments**
+	 * ### Arguments
 	 * 
-	 * - `string $id` Value of the id attribute of the `<select>` element.
-	 * - `mixed $class` String or array of additional classes for the `<select>` element.
-	 * - `string $before` Content to display before the output.
-	 * - `string $after` Content to display after the output.
-	 * - `string $sep` Separator to use between links. An empty value generates an unordered list. Defaults to "\n".
-	 * - `boolean $hierarchical` Whether to indent child characters.
-	 * - `string $collection` The collection characters must belong to.
-	 * - `string $orderby` What field to sort characters by. Defaults to 'term_group'.
-	 * - `object $walker` Custom walker object. Defaults Walker_WebcomicTerm_List.
-	 * - `string $feed` Text or image URL to use for a character feed link.
-	 * - `string $feed_type` The type of feed to link to.
-	 * - `integer $depth` How deep the walker should run. Defaults to 0 (all levels). A -1 depth will result in flat output.
-	 * - `boolean $webcomics` Whether to display a list of webcomic posts grouped by character. The 'hide_empty' argument is ignored when $webcomics is true.
-	 * - `string $webcomic_image` Size of the webcomic image to use for webcomic links.
-	 * - `boolean $show_count` Whether to display the total number of webcomics featuring a character.
-	 * - `boolean $show_description` Whether to display character descriptions.
-	 * - `boolean $show_image` Size of the character cover to use for character links.
-	 * - `string $target` The target url for characters, one of 'archive', 'first', 'last', or 'random'. Defaults to 'archive'.
-	 * - `integer $selected` The ID of the selected character or webcomic.
+	 * - `string` **$id** - Value of the id attribute of the `<select>` element.
+	 * - `mixed` **$class** - String or array of additional classes for the `<select>` element.
+	 * - `string` **$before** - Content to display before the output.
+	 * - `string` **$after** - Content to display after the output.
+	 * - `string` **$sep** - Separator to use between links. An empty value generates an unordered list. Defaults to "\n".
+	 * - `boolean` **$hierarchical** - Whether to indent child characters.
+	 * - `string` **$collection** - The collection characters must belong to.
+	 * - `string` **$orderby** - What field to sort characters by. Defaults to 'term_group'.
+	 * - `object` **$walker** - Custom walker object. Defaults Walker_WebcomicTerm_List.
+	 * - `string` **$feed** - Text or image URL to use for a character feed link.
+	 * - `string` **$feed_type** - The type of feed to link to.
+	 * - `integer` **$depth** - How deep the walker should run. Defaults to 0 (all levels). A -1 depth will result in flat output.
+	 * - `boolean` **$webcomics** - Whether to display a list of webcomic posts grouped by character. The 'hide_empty' argument is ignored when $webcomics is true.
+	 * - `string` **$webcomic_image** - Size of the webcomic image to use for webcomic links.
+	 * - `boolean` **$show_count** - Whether to display the total number of webcomics featuring a character.
+	 * - `boolean` **$show_description** - Whether to display character descriptions.
+	 * - `boolean` **$show_image** - Size of the character cover to use for character links.
+	 * - `string` **$target** - The target url for characters, one of 'archive', 'first', 'last', or 'random'. Defaults to 'archive'.
+	 * - `integer` **$selected** - The ID of the selected character or webcomic.
 	 * 
 	 * <code>
 	 * // render a list of characters with at least one webcomic in the current collection
@@ -4700,6 +4703,7 @@ if ( !function_exists( 'webcomic_list_characters' ) ) {
 	 * webcomic_list_characters( array( 'collection' => 'webcomic42', 'show_description' => true, 'webcomics' => true, 'webcomic_image' => 'thumbnail' ) );
 	 * </code>
 	 * 
+	 * @package Webcomic
 	 * @param array $args Array of arguments. See function description for detailed information.
 	 * @uses WebcomicTag::get_webcomic_collection()
 	 * @uses WebcomicTag::webcomic_list_terms()
@@ -4741,29 +4745,29 @@ if ( !function_exists( 'webcomic_list_characters' ) ) {
 if ( !function_exists( 'webcomic_list_collections' ) ) {
 	/** Return a list of webcomic collections.
 	 * 
-	 * **Arguments**
+	 * ### Arguments
 	 * 
-	 * - `string $id` Value of the id attribute of the list element.
-	 * - `mixed $class` String or array of additional classes for the list element.
-	 * - `string $before` Content to display before the output.
-	 * - `string $after` Content to display after the output.
-	 * - `boolean $hide_empty` Whether to hide collections with no readable posts. Defaults to true.
-	 * - `boolean $ordered` Use `<ol>` instead of `<ul>`.
-	 * - `string $collection` Limits output to a single collection. Useful in combination with $webcomics.
-	 * - `string $order` How to order collections, one of 'ASC' (default) or 'DESC'.
-	 * - `string $orderby` What to sort the collections by. May be one of 'name', 'slug', 'count', or 'updated'. Defaults to collection ID.
-	 * - `string $callback` Custom callback function for generating list items. Callback functions should accept three arguments: the collection configuration array, the function arguments array, and the posts array (if any).
-	 * - `string $feed` Text or image URL to use for a collection feed link.
-	 * - `string $feed_type` The type of feed to link to.
-	 * - `boolean $webcomics` Whether to display a list of webcomic posts grouped by collection. The 'hide_empty' argument is ignored when $webcomics is true.
-	 * - `string $webcomic_order` How to order webcomics, one of 'ASC' or 'DESC'. Defaults to 'ASC'.
-	 * - `string $webcomic_orderby` What field to order webcomics by. Defaults to 'date'. See WP_Query for details.
-	 * - `string $webcomic_image` Size of the webcomic image to use for webcomic links.
-	 * - `boolean $show_count` Whether to display the total number of webcomics in a collection.
-	 * - `boolean $show_description` Whether to display collection descriptions.
-	 * - `boolean $show_image` Size of the collection image to use for collection links.
-	 * - `string $target` The target url for collections, one of 'archive', 'first', 'last', or 'random'. Defaults to 'archive'.
-	 * - `integer $selected` The ID of the selected collection or webcomic.
+	 * - `string` **$id** - Value of the id attribute of the list element.
+	 * - `mixed` **$class** - String or array of additional classes for the list element.
+	 * - `string` **$before** - Content to display before the output.
+	 * - `string` **$after** - Content to display after the output.
+	 * - `boolean` **$hide_empty** - Whether to hide collections with no readable posts. Defaults to true.
+	 * - `boolean` **$ordered** - Use `<ol>` instead of `<ul>`.
+	 * - `string` **$collection** - Limits output to a single collection. Useful in combination with $webcomics.
+	 * - `string` **$order** - How to order collections, one of 'ASC' (default) or 'DESC'.
+	 * - `string` **$orderby** - What to sort the collections by. May be one of 'name', 'slug', 'count', or 'updated'. Defaults to collection ID.
+	 * - `string` **$callback** - Custom callback function for generating list items. Callback functions should accept three arguments: the collection configuration array, the function arguments array, and the posts array (if any).
+	 * - `string` **$feed** - Text or image URL to use for a collection feed link.
+	 * - `string` **$feed_type** - The type of feed to link to.
+	 * - `boolean` **$webcomics** - Whether to display a list of webcomic posts grouped by collection. The 'hide_empty' argument is ignored when $webcomics is true.
+	 * - `string` **$webcomic_order** - How to order webcomics, one of 'ASC' or 'DESC'. Defaults to 'ASC'.
+	 * - `string` **$webcomic_orderby** - What field to order webcomics by. Defaults to 'date'. See WP_Query for details.
+	 * - `string` **$webcomic_image** - Size of the webcomic image to use for webcomic links.
+	 * - `boolean` **$show_count** - Whether to display the total number of webcomics in a collection.
+	 * - `boolean` **$show_description** - Whether to display collection descriptions.
+	 * - `boolean` **$show_image** - Size of the collection image to use for collection links.
+	 * - `string` **$target** - The target url for collections, one of 'archive', 'first', 'last', or 'random'. Defaults to 'archive'.
+	 * - `integer` **$selected** - The ID of the selected collection or webcomic.
 	 * 
 	 * <code>
 	 * // render a list of all webcomic collections with at least one post
@@ -4776,6 +4780,7 @@ if ( !function_exists( 'webcomic_list_collections' ) ) {
 	 * webcomic_list_collections( array( 'collection' => 'webcomic42', 'show_description' => true, 'webcomics' => true, 'webcomic_image' => 'thumbnail' ) );
 	 * </code>
 	 * 
+	 * @package Webcomic
 	 * @param array $args Array of arguments. See function description for detailed information.
 	 * @uses WebcomicTag::webcomic_list_collections()
 	 */
@@ -4811,23 +4816,23 @@ if ( !function_exists( 'webcomic_list_collections' ) ) {
 if ( !function_exists( 'webcomic_storyline_cloud' ) ) {
 	/** Return a "cloud" of webcomic storylines.
 	 * 
-	 * **Arguments**
+	 * ### Arguments
 	 * 
-	 * - `string $id` Value of the id attribute of the wrapping element.
-	 * - `mixed $class` String or array of additional classes for the wrapping element.
-	 * - `integer $smallest` The smallest font size to display links in.
-	 * - `integer $largest` The largest font size to display links in.
-	 * - `string $unit` The CSS unit to use for $smallest and $largest.
-	 * - `string $image` Size of the storyline cover to use for storyline links. Modified by the number of posts in a given storyline and the $smallest and $largest values.
-	 * - `string $before` Content to display before the output.
-	 * - `string $after` Content to display after the output.
-	 * - `string $sep` Separator to use between links. An empty value generates an unordered list. Defaults to "\n".
-	 * - `string $collection` The collection storylines must belong to.
-	 * - `string $order` How to order storylines. Defaults to 'RAND'.
-	 * - `mixed $callback` Callback function to use when building links.
-	 * - `boolean $show_count` Whether to display the total number of webcomics in a storyline.
-	 * - `string $target` The target url for storylines, one of 'archive', 'first', 'last', or 'random'. Defaults to 'archive'.
-	 * - `integer $selected` The ID of the current storyline.
+	 * - `string` **$id** - Value of the id attribute of the wrapping element.
+	 * - `mixed` **$class** - String or array of additional classes for the wrapping element.
+	 * - `integer` **$smallest** - The smallest font size to display links in.
+	 * - `integer` **$largest** - The largest font size to display links in.
+	 * - `string` **$unit** - The CSS unit to use for $smallest and $largest.
+	 * - `string` **$image** - Size of the storyline cover to use for storyline links. Modified by the number of posts in a given storyline and the $smallest and $largest values.
+	 * - `string` **$before** - Content to display before the output.
+	 * - `string` **$after** - Content to display after the output.
+	 * - `string` **$sep** - Separator to use between links. An empty value generates an unordered list. Defaults to "\n".
+	 * - `string` **$collection** - The collection storylines must belong to.
+	 * - `string` **$order** - How to order storylines. Defaults to 'RAND'.
+	 * - `mixed` **$callback** - Callback function to use when building links.
+	 * - `boolean` **$show_count** - Whether to display the total number of webcomics in a storyline.
+	 * - `string` **$target** - The target url for storylines, one of 'archive', 'first', 'last', or 'random'. Defaults to 'archive'.
+	 * - `integer` **$selected** - The ID of the current storyline.
 	 * 
 	 * <code>
 	 * // render a cloud of webcomic storylines
@@ -4840,6 +4845,7 @@ if ( !function_exists( 'webcomic_storyline_cloud' ) ) {
 	 * webcomic_storyline_cloud( array( 'image' => 'thumbnail' ) );
 	 * </code>
 	 * 
+	 * @package Webcomic
 	 * @param array $args Array of arguments. See function description for detailed information.
 	 * @uses WebcomicTag::webcomic_term_cloud()
 	 */
@@ -4875,23 +4881,23 @@ if ( !function_exists( 'webcomic_storyline_cloud' ) ) {
 if ( !function_exists( 'webcomic_character_cloud' ) ) {
 	/** Return a "cloud" of webcomic characters.
 	 * 
-	 * **Arguments**
+	 * ### Arguments
 	 * 
-	 * - `string $id` Value of the id attribute of the wrapping element.
-	 * - `mixed $class` String or array of additional classes for the wrapping element.
-	 * - `integer $smallest` The smallest font size to display links in.
-	 * - `integer $largest` The largest font size to display links in.
-	 * - `string $unit` The CSS unit to use for $smallest and $largest.
-	 * - `string $image` Size of the character avatar to use for character links. Modified by the number of posts in a given character and the $smallest and $largest values.
-	 * - `string $before` Content to display before the output.
-	 * - `string $after` Content to display after the output.
-	 * - `string $sep` Separator to use between links. An empty value generates an unordered list. Defaults to "\n".
-	 * - `string $collection` The collection characters must belong to.
-	 * - `string $order` How to order characters. Defaults to 'RAND'.
-	 * - `mixed $callback` Callback function to use when building links.
-	 * - `boolean $show_count` Whether to display the total number of webcomics featuring a character.
-	 * - `string $target` The target url for characters, one of 'archive', 'first', 'last', or 'random'. Defaults to 'archive'.
-	 * - `integer $selected` The ID of the current character.
+	 * - `string` **$id** - Value of the id attribute of the wrapping element.
+	 * - `mixed` **$class** - String or array of additional classes for the wrapping element.
+	 * - `integer` **$smallest** - The smallest font size to display links in.
+	 * - `integer` **$largest** - The largest font size to display links in.
+	 * - `string` **$unit** - The CSS unit to use for $smallest and $largest.
+	 * - `string` **$image** - Size of the character avatar to use for character links. Modified by the number of posts in a given character and the $smallest and $largest values.
+	 * - `string` **$before** - Content to display before the output.
+	 * - `string` **$after** - Content to display after the output.
+	 * - `string` **$sep** - Separator to use between links. An empty value generates an unordered list. Defaults to "\n".
+	 * - `string` **$collection** - The collection characters must belong to.
+	 * - `string` **$order** - How to order characters. Defaults to 'RAND'.
+	 * - `mixed` **$callback** - Callback function to use when building links.
+	 * - `boolean` **$show_count** - Whether to display the total number of webcomics featuring a character.
+	 * - `string` **$target** - The target url for characters, one of 'archive', 'first', 'last', or 'random'. Defaults to 'archive'.
+	 * - `integer` **$selected** - The ID of the current character.
 	 * 
 	 * <code>
 	 * // render a cloud of webcomic characters
@@ -4904,6 +4910,7 @@ if ( !function_exists( 'webcomic_character_cloud' ) ) {
 	 * webcomic_character_cloud( array( 'image' => 'thumbnail' ) );
 	 * </code>
 	 * 
+	 * @package Webcomic
 	 * @param array $args Array of arguments. See function description for detailed information.
 	 * @uses WebcomicTag::webcomic_term_cloud()
 	 */
@@ -4939,23 +4946,23 @@ if ( !function_exists( 'webcomic_character_cloud' ) ) {
 if ( !function_exists( 'webcomic_collection_cloud' ) ) {
 	/** Render a "cloud" of webcomic collections.
 	 * 
-	 * **Arguments**
+	 * ### Arguments
 	 * 
-	 * - `string $id` Value of the id attribute of the wrapping element.
-	 * - `mixed $class` String or array of additional classes for the wrapping element.
-	 * - `integer $smallest` The smallest font size to display links in.
-	 * - `integer $largest` The largest font size to display links in.
-	 * - `string $unit` The CSS unit to use for $smallest and $largest.
-	 * - `string $image` Size of the collection poster to use for collection links. Modified by the number of posts in a given term and the $smallest and $largest values.
-	 * - `string $before` Content to display before the output.
-	 * - `string $after` Content to display after the output.
-	 * - `string $sep` Separator to use between links. An empty value generates an unordered list. Defaults to "\n".
-	 * - `string $orderby` What to sort the collections by. May be one of 'name', 'slug', 'count', or 'updated'. Defaults to collection ID.
-	 * - `string $order` How to order collections. Defaults to 'RAND'.
-	 * - `mixed $callback` Callback function to use when building links.
-	 * - `boolean $show_count` Whether to display the total number of webcomics in a collection.
-	 * - `string $target` The target url for collections, one of 'archive', 'first', 'last', or 'random'. Defaults to 'archive'.
-	 * - `integer $selected` The ID of the current collection.
+	 * - `string` **$id** - Value of the id attribute of the wrapping element.
+	 * - `mixed` **$class** - String or array of additional classes for the wrapping element.
+	 * - `integer` **$smallest** - The smallest font size to display links in.
+	 * - `integer` **$largest** - The largest font size to display links in.
+	 * - `string` **$unit** - The CSS unit to use for $smallest and $largest.
+	 * - `string` **$image** - Size of the collection poster to use for collection links. Modified by the number of posts in a given term and the $smallest and $largest values.
+	 * - `string` **$before** - Content to display before the output.
+	 * - `string` **$after** - Content to display after the output.
+	 * - `string` **$sep** - Separator to use between links. An empty value generates an unordered list. Defaults to "\n".
+	 * - `string` **$orderby** - What to sort the collections by. May be one of 'name', 'slug', 'count', or 'updated'. Defaults to collection ID.
+	 * - `string` **$order** - How to order collections. Defaults to 'RAND'.
+	 * - `mixed` **$callback** - Callback function to use when building links.
+	 * - `boolean` **$show_count** - Whether to display the total number of webcomics in a collection.
+	 * - `string` **$target** - The target url for collections, one of 'archive', 'first', 'last', or 'random'. Defaults to 'archive'.
+	 * - `integer` **$selected** - The ID of the current collection.
 	 * 
 	 * <code>
 	 * // render a cloud of webcomic collections
@@ -4968,6 +4975,7 @@ if ( !function_exists( 'webcomic_collection_cloud' ) ) {
 	 * webcomic_collection_cloud( array( 'image' => 'thumbnail' ) );
 	 * </code>
 	 * 
+	 * @package Webcomic
 	 * @param array $args Array of arguments. See function description for detailed information.
 	 * @uses WebcomicTag::webcomic_collection_cloud()
 	 */
@@ -5149,7 +5157,7 @@ if ( !class_exists( 'Walker_WebcomicTerm_List' ) ) {
 		 * @uses WebcomicTag::get_relative_webcomic_link()
 		 * @filter string webcomic_term_list_title $term
 		 * @filter string webcomic_term_image $size, $term
-		 * @filter webcomic_term_description, $term
+		 * @filter string webcomic_term_description, $term
 		 */
 		public function start_el( &$output, $term, $depth, $args ) {
 			extract( $args, $args[ 'hierarchical' ] ? EXTR_SKIP : EXTR_OVERWRITE );
