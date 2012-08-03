@@ -3,8 +3,8 @@ Contributors: mgsisk
 Donate link: http://webcomic.nu
 Tags: webcomics, archives, widgets, shortcodes, template tags, custom taxonomies, custom post types, media library, transcripts, characters, storylines, twitter, facebook, opengraph, paypal
 Requires at least: 3.3
-Tested up to: 3.4
-Stable tag: 3.0.10
+Tested up to: 3.4.1
+Stable tag: 4
 License: GPL2
 License URI: //www.gnu.org/licenses/gpl-2.0.html
 
@@ -73,4 +73,4 @@ Existing Webcomic users should [read this before upgrading](//github.com/mgsisk/
 
 == Special Thanks ==
 
-To [BigBagel](//twitter.com/DrPotatoMonster), [Miluette](//twitter.com/miluette), [LordRembo](//twitter.com/lordrembo), [Vaslittlecrow](//twitter.com/vaslittlecrow), [Fesworks](//twitter.com/fesworks), [Naomiyaki](//twitter.com/naomiyaki), [MatthewEbel](//twitter.com/matthewebel), and [Kuipou](//twitter.com/kuipou) for early testing and feedback, and to the thousands of users that share their amazing work with Webcomic.
+To [BigBagel](//twitter.com/DrPotatoMonster), [Miluette](//twitter.com/miluette), [LordRembo](//twitter.com/lordrembo), [Vaslittlecrow](//twitter.com/vaslittlecrow), [Fesworks](//twitter.com/fesworks), [Naomiyaki](//twitter.com/naomiyaki), [MatthewEbel](//twitter.com/matthewebel), [AlexWoolfson](//twitter.com/alexwoolfson), and [Kuipou](//twitter.com/kuipou) for pre-release testing and feedback, and to the thousands of users that share their amazing work with Webcomic.
