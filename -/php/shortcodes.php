@@ -439,7 +439,7 @@ class WebcomicShortcode extends Webcomic {
 	 * // render the storyline title
 	 * [webcomic_storyline_title]
 	 * 
-	 * // render the title of the cvharacter with an id of 1 in the 'webcomic42' collection with a prefix
+	 * // render the title of the character with an id of 1 in the 'webcomic42' collection with a prefix
 	 * [webcomic_character_title term="1" collection="webcomic42"]Character: [/webcomic_character_title]
 	 * </code>
 	 * 
@@ -489,12 +489,9 @@ class WebcomicShortcode extends Webcomic {
 	 */
 	public function webcomic_term_description( $atts, $content, $name ) {
 		extract( shortcode_atts( array(
-			'prefix'     => '',
 			'term'       => 0,
 			'collection' => ''
 		), $atts ) );
-		
-		$prefix = $content ? do_shortcode( $content ) : $prefix;
 		
 		if ( false !== strpos( $name, 'storyline' ) ) {
 			$tax = 'storyline';
@@ -504,7 +501,7 @@ class WebcomicShortcode extends Webcomic {
 			$tax = '';
 		}
 		
-		return WebcomicTag::webcomic_term_title( $prefix, $term, $collection ? "{$collection}_{$tax}" : '' );
+		return WebcomicTag::webcomic_term_description( $term, $collection ? "{$collection}_{$tax}" : '' );
 	}
 	
 	/** Handle webcomic_(storyline|character)_(cover|avatar) shortcode.
@@ -580,10 +577,12 @@ class WebcomicShortcode extends Webcomic {
 	 * </code>
 	 * 
 	 * @param array $atts Shortcode attributes.
+	 * @param string $content Shortcode content.
+	 * @param string $name Shortcode name.
 	 * @return string
 	 * @uses WebcomicTag::webcomic_collection_description()
 	 */
-	public function webcomic_collection_description( $atts ) {
+	public function webcomic_collection_description( $atts, $content, $name ) {
 		extract( shortcode_atts( array(
 			'collection' => ''
 		), $atts ) );

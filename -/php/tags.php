@@ -3121,7 +3121,7 @@ if ( !function_exists( 'next_webcomic_link' ) ) {
 	 * next_webcomic_link( '%link', '%thumbnail' );
 	 * 
 	 * // render a link to the next webcomic in the current storylines, excluding the storyline with an ID of 42
-	 * next_webcomic_link( '<b>%link</b>', '&lt; Previous', true, 42 );
+	 * next_webcomic_link( '<b>%link</b>', 'Next &gt;', true, 42 );
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -3148,7 +3148,7 @@ if ( !function_exists( 'first_webcomic_link' ) ) {
 	 * first_webcomic_link( '%link', '%thumbnail' );
 	 * 
 	 * //  render a link to the first webcomic in the current storylines, excluding the storyline with an ID of 42
-	 * first_webcomic_link( '<b>%link</b>', '&lt; Previous', true, 42 );
+	 * first_webcomic_link( '<b>%link</b>', '&lt;&lt; First', true, 42 );
 	 * 
 	 * // render a link to the first webcomic with a large preview in collection 42
 	 * first_webcomic_link( '%link', '%large', false, false, '', 'webcomic42' );
@@ -3179,7 +3179,7 @@ if ( !function_exists( 'last_webcomic_link' ) ) {
 	 * last_webcomic_link( '%link', '%thumbnail' );
 	 * 
 	 * // render a link to the last webcomic in the current storylines, excluding the storyline with an ID of 42
-	 * last_webcomic_link( '<b>%link</b>', '&lt; Previous', true, 42 );
+	 * last_webcomic_link( '<b>%link</b>', 'Last &gt;&gt;', true, 42 );
 	 * 
 	 * // render a link to the last webcomic with a large preview in collection 42
 	 * last_webcomic_link( '%link', '%large', false, false, '', 'webcomic42' );
@@ -3209,11 +3209,11 @@ if ( !function_exists( 'random_webcomic_link' ) ) {
 	 * // render a link to a random webcomic with a small preview
 	 * random_webcomic_link( '%link', '%thumbnail' );
 	 * 
-	 * //render a link to a random webcomic in the current storylines, excluding the storyline with an ID of 42
-	 * random_webcomic_link( '<b>%link</b>', '&lt; Previous', true, 42 );
+	 * // render a link to a random webcomic in the current storylines, excluding the storyline with an ID of 42
+	 * random_webcomic_link( '<b>%link</b>', 'Random Comic', true, 42 );
 	 * 
 	 * // render a link to a random webcomic with a large preview in collection 42 using a parameterized url
-	 * random_webcomic_link( '%link', '%large', false, false, '', 'webcomic42', true );
+	 * random_webcomic_link( '%link', '%large', false, false, '', 'webcomic42', false );
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -3494,7 +3494,7 @@ if ( !function_exists( 'random_webcomic_storyline_link' ) ) {
 	 * random_webcomic_storyline_link( '%link', 'Random Storyline', 'random', array(), 'webcomic42' );
 	 * 
 	 * // render a link to a random webcomic with a large cover in collection 42 using a parameterized url
-	 * random_webcomic_storyline_link( '%link', '%large', 'last', array(), 'webcomic42', true );
+	 * random_webcomic_storyline_link( '%link', '%large', 'last', array(), 'webcomic42', false );
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -3672,7 +3672,7 @@ if ( !function_exists( 'random_webcomic_character_link' ) ) {
 	 * random_webcomic_character_link( '%link', 'Random Character', 'random', array(), 'webcomic42' );
 	 * 
 	 * // render a link to the last webcomic in a random character with a large avatar in collection 42 using a parameterized url
-	 * random_webcomic_character_link( '%link', '%large', 'last', array(), 'webcomic42', true );
+	 * random_webcomic_character_link( '%link', '%large', 'last', array(), 'webcomic42', false );
 	 * </code>
 	 * 
 	 * @package Webcomic
