@@ -1,6 +1,8 @@
 <?php
 /** Contains the WebcomicTag class and template tag functions.
  * 
+ * @todo is_webcomic_attachment
+ * @todo is_a_webcomic_attachment
  * @package Webcomic
  */
 
@@ -154,6 +156,19 @@ class WebcomicTag extends Webcomic {
 		return ( is_singular( array_keys( self::$config[ 'collections' ] ) ) and ( !$dynamic or 'xmlhttprequest' === strtolower( $_SERVER[ 'HTTP_X_REQUESTED_WITH' ] ) ) );
 	}
 	
+	/** Is the query for a Webcomic-recognized attachment?
+	 * 
+	 * @param mixed $collection Collection ID or an array of these to check.
+	 * @return boolean
+	 * @uses Webcomic::$config
+	 */
+	public static function is_webcomic_attachment( $collection = '' ) {
+		$the_post   = get_post();
+		$collection = $collection ? ( array ) $collection : array_keys( self::$config[ 'collections' ] );
+		
+		return ( is_attachment() and preg_match( '/^image\//', get_post_mime_type( $the_post ) ) and in_array( get_post_type( $the_post->post_parent ), $collection ) );
+	}
+	
 	/** Is the query for a webcomic-related page?
 	 * 
 	 * @param mixed $the_post Post object or ID to check.
@@ -224,6 +239,20 @@ class WebcomicTag extends Webcomic {
 		return in_array( get_post_type( $the_post ), array_keys( self::$config[ 'collections' ] ) );
 	}
 	
+	/** Is the current post a Webcomic-recognized attachment?
+	 * 
+	 * @param mixed $the_post Post object or ID to check.
+	 * @param mixed $collection Collection ID or an array of these to check.
+	 * @return boolean
+	 * @uses Webcomic::$config
+	 */
+	public static function is_a_webcomic_attachment( $the_post = false, $collection = '' ) {
+		$the_post   = get_post( $the_post );
+		$collection = $collection ? ( array ) $collection : array_keys( self::$config[ 'collections' ] );
+		
+		return ( $the_post and $the_post->post_parent and preg_match( '/^image\//', get_post_mime_type( $the_post ) ) and in_array( get_post_type( $the_post->post_parent ), $collection ) );
+	}
+	
 	/** Does the current webcomic have any transcripts?
 	 * 
 	 * @param boolean $pending Does the current webcomic have any transcripts pending review?
@@ -232,7 +261,7 @@ class WebcomicTag extends Webcomic {
 	 * @return boolean
 	 */
 	public static function have_webcomic_transcripts( $pending = false, $language = '', $the_post = false ) {
-		return $the_post = get_post( $the_post ) ? ( boolean ) get_children( array(
+		return ( $the_post = get_post( $the_post ) ) ? ( boolean ) get_children( array(
 			'post_type'   => 'webcomic_transcript',
 			'post_parent' => $the_post->ID,
 			'post_status' => $pending ? 'pending' : get_post_stati( array( 'public' => true ) ),
@@ -367,7 +396,7 @@ class WebcomicTag extends Webcomic {
 			$output = apply_filters( 'the_webcomic', $output, $the_post, $attachments );
 			
 			if ( 'self' === $relative ) {
-				return sprintf( '<a href="%s">%s</a>', apply_filters( 'the_permalink', get_permalink( $the_post ) ), $output );
+				return sprintf( '<a href="%s" rel="bookmark">%s</a>', apply_filters( 'the_permalink', get_permalink( $the_post ) ), $output );
 			} else if ( $relative ) {
 				return self::relative_webcomic_link( '%link', $output, $relative, $in_same_term, $excluded_terms, $taxonomy, $the_post->post_type );
 			} else {
@@ -1684,7 +1713,7 @@ class WebcomicTag extends Webcomic {
 			) : '',
 			'transcript_field' => sprintf( '<p class="webcomic-transcript-content"><label for="webcomic-transcript-content' . $c . '">%s</label><textarea name="webcomic_transcript_content" id="webcomic-transcript-content' . $c . '" rows="10" cols="40" required>%s</textarea></p>',
 				__( 'Transcript', 'webcomic' ),
-				$update_post ? esc_html( $update_post->post_content ) : ''
+				empty( $update_post ) ? '' : esc_html( $update_post->post_content )
 			),
 			'must_log_in'              => sprintf( '<p class="must-log-in">%s</p>', sprintf( __( 'You must be <a href="%s">logged in</a> to transcribe this webcomic.' ), wp_login_url( apply_filters( 'the_permalink', get_permalink( $the_post ) ) ) ) ),
 			'logged_in_as'             => sprintf( '<p class="logged-in-as">%s</p>', sprintf( __( 'Logged in as <a href="%1$s">%2$s</a>. <a href="%3$s">Log out?</a>' ), admin_url( 'profile.php' ), $user->display_name, wp_logout_url( apply_filters( 'the_permalink', get_permalink( $the_post ) ) ) ) ),
@@ -1693,7 +1722,7 @@ class WebcomicTag extends Webcomic {
 			'transcript_notes_success' => sprintf( '<p class="webcomic-transcript-success">%s</p>', __( 'Thank you! Your transcript has been submitted.', 'webcomic' ) ),
 			'transcript_notes_failure' => sprintf( '<p class="webcomic-transcript-failure">%s</p>', __( 'There was a problem submitting your transcript. Please try again.', 'webcomic' ) ),
 			'id_form'                  => "webcomic-transcript-form{$c}",
-			'title_submit'             => $update_post ? __( 'Improve %s Transcript', 'webcomic' ) : __( 'Transcribe %s', 'webcomic' ),
+			'title_submit'             => empty( $update_post ) ? __( 'Transcribe %s', 'webcomic' ) : __( 'Improve %s Transcript', 'webcomic' ),
 			'label_submit'             => __( 'Submit Transcript', 'webcomic' ),
 			'wysiwyg_editor'           => false
 		), $the_post->post_type ) ) );
@@ -1739,7 +1768,7 @@ class WebcomicTag extends Webcomic {
 					do_action( 'webcomic_transcript_form_after_fields', $the_post->post_type );
 				}
 				
-				echo apply_filters( 'webcomic_transcript_form_field_language', $language_field, $the_post->post_type, $languages, $terms, $update_terms );
+				echo apply_filters( 'webcomic_transcript_form_field_language', $language_field, $the_post->post_type, $languages, $terms, empty( $update_terms ) ? array() : $update_terms );
 				
 				if ( $wysiwyg_editor ) {
 					wp_editor( '', "webcomic_transcript_content{$c}", array_merge( array( 'textarea_name' => 'webcomic_transcript_content', 'media_buttons' => false, 'teeny' => true, 'editor_css' => '<style scoped>*{box-sizing:content-box;-moz-box-sizing:content-box;-webkit-box-sizing:content-box}</style>' ), ( array ) $wysiwyg_editor ) );
@@ -1749,7 +1778,7 @@ class WebcomicTag extends Webcomic {
 				
 				echo $transcript_notes_after,
 					 apply_filters( 'webcomic_transcript_form_field_submit', sprintf( '<p class="webcomic-transcript-submit"><button type="submit" name="webcomic_transcript_submit">%s</button></p>', esc_html( $label_submit ) ), $the_post->post_type ),
-					 self::webcomic_transcript_fields( $transcript->ID, $the_post );
+					 self::webcomic_transcript_fields( empty( $update_post ) ? 0 : $update_post->ID, $the_post );
 				
 				do_action( 'webcomic_transcript_form', $the_post );
 				
@@ -2692,6 +2721,28 @@ if ( !function_exists( 'is_webcomic' ) ) {
 	}
 }
 
+if ( !function_exists( 'is_webcomic_attachment' ) ) {
+	/** Is the query for a Webcomic-recognized attachment?
+	 * 
+	 * <code>
+	 * if ( is_webcomic_attachment() ) {
+	 * 	// this is a Webcomic-recognized attachment
+	 * }
+	 * 
+	 * if ( is_webcomic_attachment( 'webcomic42' ) ) {
+	 * 	// this is a webcomic-recognized attachment in collection 42
+	 * }
+	 * </code>
+	 * 
+	 * @param mixed $collection Collection ID or an array of these to check.
+	 * @return boolean
+	 * @uses WebcomicTag::is_webcomic_attachment()
+	 */
+	function is_webcomic_attachment( $collection = '' ) {
+		return WebcomicTag::is_webcomic_attachment();
+	}
+}
+
 if ( !function_exists( 'is_webcomic_page' ) ) {
 	/** Is the query for a webcomic-related page?
 	 * 
@@ -2820,6 +2871,33 @@ if ( !function_exists( 'is_a_webcomic' ) ) {
 	 */
 	function is_a_webcomic( $the_post = false ) {
 		return WebcomicTag::is_a_webcomic( $the_post );
+	}
+}
+
+if ( !function_exists( 'is_a_webcomic_attachment' ) ) {
+	/** Is the current post a Webcomic-recognized attachment?
+	 * 
+	 * <code>
+	 * if ( is_a_webcomic_attachment() ) {
+	 * 	// the current post is a webcomic-recognized attachment
+	 * }
+	 * 
+	 * if ( is_a_webcomic_attachment( 42 ) ) {
+	 * 	// the post with an ID of 42 is a webcomic-recognized attachment
+	 * }
+	 * 
+	 * if ( is_a_webcomic_attachment( 0, 'webcomic42' ) ) {
+	 * 	// the current post is a webcomic-recognized attachment in collection 42
+	 * }
+	 * </code>
+	 * 
+	 * @param mixed $the_post Post object or ID to check.
+	 * @param mixed $collection Collection ID or an array of these to check.
+	 * @return boolean
+	 * @uses WebcomicTag::is_a_webcomic_attachment()
+	 */
+	function is_a_webcomic_attachment( $the_post = false, $collection = '' ) {
+		return WebcomicTag::is_a_webcomic_attachment( $the_post, $collection );
 	}
 }
 

@@ -20,11 +20,11 @@ if ( is_webcomic() ) {
 	
 	if ( webcomic_prints_available() ) {
 		$prints   = array();
-		$prints[] = WebcomicTag::webcomic_print_form( 'domestic', sprintf( __( '%s%s%%total Domestic', 'webcomic' ), __( '%dec.', 'webcomic' ), __( '%sep,', 'webcomic' ) ) );
-		$prints[] = WebcomicTag::webcomic_print_form( 'international', sprintf( __( '%s%s%%total International', 'webcomic' ), __( '%dec.', 'webcomic' ), __( '%sep,', 'webcomic' ) ) );
+		$prints[] = WebcomicTag::webcomic_print_form( 'domestic', sprintf( __( '%1$s%2$s%%total Domestic', 'webcomic' ), __( '%dec.', 'webcomic' ), __( '%sep,', 'webcomic' ) ) );
+		$prints[] = WebcomicTag::webcomic_print_form( 'international', sprintf( __( '%1$s%2$s%%total International', 'webcomic' ), __( '%dec.', 'webcomic' ), __( '%sep,', 'webcomic' ) ) );
 		
 		if ( webcomic_prints_available( 'original' ) ) {
-			$prints[] = WebcomicTag::webcomic_print_form( 'original', sprintf( __( '%s%s%%total Original', 'webcomic' ), __( '%dec.', 'webcomic' ), __( '%sep,', 'webcomic' ) ) );
+			$prints[] = WebcomicTag::webcomic_print_form( 'original', sprintf( __( '%1$s%2$s%%total Original', 'webcomic' ), __( '%dec.', 'webcomic' ), __( '%sep,', 'webcomic' ) ) );
 		}
 		
 		if ( '_cart' === self::$config[ 'collections' ][ $post->post_type ][ 'commerce' ][ 'method' ] ) {

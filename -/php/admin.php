@@ -445,7 +445,7 @@ class WebcomicAdmin extends Webcomic {
 		}
 		
 		if ( isset( self::$config[ 'thanks' ] ) ) {
-			echo '<div class="updated webcomic"><a href="http://webcomic.nu" target="_blank"><b>&#x2764;</b>', sprintf( __( 'Thank you for using Webcomic %s', 'webcomic' ), self::$version ), '</a></div>';
+			printf( '<div class="updated webcomic"><a href="http://webcomic.nu" target="_blank"><b>&#x2764;</b>%s</a></div>', sprintf( __( 'Thank you for using Webcomic %s', 'webcomic' ), self::$version ) );
 			
 			unset( self::$config[ 'thanks' ] );
 			

@@ -18,7 +18,7 @@ if ( is_webcomic() ) {
 		<h3 id="webcomic-transcripts"><?php sprintf( __( '%s Transcripts', 'webcomic' ), the_title( '', '', false ) ); ?></h3>
 		<?php foreach ( $transcripts as $post ) { setup_postdata( $post ); ?>
 		<div class="webcomic-transcript-content"><?php the_content(); ?></div>
-		<div class="webcomic-transcript-meta"><?php printf( __( 'Transcribed by %s%s', 'webcomic' ), WebcomicTag::get_webcomic_transcript_authors(), WebcomicTag::get_the_webcomic_transcript_term_list( 0, 'webcomic_language', __( ' in ', 'webcomic' ), __( ', ', 'webcomic' ), __( '', 'webcomic' ) ) ); ?></div>
+		<div class="webcomic-transcript-meta"><?php printf( __( 'Transcribed by %1$s%2$s', 'webcomic' ), WebcomicTag::get_webcomic_transcript_authors(), WebcomicTag::get_the_webcomic_transcript_term_list( 0, 'webcomic_language', __( ' in ', 'webcomic' ), __( ', ', 'webcomic' ), __( '', 'webcomic' ) ) ); ?></div>
 		<?php wp_reset_postdata(); }
 	}
 	
@@ -30,5 +30,5 @@ if ( is_webcomic() ) {
 		}
 		
 		webcomic_transcript_form();
-	}	
+	}
 }

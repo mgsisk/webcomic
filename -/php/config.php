@@ -204,7 +204,7 @@ class WebcomicConfig extends Webcomic {
 						submit_button( '', 'primary', '', false );
 						
 						if ( 'webcomic-options' === $page ) {
-							printf( '<span class="alignright">%s</span>', sprintf( __( 'Thank you for using %s', 'webcomic' ), sprintf( '<a href="http://webcomic.nu" target="_blank">Webcomic %s</a>', self::$version ) ) );
+							printf( '<span class="alignright">%s</span>', sprintf( __( 'Thank you for using <a href="%1$s" target="_blank">Webcomic %2$s</a>', 'webcomic' ), 'http://webcomic.nu', self::$version ) );
 						}
 					?>
 				</p>
@@ -436,7 +436,7 @@ class WebcomicConfig extends Webcomic {
 			printf( '<label><input type="checkbox" name="webcomic_detach"> %s</label><br>', __( 'Detach', 'webcomic' ) );
 		}
 		
-		echo '<p class="description">', sprintf( __( 'The poster is a representative image that can be displayed on your site. Posters are uploaded to the Media Library. Maximum upload file size: %s%s', 'webcomic' ), $upload_size, $sizes[ $u ] ), '</p>';
+		printf( '<p class="description">%s</p>', sprintf( __( 'The poster is a representative image that can be displayed on your site. Posters are uploaded to the Media Library. Maximum upload file size: %1$s%2$s', 'webcomic' ), $upload_size, $sizes[ $u ] ) );
 	}
 	
 	/** Render the Theme setting.
@@ -1015,7 +1015,7 @@ class WebcomicConfig extends Webcomic {
 			}
 		} else if ( isset( $_POST[ 'webcomic_collection' ] ) ) {
 			$id         = $_POST[ 'webcomic_collection' ];
-			$tokens     = array( '%year%', '%monthnum%', '%day%', '%hour%', '%minute%', '%second%', '%post_id%', "%{$id}_storyline%", '%author%' );
+			$tokens     = array( '%year%', '%monthnum%', '%day%', '%hour%', '%minute%', '%second%', '%post_id%', '%author%', "%{$id}_storyline%" );
 			$collection = array(
 				'id'          => $id,
 				'name'        => $_POST[ 'webcomic_name' ] ? $_POST[ 'webcomic_name' ] : self::$config[ 'collections' ][ $id ][ 'name' ],
@@ -1161,7 +1161,7 @@ class WebcomicConfig extends Webcomic {
 	 */
 	public static function ajax_slug_preview( $slug, $preview, $collection ) {
 		$slug     = explode( '/', $slug );
-		$tokens   = array( '%year%', '%monthnum%', '%day%', '%hour%', '%minute%', '%second%', '%post_id%', "%{$collection}_storyline%", '%author%' );
+		$tokens   = array( '%year%', '%monthnum%', '%day%', '%hour%', '%minute%', '%second%', '%post_id%', '%author%', "%{$collection}_storyline%" );
 		$fallback = substr( $preview, 16 );
 		
 		foreach ( $slug as $k => $v ) {
@@ -1217,17 +1217,21 @@ class WebcomicConfig extends Webcomic {
 				$oauth   = new TwitterOAuth( $consumer_key, $consumer_secret );
 				$request = $oauth->getRequestToken( add_query_arg( array( 'webcomic_twitter_oauth' => true, 'webcomic_collection' => $collection ), get_site_url() ) );
 				
-				self::$config[ 'collections' ][ $collection ][ 'twitter' ][ 'request_token' ]   = isset( $request[ 'oauth_token' ] ) ? $request[ 'oauth_token' ] : '';
-				self::$config[ 'collections' ][ $collection ][ 'twitter' ][ 'request_secret' ]  = isset( $request[ 'oauth_token_secret' ] ) ? $request[ 'oauth_token_secret' ] : '';
-				
-				update_option( 'webcomic_options', self::$config );
-			
-				printf( '%s<a href="%s"><img src="%s-/img/twitter.png" alt="%s"></a>',
-					( self::$config[ 'collections' ][ $collection ][ 'twitter' ][ 'oauth_token' ] and self::$config[ 'collections' ][ $collection ][ 'twitter' ][ 'oauth_secret' ]  ) ? __( '<p class="description">Your credentials could not be verified.</p>', 'webcomic' ) : '',
-					$oauth->getAuthorizeURL( $request ),
-					self::$url,
-					__( 'Sign in with Twitter', 'webcomic' )
-				);
+				if ( isset( $request[ 'Failed to validate oauth signature and token' ] ) ) {
+					_e( 'Validation error. Please ensure your <a href="https://dev.twitter.com/apps/new" target="_blank">Twitter Application</a> <b>consumer key</b> and <b>consumer secret</b> are entered correctly.', 'webcomic' );
+				} else {
+					self::$config[ 'collections' ][ $collection ][ 'twitter' ][ 'request_token' ]   = isset( $request[ 'oauth_token' ] ) ? $request[ 'oauth_token' ] : '';
+					self::$config[ 'collections' ][ $collection ][ 'twitter' ][ 'request_secret' ]  = isset( $request[ 'oauth_token_secret' ] ) ? $request[ 'oauth_token_secret' ] : '';
+					
+					update_option( 'webcomic_options', self::$config );
+					
+					printf( '%s<a href="%s"><img src="%s-/img/twitter.png" alt="%s"></a>',
+						( self::$config[ 'collections' ][ $collection ][ 'twitter' ][ 'oauth_token' ] and self::$config[ 'collections' ][ $collection ][ 'twitter' ][ 'oauth_secret' ]  ) ? __( '<p class="description">Your credentials could not be verified.</p>', 'webcomic' ) : '',
+						$oauth->getAuthorizeURL( $request ),
+						self::$url,
+						__( 'Sign in with Twitter', 'webcomic' )
+					);
+				}
 			}
 		} else {
 			echo '<span class="description">', __( 'Please enter your <a href="https://dev.twitter.com/apps/new" target="_blank">Twitter Application</a> <b>consumer key</b> and <b>consumer secret</b> below.', 'webcomic' ), '</span>';
@@ -1242,9 +1246,9 @@ class WebcomicConfig extends Webcomic {
 		if ( isset( $_POST[ 'webcomic_media_sizes' ], $_POST[ 'option_page' ], $_POST[ 'action' ] ) and 'media' === $_POST[ 'option_page' ] and 'update' === $_POST[ 'action' ] and wp_verify_nonce( $_POST[ 'webcomic_media_sizes' ], 'webcomic_media_sizes' ) ) {
 			if ( $size = sanitize_title( $_POST[ 'webcomic_new_size' ] ) ) {
 				if ( 'thumb' === $size or 'thumbnail' === $size or 'medium' === $size or 'large' === $size or 'post-thumbnail' === $size ) {
-					wp_die( sprintf( __( 'The name "%s" is reserved by WordPress.', 'webcomic' ), $size ), __( 'Error | Webcomic', 'webcomic' ) );
+					wp_die( sprintf( __( 'The name <q>%s</q> is reserved by WordPress.', 'webcomic' ), $size ), __( 'Error | Webcomic', 'webcomic' ) );
 				} else if ( in_array( $size, get_intermediate_image_sizes() ) ) {
-					wp_die( sprintf( __( 'A size with the name "%s" already exists.', 'webcomic' ), $size ), __( 'Error | Webcomic', 'webcomic' ) );
+					wp_die( sprintf( __( 'A size with the name <q>%s</q> already exists.', 'webcomic' ), $size ), __( 'Error | Webcomic', 'webcomic' ) );
 				} else {
 					self::$config[ 'sizes' ][ $size ] = array(
 						'width'  => intval( $_POST[ 'webcomic_new_size_width' ] ),

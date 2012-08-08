@@ -691,7 +691,7 @@ class WebcomicPosts extends Webcomic {
 							</tr>',
 							current_user_can( 'edit_post', $p->ID ) ? sprintf( '<strong><a href="%s" class="row-title">%s</a></strong>', get_edit_post_link( $p->ID ), esc_html( $p->post_title ) ) : sprintf( '<strong>%s</strong>', esc_html( $p->post_title ) ),
 							$status,
-							sprintf( __( 'Submitted on %s at %s by %s (%s)', 'webcomic' ), date( 'Y/n/j', $date ), date( 'g:i a', $date ), $authors, $terms ),
+							sprintf( __( 'Submitted on %1$s at %2$s by %3$s (%4$s)', 'webcomic' ), date( 'Y/n/j', $date ), date( 'g:i a', $date ), $authors, $terms ),
 							apply_filters( 'the_content', $p->post_content )
 						);
 					}

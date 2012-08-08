@@ -150,6 +150,7 @@ class Webcomic {
 				if ( self::$config[ 'integrate' ] ) {
 					add_action( 'loop_end', array( $this, 'loop_end' ), 10, 1 );
 					add_action( 'loop_start', array( $this, 'loop_start' ), 10, 1 );
+					add_action( 'the_excerpt', array( $this, 'the_excerpt' ), 10, 1 );
 					add_action( 'the_content', array( $this, 'the_content' ), 10, 1 );
 					add_action( 'pre_get_posts', array( $this, 'pre_get_posts' ), 10, 1 );
 				}
@@ -413,8 +414,6 @@ class Webcomic {
 			return $link;
 		}
 		
-		$time = explode( ' ', date( 'Y m d H i s', strtotime( $post->post_date ) ) );
-		
 		if ( false !== strpos( $link, "%{$post->post_type}_storyline%" ) and $storylines = get_the_terms( $post->ID, "{$post->post_type}_storyline" ) and !is_wp_error( $storylines ) ) {
 			$storylines = array_reverse( $storylines );
 			$storyline  = $storylines[ 0 ]->slug;
@@ -435,6 +434,7 @@ class Webcomic {
 			$storyline = '';
 		}
 		
+		$time   = explode( ' ', date( 'Y m d H i s', strtotime( $post->post_date ) ) );
 		$tokens = array(
 			'%year%'     => $time[ 0 ],
 			'%monthnum%' => $time[ 1 ],
@@ -595,7 +595,9 @@ class Webcomic {
 	 * 
 	 * We have to do this as early as possible to ensure that the
 	 * correct template can be set if the collection is using a custom
-	 * theme.
+	 * theme. It'd be better to use `wp_get_theme` for the integration
+	 * check, but custom headers can't be retrieved this way since
+	 * WordPress 3.4.
 	 * 
 	 * @uses Webcomic::$config
 	 * @uses Webcomic::$integrate
@@ -629,8 +631,9 @@ class Webcomic {
 			self::$collection = empty( self::$config[ 'collections' ][ $match[ 0 ] ] ) ? preg_replace( '/_(archive|webcomic|storyline|character)$/', '', array_search( $match[ 1 ], $permalinks ) ) : $match[ 0 ];
 		}
 		
-		$current_theme   = wp_get_theme( get_stylesheet_directory() . '/style.css' );
-		self::$integrate = empty( $current_theme[ 'Webcomic' ] );
+		$integrate = get_file_data( get_stylesheet_directory() . '/style.css', array( 'webcomic' => 'Webcomic' ) );
+		
+		self::$integrate = empty( $integrate[ 'webcomic' ] );
 	}
 	
 	/** Register and enqueue javascript.
@@ -910,6 +913,31 @@ class Webcomic {
 	
 	/** Automagically integrate basic webcomic functionality.
 	 * 
+	 * @param string $excerpt The post excerpt.
+	 * @return string
+	 * @uses Webcomic::$integrate
+	 * @hook the_content
+	 * @filter string webcomic_the_excerpt $prepend, $append
+	 * @template the_excerpt-{$collection}.php, the_excerpt.php
+	 */
+	public function the_excerpt( $excerpt ) {
+		global $wp_query, $post;
+		
+		if ( self::$integrate and in_the_loop() and $wp_query->is_main_query() and !is_feed() and $collection = get_post_type( $post ) and isset( self::$config[ 'collections' ][ $collection ] ) ) {
+			$prepend = $append = '';
+			
+			if ( !locate_template( array( "webcomic/the_excerpt-{$collection}.php", 'webcomic/the_excerpt.php' ), true, false ) ) {
+				require self::$dir . '-/php/integrate/the_excerpt.php';
+			}
+			
+			$excerpt = apply_filters( 'webcomic_the_excerpt', $prepend . $excerpt . $append, $excerpt, $prepend, $append );
+		}
+		
+		return $excerpt;
+	}
+	
+	/** Automagically integrate basic webcomic functionality.
+	 * 
 	 * @param string $content The post content.
 	 * @return string
 	 * @uses Webcomic::$integrate
@@ -1106,9 +1134,9 @@ class Webcomic {
 			$admin_url = add_query_arg( array( 'post_type' => $_GET[ 'webcomic_collection' ], 'page' => "{$_GET[ 'webcomic_collection' ]}-options" ), admin_url( 'edit.php' ) );
 			
 			if ( isset( $_GET[ 'denied' ] ) ) {
-				wp_die( sprintf( __( 'Authorization was denied. <a href="%s">Return to %s Settings</a>', 'webcomic' ), $admin_url, self::$config[ 'collections' ][ $_GET[ 'webcomic_collection' ] ][ 'name' ] ), __( 'Twitter Authorization Denied | Webcomic', 'webcomic' ), array( 'response' => 200 ) );
+				wp_die( sprintf( __( 'Authorization was denied. <a href="%1$s">Return to %2$s Settings</a>', 'webcomic' ), $admin_url, self::$config[ 'collections' ][ $_GET[ 'webcomic_collection' ] ][ 'name' ] ), __( 'Twitter Authorization Denied | Webcomic', 'webcomic' ), array( 'response' => 200 ) );
 			} else {
-				$oauth = new TwitterOAuth( self::$config[ 'collections' ][ $_GET[ 'webcomic_collection' ] ][ 'twitter' ][ 'consumer_key' ], self::$config[ 'collections' ][ $_GET[ 'webcomic_collection' ] ][ 'twitter' ][ 'consumer_secret' ], $_GET[ 'oauth_token' ], self::$config[ 'collections' ][ $_GET[ 'webcomic_collection' ] ][ 'twitter' ][ 'request_token' ], self::$config[ 'collections' ][ $_GET[ 'webcomic_collection' ] ][ 'twitter' ][ 'consumer_secret' ], $_GET[ 'request_secret' ] );
+				$oauth = new TwitterOAuth( self::$config[ 'collections' ][ $_GET[ 'webcomic_collection' ] ][ 'twitter' ][ 'consumer_key' ], self::$config[ 'collections' ][ $_GET[ 'webcomic_collection' ] ][ 'twitter' ][ 'consumer_secret' ], $_GET[ 'oauth_token' ], self::$config[ 'collections' ][ $_GET[ 'webcomic_collection' ] ][ 'twitter' ][ 'request_token' ] );
 				$token = $oauth->getAccessToken( $_GET[ 'oauth_verifier' ] );
 				
 				if ( isset( $token[ 'oauth_token' ], $token[ 'oauth_token_secret' ] ) ) {
@@ -1118,12 +1146,11 @@ class Webcomic {
 					
 					update_option( 'webcomic_options', self::$config );
 					
-					wp_die( sprintf( __( 'Newly published %s webcomics will be tweeted to <a href="%s">%s</a>. <a href="%s">Return to %s Settings</a>', 'webcomic' ),
+					wp_die( sprintf( __( 'Newly published %1$s webcomics will be tweeted to <a href="%2$s">%3$s</a>. <a href="%4$s">Return to %1s Settings</a>', 'webcomic' ),
 						self::$config[ 'collections' ][ $_GET[ 'webcomic_collection' ] ][ 'name' ],
 						"http://twitter.com/{$token[ 'screen_name' ]}",
 						$token[ 'screen_name' ],
-						$admin_url,
-						self::$config[ 'collections' ][ $_GET[ 'webcomic_collection' ] ][ 'name' ]
+						$admin_url
 					), __( 'Twitter Authorization Complete | Webcomic', 'webcomic' ), array( 'response' => 200 ) );
 				} else {
 					wp_die( sprintf( __( 'Your credentials could not be verified. Please ensure that your <b>consumer key</b> and <b>consumer secret</b> were entered correctly and <a href="%s">try again.</a>', 'webcomic' ), $admin_url ), __( 'Twitter Authorization Failed | Webcomic', 'webcomic' ), array( 'response' => 200 ) );
@@ -1207,8 +1234,8 @@ class Webcomic {
 					if ( self::$config[ 'collections' ][ $the_post->post_type ][ 'transcripts' ][ 'notify' ][ 'hook' ] ) {
 						wp_mail(
 							self::$config[ 'collections' ][ $the_post->post_type ][ 'transcripts' ][ 'notify' ][ 'email' ],
-							sprintf( __( '[%s] %s Transcript Submitted', 'webcomic' ), get_bloginfo( 'name' ), $the_post->post_title ),
-							sprintf( __( 'This is an automated notification that %s%s has <a href="%s">%s</a> for %s.', 'webcomic' ),
+							sprintf( __( '[%1$s] %2$s Transcript Submitted', 'webcomic' ), get_bloginfo( 'name' ), $the_post->post_title ),
+							sprintf( __( 'This is an automated notification that %1$s%2$s has <a href="%3$s">%4$s</a> for %5$s.', 'webcomic' ),
 								$_POST[ 'webcomic_transcript_author' ],
 								$_POST[ 'webcomic_transcript_email' ] ? " &lt;{$_POST[ 'webcomic_transcript_email' ]}&gt;" : '',
 								esc_url( admin_url( "post.php?post={$new_post}&action=edit" ) ),

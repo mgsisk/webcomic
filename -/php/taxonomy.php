@@ -304,7 +304,7 @@ class WebcomicTaxonomy extends Webcomic {
 				<?php $storyline ? _e( 'Cover', 'webcomic' ) : _e( 'Avatar', 'webcomic' ); ?>
 				<input type="file" name="webcomic_image" id="webcomic_image">
 			</label>
-			<p><?php $storyline ? printf( __( 'The cover is a representative image that can be displayed on your site. Covers are uploaded to the Media Library. Maximum upload file size: %s%s', 'webcomic' ), $upload_size, $sizes[ $u ] ) : printf( __( 'The avatar is a representative image that can be displayed on your site. Avatars are uploaded to the Media Library. Maximum upload file size: %s%s', 'webcomic' ), $upload_size, $sizes[ $u ] ); ?></p>
+			<p><?php $storyline ? printf( __( 'The cover is a representative image that can be displayed on your site. Covers are uploaded to the Media Library. Maximum upload file size: %1$s%2$s', 'webcomic' ), $upload_size, $sizes[ $u ] ) : printf( __( 'The avatar is a representative image that can be displayed on your site. Avatars are uploaded to the Media Library. Maximum upload file size: %1$s%2$s', 'webcomic' ), $upload_size, $sizes[ $u ] ); ?></p>
 		</div>
 		<?php }
 	}
@@ -355,7 +355,7 @@ class WebcomicTaxonomy extends Webcomic {
 						printf( '<label><input type="checkbox" name="webcomic_detach" style="width:auto"> %s</label><br>', __( 'Detach', 'webcomic' ) );
 					}
 				?>
-				<p class="description"><?php $storyline ? printf( __( 'The cover is a representative image that can be displayed on your site. Covers are uploaded to the Media Library. Maximum upload file size: %s%s', 'webcomic' ), $upload_size, $sizes[ $u ] ) : printf( __( 'The avatar is a representative image that can be displayed on your site. Avatars are uploaded to the Media Library. Maximum upload file size: %s%s', 'webcomic' ), $upload_size, $sizes[ $u ] ); ?></p>
+				<p class="description"><?php $storyline ? printf( __( 'The cover is a representative image that can be displayed on your site. Covers are uploaded to the Media Library. Maximum upload file size: %1$s%2$s', 'webcomic' ), $upload_size, $sizes[ $u ] ) : printf( __( 'The avatar is a representative image that can be displayed on your site. Avatars are uploaded to the Media Library. Maximum upload file size: %1$s%2$s', 'webcomic' ), $upload_size, $sizes[ $u ] ); ?></p>
 			</td>
 		</tr>
 		<?php
