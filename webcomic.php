@@ -29,15 +29,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 
 /** Comic Publishing Power for the Web
  * 
- * @todo Future: Bulk media actions; see core.trac.wordpress.org/ticket/16031
- * @todo Future: Screen Options; see core.trac.wordpress.org/ticket/18323
- * @todo Future: Post-specific access settings?
- * @todo Future: Dynamic navigation widget?
- * @todo Future: PayPal IPN log viewer?
+ * @todo Future Bulk media actions; see core.trac.wordpress.org/ticket/16031
+ * @todo Future Screen Options; see core.trac.wordpress.org/ticket/18323
+ * @todo 4 Add short descriptions for actions and filters.
  * 
  * @package Webcomic
  * @copyright 2008 - 2012 Michael Sisk
- * @license http://www.gnu.org/licenses/gpl-2.0.html GPL2
+ * @license //gnu.org/licenses/gpl-2.0.html GPL2
  * @version 4
  * @link http://webcomic.nu
  */
@@ -497,7 +495,7 @@ class Webcomic {
 	 * @uses Webcomic::$collection
 	 * @uses Webcomic::get_attachments()
 	 * @hook wp_head
-	 * @filter array webcomic_opengraph $object, self::$collection
+	 * @filter array webcomic_opengraph Filters the Open Graph data Webcomic adds to all Webcomic-related pages.
 	 */
 	public function head() {
 		global $wp_the_query, $wp_query, $post;
@@ -816,7 +814,6 @@ class Webcomic {
 	 * @uses Webcomic::$config
 	 * @uses Webcomic:get_attachments()
 	 * @hook the_content_feed
-	 * @filter string the_webcomic_feed $feeds, $content, $prepend, $append
 	 * @template feed-{$collectionID}.php, feed.php
 	 */
 	public function the_content_feed( $content ) {
@@ -831,7 +828,7 @@ class Webcomic {
 				require self::$dir . '-/php/integrate/feed.php';
 			}
 			
-			$content = apply_filters( 'the_webcomic_feed', $prepend . $content . $append, $feeds, $content, $prepend, $append );
+			$content = $prepend . $content . $append;
 		}
 		
 		return $content;
@@ -863,7 +860,7 @@ class Webcomic {
 	 * @uses Webcomic::$config
 	 * @uses Webcomic::$integrate
 	 * @hook loop_start
-	 * @action webcomic_loop_start $collection
+	 * @action webcomic_loop_start Triggered during integration just before Webcomic content is prepended to the start of a WordPress loop.
 	 * @template loop_start-{$collection}.php, loop_start.php
 	 */
 	public function loop_start( $query ) {
@@ -896,7 +893,7 @@ class Webcomic {
 	 * @uses Webcomic::$config
 	 * @uses Webcomic::$integrate
 	 * @hook loop_start
-	 * @action webcomic_loop_end $collection
+	 * @action webcomic_loop_end Triggered during integration just before Webcomic content is appended to the end of a WordPress loop.
 	 * @template loop_end-{$collection}.php, loop_end.php
 	 */
 	public function loop_end( $query ) {
@@ -917,7 +914,6 @@ class Webcomic {
 	 * @return string
 	 * @uses Webcomic::$integrate
 	 * @hook the_content
-	 * @filter string webcomic_the_excerpt $prepend, $append
 	 * @template the_excerpt-{$collection}.php, the_excerpt.php
 	 */
 	public function the_excerpt( $excerpt ) {
@@ -929,8 +925,6 @@ class Webcomic {
 			if ( !locate_template( array( "webcomic/the_excerpt-{$collection}.php", 'webcomic/the_excerpt.php' ), true, false ) ) {
 				require self::$dir . '-/php/integrate/the_excerpt.php';
 			}
-			
-			$excerpt = apply_filters( 'webcomic_the_excerpt', $prepend . $excerpt . $append, $excerpt, $prepend, $append );
 		}
 		
 		return $excerpt;
@@ -942,7 +936,6 @@ class Webcomic {
 	 * @return string
 	 * @uses Webcomic::$integrate
 	 * @hook the_content
-	 * @filter string webcomic_the_content $prepend, $append
 	 * @template the_content-{$collection}.php, the_content.php
 	 */
 	public function the_content( $content ) {
@@ -955,7 +948,7 @@ class Webcomic {
 				require self::$dir . '-/php/integrate/the_content.php';
 			}
 			
-			$content = apply_filters( 'webcomic_the_content', $prepend . $content . $append, $content, $prepend, $append );
+			$content = $prepend . $content . $append;
 		}
 		
 		return $content;
@@ -995,13 +988,12 @@ class Webcomic {
 	 * 
 	 * Logs instant payment notifications and updates the original print
 	 * availability of webcomics as necessary. Logs are saved to
-	 * /webcomic/-/logs/ipn-{$blog_id}.log
+	 * /webcomic/-/logs/ipn-{$blog_id}.php
 	 * 
-	 * ssl://www.paypal.com | ssl://www.sandbox.paypal.com
+	 * https://www.paypal.com/cgi-bin/webscr | https://www.sandbox.paypal.com/cgi-bin/webscr
 	 * 
 	 * @uses Webcomic::$config
-	 * @action webcomic_ipn
-	 * @filter array webcomic_ipn_log
+	 * @action webcomic_ipn Triggered prior to processing a Paypal IPN request.
 	 */
 	private function log_ipn() {
 		global $blog_id;
@@ -1010,116 +1002,133 @@ class Webcomic {
 			do_action( 'webcomic_ipn' );
 			
 			$output  = array();
-			$header  = $message = '';
-			$logfile = self::$dir . sprintf( '-/log/ipn-%s.log', $blog_id ? $blog_id : 1 );
-			$request = 'cmd=_notify-validate';
+			$header  = $message = $error = '';
+			$logfile = self::$dir . sprintf( '-/log/ipn-%s.php', $blog_id ? $blog_id : 1 );
+			$request = 'cmd=' . urlencode( '_notify-validate' );
 			
 			foreach ( $_POST as $k => $v ) {
 				$value    = urlencode( stripslashes( $v ) );
 				$request .= "&{$k}={$value}";
 			}
 			
-			$header .= "POST /cgi-bin/webscr HTTP/1.0\r\n";
-			$header .= "Content-Type: application/x-www-form-urlencoded\r\n";
-			$header .= "Content-Length: " . strlen( $request ) . "\r\n\r\n";
-			$socket  = fsockopen ( 'ssl://www.paypal.com', 443, $error_number, $error_message, 30 );
-			
-			if ( !$socket ) {
-				$message = __( 'HTTP Error', 'webcomic' );
-			} else {
-				fputs( $socket, $header . $request );
+			if ( $curl = curl_init() ) {
+				curl_setopt( $curl, CURLOPT_URL, 'https://www.paypal.com/cgi-bin/webscr' );
+				curl_setopt( $curl, CURLOPT_HEADER, 0 );
+				curl_setopt( $curl, CURLOPT_POST, 1 );
+				curl_setopt( $curl, CURLOPT_RETURNTRANSFER,1);
+				curl_setopt( $curl, CURLOPT_POSTFIELDS, $request );
+				curl_setopt( $curl, CURLOPT_SSL_VERIFYPEER, 1 );
+				curl_setopt( $curl, CURLOPT_SSL_VERIFYHOST, 2 );
+				curl_setopt( $curl, CURLOPT_HTTPHEADER, array( 'Host: www.paypal.com' ) );
 				
-				$log = file_get_contents( $logfile );
+				$log      = is_readable( $logfile ) ? file_get_contents( $logfile ) : '';
+				$response = curl_exec( $curl );
 				
-				while ( !feof( $socket ) ) {
-					$response = fgets ( $socket, 1024 );
-					
-					if ( 0 === strcmp( $response, 'VERIFIED' ) ) {
-						if ( 'Completed' !== $_POST[ 'payment_status' ] ) {
-							$message = __( 'Incomplete transaction', 'webcomic' );
-						} else if ( preg_match( sprintf( '/^%s/', $_POST[ 'txn_id' ] ), $log ) ) {
-							$message = __( 'Transaction already completed', 'webcomic' );
-						} else if ( 'cart' === $_POST[ 'txn_type' ] ) {
-							$i = 1;
-							$e = 0;
-							
-							while ( isset( $_POST[ "item_number{$i}" ] ) ) {
-								$item     = explode( '-', $_POST[ "item_number{$i}" ] );
-								$commerce = get_post_meta( $item[ 0 ], 'webcomic_commerce', true );
-								
-								if ( empty( self::$config[ 'collections' ][ $item[ 1 ] ] ) ) {
-									$e++;
-									$message = sprintf( __( 'Invalid collection %s', 'webcomic' ), $item[ 1 ] );
-								} else if ( self::$config[ 'collections' ][ $item[ 1 ] ][ 'commerce' ][ 'business' ] !== $_POST[ 'receiver_email' ] ) {
-									$e++;
-									$message = sprintf( __( 'Incorrect business email %s', 'webcomic' ), $_POST[ 'receiver_email' ] );
-								} else if ( number_format( $commerce[ 'total' ][ $item[ 2 ] ], 2 ) !== number_format( $_POST[ "mc_gross_{$i}" ] / $_POST[ "quantity{$i}" ], 2 ) ) {
-									$e++;
-									$message = sprintf( __( 'Incorrect price %s', 'webcomic' ), number_format( $_POST[ "mc_gross_{$i}" ] / $_POST[ "quantity{$i}" ], 2 ) );
-								} else if ( self::$config[ 'collections' ][ $item[ 1 ] ][ 'commerce' ][ 'currency' ] !== $_POST[ 'mc_currency' ] ) {
-									$e++;
-									$message = sprintf( __( 'Incorrect currency %s', 'webcomic' ), $_POST[ 'mc_currency' ] );
-								} else {
-									if ( 'original' === $item[ 2 ] ) {
-										update_post_meta( $item[ 0 ], 'webcomic_original', false );
-									}
-									
-									$message = __( 'Good', 'webcomic' );
-								}
-								
-								$output[] = sprintf( "\t%s\t%s", $_POST[ "item_number{$i}" ], $message );
-								
-								$i++;
-							}
-							
-							array_unshift( $output, sprintf( "%s\t%s\t%s", $_POST[ 'txn_id' ], $_POST[ 'payment_date' ], $e ? sprintf( _n( '%s Error', '%s Errors', $e, 'webcomic' ), $e ) : __( 'Sale Get!', 'webcomic' ) ) );
-						} else if ( 'donation' === $_GET[ 'webcomic_commerce_ipn' ] ) {
-							if ( empty( self::$config[ 'collections' ][ $_POST[ 'item_number' ] ] ) ) {
-								$message = sprintf( __( 'Invalid collection %s', 'webcomic' ), $_POST[ 'item_number' ] );
-							} else if ( self::$config[ 'collections' ][ $_POST[ 'item_number' ] ][ 'commerce' ][ 'business' ] !== $_POST[ 'receiver_email' ] ) {
-								$message = sprintf( __( 'Incorrect business email %s', 'webcomic' ), $_POST[ 'receiver_email' ] );
-							} else if ( self::$config[ 'collections' ][ $_POST[ 'item_number' ] ][ 'commerce' ][ 'donation' ] and ( number_format( self::$config[ 'collections' ][ $_POST[ 'item_number' ] ][ 'commerce' ][ 'donation' ], 2 ) !== number_format( $_POST[ 'mc_gross' ], 2 ) ) ) {
-								$message = sprintf( __( 'Incorrect price %s', 'webcomic' ), number_format( $_POST[ 'mc_gross' ] / $_POST[ 'quantity' ], 2 ) );
-							} else if ( self::$config[ 'collections' ][ $_POST[ 'item_number' ] ][ 'commerce' ][ 'currency' ] !== $_POST[ 'mc_currency' ] ) {
-								$message = sprintf( __( 'Incorrect currency %s', 'webcomic' ), $_POST[ 'mc_currency' ] );
-							} else {
-								$message = __( 'Donation Get!', 'webcomic' );
-							}
-						} else {
-							$item     = explode( '-', $_POST[ 'item_number' ] );
+				if ( 0 === strcmp( $response, 'VERIFIED' ) ) {
+					if ( 'Completed' !== $_POST[ 'payment_status' ] ) {
+						$error   = true;
+						$message = __( 'Incomplete transaction', 'webcomic' );
+					} else if ( preg_match( sprintf( '/^%s/', $_POST[ 'txn_id' ] ), $log ) ) {
+						$error   = true;
+						$message = __( 'Transaction already completed', 'webcomic' );
+					} else if ( 'cart' === $_POST[ 'txn_type' ] ) {
+						$i = 1;
+						$e = 0;
+						
+						while ( isset( $_POST[ "item_number{$i}" ] ) ) {
+							$item     = explode( '-', $_POST[ "item_number{$i}" ] );
 							$commerce = get_post_meta( $item[ 0 ], 'webcomic_commerce', true );
 							
 							if ( empty( self::$config[ 'collections' ][ $item[ 1 ] ] ) ) {
+								$e++;
+								$error   = true;
 								$message = sprintf( __( 'Invalid collection %s', 'webcomic' ), $item[ 1 ] );
 							} else if ( self::$config[ 'collections' ][ $item[ 1 ] ][ 'commerce' ][ 'business' ] !== $_POST[ 'receiver_email' ] ) {
+								$e++;
+								$error   = true;
 								$message = sprintf( __( 'Incorrect business email %s', 'webcomic' ), $_POST[ 'receiver_email' ] );
-							} else if ( number_format( $commerce[ 'total' ][ $item[ 2 ] ], 2 ) !== number_format( $_POST[ 'mc_gross' ] / $_POST[ 'quantity' ], 2 ) ) {
-								$message = sprintf( __( 'Incorrect price %s', 'webcomic' ), number_format( $_POST[ 'mc_gross' ] / $_POST[ 'quantity' ], 2 ) );
+							} else if ( number_format( $commerce[ 'total' ][ $item[ 2 ] ], 2 ) !== number_format( $_POST[ "mc_gross_{$i}" ] / $_POST[ "quantity{$i}" ], 2 ) ) {
+								$e++;
+								$error   = true;
+								$message = sprintf( __( 'Incorrect price %s', 'webcomic' ), number_format( $_POST[ "mc_gross_{$i}" ] / $_POST[ "quantity{$i}" ], 2 ) );
 							} else if ( self::$config[ 'collections' ][ $item[ 1 ] ][ 'commerce' ][ 'currency' ] !== $_POST[ 'mc_currency' ] ) {
+								$e++;
+								$error   = true;
 								$message = sprintf( __( 'Incorrect currency %s', 'webcomic' ), $_POST[ 'mc_currency' ] );
 							} else {
 								if ( 'original' === $item[ 2 ] ) {
 									update_post_meta( $item[ 0 ], 'webcomic_original', false );
 								}
 								
-								$message = __( 'Sale Get!', 'webcomic' );
+								$message = __( 'Good', 'webcomic' );
 							}
+							
+							$output[] = sprintf( "\t\t%s\t%s\t%s", $_POST[ "item_number{$i}" ], $message, $error ? 'x' : '' );
+							$error = false;
+							
+							$i++;
 						}
-					} else if ( 0 === strcmp( $response, 'INVALID' ) ) {
-						$message = __( 'Invalid response', 'webcomic' );
+						
+						array_unshift( $output, sprintf( "%s\t%s\t%s\t%s\t%s", $_POST[ 'txn_id' ], $_POST[ 'payment_date' ], '', $e ? sprintf( _n( '%s Error', '%s Errors', $e, 'webcomic' ), $e ) : __( 'Sale Get!', 'webcomic' ) ), $e ? 'x' : '' );
+					} else if ( 'donation' === $_GET[ 'webcomic_commerce_ipn' ] ) {
+						if ( empty( self::$config[ 'collections' ][ $_POST[ 'item_number' ] ] ) ) {
+							$error   = true;
+							$message = sprintf( __( 'Invalid collection %s', 'webcomic' ), $_POST[ 'item_number' ] );
+						} else if ( self::$config[ 'collections' ][ $_POST[ 'item_number' ] ][ 'commerce' ][ 'business' ] !== $_POST[ 'receiver_email' ] ) {
+							$error   = true;
+							$message = sprintf( __( 'Incorrect business email %s', 'webcomic' ), $_POST[ 'receiver_email' ] );
+						} else if ( self::$config[ 'collections' ][ $_POST[ 'item_number' ] ][ 'commerce' ][ 'donation' ] and ( number_format( self::$config[ 'collections' ][ $_POST[ 'item_number' ] ][ 'commerce' ][ 'donation' ], 2 ) !== number_format( $_POST[ 'mc_gross' ], 2 ) ) ) {
+							$error   = true;
+							$message = sprintf( __( 'Incorrect price %s', 'webcomic' ), number_format( $_POST[ 'mc_gross' ] / $_POST[ 'quantity' ], 2 ) );
+						} else if ( self::$config[ 'collections' ][ $_POST[ 'item_number' ] ][ 'commerce' ][ 'currency' ] !== $_POST[ 'mc_currency' ] ) {
+							$error   = true;
+							$message = sprintf( __( 'Incorrect currency %s', 'webcomic' ), $_POST[ 'mc_currency' ] );
+						} else {
+							$message = __( 'Donation Get!', 'webcomic' );
+						}
+					} else {
+						$item     = explode( '-', $_POST[ 'item_number' ] );
+						$commerce = get_post_meta( $item[ 0 ], 'webcomic_commerce', true );
+						
+						if ( empty( self::$config[ 'collections' ][ $item[ 1 ] ] ) ) {
+							$error   = true;
+							$message = sprintf( __( 'Invalid collection %s', 'webcomic' ), $item[ 1 ] );
+						} else if ( self::$config[ 'collections' ][ $item[ 1 ] ][ 'commerce' ][ 'business' ] !== $_POST[ 'receiver_email' ] ) {
+							$error   = true;
+							$message = sprintf( __( 'Incorrect business email %s', 'webcomic' ), $_POST[ 'receiver_email' ] );
+						} else if ( number_format( $commerce[ 'total' ][ $item[ 2 ] ], 2 ) !== number_format( $_POST[ 'mc_gross' ] / $_POST[ 'quantity' ], 2 ) ) {
+							$error   = true;
+							$message = sprintf( __( 'Incorrect price %s', 'webcomic' ), number_format( $_POST[ 'mc_gross' ] / $_POST[ 'quantity' ], 2 ) );
+						} else if ( self::$config[ 'collections' ][ $item[ 1 ] ][ 'commerce' ][ 'currency' ] !== $_POST[ 'mc_currency' ] ) {
+							$error   = true;
+							$message = sprintf( __( 'Incorrect currency %s', 'webcomic' ), $_POST[ 'mc_currency' ] );
+						} else {
+							if ( 'original' === $item[ 2 ] ) {
+								update_post_meta( $item[ 0 ], 'webcomic_original', false );
+							}
+							
+							$message = __( 'Sale Get!', 'webcomic' );
+						}
 					}
+				} else if ( 0 === strcmp( $response, 'INVALID' ) ) {
+					$error   = true;
+					$message = __( 'Invalid response', 'webcomic' );
 				}
 				
-				fclose( $socket );
+				curl_close( $curl );
+			} else {
+				$message = __( 'HTTP Error', 'webcomic' );
 			}
 			
 			if ( !$output ) {
-				$output[] = sprintf( "%s\t%s\t%s\t%s", $_POST[ 'txn_id' ], $_POST[ 'payment_date' ], $_POST[ 'item_number' ], $message );
+				$output[] = sprintf( "%s\t%s\t%s\t%s\t%s", $_POST[ 'txn_id' ], $_POST[ 'payment_date' ], $_POST[ 'item_number' ], $message, $error ? 'x' : '' );
 			}
 			
-			$output = apply_filters( 'webcomic_ipn_log', $output );
-			
-			file_put_contents( $logfile, join( "\n", $output ) . "\n", FILE_APPEND );
+			if ( file_exists( $logfile ) and is_writable( $logfile ) ) {
+				file_put_contents( $logfile, join( "\n", $output ) . "\n", FILE_APPEND );
+			} else if ( is_writable( dirname( $logfile ) ) ) {
+				file_put_contents( $logfile, "<?php die; ?>\n" . join( "\n", $output ) . "\n" );
+			}
 		}
 	}
 	
@@ -1162,8 +1171,8 @@ class Webcomic {
 	/** Handle transcript submissions.
 	 * 
 	 * @uses Webcomic::$config
-	 * @action webcomic_transcript_submit
-	 * @action webcomic_transcript_submitted
+	 * @action webcomic_transcript_submit Triggered prior to processing a user-submitted transcript.
+	 * @action webcomic_transcript_submitted Triggered after processing a user-submitted transcript.
 	 */
 	private function save_transcript() {
 		if ( isset( $_POST[ 'webcomic_user_transcript' ] ) and wp_verify_nonce( $_POST[ 'webcomic_user_transcript' ], 'webcomic_user_transcript' ) ) {
@@ -1273,6 +1282,24 @@ class Webcomic {
 			
 			die;
 		}
+	}
+	
+	/** Provides access to the plugin directory path.
+	 * 
+	 * @uses Webcomic::$dir
+	 * @return string
+	 */
+	public static function dir() {
+		return self::$dir;
+	}
+	
+	/** Provides access to the plugin URL path.
+	 * 
+	 * @uses Webcomic::$url
+	 * @return string
+	 */
+	public static function url() {
+		return self::$url;
 	}
 	
 	/** Provides access to the plugin configuration.

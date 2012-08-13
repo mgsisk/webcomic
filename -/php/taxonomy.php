@@ -274,7 +274,7 @@ class WebcomicTaxonomy extends Webcomic {
 	 * We have to use a small amount of Javascript to disable the AJAX
 	 * submission and ensure any files are actually uploaded.
 	 * 
-	 * @filter integer webcomic_upload_size_limit
+	 * @filter integer webcomic_upload_size_limit Filters the maximum allowed upload size for cover and avatar uploads. Defaults to the value returned by `wp_max_upload_size`.
 	 * @param string $taxonomy The add term form taxonomy.
 	 * @hook (webcomic\d+)_storyline_add_form_fields, (webcomic\d+)_character_add_form_fields
 	 */
@@ -314,7 +314,7 @@ class WebcomicTaxonomy extends Webcomic {
 	 * We have to use a small amount of Javascript to disable the AJAX
 	 * submission and ensure any files are actually uploaded.
 	 * 
-	 * @filter integer webcomic_upload_size_limit
+	 * @filter integer webcomic_upload_size_limit Filters the maximum allowed upload size for cover and avatar uploads. Defaults to the value returned by `wp_max_upload_size`.
 	 * @param object $term The current term object.
 	 * @param string $taxonomy The taxonomy of the current term.
 	 * @hook (webcomic\d+)_storyline_edit_form_fields, (webcomic\d+)_character_edit_form_fields

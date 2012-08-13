@@ -50,6 +50,7 @@ class WebcomicAdmin extends Webcomic {
 			require_once self::$dir . '-/php/users.php';       new WebcomicUsers;
 			require_once self::$dir . '-/php/media.php';       new WebcomicMedia;
 			require_once self::$dir . '-/php/config.php';      new WebcomicConfig;
+			require_once self::$dir . '-/php/commerce.php';    new WebcomicCommerce;
 			require_once self::$dir . '-/php/taxonomy.php';    new WebcomicTaxonomy;
 			require_once self::$dir . '-/php/transcripts.php'; new WebcomicTranscripts;
 			
@@ -412,7 +413,7 @@ class WebcomicAdmin extends Webcomic {
 	public function admin_head() {
 		$screen = get_current_screen();
 		
-		if ( preg_match( '/^(page|options-media|media_page_webcomic-generator|settings_page_webcomic-options|(edit-)?webcomic_(transcript|language)|(webcomic\d+_page_|edit-)?webcomic\d+(-options|_storyline|_character)?)$/', $screen->id ) ) {
+		if ( preg_match( '/^(page|options-media|tools_page_webcomic-commerce|tools_page_webcomic-upgrader|media_page_webcomic-generator|settings_page_webcomic-options|(edit-)?webcomic_(transcript|language)|(webcomic\d+_page_|edit-)?webcomic\d+(-options|_storyline|_character)?)$/', $screen->id ) ) {
 			require_once self::$dir . '-/php/help.php';
 			
 			new WebcomicHelp( $screen );
@@ -479,7 +480,7 @@ class WebcomicAdmin extends Webcomic {
 	 */
 	public function plugin_row_meta( $meta, $file, $data ) {
 		if ( 'Webcomic' === $data[ 'Name' ] ) {
-			$meta[] = sprintf( '<a href="%s" target="_blank">%s</a>', add_query_arg( array( 'hosted_button_id' => 'UD3J2DJPSN9UC' ), 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick' ), __( 'Donate', 'webcomic' ) );
+			$meta[] = sprintf( '<a href="%s" target="_blank">%s</a>', add_query_arg( array( 'hosted_button_id' => 'UD3J2DJPSN9UC' ), '//paypal.com/cgi-bin/webscr?cmd=_s-xclick' ), __( 'Donate', 'webcomic' ) );
 			
 			if ( self::$config[ 'uninstall' ] ) {
 				$meta[] = sprintf( '<strong style="color:#bc0b0b">%s</strong>', self::$config[ 'convert' ] ?  __( 'Webcomic data will be converted to posts, categories, and tags if the plugin is deactivated.', 'webcomic' ) : __( 'Webcomic data will be deleted if the plugin is deactivated.', 'webcomic' ) );

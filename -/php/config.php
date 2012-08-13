@@ -402,7 +402,7 @@ class WebcomicConfig extends Webcomic {
 	
 	/** Render the Cover setting.
 	 * 
-	 * @filter integer webcomic_upload_size_limit
+	 * @filter integer webcomic_upload_size_limit Filters the maximum allowed upload size for poster uploads. Defaults to the value returned by `wp_max_upload_size`.
 	 * @uses Webcomic::$config
 	 */
 	public function collection_image() {
@@ -452,7 +452,7 @@ class WebcomicConfig extends Webcomic {
 					printf(
 						'<option value="%s"%s>%s</option>',
 						$theme[ 'Template' ],
-						selected( self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'theme' ], $theme[ 'Template' ], false ),
+						selected( $theme[ 'Template' ], self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'theme' ], false ),
 						esc_html( $theme[ 'Name' ] )
 					);
 				}
@@ -556,7 +556,7 @@ class WebcomicConfig extends Webcomic {
 		?>
 		<select name="webcomic_transcripts_languages[]" id="webcomic_transcripts_languages" style="min-height:8em;vertical-align:top" multiple>
 			<optgroup label="<?php esc_attr_e( 'Transcript Languages', 'webcomic' ); ?>">
-				<option value="!"<?php selected( '!' === self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'transcripts' ][ 'languages' ][ 0 ] ); ?>><?php _e( '- Any -', 'webcomic' ); ?></option>
+				<option value="!"<?php selected( '!', self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'transcripts' ][ 'languages' ][ 0 ] ); ?>><?php _e( '- Any -', 'webcomic' ); ?></option>
 				<?php
 					if ( $terms = get_terms( 'webcomic_language', array( 'get' => 'all' ) ) and !is_wp_error( $terms ) ) {
 						foreach ( $terms as $term ) {
@@ -582,7 +582,7 @@ class WebcomicConfig extends Webcomic {
 	public function collection_commerce_business() {
 		?>
 		<input type="email" name="webcomic_commerce_business" id="webcomic_commerce_business" value="<?php echo esc_attr( self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'commerce' ][ 'business' ] ); ?>" class="regular-text">
-		<span class="description"><a href="http://paypal.com" target="_blank"><?php _e( 'Get a PayPal Account', 'webcomic' ); ?></a></span>
+		<span class="description"><a href="//paypal.com" target="_blank"><?php _e( 'Get a PayPal Account', 'webcomic' ); ?></a></span>
 		<?php
 	}
 	
@@ -842,7 +842,7 @@ class WebcomicConfig extends Webcomic {
 		?>
 		<label>
 			<input type="text" name="webcomic_slugs[archive]" id="webcomic_slugs_archive" value="<?php echo self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'slugs' ][ 'archive' ]; ?>" class="regular-text">
-			<?php printf( '<span class="description">%s/<b>%s</b>/</span>', get_home_url(), self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'slugs' ][ 'archive' ] ); ?>
+			<?php printf( '<span class="description">%s/<b>%s</b>/</span>', home_url(), self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'slugs' ][ 'archive' ] ); ?>
 		</label>
 		<?php
 	}
@@ -855,7 +855,7 @@ class WebcomicConfig extends Webcomic {
 		?>
 		<label>
 			<input type="text" name="webcomic_slugs[webcomic]" id="webcomic_slugs_webcomic" value="<?php echo self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'slugs' ][ 'webcomic' ]; ?>" class="regular-text">
-			<?php printf( '<span class="description">%s/<b>%s</b>/single-webcomic-slug</span>', get_home_url(), self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'slugs' ][ 'webcomic' ] ); ?>
+			<?php printf( '<span class="description">%s/<b>%s</b>/single-webcomic-slug</span>', home_url(), self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'slugs' ][ 'webcomic' ] ); ?>
 		</label>
 		<?php
 	}
@@ -868,7 +868,7 @@ class WebcomicConfig extends Webcomic {
 		?>
 		<label>
 			<input type="text" name="webcomic_slugs[storyline]" id="webcomic_slugs_storyline" value="<?php echo self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'slugs' ][ 'storyline' ]; ?>" class="regular-text">
-			<?php printf( '<span class="description">%s/<b>%s</b>/single-storyline-slug</span>', get_home_url(), self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'slugs' ][ 'storyline' ] ); ?>
+			<?php printf( '<span class="description">%s/<b>%s</b>/single-storyline-slug</span>', home_url(), self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'slugs' ][ 'storyline' ] ); ?>
 		</label>
 		<?php
 	}
@@ -881,7 +881,7 @@ class WebcomicConfig extends Webcomic {
 		?>
 		<label>
 			<input type="text" name="webcomic_slugs[character]" id="webcomic_slugs_character" value="<?php echo self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'slugs' ][ 'character' ]; ?>" class="regular-text">
-			<?php printf( '<span class="description">%s/<b>%s</b>/single-character-slug</span>', get_home_url(), self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'slugs' ][ 'character' ] ); ?>
+			<?php printf( '<span class="description">%s/<b>%s</b>/single-character-slug</span>', home_url(), self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'slugs' ][ 'character' ] ); ?>
 		</label>
 		<?php
 	}
@@ -1122,7 +1122,7 @@ class WebcomicConfig extends Webcomic {
 			
 			if ( $collection[ 'twitter' ][ 'consumer_key' ] !== self::$config[ 'collections' ][ $id ][ 'twitter' ][ 'consumer_key' ] or $collection[ 'twitter' ][ 'consumer_secret' ] !== self::$config[ 'collections' ][ $id ][ 'twitter' ][ 'consumer_secret' ] ) {
 				$collection[ 'twitter' ][ 'oauth_token' ] = $collection[ 'twitter' ][ 'oauth_secret' ] = '';
-			} else if ( $twitter[ 'oauth_token' ] and $twitter[ 'oauth_secret' ] ) {
+			} else if ( $collection[ 'twitter' ][ 'oauth_token' ] and $collection[ 'twitter' ][ 'oauth_secret' ] ) {
 				$collection[ 'twitter' ][ 'request_token' ] = $collection[ 'twitter' ][ 'request_secret' ] = '';
 			}
 			
@@ -1132,7 +1132,7 @@ class WebcomicConfig extends Webcomic {
 			$collection[ 'commerce' ][ 'total' ][ 'international' ] = round( $collection[ 'commerce' ][ 'price' ][ 'international' ] + $collection[ 'commerce' ][ 'shipping' ][ 'international' ], 2 );
 			$collection[ 'commerce' ][ 'total' ][ 'original' ]      = round( $collection[ 'commerce' ][ 'price' ][ 'original' ] + $collection[ 'commerce' ][ 'shipping' ][ 'original' ], 2 );
 			
-			if ( $_POST[ 'webcomic_transcripts_languages' ] and !in_array( '!', $_POST[ 'webcomic_transcripts_languages' ] ) ) {
+			if ( !empty( $_POST[ 'webcomic_transcripts_languages' ] ) and !in_array( '!', $_POST[ 'webcomic_transcripts_languages' ] ) ) {
 				$collection[ 'transcripts' ][ 'languages' ] = array();
 				
 				foreach ( $_POST[ 'webcomic_transcripts_languages' ] as $language ) {

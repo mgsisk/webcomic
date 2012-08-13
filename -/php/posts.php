@@ -237,7 +237,7 @@ class WebcomicPosts extends Webcomic {
 	 * @param string $post Post object to update.
 	 * @uses Webcomic::$config
 	 * @hook transition_post_status
-	 * @filter string webcomic_tweet $post
+	 * @filter string webcomic_tweet Filters the tweet text pushed to Twitter whenever a webcomic is published. Defaults to the collection-specific tweet format.
 	 */
 	public function tweet_webcomic( $new, $old, $post ) {
 		if ( 'publish' === $new and 'publish' !== $old and !empty( self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'format' ] ) and !empty( self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'oauth_token' ] ) and !empty( self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'oauth_secret' ] ) ) {
@@ -550,7 +550,7 @@ class WebcomicPosts extends Webcomic {
 		
 		wp_nonce_field( 'webcomic_meta_commerce', 'webcomic_meta_commerce' );
 		?>
-		<p><label><input type="checkbox" name="webcomic_commerce_prints"<?php disabled( !self::$config[ 'collections' ][ $post->post_type ][ 'commerce' ][ 'business' ] ); checked( ( 'auto-draft' === $post->post_status and self::$config[ 'collections' ][ $post->post_type ][ 'commerce' ][ 'prints' ] ) or ( self::$config[ 'collections' ][ $post->post_type ][ 'commerce' ][ 'business' ] and get_post_meta( $post->ID, 'webcomic_prints', true ) ) ); ?>> <?php _e( 'Sell prints', 'webcomic' ); ?></label></p>
+		<p><label><input type="checkbox" name="webcomic_commerce_prints"<?php checked( ( 'auto-draft' === $post->post_status and self::$config[ 'collections' ][ $post->post_type ][ 'commerce' ][ 'prints' ] ) or ( self::$config[ 'collections' ][ $post->post_type ][ 'commerce' ][ 'business' ] and get_post_meta( $post->ID, 'webcomic_prints', true ) ) ); disabled( !self::$config[ 'collections' ][ $post->post_type ][ 'commerce' ][ 'business' ] ); ?>> <?php _e( 'Sell prints', 'webcomic' ); ?></label></p>
 		<div style="margin:0 -11px">
 			<table class="widefat fixed">
 				<thead>

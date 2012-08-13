@@ -6,7 +6,7 @@ Requires at least: 3.3
 Tested up to: 3.4.1
 Stable tag: 4
 License: GPL2
-License URI: //www.gnu.org/licenses/gpl-2.0.html
+License URI: //gnu.org/licenses/gpl-2.0.html
 
 Comic publishing power for the web.
 
@@ -37,7 +37,7 @@ You can install Webcomic from the **Plugins > Add New** page in the administrati
 
 = Manual Installation =
 
-1. Download and extract Webcomic from the WordPress plugin directory.
+1. Download and extract Webcomic from the [WordPress plugin directory](//wordpress.org/extend/plugins/webcomic).
 2. Upload the `webcomic` directory to your `wp-content/plugins` directory.
 3. Activate Webcomic through the **Plugins > Installed Plugins** page in the administrative dashboard.
 
@@ -48,7 +48,7 @@ You can install Webcomic from the **Plugins > Add New** page in the administrati
 Once installed and activated you can use Webcomic in one of three ways:
 
 1. Turn on the [**Integrate** option](//github.com/mgsisk/webcomic/Wiki/Configuring#Integrate) found on the **Settings > Webcomic** page in the administrative dashboard.
-2. Use an [official Webcomic theme](http://webcomic.nu/download) to get the most out of Webcomic's features with minimal hassle.
+2. Use a [Webcomic-ready theme](http://webcomic.nu/download) to get the most out of Webcomic's features with minimal hassle.
 3. Leverage Webcomic's new [template tags, shortcodes]((//github.com/mgsisk/webcomic/Wiki/Template-Tags-and-Shortcodes), and [widgets](//github.com/mgsisk/webcomic/Wiki/Widgets) to [modify an existing theme](//wordpress.org/extend/themes) or [build your own](//codex.wordpress.org/Theme_Development).
 
 = Where can I get help with Webcomic? =

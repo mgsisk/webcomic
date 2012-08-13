@@ -117,7 +117,7 @@ class WebcomicShortcode extends Webcomic {
 	 * @return string
 	 * @uses WebcomicTag::verify_webcomic_age()
 	 * @uses WebcomicTag::get_webcomic_collection()
-	 * @filter string webcomic_verify_age_inline $clear, $collection, $age, $content
+	 * @filter string webcomic_verify_age_inline Filters the output of the `verify_webcomic_age` shortcode. Defaults to a generic age verification message.
 	 */
 	public function verify_webcomic_age( $atts, $content ) {
 		extract( shortcode_atts( array(
@@ -152,7 +152,7 @@ class WebcomicShortcode extends Webcomic {
 	 * @param string $content Shortcode content.
 	 * @return string
 	 * @uses WebcomicTag::verify_webcomic_role()
-	 * @filter string webcomic_verify_role_inline $loggedin, $collection, $roles, $content
+	 * @filter string webcomic_verify_role_inline Filters the output of the `verify_webcomic_role` shortcode. Defaults to a generic role verification message.
 	 */
 	public function verify_webcomic_role( $atts, $content ) {
 		extract( shortcode_atts( array(
