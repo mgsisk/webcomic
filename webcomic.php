@@ -31,7 +31,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 
  * @todo Future Bulk media actions; see core.trac.wordpress.org/ticket/16031
  * @todo Future Screen Options; see core.trac.wordpress.org/ticket/18323
- * @todo 4 Add short descriptions for actions and filters.
  * 
  * @package Webcomic
  * @copyright 2008 - 2012 Michael Sisk
