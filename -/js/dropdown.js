@@ -4,7 +4,7 @@ jQuery( function( $ ) {
 		var url = $( this ).find( 'option:selected' ).data( 'webcomic-url' );
 		
 		if ( url ) {
-			window.location.href = $( this ).find( 'option:selected' ).data( 'webcomic-url' );
+			window.location.href = url;
 		}
 	} );
 } );
