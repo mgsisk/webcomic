@@ -316,7 +316,7 @@ class WebcomicHelp extends Webcomic {
 			<p><strong>%s</strong></p>
 			<p><a href="//github.com/mgsisk/webcomic/wiki" target="_blank">%s</a></p>
 			<p><a href="//vimeo.com/channels/webcomic" target="_blank">%s</a></p>
-			<p><a href="http://webcomic.nu/support" target="_blank">%s</a></p>
+			<p><a href="//groups.google.com/d/forum/webcomicnu" target="_blank">%s</a></p>
 			<p><a href="//github.com/mgsisk/webcomic/issues" target="_blank">%s</a></p>
 			<hr>
 			<p><a href="support@webcomic.nu">%s</a></p>',

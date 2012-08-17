@@ -55,7 +55,7 @@ Once installed and activated you can use Webcomic in one of three ways:
 
 - [Beginner's Guide](//github.com/mgsisk/webcomic/wiki)
 - [Video Tutorials](//vimeo.com/channels/webcomic)
-- [Support Forum](http://webcomic.nu/support)
+- [Support Forum](//groups.google.com/d/forum/webcomicnu)
 - [Issue Tracker](//github.com/mgsisk/webcomic/issues)
 - [Email Support](mailto:support@webcomic.nu)
 
