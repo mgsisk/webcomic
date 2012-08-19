@@ -2774,7 +2774,7 @@ if ( !function_exists( 'is_first_webcomic' ) ) {
 	 * @return boolean
 	 * @uses WebcomicTag::is_relative_webcomic()
 	 */
-	public static function is_first_webcomic( $in_same_term = false, $excluded_terms = false, $taxonomy = 'storyline', $collection = '' ) {
+	function is_first_webcomic( $in_same_term = false, $excluded_terms = false, $taxonomy = 'storyline', $collection = '' ) {
 		return WebcomicTag::is_relative_webcomic( 'first', $in_same_term, $excluded_terms, $taxonomy, $collection );
 	}
 }
@@ -2803,7 +2803,7 @@ if ( !function_exists( 'is_last_webcomic' ) ) {
 	 * @return boolean
 	 * @uses WebcomicTag::is_relative_webcomic()
 	 */
-	public static function is_last_webcomic( $in_same_term = false, $excluded_terms = false, $taxonomy = 'storyline', $collection = '' ) {
+	function is_last_webcomic( $in_same_term = false, $excluded_terms = false, $taxonomy = 'storyline', $collection = '' ) {
 		return WebcomicTag::is_relative_webcomic( 'last', $in_same_term, $excluded_terms, $taxonomy, $collection );
 	}
 }
