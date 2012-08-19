@@ -161,10 +161,11 @@ class WebcomicTag extends Webcomic {
 	 * @uses Webcomic::$config
 	 */
 	public static function is_webcomic_attachment( $collection = '' ) {
-		$the_post   = get_post();
+		global $post;
+		
 		$collection = $collection ? ( array ) $collection : array_keys( self::$config[ 'collections' ] );
 		
-		return ( is_attachment() and preg_match( '/^image\//', get_post_mime_type( $the_post ) ) and in_array( get_post_type( $the_post->post_parent ), $collection ) );
+		return ( is_attachment() and preg_match( '/^image\//', get_post_mime_type( $post ) ) and in_array( get_post_type( $post->post_parent ), $collection ) );
 	}
 	
 	/** Is the query for a webcomic-related page?
