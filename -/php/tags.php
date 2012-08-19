@@ -154,6 +154,26 @@ class WebcomicTag extends Webcomic {
 		return ( is_singular( array_keys( self::$config[ 'collections' ] ) ) and ( !$dynamic or 'xmlhttprequest' === strtolower( $_SERVER[ 'HTTP_X_REQUESTED_WITH' ] ) ) );
 	}
 	
+	/** Is the query for a relatieve webcomic?
+	 * 
+	 * @param string $relative The relative post to check for; one of 'first' or 'last'.
+	 * @param mixed $in_same_term Whether the relative webcomic should be in a same term. May also be an array or comma-separated list of inclusive term IDs.
+	 * @param mixed $excluded_terms An array or comma-separated list of excluded term IDs.
+	 * @param string $taxonomy The taxonomy of the terms specified with $in_same_term and $excluded_terms arguments. The shorthand 'storyline' or 'character' may be used.
+	 * @param string $collection The collection to compare from. Used when comparing outside of the loop.
+	 * @return boolean
+	 * @uses Webcomic::get_relative_webcomic()
+	 */
+	public static function is_relative_webcomic( $relative = 'first', $in_same_term = false, $excluded_terms = false, $taxonomy = 'storyline', $collection = '' ) {
+		global $post;
+		
+		if ( !$the_post = self::get_relative_webcomic( $relative, $in_same_term, $excluded_terms, $taxonomy, $collection ) ) {
+			return false;
+		}
+		
+		return ( $post->ID === $the_post->ID );
+	}
+	
 	/** Is the query for a Webcomic-recognized attachment?
 	 * 
 	 * @param mixed $collection Collection ID or an array of these to check.
@@ -2727,6 +2747,64 @@ if ( !function_exists( 'is_webcomic' ) ) {
 	 */
 	function is_webcomic( $dynamic = false ) {
 		return WebcomicTag::is_webcomic( $dynamic );
+	}
+}
+
+if ( !function_exists( 'is_first_webcomic' ) ) {
+	/** Is the query for the first webcomic?
+	 * 
+	 * <code>
+	 * if ( is_first_webcomic() ) {
+	 * 	// this is the first webcomic in the collection
+	 * }
+	 * 
+	 * if ( is_first_webcomic( true, 42, 'character' ) ) {
+	 * 	// This is the first webcomic featuring any similar character, excluding the character with ID 42
+	 * }
+	 * 
+	 * if ( is_first_webcomic( false, false, '', 'webcomic42' ) ) {
+	 * 	// this is the first webcomic in collection 42
+	 * }
+	 * </code>
+	 * 
+	 * @param mixed $in_same_term Whether the relative webcomic should be in a same term. May also be an array or comma-separated list of inclusive term IDs.
+	 * @param mixed $excluded_terms An array or comma-separated list of excluded term IDs.
+	 * @param string $taxonomy The taxonomy of the terms specified with $in_same_term and $excluded_terms arguments. The shorthand 'storyline' or 'character' may be used.
+	 * @param string $collection The collection to compare from. Used when comparing outside of the loop.
+	 * @return boolean
+	 * @uses WebcomicTag::is_relative_webcomic()
+	 */
+	public static function is_first_webcomic( $in_same_term = false, $excluded_terms = false, $taxonomy = 'storyline', $collection = '' ) {
+		return WebcomicTag::is_relative_webcomic( 'first', $in_same_term, $excluded_terms, $taxonomy, $collection );
+	}
+}
+
+if ( !function_exists( 'is_last_webcomic' ) ) {
+	/** Is the query for the last webcomic?
+	 * 
+	 * <code>
+	 * if ( is_last_webcomic() ) {
+	 * 	// this is the last webcomic in the collection
+	 * }
+	 * 
+	 * if ( is_last_webcomic( true, 42, 'character' ) ) {
+	 * 	// This is the last webcomic featuring any similar character, excluding the character with ID 42
+	 * }
+	 * 
+	 * if ( is_last_webcomic( false, false, '', 'webcomic42' ) ) {
+	 * 	// this is the last webcomic in collection 42
+	 * }
+	 * </code>
+	 * 
+	 * @param mixed $in_same_term Whether the relative webcomic should be in a same term. May also be an array or comma-separated list of inclusive term IDs.
+	 * @param mixed $excluded_terms An array or comma-separated list of excluded term IDs.
+	 * @param string $taxonomy The taxonomy of the terms specified with $in_same_term and $excluded_terms arguments. The shorthand 'storyline' or 'character' may be used.
+	 * @param string $collection The collection to compare from. Used when comparing outside of the loop.
+	 * @return boolean
+	 * @uses WebcomicTag::is_relative_webcomic()
+	 */
+	public static function is_last_webcomic( $in_same_term = false, $excluded_terms = false, $taxonomy = 'storyline', $collection = '' ) {
+		return WebcomicTag::is_relative_webcomic( 'last', $in_same_term, $excluded_terms, $taxonomy, $collection );
 	}
 }
 
