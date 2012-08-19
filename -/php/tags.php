@@ -2708,7 +2708,7 @@ if ( !function_exists( 'is_webcomic' ) ) {
 	 * 
 	 * <code>
 	 * if ( is_webcomic() ) {
-	 * 	// this is aany single webcomic page
+	 * 	// this is any single webcomic page
 	 * }
 	 * 
 	 * if ( is_webcomic( true ) ) {
