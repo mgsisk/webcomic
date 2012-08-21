@@ -1701,7 +1701,7 @@ class WebcomicTag extends Webcomic {
 		$languages = array();
 		
 		if ( ( $terms = in_array( '!', self::$config[ 'collections' ][ $the_post->post_type ][ 'transcripts' ][ 'languages' ] ) ? get_terms( 'webcomic_language', array( 'get' => 'all', 'cache_domain' => 'webcomic_transcript_form' ) ) : get_terms( 'webcomic_language', array( 'get' => 'all', 'cache_domain' => 'webcomic_transcript_form', 'include' => self::$config[ 'collections' ][ $the_post->post_type ][ 'transcripts' ][ 'languages' ] ) ) ) and !is_wp_error( $terms ) ) {
-			$update_terms     = $update_post ? wp_get_object_terms( $update_post->ID, 'webcomic_language', array( 'fields' => 'ids' ) ) : array();
+			$update_terms     = empty( $update_post ) ? array() : wp_get_object_terms( $update_post->ID, 'webcomic_language', array( 'fields' => 'ids' ) );
 			$queried_language = get_query_var( 'transcripts' );
 			
 			foreach ( $terms as $term ) {
