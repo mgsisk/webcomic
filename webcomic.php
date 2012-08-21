@@ -710,6 +710,7 @@ class Webcomic {
 			}
 			
 			if ( isset( $_GET[ 'webcomic_dynamic' ] ) and 'xmlhttprequest' === strtolower( $_SERVER[ 'HTTP_X_REQUESTED_WITH' ] ) ) {
+				setup_postdata( $post );
 				
 				if ( !locate_template( array( "webcomic/dynamic-{$_GET[ 'webcomic_dynamic' ]}-{$collection}.php", "webcomic/dynamic-{$_GET[ 'webcomic_dynamic' ]}.php", "webcomic/dynamic-{$collection}.php", 'webcomic/dynamic.php' ), true, false ) ) {
 					require self::$dir . '-/php/integrate/dynamic.php';
