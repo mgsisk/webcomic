@@ -819,9 +819,9 @@ class Webcomic {
 		global $post;
 		
 		if ( !empty( self::$config[ 'collections' ][ $post->post_type ][ 'feeds' ][ 'hook' ] ) ) {
-			$prepend = $append = '';
-			$feed_size = self::$config[ 'collections' ][ $post->post_type ][ 'feeds' ][ 'size' ];
-			
+			$prepend     = $append = '';
+			$feed_size   = self::$config[ 'collections' ][ $post->post_type ][ 'feeds' ][ 'size' ];
+			$attachments = self::get_attachments( $post->ID );
 			
 			if ( $template = locate_template( array( "webcomic/feed-{$post->post_type}.php", 'webcomic/feed.php' ) ) ) {
 				require $template;
