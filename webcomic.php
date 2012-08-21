@@ -578,6 +578,7 @@ class Webcomic {
 				$post->post_title = __( 'Restricted Content', 'webcomic' );
 				$pages            = array( is_user_logged_in() ? __( "You don't have permission to view this content.", 'webcomic' ) : sprintf( __( 'You must <a href="%s">log in</a> to view this content.', 'webcomic' ), wp_login_url( get_permalink( $post->ID ) ) ) );
 				$post->content    = $pages[ 0 ];
+				$post->ID         = 0;
 			} else if ( !$clear = WebcomicTag::verify_webcomic_age( $post->post_type ) ) {
 				$post->post_title = __( 'Restricted Content', 'webcomic' );
 				$pages            = array( is_null( $clear ) ? sprintf( __( 'Please <a href="%s">verify your age</a> to view this content.', 'webcomic' ), get_permalink( $post->ID ) ) : __( "You don't have permission to view this content.", 'webcomic' ) );
@@ -709,11 +710,8 @@ class Webcomic {
 			}
 			
 			if ( isset( $_GET[ 'webcomic_dynamic' ] ) and 'xmlhttprequest' === strtolower( $_SERVER[ 'HTTP_X_REQUESTED_WITH' ] ) ) {
-				$collection = self::$collection;
 				
 				if ( !locate_template( array( "webcomic/dynamic-{$_GET[ 'webcomic_dynamic' ]}-{$collection}.php", "webcomic/dynamic-{$_GET[ 'webcomic_dynamic' ]}.php", "webcomic/dynamic-{$collection}.php", 'webcomic/dynamic.php' ), true, false ) ) {
-					setup_postdata( $post );
-					
 					require self::$dir . '-/php/integrate/dynamic.php';
 				}
 				
