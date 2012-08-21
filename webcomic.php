@@ -823,7 +823,9 @@ class Webcomic {
 			$feed_size = self::$config[ 'collections' ][ $post->post_type ][ 'feeds' ][ 'size' ];
 			
 			
-			if ( !locate_template( array( "webcomic/feed-{$post->post_type}.php", 'webcomic/feed.php' ), true, false ) and $attachments = self::get_attachments( $post->ID ) ) {
+			if ( $template = locate_template( array( "webcomic/feed-{$post->post_type}.php", 'webcomic/feed.php' ) ) ) {
+				require $template;
+			} else {
 				require self::$dir . '-/php/integrate/feed.php';
 			}
 			
@@ -921,7 +923,9 @@ class Webcomic {
 		if ( self::$integrate and in_the_loop() and $wp_query->is_main_query() and !is_feed() and $collection = get_post_type( $post ) and isset( self::$config[ 'collections' ][ $collection ] ) ) {
 			$prepend = $append = '';
 			
-			if ( !locate_template( array( "webcomic/the_excerpt-{$collection}.php", 'webcomic/the_excerpt.php' ), true, false ) ) {
+			if ( $template = locate_template( array( "webcomic/the_excerpt-{$collection}.php", 'webcomic/the_excerpt.php' ) ) ) {
+				require $template;
+			} else {
 				require self::$dir . '-/php/integrate/the_excerpt.php';
 			}
 		}
@@ -943,7 +947,9 @@ class Webcomic {
 		if ( self::$integrate and in_the_loop() and $wp_query->is_main_query() and !is_feed() and $collection = get_post_type( $post ) and isset( self::$config[ 'collections' ][ $collection ] ) ) {
 			$prepend = $append = '';
 			
-			if ( !locate_template( array( "webcomic/the_content-{$collection}.php", 'webcomic/the_content.php' ), true, false ) ) {
+			if ( $template = locate_template( array( "webcomic/the_content-{$collection}.php", 'webcomic/the_content.php' ) ) ) {
+				require $template;
+			} else {
 				require self::$dir . '-/php/integrate/the_content.php';
 			}
 			
