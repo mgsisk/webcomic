@@ -748,7 +748,7 @@ class Webcomic {
 			$post_type = array( 'post' );
 			
 			foreach ( array_keys( self::$config[ 'collections' ] ) as $k ) {
-				if ( $collection[ 'feeds' ][ 'main' ] ) {
+				if ( self::$config[ 'collections' ][ $k ][ 'feeds' ][ 'main' ] ) {
 					$post_type[] = $k;
 				}
 			}
