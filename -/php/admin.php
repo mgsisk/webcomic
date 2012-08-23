@@ -501,7 +501,7 @@ class WebcomicAdmin extends Webcomic {
 	 */
 	public function plugin_action_links( $actions, $file, $data, $context ) {
 		if ( 'Webcomic' === $data[ 'Name' ] ) {
-			$actions[ 'settings' ] = sprintf( '<a href="%s">%s</a>', esc_url( add_query_arg( array( 'page' => 'webcomic' ), admin_url( 'options-general.php' ) ) ), __( 'Settings', 'webcomic' ) );
+			$actions[ 'settings' ] = sprintf( '<a href="%s">%s</a>', esc_url( add_query_arg( array( 'page' => 'webcomic-options' ), admin_url( 'options-general.php' ) ) ), __( 'Settings', 'webcomic' ) );
 			$actions[ 'support' ]  = sprintf( '<a href="//groups.google.com/d/forum/webcomicnu" target="_blank">%s</a>', __( 'Support', 'webcomic' ) );
 		}
 		
