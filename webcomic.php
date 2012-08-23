@@ -497,7 +497,7 @@ class Webcomic {
 	 * @filter array webcomic_opengraph Filters the Open Graph data Webcomic adds to all Webcomic-related pages.
 	 */
 	public function head() {
-		global $wp_the_query, $wp_query, $post;
+		global $wp_query, $post;
 		
 		if ( self::$collection ) {
 			$object                   = $wp_query->get_queried_object();
