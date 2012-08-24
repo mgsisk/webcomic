@@ -13,9 +13,9 @@ _**Everything!**_ Webcomic has been rebuilt to provide you with leaner, meaner w
 - [File management](//github.com/mgsisk/webcomic/wiki/Media) handled through the WordPress Media Library.
 - Each [collection](//github.com/mgsisk/webcomic/wiki/Webcomic-Collections) is now a custom post type with unique [storyline](//github.com/mgsisk/webcomic/wiki/Storylines) and [character](//github.com/mgsisk/webcomic/wiki/Characters) taxonomies.
 - [More](//github.com/mgsisk/webcomic/wiki/General-Settings) [collection](//github.com/mgsisk/webcomic/wiki/Transcript-Settings)-[specific](//github.com/mgsisk/webcomic/wiki/Commerce-Settings) [settings](//github.com/mgsisk/webcomic/wiki/Access-Settings) [provide](//github.com/mgsisk/webcomic/wiki/Post-Settings) [greater](//github.com/mgsisk/webcomic/wiki/Permalink-Settings) [control](//github.com/mgsisk/webcomic/wiki/Twitter-Settings) over each webcomic on your site.
-- [Transcripts](github.com/mgsisk/webcomic/wiki/Transcripts) are now a custom post type, taking full advantage of the administrative features WordPress provides.
-- Improved [theme integration](github.com/mgsisk/webcomic/wiki/Configuring) makes it easier than ever to start using Webcomic right away with almost any WordPress theme.
-- New and refactored [template tags, shortcode](//github.com/mgsisk/webcomic/wiki/Template-Tags-and-Shortcodes), and [widgets](github.com/mgsisk/webcomic/wiki/Widgets) for greater control and customization of your Webcomic-powered site.
+- [Transcripts](//github.com/mgsisk/webcomic/wiki/Transcripts) are now a custom post type, taking full advantage of the administrative features WordPress provides.
+- Improved [theme integration](//github.com/mgsisk/webcomic/wiki/Configuring) makes it easier than ever to start using Webcomic right away with almost any WordPress theme.
+- New and refactored [template tags, shortcode](//github.com/mgsisk/webcomic/wiki/Template-Tags-and-Shortcodes), and [widgets](//github.com/mgsisk/webcomic/wiki/Widgets) for greater control and customization of your Webcomic-powered site.
 
 ## Installation
 
