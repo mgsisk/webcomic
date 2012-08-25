@@ -2,7 +2,7 @@
 
 Webcomic is a plugin for [WordPress](//wordpress.org) that provides a host of features for creating, managing, and sharing webcomics. Take control of your webcomic with multi-comic management, theme integration, dynamic navigation, and more.
 
-[**Existing Webcomic users should read this before upgrading.**](//github.com/mgsisk/webcomic/wiki/Upgrading)
+[**Existing Webcomic users should read this before upgrading.**](https://github.com/mgsisk/webcomic/wiki/Upgrading#Upgrading-from-Webcomic-1%2C-2%2C-or-3)
 
 ## [★ New in Webcomic 4 ★](//vimeo.com/channels/webcomic)
 
