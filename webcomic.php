@@ -1316,7 +1316,7 @@ class Webcomic {
 }
 
 if ( is_admin() ) { // Load and instantiate the administrative class.
-	require_once '-/php/admin.php'; new WebcomicAdmin;
+	require_once dirname( __FILE__ ) . '/-/php/admin.php'; new WebcomicAdmin;
 } else { // Instantiate the standard class.
 	new Webcomic;
 }
