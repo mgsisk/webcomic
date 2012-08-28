@@ -853,7 +853,7 @@ class WebcomicLegacy extends Webcomic {
 				update_option( 'large_size_h', $legacy_config[ 'large_h' ] );
 			}
 			
-			foreach ( $legacy_config[ 'transcribe_language' ] as $k => $v ) {
+			foreach ( ( array ) $legacy_config[ 'transcribe_language' ] as $k => $v ) {
 				wp_insert_term( $v, 'webcomic_language', array( 'slug' => $k ) );
 			}
 			
