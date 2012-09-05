@@ -42,7 +42,7 @@ class WebcomicWidgets extends Webcomic {
  * @package Webcomic
  */
 class Widget_WebcomicLink extends WP_Widget {
-	/** Initialize the plugin.
+	/** Initialize the widget.
 	 */
 	public function __construct() {
 		parent::__construct( false, __( 'Webcomic Link', 'webcomic' ), array( 'description' => __( 'Link to the first, last, or a random webcomic.', 'webcomic' ) ) );
@@ -168,7 +168,7 @@ class Widget_WebcomicLink extends WP_Widget {
  * @package Webcomic
  */
 class Widget_DynamicWebcomic extends WP_Widget {
-	/** Initialize the plugin.
+	/** Initialize the widget.
 	 */
 	public function __construct() {
 		parent::__construct( false, __( 'Dynamic Webcomic', 'webcomic' ), array( 'description' => __( 'A dynamic browser for your webcomics.', 'webcomic' ) ) );
@@ -285,7 +285,7 @@ class Widget_DynamicWebcomic extends WP_Widget {
  * @package Webcomic
  */
 class Widget_RecentWebcomics extends WP_Widget {
-	/** Initialize the plugin.
+	/** Initialize the widget.
 	 */
 	public function __construct() {
 		parent::__construct( false, __( 'Recent Webcomics', 'webcomic' ), array( 'description' => __( 'The most recent webcomics on your site.', 'webcomic' ) ) );
@@ -392,7 +392,7 @@ class Widget_RecentWebcomics extends WP_Widget {
  * @package Webcomic
  */
 class Widget_WebcomicDonation extends WP_Widget {
-	/** Initialize the plugin.
+	/** Initialize the widget.
 	 */
 	public function __construct() {
 		parent::__construct( false, __( 'Webcomic Donation', 'webcomic' ), array( 'description' => __( 'A donation form for your webcomics.', 'webcomic' ) ) );
@@ -492,7 +492,7 @@ class Widget_WebcomicDonation extends WP_Widget {
  * @package Webcomic
  */
 class Widget_WebcomicStorylines extends WP_Widget {
-	/** Initialize the plugin.
+	/** Initialize the widget.
 	 */
 	public function __construct() {
 		parent::__construct( false, __( 'Webcomic Storylines', 'webcomic' ), array( 'description' => __( 'A list, dropdown, or cloud of Webcomic storylines.', 'webcomic' ) ) );
@@ -613,7 +613,7 @@ class Widget_WebcomicStorylines extends WP_Widget {
  * @package Webcomic
  */
 class Widget_WebcomicCharacters extends WP_Widget {
-	/** Initialize the plugin.
+	/** Initialize the widget.
 	 */
 	public function __construct() {
 		parent::__construct( false, __( 'Webcomic Characters', 'webcomic' ), array( 'description' => __( 'A list, dropdown, or cloud of Webcomic characters.', 'webcomic' ) ) );
@@ -734,7 +734,7 @@ class Widget_WebcomicCharacters extends WP_Widget {
  * @package Webcomic
  */
 class Widget_WebcomicCollections extends WP_Widget {
-	/** Initialize the plugin.
+	/** Initialize the widget.
 	 */
 	public function __construct() {
 		parent::__construct( false, __( 'Webcomic Collections', 'webcomic' ), array( 'description' => __( 'A list, dropdown, or cloud of Webcomic collections.', 'webcomic' ) ) );
