@@ -120,6 +120,10 @@ class Webcomic {
 		
 		if ( self::$config and version_compare( self::$config[ 'version' ], '4x', '>=' ) ) {
 			add_action( 'init', array( $this, 'init' ) );
+			add_action( 'init', array( $this, 'log_ipn' ) );
+			add_action( 'init', array( $this, 'twitter_oauth' ) );
+			add_action( 'init', array( $this, 'save_transcript' ) );
+			add_action( 'init', array( $this, 'random_redirect' ) );
 			add_action( 'webcomic_buffer_alert', array( $this, 'buffer_alert' ) );
 			
 			add_filter( 'get_term', array( $this, 'get_term' ), 10, 2 );
@@ -301,11 +305,6 @@ class Webcomic {
 			'rewrite'           => false,
 			'show_in_nav_menus' => false
 		) );
-		
-		$this->log_ipn();
-		$this->twitter_oauth();
-		$this->save_transcript();
-		$this->random_redirect();
 	}
 	
 	/** Email buffer alert notifications.
@@ -998,7 +997,7 @@ class Webcomic {
 	 * @uses Webcomic::$config
 	 * @action webcomic_ipn Triggered prior to processing a Paypal IPN request.
 	 */
-	private function log_ipn() {
+	public function log_ipn() {
 		global $blog_id;
 		
 		if ( isset( $_GET[ 'webcomic_commerce_ipn' ] ) and !empty( $_POST ) ) {
@@ -1177,7 +1176,7 @@ class Webcomic {
 	 * @action webcomic_transcript_submit Triggered prior to processing a user-submitted transcript.
 	 * @action webcomic_transcript_submitted Triggered after processing a user-submitted transcript.
 	 */
-	private function save_transcript() {
+	public function save_transcript() {
 		if ( isset( $_POST[ 'webcomic_user_transcript' ] ) and wp_verify_nonce( $_POST[ 'webcomic_user_transcript' ], 'webcomic_user_transcript' ) ) {
 			do_action( 'webcomic_transcript_submit' );
 			
@@ -1273,7 +1272,7 @@ class Webcomic {
 	 * @uses WebcomicTag::get_relative_webcomic_term_link()
 	 * @uses WebcomicTag::get_relative_webcomic_link()
 	 */
-	private function random_redirect() {
+	public function random_redirect() {
 		if ( isset( $_GET[ 'random_webcomic' ] ) and $link = WebcomicTag::get_relative_webcomic_link( 'random', maybe_unserialize( stripslashes( urldecode( empty( $_GET[ 'in_same_term' ] ) ? false : $_GET[ 'in_same_term' ] ) ) ), maybe_unserialize( stripslashes( urldecode( empty( $_GET[ 'excluded_terms' ] ) ? false : $_GET[ 'excluded_terms' ] ) ) ), empty( $_GET[ 'taxonomy' ] ) ? '' : $_GET[ 'taxonomy' ], $_GET[ 'random_webcomic' ] ) ) {
 			wp_redirect( $link );
 			
