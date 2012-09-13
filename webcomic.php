@@ -779,7 +779,7 @@ class Webcomic {
 				}
 			}
 			
-			return array_unique( $posts, SORT_REGULAR );
+			return array_values( array_unique( $posts, SORT_REGULAR ) );
 		}
 		
 		return $posts;
