@@ -247,7 +247,7 @@ class WebcomicTag extends Webcomic {
 	
 	/** Is the current post a webcomic?
 	 * 
-	 * Specific colleciton checks should be done by comparing the post
+	 * Specific collection checks should be done by comparing the post
 	 * type directly.
 	 * 
 	 * @param mixed $the_post Post object or ID to check.
@@ -1164,7 +1164,7 @@ class WebcomicTag extends Webcomic {
 	 * @filter string webcomic_collection_image Filters the the image returned by `webcomic_collection_image` and used by `webcomic_collection_poster`.
 	 */
 	public static function webcomic_collection_image( $size = 'full', $collection = '' ) {
-		$colleciton = $collection ? $collection : self::$collection;
+		$collection = $collection ? $collection : self::$collection;
 		
 		return empty( self::$config[ 'collections' ][ $collection ][ 'image' ] ) ? '' : apply_filters( 'webcomic_collection_image', wp_get_attachment_image( self::$config[ 'collections' ][ $collection ][ 'image' ], $size ), $size, $collection );
 	}

@@ -932,7 +932,7 @@ class WebcomicConfig extends Webcomic {
 	 * 
 	 * If 'webcomic_add_collection' is set, create a new collection.
 	 * 
-	 * If 'webcomic_bulk_collection' is set and one or more collecitons
+	 * If 'webcomic_bulk_collection' is set and one or more collections
 	 * is selected, perform bulk collection actions (thanks WPCat2Tag).
 	 * 
 	 * Otherwise, save general settings.
