@@ -1483,11 +1483,11 @@ class WebcomicTag extends Webcomic {
 		
 		$link = apply_filters( 'the_permalink', get_permalink( $the_post ) );
 		
-		if ( $term = get_term( $language, 'webcomic_language' ) ) {
+		if ( $term = get_term( $language, 'webcomic_language' ) and !empty( $term->slug ) ) {
 			$link = $wp_rewrite->using_permalinks() ? user_trailingslashit( trailingslashit( $link ) . "transcripts/{$term->slug}" ) : add_query_arg(  array( 'transcripts' => $term->slug ), $link );
 		}
 		
-		return apply_filters( 'get_webcomic_transcripts_link', $link . ( self::have_webcomic_transcripts( false, $term ? $term->slug : '' ) ? '#webcomic-transcripts' : '#webcomic-transcribe0' ), $language, $the_post );
+		return apply_filters( 'get_webcomic_transcripts_link', $link . ( self::have_webcomic_transcripts( false, ( $term and !empty( $term->slug ) ) ? $term->slug : '' ) ? '#webcomic-transcripts' : '#webcomic-transcribe0' ), $language, $the_post );
 	}
 	
 	/** Return a webcomic transcripts link.
