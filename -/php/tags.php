@@ -1029,11 +1029,11 @@ class WebcomicTag extends Webcomic {
 				if ( 'previous' === $relative ) {
 					$link = __( '&lsaquo; %title', 'webcomic' );
 				} else if ( 'next' === $relative ) {
-					$link = '%title &rsaquo;', 'webcomic' );
+					$link = __( '%title &rsaquo;', 'webcomic' );
 				} else if ( 'first' === $relative ) {
-					$link = '&laquo; %title', 'webcomic' );
+					$link = __( '&laquo; %title', 'webcomic' );
 				} else if ( 'last' === $relative ) {
-					$link = '%title &raquo;', 'webcomic' );
+					$link = __( '%title &raquo;', 'webcomic' );
 				} else {
 					$link = __( '%title', 'webcomic' );
 				}
@@ -1503,7 +1503,7 @@ class WebcomicTag extends Webcomic {
 	 * @return string
 	 * @filter string webcomic_transcripts_link Filters the output of `webcomic_transcripts_link`.
 	 */
-	public static function webcomic_transcripts_link( $format, $none, $some, $off, $language = false, $the_post = false ) {
+	public static function webcomic_transcripts_link( $format, $none = '', $some = '', $off = '', $language = false, $the_post = false ) {
 		if ( $the_post = get_post( $the_post ) and $href = self::get_webcomic_transcripts_link( $language, $the_post ) ) {
 			$class = array( 'webcomic-transcript-link', "{$the_post->post_type}-transcript-link" );
 			
