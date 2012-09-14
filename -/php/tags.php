@@ -648,7 +648,7 @@ class WebcomicTag extends Webcomic {
 	 * @uses WebcomicTag::get_random_webcomic_link()
 	 * @filter string {$relative}_webcomic_link Filters the output of the relative webcomic link template tags: `previous_webcomic_link`, `next_webcomic_link`, `first_webcomic_link`, `last_webcomic_link`, and `random_webcomic_link`.
 	 */
-	public static function relative_webcomic_link( $format, $link, $relative = 'random', $in_same_term = false, $excluded_terms = false, $taxonomy = 'storyline', $collection = '' ) {
+	public static function relative_webcomic_link( $format, $link = '', $relative = 'random', $in_same_term = false, $excluded_terms = false, $taxonomy = 'storyline', $collection = '' ) {
 		global $post;
 		
 		if ( 'random-nocache' === $relative or $the_post = self::get_relative_webcomic( $relative, $in_same_term, $excluded_terms, $taxonomy, $collection ) ) {
@@ -668,15 +668,15 @@ class WebcomicTag extends Webcomic {
 			
 			if ( !$link ) {
 				if ( 'previous' === $relative ) {
-					$link = '&lsaquo;';
+					$link = __( '&lsaquo;', 'webcomic' );
 				} else if ( 'next' === $relative ) {
-					$link = '&rsaquo;';
+					$link = __( '&rsaquo;', 'webcomic' );
 				} else if ( 'first' === $relative ) {
-					$link = '&laquo;';
+					$link = __( '&laquo;', 'webcomic' );
 				} else if ( 'last' === $relative ) {
-					$link = '&raquo;';
+					$link = __( '&raquo;', 'webcomic' );
 				} else {
-					$link = '&infin;';
+					$link = __( '&infin;', 'webcomic' );
 				}
 			}
 			
@@ -748,9 +748,10 @@ class WebcomicTag extends Webcomic {
 	 * @uses WebcomicTag::get_purchase_webcomic_link()
 	 * @filter string purchase_webcomic_link Filters the output of `purchase_webcomic_link`.
 	 */
-	public static function purchase_webcomic_link( $format, $link, $the_post = false ) {
+	public static function purchase_webcomic_link( $format, $link = '', $the_post = false ) {
 		if ( $the_post = get_post( $the_post ) and $href = self::get_purchase_webcomic_link( $the_post ) ) {
 			$class = array( 'webcomic-link', "{$the_post->post_type}-link", "purchase-webcomic-link", "purchase-{$the_post->post_type}-link" );
+			$link  = $link ? $link : __( '&curren;', 'webcomic' );
 			
 			if ( false !== strpos( $link, '%' ) ) {
 				$tokens = array(
@@ -797,7 +798,7 @@ class WebcomicTag extends Webcomic {
 	 * @uses WebcomicTag::get_relative_webcomic_link()
 	 * @filter string webcomic_collection_link Filters the output of `the_webcomic_collection`.
 	 */
-	public static function webcomic_collection_link( $format, $link, $target = 'archive', $collection = '' ) {
+	public static function webcomic_collection_link( $format, $link = '', $target = 'archive', $collection = '' ) {
 		global $post;
 		
 		if ( !$collection ) {
@@ -807,6 +808,7 @@ class WebcomicTag extends Webcomic {
 		if ( $collection ) {
 			$class  = array( 'webcomic-link', 'webcomic-collection-link', "{$collection}-collection-link" );
 			$href   = ( 'first' === $target or 'last' === $target or 'random' === $target ) ? self::get_relative_webcomic_link( $target, false, false, '', $collection ) : get_post_type_archive_link( $collection );
+			$link   = $link ? $link : __( '%title', 'webcomic' );
 			
 			if ( false !== strpos( $link, '%' ) ) {
 				$tokens = array(
@@ -1009,7 +1011,7 @@ class WebcomicTag extends Webcomic {
 	 * @uses WebcomicTag::get_random_webcomic_term_link()
 	 * @filter string {$relative}_webcomic_term_link Filters the output of the relative webcomic term link template tags: `previous_webcomic_storyline_link`, `next_webcomic_storyline_link`, `first_webcomic_storyline_link`, `last_webcomic_storyline_link`, `random_webcomic_storyline_link`, `previous_webcomic_character_link`, `next_webcomic_character_link`, `first_webcomic_character_link`, `last_webcomic_character_link`, `random_webcomic_character_link`.
 	 */
-	public static function relative_webcomic_term_link( $format, $link, $target = 'archive', $relative = 'random', $taxonomy = '', $args = array() ) {
+	public static function relative_webcomic_term_link( $format, $link = '', $target = 'archive', $relative = 'random', $taxonomy = '', $args = array() ) {
 		global $wpdb;
 		
 		if ( 'random-nocache' === $relative or $term = self::get_relative_webcomic_term( $relative, $taxonomy, $args ) ) {
@@ -1025,15 +1027,15 @@ class WebcomicTag extends Webcomic {
 			
 			if ( !$link ) {
 				if ( 'previous' === $relative ) {
-					$link = '&lsaquo; %title';
+					$link = __( '&lsaquo; %title', 'webcomic' );
 				} else if ( 'next' === $relative ) {
-					$link = '%title &rsaquo;';
+					$link = '%title &rsaquo;', 'webcomic' );
 				} else if ( 'first' === $relative ) {
-					$link = '&laquo; %title';
+					$link = '&laquo; %title', 'webcomic' );
 				} else if ( 'last' === $relative ) {
-					$link = '%title &raquo;';
+					$link = '%title &raquo;', 'webcomic' );
 				} else {
-					$link = ' %title';
+					$link = __( '%title', 'webcomic' );
 				}
 			}
 			
@@ -3292,7 +3294,7 @@ if ( !function_exists( 'previous_webcomic_link' ) ) {
 	 * @param string $taxonomy The taxonomy of the terms specified in the $in_same_term and $excluded_terms arguments. The shorthand 'storyline' or 'character' may be used.
 	 * @uses WebcomicTag::relative_webcomic_link()
 	 */
-	function previous_webcomic_link( $format = '%link', $link = '&lsaquo;', $in_same_term = false, $excluded_terms = false, $taxonomy = 'storyline' ) {
+	function previous_webcomic_link( $format = '%link', $link = '', $in_same_term = false, $excluded_terms = false, $taxonomy = 'storyline' ) {
 		echo WebcomicTag::relative_webcomic_link( $format, $link, 'previous', $in_same_term, $excluded_terms, $taxonomy );
 	}
 }
@@ -3319,7 +3321,7 @@ if ( !function_exists( 'next_webcomic_link' ) ) {
 	 * @param string $taxonomy The taxonomy of the terms specified in the $in_same_term and $excluded_terms arguments. The shorthand 'storyline' or 'character' may be used.
 	 * @uses WebcomicTag::relative_webcomic_link()
 	 */
-	function next_webcomic_link( $format = '%link', $link = '&rsaquo;', $in_same_term = false, $excluded_terms = false, $taxonomy = 'storyline' ) {
+	function next_webcomic_link( $format = '%link', $link = '', $in_same_term = false, $excluded_terms = false, $taxonomy = 'storyline' ) {
 		echo WebcomicTag::relative_webcomic_link( $format, $link, 'next', $in_same_term, $excluded_terms, $taxonomy );
 	}
 }
@@ -3350,7 +3352,7 @@ if ( !function_exists( 'first_webcomic_link' ) ) {
 	 * @param string $collection The collection to retrieve from. Used when linking outside the loop.
 	 * @uses WebcomicTag::relative_webcomic_link()
 	 */
-	function first_webcomic_link( $format = '%link', $link = '&laquo;', $in_same_term = false, $excluded_terms = false, $taxonomy = 'storyline', $collection = '' ) {
+	function first_webcomic_link( $format = '%link', $link = '', $in_same_term = false, $excluded_terms = false, $taxonomy = 'storyline', $collection = '' ) {
 		echo WebcomicTag::relative_webcomic_link( $format, $link, 'first', $in_same_term, $excluded_terms, $taxonomy, $collection );
 	}
 }
@@ -3381,7 +3383,7 @@ if ( !function_exists( 'last_webcomic_link' ) ) {
 	 * @param string $collection The collection to retrieve from. Used when linking outside the loop.
 	 * @uses WebcomicTag::relative_webcomic_link()
 	 */
-	function last_webcomic_link( $format = '%link', $link = '&raquo;', $in_same_term = false, $excluded_terms = false, $taxonomy = 'storyline', $collection = '' ) {
+	function last_webcomic_link( $format = '%link', $link = '', $in_same_term = false, $excluded_terms = false, $taxonomy = 'storyline', $collection = '' ) {
 		echo WebcomicTag::relative_webcomic_link( $format, $link, 'last', $in_same_term, $excluded_terms, $taxonomy, $collection );
 	}
 }
@@ -3413,7 +3415,7 @@ if ( !function_exists( 'random_webcomic_link' ) ) {
 	 * @param boolean $cache Whether to use a parameterized random webcomic link.
 	 * @uses WebcomicTag::relative_webcomic_link()
 	 */
-	function random_webcomic_link( $format = '%link', $link = '&infin;', $in_same_term = false, $excluded_terms = false, $taxonomy = 'storyline', $collection = '', $cache = true ) {
+	function random_webcomic_link( $format = '%link', $link = '', $in_same_term = false, $excluded_terms = false, $taxonomy = 'storyline', $collection = '', $cache = true ) {
 		echo WebcomicTag::relative_webcomic_link( $format, $link, $cache ? 'random' : 'random-nocache', $in_same_term, $excluded_terms, $taxonomy, $collection );
 	}
 }
@@ -3438,7 +3440,7 @@ if ( !function_exists( 'purchase_webcomic_link' ) ) {
 	 * @param mixed $the_post The post object or ID to retrive the purchase link for.
 	 * @uses WebcomicTag::purchase_webcomic_link()
 	 */
-	function purchase_webcomic_link( $format = '%link', $link = '&curren;', $the_post = false ) {
+	function purchase_webcomic_link( $format = '%link', $link = '', $the_post = false ) {
 		echo WebcomicTag::purchase_webcomic_link( $format, $link, $the_post );
 	}
 }
@@ -3461,7 +3463,7 @@ if ( !function_exists( 'the_webcomic_collection' ) ) {
 	 * @param string $collection The collection ID to render a link for.
 	 * @uses WebcomicTag::webcomic_collection_link()
 	 */
-	function the_webcomic_collection( $format = '%link', $link = '%title', $target = 'archive', $collection = '' ) {
+	function the_webcomic_collection( $format = '%link', $link = '', $target = 'archive', $collection = '' ) {
 		echo WebcomicTag::webcomic_collection_link( $format, $link, $target, $collection );
 	}
 }
@@ -3546,7 +3548,7 @@ if ( !function_exists( 'previous_webcomic_storyline_link' ) ) {
 	 * @uses WebcomicTag::get_webcomic_collection()
 	 * @uses WebcomicTag::relative_webcomic_term_link()
 	 */
-	function previous_webcomic_storyline_link( $format = '%link', $link = '&lsaquo; %title', $target = 'archive', $args = array() ) {
+	function previous_webcomic_storyline_link( $format = '%link', $link = '', $target = 'archive', $args = array() ) {
 		global $post;
 		
 		$taxonomy = ( ( is_tax() or is_single() ) and $collection = WebcomicTag::get_webcomic_collection() ) ? "{$collection}_storyline" : '';
@@ -3579,7 +3581,7 @@ if ( !function_exists( 'next_webcomic_storyline_link' ) ) {
 	 * @uses WebcomicTag::get_webcomic_collection()
 	 * @uses WebcomicTag::relative_webcomic_term_link()
 	 */
-	function next_webcomic_storyline_link( $format = '%link', $link = '%title &rsaquo;', $target = 'archive', $args = array() ) {
+	function next_webcomic_storyline_link( $format = '%link', $link = '', $target = 'archive', $args = array() ) {
 		global $post;
 		
 		$taxonomy = ( ( is_tax() or is_single() ) and $collection = WebcomicTag::get_webcomic_collection() ) ? "{$collection}_storyline" : '';
@@ -3616,7 +3618,7 @@ if ( !function_exists( 'first_webcomic_storyline_linke' ) ) {
 	 * @uses WebcomicTag::get_webcomic_collection()
 	 * @uses WebcomicTag::relative_webcomic_term_link()
 	 */
-	function first_webcomic_storyline_link( $format = '%link', $link = '&laquo; %title', $target = 'archive', $args = array(), $collection = '' ) {
+	function first_webcomic_storyline_link( $format = '%link', $link = '', $target = 'archive', $args = array(), $collection = '' ) {
 		global $post;
 		
 		$taxonomy = ( ( $collection and taxonomy_exists( "{$collection}_storyline" ) ) or $collection = WebcomicTag::get_webcomic_collection() ) ? "{$collection}_storyline" : '';
@@ -3653,7 +3655,7 @@ if ( !function_exists( 'last_webcomic_storyline_link' ) ) {
 	 * @uses WebcomicTag::get_webcomic_collection()
 	 * @uses WebcomicTag::relative_webcomic_term_link()
 	 */
-	function last_webcomic_storyline_link( $format = '%link', $link = '%title &raquo;', $target = 'archive', $args = array(), $collection = '' ) {
+	function last_webcomic_storyline_link( $format = '%link', $link = '', $target = 'archive', $args = array(), $collection = '' ) {
 		global $post;
 		
 		$taxonomy = ( ( $collection and taxonomy_exists( "{$collection}_storyline" ) ) or $collection = WebcomicTag::get_webcomic_collection() ) ? "{$collection}_storyline" : '';
@@ -3693,7 +3695,7 @@ if ( !function_exists( 'random_webcomic_storyline_link' ) ) {
 	 * @param boolean $cache Whether to use a parameterized random webcomic storyline link.
 	 * @uses WebcomicTag::relative_webcomic_term_link()
 	 */
-	function random_webcomic_storyline_link( $format = '%link', $link = '%title', $target = 'archive', $args = array(), $collection = '', $cache = true ) {
+	function random_webcomic_storyline_link( $format = '%link', $link = '', $target = 'archive', $args = array(), $collection = '', $cache = true ) {
 		$taxonomy = ( ( $collection and taxonomy_exists( "{$collection}_storyline" ) ) or $collection = WebcomicTag::get_webcomic_collection() ) ? "{$collection}_storyline" : '';
 		
 		if ( preg_match( '/^webcomic\d+_storyline$/', $taxonomy ) ) {
@@ -3724,7 +3726,7 @@ if ( !function_exists( 'previous_webcomic_character_link' ) ) {
 	 * @uses WebcomicTag::get_webcomic_collection()
 	 * @uses WebcomicTag::relative_webcomic_term_link()
 	 */
-	function previous_webcomic_character_link( $format = '%link', $link = '&lsaquo; %title', $target = 'archive', $args = array() ) {
+	function previous_webcomic_character_link( $format = '%link', $link = '', $target = 'archive', $args = array() ) {
 		global $post;
 		
 		$taxonomy = ( ( is_tax() or is_single() ) and $collection = WebcomicTag::get_webcomic_collection() ) ? "{$collection}_character" : '';
@@ -3757,7 +3759,7 @@ if ( !function_exists( 'next_webcomic_character_link' ) ) {
 	 * @uses WebcomicTag::get_webcomic_collection()
 	 * @uses WebcomicTag::relative_webcomic_term_link()
 	 */
-	function next_webcomic_character_link( $format = '%link', $link = '%title &rsaquo;', $target = 'archive', $args = array() ) {
+	function next_webcomic_character_link( $format = '%link', $link = '', $target = 'archive', $args = array() ) {
 		global $post;
 		
 		$taxonomy = ( ( is_tax() or is_single() ) and $collection = WebcomicTag::get_webcomic_collection() ) ? "{$collection}_character" : '';
@@ -3794,7 +3796,7 @@ if ( !function_exists( 'first_webcomic_character_link' ) ) {
 	 * @uses WebcomicTag::get_webcomic_collection()
 	 * @uses WebcomicTag::relative_webcomic_term_link()
 	 */
-	function first_webcomic_character_link( $format = '%link', $link = '&laquo; %title', $target = 'archive', $args = array(), $collection = '' ) {
+	function first_webcomic_character_link( $format = '%link', $link = '', $target = 'archive', $args = array(), $collection = '' ) {
 		global $post;
 		
 		$taxonomy = ( ( $collection and taxonomy_exists( "{$collection}_character" ) ) or $collection = WebcomicTag::get_webcomic_collection() ) ? "{$collection}_character" : '';
@@ -3831,7 +3833,7 @@ if ( !function_exists( 'last_webcomic_character_link' ) ) {
 	 * @uses WebcomicTag::get_webcomic_collection()
 	 * @uses WebcomicTag::relative_webcomic_term_link()
 	 */
-	function last_webcomic_character_link( $format = '%link', $link = '%title &raquo;', $target = 'archive', $args = array(), $collection = '' ) {
+	function last_webcomic_character_link( $format = '%link', $link = '', $target = 'archive', $args = array(), $collection = '' ) {
 		global $post;
 		
 		$taxonomy = ( ( $collection and taxonomy_exists( "{$collection}_character" ) ) or $collection = WebcomicTag::get_webcomic_collection() ) ? "{$collection}_character" : '';
@@ -3871,7 +3873,7 @@ if ( !function_exists( 'random_webcomic_character_link' ) ) {
 	 * @param boolean $cache Whether to use a parameterized random webcomic character link.
 	 * @uses WebcomicTag::relative_webcomic_term_link()
 	 */
-	function random_webcomic_character_link( $format = '%link', $link = '%title', $target = 'archive', $args = array(), $collection = '', $cache = true ) {
+	function random_webcomic_character_link( $format = '%link', $link = '', $target = 'archive', $args = array(), $collection = '', $cache = true ) {
 		$taxonomy = ( ( $collection and taxonomy_exists( "{$collection}_character" ) ) or $collection = WebcomicTag::get_webcomic_collection() ) ? "{$collection}_character" : '';
 		
 		if ( preg_match( '/^webcomic\d+_character$/', $taxonomy ) ) {
