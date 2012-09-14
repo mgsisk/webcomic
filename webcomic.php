@@ -498,9 +498,10 @@ class Webcomic {
 	public function head() {
 		global $wp_query, $post;
 		
+		$output = array();
+		$object = $wp_query->get_queried_object();
+		
 		if ( self::$collection ) {
-			$object                   = $wp_query->get_queried_object();
-			$output                   = array();
 			$output[ 'og:type' ]      = empty( $object->post_type ) ? 'website' : 'article';
 			$output[ 'og:site_name' ] = get_bloginfo( 'name' );
 			
