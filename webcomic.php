@@ -547,17 +547,17 @@ class Webcomic {
 				$attributes = wp_get_attachment_image_src( self::$config[ 'collections' ][ self::$collection ][ 'image' ] );
 				$output[ 'og:image' ] = $attributes[ 0 ];
 			}
-			
-			$output = apply_filters( 'webcomic_opengraph', $output, $object, self::$collection );
-			
-			foreach ( ( array ) $output as $k => $v ) {
-				if ( is_array( $v ) ) {
-					foreach( $v as $b ) {
-						echo sprintf( '<meta property="%s" content="%s">', $k, $b ), "\n";
-					}
-				} else {
-					echo sprintf( '<meta property="%s" content="%s">', $k, $v ), "\n";
+		}
+		
+		$output = apply_filters( 'webcomic_opengraph', $output, $object, self::$collection );
+		
+		foreach ( ( array ) $output as $k => $v ) {
+			if ( is_array( $v ) ) {
+				foreach( $v as $b ) {
+					echo sprintf( '<meta property="%s" content="%s">', $k, $b ), "\n";
 				}
+			} else {
+				echo sprintf( '<meta property="%s" content="%s">', $k, $v ), "\n";
 			}
 		}
 	}
