@@ -1721,13 +1721,13 @@ class WebcomicTag extends Webcomic {
 		
 		extract( wp_parse_args( $args, apply_filters( 'webcomic_transcript_form_defaults', array(
 			'fields' => apply_filters( 'webcomic_transcript_form_default_fields', array(
-				'author' => sprintf( '<p class="webcomic-transcript-author"><label for="webcomic-transcript-author' . $c . '">%s%s</label><input type="text" name="webcomic_transcript_author" id="webcomic-transcript-author' . $c . '" value="%s"%s></p>',
+				'author' => sprintf( '<p class="webcomic-transcript-author"><label for="webcomic-transcript-author' . $c . '">%s</label>%s<input type="text" name="webcomic_transcript_author" id="webcomic-transcript-author' . $c . '" value="%s"%s></p>',
 					 __( 'Name', 'webcomic' ),
 					 $required ? '<span class="required">*</span>' : '',
 					 esc_attr( $commenter[ 'comment_author' ] ),
 					 $required ? ' required' : ''
 				),
-				'email' => sprintf( '<p class="webcomic-transcript-email"><label for="webcomic-transcript-email' . $c . '">%s%s</label><input type="email" name="webcomic_transcript_email" id="webcomic-transcript-email' . $c . '" value="%s"%s></p>',
+				'email' => sprintf( '<p class="webcomic-transcript-email"><label for="webcomic-transcript-email' . $c . '">%s</label>%s<input type="email" name="webcomic_transcript_email" id="webcomic-transcript-email' . $c . '" value="%s"%s></p>',
 					__( 'Email', 'webcomic' ),
 					 $required ? '<span class="required">*</span>' : '',
 					 esc_attr(  $commenter[ 'comment_author_email' ] ),
