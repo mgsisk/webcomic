@@ -1752,7 +1752,7 @@ class WebcomicTag extends Webcomic {
 			'transcript_notes_after'   => '',
 			'transcript_notes_success' => sprintf( '<p class="webcomic-transcript-success">%s</p>', __( 'Thank you! Your transcript has been submitted.', 'webcomic' ) ),
 			'transcript_notes_failure' => sprintf( '<p class="webcomic-transcript-failure">%s</p>', __( 'There was a problem submitting your transcript. Please try again.', 'webcomic' ) ),
-			'id_form'                  => "webcomic-transcript-form{$c}",
+			'id_form'                  => "webcomic-transcript-form%s",
 			'title_submit'             => empty( $update_post ) ? __( 'Transcribe %s', 'webcomic' ) : __( 'Improve %s Transcript', 'webcomic' ),
 			'label_submit'             => __( 'Submit Transcript', 'webcomic' ),
 			'wysiwyg_editor'           => false
@@ -1775,7 +1775,7 @@ class WebcomicTag extends Webcomic {
 				
 				do_action( 'webcomic_transcript_form_must_log_in_after', $the_post->post_type );
 			} else {
-				printf( '<form method="post" id="%s">', esc_attr( $id_form ) );
+				printf( '<form method="post" id="%s" class="webcomic-transcribe-form">', sprintf( esc_attr( $id_form ), %c ) );
 				
 				do_action( 'webcomic_transcript_form_top', $the_post->post_type );
 				
