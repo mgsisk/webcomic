@@ -1775,7 +1775,7 @@ class WebcomicTag extends Webcomic {
 				
 				do_action( 'webcomic_transcript_form_must_log_in_after', $the_post->post_type );
 			} else {
-				printf( '<form method="post" id="%s" class="webcomic-transcribe-form">', sprintf( esc_attr( $id_form ), %c ) );
+				printf( '<form method="post" id="%s" class="webcomic-transcribe-form">', sprintf( esc_attr( $id_form ), $c ) );
 				
 				do_action( 'webcomic_transcript_form_top', $the_post->post_type );
 				
