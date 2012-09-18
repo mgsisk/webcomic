@@ -236,7 +236,7 @@ class WebcomicLegacy extends Webcomic {
 					<?php } else { ?>
 					
 					<p><?php printf( __( 'This tool will attempt to automatically convert your existing Webcomic %1$s data to Webcomic %2$s. Depending on the size of your site the upgrade may require multiple steps. If you do not want to upgrade click <strong>Not Interested</strong> to uninstall Webcomic %2$s.', 'webcomic' ), self::$config[ 'legacy' ], self::$version ); ?></p>
-					<p style="color:#bc0b0b;font-size:larger"><strong><?php printf( __( 'Upgrades are not reversible and, once begun, should not be stopped. Please <a href="%1$s" target="_blank">read this</a> and <a href="%2$s">backup your site</a> before upgrading.', 'webcomic' ), '//github.com/mgsisk/webcomic/Upgrading', esc_url( admin_url( 'export.php' ) ) ); ?></strong></p>
+					<p style="color:#bc0b0b;font-size:larger"><strong><?php printf( __( 'Upgrades are not reversible and, once begun, should not be stopped. Please <a href="%1$s" target="_blank">read this</a> and <a href="%2$s">backup your site</a> before upgrading.', 'webcomic' ), '//github.com/mgsisk/webcomic/wiki/Upgrading', esc_url( admin_url( 'export.php' ) ) ); ?></strong></p>
 					<form method="post">
 						<?php wp_nonce_field( 'webcomic_upgrade', 'webcomic_upgrade' ); ?>
 						<div class="form-wrap">
