@@ -1593,7 +1593,7 @@ class WebcomicTag extends Webcomic {
 		}
 		
 		if ( $authors = get_post_meta( $id, 'webcomic_author' ) ) {
-			foreach ( $authos as $author ) {
+			foreach ( $authors as $author ) {
 				$output[] = $author[ 'name' ];
 			}
 		}
