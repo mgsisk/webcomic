@@ -129,6 +129,7 @@ class Webcomic {
 			add_action( 'init', array( $this, 'twitter_oauth' ) );
 			add_action( 'init', array( $this, 'save_transcript' ) );
 			add_action( 'init', array( $this, 'random_redirect' ) );
+			add_action( 'setup_theme', array( $this, 'setup_theme' ) );
 			add_action( 'webcomic_buffer_alert', array( $this, 'buffer_alert' ) );
 			
 			add_filter( 'get_term', array( $this, 'get_term' ), 10, 2 );
@@ -141,7 +142,6 @@ class Webcomic {
 			if ( !is_admin() ) {
 				add_action( 'wp_head', array( $this, 'head' ), 1 );
 				add_action( 'the_post', array( $this, 'the_post' ), 10, 1 );
-				add_action( 'setup_theme', array( $this, 'setup_theme' ) );
 				add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 				add_action( 'template_redirect', array( $this, 'template_redirect' ) );
 				
@@ -309,6 +309,55 @@ class Webcomic {
 			'rewrite'           => false,
 			'show_in_nav_menus' => false
 		) );
+	}
+	
+	/** Check to see if the current page is webcomic-related.
+	 * 
+	 * We have to do this as early as possible to ensure that the
+	 * correct template can be set if the collection is using a custom
+	 * theme. It'd be better to use `wp_get_theme` for the integration
+	 * check, but custom headers can't be retrieved this way since
+	 * WordPress 3.4.
+	 * 
+	 * @uses Webcomic::$config
+	 * @uses Webcomic::$integrate
+	 * @uses Webcomic::$collection
+	 * @hook setup_theme
+	 */
+	public function setup_theme() {
+		global $wp_rewrite;
+		
+		$match = $permalinks = array();
+		
+		if ( $wp_rewrite->using_permalinks() ) {
+			foreach ( self::$config[ 'collections' ] as $k => $v ) {
+				$permalinks[ "{$k}_archive" ]   = $v[ 'slugs' ][ 'archive' ];
+				$permalinks[ "{$k}_webcomic" ]  = $v[ 'slugs' ][ 'webcomic' ];
+				$permalinks[ "{$k}_storyline" ] = $v[ 'slugs' ][ 'storyline' ];
+				$permalinks[ "{$k}_character" ] = $v[ 'slugs' ][ 'character' ];
+			}
+		}
+		
+		if (
+				(
+					preg_match( '/webcomic\d+(_(storyline|character))?/', join( ' ', array_keys( $_GET ) ), $match )
+					or ( isset( $_GET[ 'post_type' ] ) and isset( self::$config[ 'collections' ][ $_GET[ 'post_type' ] ] ) and $match[ 0 ] = $_GET[ 'post_type' ] )
+					or ( $wp_rewrite->using_permalinks() and preg_match( sprintf( '{/(%s)/}', join( '|', $permalinks ) ), $_SERVER[ 'REQUEST_URI' ], $match ) )
+					or ( $id = url_to_postid( $_SERVER[ 'REQUEST_URI' ] ) and $match[ 0 ] = get_post_meta( $id, 'webcomic_collection', true ) and isset( self::$config[ 'collections' ][ $match[ 0 ] ] ) )
+				)
+			and $match
+		) {
+			$match[ 0 ]       = preg_replace( '/_(storyline|character)$/', '', $match[ 0 ] );
+			self::$collection = empty( self::$config[ 'collections' ][ $match[ 0 ] ] ) ? preg_replace( '/_(archive|webcomic|storyline|character)$/', '', array_search( $match[ 1 ], $permalinks ) ) : $match[ 0 ];
+		}
+		
+		$integrate = get_file_data( get_stylesheet_directory() . '/style.css', array( 'webcomic' => 'Webcomic' ) );
+		
+		if ( empty( $integrate[ 'webcomic' ] ) ) {
+			self::$integrate = true;
+		} else {
+			self::$theme_version = $integrate[ 'webcomic' ];
+		}
 	}
 	
 	/** Email buffer alert notifications.
@@ -589,55 +638,6 @@ class Webcomic {
 				$post->content    = $pages[ 0 ];
 				$post->ID         = 0;
 			}
-		}
-	}
-	
-	/** Check to see if the current page is webcomic-related.
-	 * 
-	 * We have to do this as early as possible to ensure that the
-	 * correct template can be set if the collection is using a custom
-	 * theme. It'd be better to use `wp_get_theme` for the integration
-	 * check, but custom headers can't be retrieved this way since
-	 * WordPress 3.4.
-	 * 
-	 * @uses Webcomic::$config
-	 * @uses Webcomic::$integrate
-	 * @uses Webcomic::$collection
-	 * @hook setup_theme
-	 */
-	public function setup_theme() {
-		global $wp_rewrite;
-		
-		$match = $permalinks = array();
-		
-		if ( $wp_rewrite->using_permalinks() ) {
-			foreach ( self::$config[ 'collections' ] as $k => $v ) {
-				$permalinks[ "{$k}_archive" ]   = $v[ 'slugs' ][ 'archive' ];
-				$permalinks[ "{$k}_webcomic" ]  = $v[ 'slugs' ][ 'webcomic' ];
-				$permalinks[ "{$k}_storyline" ] = $v[ 'slugs' ][ 'storyline' ];
-				$permalinks[ "{$k}_character" ] = $v[ 'slugs' ][ 'character' ];
-			}
-		}
-		
-		if (
-				(
-					preg_match( '/webcomic\d+(_(storyline|character))?/', join( ' ', array_keys( $_GET ) ), $match )
-					or ( isset( $_GET[ 'post_type' ] ) and isset( self::$config[ 'collections' ][ $_GET[ 'post_type' ] ] ) and $match[ 0 ] = $_GET[ 'post_type' ] )
-					or ( $wp_rewrite->using_permalinks() and preg_match( sprintf( '{/(%s)/}', join( '|', $permalinks ) ), $_SERVER[ 'REQUEST_URI' ], $match ) )
-					or ( $id = url_to_postid( $_SERVER[ 'REQUEST_URI' ] ) and $match[ 0 ] = get_post_meta( $id, 'webcomic_collection', true ) and isset( self::$config[ 'collections' ][ $match[ 0 ] ] ) )
-				)
-			and $match
-		) {
-			$match[ 0 ]       = preg_replace( '/_(storyline|character)$/', '', $match[ 0 ] );
-			self::$collection = empty( self::$config[ 'collections' ][ $match[ 0 ] ] ) ? preg_replace( '/_(archive|webcomic|storyline|character)$/', '', array_search( $match[ 1 ], $permalinks ) ) : $match[ 0 ];
-		}
-		
-		$integrate = get_file_data( get_stylesheet_directory() . '/style.css', array( 'webcomic' => 'Webcomic' ) );
-		
-		if ( empty( $integrate[ 'webcomic' ] ) ) {
-			self::$integrate = true;
-		} else {
-			self::$theme_version = $integrate[ 'webcomic' ];
 		}
 	}
 	
