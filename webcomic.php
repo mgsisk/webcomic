@@ -351,12 +351,12 @@ class Webcomic {
 			self::$collection = empty( self::$config[ 'collections' ][ $match[ 0 ] ] ) ? preg_replace( '/_(archive|webcomic|storyline|character)$/', '', array_search( $match[ 1 ], $permalinks ) ) : $match[ 0 ];
 		}
 		
-		$integrate = get_file_data( get_stylesheet_directory() . '/style.css', array( 'webcomic' => 'Webcomic' ) );
+		$theme = new WP_Theme( get_stylesheet_directory(), '' );
 		
-		if ( empty( $integrate[ 'webcomic' ] ) ) {
+		if ( $theme->get( 'Webcomic' ) ) {
 			self::$integrate = true;
 		} else {
-			self::$theme_version = $integrate[ 'webcomic' ];
+			self::$theme_version = $theme->get( 'Webcomic' );
 		}
 	}
 	
