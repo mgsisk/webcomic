@@ -121,45 +121,41 @@ class Webcomic {
 		if ( self::$config and version_compare( self::$config[ 'version' ], '4x', '>=' ) ) {
 			add_action( 'init', array( $this, 'init' ) );
 			add_action( 'init', array( $this, 'log_ipn' ) );
+			add_action( 'wp_head', array( $this, 'head' ), 1 );
 			add_action( 'init', array( $this, 'twitter_oauth' ) );
 			add_action( 'init', array( $this, 'save_transcript' ) );
 			add_action( 'init', array( $this, 'random_redirect' ) );
 			add_action( 'setup_theme', array( $this, 'setup_theme' ) );
+			add_action( 'the_post', array( $this, 'the_post' ), 10, 1 );
 			add_action( 'webcomic_buffer_alert', array( $this, 'buffer_alert' ) );
+			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+			add_action( 'template_redirect', array( $this, 'template_redirect' ) );
 			
+			add_filter( 'template', array( $this, 'theme' ), 10, 1 );
+			add_filter( 'request', array( $this, 'request' ), 10, 1 );
+			add_filter( 'stylesheet', array( $this, 'theme' ), 10, 1 );
 			add_filter( 'get_term', array( $this, 'get_term' ), 10, 2 );
+			add_filter( 'the_posts', array( $this, 'the_posts' ), 10, 2 );
 			add_filter( 'get_terms', array( $this, 'get_terms' ), 10, 3 );
+			add_filter( 'body_class', array( $this, 'body_class' ), 10, 2 );
 			add_filter( 'get_the_terms', array( $this, 'get_the_terms' ), 10, 3 );
 			add_action( 'post_type_link', array( $this, 'post_type_link' ), 10, 4 );
+			add_filter( 'the_content_feed', array( $this, 'the_content_feed' ), 10, 1 );
 			add_filter( 'wp_get_object_terms', array( $this, 'get_object_terms' ), 10, 4 );
+			add_filter( 'extra_theme_headers', array( $this, 'extra_theme_headers' ), 10, 1 );
 			add_filter( 'wp_get_attachment_image_attributes', array( $this, 'get_attachment_image_attributes' ), 10, 2 );
 			
-			if ( !is_admin() ) {
-				add_action( 'wp_head', array( $this, 'head' ), 1 );
-				add_action( 'the_post', array( $this, 'the_post' ), 10, 1 );
-				add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
-				add_action( 'template_redirect', array( $this, 'template_redirect' ) );
-				
-				add_filter( 'template', array( $this, 'theme' ), 10, 1 );
-				add_filter( 'request', array( $this, 'request' ), 10, 1 );
-				add_filter( 'stylesheet', array( $this, 'theme' ), 10, 1 );
-				add_filter( 'the_posts', array( $this, 'the_posts' ), 10, 2 );
-				add_filter( 'body_class', array( $this, 'body_class' ), 10, 2 );
-				add_filter( 'the_content_feed', array( $this, 'the_content_feed' ), 10, 1 );
-				add_filter( 'extra_theme_headers', array( $this, 'extra_theme_headers' ), 10, 1 );
-				
-				if ( self::$config[ 'integrate' ] ) {
-					add_action( 'loop_end', array( $this, 'loop_end' ), 10, 1 );
-					add_action( 'loop_start', array( $this, 'loop_start' ), 10, 1 );
-					add_action( 'the_excerpt', array( $this, 'the_excerpt' ), 10, 1 );
-					add_action( 'the_content', array( $this, 'the_content' ), 10, 1 );
-					add_action( 'pre_get_posts', array( $this, 'pre_get_posts' ), 10, 1 );
-				}
+			if ( self::$config[ 'integrate' ] ) {
+				add_action( 'loop_end', array( $this, 'loop_end' ), 10, 1 );
+				add_action( 'loop_start', array( $this, 'loop_start' ), 10, 1 );
+				add_action( 'the_excerpt', array( $this, 'the_excerpt' ), 10, 1 );
+				add_action( 'the_content', array( $this, 'the_content' ), 10, 1 );
+				add_action( 'pre_get_posts', array( $this, 'pre_get_posts' ), 10, 1 );
 			}
-				
+			
 			require_once self::$dir . '-/php/tags.php';
+			require_once self::$dir . '-/php/widgets.php';    new WebcomicWidgets;
 			require_once self::$dir . '-/php/shortcodes.php'; new WebcomicShortcode;
-			require_once self::$dir . '-/php/widgets.php'; new WebcomicWidgets;
 		}
 	}
 	
@@ -306,227 +302,6 @@ class Webcomic {
 		) );
 	}
 	
-	/** Check to see if the current page is webcomic-related.
-	 * 
-	 * We have to do this as early as possible to ensure that the
-	 * correct template can be set if the collection is using a custom
-	 * theme. It'd be better to use `wp_get_theme` for the integration
-	 * check, but custom headers can't be retrieved this way since
-	 * WordPress 3.4.
-	 * 
-	 * @uses Webcomic::$config
-	 * @uses Webcomic::$integrate
-	 * @uses Webcomic::$collection
-	 * @hook setup_theme
-	 */
-	public function setup_theme() {
-		global $wp_rewrite;
-		
-		$match = $permalinks = array();
-		
-		if ( $wp_rewrite->using_permalinks() ) {
-			foreach ( self::$config[ 'collections' ] as $k => $v ) {
-				$permalinks[ "{$k}_archive" ]   = $v[ 'slugs' ][ 'archive' ];
-				$permalinks[ "{$k}_webcomic" ]  = $v[ 'slugs' ][ 'webcomic' ];
-				$permalinks[ "{$k}_storyline" ] = $v[ 'slugs' ][ 'storyline' ];
-				$permalinks[ "{$k}_character" ] = $v[ 'slugs' ][ 'character' ];
-			}
-		}
-		
-		if (
-				(
-					preg_match( '/webcomic\d+(_(storyline|character))?/', join( ' ', array_keys( $_GET ) ), $match )
-					or ( isset( $_GET[ 'post_type' ] ) and isset( self::$config[ 'collections' ][ $_GET[ 'post_type' ] ] ) and $match[ 0 ] = $_GET[ 'post_type' ] )
-					or ( $wp_rewrite->using_permalinks() and preg_match( sprintf( '{/(%s)/}', join( '|', $permalinks ) ), $_SERVER[ 'REQUEST_URI' ], $match ) )
-					or ( $id = url_to_postid( $_SERVER[ 'REQUEST_URI' ] ) and $match[ 0 ] = get_post_meta( $id, 'webcomic_collection', true ) and isset( self::$config[ 'collections' ][ $match[ 0 ] ] ) )
-				)
-			and $match
-		) {
-			$match[ 0 ]       = preg_replace( '/_(storyline|character)$/', '', $match[ 0 ] );
-			self::$collection = empty( self::$config[ 'collections' ][ $match[ 0 ] ] ) ? preg_replace( '/_(archive|webcomic|storyline|character)$/', '', array_search( $match[ 1 ], $permalinks ) ) : $match[ 0 ];
-		}
-		
-		$active_theme    = new WP_Theme( get_stylesheet_directory(), '' );
-		self::$integrate = !$active_theme->get( 'Webcomic' );
-	}
-	
-	/** Email buffer alert notifications.
-	 * 
-	 * Hooks into the webcomic_buffer_alert event scheduled during
-	 * installation. As with all WordPress scheduled events this
-	 * requires someone actually visiting the site to trigger the event
-	 * and send a buffer alert email.
-	 * 
-	 * @uses Webcomic::$config
-	 * @hook webcomic_buffer_alert
-	 */
-	public function buffer_alert() {
-		global $wpdb;
-		
-		$now = ( integer ) current_time( 'timestamp' );
-		
-		foreach ( self::$config[ 'collections' ] as $k => $v ) {
-			if ( $v[ 'buffer' ][ 'hook' ] and $buffer = strtotime( $wpdb->get_var( $wpdb->prepare( "SELECT post_date FROM $wpdb->posts WHERE post_type = '%s' AND post_status = 'future' ORDER BY post_date DESC", $k ) ) ) and $eta = floor( ( $buffer - $now ) / 86400 ) and $eta <= $v[ 'buffer' ][ 'days' ] ) {
-				wp_mail(
-					$v[ 'buffer' ][ 'email' ],
-					sprintf( _n( '[%s] %s Buffer Alert - %s Day Left', '[%s] %s Buffer Alert - %s Days Left', $eta, 'webcomic' ), get_bloginfo( 'name' ), $v[ 'name' ], $eta ),
-					sprintf( __( 'This is an automated reminder that the buffer for %1$s expires on %2%s.', 'webcomic' ),
-						sprintf( '<a href="%s">%s</a>', esc_url( admin_url( "edit.php?post_type={$k}" ) ), $v[ 'name' ] ),
-						date( 'j F Y', $buffer )
-					),
-					'content-type: text/html'
-				);
-			}
-		}
-	}
-	
-	/** Add a webcomic_image property to term objects.
-	 * 
-	 * @param object $term Retrieved term.
-	 * @param string $taxonomy Taxonomy the term belongs to.
-	 * @return object
-	 * @uses Webcomic::$config
-	 * @hook get_term
-	 */
-	public function get_term( $term, $taxonomy ) {
-		if ( preg_match( '/^webcomic\d+_(storyline|character)$/', $taxonomy ) ) {
-			$term->webcomic_image = empty( self::$config[ 'terms' ][ $term->term_id ][ 'image' ] ) ? 0 : self::$config[ 'terms' ][ $term->term_id ][ 'image' ];
-		}
-		
-		return $term;
-	}
-	
-	/** Add a webcomic_image property to term objects.
-	 * 
-	 * @param array $terms Array of retrieved terms.
-	 * @param array $taxonomies Array of taxonomies the terms belong to.
-	 * @param array $args Additional arguments passed to get_terms().
-	 * @return array
-	 * @uses Webcomic::$config
-	 * @hook get_terms
-	 */
-	public function get_terms( $terms, $taxonomies, $args ) {
-		if ( preg_match( '/webcomic\d+_(storyline|character)/', join( ' ', ( array ) $taxonomies ) ) ) {
-			foreach ( $terms as $k => $v ) {
-				if ( isset( $v->taxonomy ) and preg_match( '/^webcomic\d+_(storyline|character)$/', $v->taxonomy ) ) {
-					$terms[ $k ]->webcomic_image = empty( self::$config[ 'terms' ][ $v->term_id ][ 'image' ] ) ? 0 : self::$config[ 'terms' ][ $v->term_id ][ 'image' ];
-				}
-			}
-		}
-		
-		return $terms;
-	}
-	
-	/** Add a webcomic_image property to term objects.
-	 * 
-	 * @param array $terms Array of retrieved terms.
-	 * @param integer $id Object ID the terms are related to.
-	 * @param string $taxonomy Taxonomy the terms belong to.
-	 * @return array
-	 * @uses Webcomic::$config
-	 * @hook get_the_terms
-	 */
-	public function get_the_terms( $terms, $id, $taxonomy ) {
-		if ( preg_match( '/^webcomic\d+_(storyline|character)$/', $taxonomy ) ) {
-			foreach ( $terms as $k => $v ) {
-				$terms[ $k ]->webcomic_image = empty( self::$config[ 'terms' ][ $v->term_id ][ 'image' ] ) ? 0 : self::$config[ 'terms' ][ $v->term_id ][ 'image' ];
-			}
-		}
-		
-		return $terms;
-	}
-	
-	/** Handle custom permalink tokens.
-	 * 
-	 * @todo Future: Use get_term_parents; see core.trac.wordpress.org/ticket/17069
-	 * 
-	 * @param string $link Permalink to swap tokens in.
-	 * @param object $post Post object.
-	 * @param boolean $name Whether to keep post name.
-	 * @param boolean $sample Whether this is a sample permalink.
-	 * @return string
-	 * @uses Webcomic::$config
-	 * @hook post_type_link
-	 */
-	public function post_type_link( $link, $post, $name, $sample ) {
-		if ( empty( self::$config[ 'collections' ][ $post->post_type ] ) or false === strpos( $link, '%' ) ) {
-			return $link;
-		}
-		
-		if ( false !== strpos( $link, "%{$post->post_type}_storyline%" ) and $storylines = get_the_terms( $post->ID, "{$post->post_type}_storyline" ) and !is_wp_error( $storylines ) ) {
-			$storylines = array_reverse( $storylines );
-			$storyline  = $storylines[ 0 ]->slug;
-			
-			if ( $parent = $storylines[ 0 ]->parent and $parents = get_ancestors( $storylines[ 0 ]->term_id, $storylines[ 0 ]->taxonomy ) ) {
-				$storyline = array();
-				
-				foreach ( $parents as $parent ) {
-					$the_parent   = get_term( $parent, $storylines[ 0 ]->taxonomy );
-					$storylines[] = $the_parent->slug;
-				}
-				
-				$storyline   = array_reverse( $storylines );
-				$storyline[] = $storylines[ 0 ]->slug;
-				$storyline   = join( '/', $storyline );
-			}
-		} else {
-			$storyline = '';
-		}
-		
-		$time   = explode( ' ', date( 'Y m d H i s', strtotime( $post->post_date ) ) );
-		$tokens = array(
-			'%year%'     => $time[ 0 ],
-			'%monthnum%' => $time[ 1 ],
-			'%day%'      => $time[ 2 ],
-			'%hour%'     => $time[ 3 ],
-			'%minute%'   => $time[ 4 ],
-			'%second%'   => $time[ 5 ],
-			'%post_id%'  => $post->ID,
-			'%author%'   => false !== strpos( $link, '%author%' ) ? get_userdata( $post->post_author )->user_nicename : '',
-			"%{$post->post_type}_storyline%" => $storyline
-		);
-		
-		return str_replace( array_keys( $tokens ), $tokens, $link );
-	}
-	
-	/** Add a webcomic_image property to term objects.
-	 * 
-	 * @param array $terms Array of retrieved terms.
-	 * @param integer $objects Object ID's the terms are related to.
-	 * @param string $taxonomies Taxonomy the terms belong to.
-	 * @param array $args Arguments passed to wp_get_object_terms().
-	 * @return array
-	 * @uses Webcomic::$config
-	 * @hook get_the_terms
-	 */
-	public function get_object_terms( $terms, $objects, $taxonomies, $args ) {
-		if ( 'all' === $args[ 'fields' ] and preg_match( '/webcomic\d+_(storyline|character)/', join( ' ', ( array ) $taxonomies ) ) ) {
-			foreach ( $terms as $k => $v ) {
-				if ( isset( $v->taxonomy ) and preg_match( '/^webcomic\d+_(storyline|character)$/', $v->taxonomy ) ) {
-					$terms[ $k ]->webcomic_image = empty( self::$config[ 'terms' ][ $v->term_id ][ 'image' ] ) ? 0 : self::$config[ 'terms' ][ $v->term_id ][ 'image' ];
-				}
-			}
-		}
-		
-		return $terms;
-	}
-	
-	/** Use caption for title of media objects attached to a webcomic.
-	 *  
-	 * @param array $attributes An array of media attributes.
-	 * @param object $attachment The media object.
-	 * @return array
-	 * @uses Webcomic::$config
-	 * @hook wp_get_attachment_image_attributes
-	 */
-	public function get_attachment_image_attributes( $attributes, $attachment ) {
-		if ( $attachment->post_parent and $attachment->post_excerpt and isset( self::$config[ 'collections' ][ get_post_type( $attachment->post_parent ) ] ) ) {
-			$attributes[ 'title' ] = esc_attr( trim( strip_tags( $attachment->post_excerpt ) ) );
-		}
-		
-		return $attributes;
-	}
-	
 	/** Add Open Graph metadata for Webcomic-related pages.
 	 * 
 	 * Use of the 'property' attribute is obnoxious but intentional; see
@@ -606,6 +381,48 @@ class Webcomic {
 		}
 	}
 	
+	/** Check to see if the current page is webcomic-related.
+	 * 
+	 * We have to do this as early as possible to ensure that the
+	 * correct template can be set if the collection is using a custom
+	 * theme.
+	 * 
+	 * @uses Webcomic::$config
+	 * @uses Webcomic::$integrate
+	 * @uses Webcomic::$collection
+	 * @hook setup_theme
+	 */
+	public function setup_theme() {
+		global $wp_rewrite;
+		
+		$match = $permalinks = array();
+		
+		if ( $wp_rewrite->using_permalinks() ) {
+			foreach ( self::$config[ 'collections' ] as $k => $v ) {
+				$permalinks[ "{$k}_archive" ]   = $v[ 'slugs' ][ 'archive' ];
+				$permalinks[ "{$k}_webcomic" ]  = $v[ 'slugs' ][ 'webcomic' ];
+				$permalinks[ "{$k}_storyline" ] = $v[ 'slugs' ][ 'storyline' ];
+				$permalinks[ "{$k}_character" ] = $v[ 'slugs' ][ 'character' ];
+			}
+		}
+		
+		if (
+				(
+					preg_match( '/webcomic\d+(_(storyline|character))?/', join( ' ', array_keys( $_GET ) ), $match )
+					or ( isset( $_GET[ 'post_type' ] ) and isset( self::$config[ 'collections' ][ $_GET[ 'post_type' ] ] ) and $match[ 0 ] = $_GET[ 'post_type' ] )
+					or ( $wp_rewrite->using_permalinks() and preg_match( sprintf( '{/(%s)/}', join( '|', $permalinks ) ), $_SERVER[ 'REQUEST_URI' ], $match ) )
+					or ( $id = url_to_postid( $_SERVER[ 'REQUEST_URI' ] ) and $match[ 0 ] = get_post_meta( $id, 'webcomic_collection', true ) and isset( self::$config[ 'collections' ][ $match[ 0 ] ] ) )
+				)
+			and $match
+		) {
+			$match[ 0 ]       = preg_replace( '/_(storyline|character)$/', '', $match[ 0 ] );
+			self::$collection = empty( self::$config[ 'collections' ][ $match[ 0 ] ] ) ? preg_replace( '/_(archive|webcomic|storyline|character)$/', '', array_search( $match[ 1 ], $permalinks ) ) : $match[ 0 ];
+		}
+		
+		$active_theme    = new WP_Theme( get_stylesheet_directory(), '' );
+		self::$integrate = !$active_theme->get( 'Webcomic' );
+	}
+	
 	/** Filter titles and content for restricted webcomics.
 	 * 
 	 * @param object $post The global post object.
@@ -627,6 +444,36 @@ class Webcomic {
 				$pages            = array( is_null( $clear ) ? sprintf( __( 'Please <a href="%s">verify your age</a> to view this content.', 'webcomic' ), get_permalink( $post->ID ) ) : __( "You don't have permission to view this content.", 'webcomic' ) );
 				$post->content    = $pages[ 0 ];
 				$post->ID         = 0;
+			}
+		}
+	}
+	
+	/** Email buffer alert notifications.
+	 * 
+	 * Hooks into the webcomic_buffer_alert event scheduled during
+	 * installation. As with all WordPress scheduled events this
+	 * requires someone actually visiting the site to trigger the event
+	 * and send a buffer alert email.
+	 * 
+	 * @uses Webcomic::$config
+	 * @hook webcomic_buffer_alert
+	 */
+	public function buffer_alert() {
+		global $wpdb;
+		
+		$now = ( integer ) current_time( 'timestamp' );
+		
+		foreach ( self::$config[ 'collections' ] as $k => $v ) {
+			if ( $v[ 'buffer' ][ 'hook' ] and $buffer = strtotime( $wpdb->get_var( $wpdb->prepare( "SELECT post_date FROM $wpdb->posts WHERE post_type = '%s' AND post_status = 'future' ORDER BY post_date DESC", $k ) ) ) and $eta = floor( ( $buffer - $now ) / 86400 ) and $eta <= $v[ 'buffer' ][ 'days' ] ) {
+				wp_mail(
+					$v[ 'buffer' ][ 'email' ],
+					sprintf( _n( '[%s] %s Buffer Alert - %s Day Left', '[%s] %s Buffer Alert - %s Days Left', $eta, 'webcomic' ), get_bloginfo( 'name' ), $v[ 'name' ], $eta ),
+					sprintf( __( 'This is an automated reminder that the buffer for %1$s expires on %2%s.', 'webcomic' ),
+						sprintf( '<a href="%s">%s</a>', esc_url( admin_url( "edit.php?post_type={$k}" ) ), $v[ 'name' ] ),
+						date( 'j F Y', $buffer )
+					),
+					'content-type: text/html'
+				);
 			}
 		}
 	}
@@ -757,6 +604,22 @@ class Webcomic {
 		return $query;
 	}
 	
+	/** Add a webcomic_image property to term objects.
+	 * 
+	 * @param object $term Retrieved term.
+	 * @param string $taxonomy Taxonomy the term belongs to.
+	 * @return object
+	 * @uses Webcomic::$config
+	 * @hook get_term
+	 */
+	public function get_term( $term, $taxonomy ) {
+		if ( preg_match( '/^webcomic\d+_(storyline|character)$/', $taxonomy ) ) {
+			$term->webcomic_image = empty( self::$config[ 'terms' ][ $term->term_id ][ 'image' ] ) ? 0 : self::$config[ 'terms' ][ $term->term_id ][ 'image' ];
+		}
+		
+		return $term;
+	}
+	
 	/** Display webcomics in place of transcripts in searches.
 	 * 
 	 * @param array $posts Posts array.
@@ -784,6 +647,27 @@ class Webcomic {
 		return $posts;
 	}
 	
+	/** Add a webcomic_image property to term objects.
+	 * 
+	 * @param array $terms Array of retrieved terms.
+	 * @param array $taxonomies Array of taxonomies the terms belong to.
+	 * @param array $args Additional arguments passed to get_terms().
+	 * @return array
+	 * @uses Webcomic::$config
+	 * @hook get_terms
+	 */
+	public function get_terms( $terms, $taxonomies, $args ) {
+		if ( preg_match( '/webcomic\d+_(storyline|character)/', join( ' ', ( array ) $taxonomies ) ) ) {
+			foreach ( $terms as $k => $v ) {
+				if ( isset( $v->taxonomy ) and preg_match( '/^webcomic\d+_(storyline|character)$/', $v->taxonomy ) ) {
+					$terms[ $k ]->webcomic_image = empty( self::$config[ 'terms' ][ $v->term_id ][ 'image' ] ) ? 0 : self::$config[ 'terms' ][ $v->term_id ][ 'image' ];
+				}
+			}
+		}
+		
+		return $terms;
+	}
+	
 	/** Add webcomic classes to the body tag.
 	 * 
 	 * @param array $classes Array of body classes.
@@ -800,6 +684,78 @@ class Webcomic {
 		}
 		
 		return $classes;
+	}
+	
+	/** Add a webcomic_image property to term objects.
+	 * 
+	 * @param array $terms Array of retrieved terms.
+	 * @param integer $id Object ID the terms are related to.
+	 * @param string $taxonomy Taxonomy the terms belong to.
+	 * @return array
+	 * @uses Webcomic::$config
+	 * @hook get_the_terms
+	 */
+	public function get_the_terms( $terms, $id, $taxonomy ) {
+		if ( preg_match( '/^webcomic\d+_(storyline|character)$/', $taxonomy ) ) {
+			foreach ( $terms as $k => $v ) {
+				$terms[ $k ]->webcomic_image = empty( self::$config[ 'terms' ][ $v->term_id ][ 'image' ] ) ? 0 : self::$config[ 'terms' ][ $v->term_id ][ 'image' ];
+			}
+		}
+		
+		return $terms;
+	}
+	
+	/** Handle custom permalink tokens.
+	 * 
+	 * @todo Future: Use get_term_parents; see core.trac.wordpress.org/ticket/17069
+	 * 
+	 * @param string $link Permalink to swap tokens in.
+	 * @param object $post Post object.
+	 * @param boolean $name Whether to keep post name.
+	 * @param boolean $sample Whether this is a sample permalink.
+	 * @return string
+	 * @uses Webcomic::$config
+	 * @hook post_type_link
+	 */
+	public function post_type_link( $link, $post, $name, $sample ) {
+		if ( empty( self::$config[ 'collections' ][ $post->post_type ] ) or false === strpos( $link, '%' ) ) {
+			return $link;
+		}
+		
+		if ( false !== strpos( $link, "%{$post->post_type}_storyline%" ) and $storylines = get_the_terms( $post->ID, "{$post->post_type}_storyline" ) and !is_wp_error( $storylines ) ) {
+			$storylines = array_reverse( $storylines );
+			$storyline  = $storylines[ 0 ]->slug;
+			
+			if ( $parent = $storylines[ 0 ]->parent and $parents = get_ancestors( $storylines[ 0 ]->term_id, $storylines[ 0 ]->taxonomy ) ) {
+				$storyline = array();
+				
+				foreach ( $parents as $parent ) {
+					$the_parent   = get_term( $parent, $storylines[ 0 ]->taxonomy );
+					$storylines[] = $the_parent->slug;
+				}
+				
+				$storyline   = array_reverse( $storylines );
+				$storyline[] = $storylines[ 0 ]->slug;
+				$storyline   = join( '/', $storyline );
+			}
+		} else {
+			$storyline = '';
+		}
+		
+		$time   = explode( ' ', date( 'Y m d H i s', strtotime( $post->post_date ) ) );
+		$tokens = array(
+			'%year%'     => $time[ 0 ],
+			'%monthnum%' => $time[ 1 ],
+			'%day%'      => $time[ 2 ],
+			'%hour%'     => $time[ 3 ],
+			'%minute%'   => $time[ 4 ],
+			'%second%'   => $time[ 5 ],
+			'%post_id%'  => $post->ID,
+			'%author%'   => false !== strpos( $link, '%author%' ) ? get_userdata( $post->post_author )->user_nicename : '',
+			"%{$post->post_type}_storyline%" => $storyline
+		);
+		
+		return str_replace( array_keys( $tokens ), $tokens, $link );
 	}
 	
 	/** Add webcomic previews to feed content.
@@ -831,6 +787,28 @@ class Webcomic {
 		return $content;
 	}
 	
+	/** Add a webcomic_image property to term objects.
+	 * 
+	 * @param array $terms Array of retrieved terms.
+	 * @param integer $objects Object ID's the terms are related to.
+	 * @param string $taxonomies Taxonomy the terms belong to.
+	 * @param array $args Arguments passed to wp_get_object_terms().
+	 * @return array
+	 * @uses Webcomic::$config
+	 * @hook get_the_terms
+	 */
+	public function get_object_terms( $terms, $objects, $taxonomies, $args ) {
+		if ( 'all' === $args[ 'fields' ] and preg_match( '/webcomic\d+_(storyline|character)/', join( ' ', ( array ) $taxonomies ) ) ) {
+			foreach ( $terms as $k => $v ) {
+				if ( isset( $v->taxonomy ) and preg_match( '/^webcomic\d+_(storyline|character)$/', $v->taxonomy ) ) {
+					$terms[ $k ]->webcomic_image = empty( self::$config[ 'terms' ][ $v->term_id ][ 'image' ] ) ? 0 : self::$config[ 'terms' ][ $v->term_id ][ 'image' ];
+				}
+			}
+		}
+		
+		return $terms;
+	}
+	
 	/** Add the 'Webcomic' key for theme headers.
 	 * 
 	 * Theme authors can specify a theme as being 'Webcomic ready' by
@@ -847,6 +825,45 @@ class Webcomic {
 		$extra[] = 'Webcomic';
 		
 		return $extra;
+	}
+	
+	/** Use caption for title of media objects attached to a webcomic.
+	 *  
+	 * @param array $attributes An array of media attributes.
+	 * @param object $attachment The media object.
+	 * @return array
+	 * @uses Webcomic::$config
+	 * @hook wp_get_attachment_image_attributes
+	 */
+	public function get_attachment_image_attributes( $attributes, $attachment ) {
+		if ( $attachment->post_parent and $attachment->post_excerpt and isset( self::$config[ 'collections' ][ get_post_type( $attachment->post_parent ) ] ) ) {
+			$attributes[ 'title' ] = esc_attr( trim( strip_tags( $attachment->post_excerpt ) ) );
+		}
+		
+		return $attributes;
+	}
+	
+	/** Automagically integrate basic webcomic functionality.
+	 * 
+	 * @param object $query WP_Query object for the loop.
+	 * @return null
+	 * @uses Webcomic::$dir
+	 * @uses Webcomic::$config
+	 * @uses Webcomic::$integrate
+	 * @hook loop_start
+	 * @action webcomic_loop_end Triggered during integration just before Webcomic content is appended to the end of a WordPress loop.
+	 * @template loop_end-{$collection}.php, loop_end.php
+	 */
+	public function loop_end( $query ) {
+		global $post;
+		
+		if ( self::$integrate and $query->is_main_query() and is_singular( array_keys( self::$config[ 'collections' ] ) ) ) {
+			do_action( 'webcomic_loop_end', self::$collection );
+			
+			if ( !locate_template( array( 'webcomic/loop_end=' . self::$collection . '.php', 'webcomic/loop_end.php' ), true, false ) ) {
+				require self::$dir . '-/php/integrate/loop_end.php';
+			}
+		}
 	}
 	
 	/** Automagically integrate basic webcomic functionality.
@@ -878,29 +895,6 @@ class Webcomic {
 			
 			if ( !locate_template( array( 'webcomic/loop_start-' . self::$collection . '.php', 'webcomic/loop_start.php' ), true, false ) ) {
 				require self::$dir . '-/php/integrate/loop_start.php';
-			}
-		}
-	}
-	
-	/** Automagically integrate basic webcomic functionality.
-	 * 
-	 * @param object $query WP_Query object for the loop.
-	 * @return null
-	 * @uses Webcomic::$dir
-	 * @uses Webcomic::$config
-	 * @uses Webcomic::$integrate
-	 * @hook loop_start
-	 * @action webcomic_loop_end Triggered during integration just before Webcomic content is appended to the end of a WordPress loop.
-	 * @template loop_end-{$collection}.php, loop_end.php
-	 */
-	public function loop_end( $query ) {
-		global $post;
-		
-		if ( self::$integrate and $query->is_main_query() and is_singular( array_keys( self::$config[ 'collections' ] ) ) ) {
-			do_action( 'webcomic_loop_end', self::$collection );
-			
-			if ( !locate_template( array( 'webcomic/loop_end=' . self::$collection . '.php', 'webcomic/loop_end.php' ), true, false ) ) {
-				require self::$dir . '-/php/integrate/loop_end.php';
 			}
 		}
 	}
