@@ -84,11 +84,6 @@ class Webcomic {
 	 */
 	protected static $collection = '';
 	
-	/** Minimum Webcomic version supported by the active theme.
-	 * @var string
-	 */
-	protected static $theme_version = '';
-	
 	/** Set class properties and register hooks.
 	 * 
 	 * @uses Webcomic::$dir
@@ -351,13 +346,8 @@ class Webcomic {
 			self::$collection = empty( self::$config[ 'collections' ][ $match[ 0 ] ] ) ? preg_replace( '/_(archive|webcomic|storyline|character)$/', '', array_search( $match[ 1 ], $permalinks ) ) : $match[ 0 ];
 		}
 		
-		$theme = new WP_Theme( get_stylesheet_directory(), '' );
-		
-		if ( $theme->get( 'Webcomic' ) ) {
-			self::$integrate = true;
-		} else {
-			self::$theme_version = $theme->get( 'Webcomic' );
-		}
+		$active_theme    = new WP_Theme( get_stylesheet_directory(), '' );
+		self::$integrate = !$active_theme->get( 'Webcomic' );
 	}
 	
 	/** Email buffer alert notifications.

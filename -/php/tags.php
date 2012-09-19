@@ -143,10 +143,9 @@ class WebcomicTag extends Webcomic {
 	
 	/** Is a compatible version of Webcomic installed?
 	 * 
-	 * This is mostly useful for constructing Webcomic-ready themes to
-	 * verify that a compatible version of Webcomic is installed, but we
-	 * can also check for an arbitrary version by passing it via the
-	 * `$version` parameter.
+	 * This is mostly useful to verify that a compatible version of
+	 * Webcomic is installed when constructing Webcomic-ready themes,
+	 * but we can also check for an arbitrary version if necessary.
 	 * 
 	 * @param string $version Minimum version to check for. Defaults to the active themes version.
 	 * @return boolean
@@ -154,7 +153,10 @@ class WebcomicTag extends Webcomic {
 	 * @uses Webcomic::$theme_version
 	 */
 	public static function webcomic( $version = '' ) {
-		$version = $version ? $version : self::$theme_version;
+		if ( empty( $version ) ) {
+			$theme   = new WP_Theme( get_stylesheet_directory(), '' );
+			$version = $theme->get( 'Webcomic' );
+		}
 		
 		return ( $version and version_compare( self::$version, $version, '>=' ) );
 	}
