@@ -84,6 +84,11 @@ class Webcomic {
 	 */
 	protected static $collection = '';
 	
+	/** Minimum Webcomic version supported by the active theme.
+	 * @var string
+	 */
+	protected static $theme_version = '';
+	
 	/** Set class properties and register hooks.
 	 * 
 	 * @uses Webcomic::$dir
@@ -630,7 +635,11 @@ class Webcomic {
 		
 		$integrate = get_file_data( get_stylesheet_directory() . '/style.css', array( 'webcomic' => 'Webcomic' ) );
 		
-		self::$integrate = empty( $integrate[ 'webcomic' ] );
+		if ( empty( $integrate[ 'webcomic' ] ) ) {
+			self::$integrate = true;
+		} else {
+			self::$theme_version = $integrate[ 'webcomic' ];
+		}
 	}
 	
 	/** Register and enqueue javascript.
