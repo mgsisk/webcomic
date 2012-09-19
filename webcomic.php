@@ -160,11 +160,10 @@ class Webcomic {
 					add_action( 'the_content', array( $this, 'the_content' ), 10, 1 );
 					add_action( 'pre_get_posts', array( $this, 'pre_get_posts' ), 10, 1 );
 				}
-				
-				require_once self::$dir . '-/php/tags.php';
-				require_once self::$dir . '-/php/shortcodes.php'; new WebcomicShortcode;
 			}
-			
+				
+			require_once self::$dir . '-/php/tags.php';
+			require_once self::$dir . '-/php/shortcodes.php'; new WebcomicShortcode;
 			require_once self::$dir . '-/php/widgets.php'; new WebcomicWidgets;
 		}
 	}
