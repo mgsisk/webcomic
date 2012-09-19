@@ -141,6 +141,24 @@ class WebcomicTag extends Webcomic {
 	// Conditional Tags
 	///
 	
+	/** Is a compatible version of Webcomic installed?
+	 * 
+	 * This is mostly useful for constructing Webcomic-ready themes to
+	 * verify that a compatible version of Webcomic is installed, but we
+	 * can also check for an arbitrary version by passing it via the
+	 * `$version` parameter.
+	 * 
+	 * @param string $version Minimum version to check for. Defaults to the active themes version.
+	 * @return boolean
+	 * @uses Webcomic::$version
+	 * @uses Webcomic::$theme_version
+	 */
+	public static function webcomic( $version = '' ) {
+		$version = $version ? $version : self::$theme_version;
+		
+		return ( $version and version_compare( self::$version, $version, '>=' ) );
+	}
+	
 	/** Is the query for any single webcomic?
 	 * 
 	 * Specific collection checks should be done using the is_singular()
@@ -2724,6 +2742,29 @@ if ( !function_exists( 'get_webcomic_collections' ) ) {
 ///
 // Conditional Tags
 ///
+
+if ( !function_exists( 'webcomic' ) ) {
+	/** Is a compatible version of Webcomic installed?
+	 * 
+	 * <code>
+	 * if ( webcomic() ) {
+	 * 	// the current theme is compatible with this version of Webcomic
+	 * }
+	 * 
+	 * if ( webcomic( 5 ) ) {
+	 * 	// Webcomic 5 (or greater) is installed
+	 * }
+	 * </code>
+	 * 
+	 * @package Webcomic
+	 * @param string $version Minimum version to check for. Defaults to the active themes version.
+	 * @return boolean
+	 * @uses WebcomicTag::webcomic()
+	 */
+	function webcomic( $version = '' ) {
+		return WebcomicTag::webcomic( $version );
+	}
+}
 
 if ( !function_exists( 'is_webcomic' ) ) {
 	/** Is the query for any single webcomic?
