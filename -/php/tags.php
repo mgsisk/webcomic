@@ -2398,56 +2398,60 @@ class WebcomicTag extends Webcomic {
 		$output = $items = '';
 		
 		foreach ( $collections as $v ) {
-			if ( ( $collection and $v[ 'id' ] === $collection ) or ( $readable_count = wp_count_posts( $v[ 'id' ], 'readable' ) and 0 < ( $readable_count->publish + $readable_count->private ) ) or !$hide_empty ) {
-				$readable_count   = $readable_count->publish + $readable_count->private;
-				$collection_title = apply_filters( 'webcomic_collection_list_title', $v[ 'name' ], $v );
-				$feed_image       = filter_var( $feed, FILTER_VALIDATE_URL );
-				$feed_link        = $feed ? sprintf( '<a href="%s" class="webcomic-collection-feed">%s</a>',
-					get_post_type_archive_feed_link( $v[ 'id' ], $feed_type ),
-					$feed_image ? sprintf( '<img src="%s" alt="%s">', $feed, sprintf( __( 'Feed for %s', 'webcomic' ), get_post_type_object( $v[ 'id' ] )->labels->name ) ) : $feed
-				) : '';
+			if ( !$collection or $v[ 'id' ] === $collection ) {
+				$readable_count = wp_count_posts( $v[ 'id' ], 'readable' );
+				$readable_count = $readable_count->publish + $readable_count->private;
 				
-				if ( $webcomics ) {
-					$the_posts = new WP_Query( array( 'post_type' => $v[ 'id' ], 'order' => $webcomic_order, 'orderby' => $webcomic_orderby ) );
+				if ( !$hide_empty or 0 < $readable_count ) {
+					$collection_title = apply_filters( 'webcomic_collection_list_title', $v[ 'name' ], $v );
+					$feed_image       = filter_var( $feed, FILTER_VALIDATE_URL );
+					$feed_link        = $feed ? sprintf( '<a href="%s" class="webcomic-collection-feed">%s</a>',
+						get_post_type_archive_feed_link( $v[ 'id' ], $feed_type ),
+						$feed_image ? sprintf( '<img src="%s" alt="%s">', $feed, sprintf( __( 'Feed for %s', 'webcomic' ), get_post_type_object( $v[ 'id' ] )->labels->name ) ) : $feed
+					) : '';
 					
-					if ( $the_posts->have_posts() ) {
-						if ( $callback ) {
-							$items .= call_user_func( $callback, $v, $r, $the_posts );
-						} else {
-							$items .= sprintf( '<li class=""webcomic-collection %s%s"><a href="%s" class="webcomic-collection-link">%s%s</a>%s%s<%s class="webcomics">',
-								$v[ 'id' ],
-								$selected === $v[ 'id' ] ? ' current' : '',
-								'archive' === $target ? get_post_type_archive_link( $v[ 'id' ] ) : self::get_relative_webcomic_link( $target, false, false, '', $v[ 'id' ] ),
-								sprintf( '<div class="webcomic-collection-name">%s%s</div>', $collection_title, $show_count ? " ({$readable_count})" : '' ),
-								( $show_image and $v[ 'image' ] ) ? sprintf( '<div class="webcomic-collection-image">%s</div>', apply_filters( 'webcomic_collection_image', wp_get_attachment_image( $v[ 'image' ], $show_image ), $show_image, $v[ 'id' ] ) ) : '',
-								( $show_description and $v[ 'description' ] ) ? sprintf( '<div class="webcomic-collection-description">%s</div>', apply_filters( 'webcomic_collection_description', wpautop( $v[ 'description' ] ), $v[ 'id' ] ) ) : '',
-								$feed_link,
-								$ordered ? 'ol' : 'ul'
-							);
-							
-							while ( $the_posts->have_posts() ) { $the_posts->the_post();
-								$items .= sprintf( '<li%s><a href="%s">%s</a></li>',
-									$selected === get_the_ID() ? ' class="current"' : '',
-									apply_filters( 'the_permalink', get_permalink() ),
-									$webcomic_image ? WebcomicTag::the_webcomic( $webcomic_image, 'self' ) : the_title( '', '', false )
+					if ( $webcomics ) {
+						$the_posts = new WP_Query( array( 'post_type' => $v[ 'id' ], 'order' => $webcomic_order, 'orderby' => $webcomic_orderby ) );
+						
+						if ( $the_posts->have_posts() ) {
+							if ( $callback ) {
+								$items .= call_user_func( $callback, $v, $r, $the_posts );
+							} else {
+								$items .= sprintf( '<li class=""webcomic-collection %s%s"><a href="%s" class="webcomic-collection-link">%s%s</a>%s%s<%s class="webcomics">',
+									$v[ 'id' ],
+									$selected === $v[ 'id' ] ? ' current' : '',
+									'archive' === $target ? get_post_type_archive_link( $v[ 'id' ] ) : self::get_relative_webcomic_link( $target, false, false, '', $v[ 'id' ] ),
+									sprintf( '<div class="webcomic-collection-name">%s%s</div>', $collection_title, $show_count ? " ({$readable_count})" : '' ),
+									( $show_image and $v[ 'image' ] ) ? sprintf( '<div class="webcomic-collection-image">%s</div>', apply_filters( 'webcomic_collection_image', wp_get_attachment_image( $v[ 'image' ], $show_image ), $show_image, $v[ 'id' ] ) ) : '',
+									( $show_description and $v[ 'description' ] ) ? sprintf( '<div class="webcomic-collection-description">%s</div>', apply_filters( 'webcomic_collection_description', wpautop( $v[ 'description' ] ), $v[ 'id' ] ) ) : '',
+									$feed_link,
+									$ordered ? 'ol' : 'ul'
 								);
+								
+								while ( $the_posts->have_posts() ) { $the_posts->the_post();
+									$items .= sprintf( '<li%s><a href="%s">%s</a></li>',
+										$selected === get_the_ID() ? ' class="current"' : '',
+										apply_filters( 'the_permalink', get_permalink() ),
+										$webcomic_image ? WebcomicTag::the_webcomic( $webcomic_image, 'self' ) : the_title( '', '', false )
+									);
+								}
+								
+								$items .= $ordered ? '</ol></li>' : '</ul></li>';
 							}
-							
-							$items .= $ordered ? '</ol></li>' : '</ul></li>';
 						}
+						
+						wp_reset_postdata();
+					} else {
+						$items .= $callback ? call_user_func( $callback, $v, $r ) : sprintf( '<li class="webcomic-collection %s%s"><a href="%s" class="webcomic-collection-link">%s%s</a>%s%s</li>',
+							$v[ 'id' ],
+							$selected === $v[ 'id' ] ? ' current' : '',
+							'archive' === $target ? get_post_type_archive_link( $v[ 'id' ] ) : self::get_relative_webcomic_link( $target, false, false, '', $v[ 'id' ] ),
+							sprintf( '<div class="webcomic-collection-name">%s%s</div>', $collection_title, $show_count ? " ({$readable_count})" : '' ),
+							( $show_image and $v[ 'image' ] ) ? sprintf( '<div class="webcomic-collection-image">%s</div>', apply_filters( 'webcomic_collection_image', wp_get_attachment_image( $v[ 'image' ], $show_image ), $show_image, $v[ 'id' ] ) ) : '',
+							( $show_description and $v[ 'description' ] ) ? sprintf( '<div class="webcomic-collection-description">%s</div>', apply_filters( 'webcomic_collection_description', wpautop( $v[ 'description' ] ), $v[ 'id' ] ) ) : '',
+							$feed_link
+						);
 					}
-					
-					wp_reset_postdata();
-				} else {
-					$items .= $callback ? call_user_func( $callback, $v, $r ) : sprintf( '<li class="webcomic-collection %s%s"><a href="%s" class="webcomic-collection-link">%s%s</a>%s%s</li>',
-						$v[ 'id' ],
-						$selected === $v[ 'id' ] ? ' current' : '',
-						'archive' === $target ? get_post_type_archive_link( $v[ 'id' ] ) : self::get_relative_webcomic_link( $target, false, false, '', $v[ 'id' ] ),
-						sprintf( '<div class="webcomic-collection-name">%s%s</div>', $collection_title, $show_count ? " ({$readable_count})" : '' ),
-						( $show_image and $v[ 'image' ] ) ? sprintf( '<div class="webcomic-collection-image">%s</div>', apply_filters( 'webcomic_collection_image', wp_get_attachment_image( $v[ 'image' ], $show_image ), $show_image, $v[ 'id' ] ) ) : '',
-						( $show_description and $v[ 'description' ] ) ? sprintf( '<div class="webcomic-collection-description">%s</div>', apply_filters( 'webcomic_collection_description', wpautop( $v[ 'description' ] ), $v[ 'id' ] ) ) : '',
-						$feed_link
-					);
 				}
 			}
 		}
@@ -2457,7 +2461,7 @@ class WebcomicTag extends Webcomic {
 				$before,
 				$ordered ? 'ol' : 'ul',
 				$id ? sprintf( ' id="%s"', esc_attr( $id ) ) : '',
-				join( ' ', array_merge( array( 'webcomic-collections', $k ), ( array ) $class ) ),
+				join( ' ', array_merge( array( 'webcomic-collections', $collection ), ( array ) $class ) ),
 				$items,
 				$ordered ? 'ol' : 'ul',
 				$after
