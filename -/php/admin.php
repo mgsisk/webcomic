@@ -254,11 +254,11 @@ class WebcomicAdmin extends Webcomic {
 			add_option( 'webcomic_options', self::$config );
 			
 			wp_schedule_event( ( integer ) current_time( 'timestamp' ), 'daily', 'webcomic_buffer_alert' );
-			
-			flush_rewrite_rules();
 		} else if ( version_compare( self::$config[ 'version' ], self::$version, '<' ) ) {
 			require_once self::$dir . '-/php/upgrade.php'; new WebcomicUpgrade;
 		}
+		
+		flush_rewrite_rules();
 	}
 	
 	/** Deactivation hook.
