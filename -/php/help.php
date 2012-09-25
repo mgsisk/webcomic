@@ -321,7 +321,7 @@ class WebcomicHelp extends Webcomic {
 			<hr>
 			<p><a href="support@webcomic.nu">%s</a></p>',
 			__( 'For more information:', 'webcomic' ),
-			__( "Beginner's Guide", 'webcomic' ),
+			__( "Beginners Guide", 'webcomic' ),
 			__( 'Video Tutorials', 'webcomic' ),
 			__( 'Support Forum', 'webcomic' ),
 			__( 'Issue Tracker', 'webcomic' ),
