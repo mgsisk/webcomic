@@ -111,7 +111,7 @@ class Widget_WebcomicLink extends WP_Widget {
 		<p>
 			<label><?php _e( 'Collection:', 'webcomic' ); ?><br>
 				<select name="<?php echo $this->get_field_name( 'collection' ); ?>">
-					<option value=""><?php _e( '- Any Collection -', 'webcomic' ); ?></option>
+					<option value=""><?php _e( '(current collection)', 'webcomic' ); ?></option>
 					<?php
 						foreach ( $config[ 'collections' ] as $k => $v ) {
 							printf( '<option value="%s"%s>%s</option>',
@@ -253,8 +253,8 @@ class Widget_DynamicWebcomic extends WP_Widget {
 		<p>
 			<label><?php _e( 'Collection:', 'webcomic' ); ?><br>
 				<select name="<?php echo $this->get_field_name( 'collection' ); ?>">
-					<option value=""><?php _e( '- Any Collection -', 'webcomic' ); ?></option>
-					<option value="-1"<?php echo empty( $collection ) ? '' : selected( -1, $collection, false ); ?>><?php _e( '- All Collections -', 'webcomic' ); ?></option>
+					<option value=""><?php _e( '(current collection)', 'webcomic' ); ?></option>
+					<option value="-1"<?php echo empty( $collection ) ? '' : selected( -1, $collection, false ); ?>><?php _e( '(all collections)', 'webcomic' ); ?></option>
 					<?php
 						foreach ( $config[ 'collections' ] as $k => $v ) {
 							printf( '<option value="%s"%s>%s</option>',
@@ -360,8 +360,8 @@ class Widget_RecentWebcomics extends WP_Widget {
 		<p>
 			<label><?php _e( 'Collection:', 'webcomic' ); ?><br>
 				<select name="<?php echo $this->get_field_name( 'collection' ); ?>">
-					<option value=""><?php _e( '- Any Collection -', 'webcomic' ); ?></option>
-					<option value="-1"<?php echo empty( $collection ) ? '' : selected( -1, $collection, false ); ?>><?php _e( '- All Collections -', 'webcomic' ); ?></option>
+					<option value=""><?php _e( '(current collection)', 'webcomic' ); ?></option>
+					<option value="-1"<?php echo empty( $collection ) ? '' : selected( -1, $collection, false ); ?>><?php _e( '(all collections)', 'webcomic' ); ?></option>
 					<?php
 						foreach ( $config[ 'collections' ] as $k => $v ) {
 							printf( '<option value="%s"%s>%s</option>',
@@ -584,7 +584,7 @@ class Widget_WebcomicStorylines extends WP_Widget {
 		<p>
 			<label><?php _e( 'Collection:', 'webcomic' ); ?><br>
 				<select name="<?php echo $this->get_field_name( 'collection' ); ?>">
-					<option value=""><?php _e( '- Any Collection -', 'webcomic' ); ?></option>
+					<option value=""><?php _e( '(current collection)', 'webcomic' ); ?></option>
 					<?php
 						foreach ( $config[ 'collections' ] as $k => $v ) {
 							printf( '<option value="%s"%s>%s</option>',
@@ -705,7 +705,7 @@ class Widget_WebcomicCharacters extends WP_Widget {
 		<p>
 			<label><?php _e( 'Collection:', 'webcomic' ); ?><br>
 				<select name="<?php echo $this->get_field_name( 'collection' ); ?>">
-					<option value=""><?php _e( '- Any Collection -', 'webcomic' ); ?></option>
+					<option value=""><?php _e( '(current collection)', 'webcomic' ); ?></option>
 					<?php
 						foreach ( $config[ 'collections' ] as $k => $v ) {
 							printf( '<option value="%s"%s>%s</option>',
