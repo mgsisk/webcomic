@@ -446,7 +446,7 @@ class WebcomicConfig extends Webcomic {
 	public function collection_theme() {
 		?>
 		<select name="webcomic_theme" id="webcomic_theme">
-			<option value=""><?php _e( '- Current Theme -', 'webcomic' ); ?></option>
+			<option value=""><?php _e( '(current theme)', 'webcomic' ); ?></option>
 			<?php
 				foreach ( wp_get_themes() as $theme ) {
 					printf(
@@ -556,7 +556,7 @@ class WebcomicConfig extends Webcomic {
 		?>
 		<select name="webcomic_transcripts_languages[]" id="webcomic_transcripts_languages" style="min-height:8em;vertical-align:top" multiple>
 			<optgroup label="<?php esc_attr_e( 'Transcript Languages', 'webcomic' ); ?>">
-				<option value="!"<?php selected( '!', self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'transcripts' ][ 'languages' ][ 0 ] ); ?>><?php _e( '- Any -', 'webcomic' ); ?></option>
+				<option value="!"<?php selected( '!', self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'transcripts' ][ 'languages' ][ 0 ] ); ?>><?php _e( '(any)', 'webcomic' ); ?></option>
 				<?php
 					if ( $terms = get_terms( 'webcomic_language', array( 'get' => 'all' ) ) and !is_wp_error( $terms ) ) {
 						foreach ( $terms as $term ) {
@@ -756,7 +756,7 @@ class WebcomicConfig extends Webcomic {
 		<p>
 			<select name="webcomic_access_roles[]" style="min-height:8em;vertical-align:top" multiple>
 				<optgroup label="<?php esc_attr_e( 'Allowed Roles', 'webcomic' ); ?>">
-					<option value="!"<?php selected( ( isset( self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'access' ][ 'roles' ][ 0 ]  ) and '!' === self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'access' ][ 'roles' ][ 0 ] ) ); ?>><?php _e( '- Any -', 'webcomic' ); ?></option>
+					<option value="!"<?php selected( ( isset( self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'access' ][ 'roles' ][ 0 ]  ) and '!' === self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'access' ][ 'roles' ][ 0 ] ) ); ?>><?php _e( '(any)', 'webcomic' ); ?></option>
 					<?php
 						$roles = get_editable_roles();
 						
