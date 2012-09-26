@@ -89,6 +89,7 @@ class TwitterOAuth {
    * Get a request_token from Twitter
    *
    * @returns a key/value array containing oauth_token and oauth_token_secret
+   * @modified Michael Sisk
    */
   function getRequestToken($oauth_callback = NULL) {
     $parameters = array();
@@ -97,7 +98,9 @@ class TwitterOAuth {
     } 
     $request = $this->oAuthRequest($this->requestTokenURL(), 'GET', $parameters);
     $token = OAuthUtil::parse_parameters($request);
-    $this->token = new OAuthConsumer($token['oauth_token'], $token['oauth_token_secret']);
+    if ( isset( $token[ 'oauth_token' ], $token[ 'oauth_token_secret' ] ) ) {
+	    $this->token = new OAuthConsumer($token['oauth_token'], $token['oauth_token_secret']);
+	}
     return $token;
   }
 
