@@ -42,7 +42,7 @@ class WebcomicTag extends Webcomic {
 	 * collections by name, like:
 	 * 
 	 * <code>
-	 * 	$collections = WebcomicTag::get_webcomic_collections( true );
+	 * $collections = WebcomicTag::get_webcomic_collections( true );
 	 * 
 	 * usort( $collections, array( 'WebcomicTag', 'sort_webcomic_collections_name' ) );
 	 * 
@@ -64,7 +64,7 @@ class WebcomicTag extends Webcomic {
 	 * collections by slug, like:
 	 * 
 	 * <code>
-	 * 	$collections = WebcomicTag::get_webcomic_collections( true );
+	 * $collections = WebcomicTag::get_webcomic_collections( true );
 	 * 
 	 * usort( $collections, array( 'WebcomicTag', 'sort_webcomic_collections_slug' ) );
 	 * 
@@ -2706,7 +2706,7 @@ class WebcomicTag extends Webcomic {
 if ( !function_exists( 'get_webcomic_collection' ) ) {
 	/** Return the current collection ID or configuration.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // return the current collection ID (if any)
 	 * $collection = get_webcomic_collection();
 	 * 
@@ -2727,7 +2727,7 @@ if ( !function_exists( 'get_webcomic_collection' ) ) {
 if ( !function_exists( 'get_webcomic_collections' ) ) {
 	/** Return all collection ID's or configurations.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // return an array of all collection ID's
 	 * $collections = get_webcomic_collections();
 	 * 
@@ -2752,7 +2752,7 @@ if ( !function_exists( 'get_webcomic_collections' ) ) {
 if ( !function_exists( 'webcomic' ) ) {
 	/** Is a compatible version of Webcomic installed?
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * if ( webcomic() ) {
 	 * 	// the current theme is compatible with this version of Webcomic
 	 * }
@@ -2775,7 +2775,7 @@ if ( !function_exists( 'webcomic' ) ) {
 if ( !function_exists( 'is_webcomic' ) ) {
 	/** Is the query for any single webcomic?
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * if ( is_webcomic() ) {
 	 * 	// this is any single webcomic page
 	 * }
@@ -2802,7 +2802,7 @@ if ( !function_exists( 'is_webcomic' ) ) {
 if ( !function_exists( 'is_first_webcomic' ) ) {
 	/** Is the query for the first webcomic?
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * if ( is_first_webcomic() ) {
 	 * 	// this is the first webcomic in the collection
 	 * }
@@ -2831,7 +2831,7 @@ if ( !function_exists( 'is_first_webcomic' ) ) {
 if ( !function_exists( 'is_last_webcomic' ) ) {
 	/** Is the query for the last webcomic?
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * if ( is_last_webcomic() ) {
 	 * 	// this is the last webcomic in the collection
 	 * }
@@ -2860,7 +2860,7 @@ if ( !function_exists( 'is_last_webcomic' ) ) {
 if ( !function_exists( 'is_webcomic_attachment' ) ) {
 	/** Is the query for a Webcomic-recognized attachment?
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * if ( is_webcomic_attachment() ) {
 	 * 	// this is a Webcomic-recognized attachment
 	 * }
@@ -2882,7 +2882,7 @@ if ( !function_exists( 'is_webcomic_attachment' ) ) {
 if ( !function_exists( 'is_webcomic_page' ) ) {
 	/** Is the query for a webcomic-related page?
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * if ( is_webcomic_page() {
 	 * 	// this is a webcomic-related page
 	 * }
@@ -2910,7 +2910,7 @@ if ( !function_exists( 'is_webcomic_page' ) ) {
 if ( !function_exists( 'is_webcomic_archive' ) ) {
 	/** Is the query for a webcomic archive page?
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * if ( is_webcomic_archive() ) {
 	 * 	// this is a webcomic archive page
 	 * }
@@ -2932,7 +2932,7 @@ if ( !function_exists( 'is_webcomic_archive' ) ) {
 if ( !function_exists( 'is_webcomic_storyline' ) ) {
 	/** Is the query for a webcomic storyline archive page?
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * if ( is_webcomic_storyline() ) {
 	 * 	// this is a webcomic storyline page
 	 * }
@@ -2959,7 +2959,7 @@ if ( !function_exists( 'is_webcomic_storyline' ) ) {
 if ( !function_exists( 'is_webcomic_character' ) ) {
 	/** Is the query for a webcomic character archive page?
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * if ( is_webcomic_character() ) {
 	 * 	// this is a webcomic character page
 	 * }
@@ -2986,7 +2986,7 @@ if ( !function_exists( 'is_webcomic_character' ) ) {
 if ( !function_exists( 'is_a_webcomic' ) ) {
 	/** Is the current post a webcomic?
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * if ( is_a_webcomic() ) {
 	 * 	// the current post is a webcomic
 	 * }
@@ -3013,7 +3013,7 @@ if ( !function_exists( 'is_a_webcomic' ) ) {
 if ( !function_exists( 'is_a_webcomic_attachment' ) ) {
 	/** Is the current post a Webcomic-recognized attachment?
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * if ( is_a_webcomic_attachment() ) {
 	 * 	// the current post is a webcomic-recognized attachment
 	 * }
@@ -3040,7 +3040,7 @@ if ( !function_exists( 'is_a_webcomic_attachment' ) ) {
 if ( !function_exists( 'has_webcomic_attachments' ) ) {
 	/** Does the current webcomic have any Webcomic-recognized attachments?
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * if ( has_webcomic_attachments() ) {
 	 * 	// the current post has webcomic-recognized attachments
 	 * }
@@ -3062,7 +3062,7 @@ if ( !function_exists( 'has_webcomic_attachments' ) ) {
 if ( !function_exists( 'has_webcomic_storyline' ) ) {
 	/** Does the current post belong to a specific storyline?
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * if ( has_webcomic_storyline( 'mostly-harmless' ) ) {
 	 * 	// the current post is part of a storyline with the slug 'mostly-harmless'
 	 * }
@@ -3086,7 +3086,7 @@ if ( !function_exists( 'has_webcomic_storyline' ) ) {
 if ( !function_exists( 'has_webcomic_character' ) ) {
 	/** Does the current post feature to a specific character?
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * if ( has_webcomic_character( 'zaphod-beeblebrox' ) ) {
 	 * 	// the current post features a character with the slug 'zaphod-beeblebrox'
 	 * }
@@ -3110,7 +3110,7 @@ if ( !function_exists( 'has_webcomic_character' ) ) {
 if ( !function_exists( 'have_webcomic_transcripts' ) ) {
 	/** Does the current webcomic have any transcripts?
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * if ( have_webcomic_transcripts() ) {
 	 * 	// the current post has published transcripts
 	 * }
@@ -3143,7 +3143,7 @@ if ( !function_exists( 'have_webcomic_transcripts' ) ) {
 if ( !function_exists( 'webcomic_transcripts_open' ) ) {
 	/** Does the current webcomic allow transcribing?
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * if ( webcomic_transcripts_open() ) {
 	 * 	// the current post allows transcribing
 	 * }
@@ -3166,7 +3166,7 @@ if ( !function_exists( 'webcomic_transcripts_open' ) ) {
 if ( !function_exists( 'webcomic_prints_available' ) ) {
 	/** Does the current webcomic have prints available?
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * if ( webcomic_prints_available() ) {
 	 * 	// the current post has prints available
 	 * }
@@ -3194,7 +3194,7 @@ if ( !function_exists( 'webcomic_prints_available' ) ) {
 if ( !function_exists( 'verify_webcomic_age' ) ) {
 	/** Verify a users age against collection age limit.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * if ( is_null( verify_webcomic_age() ) ) {
 	 * 	// the current user's age has not be checked
 	 * } else if ( verify_webcomic_age() ) {
@@ -3212,6 +3212,20 @@ if ( !function_exists( 'verify_webcomic_age' ) ) {
 	 * }
 	 * </code>
 	 * 
+	 * <code class="bbcode">
+	 * [verify_webcomic_age]
+	 * // the current user is old enough to view content in the current collection
+	 * [/verify_webcomic_age]
+	 * 
+	 * [verify_webcomic_age collection="webcomic42"]
+	 * // the current user is old enough to view content in webcomic collection 42
+	 * [/verify_webcomic_age]
+	 * 
+	 * [verify_webcomic_age collection="webcomic42" user="2"]
+	 * // the user with an ID of 2 is old enough to view content in webcomic collection 42
+	 * [/verify_webcomic_age]
+	 * </code>
+	 * 
 	 * @package Webcomic
 	 * @param string $collection The collection to verify against.
 	 * @param object $user The user to verify with (defaults to the current user).
@@ -3227,7 +3241,7 @@ if ( !function_exists( 'verify_webcomic_age' ) ) {
 if ( !function_exists( 'verify_webcomic_role' ) ) {
 	/** Verify a users role against allowed collection roles.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * if ( is_null( verify_webcomic_role() ) ) {
 	 * 	// the current user is not logged in
 	 * } else if ( verify_webcomic_role() ) {
@@ -3243,6 +3257,20 @@ if ( !function_exists( 'verify_webcomic_role' ) ) {
 	 * if ( verify_webcomic_role( 'webcomic42', 2 ) ) {
 	 * 	// the user with an ID of 2 has permission to view content in webcomic collection 42
 	 * }
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * [verify_webcomic_role]
+	 * // the current user has permission to view content in the current collection
+	 * [/verify_webcomic_role]
+	 * 
+	 * [verify_webcomic_role collection="webcomic42"]
+	 * // the current user has permission  to view content in webcomic collection 42
+	 * [/verify_webcomic_role]
+	 * 
+	 * [verify_webcomic_role collection="webcomic42" user="2"]
+	 * // the user with an ID of 2 has permission to view content in webcomic collection 42
+	 * [/verify_webcomic_role]
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -3264,7 +3292,7 @@ if ( !function_exists( 'verify_webcomic_role' ) ) {
 if ( !function_exists( 'the_webcomic' ) ) {
 	/** Render a webcomic.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render webcomic attachments for the current post
 	 * the_webcomic();
 	 * 
@@ -3273,6 +3301,17 @@ if ( !function_exists( 'the_webcomic' ) ) {
 	 * 
 	 * // render large webcomic attachments for the current post linked to the next webcomic in the storyline with an ID of 42
 	 * the_webomic( 'large', 'next', 42, false, 'storyline' );
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render webcomic attachments for the current post
+	 * [the_webcomic]
+	 * 
+	 * // render small webcomic attachments for the post with an ID of 42 linked to the first webcomic in the collection
+	 * [the_webcomic size="thumbnail" relative="first" the_post="42"]
+	 * 
+	 * // render large webcomic attachments for the current post linked to the next webcomic in the storyline with an ID of 42
+	 * [the_webomic size="large" relative="next" in_same_term="42" taxonomy="storyline"]
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -3292,7 +3331,7 @@ if ( !function_exists( 'the_webcomic' ) ) {
 if ( !function_exists( 'the_related_webcomics' ) ) {
 	/** Render a formatted list of related webcomics.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render a comma-separated list of up to five related webcomics
 	 * the_related_webcomics();
 	 * 
@@ -3301,6 +3340,17 @@ if ( !function_exists( 'the_related_webcomics' ) ) {
 	 * 
 	 * // render a comma-separated list of all webcomics related by storyline to the post with an ID of 42
 	 * the_related_webcomics( '<h2>Related Webcomics</h2><p>', ', ', '</p>', '', 0, true, false, 42 );
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render a comma-separated list of up to five related webcomics
+	 * [the_related_webcomics]
+	 * 
+	 * // render an ordered list of up to to ten webcomics related by characters using small images
+	 * [the_related_webcomics before="<ol class='related-webcomics'><li>" sep="</li><li>" after="</li></ol>" image="thumbnail" limit="10" storylines="false"]
+	 * 
+	 * // render a comma-separated list of all webcomics related by storyline to the post with an ID of 42
+	 * [the_related_webcomics before="<h2>Related Webcomics</h2><p>" sep=", " after="</p>" limit="0" characters="false" the_post="42"]
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -3322,7 +3372,7 @@ if ( !function_exists( 'the_related_webcomics' ) ) {
 if ( !function_exists( 'previous_webcomic_link' ) ) {
 	/** Render a link to the previous chronological webcomic.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render a link to the previous webcomic
 	 * previous_webcomic_link();
 	 * 
@@ -3331,6 +3381,17 @@ if ( !function_exists( 'previous_webcomic_link' ) ) {
 	 * 
 	 * // render a link to the previous webcomic in the current storylines, excluding the storyline with an ID of 42
 	 * previous_webcomic_link( '<b>%link</b>', '&lt; Previous', true, 42 );
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render a link to the previous webcomic
+	 * [previous_webcomic_link]
+	 * 
+	 * // render a link to the previous webcomic with a small preview
+	 * [previous_webcomic_link link="%thumbnail"]
+	 * 
+	 * // render a link to the previous webcomic in the current storylines, excluding the storyline with an ID of 42
+	 * [previous_webcomic_link format="<b>%link</b>" in_same_term="true" excluded_terms="42"]&lt; Previous[/previous_webcomic_link]
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -3349,7 +3410,7 @@ if ( !function_exists( 'previous_webcomic_link' ) ) {
 if ( !function_exists( 'next_webcomic_link' ) ) {
 	/** Render a link to the next chronological webcomic.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render a link to the next webcomic
 	 * next_webcomic_link();
 	 * 
@@ -3358,6 +3419,17 @@ if ( !function_exists( 'next_webcomic_link' ) ) {
 	 * 
 	 * // render a link to the next webcomic in the current storylines, excluding the storyline with an ID of 42
 	 * next_webcomic_link( '<b>%link</b>', 'Next &gt;', true, 42 );
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render a link to the next webcomic
+	 * [next_webcomic_link]
+	 * 
+	 * // render a link to the next webcomic with a small preview
+	 * [next_webcomic_link link="%thumbnail"]
+	 * 
+	 * // render a link to the next webcomic in the current storylines, excluding the storyline with an ID of 42
+	 * [next_webcomic_link format="<b>%link</b>" in_same_term="true" excluded_terms="42"]Next &gt;[/next_webcomic_link]
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -3376,7 +3448,7 @@ if ( !function_exists( 'next_webcomic_link' ) ) {
 if ( !function_exists( 'first_webcomic_link' ) ) {
 	/** Render a link to the first chronological webcomic.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render a link to the first webcomic
 	 * first_webcomic_link();
 	 * 
@@ -3388,6 +3460,20 @@ if ( !function_exists( 'first_webcomic_link' ) ) {
 	 * 
 	 * // render a link to the first webcomic with a large preview in collection 42
 	 * first_webcomic_link( '%link', '%large', false, false, '', 'webcomic42' );
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render a link to the first webcomic
+	 * [first_webcomic_link]
+	 * 
+	 * // render a link to the first webcomic with a small preview
+	 * [first_webcomic_link link="%thumbnail"]
+	 * 
+	 * // render a link to the first webcomic in the current storylines, excluding the storyline with an ID of 42
+	 * [first_webcomic_link format="<b>%link</b>" in_same_term="true" excluded_terms="42"]&lt;&lt; First[/first_webcomic_link]
+	 * 
+	 * // render a link to the first webcomic with a large preview in collection 42
+	 * [first_webcomic_link collection="webcomic42"]%large[/first_webcomic_link]
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -3407,7 +3493,7 @@ if ( !function_exists( 'first_webcomic_link' ) ) {
 if ( !function_exists( 'last_webcomic_link' ) ) {
 	/** Render a link to the last chronological webcomic.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render a link to the last webcomic
 	 * last_webcomic_link();
 	 * 
@@ -3419,6 +3505,20 @@ if ( !function_exists( 'last_webcomic_link' ) ) {
 	 * 
 	 * // render a link to the last webcomic with a large preview in collection 42
 	 * last_webcomic_link( '%link', '%large', false, false, '', 'webcomic42' );
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render a link to the last webcomic
+	 * [last_webcomic_link]
+	 * 
+	 * // render a link to the last webcomic with a small preview
+	 * [last_webcomic_link link="%thumbnail"]
+	 * 
+	 * // render a link to the last webcomic in the current storylines, excluding the storyline with an ID of 42
+	 * [last_webcomic_link format="<b>%link</b>" in_same_term="true" excluded_terms="42"]Last &gt;&gt;[/last_webcomic_link]
+	 * 
+	 * // render a link to the last webcomic with a large preview in collection 42
+	 * [last_webcomic_link collection="webcomic42"]%large[/last_webcomic_link]
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -3438,7 +3538,7 @@ if ( !function_exists( 'last_webcomic_link' ) ) {
 if ( !function_exists( 'random_webcomic_link' ) ) {
 	/** Render a link to a randomly selected webcomic.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render a link to a random webcomic
 	 * random_webcomic_link();
 	 * 
@@ -3450,6 +3550,20 @@ if ( !function_exists( 'random_webcomic_link' ) ) {
 	 * 
 	 * // render a link to a random webcomic with a large preview in collection 42 using a parameterized url
 	 * random_webcomic_link( '%link', '%large', false, false, '', 'webcomic42', false );
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render a link to a random webcomic
+	 * [random_webcomic_link]
+	 * 
+	 * // render a link to a random webcomic with a small preview
+	 * [random_webcomic_link link="%thumbnail"]
+	 * 
+	 * // render a link to a random webcomic in the current storylines, excluding the storyline with an ID of 42
+	 * [random_webcomic_link format="<b>%link</b>" in_same_term="true" excluded_terms="42"]Random Comic[/random_webcomic_link]
+	 * 
+	 * // render a link to a random webcomic with a large preview in collection 42 using a parameterized url
+	 * [random_webcomic_link collection="webcomic42" cache="false"]%large[/random_webcomic_link]
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -3470,7 +3584,7 @@ if ( !function_exists( 'random_webcomic_link' ) ) {
 if ( !function_exists( 'purchase_webcomic_link' ) ) {
 	/** Render a purchase webcomic link.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render a link to purchase the current webcomic
 	 * purchase_webcomic_link();
 	 * 
@@ -3479,6 +3593,17 @@ if ( !function_exists( 'purchase_webcomic_link' ) ) {
 	 * 
 	 * // render a link to purchase the webcomic with an ID of 42
 	 * purchase_webcomic_link( '%link', 'Purchase prints of %title', 42 );
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render a link to purchase the current webcomic
+	 * [purchase_webcomic_link]
+	 * 
+	 * // render a link to a random webcomic with a small preview
+	 * [purchase_webcomic_link link="%thumbnail"]
+	 * 
+	 * // render a link to purchase the webcomic with an ID of 42
+	 * [purchase_webcomic_link the_post="42"]Purchase prints of %title[/purchase_webcomic_link]
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -3495,12 +3620,20 @@ if ( !function_exists( 'purchase_webcomic_link' ) ) {
 if ( !function_exists( 'the_webcomic_collection' ) ) {
 	/** Render a webcomic collection link.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render a link to the collection archive page for the collection the current webcomic belongs to
 	 * the_webcomic_collection();
 	 * 
 	 * // render a link to the beginning of collection 42 with a small poster preview
 	 * the_webcomic_collection( '%link', '%thumbnail', 'first', 'webcomic42' );
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render a link to the collection archive page for the collection the current webcomic belongs to
+	 * [the_webcomic_collection]
+	 * 
+	 * // render a link to the beginning of collection 42 with a small poster preview
+	 * [the_webcomic_collection target="first" collection="webcomic42"]%thumbnail[/the_webcomic_collection]
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -3518,7 +3651,7 @@ if ( !function_exists( 'the_webcomic_collection' ) ) {
 if ( !function_exists( 'the_webcomic_storylines' ) ) {
 	/** Render a formatted list of storylines related to the current webcomic.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render a comma-separated list of storylines related to the current webcomic
 	 * the_webcomic_storylines();
 	 * 
@@ -3527,6 +3660,17 @@ if ( !function_exists( 'the_webcomic_storylines' ) ) {
 	 * 
 	 * // render links to the first webcomic in each storyline related to the current webcomic with a small storyline cover
 	 * the_webcomic_storylines( '<div><h2>Storylines</h2><figure>', '</figure><figure>', '</figure></div>', 'first', 'thumbnail' );
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render a comma-separated list of storylines related to the current webcomic
+	 * [the_webcomic_storylines]
+	 * 
+	 * // render an unordered list of storylines related to the current webcomic
+	 * [the_webcomic_storylines before="<ul><li>" sep="</li><li>" after="</li></ul>"]
+	 * 
+	 * // render links to the first webcomic in each storyline related to the current webcomic with a small storyline cover
+	 * [the_webcomic_storylines before="<div><h2>Storylines</h2><figure>" sep="</figure><figure>" after="</figure></div>" target="first" image="thumbnail"]
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -3545,7 +3689,7 @@ if ( !function_exists( 'the_webcomic_storylines' ) ) {
 if ( !function_exists( 'the_webcomic_characters' ) ) {
 	/** Render a formatted list of characters appearing to the current webcomic.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render a comma-separated list of characters appearing in the current webcomic
 	 * the_webcomic_characters();
 	 * 
@@ -3554,6 +3698,17 @@ if ( !function_exists( 'the_webcomic_characters' ) ) {
 	 * 
 	 * // render links to the first appearance of each character appearing in the current webcomic with a small character avatar
 	 * the_webcomic_characters( '<div><h2>Characters</h2><figure>', '</figure><figure>', '</figure></div>', 'first', 'thumbnail' );
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render a comma-separated list of characters appearing to the current webcomic
+	 * [the_webcomic_characters]
+	 * 
+	 * // render an unordered list of characters appearing in the current webcomic
+	 * [the_webcomic_characters before="<ul><li>" sep="</li><li>" after="</li></ul>"]
+	 * 
+	 * // render links to the first appearance of each character appearing in the current webcomic with a small character avatar
+	 * [the_webcomic_characters before="<div><h2>characters</h2><figure>" sep="</figure><figure>" after="</figure></div>" target="first" image="thumbnail"]
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -3576,7 +3731,7 @@ if ( !function_exists( 'the_webcomic_characters' ) ) {
 if ( !function_exists( 'previous_webcomic_storyline_link' ) ) {
 	/** Render a link to the previous webcomic storyline.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render a link to the archive page for the previous storyline
 	 * previous_webcomic_storyline_link();
 	 * 
@@ -3585,6 +3740,17 @@ if ( !function_exists( 'previous_webcomic_storyline_link' ) ) {
 	 * 
 	 * // render a link to the archive page for the previous storyline, even if it doesn't have any webcomics
 	 * previous_webcomic_storyline_link( '%link', '&lt; Previous Arc', 'archive', array( 'hide_empty' => false ) );
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render a link to the archive page for the previous storyline
+	 * [previous_webcomic_storyline_link]
+	 * 
+	 * // render a link to the first webcomic in the previous storyline with a small cover preview
+	 * [previous_webcomic_storyline_link link="%thumbnail" target="first"]
+	 * 
+	 * // render a link to the archive page for the previous storyline, even if it doesn't have any webcomics
+	 * [previous_webcomic_storyline_link args="hide_empty=0"]&lt; Previous Arc[/previous_webcomic_storyline_link]
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -3609,7 +3775,7 @@ if ( !function_exists( 'previous_webcomic_storyline_link' ) ) {
 if ( !function_exists( 'next_webcomic_storyline_link' ) ) {
 	/** Render a link to the next webcomic storyline.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render a link to the archive page for the next storyline
 	 * next_webcomic_storyline_link();
 	 * 
@@ -3618,6 +3784,17 @@ if ( !function_exists( 'next_webcomic_storyline_link' ) ) {
 	 * 
 	 * // render a link to the archive page for the next storyline, even if it doesn't have any webcomics
 	 * next_webcomic_storyline_link( '%link', 'Next Arc &gt;', 'archive', array( 'hide_empty' => false ) );
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render a link to the archive page for the next storyline
+	 * [next_webcomic_storyline_link]
+	 * 
+	 * // render a link to the first webcomic in the next storyline with a small cover preview
+	 * [next_webcomic_storyline_link link="%thumbnail" target="first"]
+	 * 
+	 * // render a link to the archive page for the next storyline, even if it doesn't have any webcomics
+	 * [next_webcomic_storyline_link args="hide_empty=0"]Next Arc &gt;[/next_webcomic_storyline_link]
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -3642,7 +3819,7 @@ if ( !function_exists( 'next_webcomic_storyline_link' ) ) {
 if ( !function_exists( 'first_webcomic_storyline_linke' ) ) {
 	/** Render a link to the first webcomic storyline.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render a link to the archive page for the first storyline
 	 * first_webcomic_storyline_link();
 	 * 
@@ -3654,6 +3831,20 @@ if ( !function_exists( 'first_webcomic_storyline_linke' ) ) {
 	 * 
 	 * // render a link to the last page for the first storyline in webcomic 42
 	 * first_webcomic_storyline_link( '%link', '&lt;&lt; First Arc', 'last', array(), 'webcomic42' );
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render a link to the archive page for the first storyline
+	 * [first_webcomic_storyline_link]
+	 * 
+	 * // render a link to the first webcomic in the first storyline with a small cover preview
+	 * [first_webcomic_storyline_link link="%thumbnail" target="first"]
+	 * 
+	 * // render a link to the archive page for the first storyline, even if it doesn't have any webcomics
+	 * [first_webcomic_storyline_link args="hide_empty=0"]&lt;&lt; First Arc[/first_webcomic_storyline_link]
+	 * 
+	 * // render a link to the last page for the first storyline in webcomic 42
+	 * [first_webcomic_storyline_link link="&lt;&lt; First Arc" target="last" collection="webcomic42"]
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -3679,7 +3870,7 @@ if ( !function_exists( 'first_webcomic_storyline_linke' ) ) {
 if ( !function_exists( 'last_webcomic_storyline_link' ) ) {
 	/** Render a link to the last webcomic storyline.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render a link to the archive page for the last storyline
 	 * last_webcomic_storyline_link();
 	 * 
@@ -3691,6 +3882,20 @@ if ( !function_exists( 'last_webcomic_storyline_link' ) ) {
 	 * 
 	 * // render a link to the first page for the last storyline in webcomic 42
 	 * last_webcomic_storyline_link( '%link', 'Last Arc &gt;&gt;', 'first', array(), 'webcomic42' );
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render a link to the archive page for the last storyline
+	 * [last_webcomic_storyline_link]
+	 * 
+	 * // render a link to the last webcomic in the last storyline with a small cover preview
+	 * [last_webcomic_storyline_link link="%thumbnail" target="last"]
+	 * 
+	 * // render a link to the archive page for the last storyline, even if it doesn't have any webcomics
+	 * [last_webcomic_storyline_link args="hide_empty=0"]Last Arc &gt;&gt;[/last_webcomic_storyline_link]
+	 * 
+	 * // render a link to the first page for the last storyline in webcomic 42
+	 * [last_webcomic_storyline_link link="Last Arc &gt;&gt;" target="first" collection="webcomic42"]
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -3716,7 +3921,7 @@ if ( !function_exists( 'last_webcomic_storyline_link' ) ) {
 if ( !function_exists( 'random_webcomic_storyline_link' ) ) {
 	/** Render a link to a randomly selected webcomic storyline.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render a link to the archive page of a random webcomic
 	 * random_webcomic_storyline_link();
 	 * 
@@ -3731,6 +3936,23 @@ if ( !function_exists( 'random_webcomic_storyline_link' ) ) {
 	 * 
 	 * // render a link to a random webcomic with a large cover in collection 42 using a parameterized url
 	 * random_webcomic_storyline_link( '%link', '%large', 'last', array(), 'webcomic42', false );
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render a link to the archive page of a random webcomic
+	 * [random_webcomic_storyline_link]
+	 * 
+	 * // render a link to the last webcomic in a random storyline with a small cover preview
+	 * [random_webcomic_storyline_link link="%thumbnail target="last"]
+	 * 
+	 * // render a link to the archive page of a random storyline, even if it doesn't have any webcomics
+	 * [random_webcomic_storyline_link args="hide_empty=0"]Random Arc[/random_webcomic_storyline_link]
+	 * 
+	 * // render a link to a random page in a random storyline in collection 42
+	 * [random_webcomic_storyline_link link="Random Storyline" target="random" collection="webcomic42"]
+	 * 
+	 * // render a link to a random webcomic with a large cover in collection 42 using a parameterized url
+	 * [random_webcomic_storyline_link link="%large" target="last" collection="webcomic42" cache="false"]
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -3754,7 +3976,7 @@ if ( !function_exists( 'random_webcomic_storyline_link' ) ) {
 if ( !function_exists( 'previous_webcomic_character_link' ) ) {
 	/** Render a link to the previous webcomic character.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render a link to the archive page for the previous character
 	 * previous_webcomic_character_link();
 	 * 
@@ -3763,6 +3985,17 @@ if ( !function_exists( 'previous_webcomic_character_link' ) ) {
 	 * 
 	 * // render a link to the archive page for the previous character, even if it doesn't have any webcomics
 	 * previous_webcomic_character_link( '%link', '&lt; Previous Character', 'archive', array( 'hide_empty' => false ) );
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render a link to the archive page for the previous character
+	 * [previous_webcomic_character_link]
+	 * 
+	 * // render a link to the first webcomic in the previous character with a small cover preview
+	 * [previous_webcomic_character_link link="%thumbnail" target="first"]
+	 * 
+	 * // render a link to the archive page for the previous character, even if it doesn't have any webcomics
+	 * [previous_webcomic_character_link args="hide_empy=0"]&lt; Previous Character[/previous_webcomic_link]
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -3787,7 +4020,7 @@ if ( !function_exists( 'previous_webcomic_character_link' ) ) {
 if ( !function_exists( 'next_webcomic_character_link' ) ) {
 	/** Render a link to the next webcomic character.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render a link to the archive page for the next character
 	 * next_webcomic_character_link();
 	 * 
@@ -3796,6 +4029,17 @@ if ( !function_exists( 'next_webcomic_character_link' ) ) {
 	 * 
 	 * // render a link to the archive page for the next character, even if it doesn't have any webcomics
 	 * next_webcomic_character_link( '%link', 'Next Character &gt;', 'archive', array( 'hide_empty' => false ) );
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render a link to the archive page for the next character
+	 * [next_webcomic_character_link]
+	 * 
+	 * // render a link to the first webcomic in the next character with a small cover preview
+	 * [next_webcomic_character_link link="%thumbnail" target="first"]
+	 * 
+	 * // render a link to the archive page for the next character, even if it doesn't have any webcomics
+	 * [next_webcomic_character_link args="hide_empty=0"]Next Character &gt;[/next_webcomic_character_link]
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -3820,7 +4064,7 @@ if ( !function_exists( 'next_webcomic_character_link' ) ) {
 if ( !function_exists( 'first_webcomic_character_link' ) ) {
 	/** Render a link to the first webcomic character.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render a link to the archive page for the first character
 	 * first_webcomic_character_link();
 	 * 
@@ -3832,6 +4076,20 @@ if ( !function_exists( 'first_webcomic_character_link' ) ) {
 	 * 
 	 * // render a link to the last page for the first character in webcomic 42
 	 * first_webcomic_character_link( '%link', '&lt;&lt; First Character', 'last', array(), 'webcomic42' );
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render a link to the archive page for the first character
+	 * [first_webcomic_character_link]
+	 * 
+	 * // render a link to the first webcomic in the first character with a small cover preview
+	 * [first_webcomic_character_link link="%thumbnail" target="first"]
+	 * 
+	 * // render a link to the archive page for the first character, even if it doesn't have any webcomics
+	 * [first_webcomic_character_link link="&lt;&lt; First Character" args="hide_empty=0"]
+	 * 
+	 * // render a link to the last page for the first character in webcomic 42
+	 * [first_webcomic_character_link link="&lt;&lt; First Character" target="last" collection="webcomic42"]
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -3857,7 +4115,7 @@ if ( !function_exists( 'first_webcomic_character_link' ) ) {
 if ( !function_exists( 'last_webcomic_character_link' ) ) {
 	/** Render a link to the last webcomic character.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render a link to the archive page for the last character
 	 * last_webcomic_character_link();
 	 * 
@@ -3869,6 +4127,20 @@ if ( !function_exists( 'last_webcomic_character_link' ) ) {
 	 * 
 	 * // render a link to the first page for the last character in webcomic 42
 	 * last_webcomic_character_link( '%link', 'Last Character &gt;&gt;', 'first', array(), 'webcomic42' );
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render a link to the archive page for the last character
+	 * [last_webcomic_character_link]
+	 * 
+	 * // render a link to the last webcomic in the last character with a small cover preview
+	 * [last_webcomic_character_link link="%thumbnail" target="last"]
+	 * 
+	 * // render a link to the archive page for the last character, even if it doesn't have any webcomics
+	 * [last_webcomic_character_link args="hide_empty=0"]Last Character &gt;&gt;[/last_webcomic_character_link]
+	 * 
+	 * // render a link to the first page for the last character in webcomic 42
+	 * [last_webcomic_character_link link="Last Character &gt;&gt;" target="first" collection="webcomic42"]
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -3894,7 +4166,7 @@ if ( !function_exists( 'last_webcomic_character_link' ) ) {
 if ( !function_exists( 'random_webcomic_character_link' ) ) {
 	/** Render a link to a randomly selected webcomic character.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render a link to the archive page of a random webcomic
 	 * random_webcomic_character_link();
 	 * 
@@ -3909,6 +4181,23 @@ if ( !function_exists( 'random_webcomic_character_link' ) ) {
 	 * 
 	 * // render a link to the last webcomic in a random character with a large avatar in collection 42 using a parameterized url
 	 * random_webcomic_character_link( '%link', '%large', 'last', array(), 'webcomic42', false );
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render a link to the archive page of a random webcomic
+	 * [random_webcomic_character_link]
+	 * 
+	 * // render a link to the last webcomic in a random character with a small avatar preview
+	 * [random_webcomic_character_link link="%thumbnail" target="last"]
+	 * 
+	 * // render a link to the archive page of a random character, even if it doesn't have any webcomics
+	 * [random_webcomic_character_link args="hide_empty=0"]Random Character[/random_webcomic_character_link]
+	 * 
+	 * // render a link to a random page in a random character in collection 42
+	 * [random_webcomic_character_link link="Random Character" target="random" collection="webcomic42"]
+	 * 
+	 * // render a link to the last webcomic in a random character with a large avatar in collection 42 using a parameterized url
+	 * [random_webcomic_character_link link="%large" target="last" collection="webcomic42" cache="false"]
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -3932,12 +4221,20 @@ if ( !function_exists( 'random_webcomic_character_link' ) ) {
 if ( !function_exists( 'webcomic_storyline_title' ) ) {
 	/** Render the webcomic storyline title on a storyline archive page.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render the storyline title
 	 * webcomic_storyline_title();
 	 * 
 	 * // assign the title of the storyline with an id of 42 in the 'webcomic42' collection to a variable for later use
 	 * $storyline_title = WebcomicTag::webcomic_term_title( 'Storyline: ', 42, 'webcomic42' );
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render the storyline title
+	 * [webcomic_storyline_title]
+	 * 
+	 * // render the title of the storyline with an id of 1 in the 'webcomic42' collection with a prefix
+	 * [webcomic_storyline_title term="1" collection="webcomic42"]storyline: [/webcomic_storyline_title]
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -3955,12 +4252,20 @@ if ( !function_exists( 'webcomic_storyline_title' ) ) {
 if ( !function_exists( 'webcomic_character_title' ) ) {
 	/** Render the webcomic character name on a character archive page.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render the character name
 	 * webcomic_character_title();
 	 * 
 	 * // assign the title of the character with an id of 42 in the 'webcomic42' collection to a variable for later use
 	 * $character_title = WebcomicTag::webcomic_term_title( 'Character: ', 42, 'webcomic42' );
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render the character title
+	 * [webcomic_character_title]
+	 * 
+	 * // render the title of the character with an id of 1 in the 'webcomic42' collection with a prefix
+	 * [webcomic_character_title term="1" collection="webcomic42"]Character: [/webcomic_character_title]
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -3978,13 +4283,21 @@ if ( !function_exists( 'webcomic_character_title' ) ) {
 if ( !function_exists( 'webcomic_storyline_description' ) ) {
 	/** Render the description for a webcomic storyline.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render the description of a webcomic storyline on the storyline archive page
 	 * webcomic_storyline_description();
 	 * 
 	 * // assign the description of the webcomic storyline with an ID of 1 from collection 42 to a variable for later use
 	 * $description = WebcomicTag::webcomic_term_description( 1, 'webcomic42_storyline' );
 	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render the description of a webcomic storyline on the storyline archive page
+	 * [webcomic_storyline_description]
+	 * 
+	 * // render the description of the webcomic storyline with an ID of 1 from collection 42
+	 * [webcomic_storyline_description term="1" collection="webcomic42"]
+	 * <code>
 	 * 
 	 * @package Webcomic
 	 * @param integer $storyline Storyline ID to render a description for. Will use global term ID by default.
@@ -4001,12 +4314,20 @@ if ( !function_exists( 'webcomic_storyline_description' ) ) {
 if ( !function_exists( 'webcomic_character_description' ) ) {
 	/** Render the description for a webcomic character.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render the description of a webcomic character on the character archive page
 	 * webcomic_character_description();
 	 * 
 	 * // assign the description of the webcomic character with an ID of 1 from collection 42 to a variable for later use
 	 * $description = WebcomicTag::webcomic_term_description( 1, 'webcomic42_character' );
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render the description of a webcomic character on the character archive page
+	 * [webcomic_character_description]
+	 * 
+	 * // render the description of the webcomic character with an ID of 1 from collection 42
+	 * [webcomic_character_description term="1" collection="webcomic42"]
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -4024,12 +4345,20 @@ if ( !function_exists( 'webcomic_character_description' ) ) {
 if ( !function_exists( 'webcomic_storyline_cover' ) ) {
 	/** Render the storyline cover on a storyline archive page.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render the full size storyline cover
 	 * webcomic_storyline_cover();
 	 * 
 	 * // assign the medium size storyline cover for for the storyline with an ID of 42 in collection 42 to a variable for later use
 	 * $poster = WebcomicTag::webcomic_term_image( medium, '42', 'webcomic42' );
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render the full size storyline cover
+	 * [webcomic_storyline_cover]
+	 * 
+	 * // render the medium size storyline cover for for the storyline with an ID of 1 in collection 42
+	 * [webcomic_storyline_cover size="medium" term="1" collection="webcomic42"]
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -4047,12 +4376,20 @@ if ( !function_exists( 'webcomic_storyline_cover' ) ) {
 if ( !function_exists( 'webcomic_character_avatar' ) ) {
 	/** Render the webcomic poster on a collection archive page.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render the full size collection image
 	 * webcomic_character_avatar();
 	 * 
 	 * // assign the medium size character avatar for for the character with an ID of 42 in collection 42 to a variable for later use
 	 * $poster = WebcomicTag::webcomic_term_image( 'medium', 42, 'webcomic42' );
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render the full size character avatar
+	 * [webcomic_character_avatar]
+	 * 
+	 * // render the medium size character avatar for for the character with an ID of 1 in collection 42
+	 * [webcomic_character_avatar size="medium" term="1" collection="webcomic42"]
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -4074,12 +4411,20 @@ if ( !function_exists( 'webcomic_character_avatar' ) ) {
 if ( !function_exists( 'webcomic_collection_title' ) ) {
 	/** Render the webcomic collection title on a collection archive page.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render the collection title
 	 * webcomic_collection_title();
 	 * 
 	 * // assign the collection title to a variable for later use
 	 * $collection_title = WebcomicTag::webcomic_collection_title( 'Collection: ', false );
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render the collection title
+	 * [webecomic_collection_title]
+	 * 
+	 * // render the collection title for collection 42 with a prefix
+	 * [webecomic_collection_title collection="webcomic42" prefix="Collection: "]
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -4094,12 +4439,20 @@ if ( !function_exists( 'webcomic_collection_title' ) ) {
 if ( !function_exists( 'webcomic_collection_description' ) ) {
 	/** Render the description for a webcomic collection.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render the description of a webcomic collection on the collection archive page
 	 * webcomic_collection_description();
 	 * 
 	 * // assign the description of webcomic collection 42 to a variable for later use
 	 * $description = WebcomicTag::webcomic_collection_description( 'webcomic42' );
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render the description of a webcomic collection on the collection archive page
+	 * [webcomic_collection_description]
+	 * 
+	 * // render the description of webcomic collection 42
+	 * [webcomic_collection_description collection="webcomic42"]
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -4114,12 +4467,20 @@ if ( !function_exists( 'webcomic_collection_description' ) ) {
 if ( !function_exists( 'webcomic_collection_poster' ) ) {
 	/** Render the webcomic poster on a collection archive page.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render the full size collection poster
 	 * webcomic_collection_poster();
 	 * 
 	 * // assign the medium size collection poster for collection 42 to a variable for later use
 	 * $poster = WebcomicTag::webcomic_collection_image( 'webcomic42', 'medium' );
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render the full size collection poster
+	 * [webcomic_collection_poster]
+	 * 
+	 * // render the medium size collection poster for collection 42
+	 * [webcomic_collection_poster size="medium" collection="webcomic42"]
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -4135,12 +4496,20 @@ if ( !function_exists( 'webcomic_collection_poster' ) ) {
 if ( !function_exists( 'webcomic_collection_print_amount' ) ) {
 	/** Render a formatted collection print amount.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render the current collection's print amount for a domestic print
 	 * webcomic_collection_print_amount( 'domestic' );
 	 * 
 	 * // render the original-print shipping amount for collection 42 using ',' for the decimal and '.' for the thousands separator
 	 * webcomic_collection_print_amount( 'original-shipping', ',', '.', 'webcomic42' );
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render the current collection's print amount for a domestic print.
+	 * [webcomic_collection_print_amount type="domestic"]
+	 * 
+	 * // render the original-print shipping amount for collection 42 using ',' for the decimal and '.' for the thousands separator.
+	 * [webcomic_collection_print_amount type="original-shipping" dec="," sep="." collection="42"]
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -4162,12 +4531,20 @@ if ( !function_exists( 'webcomic_collection_print_amount' ) ) {
 if ( !function_exists( 'webcomic_donation_amount' ) ) {
 	/** Render a donation amount.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render the current collections donation amount
 	 * webcomic_donation_amount();
 	 * 
 	 * // render the donation amount for collection 42 using ',' for the decimal and '.' for the thousands separator
 	 * webcomic_donation_amount( ',', '.', 'webcomic42' );
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render the current collections donation amount
+	 * [webcomic_donation_amount]
+	 * 
+	 * // render the donation amount for collection 42 using ',' for the decimal and '.' for the thousands separator
+	 * [webcomic_donation_amount dec="," sep="." collection="webcomic42"]
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -4184,7 +4561,7 @@ if ( !function_exists( 'webcomic_donation_amount' ) ) {
 if ( !function_exists( 'webcomic_donation_fields' ) ) {
 	/** Render hidden donation form fields.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render hidden donation fields for the current collection
 	 * webcomic_donation_fields();
 	 * 
@@ -4204,12 +4581,20 @@ if ( !function_exists( 'webcomic_donation_fields' ) ) {
 if ( !function_exists( 'webcomic_donation_form' ) ) {
 	/** Render a donation form.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render a donation form for the current collection
 	 * webcomic_donation_form();
 	 * 
 	 * // render a donation form for collection 42 with a custom label
 	 * webcomic_donation_form( 'Support This Webcomic', 'webcomic42' );
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render a donation form for the current collection
+	 * [webcomic_donation_form]
+	 * 
+	 * // render a donation form for collection 42 with a custom label
+	 * [webcomic_donation_form collection="webcomic42"]Support This Webcomic[/webcomic_donation_form]
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -4225,12 +4610,20 @@ if ( !function_exists( 'webcomic_donation_form' ) ) {
 if ( !function_exists( 'webcomic_print_amount' ) ) {
 	/** Render a formatted webcomic print amount.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render the current webcomic's print amount for a domestic print
 	 * webcomic_print_amount( 'domestic' );
 	 * 
 	 * // render the original-print shipping amount for webcomic 42 using ',' for the decimal and '.' for the thousands separator
 	 * webcomic_print_amount( 'original-shipping', ',', '.', 42 );
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render the current webcomic's print amount for a domestic print
+	 * [webcomic_print_amount type="domestic"]
+	 * 
+	 * // render the original-print shipping amount for webcomic 42 using ',' for the decimal and '.' for the thousands separator
+	 * [webcomic_print_amount type="original-shipping" dec="," sep="." the_post="42"]
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -4248,12 +4641,20 @@ if ( !function_exists( 'webcomic_print_amount' ) ) {
 if ( !function_exists( 'webcomic_print_adjustment' ) ) {
 	/** Render a formatted webcomic print adjustment.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render the current webcomic's adjustment for a domestic print
 	 * webcomic_print_amount( 'domestic' );
 	 * 
 	 * // render the original-print shipping adjustment for webcomic 42
 	 * webcomic_print_amount( 'original-shipping', 42 );
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render the current webcomic's adjustment for a domestic print
+	 * [webcomic_print_amount type="domestic"]
+	 * 
+	 * // render the original-print shipping adjustment for webcomic 42
+	 * [webcomic_print_amount type="original-shipping" the_post="42"]
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -4269,7 +4670,7 @@ if ( !function_exists( 'webcomic_print_adjustment' ) ) {
 if ( !function_exists( 'webcomic_print_fields' ) ) {
 	/** Return hidden print form fields.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render hidden domestic print form fields for the current webcomic
 	 * webcomic_print_fields( 'domestic' );
 	 * 
@@ -4293,7 +4694,7 @@ if ( !function_exists( 'webcomic_print_fields' ) ) {
 if ( !function_exists( 'webcomic_print_form' ) ) {
 	/** Render a print purchase form.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render a purchase domestic webcomic print form
 	 * webcomic_print_form( 'domestic' );
 	 * 
@@ -4302,6 +4703,17 @@ if ( !function_exists( 'webcomic_print_form' ) ) {
 	 * 
 	 * // render a shopping cart form with a custom label
 	 * webcomic_print_form( 'cart', 'View Your Cart' );
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render a purchase domestic webcomic print form
+	 * [webcomic_print_form type="domestic"]
+	 * 
+	 * // render a purchase international webcomic print form for webcomic 42
+	 * [webcomic_print_form type="international" the_post="42"]
+	 * 
+	 * // render a shopping cart form with a custom label
+	 * [webcomic_print_form type="cart" label="View Your Cart"]
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -4322,7 +4734,7 @@ if ( !function_exists( 'webcomic_print_form' ) ) {
 if ( !function_exists( 'webcomic_transcripts_template' ) ) {
 	/** Load the transcripts template file.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // load the standard Webcomic transcripts template
 	 * webcomic_transcripts_template();
 	 * 
@@ -4342,7 +4754,7 @@ if ( !function_exists( 'webcomic_transcripts_template' ) ) {
 if ( !function_exists( 'webcomic_transcripts_link' ) ) {
 	/** Render a webcomic transcripts link.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render a transcripts link
 	 * webcomic_transcripts_link();
 	 * 
@@ -4370,7 +4782,7 @@ if ( !function_exists( 'webcomic_transcripts_link' ) ) {
 if ( !function_exists( 'get_webcomic_transcripts' ) ) {
 	/** Return an array of post objects.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render published transcripts
 	 * if ( $transcripts = get_webcomic_transcripts() ) {
 	 * 	foreach ( $transcripts as $post ) { setup_postdata( $post );
@@ -4410,7 +4822,7 @@ if ( !function_exists( 'the_webcomic_transcript_authors' ) ) {
 	 * returned list. Standard WordPress functions like the_author()
 	 * should be used to display this information.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render all authors related to the current transcript
 	 * the_webcomic_transcript_authors()
 	 * 
@@ -4436,7 +4848,7 @@ if ( !function_exists( 'the_webcomic_transcript_authors' ) ) {
 if ( !function_exists( 'the_webcomic_transcript_languages' ) ) {
 	/** Render a formatted list of languages related to the current webcomic transcript.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render any languages associated with the current transcript
 	 * the_webcomic_transcript_languages();
 	 * 
@@ -4458,7 +4870,7 @@ if ( !function_exists( 'the_webcomic_transcript_languages' ) ) {
 if ( !function_exists( 'webcomic_transcript_fields' ) ) {
 	/** Render hidden transcript form fields.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render hidden transcript form fields
 	 * webcomic_transcript_fields();
 	 * 
@@ -4495,7 +4907,7 @@ if ( !function_exists( 'webcomic_transcript_form' ) ) {
 	 * - `string` **$label_submit** - Text to display for the submit button.
 	 * - `mixed` **$wysiwyg_editor** - Whether to display a WYSIWYG transcript editor. May pass an array of arguments for `wp_editor()`.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render the standard transcript form
 	 * webcomic_transcript_form();
 	 * 
@@ -4542,7 +4954,7 @@ if ( !function_exists( 'webcomic_dropdown_transcript_languages' ) ) {
 	 * - `integer` **$depth** - How deep the walker should run. Defaults to 0 (all levels). A -1 depth will result in flat output.
 	 * - `integer` **$selected** - The ID of the selected term.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render a dropdown of available transcript languages
 	 * webcomic_dropdown_transcript_languages();
 	 * 
@@ -4603,7 +5015,7 @@ if ( !function_exists( 'webcomic_list_transcript_languages' ) ) {
 	 * - `integer` **$depth** - How deep the walker should run. Defaults to 0 (all levels). A -1 depth will result in flat output.
 	 * - `integer` **$selected** - The ID of the selected term.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render a list of available transcript languages
 	 * webcomic_list_transcript_languages();
 	 * 
@@ -4661,7 +5073,7 @@ if ( !function_exists( 'webcomic_dropdown_storylines' ) ) {
 	 * - `string` **$target** - The target url for storylines, one of 'archive', 'first', 'last', or 'random'. Defaults to 'archive'.
 	 * - `integer` **$selected** - The ID of the selected term or webcomic.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render a dropdown of storylines with at least one webcomic in the current collection
 	 * webcomic_dropdown_storylines();
 	 * 
@@ -4670,6 +5082,17 @@ if ( !function_exists( 'webcomic_dropdown_storylines' ) ) {
 	 * 
 	 * // render a dropdown of published webcomics grouped by storyline in collection 42
 	 * webcomic_dropdown_storylines( array( 'collection' => 'webcomic42', 'show_option_all' => '- Comics by Storyline -', 'webcomics' => true ) );
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render a dropdown of storylines with at least one webcomic in the current collection
+	 * [webcomic_dropdown_storylines]
+	 * 
+	 * // render a dropdown of all storylines in collection 42 linked to the beginning of each storyline with a default option
+	 * [webcomic_dropdown_storylines collection="webcomic42" hide_empty="false" target="first" show_option_all="- Storylines -"]
+	 * 
+	 * // render a dropdown of published webcomics grouped by storyline in collection 42
+	 * [webcomic_dropdown_storylines collection="webcomic42" show_option_all="- Comics by Storyline -" webcomics="true"]
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -4726,7 +5149,7 @@ if ( !function_exists( 'webcomic_dropdown_characters' ) ) {
 	 * - `string` **$target** - The target url for characters, one of 'archive', 'first', 'last', or 'random'. Defaults to 'archive'.
 	 * - `integer` **$selected** - The ID of the selected character or webcomic.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render a dropdown of characters featured in at least one webcomic of the current collection
 	 * webcomic_dropdown_characters();
 	 * 
@@ -4735,6 +5158,17 @@ if ( !function_exists( 'webcomic_dropdown_characters' ) ) {
 	 * 
 	 * // render a dropdown of published webcomics grouped by character in collection 42
 	 * webcomic_dropdown_characters( array( 'collection' => 'webcomic42', 'show_option_all' => '- Comics by Character -', 'webcomics' => true ) );
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render a dropdown of characters featured in at least one webcomic of the current collection
+	 * [webcomic_dropdown_characters]
+	 * 
+	 * // render a dropdown of all characters in collection 42 linked to the beginning of each character with a default option
+	 * [webcomic_dropdown_characters collection="webcomic42" hide_empty="false" target="first" show_option_all="- Characters -"]
+	 * 
+	 * // render a dropdown of published webcomics grouped by character in collection 42
+	 * [webcomic_dropdown_characters collection="webcomic42" show_option_all="- Comics by Character -" webcomics="true"]
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -4791,7 +5225,7 @@ if ( !function_exists( 'webcomic_dropdown_collections' ) ) {
 	 * - `string` **$target** - The target url for collections, one of 'archive', 'first', 'last', or 'random'. Defaults to 'archive'.
 	 * - `string` **$selected** - The ID of the selected collection or webcomic.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render a dropdown of all webcomic collections with at least one post
 	 * webcomic_dropdown_collections();
 	 * 
@@ -4800,6 +5234,17 @@ if ( !function_exists( 'webcomic_dropdown_collections' ) ) {
 	 * 
 	 * // render a dropdown of published webcomics grouped by collection only for collection 42
 	 * webcomic_dropdown_collections( array( 'collection' => 'webcomic42', 'webcomics' => true ) );
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render a dropdown of all webcomic collections with at least one post
+	 * [webcomic_dropdown_collections]
+	 * 
+	 * // render a dropdown of all webcomic collections linked to the beginning of each collection with a default option
+	 * [webcomic_dropdown_collections hide_empty="false" target="first" show_option_all="- Collections -"]
+	 * 
+	 * // render a dropdown of published webcomics grouped by collection only for collection 42
+	 * [webcomic_dropdown_collections collection="webcomic42" webcomics="true"]
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -4853,7 +5298,7 @@ if ( !function_exists( 'webcomic_list_storylines' ) ) {
 	 * - `string` **$target** - The target url for storylines, one of 'archive', 'first', 'last', or 'random'. Defaults to 'archive'.
 	 * - `integer` **$selected** - The ID of the selected storyline or webcomic.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render a list of storylines with at least one webcomic in the current collection
 	 * webcomic_list_storylines();
 	 * 
@@ -4862,6 +5307,17 @@ if ( !function_exists( 'webcomic_list_storylines' ) ) {
 	 * 
 	 * // render a list of published webcomic thumbnails grouped by storyline in collection 42 with storyline descriptions
 	 * webcomic_list_storylines( array( 'collection' => 'webcomic42', 'show_description' => true, 'webcomics' => true, 'webcomic_image' => 'thumbnail' ) );
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render a list of storylines with at least one webcomic in the current collection
+	 * [webcomic_list_storylines]
+	 * 
+	 * // render an ordered list of all storylines in collection 42 linked to the beginning of each storyline
+	 * [webcomic_list_storylines collection="webcomic42" hide_empty="false" target="first" ordered="true"]
+	 * 
+	 * // render a list of published webcomic thumbnails grouped by storyline in collection 42 with storyline descriptions
+	 * [webcomic_list_storylines collection="webcomic42" show_description="true" webcomics="true" webcomic_image="thumbnail"]
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -4928,7 +5384,7 @@ if ( !function_exists( 'webcomic_list_characters' ) ) {
 	 * - `string` **$target** - The target url for characters, one of 'archive', 'first', 'last', or 'random'. Defaults to 'archive'.
 	 * - `integer` **$selected** - The ID of the selected character or webcomic.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render a list of characters with at least one webcomic in the current collection
 	 * webcomic_list_characters();
 	 * 
@@ -4937,6 +5393,17 @@ if ( !function_exists( 'webcomic_list_characters' ) ) {
 	 * 
 	 * // render a list of published webcomic thumbnails grouped by character in collection 42 with character descriptions
 	 * webcomic_list_characters( array( 'collection' => 'webcomic42', 'show_description' => true, 'webcomics' => true, 'webcomic_image' => 'thumbnail' ) );
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render a list of characters with at least one webcomic in the current collection
+	 * [webcomic_list_characters]
+	 * 
+	 * // render an ordered list of all characters in collection 42 linked to the beginning of each character
+	 * [webcomic_list_characters collection="webcomic42" hide_empty="false" target="first" ordered="true"]
+	 * 
+	 * // render a list of published webcomic thumbnails grouped by character in collection 42 with character descriptions
+	 * [webcomic_list_characters collection="webcomic42" show_description="true" webcomics="true" webcomic_image="thumbnail"]
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -5005,7 +5472,7 @@ if ( !function_exists( 'webcomic_list_collections' ) ) {
 	 * - `string` **$target** - The target url for collections, one of 'archive', 'first', 'last', or 'random'. Defaults to 'archive'.
 	 * - `integer` **$selected** - The ID of the selected collection or webcomic.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render a list of all webcomic collections with at least one post
 	 * webcomic_list_collections();
 	 * 
@@ -5014,6 +5481,17 @@ if ( !function_exists( 'webcomic_list_collections' ) ) {
 	 * 
 	 * // render a list of published webcomic thumbnails grouped by collection only for collection 42 with collection descriptions
 	 * webcomic_list_collections( array( 'collection' => 'webcomic42', 'show_description' => true, 'webcomics' => true, 'webcomic_image' => 'thumbnail' ) );
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render a list of all webcomic collections with at least one post
+	 * [webcomic_list_collections]
+	 * 
+	 * // render an ordered list of all webcomic collections linked to the beginning of each collection
+	 * [webcomic_list_collections hide_empty="false" target="first" ordered="true"]
+	 * 
+	 * // render a list of published webcomic thumbnails grouped by collection only for collection 42 with collection descriptions
+	 * [webcomic_list_collections collection="webcomic42" show_description="true" webcomics="true" webcomic_image="thumbnail"]
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -5070,7 +5548,7 @@ if ( !function_exists( 'webcomic_storyline_cloud' ) ) {
 	 * - `string` **$target** - The target url for storylines, one of 'archive', 'first', 'last', or 'random'. Defaults to 'archive'.
 	 * - `integer` **$selected** - The ID of the current storyline.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render a cloud of webcomic storylines
 	 * webcomic_storyline_cloud();
 	 * 
@@ -5079,6 +5557,17 @@ if ( !function_exists( 'webcomic_storyline_cloud' ) ) {
 	 * 
 	 * // render a cloud of thumbnail-sized webcomic storyline covers
 	 * webcomic_storyline_cloud( array( 'image' => 'thumbnail' ) );
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render a cloud of webcomic storylines
+	 * [webcomic_storyline_cloud]
+	 * 
+	 * // render a list cloud of webcomic storylines in collection 42 linked to the beginning of each storyline
+	 * [webcomic_storyline_cloud collection="webcomic42" target="first" sep=""]
+	 * 
+	 * // render a cloud of thumbnail-sized webcomic storyline covers
+	 * [webcomic_storyline_cloud image="thumbnail"]
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -5135,7 +5624,7 @@ if ( !function_exists( 'webcomic_character_cloud' ) ) {
 	 * - `string` **$target** - The target url for characters, one of 'archive', 'first', 'last', or 'random'. Defaults to 'archive'.
 	 * - `integer` **$selected** - The ID of the current character.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render a cloud of webcomic characters
 	 * webcomic_character_cloud();
 	 * 
@@ -5144,6 +5633,17 @@ if ( !function_exists( 'webcomic_character_cloud' ) ) {
 	 * 
 	 * // render a cloud of thumbnail-sized webcomic avatars
 	 * webcomic_character_cloud( array( 'image' => 'thumbnail' ) );
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render a cloud of webcomic characters
+	 * [webcomic_character_cloud]
+	 * 
+	 * // render a list cloud of webcomic characters in collection 42 linked to the beginning of each character
+	 * [webcomic_character_cloud collection="webcomic42" target="first" sep=""]
+	 * 
+	 * // render a cloud of thumbnail-sized webcomic avatars
+	 * [webcomic_character_cloud image="thumbnail"]
 	 * </code>
 	 * 
 	 * @package Webcomic
@@ -5200,7 +5700,7 @@ if ( !function_exists( 'webcomic_collection_cloud' ) ) {
 	 * - `string` **$target** - The target url for collections, one of 'archive', 'first', 'last', or 'random'. Defaults to 'archive'.
 	 * - `integer` **$selected** - The ID of the current collection.
 	 * 
-	 * <code>
+	 * <code class="php">
 	 * // render a cloud of webcomic collections
 	 * webcomic_collection_cloud();
 	 * 
@@ -5209,6 +5709,17 @@ if ( !function_exists( 'webcomic_collection_cloud' ) ) {
 	 * 
 	 * // render a cloud of thumbnail-sized webcomic collections
 	 * webcomic_collection_cloud( array( 'image' => 'thumbnail' ) );
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render a cloud of webcomic collections
+	 * [webcomic_collection_cloud]
+	 * 
+	 * // render a list cloud of webcomic collections linked to the beginning of each character
+	 * [webcomic_collection_cloud target="first" sep=""]
+	 * 
+	 * // render a cloud of thumbnail-sized webcomic collections
+	 * [webcomic_collection_cloud image="thumbnail"]
 	 * </code>
 	 * 
 	 * @package Webcomic

@@ -6,6 +6,8 @@
 
 /** Handle custom shortcodes.
  * 
+ * For shortcode examples see `tags.php`.
+ * 
  * @package Webcomic
  */
 class WebcomicShortcode extends Webcomic {
@@ -101,17 +103,6 @@ class WebcomicShortcode extends Webcomic {
 	
 	/** Handle verify_webcomic_age shortcode.
 	 * 
-	 * <code>
-	 * // Hide content from users based on the collection age setting.
-	 * [verify_webcomic_age]This content will be hidden from some users.[/verify_webcomic_age]
-	 * 
-	 * // Hide content from users younger than 18 years old, regardless of the collection age setting.
-	 * [verify_webcomic_age age="18"]You must be 18 years or older to view this content.[/verify_webcomic_age]
-	 * 
-	 * // Hide content from users based on the age setting of collection 42.
-	 * [verify_webcomic_age collection="webcomic42"]It's dangerous to go alone.[/verify_webcomic_age]
-	 * </code>
-	 * 
 	 * @param array $atts Shortcode attributes.
 	 * @param string $content Shortcode content.
 	 * @return string
@@ -136,17 +127,6 @@ class WebcomicShortcode extends Webcomic {
 	}
 	
 	/** Handle verify_webcomic_role shortcode.
-	 * 
-	 * <code>
-	 * // Hide content from users based on the collection role setting.
-	 * [verify_webcomic_role]This content will be hidden from some users.[/verify_webcomic_role]
-	 * 
-	 * // Hide content from users that are not contributors or administrators, regardless of the collection role setting.
-	 * [verify_webcomic_role roles="administrator,contributor"]You must be a contributor or administrator to view this content.[/verify_webcomic_role]
-	 * 
-	 * // Hide content from users based on the role setting of collection 42.
-	 * [verify_webcomic_role collection="webcomic42"]It's dangerous to go alone.[/verify_webcomic_role]
-	 * </code>
 	 * 
 	 * @param array $atts Shortcode attributes.
 	 * @param string $content Shortcode content.
@@ -173,17 +153,6 @@ class WebcomicShortcode extends Webcomic {
 	
 	/** Handle the_webcomic shortcode.
 	 * 
-	 * <code>
-	 * // render webcomic attachments for the current post
-	 * [the_webcomic]
-	 * 
-	 * // render small webcomic attachments for the post with an ID of 42 linked to the first webcomic in the collection
-	 * [the_webcomic size="thumbnail" relative="first" the_post="42"]
-	 * 
-	 * // render large webcomic attachments for the current post linked to the next webcomic in the storyline with an ID of 42
-	 * [the_webomic size="large" relative="next", in_same_term="42" taxonomy="storyline"]
-	 * </code>
-	 * 
 	 * @param array $atts Shortcode attributes.
 	 * @return string
 	 * @uses WebcomicTag::the_webcomic()
@@ -202,17 +171,6 @@ class WebcomicShortcode extends Webcomic {
 	}
 	
 	/** Handle the_related_webcomics shortcode.
-	 * 
-	 * <code>
-	 * // render a comma-separated list of up to five related webcomics
-	 * [the_related_webcomics]
-	 * 
-	 * // render an ordered list of up to to ten webcomics related by characters using small images
-	 * [the_related_webcomics before="<ol><li>" sep="</li><li>" after="</li></ol>" image="thumbnail" limit="10" storylines="false"]
-	 * 
-	 * // render a comma-separated list of all webcomics related by storyline to the post with an ID of 42
-	 * [the_related_webcomics before="<h2>Related Webcomics</h2><p>" after="</p>" limit="0" characters="false" the_post="42"]
-	 * </code>
 	 * 
 	 * @param array $atts Shortcode attributes.
 	 * @return string
@@ -234,20 +192,6 @@ class WebcomicShortcode extends Webcomic {
 	}
 	
 	/** Handle (relative)_webcomic_link shortcodes.
-	 * 
-	 * <code>
-	 * // render a link to the first webcomic in the collection
-	 * [first_webcomic_link]
-	 * 
-	 * // render a link to the next webcomic in the collection with a small preview
-	 * [next_webcomic_link link="%thumbnail"]
-	 * 
-	 * // render a bold link to the last webcomic in the current storylines, excluding the storyline with an ID of 42
-	 * [last_webcomic_link format="<b>%link</b>" in_same_term="true" excluded_terms="42"]Last &raquo;[/last_webcomic_storyline]
-	 * 
-	 * // render a link to a random webcomic with a large preview in collection 42 using a parameterized url
-	 * [random_webcomic_link link="%large" collection="webcomic42" cache="false"]
-	 * </code>
 	 * 
 	 * @param array $atts Shortcode attributes.
 	 * @param string $content Shortcode content.
@@ -297,14 +241,6 @@ class WebcomicShortcode extends Webcomic {
 	
 	/** Handle the_webcomic_collection shortcode.
 	 * 
-	 * <code>
-	 * // render a link to the collection archive page for the collection the current webcomic belongs to
-	 * [the_webcomic_collection]
-	 * 
-	 * // render a link to the beginning of collection 42 with a small poster preview
-	 * [the_webcomic_collection link="%thumbnail" target="first" collection="webcomic42"]
-	 * </code>
-	 * 
 	 * @param array $atts Shortcode attributes.
 	 * @return string
 	 * @uses WebcomicTag::webcomic_collection_link()
@@ -321,17 +257,6 @@ class WebcomicShortcode extends Webcomic {
 	}
 	
 	/** Handle the_webcomic_(terms) shortcodes.
-	 * 
-	 * <code>
-	 * // render a comma-separated list of storylines related to the current webcomic
-	 * [the_webcomic_storylines]
-	 * 
-	 * // render an unordered list of characters related to the current webcomic
-	 * [the_webcomic_characters before="<ul><li>" sep="</li><li>" after="</li></ul>"]
-	 * 
-	 * // render links to the first webcomic in each storyline related to the current webcomic with a small storyline cover
-	 * [the_webcomic_storylines before="<div><h2>Storylines</h2><figure>" sep="</figure><figure>" after="</figure></div>" target="first" image="thumbnail"]
-	 * </code>
 	 * 
 	 * @param array $atts Shortcode attributes.
 	 * @param string $content Shortcode content.
@@ -360,20 +285,6 @@ class WebcomicShortcode extends Webcomic {
 	}
 	
 	/** Handle (relative)_webcomic_(storyline|character)_link shortcodes.
-	 * 
-	 * <code>
-	 * // render a link to the archive page for the first storyline
-	 * [first_webcomic_storyline_link]
-	 * 
-	 * // render a link to the first webcomic in the next character with a small cover preview
-	 * [next_webcomic_character_link link="%thumbnail" target="first"]
-	 * 
-	 * // render a bold link to the archive page for the last storyline, even if it doesn't have any webcomics
-	 * [last_webcomic_storyline_link format="<b>%link</b>" args="hide_empty=0"]Last Arc &gt;&gt;[/last_webcomic_storyline]
-	 * 
-	 * // render a link to the last webcomic in a random character with a large avatar in collection 42 using a parameterized url
-	 * [random_webcomic_character_link link="%large" target="last" collection="42" cache="false"]
-	 * </code>
 	 * 
 	 * @param array $atts Shortcode attributes.
 	 * @param string $content Shortcode content.
@@ -435,14 +346,6 @@ class WebcomicShortcode extends Webcomic {
 	
 	/** Handle webcomic_(storyline|character)_title shortcode.
 	 * 
-	 * <code>
-	 * // render the storyline title
-	 * [webcomic_storyline_title]
-	 * 
-	 * // render the title of the character with an id of 1 in the 'webcomic42' collection with a prefix
-	 * [webcomic_character_title term="1" collection="webcomic42"]Character: [/webcomic_character_title]
-	 * </code>
-	 * 
 	 * @param array $atts Shortcode attributes.
 	 * @param string $content Shortcode content.
 	 * @param string $name Shortcode name.
@@ -472,14 +375,6 @@ class WebcomicShortcode extends Webcomic {
 	
 	/** Handle webcomic_(storyline|character)_description shortcode.
 	 * 
-	 * <code>
-	 * // render the description of a webcomic storyline on the storyline archive page
-	 * [webcomic_storyline_description]
-	 * 
-	 * // render the description of the webcomic character with an ID of 1 from collection 42 with a prefix.
-	 * [webcomic_character_description term="1" collection="webcomic42"]<h2>Description</h2>[/webcomic_character_description]
-	 * </code>
-	 * 
 	 * @param array $atts Shortcode attributes.
 	 * @param string $content Shortcode content.
 	 * @param string $name Shortcode name.
@@ -505,14 +400,6 @@ class WebcomicShortcode extends Webcomic {
 	}
 	
 	/** Handle webcomic_(storyline|character)_(cover|avatar) shortcode.
-	 * 
-	 * <code>
-	 * // render the full size storyline cover
-	 * [webcomic_storyline_cover]
-	 * 
-	 * // render the medium size character avatar for for the character with an ID of 1 in collection 42
-	 * [webcomic_character_avatar size="medium" term="1" collection="webcomic42"]
-	 * </code>
 	 * 
 	 * @param array $atts Shortcode attributes.
 	 * @param string $content Shortcode content.
@@ -541,14 +428,6 @@ class WebcomicShortcode extends Webcomic {
 	
 	/** Handle webcomic_collection_title shortcode.
 	 * 
-	 * <code>
-	 * // render the collection title
-	 * [webecomic_collection_title]
-	 * 
-	 * // render the collection title for collection 42 with a prefix
-	 * [webecomic_collection_title collection="webcomic42" prefix="Collection: "]
-	 * </code>
-	 * 
 	 * @param array $atts Shortcode attributes.
 	 * @param string $content Shortcode content.
 	 * @param string $name Shortcode name.
@@ -568,14 +447,6 @@ class WebcomicShortcode extends Webcomic {
 	
 	/** Handle webcomic_collection_description shortcode.
 	 * 
-	 * <code>
-	 * // render the description of a webcomic collection on the collection archive page
-	 * [webcomic_collection_description]
-	 * 
-	 * // render the description of webcomic collection 42
-	 * [webcomic_collection_description collection="webcomic42"]
-	 * </code>
-	 * 
 	 * @param array $atts Shortcode attributes.
 	 * @param string $content Shortcode content.
 	 * @param string $name Shortcode name.
@@ -592,14 +463,6 @@ class WebcomicShortcode extends Webcomic {
 	
 	/** Handle webcomic_collection_poster shortcode.
 	 * 
-	 * <code>
-	 * // render the full size collection poster
-	 * [webcomic_collection_poster]
-	 * 
-	 * // render the medium size collection poster for collection 42
-	 * [webcomic_collection_poster size="medium" collection="webcomic42"]
-	 * </code>
-	 * 
 	 * @param array $atts Shortcode attributes.
 	 * @return string
 	 * @uses WebcomicTag::webcomic_collection_image()
@@ -614,14 +477,6 @@ class WebcomicShortcode extends Webcomic {
 	}
 	
 	/** Handle webcomic_collection_print_amount shortcode.
-	 * 
-	 * <code>
-	 * // render the current collection's print amount for a domestic print.
-	 * [webcomic_collection_print_amount type="domestic"]
-	 * 
-	 * // render the original-print shipping amount for collection 42 using ',' for the decimal and '.' for the thousands separator.
-	 * [webcomic_collection_print_amount type="original-shipping" dec="," sep="." collection="42"]
-	 * </code>
 	 * 
 	 * @param array $atts Shortcode attributes.
 	 * @return string
@@ -640,14 +495,6 @@ class WebcomicShortcode extends Webcomic {
 	
 	/** Handle webcomic_donation_amount shortcode.
 	 * 
-	 * <code>
-	 * // render the current collections donation amount
-	 * [webcomic_donation_amount]
-	 * 
-	 * // render the donation amount for collection 42 using ',' for the decimal and '.' for the thousands separator
-	 * [webcomic_donation_amount dec="," sep="." collection="webcomic42"]
-	 * </code>
-	 * 
 	 * @param array $atts Shortcode attributes.
 	 * @return string
 	 * @uses WebcomicTag::webcomic_donation_amount()
@@ -663,14 +510,6 @@ class WebcomicShortcode extends Webcomic {
 	}
 	
 	/** Handle webcomic_donation_form shortcode.
-	 * 
-	 * <code>
-	 * // render a donation form for the current collection
-	 * [webcomic_donation_form]
-	 * 
-	 * // render a donation form for collection 42 with a custom label
-	 * [webcomic_donation_form collection="webcomic42"]Support This Webcomic[/webcomic_donation_form]
-	 * </code>
 	 * 
 	 * @param array $atts Shortcode attributes.
 	 * @return string
@@ -689,14 +528,6 @@ class WebcomicShortcode extends Webcomic {
 	
 	/** Handle webcomic_print_amount shortcode.
 	 * 
-	 * <code>
-	 * // render the current webcomic's print amount for a domestic print
-	 * [webcomic_print_amount type="domestic"]
-	 * 
-	 * // render the original-print shipping amount for webcomic 42 using ',' for the decimal and '.' for the thousands separator
-	 * [webcomic_print_amount type="original-shipping" dec="," sep="." the_post="42"]
-	 * </code>
-	 * 
 	 * @param array $atts Shortcode attributes.
 	 * @return string
 	 * @uses WebcomicTag::webcomic_print_amount()
@@ -714,14 +545,6 @@ class WebcomicShortcode extends Webcomic {
 	
 	/** Handle webcomic_print_adjustment shortcode.
 	 * 
-	 * <code>
-	 * // render the current webcomic's adjustment for a domestic print
-	 * [webcomic_print_amount type="domestic"]
-	 * 
-	 * // render the original-print shipping adjustment for webcomic 42
-	 * [webcomic_print_amount type="original-shipping" the_post="42"]
-	 * </code>
-	 * 
 	 * @param array $atts Shortcode attributes.
 	 * @return string
 	 * @uses WebcomicTag::webcomic_print_adjustment()
@@ -736,17 +559,6 @@ class WebcomicShortcode extends Webcomic {
 	}
 	
 	/** Handle webcomic_print_form shortcode.
-	 * 
-	 * <code>
-	 * // render a purchase domestic webcomic print form
-	 * [webcomic_print_form type="domestic"]
-	 * 
-	 * // render a purchase international webcomic print form for webcomic 42
-	 * [webcomic_print_form type="international" the_post="42"]
-	 * 
-	 * // render a shopping cart form with a custom label
-	 * [webcomic_print_form type="cart" label="View Your Cart"]
-	 * </code>
 	 * 
 	 * @param array $atts Shortcode attributes.
 	 * @param string $content Shortcode content.
@@ -768,17 +580,6 @@ class WebcomicShortcode extends Webcomic {
 	
 	/** Handle webcomic_transcripts_link shortcode.
 	 * 
-	 * <code>
-	 * // render a transcripts link
-	 * [webcomic_transcripts_link]
-	 * 
-	 * // render a transcripts link for the language with a slug of 'en'
-	 * [webcomic_transcripts_link language="en"]
-	 * 
-	 * // render a transcript lik for webcomic 42 with custom link text
-	 * [webcomic_transcripts_link none="Transcribe Me!" some="Read Transcripts" off="Transcription Disabled" the_post="42"]
-	 * </code>
-	 * 
 	 * @param array $atts Shortcode attributes.
 	 * @return string
 	 * @uses WebcomicTag::webcomic_transcripts_link()
@@ -797,17 +598,6 @@ class WebcomicShortcode extends Webcomic {
 	}
 	
 	/** Handle webcomic_dropdown_terms shortcodes.
-	 * 
-	 * <code>
-	 * // render a dropdown of storylines with at least one webcomic in the current collection
-	 * [webcomic_dropdown_storylines]
-	 * 
-	 * // render a dropdown of all characters in collection 42 linked to the beginning of each character with a default option
-	 * [webcomic_dropdown_characters collection="webcomic42" hide_empty="false" target="first" show_option_all="Characters"]
-	 * 
-	 * // render a dropdown of published webcomics grouped by storyline in collection 42
-	 * [webcomic_dropdown_storylines collection="webcomic42" show_option_all="- Comics by Storyline -" webcomics="true"]
-	 * </code>
 	 * 
 	 * @param array $atts Shortcode attributes.
 	 * @param string $content Shortcode content.
@@ -854,17 +644,6 @@ class WebcomicShortcode extends Webcomic {
 	
 	/** Handle webcomic_dropdown_collections shortcode.
 	 * 
-	 * <code>
-	 * // render a dropdown of all webcomic collections with at least one post
-	 * [webcomic_dropdown_collections]
-	 * 
-	 * // render a dropdown of all webcomic collections linked to the beginning of each collection with a default option
-	 * [webcomic_dropdown_collections hide_empty="false" target="first" show_option_all="- Collections -"]
-	 * 
-	 * // render a dropdown of published webcomics grouped by collection only for collection 42
-	 * [webcomic_dropdown_collections collection="webcomic42" webcomics="true"]
-	 * </code>
-	 * 
 	 * @param array $atts Shortcode attributes.
 	 * @return string
 	 * @uses WebcomicTag::webcomic_dropdown_terms()
@@ -891,17 +670,6 @@ class WebcomicShortcode extends Webcomic {
 	}
 	
 	/** Handle webcomic_list_terms shortcodes.
-	 * 
-	 * <code>
-	 * // render a list of storylines with at least one webcomic in the current collection
-	 * [webcomic_dropdown_storylines]
-	 * 
-	 * // render an ordered list of all characters in collection 42 linked to the beginning of each character
-	 * [webcomic_list_characters collection="webcomic42" hide_empty="false" target="first" ordered="true"]
-	 * 
-	 * // render a list of published webcomic thumbnails grouped by storyline in collection 42 with storyline descriptions
-	 * [webcomic_list_storylines collection="webcomic42" show_description="true" webcomics="true" webcomic_image="thumbnail"]
-	 * </code>
 	 * 
 	 * @param array $atts Shortcode attributes.
 	 * @param string $content Shortcode content.
@@ -953,17 +721,6 @@ class WebcomicShortcode extends Webcomic {
 	
 	/** Handle webcomic_list_collections shortcode.
 	 * 
-	 * <code>
-	 * // render a list of all webcomic collections with at least one post
-	 * [webcomic_list_collections]
-	 * 
-	 * // render an ordered list of all webcomic collections linked to the beginning of each collection
-	 * [webcomic_list_collections hide_empty="false" target="first" ordered="true"]
-	 * 
-	 * // render a list of published webcomic thumbnails grouped by collection only for collection 42 with collection descriptions
-	 * [webcomic_list_collections collection="webcomic42" show_description="true" webcomics="true" webcomic_image="thumbnail"]
-	 * </code>
-	 * 
 	 * @param array $atts Shortcode attributes.
 	 * @return string
 	 * @uses WebcomicTag::webcomic_list_collections()
@@ -997,17 +754,6 @@ class WebcomicShortcode extends Webcomic {
 	}
 	
 	/** Handle webcomic_term_cloud shortcodes.
-	 * 
-	 * <code>
-	 * // render a cloud of webcomic storylines
-	 * [webcomic_storyline_cloud]
-	 * 
-	 * // render a list cloud of webcomic characters in collection 42 linked to the beginning of each character
-	 * [webcomic_character_cloud collection="webcomic42" target="first" sep=""]
-	 * 
-	 * // render a cloud of thumbnail-sized webcomic storyline covers
-	 * [webcomic_storyline_cloud image="thumbnail"]
-	 * </code>
 	 * 
 	 * @param array $atts Shortcode attributes.
 	 * @param string $content Shortcode content.
@@ -1053,17 +799,6 @@ class WebcomicShortcode extends Webcomic {
 	}
 	
 	/** Handle webcomic_collection_cloud shortcode.
-	 * 
-	 * <code>
-	 * // render a cloud of webcomic collections
-	 * [webcomic_collection_cloud]
-	 * 
-	 * // render a list cloud of webcomic collections linked to the beginning of each character
-	 * [webcomic_collection_cloud target="first" sep=""]
-	 * 
-	 * // render a cloud of thumbnail-sized webcomic collections
-	 * [webcomic_collection_cloud image="thumbnail"]
-	 * </code>
 	 * 
 	 * @param array $atts Shortcode attributes.
 	 * @return string
