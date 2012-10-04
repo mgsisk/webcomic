@@ -33,9 +33,9 @@ You can install Webcomic from the **Plugins > Add New** page in the administrati
 
 Once installed and activated you can use Webcomic in one of three ways:
 
-1. Turn on the [**Integrate** option](//github.com/mgsisk/webcomic/Wiki/Configuring#Integrate) found on the **Settings > Webcomic** page in the administrative dashboard.
+1. Turn on the [**Integrate** option](//github.com/mgsisk/webcomic/wiki/Configuring#Integrate) found on the **Settings > Webcomic** page in the administrative dashboard.
 2. Use a [Webcomic-ready theme](http://webcomic.nu) to get the most out of Webcomic's features with minimal hassle.
-3. Leverage Webcomic's new [template tags, shortcodes](//github.com/mgsisk/webcomic/Wiki/Template-Tags-and-Shortcodes), and [widgets](//github.com/mgsisk/webcomic/Wiki/Widgets) to [modify an existing theme](//wordpress.org/extend/themes) or [build your own](//codex.wordpress.org/Theme_Development).
+3. Leverage Webcomic's new [template tags, shortcodes](//github.com/mgsisk/webcomic/wiki/Template-Tags-and-Shortcodes), and [widgets](//github.com/mgsisk/webcomic/wiki/Widgets) to [modify an existing theme](//wordpress.org/extend/themes) or [build your own](//codex.wordpress.org/Theme_Development).
 
 ### Where can I get help with Webcomic?
 
