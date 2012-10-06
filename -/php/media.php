@@ -112,16 +112,15 @@ class WebcomicMedia extends Webcomic {
 				);
 				
 				foreach ( $attachments as $id ) {
-					$date       = current_time( 'mysql' );
 					$attachment = get_post( $id );
 					
 					if ( $new_post = wp_insert_post( array(
 						'post_type'     => $_POST[ 'webcomic_collection' ],
-						'post_date'     => $date,
+						'post_date'     => date( 'Y-m-d H:i:s', $now ),
 						'post_title'    => $attachment->post_title,
 						'post_status'   => $draft ? 'draft' : 'publish',
 						'post_content'  => '&nbsp;',
-						'post_date_gmt' => get_gmt_from_date( $date )
+						'post_date_gmt' => get_gmt_from_date( date( 'Y-m-d H:i:s', $now ) )
 					) ) and !is_wp_error( $new_post ) ) {
 						if ( wp_update_post( array( 'ID' => $id, 'post_parent' => $new_post ) ) ) {
 							add_post_meta( $new_post, 'webcomic_prints', self::$config[ 'collections' ][ $_POST[ 'webcomic_collection' ] ][ 'commerce' ][ 'prints' ], true );
