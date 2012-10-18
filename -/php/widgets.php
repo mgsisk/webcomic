@@ -319,7 +319,7 @@ class Widget_RecentWebcomics extends WP_Widget {
 					echo '<li>', $image ? WebcomicTag::the_webcomic( $image, 'self' ) : sprintf( '<a href="%s">%s</a>', get_permalink(), get_the_title( '', '', false ) ), '</li>';
 				}
 				
-				echo $after_widget;
+				echo '</ul>', $after_widget;
 			}
 			
 			wp_reset_postdata();
