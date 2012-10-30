@@ -451,8 +451,8 @@ class WebcomicConfig extends Webcomic {
 				foreach ( wp_get_themes() as $theme ) {
 					printf(
 						'<option value="%s"%s>%s</option>',
-						$theme[ 'Template' ],
-						selected( $theme[ 'Template' ], self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'theme' ], false ),
+						$theme[ 'Stylesheet' ],
+						selected( $theme[ 'Stylesheet' ], self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'theme' ], false ),
 						esc_html( $theme[ 'Name' ] )
 					);
 				}
