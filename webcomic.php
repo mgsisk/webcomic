@@ -131,12 +131,12 @@ class Webcomic {
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 			add_action( 'template_redirect', array( $this, 'template_redirect' ) );
 			
-			add_filter( 'template', array( $this, 'theme' ), 10, 1 );
 			add_filter( 'request', array( $this, 'request' ), 10, 1 );
-			add_filter( 'stylesheet', array( $this, 'theme' ), 10, 1 );
 			add_filter( 'get_term', array( $this, 'get_term' ), 10, 2 );
+			add_filter( 'template', array( $this, 'template' ), 10, 1 );
 			add_filter( 'the_posts', array( $this, 'the_posts' ), 10, 2 );
 			add_filter( 'get_terms', array( $this, 'get_terms' ), 10, 3 );
+			add_filter( 'stylesheet', array( $this, 'stylesheet' ), 10, 1 );
 			add_filter( 'body_class', array( $this, 'body_class' ), 10, 2 );
 			add_filter( 'get_the_terms', array( $this, 'get_the_terms' ), 10, 3 );
 			add_action( 'post_type_link', array( $this, 'post_type_link' ), 10, 4 );
@@ -573,9 +573,24 @@ class Webcomic {
 	 * @uses Webcomic::$config
 	 * @uses Webcomic::$collection
 	 * @hook template
+	 */
+	public function template( $theme ) {
+		if ( self::$collection and self::$config[ 'collections' ][ self::$collection ][ 'theme' ] ) {
+			return ( $child = new WP_Theme( get_stylesheet_directory(), '' ) and $child->get( 'Template' ) ) ? $child->get( 'Template' ) : self::$config[ 'collections' ][ self::$collection ][ 'theme' ];
+		}
+		
+		return $theme;
+	}
+	
+	/** Return the appropriate theme ID for custom collection themes.
+	 * 
+	 * @param string $theme Name of the current theme.
+	 * @return string
+	 * @uses Webcomic::$config
+	 * @uses Webcomic::$collection
 	 * @hook stylesheet
 	 */
-	public function theme( $theme ) {
+	public function stylesheet( $theme ) {
 		return ( self::$collection and self::$config[ 'collections' ][ self::$collection ][ 'theme' ] ) ? self::$config[ 'collections' ][ self::$collection ][ 'theme' ] : $theme;
 	}
 	
