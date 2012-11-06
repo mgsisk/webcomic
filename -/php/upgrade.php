@@ -4,13 +4,14 @@
  * @package Webcomic
  */
 
-/** Upgrade old installations.
+/** Handle version-specific upgrades.
  * 
  * @package Webcomic
  */
 class WebcomicUpgrade extends Webcomic {
 	/** Upgrade existing installations.
 	 * 
+	 * @uses WebcomicUpgrade::_402
 	 * @uses Webcomic::$config
 	 * @uses Webcomic::$version
 	 */
