@@ -207,9 +207,9 @@ class Webcomic {
 				'supports'         => $v[ 'supports' ],
 				'taxonomies'       => $v[ 'taxonomies' ],
 				'has_archive'      => $v[ 'slugs' ][ 'archive' ],
-				'permalink_epmask' => EP_WEBCOMIC,
 				'rewrite' => array(
 					'slug'       => $v[ 'slugs' ][ 'webcomic' ],
+					'ep_mask'    => EP_WEBCOMIC | EP_PERMALINK,
 					'with_front' => false
 				)
 			) );
