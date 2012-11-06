@@ -177,7 +177,7 @@ class Webcomic {
 	public function init() {
 		load_plugin_textdomain( 'webcomic', '', self::$dir . '-/locale/' );
 		
-		define( 'EP_WEBCOMIC', 524288 );
+		define( 'EP_WEBCOMIC', 1099511627776 ); // 2^40
 		
 		add_rewrite_endpoint( 'prints', EP_WEBCOMIC );
 		add_rewrite_endpoint( 'transcripts', EP_WEBCOMIC );
