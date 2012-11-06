@@ -575,11 +575,7 @@ class Webcomic {
 	 * @hook template
 	 */
 	public function template( $theme ) {
-		if ( self::$collection and self::$config[ 'collections' ][ self::$collection ][ 'theme' ] ) {
-			return ( $child = new WP_Theme( get_stylesheet_directory(), '' ) and $child->get( 'Template' ) ) ? $child->get( 'Template' ) : self::$config[ 'collections' ][ self::$collection ][ 'theme' ];
-		}
-		
-		return $theme;
+		return ( self::$collection and self::$config[ 'collections' ][ self::$collection ][ 'theme' ] ) ? substr( self::$config[ 'collections' ][ self::$collection ][ 'theme' ], 0, strpos( self::$config[ 'collections' ][ self::$collection ][ 'theme' ], '|' ) ) : $theme;
 	}
 	
 	/** Return the appropriate theme ID for custom collection themes.
@@ -591,7 +587,7 @@ class Webcomic {
 	 * @hook stylesheet
 	 */
 	public function stylesheet( $theme ) {
-		return ( self::$collection and self::$config[ 'collections' ][ self::$collection ][ 'theme' ] ) ? self::$config[ 'collections' ][ self::$collection ][ 'theme' ] : $theme;
+		return ( self::$collection and self::$config[ 'collections' ][ self::$collection ][ 'theme' ] ) ? substr( self::$config[ 'collections' ][ self::$collection ][ 'theme' ], strpos( self::$config[ 'collections' ][ self::$collection ][ 'theme' ], '|' ) + 1 ) : $theme;
 	}
 	
 	/** Integrate webcomics into the main site feed.
