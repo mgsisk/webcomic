@@ -201,12 +201,12 @@ class Webcomic {
 					'not_found'          => __( 'No webcomics found.', 'webcomic' ),
 					'not_found_in_trash' => __( 'No webcomics found in Trash.', 'webcomic' )
 				),
-				'description'      => esc_html( $v[ 'description' ] ),
-				'public'           => true,
-				'menu_icon'        => self::$url . '-/img/webcomic-small.png',
-				'supports'         => $v[ 'supports' ],
-				'taxonomies'       => $v[ 'taxonomies' ],
-				'has_archive'      => $v[ 'slugs' ][ 'archive' ],
+				'description' => esc_html( $v[ 'description' ] ),
+				'public'      => true,
+				'menu_icon'   => self::$url . '-/img/webcomic-small.png',
+				'supports'    => $v[ 'supports' ],
+				'taxonomies'  => $v[ 'taxonomies' ],
+				'has_archive' => $v[ 'slugs' ][ 'archive' ],
 				'rewrite' => array(
 					'slug'       => $v[ 'slugs' ][ 'webcomic' ],
 					'ep_mask'    => EP_WEBCOMIC | EP_PERMALINK,

@@ -36,7 +36,7 @@ class WebcomicUpgrade extends Webcomic {
 		$themes = wp_get_themes();
 		
 		foreach ( self::$config[ 'collections' ] as $k => $v ) {
-			if ( false === strpos( $v[ 'theme' ], '|' ) ) {
+			if ( $v[ 'theme' ] and false === strpos( $v[ 'theme' ], '|' ) ) {
 				foreach ( $themes as $theme ) {
 					if ( $theme[ 'Template' ] === $v[ 'theme' ] ) {
 						self::$config[ 'collections' ][ $k ][ 'theme' ] = $theme[ 'Template' ] . '|' . $theme[ 'Stylesheet' ];
