@@ -22,8 +22,6 @@ class WebcomicUpgrade extends Webcomic {
 		self::$config[ 'version' ] = self::$version;
 		
 		update_option( 'webcomic_options', self::$config );
-		
-		flush_rewrite_rules();
 	}
 	
 	/** Upgrade to 4.0.2
