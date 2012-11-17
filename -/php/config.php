@@ -1161,7 +1161,7 @@ class WebcomicConfig extends Webcomic {
 	 */
 	public function section_permalinks() {
 		if ( !get_option( 'permalink_structure' ) ) {
-			echo '<p>', sprintf( __( "These URL's won't work unless you <a href='%s'>change the permalink setting</a> to something other than <em>Default</em>.", 'webcomic' ), admin_url( 'options-permalinks.php' ) ), '</p>';
+			echo '<p>', sprintf( __( "These URL's won't work unless you <a href='%s'>change the permalink setting</a> to something other than <em>Default</em>.", 'webcomic' ), admin_url( 'options-permalink.php' ) ), '</p>';
 		}
 	}
 	
