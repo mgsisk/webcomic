@@ -116,7 +116,7 @@ class WebcomicConfig extends Webcomic {
 			add_settings_field( "{$k}_supports_miscellanea", __( 'Miscellanea', 'webcomic' ), array( $this, 'collection_supports_miscellanea' ), "{$k}-options", "{$k}-features", array( 'label_for' => 'webcomic_posts_revisions' ) );
 			add_settings_field( "{$k}_supports_taxonomies", __( 'Taxonomies', 'webcomic' ), array( $this, 'collection_supports_taxonomies' ), "{$k}-options", "{$k}-features", array( 'label_for' => 'webcomic_posts_taxonomy' ) );
 			
-			add_settings_section( "{$k}-permalinks", __( 'Permalink Settings', 'webcomic' ), array( $this, 'section' ), "{$k}-options" );
+			add_settings_section( "{$k}-permalinks", __( 'Permalink Settings', 'webcomic' ), array( $this, 'section_permalinks' ), "{$k}-options" );
 			add_settings_field( "{$k}_slug_archive", __( 'Archive', 'webcomic' ), array( $this, 'collection_slugs_archive' ), "{$k}-options", "{$k}-permalinks", array( 'label_for' => 'webcomic_slugs_archive' ) );
 			add_settings_field( "{$k}_slug_webcomic", __( 'Webcomics', 'webcomic' ), array( $this, 'collection_slugs_webcomic' ), "{$k}-options", "{$k}-permalinks", array( 'label_for' => 'webcomic_slugs_webcomic' ) );
 			add_settings_field( "{$k}_slug_storyline", __( 'Storylines', 'webcomic' ), array( $this, 'collection_slugs_storyline' ), "{$k}-options", "{$k}-permalinks", array( 'label_for' => 'webcomic_slugs_storyline' ) );
@@ -1153,6 +1153,17 @@ class WebcomicConfig extends Webcomic {
 	
 	/** Empty callback for add_settings_section(). */
 	public function section(){}
+	
+	/** Permalink settings section.
+	 * 
+	 * If permalinks are still set to Default we need to warn users that
+	 * the permalink URL's won't actually work.
+	 */
+	public function section_permalinks() {
+		if ( !get_option( 'permalink_structure' ) ) {
+			echo '<p>', sprintf( __( "These URL's won't work unless you <a href='%s'>change the permalink setting</a> to something other than <em>Default</em>.", 'webcomic' ), admin_url( 'options-permalinks.php' ) ), '</p>';
+		}
+	}
 	
 	/** Handle dynamic slug previews.
 	 * 
