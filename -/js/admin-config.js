@@ -55,15 +55,14 @@ jQuery( function( $ ) {
 		color: '#21759b',
 		cursor: 'pointer',
 		padding: '.5em 0 0'
-	} ).next().hide();
-	
-	$( '.wrap h3:first' ).next().show();
-	
+	} ).nextAll( 'table' ).hide();
 	
 	$( '.wrap h3' ).on( 'mouseenter', function() { $( this ).css( 'color', '#d54e21' ); } );
 	$( '.wrap h3' ).on( 'mouseleave', function() { $( this ).css( 'color', '#21759b' ); } );
 	
 	$( '.wrap h3' ).on( 'click', function() {
-		$( this ).next().toggle();
+		$( this ).nextAll( 'table:first' ).toggle();
 	} );
+	
+	$( '.wrap h3:first' ).trigger( 'click' );
 } );
