@@ -750,7 +750,7 @@ class WebcomicShortcode extends Webcomic {
 			'selected'         => 0
 		), $atts );
 		
-		echo WebcomicTag::webcomic_list_collections( $r );
+		return WebcomicTag::webcomic_list_collections( $r );
 	}
 	
 	/** Handle webcomic_term_cloud shortcodes.
