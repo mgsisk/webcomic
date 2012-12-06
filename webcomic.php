@@ -1144,7 +1144,9 @@ class Webcomic {
 	 */
 	public function twitter_oauth() {
 		if ( isset( $_GET[ 'webcomic_twitter_oauth' ] ) ) {
-			require_once self::$dir . '-/library/twitter.php';
+			if ( !class_exists( 'TwitterOAuth' ) ) {
+				require_once self::$dir . '-/library/twitter.php';
+			}
 			
 			$admin_url = add_query_arg( array( 'post_type' => $_GET[ 'webcomic_collection' ], 'page' => "{$_GET[ 'webcomic_collection' ]}-options" ), admin_url( 'edit.php' ) );
 			

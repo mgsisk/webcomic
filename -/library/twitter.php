@@ -25,7 +25,9 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-require_once dirname( __FILE__ ) . '/oauth.php';
+if ( !class_exists( 'OAuthConsumer' ) ) {
+	require_once dirname( __FILE__ ) . '/oauth.php';
+}
 
 /**
  * Twitter OAuth class

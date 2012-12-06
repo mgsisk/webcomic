@@ -1208,7 +1208,9 @@ class WebcomicConfig extends Webcomic {
 	 * @param string $collection Collection the Twitter credentials belong to.
 	 */
 	public static function ajax_twitter_account( $consumer_key, $consumer_secret, $collection ) {
-		require_once self::$dir . '-/library/twitter.php';
+		if ( !class_exists( 'TwitterOAuth' ) ) {
+			require_once self::$dir . '-/library/twitter.php';
+		}
 		
 		if ( $consumer_key and $consumer_secret ) {
 			$oauth       = new TwitterOAuth( $consumer_key, $consumer_secret, self::$config[ 'collections' ][ $collection ][ 'twitter' ][ 'oauth_token' ], self::$config[ 'collections' ][ $collection ][ 'twitter' ][ 'oauth_secret' ] );

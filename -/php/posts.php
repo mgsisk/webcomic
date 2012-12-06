@@ -278,7 +278,9 @@ class WebcomicPosts extends Webcomic {
 			}
 			
 			if ( $status ) {
-				require_once self::$dir . '-/library/twitter.php';
+				if ( !class_exists( 'TwitterOAuth' ) ) {
+					require_once self::$dir . '-/library/twitter.php';
+				}
 				
 				$oauth    = new TwitterOAuth( self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'consumer_key' ], self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'consumer_secret' ], self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'oauth_token' ], self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'oauth_secret' ] );
 				$response = $oauth->post( 'statuses/update', array( 'status' => substr( strip_tags( $status ), 0, 140 ) ) );
