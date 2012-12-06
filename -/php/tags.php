@@ -154,8 +154,9 @@ class WebcomicTag extends Webcomic {
 	 */
 	public static function webcomic( $version = '' ) {
 		if ( empty( $version ) ) {
-			$theme   = new WP_Theme( get_stylesheet_directory(), '' );
-			$version = $theme->get( 'Webcomic' );
+			$directory = get_stylesheet_directory();
+			$theme     = new WP_Theme( basename( $directory ), dirname( $directory ) );
+			$version   = $theme->get( 'Webcomic' );
 		}
 		
 		return ( $version and version_compare( self::$version, $version, '>=' ) );
