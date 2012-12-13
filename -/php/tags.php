@@ -1118,7 +1118,7 @@ class WebcomicTag extends Webcomic {
 		$term = $taxonomy ? get_term( $term, $taxonomy ) : get_queried_object();
 		
 		if ( isset( $term->taxonomy ) ) {
-			return apply_filters( 'webcomic_term_description', term_description( $term->term_id, $taxonomy ), $term );
+			return apply_filters( 'webcomic_term_description', term_description( $term->term_id, $term->taxonomy ), $term );
 		}
 	}
 	
