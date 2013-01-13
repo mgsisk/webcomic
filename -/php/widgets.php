@@ -381,7 +381,7 @@ class Widget_RecentWebcomics extends WP_Widget {
 			</label>
 		</p>
 		<p>
-			<label><input type="checkbox" name="<?php echo $this->get_field_name( 'image' ); ?>" value="%thumbnail"<?php echo empty( $image ) ? '' : checked( '%thumbnail' === $image, true, false ); ?>> <?php _e( 'Show webcomic previews', 'webcomic' ); ?></label>
+			<label><input type="checkbox" name="<?php echo $this->get_field_name( 'image' ); ?>" value="thumbnail"<?php echo empty( $image ) ? '' : checked( '%thumbnail' === $image, true, false ); ?>> <?php _e( 'Show webcomic previews', 'webcomic' ); ?></label>
 		</p>
 		<?php
 	}
