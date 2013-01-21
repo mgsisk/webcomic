@@ -30,7 +30,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 /** Comic Publishing Power for the Web
  * 
  * @todo Future Bulk media actions; see core.trac.wordpress.org/ticket/16031
- * @todo Future Screen Options; see core.trac.wordpress.org/ticket/18323
  * 
  * @package Webcomic
  * @copyright 2008 - 2013 Michael Sisk
