@@ -35,7 +35,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * @package Webcomic
  * @copyright 2008 - 2013 Michael Sisk
  * @license //gnu.org/licenses/gpl-2.0.html GPL2
- * @version 4
+ * @version 4.0.2
  * @link http://webcomic.nu
  */
 
