@@ -9,7 +9,7 @@ Author: Michael Sisk
 Author URI: http://mgsisk.com
 License: GPL2
 
-Copyright 2008 - 2012 Michael Sisk (contact@mgsisk.com)
+Copyright 2008 - 2013 Michael Sisk (contact@mgsisk.com)
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License as
@@ -33,7 +33,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * @todo Future Screen Options; see core.trac.wordpress.org/ticket/18323
  * 
  * @package Webcomic
- * @copyright 2008 - 2012 Michael Sisk
+ * @copyright 2008 - 2013 Michael Sisk
  * @license //gnu.org/licenses/gpl-2.0.html GPL2
  * @version 4
  * @link http://webcomic.nu
