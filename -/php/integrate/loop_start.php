@@ -26,7 +26,11 @@
  * @uses webcomic_character_description()
  */
 ?>
+
+<?php if ( !is_feed() ) { ?>
 <style scoped>.webcomic-img img{height:auto;max-width:100%}</style>
+<?php } ?>
+
 <?php if ( is_front_page() ) { ?>
 	<div data-webcomic-container="integrated">
 		<div class="integrated-webcomic">
