@@ -36,6 +36,10 @@ class WebcomicAdmin extends Webcomic {
 		register_activation_hook( self::$dir . 'webcomic.php', array( $this, 'activate' ) );
 		register_deactivation_hook( self::$dir . 'webcomic.php', array( $this, 'deactivate' ) );
 		
+		if ( !self::$config or version_compare( self::$config[ 'version' ], self::$version, '<' ) ) {
+			$this->activate();
+		}
+		
 		if ( self::$config and version_compare( self::$config[ 'version' ], '4x', '>=' ) ) {
 			add_action( 'admin_init', array( $this, 'admin_init' ) );
 			add_action( 'admin_head', array( $this, 'admin_head' ) );
