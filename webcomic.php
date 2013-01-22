@@ -574,7 +574,7 @@ class Webcomic {
 	 * @hook template
 	 */
 	public function template( $theme ) {
-		return ( self::$collection and self::$config[ 'collections' ][ self::$collection ][ 'theme' ] ) ? substr( self::$config[ 'collections' ][ self::$collection ][ 'theme' ], 0, strpos( self::$config[ 'collections' ][ self::$collection ][ 'theme' ], '|' ) ) : $theme;
+		return ( self::$collection and self::$config[ 'collections' ][ self::$collection ][ 'theme' ] and $template = substr( self::$config[ 'collections' ][ self::$collection ][ 'theme' ], 0, strpos( self::$config[ 'collections' ][ self::$collection ][ 'theme' ], '|' ) ) and is_readable( get_theme_root() . "/{$template}" ) ) ? $template : $theme;
 	}
 	
 	/** Return the appropriate theme ID for custom collection themes.
@@ -586,7 +586,7 @@ class Webcomic {
 	 * @hook stylesheet
 	 */
 	public function stylesheet( $theme ) {
-		return ( self::$collection and self::$config[ 'collections' ][ self::$collection ][ 'theme' ] ) ? substr( self::$config[ 'collections' ][ self::$collection ][ 'theme' ], strpos( self::$config[ 'collections' ][ self::$collection ][ 'theme' ], '|' ) + 1 ) : $theme;
+		return ( self::$collection and self::$config[ 'collections' ][ self::$collection ][ 'theme' ] and $stylesheet = substr( self::$config[ 'collections' ][ self::$collection ][ 'theme' ], strpos( self::$config[ 'collections' ][ self::$collection ][ 'theme' ], '|' ) + 1 ) and is_readable( get_theme_root() . "/{$stylesheet}" ) ) ? $stylesheet : $theme;
 	}
 	
 	/** Integrate webcomics into the main site feed.
