@@ -62,7 +62,7 @@ class WebcomicPosts extends Webcomic {
 		
 		if ( preg_match( '/^edit-webcomic\d+$/', $screen->id ) ) {
 			printf( "<script>webcomic_quick_save( '%s' );webcomic_quick_edit( '%s' );</script>", admin_url(), admin_url() );
-		} else if ( isset( self::$config[ 'collections' ][ $screen->id ] ) ) {
+		} elseif ( isset( self::$config[ 'collections' ][ $screen->id ] ) ) {
 			printf( "<script>webcomic_media_meta('%s');webcomic_prints_meta('%s','%s');</script>", admin_url(), self::$config[ 'collections' ][ $screen->id ][ 'commerce' ][ 'currency' ], __( '- SOLD -', 'webcomic' ) );
 		}
 	}
@@ -135,7 +135,7 @@ class WebcomicPosts extends Webcomic {
 			wp_register_script( 'webcomic-admin-posts', self::$url . '-/js/admin-posts.js', array( 'jquery' ) );
 			
 			wp_enqueue_script( 'webcomic-admin-posts' );
-		} else if ( isset( self::$config[ 'collections' ][ $screen->id ] ) ) {
+		} elseif ( isset( self::$config[ 'collections' ][ $screen->id ] ) ) {
 			wp_register_script( 'webcomic-admin-meta', self::$url . '-/js/admin-meta.js', array( 'jquery' ) );
 			
 			wp_enqueue_script( 'webcomic-admin-meta' );
@@ -451,7 +451,7 @@ class WebcomicPosts extends Webcomic {
 			} else {
 				_e( 'No Attachments', 'webcomic' );
 			}
-		} else if ( 'webcomic_storylines' === $column ) {
+		} elseif ( 'webcomic_storylines' === $column ) {
 			if ( $storylines = wp_get_object_terms( $id, "{$post->post_type}_storyline" ) ) {
 				$terms = array();
 				
@@ -466,7 +466,7 @@ class WebcomicPosts extends Webcomic {
 			} else {
 				_e( 'No Storylines', 'webcomic' );
 			}
-		} else if ( 'webcomic_characters' === $column ) {
+		} elseif ( 'webcomic_characters' === $column ) {
 			if ( $characters = wp_get_object_terms( $id, "{$post->post_type}_character" ) ) {
 				$terms = array();
 				

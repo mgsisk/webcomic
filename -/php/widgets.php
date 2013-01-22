@@ -191,7 +191,7 @@ class Widget_DynamicWebcomic extends WP_Widget {
 			
 			if ( !$collection ) {
 				$collection = WebcomicTag::get_webcomic_collection();
-			} else if ( -1 === ( int ) $collection ) {
+			} elseif ( -1 === ( int ) $collection ) {
 				$collection = WebcomicTag::get_webcomic_collections();
 			}
 			
@@ -305,7 +305,7 @@ class Widget_RecentWebcomics extends WP_Widget {
 		
 		if ( !$collection ) {
 			$collection = WebcomicTag::get_webcomic_collection();
-		} else if ( -1 === ( int ) $collection ) {
+		} elseif ( -1 === ( int ) $collection ) {
 			$collection = WebcomicTag::get_webcomic_collections();
 		}
 		
@@ -524,7 +524,7 @@ class Widget_WebcomicStorylines extends WP_Widget {
 		
 		if ( 'list' === $format ) {
 			$output = WebcomicTag::webcomic_list_terms( $a );
-		} else if ( 'dropdown' === $format ) {
+		} elseif ( 'dropdown' === $format ) {
 			$output = WebcomicTag::webcomic_dropdown_terms( $a );
 		} else {
 			$output = WebcomicTag::webcomic_term_cloud( $a );
@@ -645,7 +645,7 @@ class Widget_WebcomicCharacters extends WP_Widget {
 		
 		if ( 'list' === $format ) {
 			$output = WebcomicTag::webcomic_list_terms( $a );
-		} else if ( 'dropdown' === $format ) {
+		} elseif ( 'dropdown' === $format ) {
 			$output = WebcomicTag::webcomic_dropdown_terms( $a );
 		} else {
 			$output = WebcomicTag::webcomic_term_cloud( $a );
@@ -764,7 +764,7 @@ class Widget_WebcomicCollections extends WP_Widget {
 		
 		if ( 'list' === $format ) {
 			$output = WebcomicTag::webcomic_list_collections( $a );
-		} else if ( 'dropdown' === $format ) {
+		} elseif ( 'dropdown' === $format ) {
 			$output = WebcomicTag::webcomic_dropdown_collections( $a );
 		} else {
 			$output = WebcomicTag::webcomic_collection_cloud( $a );

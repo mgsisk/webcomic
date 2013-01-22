@@ -68,22 +68,22 @@
 			</footer><!-- .entry-meta -->
 		</article><!-- #post-<?php the_ID(); ?> -->
 	</div>
-<?php } else if ( is_webcomic() ) { ?>
+<?php } elseif ( is_webcomic() ) { ?>
 	<div class="integrated-webcomic">
 		<nav class="webcomic-above"><?php first_webcomic_link(); previous_webcomic_link(); random_webcomic_link(); next_webcomic_link(); last_webcomic_link(); ?></nav><!-- .webcomic-above -->
 		<div class="webcomic-img"><?php the_webcomic( 'full', 'next' ); ?></div><!-- .webcomic-img -->
 		<nav class="webcomic-below"><?php first_webcomic_link(); previous_webcomic_link(); random_webcomic_link(); next_webcomic_link(); last_webcomic_link(); ?></nav><!-- .webcomic-below -->
 	</div><!-- .integrated-webcomic -->
-<?php } else if ( is_webcomic_archive() ) { ?>
+<?php } elseif ( is_webcomic_archive() ) { ?>
 	<h2 class="webcomic-collection-title"><?php webcomic_collection_title(); ?></h2><!-- .webcomic-collection-title -->
 	<div class="webcomic-img webcomic-collection-poster"><?php webcomic_collection_poster(); ?></div><!-- .webcomic-collection-poster -->
 	<div class="webcomic-collection-description"><?php webcomic_collection_description(); ?></div><!-- .webcomic-collection-description -->
-<?php } else if ( is_webcomic_storyline() ) { ?>
+<?php } elseif ( is_webcomic_storyline() ) { ?>
 	<h2 class="webcomic-storyline-title"><?php webcomic_storyline_title(); ?></h2><!-- .webcomic-storyline-title -->
 	<div class="webcomic-img webcomic-storyline-cover"><?php webcomic_storyline_cover(); ?></div><!-- .webcomic-storyline-cover -->
 	<div class="webcomic-storyline-description"><?php webcomic_storyline_description(); ?></div><!-- .webcomic-storyline-description -->
 	<nav class="webcomic-storyline"><?php first_webcomic_storyline_link(); previous_webcomic_storyline_link(); random_webcomic_storyline_link(); next_webcomic_storyline_link(); last_webcomic_storyline_link(); ?></nav><!-- .webcomic-storyline -->
-<?php } else if ( is_webcomic_character() ) { ?>
+<?php } elseif ( is_webcomic_character() ) { ?>
 	<h2 class="webcomic-character-title"><?php webcomic_character_title(); ?></h2><!-- .webcomic-character-title -->
 	<div class="webcomic-img webcomic-character-avatar"><?php webcomic_character_avatar(); ?></div><!-- .webcomic-character-avatar -->
 	<div class="webcomic-character-description"><?php webcomic_character_description(); ?></div><!-- .webcomic-character-description -->

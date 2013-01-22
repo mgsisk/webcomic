@@ -64,31 +64,31 @@ class WebcomicHelp extends Webcomic {
 				'title'   => __( 'Webcomic Collection', 'webcomic' ),
 				'content' => $this->page_collection()
 			) );
-		} else if ( 'options-media' === $screen->id ) {
+		} elseif ( 'options-media' === $screen->id ) {
 			$screen->add_help_tab( array(
 				'id'      => 'webcomic-sizes',
 				'title'   => __( 'Additional Image Sizes', 'webcomic' ),
 				'content' => $this->media_sizes()
 			) );
-		} else if ( 'tools_page_webcomic-commerce' === $screen->id ) {
+		} elseif ( 'tools_page_webcomic-commerce' === $screen->id ) {
 			$screen->add_help_tab( array(
 				'id'      => 'overview',
 				'title'   => __( 'Overview', 'webcomic' ),
 				'content' => $this->commerce_overview()
 			) );
-		} else if ( 'tools_page_webcomic-upgrader' === $screen->id ) {
+		} elseif ( 'tools_page_webcomic-upgrader' === $screen->id ) {
 			$screen->add_help_tab( array(
 				'id'      => 'overview',
 				'title'   => __( 'Overview', 'webcomic' ),
 				'content' => $this->legacy_overview()
 			) );
-		} else if ( 'media_page_webcomic-generator' === $screen->id ) {
+		} elseif ( 'media_page_webcomic-generator' === $screen->id ) {
 			$screen->add_help_tab( array(
 				'id'      => 'overview',
 				'title'   => __( 'Overview', 'webcomic' ),
 				'content' => $this->generator_overview()
 			) );
-		} else if ( 'settings_page_webcomic-options' === $screen->id ) {
+		} elseif ( 'settings_page_webcomic-options' === $screen->id ) {
 			$screen->add_help_tab( array(
 				'id'      => 'general-settings',
 				'title'   => __( 'General Settings', 'webcomic' ),
@@ -100,7 +100,7 @@ class WebcomicHelp extends Webcomic {
 				'title'   => __( 'Collections', 'webcomic' ),
 				'content' => $this->settings_collections()
 			) );
-		} else if ( 'edit-webcomic_transcript' === $screen->id ) {
+		} elseif ( 'edit-webcomic_transcript' === $screen->id ) {
 			$screen->add_help_tab( array(
 				'id'      => 'overview',
 				'title'   => __( 'Overview', 'webcomic' ),
@@ -154,7 +154,7 @@ class WebcomicHelp extends Webcomic {
 				'title'   => __( 'Transcript Authors', 'webcomic' ),
 				'content' => $this->edit_transcript_authors()
 			) );
-		} else if ( "edit-{$screen->post_type}" === $screen->id ) {
+		} elseif ( "edit-{$screen->post_type}" === $screen->id ) {
 			$screen->add_help_tab( array(
 				'id'      => 'overview',
 				'title'   => __( 'Overview', 'webcomic' ),
@@ -178,7 +178,7 @@ class WebcomicHelp extends Webcomic {
 				'title'   => __( 'Bulk Actions', 'webcomic' ),
 				'content' => $this->webcomics_bulk()
 			) );
-		} else if ( $screen->post_type === $screen->id ) {
+		} elseif ( $screen->post_type === $screen->id ) {
 			$screen->add_help_tab( array(
 				'id'      => 'customizing-this-display',
 				'title'   => __( 'Customizing This Display', 'webcomic' ),
@@ -220,7 +220,7 @@ class WebcomicHelp extends Webcomic {
 				'title'   => __( 'Discussion Settings', 'webcomic' ),
 				'content' => $this->edit_webcomic_discussion()
 			) );
-		} else if ( "edit-{$screen->post_type}_storyline" === $screen->id and empty( $_GET[ 'tag_ID' ] ) ) {
+		} elseif ( "edit-{$screen->post_type}_storyline" === $screen->id and empty( $_GET[ 'tag_ID' ] ) ) {
 			$screen->add_help_tab( array(
 				'id'      => 'overview',
 				'title'   => __( 'Overview', 'webcomic' ),
@@ -238,7 +238,7 @@ class WebcomicHelp extends Webcomic {
 				'title'   => __( 'Moving Storylines', 'webcomic' ),
 				'content' => $this->storylines_moving()
 			) );
-		} else if ( "edit-{$screen->post_type}_character" === $screen->id and empty( $_GET[ 'tag_ID' ] ) ) {
+		} elseif ( "edit-{$screen->post_type}_character" === $screen->id and empty( $_GET[ 'tag_ID' ] ) ) {
 			$screen->add_help_tab( array(
 				'id'      => 'overview',
 				'title'   => __( 'Overview', 'webcomic' ),
@@ -250,7 +250,7 @@ class WebcomicHelp extends Webcomic {
 				'title'   => __( 'Adding Characters', 'webcomic' ),
 				'content' => $this->characters_adding()
 			) );
-		} else if ( 'edit-webcomic_language' === $screen->id and empty( $_GET[ 'tag_ID' ] ) ) {
+		} elseif ( 'edit-webcomic_language' === $screen->id and empty( $_GET[ 'tag_ID' ] ) ) {
 			$screen->add_help_tab( array(
 				'id'      => 'overview',
 				'title'   => __( 'Overview', 'webcomic' ),
@@ -262,7 +262,7 @@ class WebcomicHelp extends Webcomic {
 				'title'   => __( 'Adding Languages', 'webcomic' ),
 				'content' => $this->languages_adding()
 			) );
-		} else if ( "{$screen->post_type}_page_{$screen->post_type}-options" === $screen->id ) {
+		} elseif ( "{$screen->post_type}_page_{$screen->post_type}-options" === $screen->id ) {
 			$screen->add_help_tab( array(
 				'id'      => 'general-settings',
 				'title'   => __( 'General Settings', 'webcomic' ),

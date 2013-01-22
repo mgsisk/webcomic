@@ -36,9 +36,9 @@ class WebcomicMedia extends Webcomic {
 		if ( isset( $_GET[ 'webcomic_action_status' ] ) and 1 === count( $_GET ) ) {
 			if ( 'regenerate-clear' === $_GET[ 'webcomic_action_status' ] ) {
 				self::$notice[] = __( 'Regenerated images for media object.', 'webcomic' );
-			} else if ( 'regenerate-error' === $_GET[ 'webcomic_action_status' ] ) {
+			} elseif ( 'regenerate-error' === $_GET[ 'webcomic_action_status' ] ) {
 				self::$error[] = __( 'Images could not be regenerated.', 'webcomic' );
-			} else if ( 'detach-clear' === $_GET[ 'webcomic_action_status' ] ) {
+			} elseif ( 'detach-clear' === $_GET[ 'webcomic_action_status' ] ) {
 				self::$notice[] = __( 'Detached media object.', 'webcomic' );
 			}
 		}
@@ -92,9 +92,9 @@ class WebcomicMedia extends Webcomic {
 		if ( isset( $_POST[ 'webcomic_action' ] ) and 'generate' === $_POST[ 'webcomic_action' ] and wp_verify_nonce( $_POST[ 'webcomic_generate' ], 'webcomic_generate' ) ) {
 			if ( empty( $_POST[ 'attachments' ] ) or !$attachments = $_POST[ 'attachments' ] ) {
 				self::$error[] = sprintf( '<strong>%s</strong>', __( 'No media objects selected.', 'webcomic' ) );
-			} else if ( !$start = strtotime( $_POST[ 'webcomic_generate_start' ] ) ) {
+			} elseif ( !$start = strtotime( $_POST[ 'webcomic_generate_start' ] ) ) {
 				self::$error[] = sprintf( '<strong>%s</strong>', __( 'The start date could not be understood.', 'webcomic' ) );
-			} else if ( !$days = $_POST[ 'webcomic_generate_days' ] ) {
+			} elseif ( !$days = $_POST[ 'webcomic_generate_days' ] ) {
 				self::$error[] = sprintf( '<strong>%s</strong>', __( 'No weekdays selected.', 'webcomic' ) );
 			} else {
 				$now      = $start;
@@ -137,7 +137,7 @@ class WebcomicMedia extends Webcomic {
 					
 					if ( false !== ( $key = array_search( $weekday, $days ) ) ) {
 						$weekday = empty( $days[ $key + 1 ] ) ? $days[ 0 ] : $days[ $key + 1 ];
-					} else if ( $weekday > max( $days ) or $weekday < min( $days ) ) {
+					} elseif ( $weekday > max( $days ) or $weekday < min( $days ) ) {
 						$weekday = $days[ 0 ];
 					} else {
 						foreach ( $days as $day ) {
@@ -266,9 +266,9 @@ class WebcomicMedia extends Webcomic {
 			
 			if ( empty( $type[ 1 ] ) ) {
 				$states[] = sprintf( __( '%s Poster', 'webcomic' ), esc_html( self::$config[ 'collections' ][ $type[ 0 ] ][ 'name' ] ) );
-			} else if ( 'storyline' === $type[ 1 ] ) {
+			} elseif ( 'storyline' === $type[ 1 ] ) {
 				$states[] = sprintf( __( '%s Cover', 'webcomic' ), esc_html( self::$config[ 'collections' ][ $type[ 0 ] ][ 'name' ] ) );
-			} else if ( 'character' === $type[ 1 ] ) {
+			} elseif ( 'character' === $type[ 1 ] ) {
 				$states[] = sprintf( __( '%s Avatar', 'webcomic' ), esc_html( self::$config[ 'collections' ][ $type[ 0 ] ][ 'name' ] ) );
 			}
 		}
@@ -293,9 +293,9 @@ class WebcomicMedia extends Webcomic {
 		
 		if ( isset( $_GET[ 'post_id' ] ) ) {
 			$id = $_GET[ 'post_id' ];
-		} else if ( $post and $post->post_parent ) {
+		} elseif ( $post and $post->post_parent ) {
 			$id = $post->post_parent;
-		} else if ( $post and isset( self::$config[ 'collections' ][ $post->post_type ] ) ) {
+		} elseif ( $post and isset( self::$config[ 'collections' ][ $post->post_type ] ) ) {
 			$id = $post->ID;
 		} else {
 			$id = false;

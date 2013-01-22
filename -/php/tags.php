@@ -372,7 +372,7 @@ class WebcomicTag extends Webcomic {
 			) {
 				if ( $save and !empty( $user->ID ) ) {
 					update_user_meta( $user->ID, 'webcomic_birthday', $birthday );
-				} else if ( $save ) {
+				} elseif ( $save ) {
 					setcookie( 'webcomic_birthday_' . COOKIEHASH, $birthday, ( integer ) current_time( 'timestamp' ) + 604800, COOKIEPATH );
 				}
 				
@@ -403,7 +403,7 @@ class WebcomicTag extends Webcomic {
 			
 			if ( !empty( $user->ID ) and '!' === $roles[ 0 ] ) {
 				return true;
-			} else if ( isset( $user->roles ) ) {
+			} elseif ( isset( $user->roles ) ) {
 				foreach ( $roles as $role ) {
 					if ( in_array( $role, $user->roles ) ) {
 						return true;
@@ -447,7 +447,7 @@ class WebcomicTag extends Webcomic {
 			
 			if ( 'self' === $relative ) {
 				return sprintf( '<a href="%s" rel="bookmark">%s</a>', apply_filters( 'the_permalink', get_permalink( $the_post ) ), $output );
-			} else if ( $relative ) {
+			} elseif ( $relative ) {
 				return self::relative_webcomic_link( '%link', $output, $relative, $in_same_term, $excluded_terms, $taxonomy, $the_post->post_type );
 			} else {
 				return $output;
@@ -472,7 +472,7 @@ class WebcomicTag extends Webcomic {
 			
 			if ( $story_related and $character_related ) {
 				$related_webcomics = array_intersect( $story_related, $character_related );
-			} else if ( $story_related or $character_related ) {
+			} elseif ( $story_related or $character_related ) {
 				$related_webcomics = $story_related ? $story_related : $character_related;
 			} else {
 				$related_webcomics = array();
@@ -550,7 +550,7 @@ class WebcomicTag extends Webcomic {
 		
 		if ( 'previous' === $relative or 'next' === $relative ) {
 			$collection = ( $post and isset( self::$config[ 'collections' ][ $post->post_type ] ) ) ? $post->post_type : '';
-		} else if ( !$collection ) {
+		} elseif ( !$collection ) {
 			$collection = ( $post and isset( self::$config[ 'collections' ][ $post->post_type ] ) ) ? $post->post_type : self::$collection;
 		}
 		
@@ -565,7 +565,7 @@ class WebcomicTag extends Webcomic {
 				
 				if ( true === $in_same_term and $post_id ) {
 					$include = wp_get_object_terms( $post_id, $taxonomy, array( 'fields' => 'ids' ) );
-				} else if ( $in_same_term and true !== $in_same_term ) {
+				} elseif ( $in_same_term and true !== $in_same_term ) {
 					$include = is_array( $in_same_term ) ? array_map( 'intval', $in_same_term ) : array_map( 'intval', explode( ',', $in_same_term ) );
 				} else {
 					$include = array();
@@ -588,7 +588,7 @@ class WebcomicTag extends Webcomic {
 			
 			if ( 'previous' === $relative ) {
 				$op = " p.post_date < '{$post->post_date}' AND";
-			} else if ( 'next' === $relative ) {
+			} elseif ( 'next' === $relative ) {
 				$op = " p.post_date > '{$post->post_date}' AND";
 			} else {
 				$op = '';
@@ -596,7 +596,7 @@ class WebcomicTag extends Webcomic {
 			
 			if ( 'first' === $relative or 'next' === $relative ) {
 				$or = 'p.post_date ASC';
-			} else if ( 'last' === $relative or 'previous' === $relative ) {
+			} elseif ( 'last' === $relative or 'previous' === $relative ) {
 				$or = 'p.post_date DESC';
 			} else {
 				$or = 'RAND()';
@@ -675,7 +675,7 @@ class WebcomicTag extends Webcomic {
 		if ( 'random-nocache' === $relative or $the_post = self::get_relative_webcomic( $relative, $in_same_term, $excluded_terms, $taxonomy, $collection ) ) {
 			if ( isset( $the_post ) ) {
 				$collection = $the_post->post_type;
-			} else if ( !$collection ) {
+			} elseif ( !$collection ) {
 				$collection = ( $post and isset( self::$config[ 'collections' ][ $post->post_type ] ) ) ? $post->post_type : self::$collection;
 			}
 			
@@ -690,11 +690,11 @@ class WebcomicTag extends Webcomic {
 			if ( !$link ) {
 				if ( 'previous' === $relative ) {
 					$link = __( '&lsaquo;', 'webcomic' );
-				} else if ( 'next' === $relative ) {
+				} elseif ( 'next' === $relative ) {
 					$link = __( '&rsaquo;', 'webcomic' );
-				} else if ( 'first' === $relative ) {
+				} elseif ( 'first' === $relative ) {
 					$link = __( '&laquo;', 'webcomic' );
-				} else if ( 'last' === $relative ) {
+				} elseif ( 'last' === $relative ) {
 					$link = __( '&raquo;', 'webcomic' );
 				} else {
 					$link = __( '&infin;', 'webcomic' );
@@ -914,7 +914,7 @@ class WebcomicTag extends Webcomic {
 		
 		if ( !taxonomy_exists( $taxonomy ) and is_tax() ) {
 			$taxonomy = $object->taxonomy;
-		} else if ( ( 'next' === $relative or 'previous' === $relative ) and is_singular() and $terms = wp_get_object_terms( $post->ID, $taxonomy, array_merge( array( 'hide_empty' => true, 'orderby' => is_taxonomy_hierarchical( $taxonomy ) ? 'term_group' : 'name' ), ( array ) $args, array( 'cache_domain' => 'get_relative_webcomic_term' ) ) ) and !is_wp_error( $terms ) ) {
+		} elseif ( ( 'next' === $relative or 'previous' === $relative ) and is_singular() and $terms = wp_get_object_terms( $post->ID, $taxonomy, array_merge( array( 'hide_empty' => true, 'orderby' => is_taxonomy_hierarchical( $taxonomy ) ? 'term_group' : 'name' ), ( array ) $args, array( 'cache_domain' => 'get_relative_webcomic_term' ) ) ) and !is_wp_error( $terms ) ) {
 			$object = 'next' === $relative ? array_pop( $terms ) : array_shift( $terms );
 		}
 		
@@ -923,11 +923,11 @@ class WebcomicTag extends Webcomic {
 		if ( taxonomy_exists( $taxonomy ) and ( 'previous' === $relative or 'next' === $relative ) ? isset( $object ) : true ) {
 			if ( 'first' === $relative and $terms = get_terms( $taxonomy, array_merge( $args, array( 'parent' => 0 ) ) ) and !is_wp_error( $terms ) ) {
 				$object = $terms[ 0 ];
-			} else if ( 'random' === $relative and $terms = get_terms( $taxonomy, $args ) and !is_wp_error( $terms ) ) {
+			} elseif ( 'random' === $relative and $terms = get_terms( $taxonomy, $args ) and !is_wp_error( $terms ) ) {
 				shuffle( $terms );
 				
 				$object = $terms[ 0 ];
-			} else if ( 'last' === $relative and $terms = get_terms( $taxonomy, array_merge( $args, array( 'parent' => 0 ) ) ) and !is_wp_error( $terms ) ) {
+			} elseif ( 'last' === $relative and $terms = get_terms( $taxonomy, array_merge( $args, array( 'parent' => 0 ) ) ) and !is_wp_error( $terms ) ) {
 				$last = array_pop( $terms );
 				
 				while( $children = get_terms( $last->taxonomy, array_merge( $args, array( 'parent' => $last->term_id ) ) ) ) {
@@ -935,10 +935,10 @@ class WebcomicTag extends Webcomic {
 				}
 				
 				$object = $last;
-			} else if ( 'previous' === $relative ) {
+			} elseif ( 'previous' === $relative ) {
 				if ( !$object->term_group and $object->parent ) {
 					$object = get_term( $object->parent, $object->taxonomy );
-				} else if ( $terms = get_terms( $object->taxonomy, array_merge( $args, array( 'parent' => $object->parent ) ) ) and !is_wp_error( $terms ) and false !== ( $key = array_search( $object, $terms ) ) and isset( $terms[ $key - 1 ] ) ) {
+				} elseif ( $terms = get_terms( $object->taxonomy, array_merge( $args, array( 'parent' => $object->parent ) ) ) and !is_wp_error( $terms ) and false !== ( $key = array_search( $object, $terms ) ) and isset( $terms[ $key - 1 ] ) ) {
 					$previous = $terms[ $key - 1 ];
 					
 					while ( $children = get_terms( $previous->taxonomy, array_merge( $args, array( 'parent' => $previous->term_id ) ) ) ) {
@@ -947,10 +947,10 @@ class WebcomicTag extends Webcomic {
 					
 					$object = $previous;
 				}
-			} else if ( 'next' === $relative ) {
+			} elseif ( 'next' === $relative ) {
 				if ( $children = get_terms( $object->taxonomy, array_merge( $args, array( 'parent' => $object->term_id ) ) ) and !is_wp_error( $children ) ) {
 					$object = $children[ 0 ];
-				} else if ( $terms = get_terms( $object->taxonomy, array_merge( $args, array( 'parent' => $object->parent ) ) ) and !is_wp_error( $terms ) and false !== ( $key = array_search( $object, $terms ) ) and isset( $terms[ $key + 1 ] ) ) {
+				} elseif ( $terms = get_terms( $object->taxonomy, array_merge( $args, array( 'parent' => $object->parent ) ) ) and !is_wp_error( $terms ) and false !== ( $key = array_search( $object, $terms ) ) and isset( $terms[ $key + 1 ] ) ) {
 					$object = $terms[ $key + 1 ];
 				} else {
 					$next = $object;
@@ -1049,11 +1049,11 @@ class WebcomicTag extends Webcomic {
 			if ( !$link ) {
 				if ( 'previous' === $relative ) {
 					$link = __( '&lsaquo; %title', 'webcomic' );
-				} else if ( 'next' === $relative ) {
+				} elseif ( 'next' === $relative ) {
 					$link = __( '%title &rsaquo;', 'webcomic' );
-				} else if ( 'first' === $relative ) {
+				} elseif ( 'first' === $relative ) {
 					$link = __( '&laquo; %title', 'webcomic' );
-				} else if ( 'last' === $relative ) {
+				} elseif ( 'last' === $relative ) {
 					$link = __( '%title &raquo;', 'webcomic' );
 				} else {
 					$link = __( '%title', 'webcomic' );
@@ -1530,7 +1530,7 @@ class WebcomicTag extends Webcomic {
 			
 			if ( !webcomic_transcripts_open() ) {
 				$link = $off ? $off : __( 'Transcription Off', 'webcomic' );
-			} else if ( have_webcomic_transcripts() ) {
+			} elseif ( have_webcomic_transcripts() ) {
 				$link = $some ? $some : __( 'View %title Transcripts', 'webcomic' );
 			} else {
 				$link = $none ? $none : __( 'Transcribe %title', 'webcomic' );
@@ -2157,11 +2157,11 @@ class WebcomicTag extends Webcomic {
 		
 		if ( 'name' === $orderby ) {
 			usort( $collections, array( 'WebcomicTag', 'sort_webcomic_collections_name' ) );
-		} else if ( 'slug' === $orderby ) {
+		} elseif ( 'slug' === $orderby ) {
 			usort( $collections, array( 'WebcomicTag', 'sort_webcomic_collections_slug' ) );
-		} else if ( 'count' === $orderby ) {
+		} elseif ( 'count' === $orderby ) {
 			usort( $collections, array( 'WebcomicTag', 'sort_webcomic_collections_count' ) );
-		} else if ( 'updated' === $orderby ) {
+		} elseif ( 'updated' === $orderby ) {
 			usort( $collections, array( 'WebcomicTag', 'sort_webcomic_collections_updated' ) );
 		}
 		
@@ -2384,11 +2384,11 @@ class WebcomicTag extends Webcomic {
 		
 		if ( 'name' === $orderby ) {
 			usort( $collections, array( 'WebcomicTag', 'sort_webcomic_collections_name' ) );
-		} else if ( 'slug' === $orderby ) {
+		} elseif ( 'slug' === $orderby ) {
 			usort( $collections, array( 'WebcomicTag', 'sort_webcomic_collections_slug' ) );
-		} else if ( 'count' === $orderby ) {
+		} elseif ( 'count' === $orderby ) {
 			usort( $collections, array( 'WebcomicTag', 'sort_webcomic_collections_count' ) );
-		} else if ( 'updated' === $orderby ) {
+		} elseif ( 'updated' === $orderby ) {
 			usort( $collections, array( 'WebcomicTag', 'sort_webcomic_collections_updated' ) );
 		}
 		
@@ -2632,13 +2632,13 @@ class WebcomicTag extends Webcomic {
 		
 		if ( 'RAND' === $order ) {
 			shuffle( $collections );
-		} else if ( 'name' === $orderby ) {
+		} elseif ( 'name' === $orderby ) {
 			usort( $collections, array( 'WebcomicTag', 'sort_webcomic_collections_name' ) );
-		} else if ( 'slug' === $orderby ) {
+		} elseif ( 'slug' === $orderby ) {
 			usort( $collections, array( 'WebcomicTag', 'sort_webcomic_collections_slug' ) );
-		} else if ( 'count' === $orderby ) {
+		} elseif ( 'count' === $orderby ) {
 			usort( $collections, array( 'WebcomicTag', 'sort_webcomic_collections_count' ) );
-		} else if ( 'updated' === $orderby ) {
+		} elseif ( 'updated' === $orderby ) {
 			usort( $collections, array( 'WebcomicTag', 'sort_webcomic_collections_updated' ) );
 		}
 		
@@ -3198,7 +3198,7 @@ if ( !function_exists( 'verify_webcomic_age' ) ) {
 	 * <code class="php">
 	 * if ( is_null( verify_webcomic_age() ) ) {
 	 * 	// the current user's age has not be checked
-	 * } else if ( verify_webcomic_age() ) {
+	 * } elseif ( verify_webcomic_age() ) {
 	 * 	// the current user is old enough to view content in the current collection
 	 * } else {
 	 * 	// the current user is not old enough to view content in the current collection
@@ -3245,7 +3245,7 @@ if ( !function_exists( 'verify_webcomic_role' ) ) {
 	 * <code class="php">
 	 * if ( is_null( verify_webcomic_role() ) ) {
 	 * 	// the current user is not logged in
-	 * } else if ( verify_webcomic_role() ) {
+	 * } elseif ( verify_webcomic_role() ) {
 	 * 	// the current user has permission to view content in the current collection
 	 * } else {
 	 * 	// the current user does not have permission to view content in the current collection

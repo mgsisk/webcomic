@@ -972,7 +972,7 @@ class WebcomicConfig extends Webcomic {
 				self::$config[ 'increment' ]++;
 				
 				add_settings_error( 'webcomic_otions', 'new-collection', sprintf( __( 'Added <q>%s</q>', 'webcomic' ), esc_html( $name ) ), 'updated' );
-			} else if ( $_POST[ 'webcomic_bulk_collection' ] and isset( $_POST[ 'webcomic_collection' ] ) ) {
+			} elseif ( $_POST[ 'webcomic_bulk_collection' ] and isset( $_POST[ 'webcomic_collection' ] ) ) {
 				$bulk  = true;
 				$count = 0;
 				
@@ -994,7 +994,7 @@ class WebcomicConfig extends Webcomic {
 						
 						$count++;
 					}
-				} else if ( 'delete_save' === $_POST[ 'webcomic_bulk_collection' ] ) {
+				} elseif ( 'delete_save' === $_POST[ 'webcomic_bulk_collection' ] ) {
 					foreach ( $_POST[ 'webcomic_collection' ] as $id ) {
 						WebcomicAdmin::save_collection( $id );
 						
@@ -1014,7 +1014,7 @@ class WebcomicConfig extends Webcomic {
 				self::$config[ 'uninstall' ] = isset( $_POST[ 'webcomic_uninstall' ] );
 				self::$config[ 'convert' ]   = isset( $_POST[ 'webcomic_uninstall' ], $_POST[ 'webcomic_convert' ] );
 			}
-		} else if ( isset( $_POST[ 'webcomic_collection' ] ) ) {
+		} elseif ( isset( $_POST[ 'webcomic_collection' ] ) ) {
 			$id         = $_POST[ 'webcomic_collection' ];
 			$tokens     = array( '%year%', '%monthnum%', '%day%', '%hour%', '%minute%', '%second%', '%post_id%', '%author%', "%{$id}_storyline%" );
 			$collection = array(
@@ -1123,7 +1123,7 @@ class WebcomicConfig extends Webcomic {
 			
 			if ( $collection[ 'twitter' ][ 'consumer_key' ] !== self::$config[ 'collections' ][ $id ][ 'twitter' ][ 'consumer_key' ] or $collection[ 'twitter' ][ 'consumer_secret' ] !== self::$config[ 'collections' ][ $id ][ 'twitter' ][ 'consumer_secret' ] ) {
 				$collection[ 'twitter' ][ 'oauth_token' ] = $collection[ 'twitter' ][ 'oauth_secret' ] = '';
-			} else if ( $collection[ 'twitter' ][ 'oauth_token' ] and $collection[ 'twitter' ][ 'oauth_secret' ] ) {
+			} elseif ( $collection[ 'twitter' ][ 'oauth_token' ] and $collection[ 'twitter' ][ 'oauth_secret' ] ) {
 				$collection[ 'twitter' ][ 'request_token' ] = $collection[ 'twitter' ][ 'request_secret' ] = '';
 			}
 			
@@ -1261,7 +1261,7 @@ class WebcomicConfig extends Webcomic {
 			if ( $size = sanitize_title( $_POST[ 'webcomic_new_size' ] ) ) {
 				if ( 'thumb' === $size or 'thumbnail' === $size or 'medium' === $size or 'large' === $size or 'post-thumbnail' === $size ) {
 					wp_die( sprintf( __( 'The name <q>%s</q> is reserved by WordPress.', 'webcomic' ), $size ), __( 'Error | Webcomic', 'webcomic' ) );
-				} else if ( in_array( $size, get_intermediate_image_sizes() ) ) {
+				} elseif ( in_array( $size, get_intermediate_image_sizes() ) ) {
 					wp_die( sprintf( __( 'A size with the name <q>%s</q> already exists.', 'webcomic' ), $size ), __( 'Error | Webcomic', 'webcomic' ) );
 				} else {
 					self::$config[ 'sizes' ][ $size ] = array(

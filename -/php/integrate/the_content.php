@@ -38,6 +38,6 @@ if ( is_webcomic() ) {
 	$append .= WebcomicTag::get_the_webcomic_term_list( $post->ID, 'storyline', sprintf( '<div class="webcomic-storylines"><b>%s</b>', __( 'Part of ', 'webcomic' ) ), ', ', '</div><!-- .webcomic-storylines -->' );
 	$append .= WebcomicTag::get_the_webcomic_term_list( $post->ID, 'character', sprintf( '<div class="webcomic-characters"><b>%s</b>', __( 'Featuring ', 'webcomic' ) ), ', ', '</div><!-- .webcomic-characters -->' );
 	$append .= WebcomicTag::webcomic_dropdown_transcript_terms( array( 'before' => '<div class="webcomic-transcript-languages">', 'sep' => __( ' | ', 'webcomic' ), 'after' => '</div><!-- .webcomic-transcript-languages-->', 'show_option_all' => __( '- Transcript Language -', 'webcomic' ), 'taxonomy' => 'webcomic_language' ) );
-} else if ( is_webcomic_archive() or is_webcomic_storyline() or is_webcomic_character() or is_search() ) {
+} elseif ( is_webcomic_archive() or is_webcomic_storyline() or is_webcomic_character() or is_search() ) {
 	$prepend = sprintf( '<div class="integrated-webcomic"><div class="webcomic-img">%s</div><!-- .webcomic-img --></div><!-- .integrated-webcomic -->', WebcomicTag::the_webcomic( 'medium', 'self' ) );
 }

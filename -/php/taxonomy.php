@@ -74,7 +74,7 @@ class WebcomicTaxonomy extends Webcomic {
 						$moved = ( is_wp_error( $wpdb->update( $wpdb->terms, array( 'term_group' => $t->term_group + 1 ), array( 'term_id' => $t->term_id ) ) ) or is_wp_error( $wpdb->update( $wpdb->terms, array( 'term_group' => $term->term_group - 1 ), array( 'term_id' => $term->term_id ) ) ) ) ? false : 'up';
 						
 						break;
-					} else if ( 'move_term_down' === $_GET[ 'webcomic_action' ] and ( integer ) $t->term_group === ( $term->term_group + 1 ) ) {
+					} elseif ( 'move_term_down' === $_GET[ 'webcomic_action' ] and ( integer ) $t->term_group === ( $term->term_group + 1 ) ) {
 						$moved = ( is_wp_error( $wpdb->update( $wpdb->terms, array( 'term_group' => $t->term_group - 1 ), array( 'term_id' => $t->term_id ) ) ) or is_wp_error( $wpdb->update( $wpdb->terms, array( 'term_group' => $term->term_group + 1 ), array( 'term_id' => $term->term_id ) ) ) ) ? false : 'down';
 						
 						break;
@@ -84,7 +84,7 @@ class WebcomicTaxonomy extends Webcomic {
 			
 			if ( 'up' === $moved ) {
 				self::$notice[] = __( 'Moved item up.', 'webcomic' );
-			} else if ( 'down' === $moved ) {
+			} elseif ( 'down' === $moved ) {
 				self::$notice[] = __( 'Moved item down.', 'webcomic' );
 			} else {
 				self::$error[] = __( 'Item could not be moved.', 'webcomic' );
@@ -213,7 +213,7 @@ class WebcomicTaxonomy extends Webcomic {
 			}
 			
 			update_option( 'webcomic_options', self::$config );
-		} else if ( preg_match( '/^webcomic\d+_(storyline|character)$/', $taxonomy ) ) {
+		} elseif ( preg_match( '/^webcomic\d+_(storyline|character)$/', $taxonomy ) ) {
 			if ( isset( self::$config[ 'terms' ][ $id ] ) ) {
 				delete_post_meta( self::$config[ 'terms' ][ $id ][ 'image' ], '_wp_attachment_context' );
 				

@@ -117,7 +117,7 @@ class WebcomicTranscripts extends Webcomic {
 					wp_set_object_terms( $transcript, $tags, 'post_tag'  );
 					wp_set_object_terms( $transcript, null, 'webcomic_language' );
 				}
-			} else if ( $before->post_title !== $after->post_title ) {
+			} elseif ( $before->post_title !== $after->post_title ) {
 				$title = sprintf( __( '%s Transcript', 'webcomic' ), $after->post_title );
 				
 				foreach ( $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM {$wpdb->posts} WHERE post_type = 'webcomic_transcript' AND post_parent = %d", $id ) ) as $transcript ) {
@@ -265,7 +265,7 @@ class WebcomicTranscripts extends Webcomic {
 			}
 			
 			echo join( ', ', $authors );
-		} else if ( 'webcomic_languages' === $column ) {
+		} elseif ( 'webcomic_languages' === $column ) {
 			if ( $languages = wp_get_object_terms( $id, 'webcomic_language' ) ) {
 				$terms = array();
 				
@@ -280,7 +280,7 @@ class WebcomicTranscripts extends Webcomic {
 			} else {
 				_e( 'No Languages', 'webcomic' );
 			}
-		} else if ( 'webcomic_parent' === $column ) {
+		} elseif ( 'webcomic_parent' === $column ) {
 			echo $post->post_parent ? sprintf( '<strong><a href="%s">%s</a> - %s</strong>, %s',
 				esc_url( add_query_arg( array( 'post_type' => get_post_type( $post->post_parent ) ), admin_url( 'edit.php' ) ) ),
 				esc_html( get_post_type_object( get_post_type( $post->post_parent ) )->labels->name ),
@@ -543,7 +543,7 @@ class WebcomicTranscripts extends Webcomic {
 			foreach ( $attachments as $attachment ) {
 				echo wp_get_attachment_image( $attachment->ID, 'full' ), '<br>';
 			}
-		} else if ( $post ) {
+		} elseif ( $post ) {
 			printf( '<p>%s</p>', __( 'No Attachments', 'webcomic' ) );
 		}
 	}

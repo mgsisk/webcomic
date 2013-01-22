@@ -221,17 +221,17 @@ class WebcomicShortcode extends Webcomic {
 		if ( !$link ) {
 			if ( $content ) {
 				$link = do_shortcode( $content );
-			} else if ( 'previous' === $relative ) {
+			} elseif ( 'previous' === $relative ) {
 				$link = '&lsaquo;';
-			} else if ( 'next' === $relative ) {
+			} elseif ( 'next' === $relative ) {
 				$link = '&rsaquo;';
-			} else if ( 'first' === $relative ) {
+			} elseif ( 'first' === $relative ) {
 				$link = '&laquo;';
-			} else if ( 'last' === $relative ) {
+			} elseif ( 'last' === $relative ) {
 				$link = '&raquo;';
-			} else if ( 'random' === $relative or 'random-nocache' === $relative ) {
+			} elseif ( 'random' === $relative or 'random-nocache' === $relative ) {
 				$link = '&infin;';
-			} else if ( 'purchase' === $relative ) {
+			} elseif ( 'purchase' === $relative ) {
 				$link = '&curren;';
 			}
 		}
@@ -277,7 +277,7 @@ class WebcomicShortcode extends Webcomic {
 		
 		if ( 'the_webcomic_storylines' === $name ) {
 			$taxonomy = 'storyline';
-		} else if ( 'the_webcomic_characters' === $name ) {
+		} elseif ( 'the_webcomic_characters' === $name ) {
 			$taxonomy = 'character';
 		}
 		
@@ -314,22 +314,22 @@ class WebcomicShortcode extends Webcomic {
 		if ( !$link ) {
 			if ( $content ) {
 				$link = do_shortcode( $content );
-			} else if ( 'previous' === $relative ) {
+			} elseif ( 'previous' === $relative ) {
 				$link = '&lsaquo; %title';
-			} else if ( 'next' === $relative ) {
+			} elseif ( 'next' === $relative ) {
 				$link = '%title &rsaquo;';
-			} else if ( 'first' === $relative ) {
+			} elseif ( 'first' === $relative ) {
 				$link = '&laquo; %title';
-			} else if ( 'last' === $relative ) {
+			} elseif ( 'last' === $relative ) {
 				$link = '%title &raquo;';
-			} else if ( 'random' === $relative or 'random-nocache' === $relative ) {
+			} elseif ( 'random' === $relative or 'random-nocache' === $relative ) {
 				$link = '%title';
 			}
 		}
 		
 		if ( false !== strpos( $name, 'storyline' ) ) {
 			$tax = 'storyline';
-		} else if ( false !== strpos( $name, 'character' ) ) {
+		} elseif ( false !== strpos( $name, 'character' ) ) {
 			$tax = 'character';
 		} else {
 			$tax = '';
@@ -362,7 +362,7 @@ class WebcomicShortcode extends Webcomic {
 		
 		if ( false !== strpos( $name, 'storyline' ) ) {
 			$tax = 'storyline';
-		} else if ( false !== strpos( $name, 'character' ) ) {
+		} elseif ( false !== strpos( $name, 'character' ) ) {
 			$tax = 'character';
 		} else {
 			$tax = '';
@@ -390,7 +390,7 @@ class WebcomicShortcode extends Webcomic {
 		
 		if ( false !== strpos( $name, 'storyline' ) ) {
 			$tax = 'storyline';
-		} else if ( false !== strpos( $name, 'character' ) ) {
+		} elseif ( false !== strpos( $name, 'character' ) ) {
 			$tax = 'character';
 		} else {
 			$tax = '';
@@ -417,7 +417,7 @@ class WebcomicShortcode extends Webcomic {
 		
 		if ( false !== strpos( $name, 'storyline' ) ) {
 			$tax = 'storyline';
-		} else if ( false !== strpos( $name, 'character' ) ) {
+		} elseif ( false !== strpos( $name, 'character' ) ) {
 			$tax = 'character';
 		} else {
 			$tax = '';
@@ -629,7 +629,7 @@ class WebcomicShortcode extends Webcomic {
 		
 		if ( false !== strpos( $name, 'storyline' ) ) {
 			$tax = 'storyline';
-		} else if ( false !== strpos( $name, 'character' ) ) {
+		} elseif ( false !== strpos( $name, 'character' ) ) {
 			$tax = 'character';
 		} else {
 			$tax = '';
@@ -706,7 +706,7 @@ class WebcomicShortcode extends Webcomic {
 		
 		if ( false !== strpos( $name, 'storyline' ) ) {
 			$tax = 'storyline';
-		} else if ( false !== strpos( $name, 'character' ) ) {
+		} elseif ( false !== strpos( $name, 'character' ) ) {
 			$tax = 'character';
 		} else {
 			$tax = '';
@@ -785,7 +785,7 @@ class WebcomicShortcode extends Webcomic {
 		
 		if ( false !== strpos( $name, 'storyline' ) ) {
 			$tax = 'storyline';
-		} else if ( false !== strpos( $name, 'character' ) ) {
+		} elseif ( false !== strpos( $name, 'character' ) ) {
 			$tax = 'character';
 		} else {
 			$tax = '';

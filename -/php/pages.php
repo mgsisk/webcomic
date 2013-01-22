@@ -231,7 +231,7 @@ class WebcomicPages extends Webcomic {
 				'meta_key' => 'webcomic_collection',
 				'orderby'  => 'meta_value'
 			) );
-		} else if ( isset( $request[ 'post_type' ], $_GET[ 'meta_key' ], $_GET[ 'meta_value' ] ) and 'page' === $request[ 'post_type' ] and 'webcomic_collection' === $_GET[ 'meta_key' ] ) {
+		} elseif ( isset( $request[ 'post_type' ], $_GET[ 'meta_key' ], $_GET[ 'meta_value' ] ) and 'page' === $request[ 'post_type' ] and 'webcomic_collection' === $_GET[ 'meta_key' ] ) {
 			$request = array_merge( $request, array(
 				'meta_key'   => 'webcomic_collection',
 				'meta_value' => $_GET[ 'meta_value' ]
