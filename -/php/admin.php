@@ -37,7 +37,7 @@ class WebcomicAdmin extends Webcomic {
 		register_deactivation_hook( self::$dir . 'webcomic.php', array( $this, 'deactivate' ) );
 		
 		if ( !self::$config or version_compare( self::$config[ 'version' ], self::$version, '<' ) ) {
-			$this->activate();
+			add_action( 'admin_init', array( $this, 'activate' ) );
 		}
 		
 		if ( self::$config and version_compare( self::$config[ 'version' ], '4x', '>=' ) ) {
