@@ -26,3 +26,25 @@ function webcomic_generator( warning ) {
 		$( '.wp-list-table tbody' ).sortable();
 	} );	
 }
+
+/** Handle webcomic media reordering. */
+function webcomic_media( url ) {
+	jQuery( function( $ ) {
+		$( 'ul' ).sortable( {
+			update: function() {
+				$.post( url, {
+					ids: $( '[name="ids[]"]' ).serializeArray(),
+					webcomic_admin_ajax: 'WebcomicMedia::ajax_order_media'
+				}, function( data ) {
+					var message = $( 'div p' ).html();
+					
+					$( 'div p' ).html( data );
+					
+					setTimeout( function() {
+						$( 'div p' ).html( message );
+					}, 5000 );
+				} );
+			}
+		} );
+	} );
+}
