@@ -174,6 +174,8 @@ class WebcomicAdmin extends Webcomic {
 			);
 			
 			if ( is_array( $legacy ) ) {
+				$legacy_config = $legacy;
+				
 				delete_option( 'webcomic_options' );
 				
 				self::$config[ 'legacy' ] = self::$config[ 'legacy_notice' ] = 3;
