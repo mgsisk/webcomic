@@ -22,5 +22,7 @@ function webcomic_generator( warning ) {
 				return window.confirm( warning );
 			}
 		} );
+		
+		$( '.wp-list-table tbody' ).sortable();
 	} );	
 }
