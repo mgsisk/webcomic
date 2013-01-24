@@ -9,8 +9,6 @@ function webcomic_quick_edit( url ) {
 				$( '#webcomic_prints' ).attr( 'checked', data.prints ).attr( 'disabled', data.prints_disabled );
 				$( '#webcomic_original' ).attr( 'checked', data.original );
 				$( '#webcomic_transcripts' ).attr( 'checked', data.transcripts );
-				
-				// select page collection
 			} );
 		} );
 	} );
