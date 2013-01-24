@@ -340,7 +340,7 @@ class WebcomicTaxonomy extends Webcomic {
 				<?php
 					if ( $term->webcomic_image ) {
 						printf( '<a href="%s">%s</a><br>',
-							esc_url( add_query_arg( array( 'attachment_id' => $term->webcomic_image, 'action' => 'edit' ), admin_url( 'media.php' ) ) ),
+							esc_url( add_query_arg( array( 'post' => $term->webcomic_image, 'action' => 'edit' ), admin_url( 'post.php' ) ) ),
 							wp_get_attachment_image( $term->webcomic_image )
 						);
 					}
@@ -387,7 +387,7 @@ class WebcomicTaxonomy extends Webcomic {
 	public function manage_custom_column( $value, $column, $id ) {
 		if ( 'webcomic_image' === $column and isset( self::$config[ 'terms' ][ $id ][ 'image' ] ) and $image = wp_get_attachment_image( self::$config[ 'terms' ][ $id ][ 'image' ] ) ) {
 			echo current_user_can( 'edit_post', self::$config[ 'terms' ][ $id ][ 'image' ] ) ? sprintf( '<a href="%s">%s</a>',
-				esc_url( add_query_arg( array( 'attachment_id' => self::$config[ 'terms' ][ $id ][ 'image' ], 'action' => 'edit' ), admin_url( 'media.php' ) ) ),
+				esc_url( add_query_arg( array( 'post' => self::$config[ 'terms' ][ $id ][ 'image' ], 'action' => 'edit' ), admin_url( 'post.php' ) ) ),
 				$image
 			) : $image;
 		}

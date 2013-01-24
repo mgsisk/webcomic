@@ -223,7 +223,7 @@ class WebcomicMedia extends Webcomic {
 		}
 	}
 	
-	/** Add detach option to media table.
+	/** Add regenerate and detach options to media table.
 	 * 
 	 * This feature is not Webcomic-specific; any attached media object
 	 * will gain a functional Detach option. With luck a future

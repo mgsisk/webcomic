@@ -444,7 +444,7 @@ class WebcomicPosts extends Webcomic {
 			if ( $attachments = self::get_attachments( $id ) ) {
 				foreach ( $attachments as $attachment ) {
 					printf( '<a href="%s">%s</a>',
-						esc_url( add_query_arg( array( 'attachment_id' => $attachment->ID, 'action' => 'edit' ), admin_url( 'media.php' ) ) ),
+						esc_url( add_query_arg( array( 'post' => $attachment->ID, 'action' => 'edit' ), admin_url( 'post.php' ) ) ),
 						wp_get_attachment_image( $attachment->ID )
 					);
 				}

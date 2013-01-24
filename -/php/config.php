@@ -421,7 +421,7 @@ class WebcomicConfig extends Webcomic {
 		
 		if ( self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'image' ] ) {
 			printf( '<a href="%s">%s</a><br>',
-				esc_url( add_query_arg( array( 'attachment_id' => self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'image' ], 'action' => 'edit' ), admin_url( 'media.php' ) ) ),
+				esc_url( add_query_arg( array( 'post' => self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'image' ], 'action' => 'edit' ), admin_url( 'post.php' ) ) ),
 				wp_get_attachment_image( self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'image' ] )
 			);
 		}
