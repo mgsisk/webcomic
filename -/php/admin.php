@@ -400,8 +400,8 @@ class WebcomicAdmin extends Webcomic {
 	 * @hook admin_init
 	 */
 	public function admin_init() {
-		if ( isset( $_GET[ 'webcomic_admin_ajax' ] ) and isset( $_SERVER[ 'HTTP_X_REQUESTED_WITH' ] ) and 'xmlhttprequest' === strtolower( $_SERVER[ 'HTTP_X_REQUESTED_WITH' ] ) ) {
-			call_user_func_array( explode( '::', $_GET[ 'webcomic_admin_ajax' ] ), $_GET );
+		if ( ( isset( $_GET[ 'webcomic_admin_ajax' ] ) or isset( $_POST[ 'webcomic_admin_ajax' ] ) ) and isset( $_SERVER[ 'HTTP_X_REQUESTED_WITH' ] ) and 'xmlhttprequest' === strtolower( $_SERVER[ 'HTTP_X_REQUESTED_WITH' ] ) ) {
+			call_user_func_array( explode( '::', isset( $_GET[ 'webcomic_admin_ajax' ] ) ? $_GET[ 'webcomic_admin_ajax' ] : $_POST[ 'webcomic_admin_ajax' ] ), isset( $_GET[ 'webcomic_admin_ajax' ] ) ? $_GET : $_POST );
 			
 			die;
 		}
