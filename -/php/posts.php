@@ -536,7 +536,7 @@ class WebcomicPosts extends Webcomic {
 	 */
 	public function media( $post ) {
 		?>
-		<p id="webcomic_media_preview"><?php self::ajax_media_preview( $post->ID ); ?></p>
+		<div id="webcomic_media_preview"><?php self::ajax_media_preview( $post->ID ); ?></div>
 		<?php
 	}
 	
