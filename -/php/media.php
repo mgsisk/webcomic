@@ -44,7 +44,6 @@ class WebcomicMedia extends Webcomic {
 	 * @hook admin_init
 	 */
 	public function admin_init() {
-		//print_r( $_GET ); die;
 		if ( isset( $_GET[ 'webcomic_action' ], $_GET[ 'post' ] ) and 'regenerate' === $_GET[ 'webcomic_action' ] and $meta = wp_get_attachment_metadata( $_GET[ 'post' ] ) ) {
 			check_admin_referer( 'webcomic_regenerate' );
 			
