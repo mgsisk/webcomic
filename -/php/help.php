@@ -16,6 +16,7 @@ class WebcomicHelp extends Webcomic {
 	 * @uses WebcomicHelp::media_sizes()
 	 * @uses WebcomicHelp::commerce_overview()
 	 * @uses WebcomicHelp::legacy_overview()
+	 * @uses WebcomicHelp::attacher_overview()
 	 * @uses WebcomicHelp::generator_overview()
 	 * @uses WebcomicHelp::settings_general()
 	 * @uses WebcomicHelp::settings_collections()
@@ -81,6 +82,12 @@ class WebcomicHelp extends Webcomic {
 				'id'      => 'overview',
 				'title'   => __( 'Overview', 'webcomic' ),
 				'content' => $this->legacy_overview()
+			) );
+		} elseif ( 'media_page_webcomic-attacher' === $screen->id ) {
+			$screen->add_help_tab( array(
+				'id'      => 'overview',
+				'title'   => __( 'Overview', 'webcomic' ),
+				'content' => $this->attacher_overview()
 			) );
 		} elseif ( 'media_page_webcomic-generator' === $screen->id ) {
 			$screen->add_help_tab( array(
@@ -329,6 +336,35 @@ class WebcomicHelp extends Webcomic {
 		);
 	}
 	
+	/** Return webcomic attacher overview help.
+	 * 
+	 * @return string
+	 */
+	private function attacher_overview() {
+		return sprintf( '
+			<p>%s</p>
+			<ul>
+				<li>%s</li>
+				<li>%s</li>
+				<li>%s</li>
+				<li>%s</li>
+				<li>%s</li>
+			</ul>
+			<p>%s</p>
+			<p>%s</p>
+			<p>%s</p>',
+			__( 'The Webcomic Attacher can assist you in matching existing media to existing Webcomic posts. First, tell Webcomic how you want to match media with posts by adjusting the settings:', 'webcomic' ),
+			__( '<strong>Collection</strong> specifies the collection that Webcomic posts will be matched from.', 'webcomic' ),
+			__( '<strong>Match post&hellip;</strong> specifies what post attribute should be used to match posts with media.', 'webcomic' ),
+			__( '<strong>With media&hellip;</strong> specifies what media attribute should be use to match media with posts.', 'webcomic' ),
+			sprintf( __( '<strong>Date Format</strong> is <a href="%s" target="_blank">the date format</a> to use when using post or media dates for comparison', 'webcomic' ), '//php.net/manual/en/function.date.php' ),
+			__( '<strong>Custom Field Key</strong> is the name of the custom field to use when using a post custom field for comparison.', 'webcomic' ),
+			__( "After clicking <strong>Find Matches</strong> Webcomic will compare all orphaned posts in the selected collection to all unattached media in your Library and list any matches it finds on the right. You can verify these matches and uncheck the ones you don't want to save.", 'webcomic' ),
+			__( "Webcomic may find more than one match between media and posts, and will uncheck and highlight these additional matches. Media can only be attached to one post, so it's a good idea to check these additional matches to see if they're a better fit than the first match Webcomic found.", 'webcomic' ),
+			__( "When you're ready click <strong>Attach Media</strong> to attach selected media to their matched post.", 'webcomic' )
+		);
+	}
+	
 	/** Return webcomic generator overview help.
 	 * 
 	 * @return string
@@ -346,7 +382,7 @@ class WebcomicHelp extends Webcomic {
 			__( 'The Webcomic Generator can assist you in publishing a large backlog of webcomics. The right column lists all of the images in your Media Library that are not attached to a post. Select the files you would like to publish using the checkboxes, then adjust the publish settings on the left:', 'webcomic' ),
 			__( '<strong>Collection</strong> specifies the collection that all of the generated webcomics will belong to.', 'webcomic' ),
 			__( '<strong>Start on&hellip;</strong> specifies the the date to begin publishing the selected images. The first selected image in the list will be published on this date.', 'webcomic' ),
-			__( '<strong>Publish every&hellip;</strong> allows you to select which days of the week to publish subsequent files. The generator will work through the list from top to bottom, publishing selected files based on the days you select.', 'webcomic' ),
+			__( '<strong>Publish every&hellip;</strong> allows you to select which days of the week to publish subsequent files. The generator will work through the list from top to bottom, publishing selected files based on the days you select. You can reorder the images on the right by dragging and dropping the table rows to ensure they publish in the correct order.', 'webcomic' ),
 			__( '<strong>Save posts as drafts</strong> will cause all of the webcomics created by the generator to be drafted. These posts will not appear on your site until you publish them.', 'webcomic' ),
 			__( 'Webcomics created by the generator will use the image filename for the webcomic title.', 'webcomic' )
 		);
@@ -550,8 +586,10 @@ class WebcomicHelp extends Webcomic {
 	 */
 	private function edit_webcomic_media() {
 		return sprintf( '
+			<p>%s</p>
 			<p>%s</p>',
-			__( "To attach a file to your webcomic, click <em>Add Attachments</em> in the Webcomic Media box or the <em>Upload/Insert</em> icon above the webcomic editor and follow the instructions. Webcomic will automatically recognize any images attached to your webcomic, so as long as you've enabled the <em>Integrate</em> option, are using a Webcomic-ready theme, or have added Webcomic's template tags to your theme you do not need to insert the images into your post. The Webcomic Media box will show previews of all the images attached to your webcomic after the media popup has been dismissed.", 'webcomic' )
+			__( "To attach a file to your webcomic, click <em>Add Media</em> in the Webcomic Media box or above the webcomic editor and follow the instructions. Webcomic will automatically recognize any images uploaded to this webcomic, so as long as you've enabled the <em>Integrate</em> option, are using a Webcomic-ready theme, or have added Webcomic's template tags to your theme you do not need to insert the images into your post. The Webcomic Media box will show previews of all the images attached to your webcomic after the media popup has been dismissed.", 'webcomic' ),
+			__( "Once one or more images have been attached to a webcomic you can view them in the <em>Webcomic Media</em> tab in the media popup. From here you can rearrange the images to change the order Webcomic will display them in, regenerate the alternate image sizes (useful if you've updated the dimensions for your thumbnail, medium, or large images or added new alternate sizes), or detach them from the current webcomic.", 'webcomic' )
 		);
 	}
 	

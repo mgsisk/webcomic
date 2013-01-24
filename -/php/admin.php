@@ -417,7 +417,7 @@ class WebcomicAdmin extends Webcomic {
 	public function admin_head() {
 		$screen = get_current_screen();
 		
-		if ( preg_match( '/^(page|options-media|tools_page_webcomic-commerce|tools_page_webcomic-upgrader|media_page_webcomic-generator|settings_page_webcomic-options|(edit-)?webcomic_(transcript|language)|(webcomic\d+_page_|edit-)?webcomic\d+(-options|_storyline|_character)?)$/', $screen->id ) ) {
+		if ( preg_match( '/^(page|options-media|tools_page_webcomic-commerce|tools_page_webcomic-upgrader|media_page_webcomic-attacher|media_page_webcomic-generator|settings_page_webcomic-options|(edit-)?webcomic_(transcript|language)|(webcomic\d+_page_|edit-)?webcomic\d+(-options|_storyline|_character)?)$/', $screen->id ) ) {
 			require_once self::$dir . '-/php/help.php';
 			
 			new WebcomicHelp( $screen );
