@@ -1,7 +1,7 @@
 /** Refresh the webcomic media meta box. */
 function webcomic_media_meta( url ) {
 	jQuery( function( $ ) {
-		$( document ).on( 'mousedown', '#TB_overlay,#TB_closeWindowButton', function() {
+		$( document ).on( 'mousedown', '.media-modal-close,.media-modal-backdrop', function() {
 			
 			setTimeout( function() {
 				$.get( url, {
