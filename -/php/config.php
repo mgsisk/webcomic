@@ -572,7 +572,7 @@ class WebcomicConfig extends Webcomic {
 			</optgroup>
 		</select>
 		<span class="description"><?php echo _e( 'Hold <code>CTRL</code>, <code>Command</code>, or <code>Shift</code> to select multiple languages.', 'webcomic' ); ?></span><br>
-		<small class="description"><a href="<?php echo add_query_arg( array( 'taxonomy' => 'webcomic_language', 'post_type' => 'webcomic_transcript' ), admin_url( 'edit-tags.php' ) ); ?>"><?php echo _e( 'Manage Transcript Languages', 'webcomic' ); ?></a><small>
+		<a href="<?php echo add_query_arg( array( 'taxonomy' => 'webcomic_language', 'post_type' => 'webcomic_transcript' ), admin_url( 'edit-tags.php' ) ); ?>" class="button"><?php echo _e( 'Manage Languages', 'webcomic' ); ?></a>
 		<?php
 	}
 	
@@ -583,7 +583,7 @@ class WebcomicConfig extends Webcomic {
 	public function collection_commerce_business() {
 		?>
 		<input type="email" name="webcomic_commerce_business" id="webcomic_commerce_business" value="<?php echo esc_attr( self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'commerce' ][ 'business' ] ); ?>" class="regular-text">
-		<span class="description"><a href="//paypal.com" target="_blank"><?php _e( 'Get a PayPal Account', 'webcomic' ); ?></a></span>
+		<span><a href="//paypal.com" target="_blank" class="button"><?php _e( 'Get a PayPal Account', 'webcomic' ); ?></a></span>
 		<?php
 	}
 	
@@ -1222,7 +1222,7 @@ class WebcomicConfig extends Webcomic {
 			update_option( 'webcomic_options', self::$config );
 			
 			if ( isset( $credentials->screen_name ) ) {
-				printf( '<a href="http://twitter.com/%s" target="_blank"><b>@%s</b></a> | <a href="https://twitter.com/settings/applications" target="_blank">%s</a>',
+				printf( '<a href="http://twitter.com/%s" target="_blank"><b>@%s</b></a> <a href="https://twitter.com/settings/applications" target="_blank" class="button">%s</a>',
 					$credentials->screen_name,
 					$credentials->screen_name,
 					__( 'Revoke Access', 'webcomic' )
