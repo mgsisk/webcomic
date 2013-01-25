@@ -47,9 +47,9 @@ Once installed and activated you can use Webcomic in one of three ways:
 
 ## Special Thanks
 
-To [BigBagel](//twitter.com/DrPotatoMonster), [Miluette](//twitter.com/miluette), [LordRembo](//twitter.com/lordrembo), [Vaslittlecrow](//twitter.com/vaslittlecrow), [Fesworks](//twitter.com/fesworks), [Naomiyaki](//twitter.com/naomiyaki), [MatthewEbel](//twitter.com/matthewebel), [AlexWoolfson](//twitter.com/alexwoolfson), and [Kuipou](//twitter.com/kuipou) for pre-release testing and feedback, and to the thousands of users that share their amazing work with Webcomic.
+To [Seel](//twitter.com/webcrumblick), [Kikirini](//twitter.com/Kikirini), [Natty Bumpercar](//twitter.com/nattybumpercar), and the many other users that stuck it out and helped to resolve legacy upgrade issues.
 
-To [Seel](//twitter.com/webcrumblick), [Kikirini](//twitter.com/Kikirini) [Natty Bumpercar](//twitter.com/nattybumpercar), and the many other users that helped to resolve legacy upgrade issues.
+To [BigBagel](//twitter.com/DrPotatoMonster), [Miluette](//twitter.com/miluette), [LordRembo](//twitter.com/lordrembo), [Fesworks](//twitter.com/fesworks), [Naomiyaki](//twitter.com/naomiyaki), [AlexWoolfson](//twitter.com/alexwoolfson), and [Kuipou](//twitter.com/kuipou) for pre-release testing and feedback, and to the thousands of users that share their amazing work with Webcomic.
 
 ---
 
