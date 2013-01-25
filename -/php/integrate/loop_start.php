@@ -28,7 +28,7 @@
 ?>
 
 <?php if ( !is_feed() ) { ?>
-<style scoped>.webcomic-img img{height:auto;max-width:100%}</style>
+	<style scoped>.webcomic-img img{height:auto;max-width:100%}</style>
 <?php } ?>
 
 <?php if ( is_front_page() ) { ?>
