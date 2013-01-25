@@ -352,7 +352,7 @@ class WebcomicTaxonomy extends Webcomic {
 					}
 					
 					if ( $term->webcomic_image ) {
-						printf( '<label><input type="checkbox" name="webcomic_detach" style="width:auto"> %s</label><br>', __( 'Detach', 'webcomic' ) );
+						printf( '<label><input type="checkbox" name="webcomic_detach" style="width:auto"> %s</label><br>', __( 'Detach on save', 'webcomic' ) );
 					}
 				?>
 				<p class="description"><?php $storyline ? printf( __( 'The cover is a representative image that can be displayed on your site. Covers are uploaded to the Media Library. Maximum upload file size: %1$s%2$s', 'webcomic' ), $upload_size, $sizes[ $u ] ) : printf( __( 'The avatar is a representative image that can be displayed on your site. Avatars are uploaded to the Media Library. Maximum upload file size: %1$s%2$s', 'webcomic' ), $upload_size, $sizes[ $u ] ); ?></p>

@@ -433,7 +433,7 @@ class WebcomicConfig extends Webcomic {
 		}
 		
 		if ( self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'image' ] ) {
-			printf( '<label><input type="checkbox" name="webcomic_detach"> %s</label><br>', __( 'Detach', 'webcomic' ) );
+			printf( ' <label><input type="checkbox" name="webcomic_detach"> %s</label><br>', __( 'Detach on save', 'webcomic' ) );
 		}
 		
 		printf( '<p class="description">%s</p>', sprintf( __( 'The poster is a representative image that can be displayed on your site. Posters are uploaded to the Media Library. Maximum upload file size: %1$s%2$s', 'webcomic' ), $upload_size, $sizes[ $u ] ) );
