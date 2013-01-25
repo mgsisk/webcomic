@@ -129,6 +129,7 @@ class Webcomic {
 			add_action( 'webcomic_buffer_alert', array( $this, 'buffer_alert' ) );
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 			add_action( 'template_redirect', array( $this, 'template_redirect' ) );
+			add_action( 'transition_post_status', array( $this, 'tweet_webcomic' ), 10, 3 );
 			
 			add_filter( 'request', array( $this, 'request' ), 10, 1 );
 			add_filter( 'get_term', array( $this, 'get_term' ), 10, 2 );
@@ -561,6 +562,78 @@ class Webcomic {
 				}
 				
 				die;
+			}
+		}
+	}
+	
+	/** Auto tweet on webcomic publish.
+	 * 
+	 * @param string $new New post status.
+	 * @param string $old Old post status.
+	 * @param string $post Post object to update.
+	 * @uses Webcomic::$config
+	 * @hook transition_post_status
+	 * @filter string webcomic_tweet Filters the tweet text pushed to Twitter whenever a webcomic is published. Defaults to the collection-specific tweet format.
+	 */
+	public function tweet_webcomic( $new, $old, $post ) {
+		if ( 'publish' === $new and 'publish' !== $old and !empty( self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'format' ] ) and !empty( self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'oauth_token' ] ) and !empty( self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'oauth_secret' ] ) ) {
+			$status = self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'format' ];
+			
+			if ( false !== strpos( self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'format' ], '%' ) ) {
+				$s = $c = $m = array();
+				$link = wp_get_shortlink( $post->ID );
+				
+				if ( false !== strpos( self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'format' ], '%storylines' ) and $storylines = wp_get_object_terms( $post->ID, "{$post->post_type}_storyline" ) and !is_wp_error( $storylines ) ) {
+					foreach ( $storylines as $storyline ) {
+						$s[] = str_replace( array( '_', '-' ), '', "#{$storyline->slug}" );
+					}
+				}
+				
+				if ( false !== strpos( self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'format' ], '%characters' ) and $characters = wp_get_object_terms( $post->ID, "{$post->post_type}_character" ) and !is_wp_error( $characters ) ) {
+					foreach ( $characters as $character ) {
+						$c[] = str_replace( array( '_', '-' ), '', "#{$character->slug}" );
+					}
+				}
+				
+				if ( preg_match_all( '/%field:(?(?=\{).+?\}|\S+)/', self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'format' ], $matches ) ) {
+					foreach ( $matches[ 0 ] as $match ) {
+						if ( empty( $m[ $match ] ) ) {
+							$m[ $match ] = get_post_meta( $post->ID, str_replace( array( '%field:', '{', '}' ), '', $match ), true );
+						}
+					}
+				}
+				
+				$tokens = array_merge( array(
+					'%url'             => $link ? $link : get_permalink( $post->ID ),
+					'%date'            => get_the_time( get_option( 'date_format' ), $post ),
+					'%time'            => get_the_time( get_option( 'time_format' ), $post ),
+					'%title'           => get_the_title( $post->ID ),
+					'%author'          => get_the_author_meta( 'display_name', $post->post_author ),
+					'%site-url'        => home_url(),
+					'%permalink'       => get_permalink( $post->ID ),
+					'%site-name'       => get_bloginfo( 'name' ),
+					'%storylines'      => join( ' ', $s ),
+					'%characters'      => join( ' ', $c ),
+					'%collection'      => '#' . str_replace( array( '_', '-' ), '', self::$config[ 'collections' ][ $post->post_type ][ 'slugs' ][ 'name' ] ),
+					'%collection-name' => strip_tags( self::$config[ 'collections' ][ $post->post_type ][ 'name' ] )
+				), $m );
+				
+				$status = apply_filters( 'webcomic_tweet', str_replace( array_keys( $tokens ), $tokens, $status ), $post );
+			}
+			
+			if ( $status ) {
+				if ( !class_exists( 'TwitterOAuth' ) ) {
+					require_once self::$dir . '-/library/twitter.php';
+				}
+				
+				$oauth    = new TwitterOAuth( self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'consumer_key' ], self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'consumer_secret' ], self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'oauth_token' ], self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'oauth_secret' ] );
+				$response = $oauth->post( 'statuses/update', array( 'status' => substr( strip_tags( $status ), 0, 140 ) ) );
+				
+				if ( isset( $response->error ) ) {
+					$errors = get_transient( 'webcomic_error' );
+					
+					set_transient( 'webcomic_error', array_merge( array( sprintf( __( '<b>Twitter Error: %s</b>', 'webcomic' ), $response->error ) ), $errors ? $errors : array() ), 1 );
+				}
 			}
 		}
 	}
