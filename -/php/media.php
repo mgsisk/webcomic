@@ -469,8 +469,6 @@ class WebcomicMedia extends Webcomic {
 										
 										if ( $post_field and $attachment_field and ( $post_field === $attachment_field or ( is_array( $attachment_field ) and $post_field === $attachment_field[ 'filename' ] ) ) ) {
 											$matches[] = array( 'media' => $attachment, 'post' => $post );
-											
-											break;
 										}
 									}
 								}
