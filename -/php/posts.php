@@ -383,7 +383,7 @@ class WebcomicPosts extends Webcomic {
 					);
 				}
 			} else {
-				_e( 'No Attachments', 'webcomic' );
+				_e( '&mdash;', 'webcomic' );
 			}
 		} elseif ( 'webcomic_storylines' === $column ) {
 			if ( $storylines = wp_get_object_terms( $id, "{$post->post_type}_storyline" ) ) {
@@ -398,7 +398,7 @@ class WebcomicPosts extends Webcomic {
 				
 				echo join( ', ', $terms );
 			} else {
-				_e( 'No Storylines', 'webcomic' );
+				_e( '&mdash;', 'webcomic' );
 			}
 		} elseif ( 'webcomic_characters' === $column ) {
 			if ( $characters = wp_get_object_terms( $id, "{$post->post_type}_character" ) ) {
@@ -413,7 +413,7 @@ class WebcomicPosts extends Webcomic {
 				
 				echo join( ', ', $terms );
 			} else {
-				_e( 'No Characters', 'webcomic' );
+				_e( '&mdash;', 'webcomic' );
 			}
 		}
 	}
