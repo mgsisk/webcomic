@@ -2543,7 +2543,7 @@ class WebcomicTag extends Webcomic {
 			$minimum      = min( $count );
 			$count_spread = 0 > max( $count ) - $minimum ? 1 : max( $count ) - $minimum;
 			$font_spread  = 0 > $largest - $smallest ? 1 : $largest - $smallest;
-			$font_step    = $font_spread / $count_spread;
+			$font_step    = $count_spread ? $font_spread / $count_spread : $font_spread / 1;
 			
 			foreach ( $terms as $k => $v ) {
 				$size       = $smallest + ( ( $v->count - $minimum ) * $font_step );
@@ -2663,7 +2663,7 @@ class WebcomicTag extends Webcomic {
 		$minimum      = min( $count );
 		$count_spread = 0 > max( $count ) - $minimum ? 1 : max( $count ) - $minimum;
 		$font_spread  = 0 > $largest - $smallest ? 1 : $largest - $smallest;
-		$font_step    = $font_spread / $count_spread;
+		$font_step    = $count_spread ? $font_spread / $count_spread : $font_spread / 1;
 		
 		foreach ( $collections as $v ) {
 			$size             = $smallest + ( ( $count[ $v[ 'id' ] ] - $minimum ) * $font_step );

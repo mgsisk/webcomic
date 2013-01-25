@@ -218,9 +218,9 @@ class WebcomicPosts extends Webcomic {
 			$commerce[ 'adjust' ][ 'shipping' ][ 'domestic' ]      = intval( $_POST[ 'webcomic_commerce_adjust_shipping_domestic' ] );
 			$commerce[ 'adjust' ][ 'shipping' ][ 'original' ]      = intval( $_POST[ 'webcomic_commerce_adjust_shipping_original' ] );
 			$commerce[ 'adjust' ][ 'shipping' ][ 'international' ] = intval( $_POST[ 'webcomic_commerce_adjust_shipping_international' ] );
-			$commerce[ 'adjust' ][ 'total' ][ 'domestic' ]         = 0 - intval( round( ( 1 - $commerce[ 'total' ][ 'domestic' ] / self::$config[ 'collections' ][ $_POST[ 'post_type' ] ][ 'commerce' ][ 'total' ][ 'domestic' ] ) * 100 ) );
-			$commerce[ 'adjust' ][ 'total' ][ 'original' ]         = 0 - intval( round( ( 1 - $commerce[ 'total' ][ 'original' ] / self::$config[ 'collections' ][ $_POST[ 'post_type' ] ][ 'commerce' ][ 'total' ][ 'original' ] ) * 100 ) );
-			$commerce[ 'adjust' ][ 'total' ][ 'international' ]    = 0 - intval( round( ( 1 - $commerce[ 'total' ][ 'international' ] / self::$config[ 'collections' ][ $_POST[ 'post_type' ] ][ 'commerce' ][ 'total' ][ 'international' ] ) * 100 ) );
+			$commerce[ 'adjust' ][ 'total' ][ 'domestic' ]         = self::$config[ 'collections' ][ $_POST[ 'post_type' ] ][ 'commerce' ][ 'total' ][ 'domestic' ] ? 0 - intval( round( ( 1 - $commerce[ 'total' ][ 'domestic' ] / self::$config[ 'collections' ][ $_POST[ 'post_type' ] ][ 'commerce' ][ 'total' ][ 'domestic' ] ) * 100 ) ) : 0;
+			$commerce[ 'adjust' ][ 'total' ][ 'original' ]         = self::$config[ 'collections' ][ $_POST[ 'post_type' ] ][ 'commerce' ][ 'total' ][ 'original' ] ? 0 - intval( round( ( 1 - $commerce[ 'total' ][ 'original' ] / self::$config[ 'collections' ][ $_POST[ 'post_type' ] ][ 'commerce' ][ 'total' ][ 'original' ] ) * 100 ) ) : 0;
+			$commerce[ 'adjust' ][ 'total' ][ 'international' ]    = self::$config[ 'collections' ][ $_POST[ 'post_type' ] ][ 'commerce' ][ 'total' ][ 'international' ] ? 0 - intval( round( ( 1 - $commerce[ 'total' ][ 'international' ] / self::$config[ 'collections' ][ $_POST[ 'post_type' ] ][ 'commerce' ][ 'total' ][ 'international' ] ) * 100 ) ) : 0;
 			
 			update_post_meta( $id, 'webcomic_commerce', $commerce );
 			update_post_meta( $id, 'webcomic_prints', isset( $_POST[ 'webcomic_commerce_prints' ] ) );

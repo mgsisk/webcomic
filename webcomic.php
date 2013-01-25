@@ -1125,7 +1125,7 @@ class Webcomic {
 								$e++;
 								$error   = true;
 								$message = sprintf( __( 'Incorrect business email %s', 'webcomic' ), $_POST[ 'receiver_email' ] );
-							} elseif ( number_format( $commerce[ 'total' ][ $item[ 2 ] ], 2 ) !== number_format( $_POST[ "mc_gross_{$i}" ] / $_POST[ "quantity{$i}" ], 2 ) ) {
+							} elseif ( $_POST[ "quantity{$i}" ] and number_format( $commerce[ 'total' ][ $item[ 2 ] ], 2 ) !== number_format( $_POST[ "mc_gross_{$i}" ] / $_POST[ "quantity{$i}" ], 2 ) ) {
 								$e++;
 								$error   = true;
 								$message = sprintf( __( 'Incorrect price %s', 'webcomic' ), number_format( $_POST[ "mc_gross_{$i}" ] / $_POST[ "quantity{$i}" ], 2 ) );
@@ -1157,7 +1157,7 @@ class Webcomic {
 							$message = sprintf( __( 'Incorrect business email %s', 'webcomic' ), $_POST[ 'receiver_email' ] );
 						} elseif ( self::$config[ 'collections' ][ $_POST[ 'item_number' ] ][ 'commerce' ][ 'donation' ] and ( number_format( self::$config[ 'collections' ][ $_POST[ 'item_number' ] ][ 'commerce' ][ 'donation' ], 2 ) !== number_format( $_POST[ 'mc_gross' ], 2 ) ) ) {
 							$error   = true;
-							$message = sprintf( __( 'Incorrect price %s', 'webcomic' ), number_format( $_POST[ 'mc_gross' ] / $_POST[ 'quantity' ], 2 ) );
+							$message = sprintf( __( 'Incorrect price %s', 'webcomic' ), number_format( $_POST[ 'mc_gross' ], 2 ) );
 						} elseif ( self::$config[ 'collections' ][ $_POST[ 'item_number' ] ][ 'commerce' ][ 'currency' ] !== $_POST[ 'mc_currency' ] ) {
 							$error   = true;
 							$message = sprintf( __( 'Incorrect currency %s', 'webcomic' ), $_POST[ 'mc_currency' ] );
@@ -1174,7 +1174,7 @@ class Webcomic {
 						} elseif ( self::$config[ 'collections' ][ $item[ 1 ] ][ 'commerce' ][ 'business' ] !== $_POST[ 'receiver_email' ] ) {
 							$error   = true;
 							$message = sprintf( __( 'Incorrect business email %s', 'webcomic' ), $_POST[ 'receiver_email' ] );
-						} elseif ( number_format( $commerce[ 'total' ][ $item[ 2 ] ], 2 ) !== number_format( $_POST[ 'mc_gross' ] / $_POST[ 'quantity' ], 2 ) ) {
+						} elseif ( $_POST[ 'quantity' ] and number_format( $commerce[ 'total' ][ $item[ 2 ] ], 2 ) !== number_format( $_POST[ 'mc_gross' ] / $_POST[ 'quantity' ], 2 ) ) {
 							$error   = true;
 							$message = sprintf( __( 'Incorrect price %s', 'webcomic' ), number_format( $_POST[ 'mc_gross' ] / $_POST[ 'quantity' ], 2 ) );
 						} elseif ( self::$config[ 'collections' ][ $item[ 1 ] ][ 'commerce' ][ 'currency' ] !== $_POST[ 'mc_currency' ] ) {
