@@ -89,26 +89,35 @@ class Webcomic {
 	 * @uses Webcomic::$url
 	 * @uses Webcomic::$config
 	 * @uses Webcomic::init()
-	 * @uses Webcomic::buffer_alert()
-	 * @uses Webcomic::get_term()
-	 * @uses Webcomic::get_terms()
-	 * @uses Webcomic::get_the_terms()
-	 * @uses Webcomic::post_type_link()
-	 * @uses Webcomic::get_object_terms()
-	 * @uses Webcomic::get_attachment_image_attributes()
+	 * @uses Webcomic::log_ipn()
 	 * @uses Webcomic::head()
-	 * @uses Webcomic::the_post()
+	 * @uses Webcomic::twitter_oauth()
+	 * @uses Webcomic::save_transcript()
+	 * @uses Webcomic::webcomic_redirect()
 	 * @uses Webcomic::setup_theme()
+	 * @uses Webcomic::the_post()
+	 * @uses Webcomic::buffer_alert()
 	 * @uses Webcomic::enqueue_scripts()
 	 * @uses Webcomic::template_redirect()
-	 * @uses Webcomic::theme()
+	 * @uses Webcomic::tweet_webcomic()
 	 * @uses Webcomic::request()
+	 * @uses Webcomic::get_term()
+	 * @uses Webcomic::template()
 	 * @uses Webcomic::the_posts()
+	 * @uses Webcomic::get_terms()
+	 * @uses Webcomic::stylesheet()
 	 * @uses Webcomic::body_class()
+	 * @uses Webcomic::get_the_terms()
+	 * @uses Webcomic::post_type_link()
 	 * @uses Webcomic::the_content_feed()
+	 * @uses Webcomic::get_object_terms()
 	 * @uses Webcomic::extra_theme_headers()
+	 * @uses Webcomic::get_attachment_image_attributes()
+	 * @uses Webcomic::loop_end()
 	 * @uses Webcomic::loop_start()
+	 * @uses Webcomic::the_excerpt()
 	 * @uses Webcomic::the_content()
+	 * @uses Webcomic::pre_get_posts()
 	 * @uses WebcomicShortcodes
 	 * @uses WebcomicWidgets
 	 */
@@ -123,7 +132,7 @@ class Webcomic {
 			add_action( 'wp_head', array( $this, 'head' ), 1 );
 			add_action( 'init', array( $this, 'twitter_oauth' ) );
 			add_action( 'init', array( $this, 'save_transcript' ) );
-			add_action( 'init', array( $this, 'random_redirect' ) );
+			add_action( 'init', array( $this, 'webcomic_redirect' ) );
 			add_action( 'setup_theme', array( $this, 'setup_theme' ) );
 			add_action( 'the_post', array( $this, 'the_post' ), 10, 1 );
 			add_action( 'webcomic_buffer_alert', array( $this, 'buffer_alert' ) );
@@ -169,9 +178,6 @@ class Webcomic {
 	 * @uses Webcomic::$dir
 	 * @uses Webcomic::$url
 	 * @uses Webcomic::$config
-	 * @uses Webcomic::log_ipn()
-	 * @uses Webcomic::save_transcript()
-	 * @uses Webcomic::random_redirect()
 	 * @hook init
 	 */
 	public function init() {
@@ -1347,19 +1353,54 @@ class Webcomic {
 		}
 	}
 	
-	/** Handle parameterized random webcomic and term URL's.
+	/** Handle parameterized webcomic URL's.
 	 * 
 	 * @uses WebcomicTag::get_relative_webcomic_term_link()
 	 * @uses WebcomicTag::get_relative_webcomic_link()
 	 */
-	public function random_redirect() {
-		if ( isset( $_GET[ 'random_webcomic' ] ) and $link = WebcomicTag::get_relative_webcomic_link( 'random', maybe_unserialize( stripslashes( urldecode( empty( $_GET[ 'in_same_term' ] ) ? false : $_GET[ 'in_same_term' ] ) ) ), maybe_unserialize( stripslashes( urldecode( empty( $_GET[ 'excluded_terms' ] ) ? false : $_GET[ 'excluded_terms' ] ) ) ), empty( $_GET[ 'taxonomy' ] ) ? '' : $_GET[ 'taxonomy' ], $_GET[ 'random_webcomic' ] ) ) {
-			wp_redirect( $link );
+	public function webcomic_redirect() {
+		$link = '';
+		
+		if ( isset( $_GET[ 'first_webcomic' ] ) or isset( $_GET[ 'last_webcomic' ] ) or isset( $_GET[ 'random_webcomic' ] ) ) {
+			if ( isset( $_GET[ 'first_webcomic' ] ) ) {
+				$relative = 'first';
+			} elseif ( isset( $_GET[ 'last_webcomic' ] ) ) {
+				$relative = 'last';
+			} else {
+				$relative = 'random';
+			}
 			
-			die;
+			$in_same_term   = empty( $_GET[ 'in_same_term' ] ) ? false : maybe_unserialize( stripslashes( urldecode( $_GET[ 'in_same_term' ] ) ) );
+			$excluded_terms = empty( $_GET[ 'excluded_terms' ] ) ? false : maybe_unserialize( stripslashes( urldecode( $_GET[ 'excluded_terms' ] ) ) );
+			$taxonomy       = empty( $_GET[ 'taxonomy' ] ) ? '' : $_GET[ 'taxonomy' ];
+			$collection     = empty( $_GET[ "{$relative}_webcomic" ] ) ? array_rand( self::$config[ 'collections' ] ) : $_GET[ "{$relative}_webcomic" ];
+			
+			$link = WebcomicTag::get_relative_webcomic_link( $relative, $in_same_term, $excluded_terms, $taxonomy, $collection );
+		} elseif ( isset( $_GET[ 'first_webcomic_term' ] ) or isset( $_GET[ 'last_webcomic_term' ] ) or isset( $_GET[ 'random_webcomic_term' ] ) ) {
+			$target = empty( $_GET[ 'target' ] ) ? 'archive' : $_GET[ 'target' ];
+			
+			if ( isset( $_GET[ 'first_webcomic_term' ] ) ) {
+				$relative = 'first';
+			} elseif ( isset( $_GET[ 'last_webcomic_term' ] ) ) {
+				$relative = 'last';
+			} else {
+				$relative = 'random';
+			}
+			
+			if ( empty( $_GET[ "{$relative}_webcomic_term" ] ) ) {
+				$taxonomy = sprintf( '%s_%s',
+					array_rand( self::$config[ 'collections' ] ),
+					array_rand( array( 'storyline' => true, 'character' => true ) )
+				);
+			} else {
+				$taxonomy = $_GET[ "{$relative}_webcomic_term" ];
+			}
+			
+			$args = empty( $_GET[ 'args' ] ) ? false : maybe_unserialize( stripslashes( urldecode( $_GET[ 'args' ] ) ) );
+			$link = WebcomicTag::get_relative_webcomic_term_link( $target, $relative, $taxonomy, $args );
 		}
 		
-		if ( isset( $_GET[ 'random_webcomic_term' ] ) and $link = WebcomicTag::get_relative_webcomic_term_link( $_GET[ 'target' ], 'random', $_GET[ 'random_webcomic_term' ], maybe_unserialize( stripslashes( urldecode( empty( $_GET[ 'args' ] ) ? false : $_GET[ 'args' ] ) ) ) ) ) {
+		if ( $link ) {
 			wp_redirect( $link );
 			
 			die;
