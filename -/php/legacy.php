@@ -230,9 +230,6 @@ class WebcomicLegacy extends Webcomic {
 						</div>
 					</form>
 					
-					<script>
-					</script>
-					
 					<?php } else { ?>
 					
 					<p><?php printf( __( 'This tool will attempt to automatically convert your existing Webcomic %1$s data to Webcomic %2$s. Depending on the size of your site the upgrade may require multiple steps. If you do not want to upgrade click <strong>Not Interested</strong> to uninstall Webcomic %2$s.', 'webcomic' ), self::$config[ 'legacy' ], self::$version ); ?></p>
@@ -241,7 +238,7 @@ class WebcomicLegacy extends Webcomic {
 						<?php wp_nonce_field( 'webcomic_upgrade', 'webcomic_upgrade' ); ?>
 						<div class="form-wrap">
 							<?php submit_button( __( 'Upgrade Now', 'webcomic' ), 'primary', 'upgrade_legacy', false ); ?>
-							<span style="float:right"><?php submit_button( __( "Not Interested", 'webcomic' ), 'secondary', 'disable_legacy', false ); ?></span>
+							<span style="float:right"><?php submit_button( __( 'Not Interested', 'webcomic' ), 'secondary', 'disable_legacy', false ); ?></span>
 						</div>
 					</form>
 					
