@@ -103,6 +103,8 @@ class WebcomicLegacy extends Webcomic {
 					
 					update_option( 'webcomic_options', self::$config );
 					
+					flush_rewrite_rules();
+					
 					wp_redirect( admin_url() );
 					
 					die;
