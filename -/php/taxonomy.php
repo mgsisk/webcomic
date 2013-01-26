@@ -61,6 +61,8 @@ class WebcomicTaxonomy extends Webcomic {
 		if ( isset( $_GET[ 'webcomic_action' ], $_GET[ 'taxonomy' ], $_GET[ 'tag_ID' ] ) and ( 'move_term_up' === $_GET[ 'webcomic_action' ] or 'move_term_down' === $_GET[ 'webcomic_action' ] ) and $term = get_term( $_GET[ 'tag_ID' ], $_GET[ 'taxonomy' ] ) ) {
 			check_admin_referer( 'webcomic_move_term' );
 			
+			$moved = '';
+			
 			$terms = get_terms( $term->taxonomy, array(
 				'order'      => 'DESC',
 				'orderby'    => 'term_group',
@@ -403,7 +405,7 @@ class WebcomicTaxonomy extends Webcomic {
 		$screen                  = get_current_screen();
 		$pre                     = array_slice( $columns, 0, 1 );
 		$pre[ 'webcomic_image' ] = false !== strpos( $screen->taxonomy, '_storyline' ) ? __( 'Cover', 'webcomic' ) : __( 'Avatar', 'webcomic' );
-		$columns[ 'posts' ]      = __( 'Webcomics', 'webcomic' );
+		$columns[ 'posts' ]      = __( 'Posts', 'webcomic' );
 		
 		return array_merge( $pre, $columns );
 	}
