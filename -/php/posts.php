@@ -76,7 +76,7 @@ class WebcomicPosts extends Webcomic {
 	 */
 	public function add_meta_boxes() {
 		foreach ( array_keys( self::$config[ 'collections' ] ) as $k ) {
-			add_meta_box( 'webcomic-media', __( 'Webcomic Media', 'webcomic' ), array( $this, 'media' ), $k, 'side', 'default' );
+			add_meta_box( 'webcomic-media', __( 'Webcomic Media', 'webcomic' ), array( $this, 'media' ), $k, 'side', 'high' );
 			add_meta_box( 'webcomic-commerce', __( 'Webcomic Commerce', 'webcomic' ), array( $this, 'commerce' ), $k, 'normal', 'high' );
 			add_meta_box( 'webcomic-transcripts', __( 'Webcomic Transcripts', 'webcomic' ), array( $this, 'transcripts' ), $k, 'normal', 'high' );
 		}
