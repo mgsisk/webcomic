@@ -6,7 +6,7 @@ Webcomic is a plugin for [WordPress](//wordpress.org) that provides a host of fe
 
 ## [★ New in Webcomic 4 ★](//vimeo.com/channels/webcomic)
 
-_**Everything!**_ Webcomic has been rebuilt to provide you with leaner, meaner webcomic management. Highlights include:
+[_**Everything!**_](//github.com/mgsisk/webcomic/wiki) Webcomic has been rebuilt to provide you with leaner, meaner webcomic management. Highlights include:
 
 - [OpenGraph](//ogp.me) support for any Webcomic-related page.
 - [Twitter](//twitter.com) integration for automatically tweeting new webcomics.
