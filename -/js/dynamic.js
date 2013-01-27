@@ -1,30 +1,42 @@
 /** Enable dynamic webcomic navigation. */
 jQuery( function( $ ) {
-	/**
-	 * Update any anchors with a webcomic-dynamic data attribute inside
-	 * of a container with a webcomic-container data attribute.
-	 */
-	function update_hyperlinks( c ) {
-		var container = typeof c !== 'undefined' ? '[data-webcomic-container="' + c + '"]' : '[data-webcomic-container]';
-		
-		$( container + ' [data-webcomic-dynamic][href]' ).each( function ( i, e ) {
-			var hash = $( e ).data( 'webcomic-dynamic' ) + '/' + $( e ).parents( container ).data( 'webcomic-container' );
-			
-			$( e ).data( 'webcomic-permalink', $( e ).attr( 'href' ) );
-			$( e ).attr( 'href', $.param.fragment( window.location.href, hash, 2 ) ).attr( 'data-webcomic-dynamic', hash );
-		} );
-	} update_hyperlinks();
+	var defaults = [];
 	
-	/** Handle dynamic webcomic navigation. */
-	$( window ).on( 'hashchange', function() {
-		if ( $.param.fragment() && 0 !== $.param.fragment().indexOf( '0' ) ) {
-			var container = $.param.fragment().substr( $.param.fragment().lastIndexOf( '/' ) + 1, $.param.fragment().length );
-			
-			$.get( $( 'a[data-webcomic-dynamic="' + $.param.fragment() + '"]' ).data( 'webcomic-permalink' ), { webcomic_dynamic: container }, function( data ) {
-				$( '[data-webcomic-container="' + container + '"]' ).html( data ).fadeIn( 'fast' );
-				
-				update_hyperlinks( container );
-			} );
+	$( '[data-webcomic-container]' ).each( function() {
+		defaults.push( {
+			url: $( this ).find( '[data-webcomic-dynamic].current-webcomic' ).attr( 'href' ),
+			container: $( this ).data( 'webcomic-container' )
+		} );
+	} );
+	
+	function dynamic_webcomic( url, container ) {
+		$.get( url, { webcomic_dynamic: container }, function( data ) {
+			$( '[data-webcomic-container="' + container + '"]' ).html( data ).show();
+		} );
+	}
+	
+	$( window ).on( 'popstate', function( e ) {
+		if ( e.originalEvent.state ) {
+			if ( e.originalEvent.state.webcomicReset ) {
+				$.each( defaults, function( i, v ) {
+					dynamic_webcomic( v.url, v.container );
+				} );
+			} else if ( e.originalEvent.state.webcomic ) {
+				dynamic_webcomic( e.originalEvent.state.url, e.originalEvent.state.container );
+			}
+		} else {
+			history.replaceState( { webcomicReset: true }, '', window.location.href );
 		}
-	} ).trigger( 'hashchange' );
+	} );
+	
+	$( document ).on( 'click', '[data-webcomic-container] [data-webcomic-dynamic][href]', function( e ) {
+		e.preventDefault();
+		
+		var url = $( this ).attr( 'href' );
+		var container = $( this ).closest( '[data-webcomic-container]' ).data( 'webcomic-container' );
+		
+		dynamic_webcomic( url, container );
+		
+		history.pushState( { webcomic: true, url: url, container: container }, '', window.location.href );
+	} );
 } );

@@ -728,11 +728,10 @@ class WebcomicTag extends Webcomic {
 				$link = str_replace( array_keys( $tokens ), $tokens, $link );
 			}
 			
-			$link = sprintf( '<a href="%s" class="%s"%s data-webcomic-dynamic="%s">%s</a>',
+			$link = sprintf( '<a href="%s" class="%s"%s data-webcomic-dynamic>%s</a>',
 				$href,
 				join( ' ', $class ),
 				( 'previous' === $relative or 'next' === $relative ) ? sprintf( ' rel="%s"', str_replace( 'ious', '', $relative ) ) : '',
-				"{$the_post->ID}/{$the_post->post_name}",
 				$link
 			);
 			
