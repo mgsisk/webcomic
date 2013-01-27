@@ -499,8 +499,7 @@ class Webcomic {
 		}
 		
 		if ( self::$config[ 'dynamic' ] ) {
-			wp_register_script( 'jquery-bbq', self::$url . '-/library/jquery.bbq.js', array( 'jquery' ), false, true );
-			wp_register_script( 'webcomic-dynamic', self::$url . '-/js/dynamic.js', array( 'jquery', 'jquery-bbq' ), false, true );
+			wp_register_script( 'webcomic-dynamic', self::$url . '-/js/dynamic.js', array( 'jquery' ), false, true );
 			
 			wp_enqueue_script( 'webcomic-dynamic' );
 		}
