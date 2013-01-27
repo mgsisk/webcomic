@@ -42,7 +42,7 @@ jQuery( function( $ ) {
 			
 			dynamic_webcomic( url, container );
 			
-			history.pushState( { webcomic: true, url: url, container: container }, '', window.location.href );
+			history.pushState( { webcomic: true, url: url, container: container }, '', container ? window.location.href : url );
 		} );
 	}
 } );
