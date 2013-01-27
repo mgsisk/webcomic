@@ -132,6 +132,7 @@ class Webcomic {
 			add_action( 'wp_head', array( $this, 'head' ), 1 );
 			add_action( 'init', array( $this, 'twitter_oauth' ) );
 			add_action( 'init', array( $this, 'save_transcript' ) );
+			add_action( 'init', array( $this, 'dynamic_defaults' ) );
 			add_action( 'init', array( $this, 'webcomic_redirect' ) );
 			add_action( 'setup_theme', array( $this, 'setup_theme' ) );
 			add_action( 'the_post', array( $this, 'the_post' ), 10, 1 );
@@ -384,6 +385,27 @@ class Webcomic {
 			} else {
 				echo sprintf( '<meta property="%s" content="%s">', $k, $v ), "\n";
 			}
+		}
+	}
+	
+	/** Get default dynamic webcomic container URL's.
+	 * 
+	 * @hook init
+	 */
+	public function dynamic_defaults() {
+		if ( isset( $_GET[ 'webcomic_dynamic_defaults' ] ) and 'xmlhttprequest' === strtolower( $_SERVER[ 'HTTP_X_REQUESTED_WITH' ] ) ) {
+			$output = array();
+			
+			foreach ( $_GET[ 'webcomic_dynamic_defaults' ] as $default ) {
+				$output[] = array(
+					'url' => get_permalink( $default[ 'parent' ] ),
+					'container' => $default[ 'container' ]
+				);
+			}
+			
+			echo json_encode( $output );
+			
+			die;
 		}
 	}
 	
@@ -926,8 +948,12 @@ class Webcomic {
 	 * @hook wp_get_attachment_image_attributes
 	 */
 	public function get_attachment_image_attributes( $attributes, $attachment ) {
-		if ( $attachment->post_parent and $attachment->post_excerpt and isset( self::$config[ 'collections' ][ get_post_type( $attachment->post_parent ) ] ) ) {
-			$attributes[ 'title' ] = esc_attr( trim( strip_tags( $attachment->post_excerpt ) ) );
+		if ( $attachment->post_parent and isset( self::$config[ 'collections' ][ get_post_type( $attachment->post_parent ) ] ) ) {
+			$attributes[ 'data-webcomic-parent' ] = $attachment->post_parent;
+			
+			if ( $attachment->post_excerpt ) {
+				$attributes[ 'title' ] = esc_attr( trim( strip_tags( $attachment->post_excerpt ) ) );
+			}
 		}
 		
 		return $attributes;
