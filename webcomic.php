@@ -118,8 +118,8 @@ class Webcomic {
 	 * @uses Webcomic::the_excerpt()
 	 * @uses Webcomic::the_content()
 	 * @uses Webcomic::pre_get_posts()
-	 * @uses WebcomicShortcodes
 	 * @uses WebcomicWidgets
+	 * @uses WebcomicShortcodes
 	 */
 	public function __construct() {
 		self::$dir    = plugin_dir_path( __FILE__ );
@@ -1008,30 +1008,6 @@ class Webcomic {
 		}
 	}
 	
-	/** Return the appropriate theme ID for custom collection themes.
-	 * 
-	 * @param string $theme Name of the current theme.
-	 * @return string
-	 * @uses Webcomic::$config
-	 * @uses Webcomic::$collection
-	 * @hook template
-	 */
-	public function template( $theme ) {
-		return ( self::$collection and self::$config[ 'collections' ][ self::$collection ][ 'theme' ] and $template = substr( self::$config[ 'collections' ][ self::$collection ][ 'theme' ], 0, strpos( self::$config[ 'collections' ][ self::$collection ][ 'theme' ], '|' ) ) and is_readable( get_theme_root() . "/{$template}" ) ) ? $template : $theme;
-	}
-	
-	/** Return the appropriate theme ID for custom collection themes.
-	 * 
-	 * @param string $theme Name of the current theme.
-	 * @return string
-	 * @uses Webcomic::$config
-	 * @uses Webcomic::$collection
-	 * @hook stylesheet
-	 */
-	public function stylesheet( $theme ) {
-		return ( self::$collection and self::$config[ 'collections' ][ self::$collection ][ 'theme' ] and $stylesheet = substr( self::$config[ 'collections' ][ self::$collection ][ 'theme' ], strpos( self::$config[ 'collections' ][ self::$collection ][ 'theme' ], '|' ) + 1 ) and is_readable( get_theme_root() . "/{$stylesheet}" ) ) ? $stylesheet : $theme;
-	}
-	
 	/** Integrate webcomics into the main site feed.
 	 * 
 	 * @param array $query Post request query.
@@ -1071,6 +1047,18 @@ class Webcomic {
 		}
 		
 		return $term;
+	}
+	
+	/** Return the appropriate theme ID for custom collection themes.
+	 * 
+	 * @param string $theme Name of the current theme.
+	 * @return string
+	 * @uses Webcomic::$config
+	 * @uses Webcomic::$collection
+	 * @hook template
+	 */
+	public function template( $theme ) {
+		return ( self::$collection and self::$config[ 'collections' ][ self::$collection ][ 'theme' ] and $template = substr( self::$config[ 'collections' ][ self::$collection ][ 'theme' ], 0, strpos( self::$config[ 'collections' ][ self::$collection ][ 'theme' ], '|' ) ) and is_readable( get_theme_root() . "/{$template}" ) ) ? $template : $theme;
 	}
 	
 	/** Display webcomics in place of transcripts in searches.
@@ -1119,6 +1107,18 @@ class Webcomic {
 		}
 		
 		return $terms;
+	}
+	
+	/** Return the appropriate theme ID for custom collection themes.
+	 * 
+	 * @param string $theme Name of the current theme.
+	 * @return string
+	 * @uses Webcomic::$config
+	 * @uses Webcomic::$collection
+	 * @hook stylesheet
+	 */
+	public function stylesheet( $theme ) {
+		return ( self::$collection and self::$config[ 'collections' ][ self::$collection ][ 'theme' ] and $stylesheet = substr( self::$config[ 'collections' ][ self::$collection ][ 'theme' ], strpos( self::$config[ 'collections' ][ self::$collection ][ 'theme' ], '|' ) + 1 ) and is_readable( get_theme_root() . "/{$stylesheet}" ) ) ? $stylesheet : $theme;
 	}
 	
 	/** Add webcomic classes to the body tag.
