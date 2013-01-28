@@ -331,46 +331,6 @@ class WebcomicTranscripts extends Webcomic {
 		return $where;
 	}
 	
-	/** Add transcript languages, parent, and custom author columns.
-	 * 
-	 * @param array $columns An array of post columns.
-	 * @return array
-	 * @hook manage_edit-webcomic_transcript_columns
-	 */
-	public function manage_columns( $columns ) {
-		unset( $columns[ 'author' ] );
-		
-		$pre = array_slice( $columns, 0, 2 );
-		
-		$pre[ 'webcomic_author' ]    = __( 'Author', 'webcomic' );
-		$pre[ 'webcomic_languages' ] = __( 'Languages', 'webcomic' );
-		$pre[ 'webcomic_parent' ]    = __( 'Webcomic', 'webcomic' );
-		
-		return array_merge( $pre, $columns );
-	}
-	
-	/** Add sortable parent and author columns.
-	 * 
-	 * @param array $columns An array of sortable columns.
-	 * @return array
-	 * @hook manage_edit-webcomic_transcript_sortable_columns
-	 */
-	public function manage_sortable_columns( $columns ) {
-		return array_merge( array( 'webcomic_author' => 'webcomic_author', 'webcomic_parent' => 'webcomic_parent' ), $columns );
-	}
-	
-	/** Rename the language 'Posts' column.
-	 * 
-	 * @param array $columns An array of term columns.
-	 * @return array
-	 * @hook manage_edit-webcomic_language_columns
-	 */
-	public function manage_language_columns( $columns ) {
-		$columns[ 'posts' ] = __( 'Transcripts', 'webcomic' );
-		
-		return $columns;
-	}
-	
 	/** Add Orphaned view for webcomic posts.
 	 * 
 	 * @param array $views Array of view links.
@@ -398,6 +358,46 @@ class WebcomicTranscripts extends Webcomic {
 		}
 		
 		return $views;
+	}
+	
+	/** Add transcript languages, parent, and custom author columns.
+	 * 
+	 * @param array $columns An array of post columns.
+	 * @return array
+	 * @hook manage_edit-webcomic_transcript_columns
+	 */
+	public function manage_columns( $columns ) {
+		unset( $columns[ 'author' ] );
+		
+		$pre = array_slice( $columns, 0, 2 );
+		
+		$pre[ 'webcomic_author' ]    = __( 'Author', 'webcomic' );
+		$pre[ 'webcomic_languages' ] = __( 'Languages', 'webcomic' );
+		$pre[ 'webcomic_parent' ]    = __( 'Webcomic', 'webcomic' );
+		
+		return array_merge( $pre, $columns );
+	}
+	
+	/** Rename the language 'Posts' column.
+	 * 
+	 * @param array $columns An array of term columns.
+	 * @return array
+	 * @hook manage_edit-webcomic_language_columns
+	 */
+	public function manage_language_columns( $columns ) {
+		$columns[ 'posts' ] = __( 'Transcripts', 'webcomic' );
+		
+		return $columns;
+	}
+	
+	/** Add sortable parent and author columns.
+	 * 
+	 * @param array $columns An array of sortable columns.
+	 * @return array
+	 * @hook manage_edit-webcomic_transcript_sortable_columns
+	 */
+	public function manage_sortable_columns( $columns ) {
+		return array_merge( array( 'webcomic_author' => 'webcomic_author', 'webcomic_parent' => 'webcomic_parent' ), $columns );
 	}
 	
 	/** Render the transcript parent meta box.
