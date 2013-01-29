@@ -11,9 +11,9 @@
 class WebcomicUpgrade extends Webcomic {
 	/** Upgrade existing installations.
 	 * 
-	 * @uses WebcomicUpgrade::_403
 	 * @uses Webcomic::$config
 	 * @uses Webcomic::$version
+	 * @uses WebcomicUpgrade::_403
 	 */
 	public function __construct() {
 		if ( version_compare( self::$config[ 'version' ], '4.0.3', '<' ) ) {

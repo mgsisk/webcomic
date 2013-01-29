@@ -11,32 +11,31 @@
 class WebcomicPages extends Webcomic {
 	/** Register hooks.
 	 * 
-	 * @uses Webcomic::$config
 	 * @uses WebcomicPages::admin_footer()
 	 * @uses WebcomicPages::add_meta_boxes()
-	 * @uses WebcomicPages::save_page()
+	 * @uses WebcomicPages::wp_insert_post()
 	 * @uses WebcomicPages::pre_post_update()
 	 * @uses WebcomicPages::admin_enqueue_scripts()
 	 * @uses WebcomicPages::bulk_edit_custom_box()
 	 * @uses WebcomicPages::quick_edit_custom_box()
-	 * @uses WebcomicPages::manage_custom_column()
-	 * @uses WebcomicPages::manage_columns()
-	 * @uses WebcomicPages::manage_sortable_columns()
+	 * @uses WebcomicPages::manage_page_posts_custom_column()
 	 * @uses WebcomicPages::request()
+	 * @uses WebcomicPages::manage_edit_page_columns()
+	 * @uses WebcomicPages::manage_edit_page_sortable_columns()
 	 */
 	public function __construct() {
 		add_action( 'admin_footer', array( $this, 'admin_footer' ) );
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ) );
-		add_action( 'wp_insert_post', array( $this, 'save_page' ), 10, 2 );
+		add_action( 'wp_insert_post', array( $this, 'wp_insert_post' ), 10, 2 );
 		add_action( 'pre_post_update', array( $this, 'pre_post_update' ), 10, 1 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 		add_action( 'bulk_edit_custom_box', array( $this, 'bulk_edit_custom_box' ), 10, 2 );
 		add_action( 'quick_edit_custom_box', array( $this, 'quick_edit_custom_box' ), 10, 2 );
-		add_action( "manage_page_posts_custom_column", array( $this, 'manage_custom_column' ), 10, 2 );
+		add_action( 'manage_page_posts_custom_column', array( $this, 'manage_page_posts_custom_column' ), 10, 2 );
 		
 		add_filter( 'request', array( $this, 'request' ), 10, 1 );
-		add_filter( 'manage_edit-page_columns', array( $this, 'manage_columns' ), 10, 1 );
-		add_filter( 'manage_edit-page_sortable_columns', array( $this, 'manage_sortable_columns' ), 10, 1 );
+		add_filter( 'manage_edit-page_columns', array( $this, 'manage_edit_page_columns' ), 10, 1 );
+		add_filter( 'manage_edit-page_sortable_columns', array( $this, 'manage_edit_page_sortable_columns' ), 10, 1 );
 	}
 	
 	/** Render javascript for page meta boxes.
@@ -54,12 +53,11 @@ class WebcomicPages extends Webcomic {
 	
 	/** Add page meta boxes.
 	 * 
-	 * @uses Webcomic::$config
-	 * @uses WebcomicPages::page_collection()
+	 * @uses WebcomicPages::box_webcomic_collection()
 	 * @hook add_meta_boxes
 	 */
 	public function add_meta_boxes() {
-		add_meta_box( 'webcomic-collection', __( 'Webcomic Collection', 'webcomic' ), array( $this, 'page_collection' ), 'page', 'side' );
+		add_meta_box( 'webcomic-collection', __( 'Webcomic Collection', 'webcomic' ), array( $this, 'box_webcomic_collection' ), 'page', 'side' );
 	}
 	
 	/** Save metadata with pages.
@@ -68,7 +66,7 @@ class WebcomicPages extends Webcomic {
 	 * @param object $post Post object to update.
 	 * @hook wp_insert_post
 	 */
-	public function save_page( $id, $post ) {
+	public function wp_insert_post( $id, $post ) {
 		if (
 			isset( $_POST[ 'webcomic_meta_collection' ], $_POST[ 'webcomic_page_collection' ] )
 			and 'page' === $post->post_type
@@ -185,34 +183,10 @@ class WebcomicPages extends Webcomic {
 	 * @param integer $id Current post ID.
 	 * @hook manage_page_posts_custom_column
 	 */
-	public function manage_custom_column( $column, $id ) {
+	public function manage_page_posts_custom_column( $column, $id ) {
 		if ( 'webcomic_collection' === $column ) {
 			echo ( $collection = get_post_meta( $id, 'webcomic_collection', true ) and isset( self::$config[ 'collections' ][ $collection ] ) ) ? sprintf( '<a href="%s">%s</a>', esc_url( add_query_arg( array( 'post_type' => 'page', 'meta_key' => 'webcomic_collection', 'meta_value' => $collection ), admin_url( 'edit.php' ) ) ), self::$config[ 'collections' ][ $collection ][ 'name' ] ) : __( 'No Collection', 'webcomic' );
 		}
-	}
-	
-	/** Add custom webcomic collection to management pages.
-	 * 
-	 * @param array $columns Array of of post columns.
-	 * @return array
-	 * @hook manage_edit-page_columns
-	 */
-	public function manage_columns( $columns ) {
-		$pre = array_slice( $columns, 0, 3 );
-		
-		$pre[ 'webcomic_collection' ] = __( 'Webcomic Collection', 'webcomic' );
-		
-		return array_merge( $pre, $columns );
-	}
-	
-	/** Add sortable webcomic collection column.
-	 * 
-	 * @param array $columns An array of sortable columns.
-	 * @return array
-	 * @hook manage_edit-page_sortable_columns
-	 */
-	public function manage_sortable_columns( $columns ) {
-		return array_merge( array( 'webcomic_collection' => 'webcomic_collection' ), $columns );
 	}
 	
 	/** Handle sorting and filtering pages by webcomic collection.
@@ -241,12 +215,36 @@ class WebcomicPages extends Webcomic {
 		return $request;
 	}
 	
+	/** Add custom webcomic collection to management pages.
+	 * 
+	 * @param array $columns Array of of post columns.
+	 * @return array
+	 * @hook manage_edit-page_columns
+	 */
+	public function manage_edit_page_columns( $columns ) {
+		$pre = array_slice( $columns, 0, 3 );
+		
+		$pre[ 'webcomic_collection' ] = __( 'Webcomic Collection', 'webcomic' );
+		
+		return array_merge( $pre, $columns );
+	}
+	
+	/** Add sortable webcomic collection column.
+	 * 
+	 * @param array $columns An array of sortable columns.
+	 * @return array
+	 * @hook manage_edit-page_sortable_columns
+	 */
+	public function manage_edit_page_sortable_columns( $columns ) {
+		return array_merge( array( 'webcomic_collection' => 'webcomic_collection' ), $columns );
+	}
+	
 	/** Render the page collection meta box.
 	 * 
 	 * @param object $page Current page object.
 	 * @uses Webcomic::$config
 	 */
-	public function page_collection( $page ) {
+	public function box_webcomic_collection( $page ) {
 		$page_collection = get_post_meta( $page->ID, 'webcomic_collection', true );
 		
 		wp_nonce_field( 'webcomic_meta_collection', 'webcomic_meta_collection' );

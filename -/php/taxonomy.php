@@ -278,7 +278,8 @@ class WebcomicTaxonomy extends Webcomic {
 	 * 
 	 * @filter integer webcomic_upload_size_limit Filters the maximum allowed upload size for cover and avatar uploads. Defaults to the value returned by `wp_max_upload_size`.
 	 * @param string $taxonomy The add term form taxonomy.
-	 * @hook (webcomic\d+)_storyline_add_form_fields, (webcomic\d+)_character_add_form_fields
+	 * @hook (webcomic\d+)_storyline_add_form_fields
+	 * @hook (webcomic\d+)_character_add_form_fields
 	 */
 	public function add_form_fields( $taxonomy ) {
 		$sizes       = array( 'KB', 'MB', 'GB' );
@@ -319,7 +320,8 @@ class WebcomicTaxonomy extends Webcomic {
 	 * @filter integer webcomic_upload_size_limit Filters the maximum allowed upload size for cover and avatar uploads. Defaults to the value returned by `wp_max_upload_size`.
 	 * @param object $term The current term object.
 	 * @param string $taxonomy The taxonomy of the current term.
-	 * @hook (webcomic\d+)_storyline_edit_form_fields, (webcomic\d+)_character_edit_form_fields
+	 * @hook (webcomic\d+)_storyline_edit_form_fields
+	 * @hook (webcomic\d+)_character_edit_form_fields
 	 */
 	public function edit_form_fields( $term, $taxonomy ) {
 		$sizes       = array( 'KB', 'MB', 'GB' );
@@ -384,7 +386,8 @@ class WebcomicTaxonomy extends Webcomic {
 	 * @param string $value
 	 * @param string $column Name of the current column.
 	 * @param integer $id Current term ID.
-	 * @hook manage_(webcomic\d+)_storyline_custom_column, manage_(webcomic\d+)_character_custom_column
+	 * @hook manage_(webcomic\d+)_storyline_custom_column
+	 * @hook manage_(webcomic\d+)_character_custom_column
 	 */
 	public function manage_custom_column( $value, $column, $id ) {
 		if ( 'webcomic_image' === $column and isset( self::$config[ 'terms' ][ $id ][ 'image' ] ) and $image = wp_get_attachment_image( self::$config[ 'terms' ][ $id ][ 'image' ] ) ) {
@@ -399,7 +402,8 @@ class WebcomicTaxonomy extends Webcomic {
 	 * 
 	 * @param array $columns Array of of term columns.
 	 * @return array
-	 * @hook manage_edit-(webcomic\d+)_storyline_columns, manage_edit-(webcomic\d+)_character_columns
+	 * @hook manage_edit-(webcomic\d+)_storyline_columns
+	 * @hook manage_edit-(webcomic\d+)_character_columns
 	 */
 	public function manage_edit_columns( $columns ) {
 		$screen                  = get_current_screen();

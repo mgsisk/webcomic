@@ -23,9 +23,11 @@ class WebcomicAdmin extends Webcomic {
 	 * @uses WebcomicAdmin::plugin_row_meta()
 	 * @uses WebcomicAdmin::plugin_action_links()
 	 * @uses WebcomicPosts
+	 * @uses WebcomicPages
 	 * @uses WebcomicUsers
 	 * @uses WebcomicMedia
 	 * @uses WebcomicConfig
+	 * @uses WebcomicCommerce
 	 * @uses WebcomicTaxonomy
 	 * @uses WebcomicTranscripts
 	 * @uses WebcomicLegacy

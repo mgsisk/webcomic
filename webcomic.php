@@ -90,14 +90,14 @@ class Webcomic {
 	 * @uses Webcomic::$config
 	 * @uses Webcomic::init()
 	 * @uses Webcomic::log_ipn()
-	 * @uses Webcomic::head()
+	 * @uses Webcomic::wp_head()
 	 * @uses Webcomic::twitter_oauth()
 	 * @uses Webcomic::save_transcript()
 	 * @uses Webcomic::webcomic_redirect()
 	 * @uses Webcomic::setup_theme()
 	 * @uses Webcomic::the_post()
 	 * @uses Webcomic::buffer_alert()
-	 * @uses Webcomic::enqueue_scripts()
+	 * @uses Webcomic::wp_enqueue_scripts()
 	 * @uses Webcomic::template_redirect()
 	 * @uses Webcomic::tweet_webcomic()
 	 * @uses Webcomic::request()
@@ -110,9 +110,9 @@ class Webcomic {
 	 * @uses Webcomic::get_the_terms()
 	 * @uses Webcomic::post_type_link()
 	 * @uses Webcomic::the_content_feed()
-	 * @uses Webcomic::get_object_terms()
+	 * @uses Webcomic::wp_get_object_terms()
 	 * @uses Webcomic::extra_theme_headers()
-	 * @uses Webcomic::get_attachment_image_attributes()
+	 * @uses Webcomic::wp_get_attachment_image_attributes()
 	 * @uses Webcomic::loop_end()
 	 * @uses Webcomic::loop_start()
 	 * @uses Webcomic::the_excerpt()
@@ -129,7 +129,7 @@ class Webcomic {
 		if ( self::$config and version_compare( self::$config[ 'version' ], '4x', '>=' ) ) {
 			add_action( 'init', array( $this, 'init' ) );
 			add_action( 'init', array( $this, 'log_ipn' ) );
-			add_action( 'wp_head', array( $this, 'head' ), 1 );
+			add_action( 'wp_head', array( $this, 'wp_head' ), 1 );
 			add_action( 'init', array( $this, 'twitter_oauth' ) );
 			add_action( 'init', array( $this, 'save_transcript' ) );
 			add_action( 'init', array( $this, 'dynamic_defaults' ) );
@@ -137,7 +137,7 @@ class Webcomic {
 			add_action( 'setup_theme', array( $this, 'setup_theme' ) );
 			add_action( 'the_post', array( $this, 'the_post' ), 10, 1 );
 			add_action( 'webcomic_buffer_alert', array( $this, 'buffer_alert' ) );
-			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+			add_action( 'wp_enqueue_scripts', array( $this, 'wp_enqueue_scripts' ) );
 			add_action( 'template_redirect', array( $this, 'template_redirect' ) );
 			add_action( 'transition_post_status', array( $this, 'tweet_webcomic' ), 10, 3 );
 			
@@ -151,9 +151,9 @@ class Webcomic {
 			add_filter( 'get_the_terms', array( $this, 'get_the_terms' ), 10, 3 );
 			add_action( 'post_type_link', array( $this, 'post_type_link' ), 10, 4 );
 			add_filter( 'the_content_feed', array( $this, 'the_content_feed' ), 10, 1 );
-			add_filter( 'wp_get_object_terms', array( $this, 'get_object_terms' ), 10, 4 );
+			add_filter( 'wp_get_object_terms', array( $this, 'wp_get_object_terms' ), 10, 4 );
 			add_filter( 'extra_theme_headers', array( $this, 'extra_theme_headers' ), 10, 1 );
-			add_filter( 'wp_get_attachment_image_attributes', array( $this, 'get_attachment_image_attributes' ), 10, 2 );
+			add_filter( 'wp_get_attachment_image_attributes', array( $this, 'wp_get_attachment_image_attributes' ), 10, 2 );
 			
 			if ( self::$config[ 'integrate' ] ) {
 				add_action( 'loop_end', array( $this, 'loop_end' ), 10, 1 );
@@ -469,7 +469,7 @@ class Webcomic {
 	 * @hook wp_head
 	 * @filter array webcomic_opengraph Filters the Open Graph data Webcomic adds to all Webcomic-related pages.
 	 */
-	public function head() {
+	public function wp_head() {
 		global $wp_query, $post;
 		
 		$output = array();
@@ -854,7 +854,7 @@ class Webcomic {
 	 * @uses Webcomic::$config
 	 * @hook wp_enqueue_scripts
 	 */
-	public function enqueue_scripts() {
+	public function wp_enqueue_scripts() {
 		if ( self::$config[ 'shortcuts' ] ) {
 			wp_register_script( 'webcomic-shortcuts', self::$url . '-/js/shortcuts.js', array( 'jquery', 'jquery-hotkeys' ), false, true );
 			
@@ -1250,7 +1250,7 @@ class Webcomic {
 	 * @uses Webcomic::$config
 	 * @hook get_the_terms
 	 */
-	public function get_object_terms( $terms, $objects, $taxonomies, $args ) {
+	public function wp_get_object_terms( $terms, $objects, $taxonomies, $args ) {
 		if ( 'all' === $args[ 'fields' ] and preg_match( '/webcomic\d+_(storyline|character)/', join( ' ', ( array ) $taxonomies ) ) ) {
 			foreach ( $terms as $k => $v ) {
 				if ( isset( $v->taxonomy ) and preg_match( '/^webcomic\d+_(storyline|character)$/', $v->taxonomy ) ) {
@@ -1288,7 +1288,7 @@ class Webcomic {
 	 * @uses Webcomic::$config
 	 * @hook wp_get_attachment_image_attributes
 	 */
-	public function get_attachment_image_attributes( $attributes, $attachment ) {
+	public function wp_get_attachment_image_attributes( $attributes, $attachment ) {
 		if ( $attachment->post_parent and isset( self::$config[ 'collections' ][ get_post_type( $attachment->post_parent ) ] ) ) {
 			$attributes[ 'data-webcomic-parent' ] = $attachment->post_parent;
 			

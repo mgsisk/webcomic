@@ -24,9 +24,9 @@ class WebcomicPosts extends Webcomic {
 	 * @uses WebcomicPosts::bulk_edit_custom_box()
 	 * @uses WebcomicPosts::quick_edit_custom_box()
 	 * @uses WebcomicPosts::posts_where()
-	 * @uses WebcomicPosts::manage_custom_column()
-	 * @uses WebcomicPosts::view_orphans()
-	 * @uses WebcomicPosts::manage_columns()
+	 * @uses WebcomicPosts::manage_webcomic_posts_custom_column()
+	 * @uses WebcomicPosts::view_edit_webcomics()
+	 * @uses WebcomicPosts::manage_edit_webcomic_columns()
 	 */
 	public function __construct() {
 		add_action( 'admin_footer', array( $this, 'admin_footer' ) );
@@ -37,17 +37,17 @@ class WebcomicPosts extends Webcomic {
 		add_action( 'restrict_manage_posts', array( $this, 'restrict_manage_posts' ) );
 		add_action( 'wp_insert_post', array( $this, 'save_webcomic_commerce' ), 10, 2 );
 		add_action( 'wp_insert_post_data', array( $this, 'wp_insert_post_data' ), 10, 2 );
-		add_action( 'wp_insert_post', array( $this, 'save_webcomic_transcripts' ), 10, 2 );
+		add_action( 'wp_insert_post,', array( $this, 'save_webcomic_transcripts' ), 10, 2 );
 		add_action( 'bulk_edit_custom_box', array( $this, 'bulk_edit_custom_box' ), 10, 2 );
 		add_action( 'quick_edit_custom_box', array( $this, 'quick_edit_custom_box' ), 10, 2 );
 		
 		add_filter( 'posts_where', array( $this, 'posts_where' ), 10, 1 );
 		
 		foreach ( array_keys( self::$config[ 'collections' ] ) as $k ) {
-			add_action( "manage_{$k}_posts_custom_column", array( $this, 'manage_custom_column' ), 10, 2 );
+			add_action( "manage_{$k}_posts_custom_column", array( $this, 'manage_webcomic_posts_custom_column' ), 10, 2 );
 			
-			add_filter( "views_edit-{$k}", array( $this, 'view_orphans' ), 10, 1 );
-			add_filter( "manage_edit-{$k}_columns", array( $this, 'manage_columns' ), 10, 1 );
+			add_filter( "views_edit-{$k}", array( $this, 'view_edit_webcomic' ), 10, 1 );
+			add_filter( "manage_edit-{$k}_columns", array( $this, 'manage_edit_webcomic_columns' ), 10, 1 );
 		}
 	}
 	
@@ -76,9 +76,9 @@ class WebcomicPosts extends Webcomic {
 	 */
 	public function add_meta_boxes() {
 		foreach ( array_keys( self::$config[ 'collections' ] ) as $k ) {
-			add_meta_box( 'webcomic-media', __( 'Webcomic Media', 'webcomic' ), array( $this, 'media' ), $k, 'side', 'high' );
-			add_meta_box( 'webcomic-commerce', __( 'Webcomic Commerce', 'webcomic' ), array( $this, 'commerce' ), $k, 'normal', 'high' );
-			add_meta_box( 'webcomic-transcripts', __( 'Webcomic Transcripts', 'webcomic' ), array( $this, 'transcripts' ), $k, 'normal', 'high' );
+			add_meta_box( 'webcomic-media', __( 'Webcomic Media', 'webcomic' ), array( $this, 'box_media' ), $k, 'side', 'high' );
+			add_meta_box( 'webcomic-commerce', __( 'Webcomic Commerce', 'webcomic' ), array( $this, 'box_commerce' ), $k, 'normal', 'high' );
+			add_meta_box( 'webcomic-transcripts', __( 'Webcomic Transcripts', 'webcomic' ), array( $this, 'box_transcripts' ), $k, 'normal', 'high' );
 		}
 	}
 	
@@ -371,7 +371,7 @@ class WebcomicPosts extends Webcomic {
 	 * @uses Webcomic::get_attachments()
 	 * @hook manage_(webcomic\d+)_posts_custom_column
 	 */
-	public function manage_custom_column( $column, $id ) {
+	public function manage_webcomic_posts_custom_column( $column, $id ) {
 		global $post;
 		
 		if ( 'webcomic_attachments' === $column ) {
@@ -424,7 +424,7 @@ class WebcomicPosts extends Webcomic {
 	 * @return array
 	 * @hook views_edit-(webcomic\d+)
 	 */
-	public function view_orphans( $views ) {
+	public function view_edit_webcomic( $views ) {
 		global $wpdb;
 		
 		if ( $orphans = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = %s AND ID NOT IN ( SELECT post_parent FROM {$wpdb->posts} WHERE post_type = 'attachment' AND post_mime_type LIKE 'image/%%' )", $_GET[ 'post_type' ] ) ) ) {
@@ -453,7 +453,7 @@ class WebcomicPosts extends Webcomic {
 	 * @return array
 	 * @hook manage_edit-(webcomic\d+)_columns
 	 */
-	public function manage_columns( $columns ) {
+	public function manage_edit_webcomic_columns( $columns ) {
 		$pre = array_slice( $columns, 0, 1 );
 		$mid = array_slice( $columns, 1, 2 );
 		
@@ -469,7 +469,7 @@ class WebcomicPosts extends Webcomic {
 	 * @param object $post Current post object.
 	 * @uses WebcomicPosts::ajax_media_preview()
 	 */
-	public function media( $post ) {
+	public function box_media( $post ) {
 		?>
 		<div id="webcomic_media_preview"><?php self::ajax_media_preview( $post->ID ); ?></div>
 		<?php
@@ -480,7 +480,7 @@ class WebcomicPosts extends Webcomic {
 	 * @param object $post Current post object.
 	 * @uses Webcomic::$config
 	 */
-	public function commerce( $post ) {
+	public function box_commerce( $post ) {
 		$commerce = get_post_meta( $post->ID, 'webcomic_commerce', true );
 		$commerce = $commerce ? $commerce : array();
 		
@@ -583,7 +583,7 @@ class WebcomicPosts extends Webcomic {
 	 * @param object $post Current post object.
 	 * @uses Webcomic::$config
 	 */
-	public function transcripts( $post ) {
+	public function box_transcripts( $post ) {
 		wp_nonce_field( 'webcomic_meta_transcripts', 'webcomic_meta_transcripts' );
 		?>
 		<p><label><input type="checkbox" name="webcomic_transcripts"<?php checked( ( 'auto-draft' === $post->post_status and self::$config[ 'collections' ][ $post->post_type ][ 'transcripts' ][ 'open' ] ) or get_post_meta( $post->ID, 'webcomic_transcripts', true ) ); ?>> <?php _e( 'Allow transcribing', 'webcomic' ); ?></label></p>

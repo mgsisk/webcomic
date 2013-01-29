@@ -18,16 +18,20 @@ class WebcomicMedia extends Webcomic {
 	 * @uses WebcomicMedia::admin_footer()
 	 * @uses WebcomicMedia::delete_attachment()
 	 * @uses WebcomicMedia::admin_enqueue_scripts()
+	 * @uses WebcomicMedia::media_upload_webcomic_media()
+	 * @uses WebcomicMedia::attachment_submitbox_misc_actions()
+	 * @uses WebcomicMedia::media_upload_tabs()
 	 * @uses WebcomicMedia::media_row_actions()
 	 * @uses WebcomicMedia::display_media_states()
+	 * @uses WebcomicMedia::image_size_names_choose()
 	 */
 	public function __construct() {
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 		add_action( 'admin_footer', array( $this, 'admin_footer' ) );
-		add_action( 'media_upload_webcomic_media', array( $this, 'media' ) );
 		add_action( 'delete_attachment', array( $this, 'delete_attachment' ), 10, 1 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
+		add_action( 'media_upload_webcomic_media', array( $this, 'media_upload_webcomic_media' ) );
 		add_action( 'attachment_submitbox_misc_actions', array( $this, 'attachment_submitbox_misc_actions' ), 20 );
 		
 		add_filter( 'media_upload_tabs', array( $this, 'media_upload_tabs' ), 10, 1 );
@@ -175,8 +179,8 @@ class WebcomicMedia extends Webcomic {
 	 * @hook admin_menu
 	 */
 	public function admin_menu() {
-		add_submenu_page( 'upload.php', __( 'Webcomic Attacher', 'webcomic' ), __( 'Webcomic Attacher', 'webcomic' ), 'upload_files', 'webcomic-attacher', array( $this, 'attacher' ) );
-		add_submenu_page( 'upload.php', __( 'Webcomic Generator', 'webcomic' ), __( 'Webcomic Generator', 'webcomic' ), 'upload_files', 'webcomic-generator', array( $this, 'generator' ) );
+		add_submenu_page( 'upload.php', __( 'Webcomic Attacher', 'webcomic' ), __( 'Webcomic Attacher', 'webcomic' ), 'upload_files', 'webcomic-attacher', array( $this, 'page_attacher' ) );
+		add_submenu_page( 'upload.php', __( 'Webcomic Generator', 'webcomic' ), __( 'Webcomic Generator', 'webcomic' ), 'upload_files', 'webcomic-generator', array( $this, 'page_generator' ) );
 	}
 	
 	/** Render javascript for the webcomic generator.
@@ -195,7 +199,7 @@ class WebcomicMedia extends Webcomic {
 	 * 
 	 * @hook media_upload_webcomic_media
 	 */
-	public function media( $output = false ) {
+	public function media_upload_webcomic_media( $output = false ) {
 		if ( $output ) {
 			if ( $attachments = self::get_attachments( $_GET[ 'post_id' ] ) ) {
 				printf( '<div><p>%s</p><hr></div><ul class="webcomic-media">', __( 'Drag and drop the media attachments to change the order Webcomic will display them.', 'webcomic' ) );
@@ -407,7 +411,7 @@ class WebcomicMedia extends Webcomic {
 	 * 
 	 * @uses Webcomic::$config
 	 */
-	public function attacher() {
+	public function page_attacher() {
 		global $wpdb, $post;
 		?>
 		<div class="wrap">
@@ -591,7 +595,7 @@ class WebcomicMedia extends Webcomic {
 	 * @uses Webcomic::$config
 	 * @uses Webcomic::get_attachments()
 	 */
-	public function generator() {
+	public function page_generator() {
 		global $post;
 		
 		$attachments = self::get_attachments();

@@ -35,7 +35,8 @@ class WebcomicUsers extends Webcomic {
 	/** Render meta inputs for user profile form.
 	 * 
 	 * @param object $user Current user object.
-	 * @hook show_user_profile, edit_user_profile
+	 * @hook show_user_profile
+	 * @hook edit_user_profile
 	 */
 	public function user_profile( $user ) {
 		$birthday = get_user_meta( $user->ID, 'webcomic_birthday', true );
