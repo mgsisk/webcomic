@@ -24,6 +24,7 @@ class WebcomicShortcode extends Webcomic {
 	 * @uses WebcomicShortcode::verify_webcomic_age()
 	 * @uses WebcomicShortcode::verify_webcomic_role()
 	 * @uses WebcomicShortcode::the_webcomic()
+	 * @uses WebcomicShortcode::webcomic_count()
 	 * @uses WebcomicShortcode::the_webcomic_link()
 	 * @uses WebcomicShortcode::the_webcomic_terms()
 	 * @uses WebcomicShortcode::the_related_webcomics()
@@ -54,6 +55,7 @@ class WebcomicShortcode extends Webcomic {
 		add_shortcode( 'verify_webcomic_age', array( $this, 'verify_webcomic_age' ) );
 		add_shortcode( 'verify_webcomic_role', array( $this, 'verify_webcomic_role' ) );
 		add_shortcode( 'the_webcomic', array( $this, 'the_webcomic' ) );
+		add_shortcode( 'webcomic_count', array( $this, 'webcomic_count' ) );
 		add_shortcode( 'the_related_webcomics', array( $this, 'the_related_webcomics' ) );
 		add_shortcode( 'previous_webcomic_link', array( $this, 'the_webcomic_link' ) );
 		add_shortcode( 'next_webcomic_link', array( $this, 'the_webcomic_link' ) );
@@ -168,6 +170,47 @@ class WebcomicShortcode extends Webcomic {
 		), $atts ) );
 		
 		return WebcomicTag::the_webcomic( $size, $relative, $in_same_term, $excluded_terms, $taxonomy, $the_post );
+	}
+	
+	/** Handle webcomic_count shortcode.
+	 * 
+	 * @param array $atts Shortcode attributes.
+	 * @param string $content Shortcode content.
+	 * @return string
+	 * @uses WebcomicTag::webcomic_count()
+	 */
+	public function webcomic_count( $atts, $content ) {
+		extract( shortcode_atts( array(
+			'if'       => '',
+			'the_post' => false
+		), $atts ) );
+		
+		if ( $content ) {
+			$c = WebcomicTag::webcomic_count( $the_post );
+			$m = array();
+			$o = false;
+			
+			if ( preg_match( '/^\s*(=|!=|lt|gt|lte|gte)\s*(\d+)\s*$/', $if, $m ) ) {
+				$m[ 2 ] = ( integer ) $m[ 2 ];
+				
+				if (
+					( '=' === $m[ 1 ] and $c === $m[ 2 ] )
+					or ( '!=' === $m[ 1 ] and $c !== $m[ 2 ] )
+					or ( 'lt' === $m[ 1 ] and $c < $m[ 2 ] )
+					or ( 'gt' === $m[ 1 ] and $c > $m[ 2 ] )
+					or ( 'lte' === $m[ 1 ] and $c <= $m[ 2 ] )
+					or ( 'gte' === $m[ 1 ] and $c >= $m[ 2 ] )
+				) {
+					$o = true;
+				}
+				
+				if ( $o ) {
+					return do_shortcode( $content );
+				}
+			}
+		} else {
+			return WebcomicTag::webcomic_count( $the_post );
+		}
 	}
 	
 	/** Handle the_related_webcomics shortcode.
