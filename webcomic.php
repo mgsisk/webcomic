@@ -107,6 +107,7 @@ class Webcomic {
 	 * @uses Webcomic::get_terms()
 	 * @uses Webcomic::stylesheet()
 	 * @uses Webcomic::body_class()
+	 * @uses Webcomic::post_class()
 	 * @uses Webcomic::get_the_terms()
 	 * @uses Webcomic::post_type_link()
 	 * @uses Webcomic::the_content_feed()
@@ -148,6 +149,7 @@ class Webcomic {
 			add_filter( 'get_terms', array( $this, 'get_terms' ), 10, 3 );
 			add_filter( 'stylesheet', array( $this, 'stylesheet' ), 10, 1 );
 			add_filter( 'body_class', array( $this, 'body_class' ), 10, 2 );
+			add_filter( 'post_class', array( $this, 'post_class' ), 10, 3 );
 			add_filter( 'get_the_terms', array( $this, 'get_the_terms' ), 10, 3 );
 			add_action( 'post_type_link', array( $this, 'post_type_link' ), 10, 4 );
 			add_filter( 'the_content_feed', array( $this, 'the_content_feed' ), 10, 1 );
@@ -1159,6 +1161,23 @@ class Webcomic {
 		if ( self::$collection ) {
 			$classes[] = 'webcomic';
 			$classes[] = esc_attr( sprintf( 'webcomic-%s', self::$config[ 'collections' ][ self::$collection ][ 'slugs' ][ 'name' ] ) );
+		}
+		
+		return $classes;
+	}
+	
+	/** Add webcomic classes to posts.
+	 * 
+	 * @param array $classes Array of post classes.
+	 * @param mixed $class Additional classes passed to post_class().
+	 * @param integer $id Post ID.
+	 * @return array
+	 * @uses Webcomic::get_attachments()
+	 * @hook post_class
+	 */
+	public function post_class( $classes, $class, $id ) {
+		if ( preg_match( '/^webcomic\d+$/', get_post_type( $id ) ) and $attachments = self::get_attachments( $id ) ) {
+			$classes[] = sprintf( 'webcomic-attachments-%s', count( $attachments ) );
 		}
 		
 		return $classes;
