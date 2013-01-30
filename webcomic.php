@@ -472,24 +472,29 @@ class Webcomic {
 	public function wp_head() {
 		global $wp_query, $post;
 		
-		$output = array();
 		$object = $wp_query->get_queried_object();
+		$output = array();
 		
 		if ( self::$collection and !is_404() ) {
-			$output[ 'og:type' ]      = empty( $object->post_type ) ? 'website' : 'article';
-			$output[ 'og:site_name' ] = get_bloginfo( 'name' );
+			$output[ 'og:type' ]        = empty( $object->post_type ) ? 'website' : 'article';
+			$output[ 'twitter:card' ]   = is_singular() ? 'photo' : 'summary';
+			$output[ 'og:site_name' ]   = get_bloginfo( 'name' );
+			$output[ 'og:description' ] = get_bloginfo( 'description' );
 			
 			if ( is_singular() ) {
 				setup_postdata( $post );
 				
 				$output[ 'og:url' ]                 = get_permalink();
 				$output[ 'og:title' ]               = esc_attr( get_the_title() );
-				$output[ 'og:description' ]         = esc_attr( strip_tags( wp_trim_excerpt( get_the_excerpt() ) ) );
 				$output[ 'article:author' ]         = esc_url( get_author_posts_url( $object->post_author ) );
 				$output[ 'article:published_time' ] = get_the_time( 'c' );
 				$output[ 'article:modified_time' ]  = get_the_modified_time( 'c' );
 				$output[ 'article:section' ]        = esc_attr( self::$config[ 'collections' ][ self::$collection ][ 'name' ] );
 				$output[ 'article:tag' ]            = array();
+				
+				if ( $description = esc_attr( strip_tags( wp_trim_excerpt( get_the_excerpt() ) ) ) ) {
+					$output[ 'og:description' ] = $description;
+				}
 				
 				if ( isset( self::$config[ 'collections' ][ $object->post_type ] ) ) {
 					foreach ( array_merge( ( array ) get_the_terms( $object->ID, "{$object->post_type}_storyline" ), ( array ) get_the_terms( $object->ID, "{$object->post_type}_character" ) ) as $term ) {
@@ -501,26 +506,40 @@ class Webcomic {
 			} elseif ( is_tax() ) {
 				$output[ 'og:url' ]         = get_term_link( ( integer ) $object->term_id, $object->taxonomy );
 				$output[ 'og:title' ]       = esc_attr( single_term_title( '', false ) );
-				$output[ 'og:description' ] = esc_attr( strip_tags( term_description( $object->term_id, $object->taxonomy ) ) );
+				
+				if ( $description = esc_attr( strip_tags( term_description( $object->term_id, $object->taxonomy ) ) ) ) {
+					$output[ 'og:description' ] = $description;
+				}
 			} else {
 				$output[ 'og:url' ]         = get_post_type_archive_link( $object->name );
 				$output[ 'og:title' ]       = esc_attr( self::$config[ 'collections' ][ $object->name ][ 'name' ] );
-				$output[ 'og:description' ] = esc_attr( strip_tags( self::$config[ 'collections' ][ $object->name ][ 'description' ] ) );
+				
+				if ( $description = esc_attr( strip_tags( self::$config[ 'collections' ][ $object->name ][ 'description' ] ) ) ) {
+					$output[ 'og:description' ] = $description;
+				}
 			}
 				
 			if ( is_singular() and isset( self::$config[ 'collections' ][ $object->post_type ] ) and $attachments = self::get_attachments( $object->ID ) ) {
 				$output[ 'og:image' ] = array();
 				
 				foreach ( $attachments as $attachment ) {
-					$attributes = wp_get_attachment_image_src( $attachment->ID );
-					$output[ 'og:image' ][] = $attributes[ 0 ];
+					$attributes = wp_get_attachment_image_src( $attachment->ID, 'full' );
+					$output[ 'og:image' ][] = array(
+						$attributes[ 0 ],
+						':width'  => $attributes[ 1 ],
+						':height' => $attributes[ 2 ]
+					);
 				}
 			} elseif ( is_tax() and isset( self::$config[ 'terms' ][ $object->term_id ][ 'image' ] ) ) {
-				$attributes = wp_get_attachment_image_src( self::$config[ 'terms' ][ $object->term_id ][ 'image' ] );
-				$output[ 'og:image' ] = $attributes[ 0 ];
+				$attributes = wp_get_attachment_image_src( self::$config[ 'terms' ][ $object->term_id ][ 'image' ], 'full' );
+				$output[ 'og:image' ]        = $attributes[ 0 ];
+				$output[ 'og:image:width' ]  = $attributes[ 1 ];
+				$output[ 'og:image:height' ] = $attributes[ 2 ];
 			} elseif ( self::$config[ 'collections' ][ self::$collection ][ 'image' ] ) {
-				$attributes = wp_get_attachment_image_src( self::$config[ 'collections' ][ self::$collection ][ 'image' ] );
-				$output[ 'og:image' ] = $attributes[ 0 ];
+				$attributes = wp_get_attachment_image_src( self::$config[ 'collections' ][ self::$collection ][ 'image' ], 'full' );
+				$output[ 'og:image' ]        = $attributes[ 0 ];
+				$output[ 'og:image:width' ]  = $attributes[ 1 ];
+				$output[ 'og:image:height' ] = $attributes[ 2 ];
 			}
 		}
 		
@@ -528,11 +547,17 @@ class Webcomic {
 		
 		foreach ( ( array ) $output as $k => $v ) {
 			if ( is_array( $v ) ) {
-				foreach( $v as $b ) {
-					echo sprintf( '<meta property="%s" content="%s">', $k, $b ), "\n";
+				foreach( $v as $x ) {
+					if ( is_array( $x ) ) {
+						foreach ( $x as $a => $b ) {
+							echo sprintf( '<meta %s="%s%s" content="%s">', 0 === strpos( $k, 'twitter' ) ? 'name' : 'property', $k, is_string( $a ) ? $a : '', $b ), "\n";
+						}
+					} else {
+						echo sprintf( '<meta %s="%s" content="%s">', 0 === strpos( $k, 'twitter' ) ? 'name' : 'property', $k, $x ), "\n";
+					}
 				}
 			} else {
-				echo sprintf( '<meta property="%s" content="%s">', $k, $v ), "\n";
+				echo sprintf( '<meta %s="%s" content="%s">', 0 === strpos( $k, 'twitter' ) ? 'name' : 'property', $k, $v ), "\n";
 			}
 		}
 	}

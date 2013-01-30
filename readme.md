@@ -8,7 +8,7 @@ Webcomic is a plugin for [WordPress](//wordpress.org) that provides a host of fe
 
 [_**Everything!**_](//github.com/mgsisk/webcomic/wiki) Webcomic has been rebuilt to provide you with leaner, meaner webcomic management. Highlights include:
 
-- [OpenGraph](//ogp.me) support for any Webcomic-related page.
+- [OpenGraph](//ogp.me) and [Twitter Card](//dev.twitter.com/docs/cards) support for any Webcomic-related page.
 - [Twitter](//twitter.com) integration for automatically tweeting new webcomics.
 - [File management](//github.com/mgsisk/webcomic/wiki/Media) handled through the WordPress Media Library.
 - Each [collection](//github.com/mgsisk/webcomic/wiki/Webcomic-Collections) is now a custom post type with unique [storyline](//github.com/mgsisk/webcomic/wiki/Storylines) and [character](//github.com/mgsisk/webcomic/wiki/Characters) taxonomies.
