@@ -897,45 +897,38 @@ class WebcomicHelp extends Webcomic {
 	 * @uses Webcomic::$config
 	 */
 	private function collection_settings_twitter( $screen ) {
+		$posts = get_posts( array(
+			'post_type'      => array_keys( self::$config[ 'collections' ] ),
+			'posts_per_page' => 1,
+			'orderby'        => 'rand'
+		) );
+		
+		$cards = $posts ? sprintf( '
+			<p>%s</p>
+			<p><strong>%s</strong></p>
+			<p>%s</p>
+			<p><strong>%s</strong></p>',
+			__( 'For the <strong>Example Summary Card URL</strong> you should use a collection archive page, like:', 'webcomic' ),
+			get_post_type_archive_link( $posts[ 0 ]->post_type ),
+			__( 'For the <strong>Example Photo Card URL</strong> you should use a single webcomic page, like:', 'webcomic' ),
+			get_permalink( $posts[ 0 ]->ID )
+		) : sprintf( '<p>%s</p>',
+			__( "No published webcomics could be found in any collection. You should publish at least one webcomic before trying to opt-in to Twitter Cards. URL's to use for the <strong>Example Summary Card URL</strong> and <strong>Example Photo Card URL</strong> will be provided here once you have published at least one webcomic.", 'webcomic' )
+		);
+		
 		return sprintf( '
 			<p>%s</p>
 			<p><strong>%s</strong></p>
 			<p>%s</p>
-			<p>%s</p>
-			<ul>
-				<li>%s</li>
-				<li>%s</li>
-				<li>%s</li>
-				<li>%s</li>
-				<li>%s</li>
-				<li>%s</li>
-				<li>%s</li>
-				<li>%s</li>
-				<li>%s</li>
-				<li>%s</li>
-				<li>%s</li>
-				<li>%s</li>
-			</ul>',
+			<p><strong>%s</strong></p>
+			<p>%s</p>%s',
 			sprintf( __( 'These settings allow you to connect a Twitter account with the collection via a Twitter Application. Anytime a new webcomic is published in this collection a status update will be made to the account you authorize in the format you specify using your Twitter Application. Visit <a href="%s" target="_blank">Twitter Developers</a> to create a new Twitter Application. The optional <strong>Callback URL</strong> setting of your Twitter Application must be set to your site URL:', 'webcomic' ), '//dev.twitter.com/apps/new' ),
 			home_url(),
-			__( 'Once created, go to the <strong>Settings</strong> tab for your Twitter Application and ensure that <strong>Read and Write</strong> is selected for <strong>Application Type</strong>. Then return to the <strong>Details</strong> tab and copy the <strong>Consumer Key</strong> and <strong>Consumer Secret</strong> values into their respective fields on this page. If the keys are entered correctly a <strong>Sign in with Twitter</strong> option will appear in the <strong>Authorized Account</strong> area.', 'webcomic' ),
-			__( 'The <strong>Tweet Format</strong> accepts a number of tags:', 'webcomic' ),
-			sprintf( __( '<strong>%%url</strong> - A <a href="%s" target="_blank">shortlink</a> to the webcomic post, or the full permalink if no shortlink is available. The <strong>%%permalink</strong> tag will always use the full permalink.', 'webcomic' ), '//codex.wordpress.org/Function_Reference/the_shortlink' ),
-			__( '<strong>%date</strong> - The publish date of the webcomic.', 'webcomic' ),
-			__( '<strong>%time</strong> - The publish time of the webcomic.', 'webcomic' ),
-			__( '<strong>%title</strong> - The title of the webcomic.', 'webcomic' ),
-			__( '<strong>%author</strong> - The display name used by the author that published the webcomic.', 'webcomic' ),
-			sprintf( __( '<strong>%%site-url</strong> - The URL to your website, %s', 'webcomic' ), home_url() ),
-			sprintf( __( '<strong>%%site-name</strong> - The name of your website, %s', 'webcomic' ), get_bloginfo( 'name' ) ),
-			sprintf( __( '<strong>%%storylines</strong> - The names of all storylines the webcomic is a part of, converted to <a href="%s" target="_blank">hash tags</a>.', 'webcomic' ), '//support.twitter.com/entries/49309-what-are-hashtags-symbols' ),
-			sprintf( __( '<strong>%%characters</strong> - The names of all characters appearing in the webcomic, converted to <a href="%s" target="_blank">hash tags</a>.', 'webcomic' ), '//support.twitter.com/entries/49309-what-are-hashtags-symbols' ),
-			sprintf( __( '<strong>%%collection</strong> - The name of the collection, %1$s, converted to a <a href="%2$s" target="_blank">hash tag</a>.', 'webcomic' ), self::$config[ 'collections' ][ $screen->post_type ][ 'name' ], '//support.twitter.com/entries/49309-what-are-hashtags-symbols' ),
-			sprintf( __( '<strong>%%collection-name</strong> - The unhashed collection name, %s.', 'webcomic' ), self::$config[ 'collections' ][ $screen->post_type ][ 'name' ] ),
-			__( '<strong>%field:the-key</strong> - The value of a webcomic post custom field specified by the custom field key. If your custom field key has spaces in it you should use the format <strong>%field:{The Key}</strong>.', 'webcomic' )
+			sprintf( __( "Once created, go to the <strong>Settings</strong> tab for your Twitter Application and ensure that <strong>Read and Write</strong> is selected for <strong>Application Type</strong>. Then return to the <strong>Details</strong> tab and copy the <strong>Consumer Key</strong> and <strong>Consumer Secret</strong> values into their respective fields on this page. If the keys are entered correctly a <strong>Sign in with Twitter</strong> option will appear in the <strong>Authorized Account</strong> area. Please refer to the <a href='%s' target='_blank'>Beginner's Guide</a> for a complete list of tags accepted by <strong>Tweet Format</strong>.", 'webcomic' ), '//github.com/mgsisk/webcomic/wiki/Twitter-Settings' ),
+			__( 'Twitter Cards', 'webcomic' ),
+			sprintf( __( 'Twitter Cards do not require a Twitter Application. Webcomic automatially generates the necessary information for Twitter Cards on all Webcomic-related pages, but you must opt-in to have these cards displayed and Twitter must approve the integration. This process only needs to be done once for your entire site. Visit <a href="%s" target="_blank">Participate in Twitter Cards</a> to opt-in.', 'webcomic' ), '//dev.twitter.com/docs/cards', '//dev.twitter.com/form/participate-twitter-cards' ),
+			$cards
 		);
-		/*
-		
-		*/
 	}
 	
 	/** Return collection general settings help.
