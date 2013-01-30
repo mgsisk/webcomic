@@ -2,6 +2,7 @@
 /** Contains the WebcomicTag class and template tag functions.
  * 
  * @package Webcomic
+ * @todo get_webcomic_attachments_number
  */
 
 /** Handle custom template tag functionality.
@@ -452,6 +453,18 @@ class WebcomicTag extends Webcomic {
 			} else {
 				return $output;
 			}
+		}
+	}
+	
+	/** Return the number of Webcomic-recognized attachments.
+	 * 
+	 * @param mixed The post object or ID to retrieve the attachment count for.
+	 * @return integer
+	 * @filter integer webcomic_count Filters the webcomic-recognized attachment count returned by `webcomic_count`.
+	 */
+	public static function webcomic_count( $the_post = false ) {
+		if ( $the_post = get_post( $the_post ) and $attachments = self::get_attachments( $the_post->ID ) ) {
+			return apply_filters( 'webcomic_count', count( $attachments ), $the_post );
 		}
 	}
 	
@@ -3325,6 +3338,31 @@ if ( !function_exists( 'the_webcomic' ) ) {
 	 */
 	function the_webcomic( $size = 'full', $relative = '', $in_same_term = false, $excluded_terms = false, $taxonomy = 'storyline', $the_post = false ) {
 		echo WebcomicTag::the_webcomic( $size, $relative, $in_same_term, $excluded_terms, $taxonomy, $the_post );
+	}
+}
+
+if ( !function_exists( 'webcomic_count' ) ) {
+	/** Return the number of Webcomic-recognized attachments.
+	 * 
+	 * <code class="php">
+	 * // display the number of Webcomic-recognized attachments found on the current post
+	 * echo webcomic_count();
+	 * 
+	 * if ( 1 < webcomic_count() ) {
+	 * 	// the current post has more than one Webcomic-recognized attachment
+	 * }
+	 * 
+	 * if ( 3 === webcomic_count( 42 ) {
+	 * 	// the post with an ID of 42 has exactly three Webcomic-recognized attachments.
+	 * }
+	 * </code>
+	 * 
+	 * @param mixed The post object or ID to retrieve the attachment count for.
+	 * @return integer
+	 * @uses WebcomicTag::webcomic_count()
+	 */
+	function webcomic_count( $the_post = false ) {
+		return WebcomicTag::webcomic_count( $the_post );
 	}
 }
 
