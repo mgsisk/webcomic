@@ -869,7 +869,7 @@ class WebcomicHelp extends Webcomic {
 	private function collection_settings_posts() {
 		return sprintf( '
 			<p>%s</p>',
-			__( "These settings control some of the basic features of your webcomic posts. Disabling a feature will completely remove it's associated box from the Add New Webcomic and Edit Webcomic screens.  When titles are disabled Webcomic will automatically set the title of new webcomics to their post ID. Featured images require an active theme with featured image support.", 'webcomic' )
+			__( "These settings control some of the basic features of your webcomic posts. Disabling a feature will completely remove it's associated box from the Add New Webcomic and Edit Webcomic screens. When titles are disabled Webcomic will automatically set the title of new webcomics to their post ID. Featured images require an active theme with featured image support.", 'webcomic' )
 		);
 	}
 	
