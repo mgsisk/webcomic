@@ -222,7 +222,7 @@ class WebcomicMedia extends Webcomic {
 				printf( '<div><p>%s</p></div>', __( 'To manage Webcomic Media please attach one or more images to this webcomic.', 'webcomic' ) );
 			}
 		} else {
-			wp_iframe( array( $this, 'media' ), true );
+			wp_iframe( array( $this, 'media_upload_webcomic_media' ), true );
 		}
 	}
 	
