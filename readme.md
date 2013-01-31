@@ -10,6 +10,7 @@ Webcomic is a plugin for [WordPress](//wordpress.org) that provides a host of fe
 
 - [OpenGraph](//ogp.me) and [Twitter Card](//dev.twitter.com/docs/cards) support for any Webcomic-related page.
 - [Twitter](//twitter.com) integration for automatically tweeting new webcomics.
+- [Touch gestures](//github.com/mgsisk/webcomic/wiki/Touch-Gestures) for webcomic navigation.
 - [File management](//github.com/mgsisk/webcomic/wiki/Media) handled through the WordPress Media Library.
 - Each [collection](//github.com/mgsisk/webcomic/wiki/Webcomic-Collections) is now a custom post type with unique [storyline](//github.com/mgsisk/webcomic/wiki/Storylines) and [character](//github.com/mgsisk/webcomic/wiki/Characters) taxonomies.
 - [More](//github.com/mgsisk/webcomic/wiki/General-Settings) [collection](//github.com/mgsisk/webcomic/wiki/Transcript-Settings)-[specific](//github.com/mgsisk/webcomic/wiki/Commerce-Settings) [settings](//github.com/mgsisk/webcomic/wiki/Access-Settings) [provide](//github.com/mgsisk/webcomic/wiki/Post-Settings) [greater](//github.com/mgsisk/webcomic/wiki/Permalink-Settings) [control](//github.com/mgsisk/webcomic/wiki/Twitter-Settings) over each webcomic on your site.
