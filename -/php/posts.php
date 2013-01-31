@@ -140,7 +140,7 @@ class WebcomicPosts extends Webcomic {
 			wp_enqueue_script( 'webcomic-admin-meta' );
 			
 			if ( !in_array( 'editor', self::$config[ 'collections' ][ $screen->id ][ 'supports' ] ) ) {
-				wp_enqueue_media();
+				wp_enqueue_media( array( 'post' => get_post() ) );
 			}
 		}
 	}
