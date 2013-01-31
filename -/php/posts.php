@@ -62,7 +62,7 @@ class WebcomicPosts extends Webcomic {
 		if ( preg_match( '/^edit-webcomic\d+$/', $screen->id ) ) {
 			printf( "<script>webcomic_quick_save( '%s' );webcomic_quick_edit( '%s' );</script>", admin_url(), admin_url() );
 		} elseif ( isset( self::$config[ 'collections' ][ $screen->id ] ) ) {
-			printf( "<script>webcomic_media_meta('%s');webcomic_prints_meta('%s','%s');</script>", admin_url(), self::$config[ 'collections' ][ $screen->id ][ 'commerce' ][ 'currency' ], __( '- SOLD -', 'webcomic' ) );
+			printf( "<script>webcomic_media_meta('%s');webcomic_prints_meta('%s','%s');if(!window.wpActiveEditor)window.wpActiveEditor=false</script>", admin_url(), self::$config[ 'collections' ][ $screen->id ][ 'commerce' ][ 'currency' ], __( '- SOLD -', 'webcomic' ) );
 		}
 	}
 	
