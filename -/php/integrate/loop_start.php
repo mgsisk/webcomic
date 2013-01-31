@@ -32,7 +32,7 @@
 <?php } ?>
 
 <?php if ( is_front_page() ) { ?>
-	<div data-webcomic-container="integrated">
+	<div data-webcomic-container="integrated" data-webcomic-shortcuts data-webcomic-gestures>
 		<div class="integrated-webcomic">
 			<nav class="webcomic-above"><?php first_webcomic_link(); previous_webcomic_link(); random_webcomic_link(); next_webcomic_link(); last_webcomic_link(); ?></nav><!-- .webcomic-above -->
 			<div class="webcomic-img"><?php the_webcomic( 'full', 'next' ); ?></div><!-- .webcomic-img -->

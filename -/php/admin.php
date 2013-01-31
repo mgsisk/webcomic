@@ -92,6 +92,7 @@ class WebcomicAdmin extends Webcomic {
 				'thanks'       => true,
 				'convert'      => false,
 				'dynamic'      => false,
+				'gestures'     => false,
 				'integrate'    => false,
 				'shortcuts'    => false,
 				'uninstall'    => false,

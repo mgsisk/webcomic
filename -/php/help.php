@@ -328,7 +328,7 @@ class WebcomicHelp extends Webcomic {
 			<hr>
 			<p><a href="support@webcomic.nu">%s</a></p>',
 			__( 'For more information:', 'webcomic' ),
-			__( "Beginners Guide", 'webcomic' ),
+			__( "Beginner's Guide", 'webcomic' ),
 			__( 'Video Tutorials', 'webcomic' ),
 			__( 'Support Forum', 'webcomic' ),
 			__( 'Issue Tracker', 'webcomic' ),
@@ -940,28 +940,12 @@ class WebcomicHelp extends Webcomic {
 			<p>%s</p>
 			<ul>
 				<li>%s</li>
-				<li>
-					%s
-					<ul>
-						<li>%s</li>
-						<li>%s</li>
-						<li>%s</li>
-						<li>%s</li>
-						<li>%s</li>
-						<li>%s</li>
-					</ul>
-				</li>
+				<li>%s</li>
 				<li>%s</li>
 			</ul>',
 			__( 'The settings on this page affect your entire site:', 'webcomic' ),
 			__( "<strong>Integrate</strong> - Webcomic will attempt to automatically integrate basic functionality into your site. Integration may not work with certain WordPress themes and plugins.", 'webcomic' ),
-			__( '<strong>Navigate</strong> - Changes how users browse through webcomics on your site. Dynamic navigation will attempt to load webcomics without refreshing the page. This makes browsing significantly faster, but may not work in all situations and will affect cost per impression advertising. When shortcuts are enabled users can press the following button combinations to navigate through webcomics:', 'webcomic' ),
-			__( '<em>&larr;</em> Previous Webcomic', 'webcomic' ),
-			__( '<em>&rarr;</em> Next Webcomic', 'webcomic' ),
-			__( '<em>Shift + &larr;</em> First Webcomic', 'webcomic' ),
-			__( '<em>Shift + &rarr;</em> Last Webcomic', 'webcomic' ),
-			__( '<em>Shift + &darr;</em> Random Webcomic', 'webcomic' ),
-			__( '<em>Shift + &uarr;</em> Purchase Webcomic', 'webcomic' ),
+			sprintf( __( '<strong>Navigate</strong> - Changes how users browse through webcomics on your site. <a href="%1$s" target="_blank">Dynamic navigation</a> will attempt to load webcomics without refreshing the page. This makes browsing significantly faster, but may not work in all situations and will affect cost per impression advertising. When <a href="%2$s" target="_blank">touch gestures</a> are enabled readers can use various touch gestures to navigate your webcomics. When <a href="%3$s" target="_blank">keyboard shortcuts</a> are enabled users can press certain button combinations to navigate through webcomics.', 'webcomic' ), '//github.com/mgsisk/webcomic/wiki/Dynamic-Navigation', '//github.com/mgsisk/webcomic/wiki/Touch-Gestures', '//github.com/mgsisk/webcomic/wiki/Keyboard-Shortcuts' ),
 			__( '<strong>Uninstall</strong> - Deletes all data associated with Webcomic when the plugin is deactivated, including settings, webcomics, storylines, characters, transcripts, and languages (this cannot be undone; uploaded media will not be deleted). You may optionally choose to convert webcomics and transcripts into posts, storylines into categories, and characters and languages into tags.', 'webcomic' )
 		);
 	}

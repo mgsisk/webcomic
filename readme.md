@@ -39,7 +39,7 @@ Once installed and activated you can use Webcomic in one of three ways:
 
 ### Where can I get help with Webcomic?
 
-- [Beginners Guide](//github.com/mgsisk/webcomic/wiki)
+- [Beginner's Guide](//github.com/mgsisk/webcomic/wiki)
 - [Video Tutorials](//vimeo.com/channels/webcomic)
 - [Support Forum](//groups.google.com/d/forum/webcomicnu)
 - [Issue Tracker](//github.com/mgsisk/webcomic/issues)

@@ -230,6 +230,7 @@ class WebcomicConfig extends Webcomic {
 	public function navigate() {
 		?>
 		<label><input type="checkbox" name="webcomic_dynamic" id="webcomic_dynamic"<?php checked( self::$config[ 'dynamic' ] ); ?>> <?php _e( 'Enable dynamic webcomic navigation', 'webcomic' ); ?></label><br>
+		<label><input type="checkbox" name="webcomic_gestures"<?php checked( self::$config[ 'gestures' ] ); ?>> <?php _e( 'Enable touch gestures for webcomic navigation', 'webcomic' ); ?></label><br>
 		<label><input type="checkbox" name="webcomic_shortcuts"<?php checked( self::$config[ 'shortcuts' ] ); ?>> <?php _e( 'Enable keyboard shortcuts for webcomic navigation', 'webcomic' ); ?></label>
 		<?php
 	}
@@ -1009,6 +1010,7 @@ class WebcomicConfig extends Webcomic {
 				}
 			} else {
 				self::$config[ 'dynamic' ]   = isset( $_POST[ 'webcomic_dynamic' ] );
+				self::$config[ 'gestures' ]  = isset( $_POST[ 'webcomic_gestures' ] );
 				self::$config[ 'integrate' ] = isset( $_POST[ 'webcomic_integrate' ] );
 				self::$config[ 'shortcuts' ] = isset( $_POST[ 'webcomic_shortcuts' ] );
 				self::$config[ 'uninstall' ] = isset( $_POST[ 'webcomic_uninstall' ] );

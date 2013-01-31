@@ -894,6 +894,12 @@ class Webcomic {
 			wp_enqueue_script( 'webcomic-dynamic' );
 		}
 		
+		if ( self::$config[ 'gestures' ] ) {
+			wp_register_script( 'webcomic-gestures', self::$url . '-/js/gestures.js', array( 'jquery' ), false, true );
+			
+			wp_enqueue_script( 'webcomic-gestures' );
+		}
+		
 		wp_register_script( 'webcomic-dropdown', self::$url . '-/js/dropdown.js', array( 'jquery' ), false, true );
 		wp_enqueue_script( 'webcomic-dropdown' );
 	}
