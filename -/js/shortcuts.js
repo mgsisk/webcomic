@@ -3,7 +3,7 @@ jQuery( function( $ ) {
 	function webcomic_shortcut( target ) {
 		var $e;
 		
-		if ( $( '[data-webcomic-shortcuts] ' + target + '[href]' ).length ) {
+		if ( $( '[data-webcomic-shortcuts]' ).length ) {
 			$e = $( '[data-webcomic-shortcuts]:first ' + target + '[href]:first' );
 		} else {
 			$e = $( target + '[href]:first' );
