@@ -179,6 +179,7 @@ class Widget_DynamicWebcomic extends WP_Widget {
 	 * @param array $args General widget arguments.
 	 * @param array $instance Specific instance arguments.
 	 * @uses Webcomic::dir()
+	 * @uses Webcomic::config()
 	 * @uses WebcomicTag::get_webcomic_collection()
 	 * @uses WebcomicTag::get_webcomic_collections()
 	 */
@@ -222,9 +223,9 @@ class Widget_DynamicWebcomic extends WP_Widget {
 	 * @return array
 	 */
 	public function update( $new, $old ) {
-		$old[ 'title' ]       = strip_tags( $new[ 'title' ] );
-		$old[ 'reverse' ]     = $new[ 'reverse' ];
-		$old[ 'collection' ]  = $new[ 'collection' ];
+		$old[ 'title' ]      = strip_tags( $new[ 'title' ] );
+		$old[ 'reverse' ]    = $new[ 'reverse' ];
+		$old[ 'collection' ] = $new[ 'collection' ];
 		
 		return $old;
 	}
@@ -241,7 +242,7 @@ class Widget_DynamicWebcomic extends WP_Widget {
 	public function form( $instance ) {
 		extract( $instance );
 		
-		$config     = Webcomic::config();
+		$config = Webcomic::config();
 		
 		if ( $config[ 'dynamic' ] ) { ?>
 		<p>
