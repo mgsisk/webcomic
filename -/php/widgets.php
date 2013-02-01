@@ -766,6 +766,7 @@ class Widget_WebcomicCollections extends WP_Widget {
 		$object = get_queried_object();
 		
 		$a[ 'target' ]           = 'first' === $a[ 'target' ] ? $a[ 'target' ] : 'archive';
+		$a[ 'orderby' ]          = 'name';
 		$a[ 'show_option_none' ] = __( 'Select Collection', 'webcomic' );
 		
 		if ( !empty( $object->query_var ) and preg_match( '/^webcomic\d+$/', $object->query_var ) ) {
