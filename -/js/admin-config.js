@@ -39,8 +39,8 @@ jQuery( function( $ ) {
 		} );
 	} );
 	
-	/** Remove the collection poster. */
-	$( document ).on( 'click', '.webcomic-collection-poster-remove', function() {
+	/** Remove the collection image. */
+	$( document ).on( 'click', '.webcomic-collection-image-x', function() {
 		$.get( url, {
 			id: 0,
 			collection: $( '[name=webcomic_collection]' ).val(),
@@ -68,12 +68,12 @@ jQuery( function( $ ) {
 	$( '.wrap h3:first' ).trigger( 'click' );
 } );
 
-/** Enable fancy collection posters. */
+/** Enable fancy collection images. */
 ( function( $ ) {
 	var frame;
 	
 	$( function() {
-		$( document ). on( 'click', '.webcomic-collection-poster', function( e ) {
+		$( document ). on( 'click', '.webcomic-collection-image', function( e ) {
 			var $e = $( this );
 			
 			e.preventDefault();

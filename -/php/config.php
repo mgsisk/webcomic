@@ -1099,6 +1099,46 @@ class WebcomicConfig extends Webcomic {
 		return ( isset( $_POST[ 'webcomic_general' ] ) or isset( $_POST[ 'webcomic_collection' ] ) ) ? self::$config : $options;
 	}
 	
+	/** Update size information when media options are saved.
+	 * 
+	 * @uses Webcomic::$config
+	 */
+	private function save_sizes() {
+		if ( isset( $_POST[ 'webcomic_media_sizes' ], $_POST[ 'option_page' ], $_POST[ 'action' ] ) and 'media' === $_POST[ 'option_page' ] and 'update' === $_POST[ 'action' ] and wp_verify_nonce( $_POST[ 'webcomic_media_sizes' ], 'webcomic_media_sizes' ) ) {
+			if ( $size = sanitize_title( $_POST[ 'webcomic_new_size' ] ) ) {
+				if ( 'thumb' === $size or 'thumbnail' === $size or 'medium' === $size or 'large' === $size or 'post-thumbnail' === $size ) {
+					wp_die( sprintf( __( 'The name <q>%s</q> is reserved by WordPress.', 'webcomic' ), $size ), __( 'Error | Webcomic', 'webcomic' ) );
+				} elseif ( in_array( $size, get_intermediate_image_sizes() ) ) {
+					wp_die( sprintf( __( 'A size with the name <q>%s</q> already exists.', 'webcomic' ), $size ), __( 'Error | Webcomic', 'webcomic' ) );
+				} else {
+					self::$config[ 'sizes' ][ $size ] = array(
+						'width'  => intval( $_POST[ 'webcomic_new_size_width' ] ),
+						'height' => intval( $_POST[ 'webcomic_new_size_height' ] ),
+						'crop'   => isset( $_POST[ 'webcomic_new_size_crop' ] )
+					);
+				}
+			}
+			
+			if ( !empty( $_POST[ 'webcomic_size' ] ) ) {
+				foreach ( $_POST[ 'webcomic_size' ] as $k => $v ) {
+					self::$config[ 'sizes' ][ $k ] = array(
+						'width'  => intval( $v[ 'width' ] ),
+						'height' => intval( $v[ 'height' ] ),
+						'crop'   => isset( $v[ 'crop' ] )
+					);
+				}
+			}
+			
+			if ( $_POST[ 'webcomic_bulk_size' ] and isset( $_POST[ 'webcomic_sizes' ] ) ) {
+				foreach ( $_POST[ 'webcomic_sizes' ] as $size ) {
+					unset( self::$config[ 'sizes' ][ $size ] );
+				}
+			}
+			
+			update_option( 'webcomic_options', self::$config );
+		}
+	}
+	
 	/** Generic settings section callback.
 	 * 
 	 * Most sections don't include a description, but if permalinks are
@@ -1124,7 +1164,7 @@ class WebcomicConfig extends Webcomic {
 			);
 		}
 		
-		printf( '<input type="hidden" name="webcomic_image" value="%s"><a class="button webcomic-collection-poster" data-title="%s" data-update="%s">%s</a>',
+		printf( '<input type="hidden" name="webcomic_image" value="%s"><a class="button webcomic-collection-image" data-title="%s" data-update="%s">%s</a>',
 			$id,
 			sprintf( __( 'Choose a Poster for %s', 'webcomic' ), esc_attr( self::$config[ 'collections' ][ $collection ][ 'name' ] ) ),
 			__( 'Update', 'webcomic' ),
@@ -1132,7 +1172,7 @@ class WebcomicConfig extends Webcomic {
 		);
 		
 		if ( $id ) {
-			printf( ' <a class="button webcomic-collection-poster-remove">%s</a>', __( 'Remove', 'webcomic' ) );
+			printf( ' <a class="button webcomic-collection-image-x">%s</a>', __( 'Remove', 'webcomic' ) );
 		}
 	}
 	
@@ -1220,46 +1260,6 @@ class WebcomicConfig extends Webcomic {
 			}
 		} else {
 			echo '<span class="description">', __( 'Please enter your <a href="https://dev.twitter.com/apps/new" target="_blank">Twitter Application</a> <b>consumer key</b> and <b>consumer secret</b> below.', 'webcomic' ), '</span>';
-		}
-	}
-	
-	/** Update size information when media options are saved.
-	 * 
-	 * @uses Webcomic::$config
-	 */
-	private function save_sizes() {
-		if ( isset( $_POST[ 'webcomic_media_sizes' ], $_POST[ 'option_page' ], $_POST[ 'action' ] ) and 'media' === $_POST[ 'option_page' ] and 'update' === $_POST[ 'action' ] and wp_verify_nonce( $_POST[ 'webcomic_media_sizes' ], 'webcomic_media_sizes' ) ) {
-			if ( $size = sanitize_title( $_POST[ 'webcomic_new_size' ] ) ) {
-				if ( 'thumb' === $size or 'thumbnail' === $size or 'medium' === $size or 'large' === $size or 'post-thumbnail' === $size ) {
-					wp_die( sprintf( __( 'The name <q>%s</q> is reserved by WordPress.', 'webcomic' ), $size ), __( 'Error | Webcomic', 'webcomic' ) );
-				} elseif ( in_array( $size, get_intermediate_image_sizes() ) ) {
-					wp_die( sprintf( __( 'A size with the name <q>%s</q> already exists.', 'webcomic' ), $size ), __( 'Error | Webcomic', 'webcomic' ) );
-				} else {
-					self::$config[ 'sizes' ][ $size ] = array(
-						'width'  => intval( $_POST[ 'webcomic_new_size_width' ] ),
-						'height' => intval( $_POST[ 'webcomic_new_size_height' ] ),
-						'crop'   => isset( $_POST[ 'webcomic_new_size_crop' ] )
-					);
-				}
-			}
-			
-			if ( !empty( $_POST[ 'webcomic_size' ] ) ) {
-				foreach ( $_POST[ 'webcomic_size' ] as $k => $v ) {
-					self::$config[ 'sizes' ][ $k ] = array(
-						'width'  => intval( $v[ 'width' ] ),
-						'height' => intval( $v[ 'height' ] ),
-						'crop'   => isset( $v[ 'crop' ] )
-					);
-				}
-			}
-			
-			if ( $_POST[ 'webcomic_bulk_size' ] and isset( $_POST[ 'webcomic_sizes' ] ) ) {
-				foreach ( $_POST[ 'webcomic_sizes' ] as $size ) {
-					unset( self::$config[ 'sizes' ][ $size ] );
-				}
-			}
-			
-			update_option( 'webcomic_options', self::$config );
 		}
 	}
 }
