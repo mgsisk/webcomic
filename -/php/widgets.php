@@ -278,7 +278,7 @@ class Widget_DynamicWebcomic extends WP_Widget {
 		</p>
 		<?php } else { ?>
 			<input type="hidden" name="<?php echo $this->get_field_name( 'gestures' ); ?>" value="<?php echo empty( $gestures ) ? '' : $gestures; ?>">
-		<?php { ?>
+		<?php } ?>
 		<?php } else { ?>
 		<p style="color:#bc0b0b"><strong><?php _e( 'Please enable the dynamic navigation option on the Settings > Webcomic administrative page to use this widget.', 'webcomic' ); ?></strong></p>
 		<input type="hidden" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo empty( $title ) ? '' : esc_attr( $title ); ?>">

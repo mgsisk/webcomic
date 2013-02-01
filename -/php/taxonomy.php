@@ -13,7 +13,6 @@ class WebcomicTaxonomy extends Webcomic {
 	 * 
 	 * @uses Webcomic::$config
 	 * @uses WebcomicTaxonomy::admin_init()
-	 * @uses WebcomicTaxonomy::admin_footer()
 	 * @uses WebcomicTaxonomy::edit_term()
 	 * @uses WebcomicTaxonomy::create_term()
 	 * @uses WebcomicTaxonomy::delete_term()
@@ -27,7 +26,6 @@ class WebcomicTaxonomy extends Webcomic {
 	 */
 	public function __construct() {
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
-		add_action( 'admin_footer', array( $this, 'admin_footer' ) );
 		add_action( 'edit_term', array( $this, 'edit_term' ), 10, 3 );
 		add_action( 'create_term', array( $this, 'create_term' ), 10, 3 );
 		add_action( 'delete_term', array( $this, 'delete_term' ), 10, 3 );
@@ -91,19 +89,6 @@ class WebcomicTaxonomy extends Webcomic {
 			} else {
 				self::$error[] = __( 'Item could not be moved.', 'webcomic' );
 			}
-		}
-	}
-	
-	/** Render javascript for webcomic terms.
-	 * 
-	 * @uses Webcomic::$config
-	 * @hook admin_footer
-	 */
-	public function admin_footer() {
-		$screen = get_current_screen();
-		
-		if ( preg_match( '/^edit-webcomic\d+_(storyline|character)$/', $screen->id ) ) {
-			printf( "<script>webcomic_edit_terms( '%s' );</script>", preg_replace( '/^edit-webcomic\d+_/', '', $screen->id ) );
 		}
 	}
 	
@@ -250,9 +235,9 @@ class WebcomicTaxonomy extends Webcomic {
 		$screen = get_current_screen();
 		
 		if ( preg_match( '/^edit-webcomic\d+_(storyline|character)$/', $screen->id ) ) {
-			wp_register_script( 'webcomic-admin-terms', self::$url . '-/js/admin-terms.js', array( 'jquery' ) );
+			wp_register_script( 'webcomic-admin-taxonomy', self::$url . '-/js/admin-taxonomy.js', array( 'jquery' ) );
 			
-			wp_enqueue_script( 'webcomic-admin-terms' );
+			wp_enqueue_script( 'webcomic-admin-taxonomy' );
 		}
 	}
 	
@@ -296,7 +281,7 @@ class WebcomicTaxonomy extends Webcomic {
 			$upload_size = ( integer ) $upload_size;
 		}
 		?>
-		<div class="form-field">
+		<div class="form-field" data-webcomic-taxonomy="<?php echo $storyline ? 'storyline' : 'character'; ?>">
 			<?php
 				if ( is_multisite() and !is_upload_space_available() ) {
 					printf( '<p>%s</p>', sprintf( __( 'Sorry, you have filled your storage quota (%s MB)', 'webcomic' ), get_space_allowed() ) );

@@ -13,13 +13,11 @@ class WebcomicConfig extends Webcomic {
 	 * 
 	 * @uses WebcomicConfig::admin_init()
 	 * @uses WebcomicConfig::admin_menu()
-	 * @uses WebcomicConfig::admin_footer()
 	 * @uses WebcomicConfig::admin_enqueue_scripts()
 	 */
 	public function __construct() {
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
-		add_action( 'admin_footer', array( $this, 'admin_footer' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 	}
 	
@@ -154,18 +152,6 @@ class WebcomicConfig extends Webcomic {
 		}
 	}
 	
-	/** Render javascript for settings pages.
-	 * 
-	 * @hook admin_footer
-	 */
-	public function admin_footer() {
-		$screen = get_current_screen();
-		
-		if ( preg_match( '/^webcomic\d+_page_webcomic\d+-options$/', $screen->id ) ) {
-			printf( "<script>webcomic_slug_preview('%s');webcomic_commerce_defaults('%s');webcomic_twitter_account('%s')</script>", admin_url(), admin_url(), admin_url() );
-		}
-	}
-	
 	/** Register and enqueue settings scripts.
 	 * 
 	 * @uses Webcomic::$url
@@ -189,8 +175,8 @@ class WebcomicConfig extends Webcomic {
 	public function page() {
 		$page = empty( $_GET[ 'post_type' ] ) ? 'webcomic-options' : "{$_GET[ 'post_type' ]}-options";
 		?>
-		<div class="wrap">
-			<div id="icon-options-general" class="icon32"></div>
+		<div class="wrap" >
+			<div id="icon-options-general" class="icon32" data-webcomic-admin-url="<?php echo admin_url(); ?>"></div>
 			<h2><?php echo 'webcomic-options' === $page ? __( 'Webcomic Settings', 'webcomic' ) : sprintf( __( '%s Settings', 'webcomic' ), esc_html( self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'name' ] ) ); ?></h2>
 			<form action="options.php" method="post"<?php echo 'webcomic' !== $page ? ' enctype="multipart/form-data"' : ''; ?>>
 				<?php

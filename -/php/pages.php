@@ -11,7 +11,6 @@
 class WebcomicPages extends Webcomic {
 	/** Register hooks.
 	 * 
-	 * @uses WebcomicPages::admin_footer()
 	 * @uses WebcomicPages::add_meta_boxes()
 	 * @uses WebcomicPages::wp_insert_post()
 	 * @uses WebcomicPages::pre_post_update()
@@ -24,7 +23,6 @@ class WebcomicPages extends Webcomic {
 	 * @uses WebcomicPages::manage_edit_page_sortable_columns()
 	 */
 	public function __construct() {
-		add_action( 'admin_footer', array( $this, 'admin_footer' ) );
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ) );
 		add_action( 'wp_insert_post', array( $this, 'wp_insert_post' ), 10, 2 );
 		add_action( 'pre_post_update', array( $this, 'pre_post_update' ), 10, 1 );
@@ -36,19 +34,6 @@ class WebcomicPages extends Webcomic {
 		add_filter( 'request', array( $this, 'request' ), 10, 1 );
 		add_filter( 'manage_edit-page_columns', array( $this, 'manage_edit_page_columns' ), 10, 1 );
 		add_filter( 'manage_edit-page_sortable_columns', array( $this, 'manage_edit_page_sortable_columns' ), 10, 1 );
-	}
-	
-	/** Render javascript for page meta boxes.
-	 * 
-	 * @uses Webcomic::$config
-	 * @hook admin_footer
-	 */
-	public function admin_footer() {
-		$screen = get_current_screen();
-		
-		if ( 'edit-page' === $screen->id  ) {
-			printf( "<script>webcomic_page_quick_save( '%s' );webcomic_page_quick_edit( '%s' );</script>", admin_url(), admin_url() );
-		}
 	}
 	
 	/** Add page meta boxes.
@@ -127,7 +112,7 @@ class WebcomicPages extends Webcomic {
 		if ( 'webcomic_collection' === $column and 'page' === $type ) {
 			wp_nonce_field( 'webcomic_page_meta_bulk', 'webcomic_page_meta_bulk' );
 		?>
-		<fieldset class="inline-edit-col-right">
+		<fieldset class="inline-edit-col-right" data-webcomic-admin-url="<?php echo admin_url(); ?>">
 			<div class="inline-edit-group">
 				<label class="alignleft">
 					<span class="title"><?php _e( 'Webcomic Collection', 'webcomic' ); ?></span>

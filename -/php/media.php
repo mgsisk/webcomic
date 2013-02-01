@@ -15,7 +15,6 @@ class WebcomicMedia extends Webcomic {
 	 * @uses Webcomic::$notice
 	 * @uses WebcomicMedia::admin_init()
 	 * @uses WebcomicMedia::admin_menu()
-	 * @uses WebcomicMedia::admin_footer()
 	 * @uses WebcomicMedia::delete_attachment()
 	 * @uses WebcomicMedia::admin_enqueue_scripts()
 	 * @uses WebcomicMedia::media_upload_webcomic_media()
@@ -28,7 +27,6 @@ class WebcomicMedia extends Webcomic {
 	public function __construct() {
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
-		add_action( 'admin_footer', array( $this, 'admin_footer' ) );
 		add_action( 'delete_attachment', array( $this, 'delete_attachment' ), 10, 1 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 		add_action( 'media_upload_webcomic_media', array( $this, 'media_upload_webcomic_media' ) );
@@ -183,18 +181,6 @@ class WebcomicMedia extends Webcomic {
 		add_submenu_page( 'upload.php', __( 'Webcomic Generator', 'webcomic' ), __( 'Webcomic Generator', 'webcomic' ), 'upload_files', 'webcomic-generator', array( $this, 'page_generator' ) );
 	}
 	
-	/** Render javascript for the webcomic generator.
-	 * 
-	 * @hook admin_footer
-	 */
-	public function admin_footer() {
-		$screen = get_current_screen();
-		
-		if ( 'media_page_webcomic-generator' === $screen->id ) {
-			printf( "<script>webcomic_generator( '%s' );</script>", __( 'The start date is not one of the selected publish days. Continue anyway?', 'webcomic' ) );
-		}
-	}
-	
 	/** Manage webcomic media from the modal media manager.
 	 * 
 	 * @hook media_upload_webcomic_media
@@ -202,7 +188,7 @@ class WebcomicMedia extends Webcomic {
 	public function media_upload_webcomic_media( $output = false ) {
 		if ( $output ) {
 			if ( $attachments = self::get_attachments( $_GET[ 'post_id' ] ) ) {
-				printf( '<div><p>%s</p><hr></div><ul class="webcomic-media">', __( 'Drag and drop the media attachments to change the order Webcomic will display them.', 'webcomic' ) );
+				printf( '<div data-webcomic-modal-media="%s"><p>%s</p><hr></div><ul class="webcomic-media">', admin_url(), __( 'Drag and drop the media attachments to change the order Webcomic will display them.', 'webcomic' ) );
 				
 				foreach ( $attachments as $attachment ) {
 					printf( '<li><span>%s</span><a href="%s" title="%s">%s</a><a href="%s" title="%s">%s</a><input type="hidden" name="ids[]" value="%s"></li>',
@@ -216,8 +202,6 @@ class WebcomicMedia extends Webcomic {
 						$attachment->ID
 					);
 				}
-				
-				printf( "</ul><script>webcomic_media( '%s' );</script>", admin_url() );
 			} else {
 				printf( '<div><p>%s</p></div>', __( 'To manage Webcomic Media please attach one or more images to this webcomic.', 'webcomic' ) );
 			}
@@ -611,7 +595,7 @@ class WebcomicMedia extends Webcomic {
 		<div class="wrap">
 			<div class="icon32" id="icon-upload"></div>
 			<h2><?php _e( 'Webcomic Generator', 'webcomic' ); ?></h2>
-			<form method="post">
+			<form method="post" class="webcomic-generator" data-webcomic-daycheck="<?php esc_attr_e( 'The start date is not one of the selected publish days. Continue anyway?', 'webcomic' ); ?>">
 				<?php wp_nonce_field( 'webcomic_generate', 'webcomic_generate' ); ?>
 				<div id="col-container">
 					<div id="col-right">

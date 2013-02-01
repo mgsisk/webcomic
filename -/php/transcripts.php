@@ -12,7 +12,6 @@ class WebcomicTranscripts extends Webcomic {
 	/** Register hooks.
 	 * 
 	 * @uses WebcomicTranscripts::delete_post()
-	 * @uses WebcomicTranscripts::admin_footer()
 	 * @uses WebcomicTranscripts::add_meta_boxes()
 	 * @uses WebcomicTranscripts::post_updated()
 	 * @uses WebcomicTranscripts::restrict_manage_posts()
@@ -29,7 +28,6 @@ class WebcomicTranscripts extends Webcomic {
 	 */
 	public function __construct() {
 		add_action( 'delete_post', array( $this, 'delete_post' ) );
-		add_action( 'admin_footer', array( $this, 'admin_footer' ) );
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ) );
 		add_action( 'post_updated', array( $this, 'post_updated' ), 10, 3 );
 		add_action( 'restrict_manage_posts', array( $this, 'restrict_manage_posts' ) );
@@ -57,18 +55,6 @@ class WebcomicTranscripts extends Webcomic {
 		
 		if ( isset( self::$config[ 'collections' ][ get_post_type( $id ) ] ) ) {
 			$wpdb->update( $wpdb->posts, array( 'post_parent' => 0 ), array( 'post_type' => 'webcomic_transcript', 'post_parent' => $id ) );
-		}
-	}
-	
-	/** Render javascript for the webcomic meta boxes.
-	 * 
-	 * @hook admin_footer
-	 */
-	public function admin_footer() {
-		$screen = get_current_screen();
-		
-		if ( 'webcomic_transcript' === $screen->id ) {
-			printf( "<script>webcomic_transcript_meta('%s');</script>", admin_url() );
 		}
 	}
 	
@@ -420,7 +406,7 @@ class WebcomicTranscripts extends Webcomic {
 		wp_nonce_field( 'webcomic_meta_parent', 'webcomic_meta_parent' );
 		?>
 		<style>#webcomic_post_preview{overflow:auto}</style>
-		<p>
+		<p data-webcomic-admin-url="<?php echo admin_url(); ?>">
 			<select name="webcomic_collection" id="webcomic_collection" disabled>
 				<optgroup label="<?php esc_attr_e( 'Collection', 'webcomic' ); ?>">
 				<?php

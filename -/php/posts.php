@@ -12,7 +12,6 @@ class WebcomicPosts extends Webcomic {
 	/** Register hooks.
 	 * 
 	 * @uses Webcomic::$config
-	 * @uses WebcomicPosts::admin_footer()
 	 * @uses WebcomicPosts::add_meta_boxes()
 	 * @uses WebcomicPosts::pre_post_update()
 	 * @uses WebcomicPosts::update_collection()
@@ -29,7 +28,6 @@ class WebcomicPosts extends Webcomic {
 	 * @uses WebcomicPosts::manage_edit_webcomic_columns()
 	 */
 	public function __construct() {
-		add_action( 'admin_footer', array( $this, 'admin_footer' ) );
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ) );
 		add_action( 'pre_post_update', array( $this, 'pre_post_update' ), 10, 1 );
 		add_action( 'wp_insert_post', array( $this, 'update_collection' ), 10, 2 );
@@ -48,21 +46,6 @@ class WebcomicPosts extends Webcomic {
 			
 			add_filter( "views_edit-{$k}", array( $this, 'view_edit_webcomic' ), 10, 1 );
 			add_filter( "manage_edit-{$k}_columns", array( $this, 'manage_edit_webcomic_columns' ), 10, 1 );
-		}
-	}
-	
-	/** Render javascript for webcomic meta boxes.
-	 * 
-	 * @uses Webcomic::$config
-	 * @hook admin_footer
-	 */
-	public function admin_footer() {
-		$screen = get_current_screen();
-		
-		if ( preg_match( '/^edit-webcomic\d+$/', $screen->id ) ) {
-			printf( "<script>webcomic_quick_save( '%s' );webcomic_quick_edit( '%s' );</script>", admin_url(), admin_url() );
-		} elseif ( isset( self::$config[ 'collections' ][ $screen->id ] ) ) {
-			printf( "<script>webcomic_media_meta('%s');webcomic_prints_meta('%s','%s');if(!window.wpActiveEditor)window.wpActiveEditor=false</script>", admin_url(), self::$config[ 'collections' ][ $screen->id ][ 'commerce' ][ 'currency' ], __( '- SOLD -', 'webcomic' ) );
 		}
 	}
 	
@@ -289,7 +272,7 @@ class WebcomicPosts extends Webcomic {
 		if ( 'webcomic_attachments' === $column and preg_match( '/^webcomic\d+$/', $type ) ) {
 			wp_nonce_field( 'webcomic_meta_bulk', 'webcomic_meta_bulk' );
 		?>
-		<fieldset class="inline-edit-col-right">
+		<fieldset class="inline-edit-col-right" data-webcomic-admin-url="<?php echo admin_url(); ?>">
 			<div class="inline-edit-group">
 				<label class="alignleft">
 					<span class="title"><?php _e( 'Transcribe', 'webcomic' ); ?></span>
@@ -471,7 +454,7 @@ class WebcomicPosts extends Webcomic {
 	 */
 	public function box_media( $post ) {
 		?>
-		<div id="webcomic_media_preview"><?php self::ajax_media_preview( $post->ID ); ?></div>
+		<div id="webcomic_media_preview" data-webcomic-admin-url="<?php echo admin_url(); ?>"><?php self::ajax_media_preview( $post->ID ); ?></div>
 		<?php
 	}
 	
@@ -487,7 +470,7 @@ class WebcomicPosts extends Webcomic {
 		wp_nonce_field( 'webcomic_meta_commerce', 'webcomic_meta_commerce' );
 		?>
 		<p><label><input type="checkbox" name="webcomic_commerce_prints"<?php checked( ( 'auto-draft' === $post->post_status and self::$config[ 'collections' ][ $post->post_type ][ 'commerce' ][ 'prints' ] ) or ( self::$config[ 'collections' ][ $post->post_type ][ 'commerce' ][ 'business' ] and get_post_meta( $post->ID, 'webcomic_prints', true ) ) ); disabled( !self::$config[ 'collections' ][ $post->post_type ][ 'commerce' ][ 'business' ] ); ?>> <?php _e( 'Sell prints', 'webcomic' ); ?></label></p>
-		<div style="margin:0 -11px">
+		<div style="margin:0 -11px" data-webcomic-currency="<?php echo self::$config[ 'collections' ][ $post->post_type ][ 'commerce' ][ 'currency' ]; ?>" data-webcomic-original="<?php esc_attr_e( '- SOLD -', 'webcomic' ); ?>">
 			<table class="widefat fixed">
 				<thead>
 					<tr>

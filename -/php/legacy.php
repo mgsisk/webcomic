@@ -22,7 +22,6 @@ class WebcomicLegacy extends Webcomic {
 	 * @uses WebcomicLegacy::init()
 	 * @uses WebcomicLegacy::admin_init()
 	 * @uses WebcomicLegacy::admin_menu()
-	 * @uses WebcomicLegacy::admin_footer()
 	 * @uses WebcomicLegacy::admin_notices()
 	 * @uses WebcomicLegacy::admin_enqueue_scripts()
 	 * @uses WebcomicLegacy::list_term_exclusions()
@@ -33,7 +32,6 @@ class WebcomicLegacy extends Webcomic {
 		add_action( 'init', array( $this, 'init' ) );
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
-		add_action( 'admin_footer', array( $this, 'admin_footer' ) );
 		add_action( 'admin_notices', array( $this, 'admin_notices' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 		add_action( 'list_term_exclusions', array( $this, 'list_term_exclusions' ), 10, 2 );
@@ -128,18 +126,6 @@ class WebcomicLegacy extends Webcomic {
 		add_submenu_page( 'tools.php', __( 'Upgrade Webcomic', 'webcomic' ), __( 'Upgrade Webcomic', 'webcomic' ), 'manage_options', 'webcomic-upgrader', array( $this, 'page' ) );
 	}
 	
-	/** Render javascript for upgrade page.
-	 * 
-	 * @hook admin_footer
-	 */
-	public function admin_footer() {
-		$screen = get_current_screen();
-		
-		if ( 'tools_page_webcomic-upgrader' === $screen->id ) {
-			printf( "<script>webcomic_auto_upgrade('%s')</script>", __( 'Continuing upgrade&hellip;', 'webcomic' ) );
-		}
-	}
-	
 	/** Render upgrade tool notification.
 	 * 
 	 * @return null
@@ -223,7 +209,7 @@ class WebcomicLegacy extends Webcomic {
 					
 					<p style="color:#e66f00;font-size:larger"><strong><?php _e( 'Webcomic has paused the upgrade to prevent a timeout error.', 'webcomic' ); ?></strong></p>
 					<p><?php _e( 'The upgrade will automatically resume in 5 seconds, or you may click <strong>Continue Upgrading</strong> to resume now.', 'webcomic' ); ?></p>
-					<form method="post" class="webcomic-auto">
+					<form method="post" class="webcomic-auto" data-webcomic-upgrade-continue="<?php _e( 'Continuing upgrade&hellip;', 'webcomic' ); ?>">
 						<?php wp_nonce_field( 'webcomic_upgrade', 'webcomic_upgrade' ); ?>
 						<div class="form-wrap">
 							<?php submit_button( __( 'Continue Upgrading', 'webcomic' ), 'primary', 'upgrade_legacy', false ); ?>
