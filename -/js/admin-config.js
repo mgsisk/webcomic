@@ -39,6 +39,17 @@ jQuery( function( $ ) {
 		} );
 	} );
 	
+	/** Remove the collection poster. */
+	$( document ).on( 'click', '.webcomic-collection-poster-remove', function() {
+		$.get( url, {
+			id: 0,
+			collection: $( '[name=webcomic_collection]' ).val(),
+			webcomic_admin_ajax: 'WebcomicConfig::ajax_collection_image'
+		}, function( data ) {
+			$( '#webcomic_collection_image' ).html( data );
+		} );
+	} );
+	
 	/** Toggle collection setting sections. */
 	$( '.wrap h3' ).css( {
 		'border-top': 'thin solid #dfdfdf',
@@ -56,3 +67,44 @@ jQuery( function( $ ) {
 	
 	$( '.wrap h3:first' ).trigger( 'click' );
 } );
+
+/** Enable fancy collection posters. */
+( function( $ ) {
+	var frame;
+	
+	$( function() {
+		$( document ). on( 'click', '.webcomic-collection-poster', function( e ) {
+			var $e = $( this );
+			
+			e.preventDefault();
+			
+			if ( frame ) {
+				frame.open();
+				
+				return;
+			}
+			
+			frame = wp.media.frames.webcomicPoster = wp.media( {
+				title: $e.data( 'title' ),
+				library: {
+					type: 'image'
+				},
+				button: {
+					text: $e.data( 'update' )
+				}
+			} );
+			
+			frame.on( 'select', function() {
+				$.get( $( '[data-webcomic-admin-url]' ).data( 'webcomic-admin-url' ), {
+					id: frame.state().get( 'selection' ).first().id,
+					collection: $( '[name=webcomic_collection]' ).val(),
+					webcomic_admin_ajax: 'WebcomicConfig::ajax_collection_image'
+				}, function( data ) {
+					$( '#webcomic_collection_image' ).html( data );
+				} );
+			} );
+			
+			frame.open();
+		} );
+	} );
+}( jQuery ) );
