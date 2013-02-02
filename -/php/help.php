@@ -500,7 +500,7 @@ class WebcomicHelp extends Webcomic {
 	private function edit_transcript_authors() {
 		return sprintf( '
 			<p>%s</p>',
-			__( 'Identified but unregistered users that submit or improve a transcript will be listed in the Transcript Authors box. These additional authors may be displayed alongside (or instead of) the registered author to provide appropriate transcription credit on your site. Authors may be removed by checking the box next to their name and saving the transcript. Additional authors may be added by clicking the <em>Add Author</em> button and filling in the authors name; email, url, IP address, and transcription date are optional.', 'webcomic' )
+			__( 'Identified but unregistered users that submit or improve a transcript will be listed in the Transcript Authors box. These additional authors may be displayed alongside (or instead of) the registered author to provide appropriate transcription credit on your site. Authors may be removed by checking the box next to their name and saving the transcript. Additional authors may be added by clicking the <strong>Add Author</strong> button and filling in the authors name; email, url, IP address, and transcription date are optional.', 'webcomic' )
 		);
 	}
 	
@@ -588,8 +588,8 @@ class WebcomicHelp extends Webcomic {
 		return sprintf( '
 			<p>%s</p>
 			<p>%s</p>',
-			__( "To attach a file to your webcomic, click <em>Add Media</em> in the Webcomic Media box or above the webcomic editor and follow the instructions. Webcomic will automatically recognize any images uploaded to this webcomic, so as long as you've enabled the <em>Integrate</em> option, are using a Webcomic-ready theme, or have added Webcomic's template tags to your theme you do not need to insert the images into your post. The Webcomic Media box will show previews of all the images attached to your webcomic after the media popup has been dismissed.", 'webcomic' ),
-			__( "Once one or more images have been attached to a webcomic you can view them in the <em>Webcomic Media</em> tab in the media popup. From here you can rearrange the images to change the order Webcomic will display them in, regenerate the alternate image sizes (useful if you've updated the dimensions for your thumbnail, medium, or large images or added new alternate sizes), or detach them from the current webcomic.", 'webcomic' )
+			__( "To attach a file to your webcomic, click <strong>Add Media</strong> in the Webcomic Media box or above the webcomic editor and follow the instructions. Webcomic will automatically recognize any images uploaded to this webcomic, so as long as you've enabled the <strong>Integrate</strong> option, are using a Webcomic-ready theme, or have added Webcomic's template tags to your theme you do not need to insert the images into your post. The Webcomic Media box will show previews of all the images attached to your webcomic after the media popup has been dismissed.", 'webcomic' ),
+			__( "Once one or more images have been attached to a webcomic you can view them in the <strong>Webcomic Media</strong> tab in the media popup. From here you can rearrange the images to change the order Webcomic will display them in, regenerate the alternate image sizes (useful if you've updated the dimensions for your thumbnail, medium, or large images or added new alternate sizes), or detach them from the current webcomic.", 'webcomic' )
 		);
 	}
 	
@@ -626,7 +626,7 @@ class WebcomicHelp extends Webcomic {
 			<p>%s</p>
 			<p>%s</p>',
 			__( "<strong>Sell Prints</strong> - Check this option to sell prints of this webcomic using your collection commerce settings. This option is unavailable if you haven't specified a business on the collection settings page.", 'webcomic' ),
-			__( 'The table in the commerce box displays the default prices and shipping for domestic, international, and original prints, as well as the total cost of each. You can adjust these prices by setting a premium or discount, and the total will adjust to show what the new price will be when you update the webcomic. Uncheck the <em>Original</em> print option if the original print (for traditional media webcomics) has been sold or is otherwise unavailable.', 'webcomic' )
+			__( 'The table in the commerce box displays the default prices and shipping for domestic, international, and original prints, as well as the total cost of each. You can adjust these prices by setting a premium or discount, and the total will adjust to show what the new price will be when you update the webcomic. Uncheck the <strong>Original</strong> print option if the original print (for traditional media webcomics) has been sold or is otherwise unavailable.', 'webcomic' )
 		);
 	}
 	
@@ -882,7 +882,7 @@ class WebcomicHelp extends Webcomic {
 		return sprintf( '
 			<p>%s</p>
 			<p>%s</p>',
-			sprintf( __( 'These settings affect the URL structure of the collection archive, webcomics, storylines, and characters. To the right of each input is an example URL that will update when the slug options are changed. The slug for single webcomics may accept a number of tags, including %%year%%, %%monthnum%%, %%day%%, %%hour%%, %%minute%%, %%second%%, %%post_id%%, %%author%%, and %%%s%%.', 'webcomic' ), "{$screen->post_type}_storyline" ),
+			sprintf( __( 'These settings affect the URL structure of the collection archive, webcomics, storylines, and characters. To the right of each input is an example URL that will update when the slug options are changed. The slug for single webcomics accepts a number of tags, including %%year%%, %%monthnum%%, %%day%%, %%hour%%, %%minute%%, %%second%%, %%post_id%%, %%author%%, and %%%s%%.', 'webcomic' ), "{$screen->post_type}_storyline" ),
 			sprintf( __( 'Be careful when modifying permalinks: incorrect settings may result in broken pages. <a href="%s" target="_blank">Read more about permalinks at the WordPress Codex &raquo;</a>', 'webcomic' ), 'http://codex.wordpress.org/Using_Permalinks' )
 		);
 		/*
@@ -958,8 +958,8 @@ class WebcomicHelp extends Webcomic {
 		return sprintf( '
 			<p>%s</p>
 			<p>%s</p>',
-			__( 'The Collections section provides a general overview of all of the collections on your site. To add a new collection enter a name in the box above the list and click <em>Add Collection</em>.', 'webcomic' ),
-			__( 'To delete a collection, check the box next to it and select either <em>Delete Permanently</em> or <em>Delete and Save</em> from the Bulk Actions dropdown at the bottom of the list. If <em>Delete and Save</em> is selected the checked collections will have their webcomics and transcripts converted into posts, storylines converted into categories, and characters converted into tags before being deleted.', 'webcomic' )
+			__( 'The Collections section provides a general overview of all of the collections on your site. To add a new collection enter a name in the box above the list and click <strong>Add Collection</strong>.', 'webcomic' ),
+			__( 'To delete a collection, check the box next to it and select either <strong>Delete Permanently</strong> or <strong>Delete and Save</strong> from the Bulk Actions dropdown at the bottom of the list. If <strong>Delete and Save</strong> is selected the checked collections will have their webcomics and transcripts converted into posts, storylines converted into categories, and characters converted into tags before being deleted.', 'webcomic' )
 		);
 	}
 	
@@ -976,11 +976,11 @@ class WebcomicHelp extends Webcomic {
 				<li>%s</li>
 			</ul>
 			<p>%s</p>',
-			__( "The Additional Image Sizes section lists the image sizes that have been added to your site beyond the WordPress defaults of thumbnail, medium, and large. To add a new size, you'll fill in the following fields at the top of the list and click <em>Save Changes</em>:", 'webcomic' ),
+			__( "The Additional Image Sizes section lists the image sizes that have been added to your site beyond the WordPress defaults of thumbnail, medium, and large. To add a new size, you'll fill in the following fields at the top of the list and click <strong>Save Changes</strong>:", 'webcomic' ),
 			__( '<strong>Name</strong> - How the size is identified. Should be a "slug" containing only letters, numbers, and hyphens.', 'webcomic' ),
 			__( '<strong>Dimensions</strong> - The next two fields are for the maximum width and height of the new image size.', 'webcomic' ),
 			__( '<strong>Crop</strong> - Whether images should be hard cropped to the specified dimensions or proportionally resized.', 'webcomic' ),
-			__( 'Sizes may be adjusted by editing the width, height, and crop of the size within the list and clicking <em>Save Changes</em>. Sizes my be deleted by checking the box next to one or more sizes name, selecting <em>Delete</em> from the Bulk Actions dropdown below the list, and clicking <em>Save Changes</em>. Sizes added outside of this section cannot be edited, but are listed for informational purposes.', 'webcomic' )
+			__( 'Sizes may be adjusted by editing the width, height, and crop of the size within the list and clicking <strong>Save Changes</strong>. Sizes my be deleted by checking the box next to one or more sizes name, selecting <strong>Delete</strong> from the Bulk Actions dropdown below the list, and clicking <strong>Save Changes</strong>. Sizes added outside of this section cannot be edited, but are listed for informational purposes.', 'webcomic' )
 		);
 	}
 	
@@ -1002,7 +1002,7 @@ class WebcomicHelp extends Webcomic {
 			<p>%s</p>',
 			__( "The Webcomic Commerce tool displays the PayPal Instant Payment Notification (IPN) data that Webcomic has recorded, including:", 'webcomic' ),
 			__( '<strong>Transaction</strong> - The transaction ID provided by PayPal.', 'webcomic' ),
-			__( "<strong>Item</strong> - The item ID generated by Webcomic and sent to PayPal. Item ID's may appear as a collection ID for donations (like <em>webcomic42</em>) or as a post ID, collection ID, and type string for print sales (like <em>101-webcomic42-domestic</em>).", 'webcomic' ),
+			__( "<strong>Item</strong> - The item ID generated by Webcomic and sent to PayPal. Item ID's may appear as a collection ID for donations (like <strong>webcomic42</strong>) or as a post ID, collection ID, and type string for print sales (like <strong>101-webcomic42-domestic</strong>).", 'webcomic' ),
 			__( '<strong>Message</strong> - A transaction message generated by Webcomic.', 'webcomic' ),
 			__( '<strong>Date</strong> - The date the transaction took place. Hover over the date to see the full timestamp provided by PayPal.', 'webcomic' ),
 			__( 'Webcomic records this data for informational purposes only, such as noting transaction errors (which will appear as bold red entries in the list). Similar information should be available through your PayPal account. You may remove all of the IPN data Webcomic has recorded by clicking <strong>Empty Log</strong> at the bottom of the list.', 'webcomic' )
@@ -1024,10 +1024,10 @@ class WebcomicHelp extends Webcomic {
 				<li>%s</li>
 			</ol>',
 			sprintf( __( 'The Upgrade Webcomic tool attempts to automatically convert your existing Webcomic %1$s data to Webcomic %2$s. Depending on the size of your site the upgrade may require multiple steps. If you do not want to upgrade click <strong>Not Interested</strong> to uninstall Webcomic %2$s. If you\'re upgrading to Webcomic 4 from Webcomic 1, 2, or 3 please read the following carefully:', 'webcomic' ), self::$config[ 'legacy' ], self::$version ),
-			sprintf( __( 'Upgrades are not reversible and, once begun, should not be stopped. You should <a href="%1$s">backup your site</a> before starting the <em>irreversible</em>, <em>unstoppable</em> upgrade, or click <strong>Not Interested</strong> to uninstall Webcomic %2$s.', 'webcomic' ), esc_url( admin_url( 'export.php' ) ), self::$version ),
+			sprintf( __( 'Upgrades are not reversible and, once begun, should not be stopped. You should <a href="%1$s">backup your site</a> before starting the <strong>irreversible</strong>, <strong>unstoppable</strong> upgrade, or click <strong>Not Interested</strong> to uninstall Webcomic %2$s.', 'webcomic' ), esc_url( admin_url( 'export.php' ) ), self::$version ),
 			sprintf( __( 'Webcomic %s uses <a href="%1$s" target="_blank">the WordPress Media Library</a> for file management. All of your existing webcomic files must be imported into the media library during the upgrade. Existing files will not be moved or deleted; they will be <strong>copied</strong> into the media library. You may want to <a href="%2$s">adjust your image size settings</a> prior to upgrading.', 'webcomic' ), 'http://codex.wordpress.org/Media_Library_Screen', admin_url( 'options-media.php' ) ),
 			sprintf( __( "The permalink URL's to your webcomics may change after upgrading. Permalinks <a href='%s' target=''>may be customized</a> for each of your collections once the upgrade is complete.", 'webcomic' ), '//github.com/mgsisk/webcomic/wiki/Permalink-Settings' ),
-			sprintf( __( 'Webcomic 1, 2, and 3 themes are <em>not</em> compatible with Webcomic 4, but a selection of <a href="%1$s" target="_blank">new Webcomic-ready themes</a>. are available for Webcomic %2$s.', 'webcomic' ), 'http://webcomic.nu', self::$version ),
+			sprintf( __( 'Webcomic 1, 2, and 3 themes are <strong>not</strong> compatible with Webcomic 4, but a selection of <a href="%1$s" target="_blank">new Webcomic-ready themes</a>. are available for Webcomic %2$s.', 'webcomic' ), 'http://webcomic.nu', self::$version ),
 			sprintf( __( "Webcomic %s includes an array of new <a href='//github.com/mgsisk/webcomic/wiki/Template-Tags-and-Shortcodes' target='_blank'>template tags, shortcodes</a>, and <a href='//github.com/mgsisk/webcomic/wiki/Widgets' target='_blank'>widgets</a> that function differently from previous versions. If you have customized an existing WordPress theme or built your own using Webcomic's template tags, shortcodes, and/or widgets your theme may need to be updated.", 'webcomic' ), self::$version )
 		);
 	}
