@@ -252,9 +252,9 @@ class WebcomicMedia extends Webcomic {
 		}
 		
 		if ( isset( $_GET[ 'tab' ] ) and 'webcomic_media' === $_GET[ 'tab' ] ) {
-			wp_register_style( 'webcomic-media', self::$url . '-/css/admin-media.css' );
+			wp_register_style( 'webcomic-admin-media', self::$url . '-/css/admin-media.css' );
 			
-			wp_enqueue_style( 'webcomic-media' );
+			wp_enqueue_style( 'webcomic-admin-media' );
 		}
 	}
 	
@@ -403,6 +403,7 @@ class WebcomicMedia extends Webcomic {
 			<h2><?php _e( 'Webcomic Attacher', 'webcomic' ); ?></h2>
 			<div id="col-container">
 				<div id="col-right">
+					<div class="col-wrap">
 					<?php
 						if ( $_POST ) {
 							$matches = $dupe = array();
@@ -517,6 +518,7 @@ class WebcomicMedia extends Webcomic {
 							<input type="hidden" name="webcomic_action" value="attach">
 						</form>
 					<?php } ?>
+					</div>
 				</div>
 				<div id="col-left">
 					<form method="post">
@@ -599,26 +601,28 @@ class WebcomicMedia extends Webcomic {
 				<?php wp_nonce_field( 'webcomic_generate', 'webcomic_generate' ); ?>
 				<div id="col-container">
 					<div id="col-right">
-						<table class="wp-list-table widefat fixed posts">
-							<thead><?php echo $columns; ?></thead>
-							<tfoot><?php echo $columns; ?></tfoot>
-							<tbody>
-								<?php $i = 0; if ( $attachments ) { foreach ( $attachments as $attachment ) { $post = $attachment; ?>
-								<tr<?php echo $i % 2 ? '' : ' class="alternate"'; ?>>
-									<th class="check-column"><input type="checkbox" name="attachments[]" id="attachment-<?php echo $attachment->ID; ?>" value="<?php echo $attachment->ID; ?>"></th>
-									<td class="media-icon"><label for="attachment-<?php echo $attachment->ID; ?>"><?php echo wp_get_attachment_image( $attachment->ID, array( 60, 60 ) ); ?></label></td>
-									<td>
-										<a href="<?php echo esc_url( add_query_arg( array( 'post' => $attachment->ID, 'action' => 'edit' ), admin_url( 'post.php' ) ) ); ?>"><span class="row-title"><?php echo get_the_title( $attachment->ID ); ?></span></a><b><?php _media_states( $attachment ); ?></b>
-										<p><?php echo ( preg_match( '/^.*?\.(\w+)$/', get_attached_file( $attachment->ID ), $matches ) ) ? esc_html( strtoupper( $matches[ 1 ] ) ) : strtoupper( str_replace( 'image/', '', get_post_mime_type( $attachment->ID ) ) ); ?></p>
-									</td>
-								</tr>
-								<?php $i++; } } else { ?>
-								<tr class="no-items">
-									<td colspan="3"><?php _e( 'No unattached media found.', 'webcomic' ); ?></td>
-								</tr>
-								<?php } ?>
-							</tbody>
-						</table>
+						<div class="col-wrap">
+							<table class="wp-list-table widefat fixed posts">
+								<thead><?php echo $columns; ?></thead>
+								<tfoot><?php echo $columns; ?></tfoot>
+								<tbody>
+									<?php $i = 0; if ( $attachments ) { foreach ( $attachments as $attachment ) { $post = $attachment; ?>
+									<tr<?php echo $i % 2 ? '' : ' class="alternate"'; ?>>
+										<th class="check-column"><input type="checkbox" name="attachments[]" id="attachment-<?php echo $attachment->ID; ?>" value="<?php echo $attachment->ID; ?>"></th>
+										<td class="media-icon"><label for="attachment-<?php echo $attachment->ID; ?>"><?php echo wp_get_attachment_image( $attachment->ID, array( 60, 60 ) ); ?></label></td>
+										<td>
+											<a href="<?php echo esc_url( add_query_arg( array( 'post' => $attachment->ID, 'action' => 'edit' ), admin_url( 'post.php' ) ) ); ?>"><span class="row-title"><?php echo get_the_title( $attachment->ID ); ?></span></a><b><?php _media_states( $attachment ); ?></b>
+											<p><?php echo ( preg_match( '/^.*?\.(\w+)$/', get_attached_file( $attachment->ID ), $matches ) ) ? esc_html( strtoupper( $matches[ 1 ] ) ) : strtoupper( str_replace( 'image/', '', get_post_mime_type( $attachment->ID ) ) ); ?></p>
+										</td>
+									</tr>
+									<?php $i++; } } else { ?>
+									<tr class="no-items">
+										<td colspan="3"><?php _e( 'No unattached media found.', 'webcomic' ); ?></td>
+									</tr>
+									<?php } ?>
+								</tbody>
+							</table>
+						</div>
 					</div>
 					<div id="col-left">
 						<div class="col-wrap">

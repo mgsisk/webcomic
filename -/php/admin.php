@@ -428,7 +428,7 @@ class WebcomicAdmin extends Webcomic {
 			new WebcomicHelp( $screen );
 			
 			if ( preg_match( '/^(edit-)?webcomic_(transcript|language)$/', $screen->id ) ) {
-				echo '<style>#icon-edit{background:url("', self::$url, '-/img/transcript.png")}</style>';;
+				echo '<style>#icon-edit{background:url("', self::$url, '-/img/transcript.png")}</style>';
 			} elseif ( preg_match( '/^(edit-)?webcomic\d+(_storyline|_character)?$/', $screen->id ) ) {
 				echo '<style>#icon-edit{background:url("', self::$url, '-/img/webcomic.png")}</style>';
 			}

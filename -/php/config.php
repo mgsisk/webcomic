@@ -392,6 +392,7 @@ class WebcomicConfig extends Webcomic {
 	/** Render the Cover setting.
 	 * 
 	 * @uses Webcomic::$config
+	 * @uses WebcomicConfig::ajax_collection_image()
 	 */
 	public function collection_image() {
 		?>

@@ -266,6 +266,7 @@ class WebcomicTaxonomy extends Webcomic {
 	 * 
 	 * @filter integer webcomic_upload_size_limit Filters the maximum allowed upload size for cover and avatar uploads. Defaults to the value returned by `wp_max_upload_size`.
 	 * @param string $taxonomy The add term form taxonomy.
+	 * @uses WebcomciTaxonomy::ajax_term_image()
 	 * @hook (webcomic\d+)_storyline_add_form_fields
 	 * @hook (webcomic\d+)_character_add_form_fields
 	 */
