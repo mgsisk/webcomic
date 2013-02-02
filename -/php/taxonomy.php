@@ -22,7 +22,8 @@ class WebcomicTaxonomy extends Webcomic {
 	 * @uses WebcomicTaxonomy::edit_form_fields()
 	 * @uses WebcomicTaxonomy::storyline_row_actions()
 	 * @uses WebcomicTaxonomy::manage_custom_column()
-	 * @uses WebcomicTaxonomy::manage_edit_columns()
+	 * @uses WebcomicTaxonomy::manage_edit_webcomic_storyline_columns()
+	 * @uses WebcomicTaxonomy::manage_edit_webcomic_character_columns()
 	 */
 	public function __construct() {
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
@@ -235,6 +236,7 @@ class WebcomicTaxonomy extends Webcomic {
 	 */
 	public function admin_enqueue_scripts() {
 		$screen = get_current_screen();
+		
 		if ( preg_match( '/^edit-webcomic\d+_(storyline|character)$/', $screen->id ) ) {
 			wp_register_script( 'webcomic-admin-taxonomy', self::$url . '-/js/admin-taxonomy.js', array( 'jquery' ) );
 			
