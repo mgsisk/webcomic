@@ -790,7 +790,7 @@ class WebcomicHelp extends Webcomic {
 			__( 'These settings allow you to change some of the basic information and features related to your collection:', 'webcomic' ),
 			__( '<strong>Name</strong> - The name is how it appears on your site.', 'webcomic' ),
 			__( '<strong>Description</strong> - The description is not prominent by default; it may be used in various ways, however.', 'webcomic' ),
-			__( '<strong>Poster</strong> - The poster is a representative image that can be displayed on your site. Posters are uploaded to the Media Library.', 'webcomic' ),
+			__( '<strong>Poster</strong> - The poster is a representative image that can be displayed on your site.', 'webcomic' ),
 			__( '<strong>Theme</strong> - Determines what theme will be used when a user is viewing a page related to this collection.', 'webcomic' ),
 			__( '<strong>Buffers</strong> - Sends daily email reminders to the specified address starting however many days prior to the buffer expiration you specify.', 'webcomic' ),
 			__( '<strong>Feeds</strong> - Integrates webcomic posts into the main syndication feed and shows a webcomic preview of the specified size in syndication feeds.', 'webcomic' )
@@ -882,7 +882,7 @@ class WebcomicHelp extends Webcomic {
 		return sprintf( '
 			<p>%s</p>
 			<p>%s</p>',
-			sprintf( __( 'These settings affect the URL structure of the collection archive, webcomics, storylines, and characters. To the right of each input is an example URL that will update when the slug options are changed. The slug for single webcomics accepts a number of tags, including %%year%%, %%monthnum%%, %%day%%, %%hour%%, %%minute%%, %%second%%, %%post_id%%, %%author%%, and %%%s%%.', 'webcomic' ), "{$screen->post_type}_storyline" ),
+			sprintf( __( 'These settings affect the URL structure of the collection archive, webcomics, storylines, and characters. To the right of each input is an example URL that will update when the slug options are changed. The slug for single webcomics accepts <a href="%s" target="_blank">a number of tags</a>, including %%year%%, %%monthnum%%, %%day%%, %%hour%%, %%minute%%, %%second%%, %%post_id%%, %%author%%, and %%%s%%.', 'webcomic' ), '//github.com/mgsisk/webcomic/wiki/Permalink-Settings', "{$screen->post_type}_storyline" ),
 			sprintf( __( 'Be careful when modifying permalinks: incorrect settings may result in broken pages. <a href="%s" target="_blank">Read more about permalinks at the WordPress Codex &raquo;</a>', 'webcomic' ), 'http://codex.wordpress.org/Using_Permalinks' )
 		);
 		/*
