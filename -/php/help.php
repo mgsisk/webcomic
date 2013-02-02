@@ -55,7 +55,7 @@ class WebcomicHelp extends Webcomic {
 	 * @uses WebcomicHelp::collection_settings_twitter()
 	 */
 	public function __construct( $screen ) {
-		if ( 'options-media' !== $screen->id ) {
+		if ( 'options-media' !== $screen->id and 'page' !== $screen->id ) {
 			$screen->set_help_sidebar( $this->sidebar() );
 		}
 		
@@ -687,7 +687,7 @@ class WebcomicHelp extends Webcomic {
 			__( '<strong>Slug</strong> - The "slug" is the URL-friendly version of the name. It is usually all lowercase and contains only letters, numbers, and hyphens.', 'webcomic' ),
 			__( '<strong>Parent</strong> - Storylines can have a hierarchy. You might have a Chapter 1 storyline, and under that have children storylines for each scene within that storyline. Totally optional. To create a sub-storyline, just choose another storyline from the Parent dropdown.', 'webcomic' ),
 			__( '<strong>Description</strong> - The description is not prominent by default; it may be used in various ways, however.', 'webcomic' ),
-			__( '<strong>Cover</strong> - The cover is a representative image that can be displayed on your site. Covers are uploaded to the Media Library.', 'webcomic' ),
+			__( '<strong>Cover</strong> - The cover is a representative image that can be displayed on your site.', 'webcomic' ),
 			__( 'You can change the display of this screen using the Screen Options tab to set how many items are displayed per screen and to display/hide columns in the table.', 'webcomic' )
 		);
 	}
@@ -734,7 +734,7 @@ class WebcomicHelp extends Webcomic {
 			__( '<strong>Name</strong> - The name is how it appears on your site.', 'webcomic' ),
 			__( '<strong>Slug</strong> - The "slug" is the URL-friendly version of the name. It is usually all lowercase and contains only letters, numbers, and hyphens.', 'webcomic' ),
 			__( '<strong>Description</strong> - The description is not prominent by default; it may be used in various ways, however.', 'webcomic' ),
-			__( '<strong>Avatar</strong> - The avatar is a representative image that can be displayed on your site. Avatars are uploaded to the Media Library.', 'webcomic' ),
+			__( '<strong>Avatar</strong> - The avatar is a representative image that can be displayed on your site.', 'webcomic' ),
 			__( 'You can change the display of this screen using the Screen Options tab to set how many items are displayed per screen and to display/hide columns in the table.', 'webcomic' )
 		);
 	}
