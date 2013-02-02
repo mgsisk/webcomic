@@ -3,7 +3,6 @@ jQuery( function( $ ) {
 	if ( 'storyline' === $( '[data-webcomic-taxonomy]' ).data( 'webcomic-taxonomy' ) ) {
 		$( '#submit' ).attr( 'id', 'webcomic-submit' );
 		$( '.delete-tag' ).removeClass( 'delete-tag' ).addClass( 'webcomic-delete-term' );
-		$( '.wp-list-table tbody' ).sortable();
 	}
 	
 	/** Remove the term image. */
