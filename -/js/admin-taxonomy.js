@@ -1,10 +1,4 @@
 jQuery( function( $ ) {
-	/** Prevent AJAX actions for storylines. */
-	if ( 'storyline' === $( '[data-webcomic-taxonomy]' ).data( 'webcomic-taxonomy' ) ) {
-		$( '#submit' ).attr( 'id', 'webcomic-submit' );
-		$( '.delete-tag' ).removeClass( 'delete-tag' ).addClass( 'webcomic-delete-term' );
-	}
-	
 	/** Remove the term image. */
 	$( document ).on( 'click', '.webcomic-term-image-x', function() {
 		$.get( $( '[data-webcomic-admin-url]' ).data( 'webcomic-admin-url' ), {
@@ -16,6 +10,20 @@ jQuery( function( $ ) {
 			$( '#webcomic_term_image' ).html( data );
 		} );
 	} );
+	
+	/** Enable dynamic term sorting. */
+	$( '.webcomic-sort' ).nestedSortable( {
+		handle: 'b',
+		items: 'li',
+		tabSize: 36,
+		toleranceElement: '> b',
+		placeholder: 'webcomic-drop',
+		update: function( e, ui ) {
+			$( '[name="webcomic_terms"]' ).val( $( '.webcomic-sort' ).nestedSortable( 'serialize' ) );
+		}
+	} );
+	
+	$( '[name="webcomic_terms"]' ).val( $( '.webcomic-sort' ).nestedSortable( 'serialize' ) );
 } );
 
 /** Enable fancy taxonomy images. */

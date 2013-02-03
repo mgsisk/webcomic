@@ -18,6 +18,7 @@ class WebcomicHelp extends Webcomic {
 	 * @uses WebcomicHelp::legacy_overview()
 	 * @uses WebcomicHelp::attacher_overview()
 	 * @uses WebcomicHelp::generator_overview()
+	 * @uses WebcomicHelp::term_order_overview()
 	 * @uses WebcomicHelp::settings_general()
 	 * @uses WebcomicHelp::settings_collections()
 	 * @uses WebcomicHelp::transcripts_overview()
@@ -94,6 +95,12 @@ class WebcomicHelp extends Webcomic {
 				'id'      => 'overview',
 				'title'   => __( 'Overview', 'webcomic' ),
 				'content' => $this->generator_overview()
+			) );
+		} elseif( 'admin_page_webcomic-term-sort' === $screen->id ) {
+			$screen->add_help_tab( array(
+				'id'      => 'overview',
+				'title'   => __( 'Overview', 'webcomic' ),
+				'content' => $this->term_order_overview()
 			) );
 		} elseif ( 'settings_page_webcomic-options' === $screen->id ) {
 			$screen->add_help_tab( array(
@@ -231,19 +238,13 @@ class WebcomicHelp extends Webcomic {
 			$screen->add_help_tab( array(
 				'id'      => 'overview',
 				'title'   => __( 'Overview', 'webcomic' ),
-				'content' => $this->storylines_overview()
+				'content' => $this->storylines_overview( $screen )
 			) );
 			
 			$screen->add_help_tab( array(
 				'id'      => 'adding-storylines',
 				'title'   => __( 'Adding Storylines', 'webcomic' ),
 				'content' => $this->storylines_adding()
-			) );
-			
-			$screen->add_help_tab( array(
-				'id'      => 'moving-storylines',
-				'title'   => __( 'Moving Storylines', 'webcomic' ),
-				'content' => $this->storylines_moving()
 			) );
 		} elseif ( "edit-{$screen->post_type}_character" === $screen->id and empty( $_GET[ 'tag_ID' ] ) ) {
 			$screen->add_help_tab( array(
@@ -385,6 +386,17 @@ class WebcomicHelp extends Webcomic {
 			__( '<strong>Publish every&hellip;</strong> allows you to select which days of the week to publish subsequent files. The generator will work through the list from top to bottom, publishing selected files based on the days you select. You can reorder the images on the right by dragging and dropping the table rows to ensure they publish in the correct order.', 'webcomic' ),
 			__( '<strong>Save posts as drafts</strong> will cause all of the webcomics created by the generator to be drafted. These posts will not appear on your site until you publish them.', 'webcomic' ),
 			__( 'Webcomics created by the generator will use the image filename for the webcomic title.', 'webcomic' )
+		);
+	}
+	
+	/** Return term order overview help.
+	 * 
+	 * @return string
+	 */
+	private function term_order_overview() {
+		return sprintf( '
+			<p>%s</p>',
+			__( 'From here you can change the sorting order of your terms. Drag and drop the terms on the right to change their order. When everything looks good click <strong>Save Changes</strong>.', 'webcomic' )
 		);
 	}
 	
@@ -660,10 +672,12 @@ class WebcomicHelp extends Webcomic {
 	 * 
 	 * @return string
 	 */
-	private function storylines_overview() {
+	private function storylines_overview( $screen ) {
+		$taxonomy = get_taxonomy( $screen->taxonomy );
+		
 		return sprintf( '
 			<p>%s</p>',
-			__( 'You can organize your webcomics into story arcs using <strong>storylines</strong>.', 'webcomic' )
+			sprintf( __( 'You can organize your webcomics into story arcs using <strong>storylines</strong>. Click <strong>Sort %s</strong> to reorganize storylines.', 'webcomic' ), $taxonomy->label )
 		);
 	}
 	
@@ -689,18 +703,6 @@ class WebcomicHelp extends Webcomic {
 			__( '<strong>Description</strong> - The description is not prominent by default; it may be used in various ways, however.', 'webcomic' ),
 			__( '<strong>Cover</strong> - The cover is a representative image that can be displayed on your site.', 'webcomic' ),
 			__( 'You can change the display of this screen using the Screen Options tab to set how many items are displayed per screen and to display/hide columns in the table.', 'webcomic' )
-		);
-	}
-	
-	/** Return moving storylines help.
-	 * 
-	 * @return string
-	 */
-	private function storylines_moving() {
-		return sprintf( '
-			<p>%s</p>
-			',
-			__( "Hovering over a row in the storylines list will display action links that allow you to manage your storyline, including options to rearrange storylines. Use the &uarr; and &darr; arrows to move storylines up or down, respectively. Sub-storylines can only be moved within the list of storylines that share the same parent. To move a storyline outside of it's sublist you should first edit the storyline and change it's parent.", 'webcomic' )
 		);
 	}
 	

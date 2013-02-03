@@ -1,5 +1,5 @@
 <?php
-/** Contains the WebcomicTaxonomy class.
+/** Contains WebcomicTaxonomy and related classes.
  * 
  * @package Webcomic
  */
@@ -13,20 +13,22 @@ class WebcomicTaxonomy extends Webcomic {
 	 * 
 	 * @uses Webcomic::$config
 	 * @uses WebcomicTaxonomy::admin_init()
+	 * @uses WebcomicTaxonomy::admin_menu()
 	 * @uses WebcomicTaxonomy::edit_term()
 	 * @uses WebcomicTaxonomy::create_term()
 	 * @uses WebcomicTaxonomy::delete_term()
 	 * @uses WebcomicTaxonomy::admin_enqueue_scripts()
 	 * @uses WebcomicTaxonomy::get_terms_args()
+	 * @uses WebcomicTaxonomy::pre_add_form()
 	 * @uses WebcomicTaxonomy::add_form_fields()
 	 * @uses WebcomicTaxonomy::edit_form_fields()
-	 * @uses WebcomicTaxonomy::storyline_row_actions()
 	 * @uses WebcomicTaxonomy::manage_custom_column()
 	 * @uses WebcomicTaxonomy::manage_edit_webcomic_storyline_columns()
 	 * @uses WebcomicTaxonomy::manage_edit_webcomic_character_columns()
 	 */
 	public function __construct() {
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
+		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 		add_action( 'edit_term', array( $this, 'edit_term' ), 10, 3 );
 		add_action( 'create_term', array( $this, 'create_term' ), 10, 3 );
 		add_action( 'delete_term', array( $this, 'delete_term' ), 10, 3 );
@@ -35,12 +37,12 @@ class WebcomicTaxonomy extends Webcomic {
 		add_filter( 'get_terms_args', array( $this, 'get_terms_args' ), 10, 2 );
 		
 		foreach ( array_keys( self::$config[ 'collections' ] ) as $k ) {
+			add_action( "{$k}_storyline_pre_add_form", array( $this, 'pre_add_form' ), 10, 1 );
 			add_action( "{$k}_storyline_add_form_fields", array( $this, 'add_form_fields' ), 10, 1 );
 			add_action( "{$k}_character_add_form_fields", array( $this, 'add_form_fields' ), 10, 1 );
 			add_action( "{$k}_storyline_edit_form_fields", array( $this, 'edit_form_fields' ), 10, 2 );
 			add_action( "{$k}_character_edit_form_fields", array( $this, 'edit_form_fields' ), 10, 2 );
 			
-			add_filter( "{$k}_storyline_row_actions", array( $this, 'storyline_row_actions' ), 10, 2 );
 			add_filter( "manage_{$k}_storyline_custom_column", array( $this, 'manage_custom_column' ), 10, 3 );
 			add_filter( "manage_{$k}_character_custom_column", array( $this, 'manage_custom_column' ), 10, 3 );
 			add_filter( "manage_edit-{$k}_storyline_columns", array( $this, 'manage_edit_webcoimc_storyline_columns' ), 10, 3 );
@@ -48,7 +50,7 @@ class WebcomicTaxonomy extends Webcomic {
 		}
 	}
 	
-	/** Handle storyline term group changes.
+	/** Handle storyline sorting.
 	 * 
 	 * @uses Webcomic::$error
 	 * @uses Webcomic::$notice
@@ -57,40 +59,37 @@ class WebcomicTaxonomy extends Webcomic {
 	public function admin_init() {
 		global $wpdb;
 		
-		if ( isset( $_GET[ 'webcomic_action' ], $_GET[ 'taxonomy' ], $_GET[ 'tag_ID' ] ) and ( 'move_term_up' === $_GET[ 'webcomic_action' ] or 'move_term_down' === $_GET[ 'webcomic_action' ] ) and $term = get_term( $_GET[ 'tag_ID' ], $_GET[ 'taxonomy' ] ) ) {
-			check_admin_referer( 'webcomic_move_term' );
-			
-			$moved = '';
-			
-			$terms = get_terms( $term->taxonomy, array(
-				'order'      => 'DESC',
-				'orderby'    => 'term_group',
-				'child_of'   => $term->parent,
-				'hide_empty' => false
-			) );
-			
-			if ( !( ( 'move_term_up' === $_GET[ 'webcomic_action' ] and 0 === ( integer ) $term->term_group ) or ( 'move_term_down' === $_GET[ 'webcomic_action' ] and $term->term_group === $terms[ 0 ]->term_group ) ) ) {
-				foreach ( $terms as $t ) {
-					if ( 'move_term_up' === $_GET[ 'webcomic_action' ] and ( integer ) $t->term_group === ( $term->term_group - 1 ) ) {
-						$moved = ( is_wp_error( $wpdb->update( $wpdb->terms, array( 'term_group' => $t->term_group + 1 ), array( 'term_id' => $t->term_id ) ) ) or is_wp_error( $wpdb->update( $wpdb->terms, array( 'term_group' => $term->term_group - 1 ), array( 'term_id' => $term->term_id ) ) ) ) ? false : 'up';
-						
-						break;
-					} elseif ( 'move_term_down' === $_GET[ 'webcomic_action' ] and ( integer ) $t->term_group === ( $term->term_group + 1 ) ) {
-						$moved = ( is_wp_error( $wpdb->update( $wpdb->terms, array( 'term_group' => $t->term_group - 1 ), array( 'term_id' => $t->term_id ) ) ) or is_wp_error( $wpdb->update( $wpdb->terms, array( 'term_group' => $term->term_group + 1 ), array( 'term_id' => $term->term_id ) ) ) ) ? false : 'down';
-						
-						break;
-					}
-				}
-			}
-			
-			if ( 'up' === $moved ) {
-				self::$notice[] = __( 'Moved item up.', 'webcomic' );
-			} elseif ( 'down' === $moved ) {
-				self::$notice[] = __( 'Moved item down.', 'webcomic' );
+		if ( isset( $_POST[ 'webcomic_action' ] ) and 'term_sort' === $_POST[ 'webcomic_action' ] and wp_verify_nonce( $_POST[ 'webcomic_term_sort' ], 'webcomic_term_sort' ) ) {
+			if ( isset( $_POST[ 'webcomic_cancel_sort' ] ) ) {
+				wp_redirect( add_query_arg( array( 'taxonomy' => $_POST[ 'webcomic_taxonomy' ], 'post_type' => $_POST[ 'webcomic_collection' ] ), admin_url( 'edit-tags.php' ) ) );
+				
+				die;
 			} else {
-				self::$error[] = __( 'Item could not be moved.', 'webcomic' );
+				$terms = $count = array();
+				
+				parse_str( $_POST[ 'webcomic_terms' ], $terms );
+				
+				foreach ( $terms[ 'term' ] as $k => $v ) {
+					$count[ $v ] = empty( $count[ $v ] ) ? 1 : $count[ $v ] + 1;
+					
+					$wpdb->update( $wpdb->terms, array( 'term_group' => $count[ $v ] ), array( 'term_id' => $k ) );
+					$wpdb->update( $wpdb->term_taxonomy, array( 'parent' => 'null' === $v ? 0 : $v ), array( 'term_id' => $k, 'taxonomy' => $_POST[ 'webcomic_taxonomy' ] ) );
+				}
+				
+				clean_term_cache( array_keys( $terms[ 'term' ] ), $_POST[ 'webcomic_taxonomy' ] );
+				
+				self::$notice[] = sprintf( '<strong>%s</strong>', __( 'Order updated.', 'webcomic' ) );
 			}
 		}
+	}
+	
+	/** Register taxonomy submenu pages.
+	 * 
+	 * @uses WebcomicTaxonomy::page_term_sort()
+	 * @hook admin_menu
+	 */
+	public function admin_menu() {
+		add_submenu_page( 'options.php', __( 'Sort Webcomic Terms', 'webcomic' ), __( 'Sort Webcomic Terms', 'webcomic' ), 'manage_categories', 'webcomic-term-sort', array( $this, 'page_term_sort' ) );
 	}
 	
 	/** Detach media, upload new media, and update term group.
@@ -124,17 +123,13 @@ class WebcomicTaxonomy extends Webcomic {
 			}
 			
 			if ( false !== strpos( $taxonomy, '_storyline' ) ) {
-				$terms = get_terms( $taxonomy, array( 'get' => 'all', 'cache_domain' => "webcomic_delete_term{$id}" ) );
+				$terms = get_terms( $taxonomy, array( 'get' => 'all', 'cache_domain' => "webcomic_edit_term{$id}" ) );
 				$count = array();
 				
 				foreach ( $terms as $term ) {
-					if ( empty( $count[ $term->parent ] ) ) {
-						$count[ $term->parent ] = 0;
-					}
+					$count[ $term->parent ] = empty( $count[ $term->parent ] ) ? 1 : $count[ $term->parent ] + 1;
 					
 					$wpdb->update( $wpdb->terms, array( 'term_group' => $count[ $term->parent ] ), array( 'term_id' => $term->term_id ) );
-					
-					$count[ $term->parent ]++;
 				}
 			}
 		}
@@ -217,13 +212,9 @@ class WebcomicTaxonomy extends Webcomic {
 				$count = array();
 				
 				foreach ( $terms as $term ) {
-					if ( empty( $count[ $term->parent ] ) ) {
-						$count[ $term->parent ] = 0;
-					}
+					$count[ $term->parent ] = empty( $count[ $term->parent ] ) ? 1 : $count[ $term->parent ] + 1;
 					
 					$wpdb->update( $wpdb->terms, array( 'term_group' => $count[ $term->parent ] ), array( 'term_id' => $term->term_id ) );
-					
-					$count[ $term->parent ]++;
 				}
 			}
 		}
@@ -237,12 +228,19 @@ class WebcomicTaxonomy extends Webcomic {
 	public function admin_enqueue_scripts() {
 		$screen = get_current_screen();
 		
-		if ( preg_match( '/^edit-webcomic\d+_(storyline|character)$/', $screen->id ) ) {
-			wp_register_script( 'webcomic-admin-taxonomy', self::$url . '-/js/admin-taxonomy.js', array( 'jquery' ) );
+		if ( preg_match( '/^admin_page_webcomic-term-sort|edit-webcomic\d+_(storyline|character)$/', $screen->id ) ) {
+			wp_register_script( 'jquery-nestedsortable', self::$url . '-/library/jquery.nestedsortable.js', array( 'jquery', 'jquery-ui-sortable' ) );
+			wp_register_script( 'webcomic-admin-taxonomy', self::$url . '-/js/admin-taxonomy.js', array( 'jquery-nestedsortable' ) );
 			
 			wp_enqueue_script( 'webcomic-admin-taxonomy' );
 			
 			wp_enqueue_media();
+		}
+		
+		if ( 'admin_page_webcomic-term-sort' === $screen->id ) {
+			wp_register_style( 'webcomic-admin-taxonomy', self::$url . '-/css/admin-taxonomy.css' );
+			
+			wp_enqueue_style( 'webcomic-admin-taxonomy' );
 		}
 	}
 	
@@ -259,6 +257,19 @@ class WebcomicTaxonomy extends Webcomic {
 		}
 		
 		return $args;
+	}
+	
+	/** Render link to sort webcomic terms.
+	 * 
+	 * @hook (webcomid+)_storyline_pre_add_form
+	 */
+	public function pre_add_form( $taxonomy ) {
+		$taxonomy = get_taxonomy( $taxonomy );
+		?>
+		<div class="webcomic-sort-link">
+			<p><a href="<?php echo esc_url( add_query_arg( array( 'page' => 'webcomic-term-sort', 'taxonomy' => $taxonomy->name, 'webcomic_collection' => $_GET[ 'post_type' ] ), admin_url( 'options.php' ) ) ); ?>" class="button"><?php printf( __( 'Sort %s', 'webcomic' ), $taxonomy->label ); ?></a></p>
+		</div>
+		<?php
 	}
 	
 	/** Render file field for term imagery on the add term form.
@@ -309,22 +320,6 @@ class WebcomicTaxonomy extends Webcomic {
 		<?php
 	}
 	
-	/** Add term_group adjustment row actions for storylines.
-	 * 
-	 * @param array $actions The array of available actions.
-	 * @param object $term The current term object.
-	 * @return array
-	 * @hook (webcomic\d+)_storyline_row_actions
-	 */
-	public function storyline_row_actions( $actions, $term ) {
-		global $post_type;
-		
-		return array_merge( array( 'webcomic_term_group' => sprintf( '<a href="%s">&uarr;</a> <a href="%s">&darr;</a>',
-			esc_html( wp_nonce_url( add_query_arg( array( 'taxonomy' => $term->taxonomy, 'post_type' => $post_type, 'tag_ID' => $term->term_id, 'webcomic_action' => 'move_term_up' ), 'edit-tags.php' ), 'webcomic_move_term' ) ),
-			esc_html( wp_nonce_url( add_query_arg( array( 'taxonomy' => $term->taxonomy, 'post_type' => $post_type, 'tag_ID' => $term->term_id, 'webcomic_action' => 'move_term_down' ), 'edit-tags.php' ), 'webcomic_move_term' ) )
-		) ), $actions );
-	}
-	
 	/** Render custom taxonomy columns.
 	 * 
 	 * @param string $value
@@ -370,6 +365,45 @@ class WebcomicTaxonomy extends Webcomic {
 		return array_merge( $pre, $columns );
 	}
 	
+	/** Render the term sorter.
+	 * 
+	 * @uses Walker_WebcomicTerm_SortList
+	 */
+	public function page_term_sort() {
+		$taxonomy = get_taxonomy( $_GET[ 'taxonomy' ] );
+		?>
+		<div class="wrap">
+			<div class="icon32" id="icon-edit"></div>
+			<h2><?php printf( __( 'Sort %s', 'webcomic' ), $taxonomy->label ); ?></h2>
+			<form method="post">
+				<?php wp_nonce_field( 'webcomic_term_sort', 'webcomic_term_sort' ); ?>
+				<input type="hidden" name="webcomic_action" value="term_sort">
+				<input type="hidden" name="webcomic_terms" value="">
+				<input type="hidden" name="webcomic_taxonomy" value="<?php echo $taxonomy->name; ?>">
+				<input type="hidden" name="webcomic_collection" value="<?php echo $_GET[ 'webcomic_collection' ]; ?>">
+				<div id="col-container">
+					<div id="col-right">
+						<div class="col-wrap">
+							<ol class="webcomic-sort">
+								<?php echo call_user_func( array( new Walker_WebcomicTerm_SortList, 'walk' ), get_terms( $taxonomy->name, array( 'get' => 'all' ) ), 0, array() ) ?>
+							</ol>
+						</div>
+					</div>
+					<div id="col-left">
+						<div class="col-wrap">
+							<p><?php _e( 'Drag and drop the terms to change their order.', 'webcomic' ) ?></p>
+							<p>
+								<?php submit_button( '', 'primary', '', false ); ?>
+								<?php submit_button( __( 'Cancel', 'webcomic' ), 'secondary', 'webcomic_cancel_sort', false ); ?>
+							</p>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+		<?php
+	}
+	
 	/** Handle term image updating.
 	 * 
 	 * @param integer $id ID of the selected image.
@@ -395,5 +429,78 @@ class WebcomicTaxonomy extends Webcomic {
 		if ( $id ) {
 			printf( ' <a class="button webcomic-term-image-x">%s</a>', __( 'Remove', 'webcomic' ) );
 		}
+	}
+}
+
+/** Handle sorting list output.
+ * 
+ * @package Webcomic
+ */
+class Walker_WebcomicTerm_SortList extends Walker {
+	/** What the class handles.
+	 * 
+	 * Walker_WebcomicTerm_List handles both webcomic storylines and
+	 * characters of various taxonomies, so we specify the singular tree
+	 * type as the unhelpfully generic 'webcomic_term'. The Walker class
+	 * doesn't seem to actually use this for anything.
+	 * 
+	 * @var string
+	 */
+	public $tree_type = 'webcomic_term';
+	
+	/** Database fields to use while walking the tree.
+	 * @var array
+	 */
+	public $db_fields = array (
+		'id'     => 'term_id',
+		'parent' => 'parent'
+	);
+	
+	/** Start level output.
+	 * 
+	 * @param string $output Walker output string.
+	 * @param integer $depth Depth the walker is currently at.
+	 * @param array $args Arguments passed to the walker.
+	 */
+	public function start_lvl( &$output, $depth, $args ) {
+		$output .= '<ol>';
+	}
+	
+	/** End level output.
+	 * 
+	 * @param string $output Walker output string.
+	 * @param integer $depth Depth the walker is currently at.
+	 * @param array $args Arguments passed to the walker.
+	 */
+	public function end_lvl( &$output, $depth, $args ) {
+		$output .= '</ol>';
+	}
+	
+	/** Start element output.
+	 * 
+	 * @param string $output Walker output string.
+	 * @param object $term Current term being handled by the walker.
+	 * @param integer $depth Depth the walker is currently at.
+	 * @param array $args Arguments passed to the walker.
+	 */
+	public function start_el( &$output, $term, $depth, $args ) {
+		extract( $args, EXTR_SKIP );
+		
+		$output .= sprintf( '<li id="term_%s"><b><i>%s</i>%s</b>',
+			$term->term_id,
+			$term->webcomic_image ? wp_get_attachment_image( $term->webcomic_image, array( 36, 0 ) ) : '',
+			$term->name
+		);
+	}
+	
+	/** End element output.
+	 * 
+	 * @param string $output Walker output string.
+	 * @param object $term Current term being handled by the walker.
+	 * @param integer $depth Depth the walker is currently at.
+	 * @param array $args Arguments passed to the walker.
+	 */
+	public function end_el( &$output, $term, $depth, $args ) {
+		$output .= '</li>';
 	}
 }

@@ -1,0 +1,42 @@
+.webcomic-sort {
+	margin: 0;
+	padding: 0;
+}
+
+.webcomic-sort ol {
+	margin: 0 0 0 30px;
+	padding: 0;
+}
+
+.webcomic-sort li {
+	list-style: none;
+	margin: .25em 0;
+	padding: .25em 0;
+}
+
+.webcomic-sort b {
+	cursor: move;
+	display: block;
+}
+
+.webcomic-sort i {
+	background: rgba( 0, 0, 0, .05 );
+	box-shadow: 0 0 1em 0 rgba( 0, 0, 0, .1 ) inset;
+	display: inline-block;
+	height: 3em;
+	line-height: 3em;
+	margin: 0 .5em 0 0;
+	outline: thin solid rgba( 0, 0, 0, .2 );
+	overflow: hidden;
+	text-align: center;
+	vertical-align: middle;
+	width: 3em;
+}
+
+.webcomic-drop {
+	background: rgba( 0, 0, 0, .05 );
+	height: 3em;
+	padding: .25em 0;
+	margin: .25em 0;
+	outline: thin dashed rgba( 0, 0, 0, .2 );
+}
