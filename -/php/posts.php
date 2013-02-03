@@ -638,7 +638,7 @@ class WebcomicPosts extends Webcomic {
 			echo '<style scoped>.insert-media img{vertical-align:bottom}</style><a href="#" class="insert-media">';
 			
 			foreach ( $attachments as $attachment ) {
-				echo isset( $_wp_additional_image_sizes[ 'post-thumbnail' ] ) ? wp_get_attachment_image( $attachment->ID, 'post-thumbnail' ) : wp_get_attachment_image( $attachment->ID, array( $content_width, $content_width ) );
+				echo wp_get_attachment_image( $attachment->ID, array( $content_width, $content_width ) );
 			}
 			
 			echo '</a>';
