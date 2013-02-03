@@ -102,8 +102,8 @@ class Widget_WebcomicLink extends WP_Widget {
 			<label>
 				<?php _e( 'Target:', 'webcomic' ); ?><br>
 				<select name="<?php echo $this->get_field_name( 'relative' ); ?>">
-					<option value="first"<?php echo empty( $relative ) ? '' : selected( 'first', $relative, false ); ?>><?php _e( 'First', 'webcomic' ); ?></option>
-					<option value="last"<?php echo empty( $relative ) ? '' : selected( 'last', $relative, false ); ?>><?php _e( 'Last', 'webcomic' ); ?></option>
+					<option value="first-nocache"<?php echo empty( $relative ) ? '' : selected( 'first-nocache', $relative, false ); ?>><?php _e( 'First', 'webcomic' ); ?></option>
+					<option value="last-nocache"<?php echo empty( $relative ) ? '' : selected( 'last-cache', $relative, false ); ?>><?php _e( 'Last', 'webcomic' ); ?></option>
 					<option value="random-nocache"<?php echo empty( $relative ) ? '' : selected( 'random-nocache', $relative, false ); ?>><?php _e( 'Random', 'webcomic' ); ?></option>
 				</select>
 			</label>

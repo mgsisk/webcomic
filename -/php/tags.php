@@ -3306,7 +3306,7 @@ if ( !function_exists( 'the_webcomic' ) ) {
 	 * 
 	 * @package Webcomic
 	 * @param string $size The size attachments should be displayed at. May be any registered size; defaults are 'full', 'large', 'medium', and 'thumbnail'.
-	 * @param string $relative Whether to link the webcomic. May be one of 'self', 'next', 'previous', 'first', 'last', 'random', or 'random-nocache'.
+	 * @param string $relative Whether to link the webcomic. May be one of 'self', 'next', 'previous', 'first', 'first-nocache', 'last', 'last-nocache', 'random', or 'random-nocache'.
 	 * @param mixed $in_same_term An array or comma-separated list of inclusive term IDs.
 	 * @param mixed $excluded_terms An array or comma-separated list of excluded term IDs.
 	 * @param string $taxonomy The taxonomy of the terms specified in the $in_same_term and $excluded_terms arguments. The shorthand 'storyline' or 'character' may be used.
