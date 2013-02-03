@@ -188,10 +188,10 @@ class WebcomicMedia extends Webcomic {
 	public function media_upload_webcomic_media( $output = false ) {
 		if ( $output ) {
 			if ( $attachments = self::get_attachments( $_GET[ 'post_id' ] ) ) {
-				printf( '<div data-webcomic-modal-media="%s"><p>%s</p><hr></div><ul class="webcomic-media">', admin_url(), __( 'Drag and drop the media attachments to change the order Webcomic will display them.', 'webcomic' ) );
+				printf( '<div data-webcomic-modal-media="%s"><p>%s</p><hr></div><ul class="webcomic-media-sort">', admin_url(), __( 'Drag and drop the media attachments to change the order Webcomic will display them.', 'webcomic' ) );
 				
 				foreach ( $attachments as $attachment ) {
-					printf( '<li><span>%s</span><a href="%s" title="%s">%s</a><a href="%s" title="%s">%s</a><input type="hidden" name="ids[]" value="%s"></li>',
+					printf( '<li><b>%s</b><a href="%s" title="%s">%s</a><a href="%s" title="%s">%s</a><input type="hidden" name="ids[]" value="%s"></li>',
 						wp_get_attachment_image( $attachment->ID ),
 						esc_html( wp_nonce_url( add_query_arg( array_merge( $_GET, array( 'post' => $attachment->ID, 'action' => 'edit', 'webcomic_action' => 'regenerate' ) ), admin_url( 'media-upload.php' ) ), 'webcomic_regenerate' ) ),
 						__( 'Regenerate', 'webcomic' ),
@@ -400,7 +400,7 @@ class WebcomicMedia extends Webcomic {
 		?>
 		<div class="wrap">
 			<div class="icon32" id="icon-upload"></div>
-			<h2><?php _e( 'Webcomic Attacher', 'webcomic' ); ?></h2>
+			<h2><?php echo get_admin_page_title(); ?></h2>
 			<div id="col-container">
 				<div id="col-right">
 					<div class="col-wrap">
@@ -596,7 +596,7 @@ class WebcomicMedia extends Webcomic {
 		?>
 		<div class="wrap">
 			<div class="icon32" id="icon-upload"></div>
-			<h2><?php _e( 'Webcomic Generator', 'webcomic' ); ?></h2>
+			<h2><?php echo get_admin_page_title(); ?></h2>
 			<form method="post" class="webcomic-generator" data-webcomic-daycheck="<?php esc_attr_e( 'The start date is not one of the selected publish days. Continue anyway?', 'webcomic' ); ?>">
 				<?php wp_nonce_field( 'webcomic_generate', 'webcomic_generate' ); ?>
 				<div id="col-container">
@@ -665,7 +665,7 @@ class WebcomicMedia extends Webcomic {
 	 * 
 	 * @param array $ids Array of attachment ID's to update.
 	 */
-	public static function ajax_order_media( $ids ) {
+	public static function ajax_sort_media( $ids ) {
 		$i = 0;
 		
 		foreach ( $ids as $id ) {

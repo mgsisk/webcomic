@@ -26,11 +26,11 @@ jQuery( function( $ ) {
 	$( '.webcomic-generator .wp-list-table tbody' ).sortable();
 	
 	/** Handle webcomic media reordering. */
-	$( '.webcomic-media' ).sortable( {
+	$( '.webcomic-media-sort' ).sortable( {
 		update: function() {
-			$.post( url, {
+			$.post( $( '[data-webcomic-admin-url]' ).data( 'webcomic-admin-url' ), {
 				ids: $( '[name="ids[]"]' ).serializeArray(),
-				webcomic_admin_ajax: 'WebcomicMedia::ajax_order_media'
+				webcomic_admin_ajax: 'WebcomicMedia::ajax_sort_media'
 			}, function( data ) {
 				var message = $( 'div p' ).html();
 				
