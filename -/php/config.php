@@ -145,7 +145,7 @@ class WebcomicConfig extends Webcomic {
 	 * @hook admin_menu
 	 */
 	public function admin_menu() {
-		add_submenu_page( 'options-general.php', __( 'Webcomic', 'webcomic' ), __( 'Webcomic', 'webcomic' ), 'manage_options', 'webcomic-options', array( $this, 'page' ) );
+		add_submenu_page( 'options-general.php', __( 'Webcomic Settings', 'webcomic' ), __( 'Webcomic', 'webcomic' ), 'manage_options', 'webcomic-options', array( $this, 'page' ) );
 		
 		foreach ( self::$config[ 'collections' ] as $k => $v ) {
 			add_submenu_page( "edit.php?post_type={$k}", sprintf( __( '%s Settings', 'webcomic' ), esc_html( $v[ 'name' ] ) ), __( 'Settings', 'webcomic' ), 'manage_options', "{$k}-options", array( $this, 'page' ) );
@@ -167,38 +167,6 @@ class WebcomicConfig extends Webcomic {
 			
 			wp_enqueue_media();
 		}
-	}
-	
-	/** Render a settings page.
-	 * 
-	 * @uses Webcomic::$config
-	 * @uses Webcomic::$version
-	 */
-	public function page() {
-		$page = empty( $_GET[ 'post_type' ] ) ? 'webcomic-options' : "{$_GET[ 'post_type' ]}-options";
-		?>
-		<div class="wrap" >
-			<div id="icon-options-general" class="icon32" data-webcomic-admin-url="<?php echo admin_url(); ?>"></div>
-			<h2><?php echo 'webcomic-options' === $page ? __( 'Webcomic Settings', 'webcomic' ) : sprintf( __( '%s Settings', 'webcomic' ), esc_html( self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'name' ] ) ); ?></h2>
-			<form action="options.php" method="post"<?php echo 'webcomic' !== $page ? ' enctype="multipart/form-data"' : ''; ?>>
-				<?php
-					settings_fields( 'webcomic-options' );
-					do_settings_sections( $page );
-					
-					echo 'webcomic-options' === $page ? '<input type="hidden" name="webcomic_general" value="1">' : sprintf( '<input type="hidden" name="webcomic_collection" value="%s">', $_GET[ 'post_type' ] );
-				?>
-				<p class="submit">
-					<?php
-						submit_button( '', 'primary', '', false );
-						
-						if ( 'webcomic-options' === $page ) {
-							printf( '<span class="alignright">%s</span>', sprintf( __( 'Thank you for using <a href="%1$s" target="_blank">Webcomic %2$s</a>', 'webcomic' ), 'http://webcomic.nu', self::$version ) );
-						}
-					?>
-				</p>
-			</form>
-		</div>
-		<?php
 	}
 	
 	/** Render the Integrate setting.
@@ -1138,6 +1106,38 @@ class WebcomicConfig extends Webcomic {
 			
 			update_option( 'webcomic_options', self::$config );
 		}
+	}
+	
+	/** Render a settings page.
+	 * 
+	 * @uses Webcomic::$config
+	 * @uses Webcomic::$version
+	 */
+	public function page() {
+		$page = empty( $_GET[ 'post_type' ] ) ? 'webcomic-options' : "{$_GET[ 'post_type' ]}-options";
+		?>
+		<div class="wrap" >
+			<div id="icon-options-general" class="icon32" data-webcomic-admin-url="<?php echo admin_url(); ?>"></div>
+			<h2><?php echo get_admin_page_title(); ?></h2>
+			<form action="options.php" method="post"<?php echo 'webcomic' !== $page ? ' enctype="multipart/form-data"' : ''; ?>>
+				<?php
+					settings_fields( 'webcomic-options' );
+					do_settings_sections( $page );
+					
+					echo 'webcomic-options' === $page ? '<input type="hidden" name="webcomic_general" value="1">' : sprintf( '<input type="hidden" name="webcomic_collection" value="%s">', $_GET[ 'post_type' ] );
+				?>
+				<p class="submit">
+					<?php
+						submit_button( '', 'primary', '', false );
+						
+						if ( 'webcomic-options' === $page ) {
+							printf( '<span class="alignright">%s</span>', sprintf( __( 'Thank you for using <a href="%1$s" target="_blank">Webcomic %2$s</a>', 'webcomic' ), 'http://webcomic.nu', self::$version ) );
+						}
+					?>
+				</p>
+			</form>
+		</div>
+		<?php
 	}
 	
 	/** Generic settings section callback.

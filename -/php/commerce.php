@@ -58,7 +58,7 @@ class WebcomicCommerce extends Webcomic {
 		?>
 		<div class="wrap">
 			<div id="icon-tools" class="icon32"></div>
-			<h2><?php _e( 'Webcomic Commerce', 'webcomic' ); ?></h2>
+			<h2><?php echo get_admin_page_title(); ?></h2>
 			<br>
 			<table class="wp-list-table widefat fixed">
 				<thead>

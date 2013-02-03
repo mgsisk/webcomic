@@ -190,7 +190,7 @@ class WebcomicLegacy extends Webcomic {
 		?>
 		<div class="wrap">
 			<div id="icon-tools" class="icon32"></div>
-			<h2><?php _e( 'Upgrade Webcomic', 'webcomic' ); ?></h2>
+			<h2><?php echo get_admin_page_title(); ?></h2>
 			<div id="col-left">
 				<div class="col-wrap">
 					<?php if ( isset( $_POST[ 'webcomic_upgrade_status' ] ) and 0 === $_POST[ 'webcomic_upgrade_status' ] ) { ?>
