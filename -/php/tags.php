@@ -980,7 +980,7 @@ class WebcomicTag extends Webcomic {
 	 * @param array $args An array of arguments to pass to get_terms().
 	 * @return string
 	 * @uses WebcomicTag::get_relative_webcomic_term()
-	 * @filter string get_{$relative}_webcomic_term_link Filters the URL returned by `get_relative_webcomic_term_link` and used by the 
+	 * @filter string get_{$relative}_webcomic_term_link Filters the URL returned by `get_relative_webcomic_term_link` and used by `previous_webcomic_storyline_link`, `next_webcomic_storyline_link`, `first_webcomic_storyline_link`, `last_webcomic_storyline_link`, `random_webcomic_storyline_link`, `previous_webcomic_character_link`, `next_webcomic_character_link`, `first_webcomic_character_link`, `last_webcomic_character_link`, `random_webcomic_character_link`.
 	 */
 	public static function get_relative_webcomic_term_link( $target = 'archive', $relative = 'random', $taxonomy = '', $args = array() ) {
 		global $wpdb;
