@@ -368,36 +368,6 @@ class WebcomicPosts extends Webcomic {
 			} else {
 				_e( '&mdash;', 'webcomic' );
 			}
-		} elseif ( 'webcomic_storylines' === $column ) {
-			if ( $storylines = wp_get_object_terms( $id, "{$post->post_type}_storyline" ) ) {
-				$terms = array();
-				
-				foreach ( $storylines as $storyline ) {
-					$terms[] = sprintf( '<a href="%s">%s</a>',
-						esc_url( add_query_arg( array( 'post_type' => $post->post_type, "{$post->post_type}_storyline" => $storyline->slug ), admin_url( 'edit.php' ) ) ),
-						esc_html( sanitize_term_field( 'name', $storyline->name, $storyline->term_id, "{$post->post_type}_storyline", 'display' ) )
-					);
-				}
-				
-				echo join( ', ', $terms );
-			} else {
-				_e( '&mdash;', 'webcomic' );
-			}
-		} elseif ( 'webcomic_characters' === $column ) {
-			if ( $characters = wp_get_object_terms( $id, "{$post->post_type}_character" ) ) {
-				$terms = array();
-				
-				foreach ( $characters as $character ) {
-					$terms[] = sprintf( '<a href="%s">%s</a>',
-						esc_url( add_query_arg( array( 'post_type' => $post->post_type, "{$post->post_type}_character" => $character->slug ), admin_url( 'edit.php' ) ) ),
-						esc_html( sanitize_term_field( 'name', $character->name, $character->term_id, "{$post->post_type}_character", 'display' ) )
-					);
-				}
-				
-				echo join( ', ', $terms );
-			} else {
-				_e( '&mdash;', 'webcomic' );
-			}
 		}
 	}
 	
@@ -438,13 +408,13 @@ class WebcomicPosts extends Webcomic {
 	 */
 	public function manage_edit_webcomic_columns( $columns ) {
 		$pre = array_slice( $columns, 0, 1 );
-		$mid = array_slice( $columns, 1, 2 );
+		//$mid = array_slice( $columns, 1, 2 );
 		
 		$pre[ 'webcomic_attachments' ] = '';
-		$mid[ 'webcomic_storylines' ]  = __( 'Storylines', 'webcomic' );
-		$mid[ 'webcomic_characters' ]  = __( 'Characters', 'webcomic' );
+		$columns[ "taxonomy-{$_GET[ 'post_type' ]}_character" ] = __( 'Characters', 'webcomic' );
+		$columns[ "taxonomy-{$_GET[ 'post_type' ]}_storyline" ] = __( 'Storylines', 'webcomic' );
 		
-		return array_merge( $pre, $mid, $columns );
+		return array_merge( $pre, $columns );
 	}
 	
 	/** Render the webcomic media meta box.

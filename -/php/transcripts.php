@@ -253,21 +253,6 @@ class WebcomicTranscripts extends Webcomic {
 			}
 			
 			echo join( ', ', $authors );
-		} elseif ( 'webcomic_languages' === $column ) {
-			if ( $languages = wp_get_object_terms( $id, 'webcomic_language' ) ) {
-				$terms = array();
-				
-				foreach ( $languages as $language ) {
-					$terms[] = sprintf( '<a href="%s">%s</a>',
-						esc_url( add_query_arg( array( 'post_type' => $post->post_type, 'webcomic_language' => $language->slug ), admin_url( 'edit.php' ) ) ),
-						esc_html( sanitize_term_field( 'name', $language->name, $language->term_id, 'webcomic_language', 'display' ) )
-					);
-				}
-				
-				echo join( ', ', $terms );
-			} else {
-				_e( 'No Languages', 'webcomic' );
-			}
 		} elseif ( 'webcomic_parent' === $column ) {
 			echo $post->post_parent ? sprintf( '<strong><a href="%s">%s</a> - %s</strong>, %s',
 				esc_url( add_query_arg( array( 'post_type' => get_post_type( $post->post_parent ) ), admin_url( 'edit.php' ) ) ),
@@ -371,9 +356,9 @@ class WebcomicTranscripts extends Webcomic {
 		
 		$pre = array_slice( $columns, 0, 2 );
 		
-		$pre[ 'webcomic_author' ]    = __( 'Author', 'webcomic' );
-		$pre[ 'webcomic_languages' ] = __( 'Languages', 'webcomic' );
-		$pre[ 'webcomic_parent' ]    = __( 'Webcomic', 'webcomic' );
+		$pre[ 'webcomic_author' ] = __( 'Author', 'webcomic' );
+		$pre[ 'webcomic_parent' ] = __( 'Webcomic', 'webcomic' );
+		$columns[ 'taxonomy-webcomic_language' ] = __( 'Languages', 'webcomic' );
 		
 		return array_merge( $pre, $columns );
 	}

@@ -29,7 +29,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 
 /** Comic Publishing Power for the Web
  * 
- * @todo Future Bulk media actions; see core.trac.wordpress.org/ticket/16031
+ * @todo core.trac.wordpress.org/ticket/16031
  * 
  * @package Webcomic
  * @copyright 2008 - 2013 Michael Sisk
@@ -239,6 +239,7 @@ class Webcomic {
 					'menu_name'         => __( 'Storylines', 'webcomic' )
 				),
 				'hierarchical' => true,
+				'show_admin_column' => true,
 				'rewrite' => array(
 					'slug'         => $v[ 'slugs' ][ 'storyline' ],
 					'with_front'   => false,
@@ -262,6 +263,7 @@ class Webcomic {
 					'choose_from_most_used'      => __( 'Choose from the most used characters', 'webcomic' ),
 					'menu_name'                  => __( 'Characters', 'webcomic' )
 				),
+				'show_admin_column' => true,
 				'rewrite' => array(
 					'slug'       => $v[ 'slugs' ][ 'character' ],
 					'with_front' => false
@@ -307,7 +309,8 @@ class Webcomic {
 				'menu_name'                  => __( 'Languages', 'webcomic' )
 			),
 			'rewrite'           => false,
-			'show_in_nav_menus' => false
+			'show_in_nav_menus' => false,
+			'show_admin_column' => true
 		) );
 	}
 	
@@ -1210,7 +1213,7 @@ class Webcomic {
 	
 	/** Handle custom permalink tokens.
 	 * 
-	 * @todo Future: Use get_term_parents; see core.trac.wordpress.org/ticket/17069
+	 * @todo Use get_term_parents; see core.trac.wordpress.org/ticket/17069
 	 * 
 	 * @param string $link Permalink to swap tokens in.
 	 * @param object $post Post object.
