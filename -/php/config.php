@@ -750,7 +750,8 @@ class WebcomicConfig extends Webcomic {
 		$first = true;
 		
 		foreach ( get_taxonomies( array( 'public' => true ), 'objects' ) as $k => $v ) {
-			if ( 'post_format' === $v->name or 'webcomic_language' === $v->name or preg_match( '/^webcomic\d+_(storyline|character)$/', $v->name ) ) {
+			//if ( 'post_format' === $v->name or 'webcomic_language' === $v->name or preg_match( '/^webcomic\d+_(storyline|character)$/', $v->name ) ) {
+			if ( 'post_format' === $v->name or 'webcomic_language' === $v->name or "{$_GET[ 'post_type' ]}_storyline" === $v->name or "{$_GET[ 'post_type' ]}_character" === $v->name ) {
 				continue;
 			}
 			
@@ -1118,7 +1119,7 @@ class WebcomicConfig extends Webcomic {
 		?>
 		<div class="wrap" >
 			<div id="icon-options-general" class="icon32" data-webcomic-admin-url="<?php echo admin_url(); ?>"></div>
-			<h2><?php echo get_admin_page_title(); ?></h2>
+			<h2><?php echo get_admin_page_title(); if ( 'webcomic-options' !== $page ) { ?><a href="#" class="add-new-h2"><?php echo $_GET[ 'post_type' ]; ?></a><?php } ?></h2>
 			<form action="options.php" method="post"<?php echo 'webcomic' !== $page ? ' enctype="multipart/form-data"' : ''; ?>>
 				<?php
 					settings_fields( 'webcomic-options' );
