@@ -2,7 +2,6 @@
 /** Contains the WebcomicTag class and template tag functions.
  * 
  * @package Webcomic
- * @todo nochace first and list webcomic urls
  */
 
 /** Handle custom template tag functionality.

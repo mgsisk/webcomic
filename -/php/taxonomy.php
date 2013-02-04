@@ -346,7 +346,7 @@ class WebcomicTaxonomy extends Webcomic {
 	public function manage_edit_webcoimc_storyline_columns( $columns ) {
 		$pre                     = array_slice( $columns, 0, 1 );
 		$pre[ 'webcomic_image' ] = __( 'Cover', 'webcomic' );
-		$columns[ 'posts' ]      = __( 'Posts', 'webcomic' );
+		$columns[ 'posts' ]      = __( 'Webcomics', 'webcomic' );
 		
 		return array_merge( $pre, $columns );
 	}
@@ -360,7 +360,7 @@ class WebcomicTaxonomy extends Webcomic {
 	public function manage_edit_webcoimc_character_columns( $columns ) {
 		$pre                     = array_slice( $columns, 0, 1 );
 		$pre[ 'webcomic_image' ] = __( 'Avatar', 'webcomic' );
-		$columns[ 'posts' ]      = __( 'Posts', 'webcomic' );
+		$columns[ 'posts' ]      = __( 'Webcomics', 'webcomic' );
 		
 		return array_merge( $pre, $columns );
 	}

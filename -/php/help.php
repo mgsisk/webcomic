@@ -138,7 +138,7 @@ class WebcomicHelp extends Webcomic {
 				'title'   => __( 'Bulk Actions', 'webcomic' ),
 				'content' => $this->transcripts_bulk()
 			) );
-		} else if( 'webcomic_transcript' === $screen->id ) {
+		} elseif( 'webcomic_transcript' === $screen->id ) {
 			$screen->add_help_tab( array(
 				'id'      => 'customizing-this-display',
 				'title'   => __( 'Customizing This Display', 'webcomic' ),
