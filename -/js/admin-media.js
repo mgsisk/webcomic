@@ -42,4 +42,32 @@ jQuery( function( $ ) {
 			} );
 		}
 	} );
+	
+	/** Add regenerate and detach bulk actions. */
+	$( 'body.wp-admin.upload-php [name="action"],body.wp-admin.upload-php [name="action2"]' ).append( '<option value="webcomic_regenerate">'
+		+ $( '[data-webcomic-regenerate]' ).data( 'webcomic-regenerate' )
+		+ '</option><option value="webcomic_detach">'
+		+ $( '[data-webcomic-detach]' ).data( 'webcomic-detach' )
+		+ '</option>'
+	);
+	
+	$( 'body.wp-admin.upload-php #doaction' ).on( 'click', function( e ) {
+		if ( 'webcomic_regenerate' === $( '[name="action"]' ).val() || 'webcomic_detach' === $( '[name="action"]' ).val() ) {
+			webcomic_bulk_action( $( '[name="action"]' ) );
+		}
+	} );
+	
+	$( 'body.wp-admin.upload-php #doaction2' ).on( 'click', function( e ) {
+		if ( 'webcomic_regenerate' === $( '[name="action2"]' ).val() || 'webcomic_detach' === $( '[name="action2"]' ).val() ) {
+			webcomic_bulk_action( $( '[name="action2"]' ) );
+		}
+	} );
+	
+	function webcomic_bulk_action( $el ) {
+		var $form = $el.parents( 'form' );
+		
+		$el.attr( 'name', 'webcomic_action' );
+		$form.attr( 'method', 'post' );
+		$form.attr( 'action', $( '[data-webcomic-admin-url]' ).data( 'webcomic-admin-url' ) );
+	}
 } );

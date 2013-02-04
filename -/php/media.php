@@ -15,6 +15,7 @@ class WebcomicMedia extends Webcomic {
 	 * @uses Webcomic::$notice
 	 * @uses WebcomicMedia::admin_init()
 	 * @uses WebcomicMedia::admin_menu()
+	 * @uses WebcomicMedia::admin_foot()
 	 * @uses WebcomicMedia::delete_attachment()
 	 * @uses WebcomicMedia::admin_enqueue_scripts()
 	 * @uses WebcomicMedia::media_upload_webcomic_media()
@@ -27,6 +28,7 @@ class WebcomicMedia extends Webcomic {
 	public function __construct() {
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
+		add_action( 'admin_footer', array( $this, 'admin_footer' ) );
 		add_action( 'delete_attachment', array( $this, 'delete_attachment' ), 10, 1 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 		add_action( 'media_upload_webcomic_media', array( $this, 'media_upload_webcomic_media' ) );
@@ -46,6 +48,8 @@ class WebcomicMedia extends Webcomic {
 	 * @hook admin_init
 	 */
 	public function admin_init() {
+		global $wpdb;
+		
 		if ( isset( $_GET[ 'webcomic_action' ], $_GET[ 'post' ] ) and 'regenerate' === $_GET[ 'webcomic_action' ] and $meta = wp_get_attachment_metadata( $_GET[ 'post' ] ) ) {
 			check_admin_referer( 'webcomic_regenerate' );
 			
@@ -62,17 +66,74 @@ class WebcomicMedia extends Webcomic {
 			} else {
 				wp_update_attachment_metadata( $_GET[ 'post' ], $meta );
 				
-				self::$notice[] = __( 'Regenerated images for media.', 'webcomic' );
+				self::$notice[] = __( 'Regenerated images for media attachments.', 'webcomic' );
 			}
 		}
 		
 		if ( isset( $_GET[ 'webcomic_action' ], $_GET[ 'post' ] ) and 'detach' === $_GET[ 'webcomic_action' ] and intval( $_GET[ 'post' ] ) ) {
 			check_admin_referer( 'webcomic_detach' );
 			
-			if ( wp_update_post( array( 'ID' => ( integer ) $_GET[ 'post' ], 'post_type' => 'attachment', 'post_parent' => 0, 'menu_order' => 0 ) ) ) {
+			if ( wp_update_post( array( 'ID' => ( integer ) $_GET[ 'post' ], 'post_parent' => 0 ) ) ) {
 				self::$notice[] = __( 'Detached media.', 'webcomic' );
 			} else {
 				self::$error[] = __( 'Media could not be detached.', 'webcomic' );
+			}
+		}
+		
+		if ( isset( $_POST[ 'webcomic_action' ] ) and 'webcomic_regenerate' === $_POST[ 'webcomic_action' ] and !empty( $_POST[ 'media' ] ) ) {
+			check_admin_referer( 'bulk-media' );
+			
+			$dir   = wp_upload_dir();
+			$good  = $bad = 0;
+			$sizes = get_intermediate_image_sizes();
+			
+			foreach ( $_POST[ 'media' ] as $id ) {
+				if ( false !== strpos( get_post_mime_type( $id ), 'image' ) ) {
+					foreach ( $sizes as $size ) {
+						if ( $file = image_get_intermediate_size( $id, $size ) ) {
+							@unlink( path_join( $dir[ 'basedir' ], $file[ 'path' ] ) );
+						}
+					}
+					
+					if ( is_wp_error( $meta = wp_generate_attachment_metadata( $id, get_attached_file( $id ) ) ) ) {
+						$bad++;
+					} else {
+						wp_update_attachment_metadata( $id, $meta );
+						
+						$good++;
+					}
+				}
+			}
+			
+			if ( $bad ) {
+				self::$error[] = sprintf( _n( 'Images could not be regenerated for %s media attachment.', 'Images could not be regenerated for %s media attachments.', $bad, 'webcomic' ), $bad );
+			}
+			
+			if ( $good ) {
+				self::$notice[] = sprintf( _n( 'Images regenerated for %s media attachment.', 'Images regenerated for %s media attachments.', $good, 'webcomic' ), $good );
+			}
+		}
+		
+		if ( isset( $_POST[ 'webcomic_action' ] ) and 'webcomic_detach' === $_POST[ 'webcomic_action' ] and !empty( $_POST[ 'media' ] ) ) {
+			check_admin_referer( 'bulk-media' );
+			$good = $bad = 0;
+			
+			foreach ( $_POST[ 'media' ] as $id ) {
+				if ( $wpdb->get_var( $wpdb->prepare( "SELECT post_parent FROM {$wpdb->posts} WHERE ID = %s", $id ) ) ) {
+					if ( wp_update_post( array( 'ID' => ( integer ) $id, 'post_parent' => 0 ) ) ) {
+						$good++;
+					} else {
+						$bad++;
+					}
+				}
+			}
+			
+			if ( $bad ) {
+				self::$error[] = sprintf( _n( 'Could not detach %s attachment.', 'Could not detach %s attachments.', $bad, 'webcomic' ), $bad );
+			}
+			
+			if ( $good ) {
+				self::$notice[] = sprintf( _n( 'Detached %s attachment.', 'Detached %s attachments.', $good, 'webcomic' ), $good );
 			}
 		}
 		
@@ -181,6 +242,22 @@ class WebcomicMedia extends Webcomic {
 		add_submenu_page( 'upload.php', __( 'Webcomic Generator', 'webcomic' ), __( 'Webcomic Generator', 'webcomic' ), 'upload_files', 'webcomic-generator', array( $this, 'page_generator' ) );
 	}
 	
+	/** Render HTML data for bulk media actions.
+	 * 
+	 * @hook admin_footer
+	 */
+	public function admin_footer() {
+		$screen = get_current_screen();
+		
+		if ( 'upload' === $screen->id ) {
+			printf( '<span data-webcomic-admin-url="%s" data-webcomic-regenerate="%s" data-webcomic-detach="%s"></span>',
+				admin_url( 'upload.php' ),
+				esc_attr( __( 'Regenerate Images', 'webcomic' ) ),
+				esc_attr( __( 'Detach', 'webcomic' ) )
+			);
+		}
+	}
+	
 	/** Manage webcomic media from the modal media manager.
 	 * 
 	 * @hook media_upload_webcomic_media
@@ -245,7 +322,7 @@ class WebcomicMedia extends Webcomic {
 	public function admin_enqueue_scripts() {
 		$screen = get_current_screen();
 		
-		if ( 'media_page_webcomic-generator' === $screen->id or ( isset( $_GET[ 'tab' ] ) and 'webcomic_media' === $_GET[ 'tab' ] ) ) {
+		if ( 'upload' === $screen->id or 'media_page_webcomic-generator' === $screen->id or ( isset( $_GET[ 'tab' ] ) and 'webcomic_media' === $_GET[ 'tab' ] ) ) {
 			wp_register_script( 'webcomic-admin-media', self::$url . '-/js/admin-media.js', array( 'jquery-ui-sortable' ) );
 			
 			wp_enqueue_script( 'webcomic-admin-media' );
@@ -494,7 +571,7 @@ class WebcomicMedia extends Webcomic {
 											<?php
 												if ( !$attachments or is_wp_error( $attachments ) ) {
 													_e( 'No unattached media could be found.', 'webcomic' );
-												} else if ( !$posts ) {
+												} elseif ( !$posts ) {
 													_e( 'No orphaned webcomic posts could be found.', 'webcomic' );
 												} else {
 													_e( 'No matches could be found.', 'webcomic' );
