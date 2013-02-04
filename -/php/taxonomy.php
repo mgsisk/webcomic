@@ -45,8 +45,8 @@ class WebcomicTaxonomy extends Webcomic {
 			
 			add_filter( "manage_{$k}_storyline_custom_column", array( $this, 'manage_custom_column' ), 10, 3 );
 			add_filter( "manage_{$k}_character_custom_column", array( $this, 'manage_custom_column' ), 10, 3 );
-			add_filter( "manage_edit-{$k}_storyline_columns", array( $this, 'manage_edit_webcoimc_storyline_columns' ), 10, 3 );
-			add_filter( "manage_edit-{$k}_character_columns", array( $this, 'manage_edit_webcoimc_character_columns' ), 10, 3 );
+			add_filter( "manage_edit-{$k}_storyline_columns", array( $this, 'manage_edit_columns' ), 10, 3 );
+			add_filter( "manage_edit-{$k}_character_columns", array( $this, 'manage_edit_columns' ), 10, 3 );
 		}
 	}
 	
@@ -337,29 +337,21 @@ class WebcomicTaxonomy extends Webcomic {
 		}
 	}
 	
-	/** Rename the 'Posts' column and add the image column for storylines.
+	/** Rename the 'Posts' column and add the image column for terms.
 	 * 
 	 * @param array $columns Array of of term columns.
 	 * @return array
 	 * @hook manage_edit-(webcomic\d+)_storyline_columns
 	 */
-	public function manage_edit_webcoimc_storyline_columns( $columns ) {
+	public function manage_edit_columns( $columns ) {
 		$pre                     = array_slice( $columns, 0, 1 );
-		$pre[ 'webcomic_image' ] = __( 'Cover', 'webcomic' );
-		$columns[ 'posts' ]      = __( 'Webcomics', 'webcomic' );
 		
-		return array_merge( $pre, $columns );
-	}
-	
-	/** Rename the 'Posts' column and add the image column for characters.
-	 * 
-	 * @param array $columns Array of of term columns.
-	 * @return array
-	 * @hook manage_edit-(webcomic\d+)_character_columns
-	 */
-	public function manage_edit_webcoimc_character_columns( $columns ) {
-		$pre                     = array_slice( $columns, 0, 1 );
-		$pre[ 'webcomic_image' ] = __( 'Avatar', 'webcomic' );
+		if ( isset( $_GET[ 'taxonomy' ] ) ) {
+			$pre[ 'webcomic_image' ] = false !== strpos( $_GET[ 'taxonomy' ], '_storyline' ) ? __( 'Cover', 'webcomic' ) : __( 'Avatar', 'webcomic' );
+		} else {
+			$pre[ 'webcomic_image' ] = '';
+		}
+		
 		$columns[ 'posts' ]      = __( 'Webcomics', 'webcomic' );
 		
 		return array_merge( $pre, $columns );

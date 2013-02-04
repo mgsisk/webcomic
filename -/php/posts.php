@@ -408,11 +408,12 @@ class WebcomicPosts extends Webcomic {
 	 */
 	public function manage_edit_webcomic_columns( $columns ) {
 		$pre = array_slice( $columns, 0, 1 );
-		//$mid = array_slice( $columns, 1, 2 );
-		
 		$pre[ 'webcomic_attachments' ] = '';
-		$columns[ "taxonomy-{$_GET[ 'post_type' ]}_character" ] = __( 'Characters', 'webcomic' );
-		$columns[ "taxonomy-{$_GET[ 'post_type' ]}_storyline" ] = __( 'Storylines', 'webcomic' );
+		
+		if ( isset( $_GET[ 'post_type' ] ) ) {
+			$columns[ "taxonomy-{$_GET[ 'post_type' ]}_character" ] = __( 'Characters', 'webcomic' );
+			$columns[ "taxonomy-{$_GET[ 'post_type' ]}_storyline" ] = __( 'Storylines', 'webcomic' );
+		}
 		
 		return array_merge( $pre, $columns );
 	}
