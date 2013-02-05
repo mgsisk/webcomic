@@ -96,6 +96,7 @@ class Webcomic {
 	 * @uses Webcomic::webcomic_redirect()
 	 * @uses Webcomic::setup_theme()
 	 * @uses Webcomic::the_post()
+	 * @uses Webcomic::pre_get_posts()
 	 * @uses Webcomic::buffer_alert()
 	 * @uses Webcomic::wp_enqueue_scripts()
 	 * @uses Webcomic::template_redirect()
@@ -118,7 +119,7 @@ class Webcomic {
 	 * @uses Webcomic::loop_start()
 	 * @uses Webcomic::the_excerpt()
 	 * @uses Webcomic::the_content()
-	 * @uses Webcomic::pre_get_posts()
+	 * @uses Webcomic::integrate_sort_asc()
 	 * @uses WebcomicWidgets
 	 * @uses WebcomicShortcodes
 	 */
@@ -137,6 +138,7 @@ class Webcomic {
 			add_action( 'init', array( $this, 'webcomic_redirect' ) );
 			add_action( 'setup_theme', array( $this, 'setup_theme' ) );
 			add_action( 'the_post', array( $this, 'the_post' ), 10, 1 );
+			add_action( 'pre_get_posts', array( $this, 'pre_get_posts' ), 10, 1 );
 			add_action( 'webcomic_buffer_alert', array( $this, 'buffer_alert' ) );
 			add_action( 'wp_enqueue_scripts', array( $this, 'wp_enqueue_scripts' ) );
 			add_action( 'template_redirect', array( $this, 'template_redirect' ) );
@@ -162,7 +164,7 @@ class Webcomic {
 				add_action( 'loop_start', array( $this, 'loop_start' ), 10, 1 );
 				add_action( 'the_excerpt', array( $this, 'the_excerpt' ), 10, 1 );
 				add_action( 'the_content', array( $this, 'the_content' ), 10, 1 );
-				add_action( 'pre_get_posts', array( $this, 'pre_get_posts' ), 10, 1 );
+				add_action( 'pre_get_posts', array( $this, 'integrate_sort_asc' ), 10, 1 );
 			}
 			
 			require_once self::$dir . '-/php/tags.php';
@@ -849,6 +851,21 @@ class Webcomic {
 		}
 	}
 	
+	/** Include webcomic posts on standard archive pages.
+	 * 
+	 * @param object $query The query object for the current page.
+	 * @return object
+	 * @uses Webcomic::$config
+	 * @hook pre_get_posts
+	 */
+	public function pre_get_posts( $query ) {
+		if ( is_archive() and !get_query_var( 'post_type' ) ) {
+			$query->set( 'post_type', array_merge( array( 'post' ), array_keys( self::$config[ 'collections' ] ) ) );
+		}
+		
+		return $query;
+	}
+	
 	/** Email buffer alert notifications.
 	 * 
 	 * Hooks into the webcomic_buffer_alert event scheduled during
@@ -1468,7 +1485,7 @@ class Webcomic {
 	 * @uses WebcomicTag::is_webcomic_archive()
 	 * @uses WebcomicTag::is_webcomic_tax()
 	 */
-	public function pre_get_posts( $query ) {
+	public function integrate_sort_asc( $query ) {
 		if ( self::$integrate and $query->is_main_query() and ( WebcomicTag::is_webcomic_archive() or WebcomicTag::is_webcomic_tax() ) ) {
 			$query->set( 'order', 'ASC' );
 		}
