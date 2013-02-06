@@ -788,9 +788,11 @@ class WebcomicHelp extends Webcomic {
 				<li>%s</li>
 				<li>%s</li>
 				<li>%s</li>
+				<li>%s</li>
 			</ul>',
 			__( 'These settings allow you to change some of the basic information and features related to your collection:', 'webcomic' ),
 			__( '<strong>Name</strong> - The name is how it appears on your site.', 'webcomic' ),
+			__( '<strong>Slug</strong> - The The “slug” is the URL-friendly version of the name. It is usually all lowercase and contains only letters, numbers, and hyphens.', 'webcomic' ),
 			__( '<strong>Description</strong> - The description is not prominent by default; it may be used in various ways, however.', 'webcomic' ),
 			__( '<strong>Poster</strong> - The poster is a representative image that can be displayed on your site.', 'webcomic' ),
 			__( '<strong>Theme</strong> - Determines what theme will be used when a user is viewing a page related to this collection.', 'webcomic' ),

@@ -83,6 +83,7 @@ class WebcomicConfig extends Webcomic {
 		foreach ( array_keys( self::$config[ 'collections' ] ) as $k ) {
 			add_settings_section( "{$k}-main", __( 'General Settings', 'webcomic' ), array( $this, 'section' ), "{$k}-options" );
 			add_settings_field( "{$k}_name", __( 'Name', 'webcomic' ), array( $this, 'collection_name' ), "{$k}-options", "{$k}-main", array( 'label_for' => 'webcomic_name' ) );
+			add_settings_field( "{$k}_slug", __( 'Slug', 'webcomic' ), array( $this, 'collection_slug' ), "{$k}-options", "{$k}-main", array( 'label_for' => 'webcomic_slug' ) );
 			add_settings_field( "{$k}_description", __( 'Description', 'webcomic' ), array( $this, 'collection_description' ), "{$k}-options", "{$k}-main", array( 'label_for' => 'webcomic_description' ) );
 			add_settings_field( "{$k}_image", __( 'Poster', 'webcomic' ), array( $this, 'collection_image' ), "{$k}-options", "{$k}-main", array( 'label_for' => 'webcomic_image' ) );
 			add_settings_field( "{$k}_theme", __( 'Theme', 'webcomic' ), array( $this, 'collection_theme' ), "{$k}-options", "{$k}-main", array( 'label_for' => 'webcomic_theme' ) );
@@ -346,6 +347,17 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
+	/** Render the Slug setting.
+	 * 
+	 * @uses Webcomic::$config
+	 */
+	public function collection_slug() {
+		?>
+		<input type="text" name="webcomic_slug" id="webcomic_slug" value="<?php echo esc_attr( self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'slugs' ][ 'name' ] ); ?>" class="regular-text">
+		<p class="description"><?php _e( 'The The “slug” is the URL-friendly version of the name. It is usually all lowercase and contains only letters, numbers, and hyphens.', 'webcomic' ); ?></p>
+		<?php
+	}
+	
 	/** Render the Description setting.
 	 * 
 	 * @uses Webcomic::$config
@@ -365,8 +377,8 @@ class WebcomicConfig extends Webcomic {
 	public function collection_image() {
 		?>
 		<div id="webcomic_collection_image" data-webcomic-admin-url="<?php echo admin_url(); ?>"><?php self::ajax_collection_image( self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'image' ], $_GET[ 'post_type' ] ); ?></div>
+		<p class="description"><?php _e( "The poster is a representative image that can be displayed on your site. Don't forget to <strong>Save Changes</strong> after updating the poster.", 'webcomic' ); ?></p>
 		<?php
-		printf( '<p class="description">%s</p>', __( "The poster is a representative image that can be displayed on your site. Don't forget to <strong>Save Changes</strong> after updating the poster.", 'webcomic' ) );
 	}
 	
 	/** Render the Theme setting.
@@ -964,7 +976,7 @@ class WebcomicConfig extends Webcomic {
 					'main' => isset( $_POST[ 'webcomic_feeds_main' ] )
 				),
 				'slugs' => array(
-					'name'      => sanitize_title( $_POST[ 'webcomic_name' ], self::$config[ 'collections' ][ $id ][ 'slugs' ][ 'name' ] ),
+					'name'      => sanitize_title( $_POST[ 'webcomic_slug' ], self::$config[ 'collections' ][ $id ][ 'slugs' ][ 'name' ] ),
 					'archive'   => self::$config[ 'collections' ][ $id ][ 'slugs' ][ 'archive' ],
 					'webcomic'  => self::$config[ 'collections' ][ $id ][ 'slugs' ][ 'webcomic' ],
 					'storyline' => self::$config[ 'collections' ][ $id ][ 'slugs' ][ 'storyline' ],
@@ -1119,7 +1131,7 @@ class WebcomicConfig extends Webcomic {
 		?>
 		<div class="wrap" >
 			<div id="icon-options-general" class="icon32" data-webcomic-admin-url="<?php echo admin_url(); ?>"></div>
-			<h2><?php echo get_admin_page_title(); if ( 'webcomic-options' !== $page ) { ?><a href="#" class="add-new-h2"><?php echo $_GET[ 'post_type' ]; ?></a><?php } ?></h2>
+			<h2><?php echo get_admin_page_title(); if ( 'webcomic-options' !== $page ) { ?><a href="#" class="add-new-h2" title="<?php esc_attr_e( 'Collection ID', 'webcomic' ); ?>"><?php echo $_GET[ 'post_type' ]; ?></a><?php } ?></h2>
 			<form action="options.php" method="post"<?php echo 'webcomic' !== $page ? ' enctype="multipart/form-data"' : ''; ?>>
 				<?php
 					settings_fields( 'webcomic-options' );
