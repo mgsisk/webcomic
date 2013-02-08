@@ -200,7 +200,7 @@ class Widget_DynamicWebcomic extends WP_Widget {
 				$webcomic = new WP_Query( array( 'post_type' => $collection, 'posts_per_page' => 1, 'order' => $reverse ? 'ASC' : 'DESC' ) );
 				
 				if ( $webcomic->have_posts() ) {
-					echo $before_widget, empty( $title ) ? '' : $before_title . $title . $after_title, sprintf( '<div data-webcomic-container="%s"%s>', $widget_id, $gesture ? ' data-webcomic-gestures' : '' );
+					echo $before_widget, empty( $title ) ? '' : $before_title . $title . $after_title, sprintf( '<div data-webcomic-container="%s"%s>', $widget_id, empty( $gesture ) ?  '' : ' data-webcomic-gestures' );
 					
 					while ( $webcomic->have_posts() ) { $webcomic->the_post();
 						if ( !locate_template( array( "webcomic/dynamic-{$widget_id}-{$collection}.php", "webcomic/dynamic-{$widget_id}.php", "webcomic/dynamic-{$collection}.php", 'webcomic/dynamic.php' ), true, false ) ) {
