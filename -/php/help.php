@@ -637,7 +637,7 @@ class WebcomicHelp extends Webcomic {
 		return sprintf( '
 			<p>%s</p>
 			<p>%s</p>',
-			__( "<strong>Sell Prints</strong> - Check this option to sell prints of this webcomic using your collection commerce settings. This option is unavailable if you haven't specified a business on the collection settings page.", 'webcomic' ),
+			__( "<strong>Sell Prints</strong> - Check this option to sell prints of this webcomic using your collection commerce settings. This option is unavailable if you haven't specified a business email on the collection settings page.", 'webcomic' ),
 			__( 'The table in the commerce box displays the default prices and shipping for domestic, international, and original prints, as well as the total cost of each. You can adjust these prices by setting a premium or discount, and the total will adjust to show what the new price will be when you update the webcomic. Uncheck the <strong>Original</strong> print option if the original print (for traditional media webcomics) has been sold or is otherwise unavailable.', 'webcomic' )
 		);
 	}
@@ -792,7 +792,7 @@ class WebcomicHelp extends Webcomic {
 			</ul>',
 			__( 'These settings allow you to change some of the basic information and features related to your collection:', 'webcomic' ),
 			__( '<strong>Name</strong> - The name is how it appears on your site.', 'webcomic' ),
-			__( '<strong>Slug</strong> - The The “slug” is the URL-friendly version of the name. It is usually all lowercase and contains only letters, numbers, and hyphens.', 'webcomic' ),
+			__( '<strong>Slug</strong> - The The "slug" is the URL-friendly version of the name. It is usually all lowercase and contains only letters, numbers, and hyphens.', 'webcomic' ),
 			__( '<strong>Description</strong> - The description is not prominent by default; it may be used in various ways, however.', 'webcomic' ),
 			__( '<strong>Poster</strong> - The poster is a representative image that can be displayed on your site.', 'webcomic' ),
 			__( '<strong>Theme</strong> - Determines what theme will be used when a user is viewing a page related to this collection.', 'webcomic' ),
