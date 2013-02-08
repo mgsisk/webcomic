@@ -81,7 +81,7 @@ class WebcomicConfig extends Webcomic {
 		add_settings_section( 'webcomic-sizes', __( 'Additional Image Sizes', 'webcomic' ), array( $this, 'sizes' ), 'media' );
 		
 		foreach ( array_keys( self::$config[ 'collections' ] ) as $k ) {
-			add_settings_section( "{$k}-main", __( 'General Settings', 'webcomic' ), array( $this, 'section' ), "{$k}-options" );
+			add_settings_section( "{$k}-main", __( 'General', 'webcomic' ), array( $this, 'section' ), "{$k}-options" );
 			add_settings_field( "{$k}_name", __( 'Name', 'webcomic' ), array( $this, 'collection_name' ), "{$k}-options", "{$k}-main", array( 'label_for' => 'webcomic_name' ) );
 			add_settings_field( "{$k}_slug", __( 'Slug', 'webcomic' ), array( $this, 'collection_slug' ), "{$k}-options", "{$k}-main", array( 'label_for' => 'webcomic_slug' ) );
 			add_settings_field( "{$k}_description", __( 'Description', 'webcomic' ), array( $this, 'collection_description' ), "{$k}-options", "{$k}-main", array( 'label_for' => 'webcomic_description' ) );
@@ -90,13 +90,13 @@ class WebcomicConfig extends Webcomic {
 			add_settings_field( "{$k}_buffer", __( 'Buffer', 'webcomic' ), array( $this, 'collection_buffer' ), "{$k}-options", "{$k}-main", array( 'label_for' => 'webcomic_buffer_hook' ) );
 			add_settings_field( "{$k}_feeds", __( 'Feeds', 'webcomic' ), array( $this, 'collection_feeds' ), "{$k}-options", "{$k}-main", array( 'label_for' => 'webcomic_feeds_main' ) );
 			
-			add_settings_section( "{$k}-transcripts", __( 'Transcript Settings', 'webcomic' ), array( $this, 'section' ), "{$k}-options" );
+			add_settings_section( "{$k}-transcripts", __( 'Transcripts', 'webcomic' ), array( $this, 'section' ), "{$k}-options" );
 			add_settings_field( "{$k}_transcripts_default", __( 'Default', 'webcomic' ), array( $this, 'collection_transcripts_default' ), "{$k}-options", "{$k}-transcripts", array( 'label_for' => 'webcomic_transcripts_open' ) );
 			add_settings_field( "{$k}_transcripts_permission", __( 'Permission', 'webcomic' ), array( $this, 'collection_transcripts_permission' ), "{$k}-options", "{$k}-transcripts", array( 'label_for' => 'webcomic_transcripts_permission' ) );
 			add_settings_field( "{$k}_transcripts_notify", __( 'Notification', 'webcomic' ), array( $this, 'collection_transcripts_notify' ), "{$k}-options", "{$k}-transcripts", array( 'label_for' => 'webcomic_transcripts_hook' ) );
 			add_settings_field( "{$k}_transcripts_languages", __( 'Languages', 'webcomic' ), array( $this, 'collection_transcripts_languages' ), "{$k}-options", "{$k}-transcripts", array( 'label_for' => 'webcomic_transcripts_languages' ) );
 			
-			add_settings_section( "{$k}-commerce", __( 'Commerce Settings', 'webcomic' ), array( $this, 'section' ), "{$k}-options" );
+			add_settings_section( "{$k}-commerce", __( 'Commerce', 'webcomic' ), array( $this, 'section' ), "{$k}-options" );
 			add_settings_field(  "{$k}_commerce_business", __( 'Business Email', 'webcomic' ), array( $this, 'collection_commerce_business' ), "{$k}-options", "{$k}-commerce", array( 'label_for' => 'webcomic_commerce_business' )  );
 			add_settings_field(  "{$k}_commerce_prints", __( 'Prints', 'webcomic' ), array( $this, 'collection_commerce_prints' ), "{$k}-options", "{$k}-commerce", array( 'label_for' => 'webcomic_commerce_prints' )  );
 			add_settings_field(  "{$k}_commerce_sales", __( 'Sales', 'webcomic' ), array( $this, 'collection_commerce_sales' ), "{$k}-options", "{$k}-commerce", array( 'label_for' => 'webcomic_commerce_method' )  );
@@ -105,23 +105,23 @@ class WebcomicConfig extends Webcomic {
 			add_settings_field(  "{$k}_commerce_donation", __( 'Donations', 'webcomic' ), array( $this, 'collection_commerce_donation' ), "{$k}-options", "{$k}-commerce", array( 'label_for' => 'webcomic_commerce_donation' )  );
 			add_settings_field(  "{$k}_commerce_currency", __( 'Currency', 'webcomic' ), array( $this, 'collection_commerce_currency' ), "{$k}-options", "{$k}-commerce", array( 'label_for' => 'webcomic_commerce_currency' )  );
 			
-			add_settings_section( "{$k}-access", __( 'Access Settings', 'webcomic' ), array( $this, 'section' ), "{$k}-options" );
+			add_settings_section( "{$k}-access", __( 'Access', 'webcomic' ), array( $this, 'section' ), "{$k}-options" );
 			add_settings_field( "{$k}_access_age", __( 'Age', 'webcomic' ), array( $this, 'collection_access_age' ), "{$k}-options", "{$k}-access", array( 'label_for' => 'webcomic_access_byage' ) );
 			add_settings_field( "{$k}_access_roles", __( 'Role', 'webcomic' ), array( $this, 'collection_access_roles' ), "{$k}-options", "{$k}-access", array( 'label_for' => 'webcomic_access_byrole' ) );
 			
-			add_settings_section( "{$k}-features", __( 'Post Settings', 'webcomic' ), array( $this, 'section' ), "{$k}-options" );
+			add_settings_section( "{$k}-features", __( 'Posts', 'webcomic' ), array( $this, 'section' ), "{$k}-options" );
 			add_settings_field( "{$k}_supports_content", __( 'Content', 'webcomic' ), array( $this, 'collection_supports_content' ), "{$k}-options", "{$k}-features", array( 'label_for' => 'webcomic_posts_title' ) );
 			add_settings_field( "{$k}_supports_discussion", __( 'Discussion', 'webcomic' ), array( $this, 'collection_supports_discussion' ), "{$k}-options", "{$k}-features", array( 'label_for' => 'webcomic_posts_comments' ) );
 			add_settings_field( "{$k}_supports_miscellanea", __( 'Miscellanea', 'webcomic' ), array( $this, 'collection_supports_miscellanea' ), "{$k}-options", "{$k}-features", array( 'label_for' => 'webcomic_posts_revisions' ) );
 			add_settings_field( "{$k}_supports_taxonomies", __( 'Taxonomies', 'webcomic' ), array( $this, 'collection_supports_taxonomies' ), "{$k}-options", "{$k}-features", array( 'label_for' => 'webcomic_posts_taxonomy' ) );
 			
-			add_settings_section( "{$k}-permalinks", __( 'Permalink Settings', 'webcomic' ), array( $this, 'section' ), "{$k}-options" );
+			add_settings_section( "{$k}-permalinks", __( 'Permalinks', 'webcomic' ), array( $this, 'section' ), "{$k}-options" );
 			add_settings_field( "{$k}_slug_archive", __( 'Archive', 'webcomic' ), array( $this, 'collection_slugs_archive' ), "{$k}-options", "{$k}-permalinks", array( 'label_for' => 'webcomic_slugs_archive' ) );
 			add_settings_field( "{$k}_slug_webcomic", __( 'Webcomics', 'webcomic' ), array( $this, 'collection_slugs_webcomic' ), "{$k}-options", "{$k}-permalinks", array( 'label_for' => 'webcomic_slugs_webcomic' ) );
 			add_settings_field( "{$k}_slug_storyline", __( 'Storylines', 'webcomic' ), array( $this, 'collection_slugs_storyline' ), "{$k}-options", "{$k}-permalinks", array( 'label_for' => 'webcomic_slugs_storyline' ) );
 			add_settings_field( "{$k}_slug_character", __( 'Characters', 'webcomic' ), array( $this, 'collection_slugs_character' ), "{$k}-options", "{$k}-permalinks", array( 'label_for' => 'webcomic_slugs_character' ) );
 			
-			add_settings_section( "{$k}-twitter" , __( 'Twitter Settings', 'webcomic' ), array( $this, 'section' ), "{$k}-options" );
+			add_settings_section( "{$k}-twitter" , __( 'Twitter', 'webcomic' ), array( $this, 'section' ), "{$k}-options" );
 			add_settings_field( "{$k}_twitter_account", __( 'Authorized Account', 'webcomic' ), array( $this, 'collection_twitter_account' ), "{$k}-options", "{$k}-twitter" );
 			add_settings_field( "{$k}_twitter_consumer_key", __( 'Consumer Key', 'webcomic' ), array( $this, 'collection_twitter_consumer_key' ), "{$k}-options", "{$k}-twitter", array( 'label_for' => 'webcomic_twitter_consumer_key' ) );
 			add_settings_field( "{$k}_twitter_consumer_secret", __( 'Consumer Secret', 'webcomic' ), array( $this, 'collection_twitter_consumer_secret' ), "{$k}-options", "{$k}-twitter", array( 'label_for' => 'webcomic_twitter_consumer_secret' ) );
@@ -344,6 +344,7 @@ class WebcomicConfig extends Webcomic {
 	public function collection_name() {
 		?>
 		<input type="text" name="webcomic_name" id="webcomic_name" value="<?php echo esc_attr( self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'name' ] ); ?>" class="regular-text">
+		<p class="description"><?php _e( 'The name is how it appears on your site.', 'webcomic' ); ?></p>
 		<?php
 	}
 	
@@ -354,7 +355,7 @@ class WebcomicConfig extends Webcomic {
 	public function collection_slug() {
 		?>
 		<input type="text" name="webcomic_slug" id="webcomic_slug" value="<?php echo esc_attr( self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'slugs' ][ 'name' ] ); ?>" class="regular-text">
-		<p class="description"><?php _e( 'The The “slug” is the URL-friendly version of the name. It is usually all lowercase and contains only letters, numbers, and hyphens.', 'webcomic' ); ?></p>
+		<p class="description"><?php _e( 'The The "slug" is the URL-friendly version of the name. It is usually all lowercase and contains only letters, numbers, and hyphens.', 'webcomic' ); ?></p>
 		<?php
 	}
 	
@@ -365,7 +366,7 @@ class WebcomicConfig extends Webcomic {
 	public function collection_description() {
 		?>
 		<textarea name="webcomic_description" id="webcomic_description" rows="5" cols="50" class="large-text"><?php echo esc_html( self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'description' ] ); ?></textarea>
-		<span class="description"><?php _e( 'The description is not prominent by default; it may be used in various ways, however.', 'webcomic' ); ?></span>
+		<p class="description"><?php _e( 'The description is not prominent by default; it may be used in various ways, however.', 'webcomic' ); ?></p>
 		<?php
 	}
 	
@@ -401,7 +402,7 @@ class WebcomicConfig extends Webcomic {
 				}
 			?>
 		</select>
-		<span class="description"><?php _e( 'The theme will be used for pages related to this collection.', 'webcomic' ); ?></span>
+		<p class="description"><?php _e( 'The theme will be used for pages related to this collection.', 'webcomic' ); ?></p>
 		<?php
 	}
 	
@@ -513,8 +514,8 @@ class WebcomicConfig extends Webcomic {
 				?>
 			</optgroup>
 		</select>
-		<span class="description"><?php echo _e( 'Hold <code>CTRL</code>, <code>Command</code>, or <code>Shift</code> to select multiple languages.', 'webcomic' ); ?></span><br>
 		<a href="<?php echo add_query_arg( array( 'taxonomy' => 'webcomic_language', 'post_type' => 'webcomic_transcript' ), admin_url( 'edit-tags.php' ) ); ?>" class="button"><?php echo _e( 'Manage Languages', 'webcomic' ); ?></a>
+		<p class="description"><?php echo _e( 'Hold <code>CTRL</code>, <code>Command</code>, or <code>Shift</code> to select multiple languages.', 'webcomic' ); ?></p>
 		<?php
 	}
 	
@@ -617,7 +618,7 @@ class WebcomicConfig extends Webcomic {
 	public function collection_commerce_donation() {
 		?>
 		<input type="number" name="webcomic_commerce_donation" id="webcomic_commerce_donation" value="<?php echo self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'commerce' ][ 'donation' ]; ?>" min="0" class="small-text" style="text-align:center">
-		<span class="description"><?php _e( 'Use zero to allow donors to specify their own amount.', 'webcomic' ); ?></span>
+		<p class="description"><?php _e( 'Use zero to allow donors to specify their own amount.', 'webcomic' ); ?></p>
 		<?php
 	}
 	
@@ -667,7 +668,7 @@ class WebcomicConfig extends Webcomic {
 		}
 		?>
 		</select>
-		<span class="description"><?php _e( 'All transactions will use this currency.', 'webcomic' ); ?></span>
+		<p class="description"><?php _e( 'All transactions will use this currency.', 'webcomic' ); ?></p>
 		<?php
 	}
 	
@@ -713,7 +714,7 @@ class WebcomicConfig extends Webcomic {
 					?>
 				</optgroup>
 			</select>
-			<span class="description"><?php _e( 'Hold <code>CTRL</code>, <code>Command</code>, or <code>Shift</code> to select multiple roles.', 'webcomic' ); ?></span>
+			<p class="description"><?php _e( 'Hold <code>CTRL</code>, <code>Command</code>, or <code>Shift</code> to select multiple roles.', 'webcomic' ); ?></p>
 		</p>
 		<?php
 	}
@@ -786,7 +787,7 @@ class WebcomicConfig extends Webcomic {
 		?>
 		<label>
 			<input type="text" name="webcomic_slugs[archive]" id="webcomic_slugs_archive" value="<?php echo self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'slugs' ][ 'archive' ]; ?>" class="regular-text">
-			<?php printf( '<span class="description">%s/<b>%s</b>/</span>', home_url(), self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'slugs' ][ 'archive' ] ); ?>
+			<?php printf( '<p class="description">%s/<b>%s</b>/</p>', home_url(), self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'slugs' ][ 'archive' ] ); ?>
 		</label>
 		<?php
 	}
@@ -799,7 +800,7 @@ class WebcomicConfig extends Webcomic {
 		?>
 		<label>
 			<input type="text" name="webcomic_slugs[webcomic]" id="webcomic_slugs_webcomic" value="<?php echo self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'slugs' ][ 'webcomic' ]; ?>" class="regular-text">
-			<?php printf( '<span class="description">%s/<b>%s</b>/single-webcomic-slug</span>', home_url(), self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'slugs' ][ 'webcomic' ] ); ?>
+			<?php printf( '<p class="description">%s/<b>%s</b>/single-webcomic-slug</p>', home_url(), self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'slugs' ][ 'webcomic' ] ); ?>
 		</label>
 		<?php
 	}
@@ -812,7 +813,7 @@ class WebcomicConfig extends Webcomic {
 		?>
 		<label>
 			<input type="text" name="webcomic_slugs[storyline]" id="webcomic_slugs_storyline" value="<?php echo self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'slugs' ][ 'storyline' ]; ?>" class="regular-text">
-			<?php printf( '<span class="description">%s/<b>%s</b>/single-storyline-slug</span>', home_url(), self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'slugs' ][ 'storyline' ] ); ?>
+			<?php printf( '<p class="description">%s/<b>%s</b>/single-storyline-slug</p>', home_url(), self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'slugs' ][ 'storyline' ] ); ?>
 		</label>
 		<?php
 	}
@@ -825,7 +826,7 @@ class WebcomicConfig extends Webcomic {
 		?>
 		<label>
 			<input type="text" name="webcomic_slugs[character]" id="webcomic_slugs_character" value="<?php echo self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'slugs' ][ 'character' ]; ?>" class="regular-text">
-			<?php printf( '<span class="description">%s/<b>%s</b>/single-character-slug</span>', home_url(), self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'slugs' ][ 'character' ] ); ?>
+			<?php printf( '<p class="description">%s/<b>%s</b>/single-character-slug</p>', home_url(), self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'slugs' ][ 'character' ] ); ?>
 		</label>
 		<?php
 	}
