@@ -225,8 +225,8 @@ class WebcomicPosts extends Webcomic {
 			and current_user_can( 'edit_post', $raw[ 'ID' ] )
 		) {
 			if ( !in_array( 'title', self::$config[ 'collections' ][ $data[ 'post_type' ] ][ 'supports' ] ) ) {
-				$data[ 'post_title' ] = 'Auto Draft' === $raw[ 'post_title' ] ? $raw[ 'ID' ] : $raw[ 'post_title' ];
-				$data[ 'post_name' ]  = wp_unique_post_slug( sanitize_title( $raw[ 'post_name' ] ? $raw[ 'post_name' ] : $data[ 'post_title' ] ), $raw[ 'ID' ], $raw[ 'post_status' ], $raw[ 'post_type' ], $raw[ 'post_parent' ] );
+				$data[ 'post_title' ] = '';
+				$data[ 'post_name' ]  = $raw[ 'ID' ];
 			}
 			
 			if ( !in_array( 'editor', self::$config[ 'collections' ][ $data[ 'post_type' ] ][ 'supports' ] ) ) {
