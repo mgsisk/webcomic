@@ -30,13 +30,19 @@ class WebcomicShortcode extends Webcomic {
 	 * @uses WebcomicShortcode::the_related_webcomics()
 	 * @uses WebcomicShortcode::the_webcomic_term_link()
 	 * @uses WebcomicShortcode::the_webcomic_collection()
+	 * @uses WebcomicShortcode::the_webcomic_collections()
 	 * @uses WebcomicShortcode::webcomic_term_title()
 	 * @uses WebcomicShortcode::webcomic_term_description()
 	 * @uses WebcomicShortcode::webcomic_term_image()
+	 * @uses WebcomicShortcode::webcomic_term_crossovers()
+	 * @uses WebcomicShortcode::webcomic_crossover_title()
+	 * @uses WebcomicShortcode::webcomic_crossover_description()
+	 * @uses WebcomicShortcode::webcomic_crossover_image()
 	 * @uses WebcomicShortcode::webcomic_collection_title()
 	 * @uses WebcomicShortcode::webcomic_collection_description()
 	 * @uses WebcomicShortcode::webcomic_collection_image()
 	 * @uses WebcomicShortcode::webcomic_collection_print_amount()
+	 * @uses WebcomicShortcode::webcomic_collection_crossovers()
 	 * @uses WebcomicShortcode::webcomic_donation_amount()
 	 * @uses WebcomicShortcode::webcomic_donation_form()
 	 * @uses WebcomicShortcode::webcomic_print_amount()
@@ -64,6 +70,7 @@ class WebcomicShortcode extends Webcomic {
 		add_shortcode( 'random_webcomic_link', array( $this, 'the_webcomic_link' ) );
 		add_shortcode( 'purchase_webcomic_link', array( $this, 'the_webcomic_link' ) );
 		add_shortcode( 'the_webcomic_collection', array( $this, 'the_webcomic_collection' ) );
+		add_shortcode( 'the_webcomic_collections', array( $this, 'the_webcomic_collections' ) );
 		add_shortcode( 'the_webcomic_storylines', array( $this, 'the_webcomic_terms' ) );
 		add_shortcode( 'the_webcomic_characters', array( $this, 'the_webcomic_terms' ) );
 		add_shortcode( 'previous_webcomic_storyline_link', array( $this, 'the_webcomic_term_link' ) );
@@ -82,10 +89,16 @@ class WebcomicShortcode extends Webcomic {
 		add_shortcode( 'webcomic_character_description', array( $this, 'webcomic_term_description' ) );
 		add_shortcode( 'webcomic_storyline_cover', array( $this, 'webcomic_term_image' ) );
 		add_shortcode( 'webcomic_character_avatar', array( $this, 'webcomic_term_image' ) );
+		add_shortcode( 'webcomic_storyline_crossovers', array( $this, 'webcomic_term_crossovers' ) );
+		add_shortcode( 'webcomic_character_crossovers', array( $this, 'webcomic_term_crossovers' ) );
+		add_shortcode( 'webcomic_crossover_title', array( $this, 'webcomic_crossover_title' ) );
+		add_shortcode( 'webcomic_crossover_description', array( $this, 'webcomic_crossover_description' ) );
+		add_shortcode( 'webcomic_crossover_poster', array( $this, 'webcomic_crossover_image' ) );
 		add_shortcode( 'webcomic_collection_title', array( $this, 'webcomic_collection_title' ) );
 		add_shortcode( 'webcomic_collection_description', array( $this, 'webcomic_collection_description' ) );
 		add_shortcode( 'webcomic_collection_poster', array( $this, 'webcomic_collection_image' ) );
 		add_shortcode( 'webcomic_collection_print_amount', array( $this, 'webcomic_collection_print_amount' ) );
+		add_shortcode( 'webcomic_collection_crossovers', array( $this, 'webcomic_collection_crossovers' ) );
 		add_shortcode( 'webcomic_donation_amount', array( $this, 'webcomic_donation_amount' ) );
 		add_shortcode( 'webcomic_donation_form', array( $this, 'webcomic_donation_form' ) );
 		add_shortcode( 'webcomic_print_amount', array( $this, 'webcomic_print_amount' ) );
@@ -288,9 +301,7 @@ class WebcomicShortcode extends Webcomic {
 	
 	/** Handle the_webcomic_collection shortcode.
 	 * 
-	 * @param array $atts Shortcode attributes.
-	 * @return string
-	 * @uses WebcomicTag::webcomic_collection_link()
+	 * @deprecated 4.0.7 4.1 Use the_webcomic_collections instead.
 	 */
 	public function the_webcomic_collection( $atts ) {
 		extract( shortcode_atts( array(
@@ -301,6 +312,26 @@ class WebcomicShortcode extends Webcomic {
 		), $atts ) );
 		
 		return WebcomicTag::webcomic_collection_link( $format, $link, $target, $collection );
+	}
+	
+	/** Handle the_webcomic_collections shortcode.
+	 * 
+	 * @param array $atts Shortcode attributes.
+	 * @return string
+	 * @uses WebcomicTag::get_the_webcomic_collection_list()
+	 */
+	public function the_webcomic_collections( $atts ) {
+		extract( shortcode_atts( array(
+			'id'        => 0,
+			'before'    => '',
+			'sep'       => ', ',
+			'after'     => '',
+			'target'    => 'archive',
+			'image'     => '',
+			'crossover' => true
+		), $atts ) );
+		
+		return WebcomicTag::get_the_webcomic_collection_list(  $id, $before, $sep, $after, $target, $image, $crossover  );
 	}
 	
 	/** Handle the_webcomic_(terms) shortcodes.
@@ -477,15 +508,84 @@ class WebcomicShortcode extends Webcomic {
 		return WebcomicTag::webcomic_term_image( $size, $term, $collection ? "{$collection}_{$tax}" : '' );
 	}
 	
-	/** Handle webcomic_collection_title shortcode.
+	/** Handle webcomic_crossover_title shortcode.
+	 * 
+	 * @param array $atts Shortcode attributes.
+	 * @param string $content Shortcode content.
+	 * @return string
+	 * @uses WebcomicTag::webcomic_crossover_title()
+	 */
+	public function webcomic_crossover_title( $atts, $content ) {
+		extract( shortcode_atts( array(
+			'prefix' => ''
+		), $atts ) );
+		
+		$prefix = $content ? do_shortcode( $content ) : $prefix;
+		
+		return WebcomicTag::webcomic_crossover_title( $prefix );
+	}
+	
+	/** Handle webcomic_collection_description shortcode.
+	 * 
+	 * @return string
+	 * @uses WebcomicTag::webcomic_crossover_description()
+	 */
+	public function webcomic_crossover_description( $atts, $content, $name ) {
+		return WebcomicTag::webcomic_crossover_description();
+	}
+	
+	/** Handle webcomic_crossover_poster shortcode.
+	 * 
+	 * @param array $atts Shortcode attributes.
+	 * @return string
+	 * @uses WebcomicTag::webcomic_crossover_image()
+	 */
+	public function webcomic_crossover_image( $atts ) {
+		extract( shortcode_atts( array(
+			'size' => 'full'
+		), $atts ) );
+		
+		return WebcomicTag::webcomic_crossover_image( $size );
+	}
+	
+	/** Handle webcomic_(storyline|character)_crossovers shortcode.
 	 * 
 	 * @param array $atts Shortcode attributes.
 	 * @param string $content Shortcode content.
 	 * @param string $name Shortcode name.
 	 * @return string
+	 * @uses WebcomicTag::webcomic_term_crossovers()
+	 */
+	public function webcomic_term_crossovers( $atts, $content, $name ) {
+		extract( shortcode_atts( array(
+			'before'     => '',
+			'sep'        => ', ',
+			'after'      => '',
+			'target'     => 'archive',
+			'image'      => '',
+			'term'       => 0,
+			'collection' => ''
+		), $atts ) );
+		
+		if ( false !== strpos( $name, 'storyline' ) ) {
+			$tax = 'storyline';
+		} elseif ( false !== strpos( $name, 'character' ) ) {
+			$tax = 'character';
+		} else {
+			$tax = '';
+		}
+		
+		return WebcomicTag::webcomic_term_crossovers( $term, $collection ? "{$collection}_{$tax}" : '', $before, $sep, $after, $target, $image );
+	}
+	
+	/** Handle webcomic_collection_title shortcode.
+	 * 
+	 * @param array $atts Shortcode attributes.
+	 * @param string $content Shortcode content.
+	 * @return string
 	 * @uses WebcomicTag::webcomic_collection_title()
 	 */
-	public function webcomic_collection_title( $atts, $content, $name ) {
+	public function webcomic_collection_title( $atts, $content ) {
 		extract( shortcode_atts( array(
 			'prefix'     => '',
 			'collection' => ''
@@ -499,12 +599,10 @@ class WebcomicShortcode extends Webcomic {
 	/** Handle webcomic_collection_description shortcode.
 	 * 
 	 * @param array $atts Shortcode attributes.
-	 * @param string $content Shortcode content.
-	 * @param string $name Shortcode name.
 	 * @return string
 	 * @uses WebcomicTag::webcomic_collection_description()
 	 */
-	public function webcomic_collection_description( $atts, $content, $name ) {
+	public function webcomic_collection_description( $atts ) {
 		extract( shortcode_atts( array(
 			'collection' => ''
 		), $atts ) );
@@ -542,6 +640,25 @@ class WebcomicShortcode extends Webcomic {
 		), $atts ) );
 		
 		return WebcomicTag::webcomic_collection_print_amount( $type, $dec, $sep, $collection );
+	}
+	
+	/** Handle webcomic_collection_crossovers shortcode.
+	 * 
+	 * @param array $atts Shortcode attributes.
+	 * @return string
+	 * @uses WebcomicTag::webcomic_term_crossovers()
+	 */
+	public function webcomic_collection_crossovers( $atts ) {
+		extract( shortcode_atts( array(
+			'before'     => '',
+			'sep'        => ', ',
+			'after'      => '',
+			'target'     => 'archive',
+			'image'      => '',
+			'collection' => ''
+		), $atts ) );
+		
+		return WebcomicTag::webcomic_collection_crossovers( $before, $sep, $after, $target, $image, $collection );
 	}
 	
 	/** Handle webcomic_donation_amount shortcode.

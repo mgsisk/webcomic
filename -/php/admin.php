@@ -396,7 +396,7 @@ class WebcomicAdmin extends Webcomic {
 		flush_rewrite_rules();
 	}
 	
-	/** Handle dynamic requests.
+	/** Handle dynamic requests and remove taxonomy submenus.
 	 * 
 	 * Dynamic request must have a 'webcomic_admin_ajax' value that is a
 	 * valid callback in the form of a static class method, like
@@ -409,6 +409,14 @@ class WebcomicAdmin extends Webcomic {
 			call_user_func_array( explode( '::', isset( $_GET[ 'webcomic_admin_ajax' ] ) ? $_GET[ 'webcomic_admin_ajax' ] : $_POST[ 'webcomic_admin_ajax' ] ), isset( $_GET[ 'webcomic_admin_ajax' ] ) ? $_GET : $_POST );
 			
 			die;
+		}
+		
+		foreach ( self::$config[ 'collections' ] as $k => $v ) {
+			foreach ( $v[ 'taxonomies' ] as $taxonomy ) {
+				if ( preg_match( '/^webcomic\d+_(storyline|character)$/', $taxonomy ) ) {
+					remove_submenu_page( "edit.php?post_type={$k}", "edit-tags.php?taxonomy={$taxonomy}&amp;post_type={$k}" );
+				}
+			}
 		}
 	}
 	

@@ -99,7 +99,6 @@ class Webcomic {
 	 * @uses Webcomic::pre_get_posts()
 	 * @uses Webcomic::buffer_alert()
 	 * @uses Webcomic::wp_enqueue_scripts()
-	 * @uses Webcomic::template_redirect()
 	 * @uses Webcomic::tweet_webcomic()
 	 * @uses Webcomic::request()
 	 * @uses Webcomic::get_term()
@@ -111,6 +110,7 @@ class Webcomic {
 	 * @uses Webcomic::post_class()
 	 * @uses Webcomic::get_the_terms()
 	 * @uses Webcomic::post_type_link()
+	 * @uses Webcomic::template_include()
 	 * @uses Webcomic::the_content_feed()
 	 * @uses Webcomic::wp_get_object_terms()
 	 * @uses Webcomic::extra_theme_headers()
@@ -176,9 +176,9 @@ class Webcomic {
 	/** Initialize major plugin features.
 	 * 
 	 * This hook performs a number of important functions, including
-	 * loading the plugin text domain, defining the 'prints' and
-	 * 'transcripts' rewrite endpoints, and registering custom image
-	 * sizes, post types, and taxonomies.
+	 * loading the plugin text domain, defining the 'prints',
+	 * 'transcripts', and 'crossover' rewrite endpoints, and
+	 * registering custom image sizes, post types, and taxonomies.
 	 * 
 	 * @uses Webcomic::$dir
 	 * @uses Webcomic::$url
@@ -189,9 +189,11 @@ class Webcomic {
 		load_plugin_textdomain( 'webcomic', '', self::$dir . '-/locale/' );
 		
 		define( 'EP_WEBCOMIC', 1099511627776 ); // 2^40
+		define( 'EP_WEBCOMIC_TERM', 2199023255552 ); // 2^41
 		
 		add_rewrite_endpoint( 'prints', EP_WEBCOMIC );
 		add_rewrite_endpoint( 'transcripts', EP_WEBCOMIC );
+		add_rewrite_endpoint( 'crossover', EP_WEBCOMIC_TERM );
 		
 		foreach ( self::$config[ 'sizes' ] as $k => $v ) {
 			add_image_size( $k, $v[ 'width' ], $v[ 'height' ], $v[ 'crop' ] );
@@ -245,7 +247,8 @@ class Webcomic {
 				'rewrite' => array(
 					'slug'         => $v[ 'slugs' ][ 'storyline' ],
 					'with_front'   => false,
-					'hierarchical' => true
+					'hierarchical' => true,
+					'ep_mask'      => EP_WEBCOMIC_TERM
 				)
 			) );
 			
@@ -268,9 +271,16 @@ class Webcomic {
 				'show_admin_column' => true,
 				'rewrite' => array(
 					'slug'       => $v[ 'slugs' ][ 'character' ],
-					'with_front' => false
+					'with_front' => false,
+					'ep_mask'      => EP_WEBCOMIC_TERM
 				)
 			) );
+		}
+		
+		foreach ( self::$config[ 'collections' ] as $k => $v ) {
+			foreach ( $v[ 'taxonomies' ] as $taxonomy ) {
+				register_taxonomy_for_object_type( $taxonomy, $k );
+			}
 		}
 		
 		register_post_type( 'webcomic_transcript', array(
@@ -499,7 +509,7 @@ class Webcomic {
 				$output[ 'article:section' ]        = esc_attr( self::$config[ 'collections' ][ self::$collection ][ 'name' ] );
 				$output[ 'article:tag' ]            = array();
 				
-				if ( $description = esc_attr( strip_tags( wp_trim_excerpt( get_the_excerpt() ) ) ) ) {
+				if ( $description = esc_attr( strip_tags( get_the_excerpt() ) ) ) {
 					$output[ 'og:description' ] = $description;
 				}
 				
@@ -747,7 +757,7 @@ class Webcomic {
 			
 			$in_same_term   = empty( $_GET[ 'in_same_term' ] ) ? false : maybe_unserialize( stripslashes( urldecode( $_GET[ 'in_same_term' ] ) ) );
 			$excluded_terms = empty( $_GET[ 'excluded_terms' ] ) ? false : maybe_unserialize( stripslashes( urldecode( $_GET[ 'excluded_terms' ] ) ) );
-			$taxonomy       = empty( $_GET[ 'taxonomy' ] ) ? '' : $_GET[ 'taxonomy' ];
+			$taxonomy       = empty( $_GET[ 'taxonomy' ] ) ? false : maybe_unserialize( stripslashes( urldecode( $_GET[ 'taxonomy' ] ) ) );
 			$collection     = empty( $_GET[ "{$relative}_webcomic" ] ) ? array_rand( self::$config[ 'collections' ] ) : $_GET[ "{$relative}_webcomic" ];
 			
 			$link = WebcomicTag::get_relative_webcomic_link( $relative, $in_same_term, $excluded_terms, $taxonomy, $collection );
@@ -853,13 +863,56 @@ class Webcomic {
 	
 	/** Include webcomic posts on standard archive pages.
 	 * 
+	 * Also handles the crossover ep_mask for term crossover archives.
+	 * 
 	 * @param object $query The query object for the current page.
 	 * @return object
 	 * @uses Webcomic::$config
 	 * @hook pre_get_posts
 	 */
 	public function pre_get_posts( $query ) {
-		if ( is_archive() and !get_query_var( 'post_type' ) ) {
+		if ( $query->is_main_query() and is_tax() and !empty( $query->tax_query->queries[ 0 ][ 'taxonomy' ] ) and preg_match( '/^webcomic\d+_(storyline|character)$/', $query->tax_query->queries[ 0 ][ 'taxonomy' ] ) ) {
+			if ( isset( $query->query_vars[ 'crossover' ] ) ) {
+				$parts = explode( '/', $query->get( 'crossover' ) );
+				
+				if ( empty( $parts ) or 'page' === $parts[ 0 ] ) {
+					$collections = array_keys( self::$config[ 'collections' ] );
+					$key = array_search( str_replace( array( '_storyline', '_character' ), '', $query->tax_query->queries[ 0 ][ 'taxonomy' ] ), $collections );
+					
+					unset( $collections[ $key ] );
+					
+					$query->set( 'post_type', $collections );
+					
+					if ( isset( $parts[ 1 ] ) ) {
+						$query->set( 'paged', $parts[ 1 ] );
+					}
+				} else {
+					$collection = '';
+					
+					foreach ( self::$config[ 'collections' ] as $k => $v ) {
+						if ( false === strpos( $query->tax_query->queries[ 0 ][ 'taxonomy' ], $k ) and $parts[ 0 ] === $v[ 'slugs' ][ 'name' ] ) {
+							$collection = $k;
+							
+							break;
+						}
+					}
+					
+					if ( $collection ) {
+						$query->set( 'post_type', array( $collection ) );
+						
+						if ( isset( $parts[ 2 ] ) ) {
+							$query->set( 'paged', $parts[ 2 ] );
+						}
+					} else {
+						$query->set( 'post_type', $parts[ 0 ] );
+					}
+				}
+			} elseif ( !$query->get( 'post_type' ) ) {
+				$query->set( 'post_type', array( str_replace( array( '_storyline', '_character' ), '', $query->tax_query->queries[ 0 ][ 'taxonomy' ] ) ) );
+			}
+		}
+		
+		if ( $query->is_main_query() and is_archive() and !$query->get( 'post_type' ) ) {
 			$query->set( 'post_type', array_merge( array( 'post' ), array_keys( self::$config[ 'collections' ] ) ) );
 		}
 		
@@ -1046,7 +1099,7 @@ class Webcomic {
 	 * @hook template
 	 */
 	public function template( $theme ) {
-		return ( self::$collection and self::$config[ 'collections' ][ self::$collection ][ 'theme' ] and $webcomic_template = substr( self::$config[ 'collections' ][ self::$collection ][ 'theme' ], 0, strpos( self::$config[ 'collections' ][ self::$collection ][ 'theme' ], '|' ) ) and is_readable( get_theme_root() . "/{$template}" ) ) ? $template : $theme;
+		return ( self::$collection and self::$config[ 'collections' ][ self::$collection ][ 'theme' ] and $template = substr( self::$config[ 'collections' ][ self::$collection ][ 'theme' ], 0, strpos( self::$config[ 'collections' ][ self::$collection ][ 'theme' ], '|' ) ) and is_readable( get_theme_root() . "/{$template}" ) ) ? $template : $theme;
 	}
 	
 	/** Display webcomics in place of transcripts in searches.
@@ -1137,8 +1190,26 @@ class Webcomic {
 	 * @hook post_class
 	 */
 	public function post_class( $classes, $class, $id ) {
-		if ( preg_match( '/^webcomic\d+$/', get_post_type( $id ) ) and $attachments = self::get_attachments( $id ) ) {
+		$post_type = get_post_type( $id );
+		
+		if ( preg_match( '/^webcomic\d+$/', $post_type ) and $attachments = self::get_attachments( $id ) ) {
 			$classes[] = sprintf( 'webcomic-attachments-%s', count( $attachments ) );
+		}
+		
+		if ( $taxonomies = get_object_taxonomies( get_post( $id ) ) ) {
+			$crossovers = array();
+			
+			foreach ( $taxonomies as $taxonomy ) {
+				if ( $taxonomy !== "{$post_type}_storyline" and $taxonomy !== "{$post_type}_character" and preg_match( '/^webcomic\d+_(storyline|character)$/', $taxonomy ) and wp_get_object_terms( $id, $taxonomy, array( 'fields' => 'ids' ) ) ) {
+					$crossovers[] = 'webcomic-crossover';
+					$crossovers[] = str_replace( array( '_storyline', '_character' ), '', "$taxonomy-crossover" );
+					$crossovers[] = "{$taxonomy}-crossover";
+				}
+			}
+			
+			if ( $crossovers = array_unique( $crossovers ) ) {
+				$classes[] = join( ' ', $crossovers );
+			}
 		}
 		
 		return $classes;
@@ -1216,7 +1287,11 @@ class Webcomic {
 		return str_replace( array_keys( $tokens ), $tokens, $link );
 	}
 	
-	/** Load cusotm templates for Webcomic-related pages.
+	/** Load custom templates for Webcomic-related pages.
+	 * 
+	 * Changes the template hierarchy when a Webcomic-related page is
+	 * found, loadig Webcomic-specific templates from a `webcomic`
+	 * directory inside the current them (if they exst).
 	 * 
 	 * @param string $template The template file to be included.
 	 * @return string
@@ -1226,80 +1301,59 @@ class Webcomic {
 	 * @hook template_include
 	 */
 	public function template_include( $template ) {
-		global $wp_query, $post;
+		global $wp_query;
 		
-		$webcomic_template = false;
+		$template = str_replace( array( get_stylesheet_directory() . '/', get_template_directory() . '/' ), '', $template );
 		
-		if ( self::$collection ) {
+		if ( self::$collection and ( !is_page() or !$page_template = get_page_template_slug() or !validate_file( $page_template ) ) ) {
+			$object     = get_queried_object();
 			$collection = self::$collection;
 			
 			if ( isset( $_GET[ 'webcomic_dynamic' ] ) and 'xmlhttprequest' === strtolower( $_SERVER[ 'HTTP_X_REQUESTED_WITH' ] ) ) {
-				if ( !$webcomic_template = locate_template( array( "webcomic/dynamic-{$collection}-{$_GET[ 'webcomic_dynamic' ]}.php", "webcomic/dynamic-{$_GET[ 'webcomic_dynamic' ]}.php", "webcomic/dynamic-{$collection}.php", 'webcomic/dynamic.php' ) ) ) {
-					$webcomic_template = self::$dir . '-/php/integrate/dynamic.php';
+				if ( !$template = locate_template( array( "webcomic/dynamic-{$collection}-{$_GET[ 'webcomic_dynamic' ]}.php", "webcomic/dynamic-{$_GET[ 'webcomic_dynamic' ]}.php", "webcomic/dynamic-{$collection}.php", 'webcomic/dynamic.php' ) ) ) {
+					$template = self::$dir . '-/php/integrate/dynamic.php';
 				}
+				
+				return $template;
 			} elseif ( !WebcomicTag::verify_webcomic_role( $collection ) ) {
-				if ( !$webcomic_template = locate_template( array( "webcomic/restricted-role-{$collection}.php", 'webcomic/restricted-role.php' ) ) ) {
-					$webcomic_template = self::$dir . '-/php/integrate/restricted-role.php';
+				if ( !$template = locate_template( array( "webcomic/restricted-role-{$collection}.php", 'webcomic/restricted-role.php' ) ) ) {
+					$template = self::$dir . '-/php/integrate/restricted-role.php';
 				}
+				
+				return $template;
 			} elseif ( !WebcomicTag::verify_webcomic_age( $collection ) ) {
-				if ( !$webcomic_template = locate_template( array( "webcomic/restricted-age-{$collection}.php", 'webcomic/restricted-age.php' ) ) ) {
-					$webcomic_template = self::$dir . '-/php/integrate/restricted-age.php';
-				}
-			} elseif ( is_front_page() ) {
-				$check = array( "webcomic/front-page-{$collection}.php", 'webcomic/front-page.php' );
-				
-				if ( is_home() ) {
-					$check[] = "webcomic/home-{$collection}.php";
-					$check[] = 'webcomic/home.php';
-				} elseif ( is_page() and !get_post_meta( $wp_query->post->ID, '_wp_page_template', true ) ) {
-					$check[] = "webcomic/page-{$wp_query->post->post_name}.php";
-					$check[] = "webcomic/page-{$wp_query->post->ID}.php";
-					$check[] = 'webcomic/page-{$collection}.php';
-					$check[] = 'webcomic/page.php';
+				if ( !$template = locate_template( array( "webcomic/restricted-age-{$collection}.php", 'webcomic/restricted-age.php' ) ) ) {
+					$template = self::$dir . '-/php/integrate/restricted-age.php';
 				}
 				
-				$check[] = 'webcomic/index.php';
-				
-				$webcomic_template = locate_template( $check );
-			} elseif ( is_single() ) {
-				if ( !isset( $wp_query->query_var[ 'prints' ] ) or !$webcomic_template = locate_template( array( "webcomic/prints-{$wp_query->post->post_name}.php", "webcomic/prints-{$wp_query->post->ID}.php", "webcomic/prints-{$collection}.php", 'webcomic/prints.php' ) ) ) {
-					$webcomic_template = locate_template( array( "webcomic/single-{$wp_query->post->post_name}.php", "webcomic/single-{$wp_query->post->ID}.php", "webcomic/single-{$collection}.php", 'webcomic/single.php', 'webcomic/index.php' ) );
-				}
-			} elseif ( is_page() and !get_post_meta( $wp_query->post->ID, '_wp_page_template', true ) ) {
-				$webcomic_template = locate_template( array( "webcomic/page-{$wp_query->post->post_name}.php", "webcomic/page--{$wp_query->post->ID}.php", "webcomic/page-{$collection}.php", 'webcomic/page.php' ) );
-			} elseif ( is_tax() ) {
-				if ( isset( $wp_query->query_vars[ 'crossovers' ] ) ) {
-					$parts = explode( '/', $wp_query->query_vars[ 'crossovers' ] );
-					
-					if ( empty( $parts ) or 'page' === $parts[ 0 ] or !$webcomic_template = $webcomic_template = locate_template( array( "webcomic/crossovers-{$parts[ 0 ]}-{$wp_query->query_vars[ 'taxonomy' ]}-{$wp_query->query_vars[ 'term' ]}.php", "webcomic/crossovers-{$parts[ 0 ]}-{$wp_query->query_vars[ 'taxonomy' ]}.php", "webcomic/crossovers-{$parts[ 0 ]}.php" ) ) ) {
-						$webcomic_template = locate_template( array( "webcomic/crossovers-{$wp_query->query_vars[ 'taxonomy' ]}-{$wp_query->query_vars[ 'term' ]}.php", "webcomic/crossovers-{$wp_query->query_vars[ 'taxonomy' ]}.php", 'webcomic/crossovers.php', 'webcomic/taxonomy.php', 'webcomic/archive.php', 'webcomic/index.php' ) );
-					}
-				} else {
-					$webcomic_template = locate_template( array( "webcomic/taxonomy-{$wp_query->query_vars[ 'taxonomy' ]}-{$wp_query->query_vars[ 'term' ]}.php", "webcomic/taxonomy-{$wp_query->query_vars[ 'taxonomy' ]}.php", 'webcomic/taxonomy.php', 'webcomic/archive.php', 'webcomic/index.php' ) );
-				}
-			} elseif ( is_post_type_archive() ) {
-				$webcomic_template = locate_template( array( "webcomic/archive-{$collection}.php", 'webcomic/archive.php', 'webcomic/index.php' ) );
+				return $template;
+			} elseif ( is_front_page() and is_home() ) {
+				$template = array( "webcomic/home-{$collection}.php", 'webcomic/home.php', $template );
 			} elseif ( is_attachment() ) {
-				$mimetype          = explode( '/', $wp_query->post->post_mime_type );
-				$webcomic_template = locate_template( array( "webcomic/{$mimetype[ 0 ]}-{$collection}.php", "webcomic/{$mimetype[ 0 ]}.php", "webcomic/{$mimetype[ 1 ]}-{$collection}.php", "webcomic/{$mimetype[ 1 ]}.php", "webcomic/{$mimetype[ 0 ]}_{$mimetype[ 1 ]}-{$collection}.php", "webcomic/{$mimetype[ 0 ]}_{$mimetype[ 1 ]}.php", "webcomic/attachment-{$collection}.php", 'webcomic/attachment.php', 'webcomic/single-attachment.php', 'webcomic/single.php', 'webcomic/index.php' ) );
+				$mt = explode( '/', $object->post_mime_type );
+				$template = array(  "webcomic/{$mt[ 0 ]}-{$collection}.php", "webcomic/{$mt[ 0 ]}.php", "webcomic/{$mt[ 1 ]}-{$collection}.php", "webcomic/{$mt[ 1 ]}.php", "webcomic/{$mt[ 0 ]}_{$mt[ 1 ]}-{$collection}.php", "webcomic/{$mt[ 0 ]}_{$mt[ 1 ]}.php", "webcomic/attachment-{$collection}.php", 'webcomic/attachment.php', $template );
+			} elseif ( is_single() ) {
+				if ( isset( $wp_query->query_vars[ 'prints' ] ) ) {
+					$template = array( "webcomic/prints-{$collection}.php", 'webcomic/prints.php', 'webcomic/single.php', $template );
+				} elseif ( false === strpos( $template, $collection ) ) {
+					$template = array( 'webcomic/single.php', $template );
+				}
+			} elseif ( is_page() and false === strpos( $template, $object->post_name ) and false === strpos( $template, $object->ID ) ) {
+				$template = array( "webcomic/page-{$collection}.php", 'webcomic/page.php', $template );
+			} elseif ( is_tax() ) {
+				if ( isset( $wp_query->query_vars[ 'crossover' ] ) ) {
+					$template = array( "webcomic/crossover-{$object->taxonomy}-{$object->slug}.php", "webcomic/crossover-{$object->taxonomy}.php", sprintf( 'webcomic/crossover-%s.php', false !== strpos( $object->taxonomy, 'storyline' ) ? 'storyline' : 'character' ), 'webcomic/crossover.php', sprintf( 'webcomic/%s.php', false !== strpos( $object->taxonomy, 'storyline' ) ? 'storyline' : 'character' ), 'webcomic/taxonomy.php', 'webcomic/archive.php', $template );
+				} elseif ( false === strpos( $template, $object->taxonomy ) ) {
+					$template = array( sprintf( 'webcomic/%s.php', false !== strpos( $object->taxonomy, 'storyline' ) ? 'storyline' : 'character' ), 'webcomic/taxonomy.php', 'webcomic/archive.php', $template );
+				}
+			} elseif ( is_post_type_archive() and false === strpos( $template, $collection ) ) {
+				$template = array( 'webcomic/archive.php', $template );
 			}
-		} elseif ( is_front_page() ) {
-			$check = array( 'webcomic/front-page.php' );
-			
-			if ( is_home() ) {
-				$check[] = 'webcomic/home.php';
-			} elseif ( is_page() and !get_post_meta( $wp_query->post->ID, '_wp_page_template', true ) ) {
-				$check[] = "webcomic/page-{$wp_query->post->post_name}.php";
-				$check[] = "webcomic/page-{$wp_query->post->ID}.php";
-				$check[] = 'webcomic/page.php';
-			}
-			
-			$check[] = 'webcomic/index.php';
-			
-			$webcomic_template = locate_template( $check );
+		} elseif ( is_front_page() and is_home() ) {
+			$template = array( 'webcomic/home.php', $template );
 		}
 		
-		return $webcomic_template ? $webcomic_template : $template;
+		return locate_template( $template );
 	}
 	
 	/** Add webcomic previews to feed content.
@@ -1408,7 +1462,7 @@ class Webcomic {
 		if ( self::$integrate and $query->is_main_query() and is_singular( array_keys( self::$config[ 'collections' ] ) ) ) {
 			do_action( 'webcomic_loop_end', self::$collection );
 			
-			if ( !locate_template( array( 'webcomic/loop_end=' . self::$collection . '.php', 'webcomic/loop_end.php' ), true, false ) ) {
+			if ( !locate_template( array( 'webcomic/loop_end-' . self::$collection . '.php', 'webcomic/loop_end.php' ), true, false ) ) {
 				require self::$dir . '-/php/integrate/loop_end.php';
 			}
 		}
