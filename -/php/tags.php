@@ -1332,7 +1332,7 @@ class WebcomicTag extends Webcomic {
 	 * @return string
 	 * @uses Webcomic::$config
 	 * @uses WebcomicTag::get_relative_webcomic_link()
-	 * @filter get_webcomic_term_crossover_link
+	 * @filter get_webcomic_term_crossover_link Filters the URL returned by get_webcomic_term_crossover_link.
 	 */
 	public static function get_webcomic_term_crossover_link( $collection = '', $term = 0, $taxonomy = '' ) {
 		global $wp_rewrite;
@@ -1538,7 +1538,7 @@ class WebcomicTag extends Webcomic {
 	 * @param string $before Before list.
 	 * @param string $sep Separate items using this.
 	 * @param string $after After list.
-	 * @param string $target Where the term links should point to, one of 'archive', 'first', 'last', or 'random'.
+	 * @param string $target Where the collection links should point to, one of 'archive', 'first', 'last', or 'random'.
 	 * @param string $image Image size to use when displaying crossover collections images for links.
 	 * @param string $collection The collection to retrieve crossovers for.
 	 * @return string
@@ -3371,7 +3371,7 @@ if ( !function_exists( 'is_webcomic_crossover' ) ) {
 	 * @package Webcomic
 	 * @param string $collection Collection ID to check for.
 	 * @return boolean
-	 * @uses WebcomicTag::$is_webcomic_crossover()
+	 * @uses WebcomicTag::is_webcomic_crossover()
 	 */
 	function is_webcomic_crossover( $collection = '' ) {
 		return WebcomicTag::is_webcomic_crossover( $collection );
@@ -3460,27 +3460,27 @@ if ( !function_exists( 'has_webcomic_crossover' ) ) {
 	/** Is the current webcomic a crossover?
 	 * 
 	 * <code class="php">
-	 * if ( is_webcomic_crossover() ) {
+	 * if ( has_webcomic_crossover() ) {
 	 * 	// this webcomic features characters or storylines from any other collection
 	 * }
 	 * 
-	 * if ( is_webcomic_crossover( 'webcomic42' ) ) {
+	 * if ( has_webcomic_crossover( 'webcomic42' ) ) {
 	 * 	// this webcomic crosses over with storylines or characters from collection 42
 	 * }
 	 * 
-	 * if ( is_webcomic_crossover( 'webcomic42_character' ) ) {
+	 * if ( has_webcomic_crossover( 'webcomic42_character' ) ) {
 	 * 	// this webcomic features one or more characters from collection 42
 	 * }
 	 * 
-	 * if ( is_webcomic_crossover( '', 'ford-prefect' ) {
+	 * if ( has_webcomic_crossover( '', 'ford-prefect' ) {
 	 * 	// this webcomic crosses over with a storyline or character from any collection that has the slug ford-prefect
 	 * }
 	 * 
-	 * if ( is_webcomic_crossover( 'character', 'ford-prefect' ) {
+	 * if ( has_webcomic_crossover( 'character', 'ford-prefect' ) {
 	 * 	// this webcomic features a character from any collection that has the slug ford-prefect
 	 * }
 	 * 
-	 * if ( is_webcomic_crossover( 'webcomic42_sotyrline', 'mostly-harmless' ) {
+	 * if ( has_webcomic_crossover( 'webcomic42_sotyrline', 'mostly-harmless' ) {
 	 * 	// this webcomic crosses over with the storyline that has the slug mostly-harmless in collection 42
 	 * }
 	 * </code>
@@ -4085,7 +4085,7 @@ if ( !function_exists( 'purchase_webcomic_link' ) ) {
 if ( !function_exists( 'the_webcomic_collection' ) ) {
 	/** Render a webcomic collection link.
 	 * 
-	 * @deprecated 4.0.7 4.1 Use the_webcomic_collections instead.
+	 * @deprecated 4.0.7 4.1 the_webcomic_collections
 	 */
 	function the_webcomic_collection( $format = '%link', $link = '', $target = 'archive', $collection = '' ) {
 		echo WebcomicTag::webcomic_collection_link( $format, $link, $target, $collection );
@@ -4100,7 +4100,7 @@ if ( !function_exists( 'the_webcomic_collections' ) ) {
 	 * the_webcomic_collections();
 	 * 
 	 * // render an unordered list of collections related to the current webcomic
-	 * the_webcomic_collections( '<ul><li>', '</li><li>', </li></ul>' );
+	 * the_webcomic_collections( '<ul><li>', '</li><li>', '</li></ul>' );
 	 * 
 	 * // render links to the first webcomic in each collection related to the current webcomic with a small collection poster
 	 * the_webcomic_collections( '<div><h2>collections</h2><figure>', '</figure><figure>', '</figure></div>', 'first', 'thumbnail' );
@@ -4933,10 +4933,10 @@ if ( !function_exists( 'webcomic_storyline_crossovers' ) ) {
 	 * @param string $before Before list.
 	 * @param string $sep Separate items using this.
 	 * @param string $after After list.
-	 * @param string $target Where the term links should point to, one of 'archive', 'first', 'last', or 'random'.
+	 * @param string $target Where the links should point to, one of 'archive', 'first', 'last', or 'random'.
 	 * @param string $image Image size to use when displaying crossover collections images for links.
 	 * @param integer $storyline Storyline ID to render a crossover list for.
-	 * @param mixed $taxonomy The collection the storyline belongs to.
+	 * @param mixed $collection The collection the storyline belongs to.
 	 * @uses WebcomicTag::webcomic_term_crossovers()
 	 */
 	function webcomic_storyline_crossovers( $before = '', $sep = ', ', $after = '', $target = 'archive', $image = '', $storyline = 0, $collection = '' ) {
@@ -4973,10 +4973,10 @@ if ( !function_exists( 'webcomic_character_crossovers' ) ) {
 	 * @param string $before Before list.
 	 * @param string $sep Separate items using this.
 	 * @param string $after After list.
-	 * @param string $target Where the term links should point to, one of 'archive', 'first', 'last', or 'random'.
+	 * @param string $target Where the links should point to, one of 'archive', 'first', 'last', or 'random'.
 	 * @param string $image Image size to use when displaying crossover collections images for links.
 	 * @param integer $character character ID to render a crossover list for.
-	 * @param mixed $taxonomy The collection the character belongs to.
+	 * @param mixed $collection The collection the character belongs to.
 	 * @uses WebcomicTag::webcomic_term_crossovers()
 	 */
 	function webcomic_character_crossovers( $before = '', $sep = ', ', $after = '', $target = 'archive', $image = '', $character = 0, $collection = '' ) {

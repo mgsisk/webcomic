@@ -382,7 +382,7 @@ class WebcomicHelp extends Webcomic {
 			<p>%s</p>',
 			__( 'The Webcomic Generator can assist you in publishing a large backlog of webcomics. The right column lists all of the images in your Media Library that are not attached to a post. Select the files you would like to publish using the checkboxes, then adjust the publish settings on the left:', 'webcomic' ),
 			__( '<strong>Collection</strong> specifies the collection that all of the generated webcomics will belong to.', 'webcomic' ),
-			__( '<strong>Start on&hellip;</strong> specifies the the date to begin publishing the selected images. The first selected image in the list will be published on this date.', 'webcomic' ),
+			__( '<strong>Start on&hellip;</strong> specifies the date to begin publishing the selected images. The first selected image in the list will be published on this date.', 'webcomic' ),
 			__( '<strong>Publish every&hellip;</strong> allows you to select which days of the week to publish subsequent files. The generator will work through the list from top to bottom, publishing selected files based on the days you select. You can reorder the images on the right by dragging and dropping the table rows to ensure they publish in the correct order.', 'webcomic' ),
 			__( '<strong>Save posts as drafts</strong> will cause all of the webcomics created by the generator to be drafted. These posts will not appear on your site until you publish them.', 'webcomic' ),
 			__( 'Webcomics created by the generator will use the image filename for the webcomic title.', 'webcomic' )
@@ -792,7 +792,7 @@ class WebcomicHelp extends Webcomic {
 			</ul>',
 			__( 'These settings allow you to change some of the basic information and features related to your collection:', 'webcomic' ),
 			__( '<strong>Name</strong> - The name is how it appears on your site.', 'webcomic' ),
-			__( '<strong>Slug</strong> - The The "slug" is the URL-friendly version of the name. It is usually all lowercase and contains only letters, numbers, and hyphens.', 'webcomic' ),
+			__( '<strong>Slug</strong> - The "slug" is the URL-friendly version of the name. It is usually all lowercase and contains only letters, numbers, and hyphens.', 'webcomic' ),
 			__( '<strong>Description</strong> - The description is not prominent by default; it may be used in various ways, however.', 'webcomic' ),
 			__( '<strong>Poster</strong> - The poster is a representative image that can be displayed on your site.', 'webcomic' ),
 			__( '<strong>Theme</strong> - Determines what theme will be used when a user is viewing a page related to this collection.', 'webcomic' ),
