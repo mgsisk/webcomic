@@ -1316,13 +1316,13 @@ class Webcomic {
 				
 				return $template;
 			} elseif ( !WebcomicTag::verify_webcomic_role( $collection ) ) {
-				if ( !$template = locate_template( array( "webcomic/restricted-role-{$collection}.php", 'webcomic/restricted-role.php' ) ) ) {
+				if ( !$template = locate_template( array( "webcomic/restricted-role-{$collection}.php", 'webcomic/restricted-role.php', 'webcomic/restricted.php' ) ) ) {
 					$template = self::$dir . '-/php/integrate/restricted-role.php';
 				}
 				
 				return $template;
 			} elseif ( !WebcomicTag::verify_webcomic_age( $collection ) ) {
-				if ( !$template = locate_template( array( "webcomic/restricted-age-{$collection}.php", 'webcomic/restricted-age.php' ) ) ) {
+				if ( !$template = locate_template( array( "webcomic/restricted-age-{$collection}.php", 'webcomic/restricted-age.php', 'webcomic/restricted.php' ) ) ) {
 					$template = self::$dir . '-/php/integrate/restricted-age.php';
 				}
 				
@@ -1334,7 +1334,7 @@ class Webcomic {
 				$template = array(  "webcomic/{$mt[ 0 ]}-{$collection}.php", "webcomic/{$mt[ 0 ]}.php", "webcomic/{$mt[ 1 ]}-{$collection}.php", "webcomic/{$mt[ 1 ]}.php", "webcomic/{$mt[ 0 ]}_{$mt[ 1 ]}-{$collection}.php", "webcomic/{$mt[ 0 ]}_{$mt[ 1 ]}.php", "webcomic/attachment-{$collection}.php", 'webcomic/attachment.php', $template );
 			} elseif ( is_single() ) {
 				if ( isset( $wp_query->query_vars[ 'prints' ] ) ) {
-					$template = array( "webcomic/prints-{$collection}.php", 'webcomic/prints.php', 'webcomic/single.php', $template );
+					$template = array( "webcomic/prints-{$collection}.php", 'webcomic/prints.php', "single-{$collection}", 'webcomic/single.php', 'single.php', $template );
 				} elseif ( false === strpos( $template, $collection ) ) {
 					$template = array( 'webcomic/single.php', $template );
 				}
@@ -1342,9 +1342,9 @@ class Webcomic {
 				$template = array( "webcomic/page-{$collection}.php", 'webcomic/page.php', $template );
 			} elseif ( is_tax() ) {
 				if ( isset( $wp_query->query_vars[ 'crossover' ] ) ) {
-					$template = array( "webcomic/crossover-{$object->taxonomy}-{$object->slug}.php", "webcomic/crossover-{$object->taxonomy}.php", sprintf( 'webcomic/crossover-%s.php', false !== strpos( $object->taxonomy, 'storyline' ) ? 'storyline' : 'character' ), 'webcomic/crossover.php', sprintf( 'webcomic/%s.php', false !== strpos( $object->taxonomy, 'storyline' ) ? 'storyline' : 'character' ), 'webcomic/taxonomy.php', 'webcomic/archive.php', $template );
+					$template = array( "webcomic/crossover-{$object->taxonomy}-{$object->slug}.php", "webcomic/crossover-{$object->taxonomy}.php", sprintf( 'webcomic/crossover-%s.php', false !== strpos( $object->taxonomy, 'storyline' ) ? 'storyline' : 'character' ), 'webcomic/crossover.php', "taxonomy-{$object->taxonomy}-{$object->slug}.php", "taxonomy-{$object->taxonomy}.php", sprintf( 'webcomic/%s.php', false !== strpos( $object->taxonomy, 'storyline' ) ? 'storyline' : 'character' ), 'webcomic/taxonomy.php', 'taxonomy.php', 'webcomic/archive.php', $template );
 				} elseif ( false === strpos( $template, $object->taxonomy ) ) {
-					$template = array( sprintf( 'webcomic/%s.php', false !== strpos( $object->taxonomy, 'storyline' ) ? 'storyline' : 'character' ), 'webcomic/taxonomy.php', 'webcomic/archive.php', $template );
+					$template = array( sprintf( 'webcomic/%s.php', false !== strpos( $object->taxonomy, 'storyline' ) ? 'storyline' : 'character' ), 'webcomic/taxonomy.php', 'taxonomy.php', 'webcomic/archive.php', $template );
 				}
 			} elseif ( is_post_type_archive() and false === strpos( $template, $collection ) ) {
 				$template = array( 'webcomic/archive.php', $template );
