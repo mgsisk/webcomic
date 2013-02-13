@@ -72,7 +72,7 @@ jQuery( function( $ ) {
 				if ( $e && $e.length ) {
 					e.preventDefault();
 					
-					if ( $e.closest( '[data-webcomic-container]' ).length ) {
+					if ( $.fn.webcomicDynamicNavigation && $e.closest( '[data-webcomic-container]' ).length ) {
 						$e.trigger( 'click' );
 					} else {
 						window.location.href = $e.attr( 'href' );
