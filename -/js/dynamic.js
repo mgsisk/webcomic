@@ -49,7 +49,5 @@ jQuery( function( $ ) {
 
 /** Ensure that keyboard shortcuts and gestures work with dynamic navigation. */
 (function( $ ) {
-	$.fn.webcomicDynamicNavigation = function() {
-		return true;
-	}
+	$.fn.webcomicDynamicNavigation = true;
 } )(jQuery);
