@@ -558,6 +558,8 @@ class Webcomic {
 				$output[ 'og:image:width' ]  = $attributes[ 1 ];
 				$output[ 'og:image:height' ] = $attributes[ 2 ];
 			}
+			
+			$output[ 'generator' ] = sprintf( 'Webcomic %s', self::$version );
 		}
 		
 		$output = apply_filters( 'webcomic_opengraph', $output, $object, self::$collection );
@@ -574,7 +576,7 @@ class Webcomic {
 					}
 				}
 			} else {
-				echo sprintf( '<meta %s="%s" content="%s">', 0 === strpos( $k, 'twitter' ) ? 'name' : 'property', $k, $v ), "\n";
+				echo sprintf( '<meta %s="%s" content="%s">', ( 0 === strpos( $k, 'twitter' ) or 'generator' === $k ) ? 'name' : 'property', $k, $v ), "\n";
 			}
 		}
 	}
