@@ -177,13 +177,13 @@ class WebcomicAdmin extends Webcomic {
 			);
 			
 			if ( is_array( $legacy ) ) {
+				self::$config[ 'legacy' ] = 3;
+				
 				$legacy_config = $legacy;
 				
 				delete_option( 'webcomic_options' );
-				
-				self::$config[ 'legacy' ] = self::$config[ 'legacy_notice' ] = 3;
 			} elseif ( $legacy ) {
-				self::$config[ 'legacy' ] = self::$config[ 'legacy_notice' ] = version_compare( $legacy, '2', '>=' ) ? 2 : 1;
+				self::$config[ 'legacy' ] = version_compare( $legacy, '2', '>=' ) ? 2 : 1;
 				
 				$legacy_config = array(
 					'webcomic_version'     => $legacy,
@@ -252,9 +252,21 @@ class WebcomicAdmin extends Webcomic {
 					delete_option( 'comic_thumbnail_size_w' );
 					delete_option( 'comic_thumbnail_size_h' );
 				}
+			} elseif ( $legacy_config = get_option( 'comicpress-options' ) ) {
+				global $comiccat, $comic_folder;
+				
+				self::$config[ 'legacy' ] = 'ComicPress';
+				
+				$legacy_config = array_merge( array(
+					'comiccat'     => $comiccat,
+					'date_format'  => CP_DATE_FORMAT,
+					'comic_folder' => $comic_folder
+				), $legacy_config );
 			}
 			
-			if ( $legacy ) {
+			if ( isset( self::$config[ 'legacy' ] ) ) {
+				self::$config[ 'legacy_notice' ] = true;
+				
 				delete_option( 'webcomic_legacy' );
 				
 				update_option( 'webcomic_legacy', $legacy_config, '', 'no' );
@@ -355,7 +367,7 @@ class WebcomicAdmin extends Webcomic {
 			if ( $legacy = get_option( 'webcomic_legacy' ) ) {
 				if ( 3 === self::$config[ 'legacy' ] ) {
 					add_option( 'webcomic_options', $legacy );
-				} else {
+				} elseif ( is_numeric( self::$config[ 'legacy' ] ) ) {
 					add_option( 'webcomic_version', $legacy[ 'webcomic_version' ] );
 					add_option( 'comic_category', $legacy[ 'comic_category' ] );
 					add_option( 'comic_directory', $legacy[ 'comic_directory' ] );

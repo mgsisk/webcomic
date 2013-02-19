@@ -62,7 +62,7 @@ class WebcomicLegacy extends Webcomic {
 			register_taxonomy( 'webcomic_character', array( 'webcomic_post' ), array(
 				'label' => 'Characters',
 			) );
-		} else {
+		} elseif ( is_numeric( self::$config[ 'legacy' ] ) ) {
 			register_taxonomy( 'chapter', 'post', array(
 				'label' => sprintf( __( 'Webcomic %s Chapters', 'webcomic' ), self::$config[ 'legacy' ] ),
 				'hierarchical' => true
@@ -77,6 +77,7 @@ class WebcomicLegacy extends Webcomic {
 	 * @uses WebcomicLegacy::upgrade1()
 	 * @uses WebcomicLegacy::upgrade2()
 	 * @uses WebcomicLegacy::upgrade3()
+	 * @uses WebcomicLegacy::upgrade_comicpress()
 	 * @hook admin_init
 	 */
 	public function admin_init() {
@@ -110,8 +111,10 @@ class WebcomicLegacy extends Webcomic {
 					$_POST[ 'webcomic_upgrade_status' ] = self::upgrade3( $stage );
 				} elseif ( 2 === self::$config[ 'legacy' ] ) {
 					$_POST[ 'webcomic_upgrade_status' ] = self::upgrade2( $stage );
-				} else {
+				} elseif ( 1 === self::$config[ 'legacy' ] ) {
 					$_POST[ 'webcomic_upgrade_status' ] = self::upgrade1( $stage );
+				} elseif ( 'ComicPress' === self::$config[ 'legacy' ] ) {
+					$_POST[ 'webcomic_upgrade_status' ] = self::upgrade_comicpress( $stage );
 				}
 			}
 		}
@@ -123,7 +126,7 @@ class WebcomicLegacy extends Webcomic {
 	 * @hook admin_menu
 	 */
 	public function admin_menu() {
-		add_submenu_page( 'tools.php', __( 'Upgrade Webcomic', 'webcomic' ), __( 'Upgrade Webcomic', 'webcomic' ), 'manage_options', 'webcomic-upgrader', array( $this, 'page' ) );
+		add_submenu_page( 'tools.php', __( 'Upgrade to Webcomic 4', 'webcomic' ), __( 'Upgrade Webcomic', 'webcomic' ), 'manage_options', 'webcomic-upgrader', array( $this, 'page' ) );
 	}
 	
 	/** Render upgrade tool notification.
@@ -191,12 +194,12 @@ class WebcomicLegacy extends Webcomic {
 		<div class="wrap">
 			<div id="icon-tools" class="icon32"></div>
 			<h2><?php echo get_admin_page_title(); ?></h2>
-			<div id="col-left">
+			<div>
 				<div class="col-wrap">
 					<?php if ( isset( $_POST[ 'webcomic_upgrade_status' ] ) and 0 === $_POST[ 'webcomic_upgrade_status' ] ) { ?>
 					
 					<h3 style="color:green;font-size:larger"><?php _e( "Just one more click!", 'webcomic' ); ?></h3>
-					<p><?php printf( __( 'Thanks again for using Webcomic! Clicking <strong>Complete the Upgrade</strong> will remove the Upgrade Webcomic tool, delete any leftover Webcomic %1$s data, and take you to the administrative dashboard. If you notice any problems with the upgrade please <a href="%2$s" target="_blank">let the developer know</a>.', 'webcomic' ), self::$config[ 'legacy' ], '//github.com/mgsisk/webcomic/issues' ); ?></p>
+					<p><?php printf( __( 'Thanks again for using Webcomic! Clicking <strong>Complete the Upgrade</strong> will remove the upgrade tool, delete any leftover data, and take you to the administrative dashboard. If you notice any problems with the upgrade please <a href="%1$s" target="_blank">let the developer know</a>.', 'webcomic' ), '//github.com/mgsisk/webcomic/issues' ); ?></p>
 					<form method="post">
 						<?php wp_nonce_field( 'webcomic_upgrade', 'webcomic_upgrade' ); ?>
 						<div class="form-wrap">
@@ -220,8 +223,8 @@ class WebcomicLegacy extends Webcomic {
 					
 					<?php } else { ?>
 					
-					<p><?php printf( __( 'This tool will attempt to automatically convert your existing Webcomic %1$s data to Webcomic %2$s. Depending on the size of your site the upgrade may require multiple steps. If you do not want to upgrade click <strong>Not Interested</strong> to uninstall Webcomic %2$s.', 'webcomic' ), self::$config[ 'legacy' ], self::$version ); ?></p>
-					<p style="color:#bc0b0b;font-size:larger"><strong><?php printf( __( 'Upgrades are not reversible and, once begun, should not be stopped. Please <a href="%1$s" target="_blank">read this</a> and <a href="%2$s">backup your site</a> before upgrading.', 'webcomic' ), '//github.com/mgsisk/webcomic/wiki/Upgrading', esc_url( admin_url( 'export.php' ) ) ); ?></strong></p>
+					<p><?php printf( __( 'This tool will attempt to automatically convert your existing %1$s data to Webcomic %2$s. Depending on the size of your site the upgrade may require multiple steps. If you do not want to upgrade click <strong>Not Interested</strong> to uninstall Webcomic %2$s.', 'webcomic' ), is_numeric( self::$config[ 'legacy' ] ) ? sprintf( 'Webcomic %s', self::$config[ 'legacy' ] ) : self::$config[ 'legacy' ], self::$version ); ?></p>
+					<div class="error"><p><strong><?php printf( __( 'Upgrades are not reversible and, once begun, should not be stopped. Please <a href="%1$s" target="_blank">read this</a> and <a href="%2$s">backup your site</a> before upgrading.', 'webcomic' ), '//github.com/mgsisk/webcomic/wiki/Upgrading', esc_url( admin_url( 'export.php' ) ) ); ?></strong></p></div>
 					<form method="post">
 						<?php wp_nonce_field( 'webcomic_upgrade', 'webcomic_upgrade' ); ?>
 						<div class="form-wrap">
@@ -437,7 +440,7 @@ class WebcomicLegacy extends Webcomic {
 							
 							update_post_meta( $post, 'webcomic_original', false );
 							
-							update_post_meta( $post, 'webcomic_transcripts', ( boolean ) true );
+							update_post_meta( $post, 'webcomic_transcripts', true );
 							
 							update_post_meta( $post, 'webcomic_commerce', array(
 								'price' => array(
@@ -1130,6 +1133,159 @@ class WebcomicLegacy extends Webcomic {
 				
 				if ( microtime( true ) - $start >= $this->limit ) {
 					return $stage;
+				}
+			}
+		}
+		
+		return 0;
+	}
+	
+	/** Upgrade ComicPress installations.
+	 * 
+	 * @return integer
+	 * @uses Webcomic::$config
+	 * @uses WebcomicLegacy::update_media_library()
+	 */
+	private function upgrade_comicpress( $stage = 0 ) {
+		global $wpdb;
+		
+		$start         = microtime( true );
+		$upload_dir    = wp_upload_dir();
+		$admin_email   = get_bloginfo( 'admin_email' );
+		$legacy_config = get_option( 'webcomic_legacy' );
+		
+		$term = get_term( ( integer ) $legacy_config[ 'comiccat' ], 'category' );
+		
+		if ( !$stage ) {
+			self::$config[ 'collections' ][ 'webcomic1' ][ 'name' ]                                      = $term->name;
+			self::$config[ 'collections' ][ 'webcomic1' ][ 'slugs' ][ 'name' ]                           = $term->slug;
+			self::$config[ 'collections' ][ 'webcomic1' ][ 'slugs' ][ 'archive' ]                        = $term->slug;
+			self::$config[ 'collections' ][ 'webcomic1' ][ 'slugs' ][ 'webcomic' ]                       = $term->slug;
+			self::$config[ 'collections' ][ 'webcomic1' ][ 'slugs' ][ 'storyline' ]                      = "{$term->slug}-storyline";
+			self::$config[ 'collections' ][ 'webcomic1' ][ 'slugs' ][ 'character' ]                      = "{$term->slug}-character";
+			self::$config[ 'collections' ][ 'webcomic1' ][ 'taxonomies' ]                                = array( 'category', 'post_tag' );
+			self::$config[ 'collections' ][ 'webcomic1' ][ 'description' ]                               = $term->description;
+			self::$config[ 'collections' ][ 'webcomic1' ][ 'commerce' ][ 'business' ]                    = $legacy_config[ 'buy_print_email' ];
+			self::$config[ 'collections' ][ 'webcomic1' ][ 'commerce' ][ 'price' ][ 'domestic' ]         = $legacy_config[ 'buy_print_amount' ];
+			self::$config[ 'collections' ][ 'webcomic1' ][ 'commerce' ][ 'price' ][ 'international' ]    = $legacy_config[ 'buy_print_amount' ];
+			self::$config[ 'collections' ][ 'webcomic1' ][ 'commerce' ][ 'price' ][ 'original' ]         = $legacy_config[ 'buy_print_orig_amount' ];
+			self::$config[ 'collections' ][ 'webcomic1' ][ 'commerce' ][ 'shipping' ][ 'domestic' ]      = 0;
+			self::$config[ 'collections' ][ 'webcomic1' ][ 'commerce' ][ 'shipping' ][ 'international' ] = 0;
+			self::$config[ 'collections' ][ 'webcomic1' ][ 'commerce' ][ 'shipping' ][ 'original' ]      = 0;
+			self::$config[ 'collections' ][ 'webcomic1' ][ 'commerce' ][ 'total' ][ 'domestic' ]         = $legacy_config[ 'buy_print_amount' ];
+			self::$config[ 'collections' ][ 'webcomic1' ][ 'commerce' ][ 'total' ][ 'international' ]    = $legacy_config[ 'buy_print_amount' ];
+			self::$config[ 'collections' ][ 'webcomic1' ][ 'commerce' ][ 'total' ][ 'original'      ]    = $legacy_config[ 'buy_print_orig_amount' ];
+			
+			update_option( 'webcomic_options', self::$config );
+			
+			if ( $terms = get_terms( 'category', array( 'child_of' => ( integer ) $legacy_config[ 'comiccat' ], 'fields' => 'ids' ) ) and !is_wp_error( $terms ) ) {
+				$wpdb->query( sprintf( "UPDATE {$wpdb->term_taxonomy} SET taxonomy = 'webcomic1_storyline' WHERE term_id IN (%s)", join( ",", $terms ) ) );
+			}
+			
+			$stage++;
+		}
+		
+		if ( 1 === $stage ) {
+			$meta_files = ( array ) glob( self::legacy_path( $legacy_config[ 'comic_folder' ] ) . '*.*' );
+			
+			if ( $posts = get_posts( array(
+				'fields'      => 'ids',
+				'numberposts' => -1,
+				'post_type'   => 'post',
+				'post_status' => get_post_stati(),
+				'tax_query'   => array(
+					'relation' => 'OR',
+					array(
+						'taxonomy' => 'webcomic1_storyline',
+						'field'    => 'id',
+						'terms'    => get_terms( 'webcomic1_storyline', array( 'fields' => 'ids' ) )
+					), array(
+						'taxonomy' => 'category',
+						'field'    => 'id',
+						'terms'    => ( integer ) $legacy_config[ 'comiccat' ]
+					)
+				)
+			) ) ) {
+				foreach ( $posts as $post ) {
+					$format    = get_the_time( $legacy_config[ 'date_format' ], $post );
+					$meta_file = preg_grep( "/{$format}/", $meta_files );
+					
+					if ( !empty( $meta_file ) ) {
+						self::update_media_library( $meta_file[ 0 ], ( integer ) $post, array(
+							'post_excerpt' => ( $meta_description = get_post_meta( $post, 'hovertext', true ) ) ? $meta_description : ''
+						) );
+					}
+					
+					if ( $meta_transcript = get_post_meta( $post, 'transcript', true ) ) {
+						$date  = get_the_time( 'Y-m-d H:i:s', $post );
+						$title = sprintf( __( '%s Transcript', 'webcomic' ), get_the_title( $post ) );
+						
+						wp_insert_post( array(
+							'post_name'     => sanitize_title( $title ),
+							'post_type'     => 'webcomic_transcript',
+							'post_date'     => $date,
+							'post_title'    => $title,
+							'post_author'   => 1,
+							'post_parent'   => $post,
+							'post_status'   => 'publish',
+							'post_content'  => $meta_transcript,
+							'post_date_gmt' => get_gmt_from_date( $date )
+						) );
+					}
+					
+					update_post_meta( $post, 'webcomic_prints', false );
+					
+					update_post_meta( $post, 'webcomic_original', false );
+					
+					update_post_meta( $post, 'webcomic_transcripts', true );
+					
+					update_post_meta( $post, 'webcomic_commerce', array(
+						'price' => array(
+							'domestic'      => $legacy_config[ 'buy_print_amount' ],
+							'international' => $legacy_config[ 'buy_print_amount' ],
+							'original'      => $legacy_config[ 'buy_print_orig_amount' ]
+						),
+						'shipping' => array(
+							'domestic'      => 0,
+							'international' => 6,
+							'original'      => 0
+						),
+						'total'  => array(
+							'domestic'      => $legacy_config[ 'buy_print_amount' ],
+							'international' => $legacy_config[ 'buy_print_amount' ],
+							'original'      => $legacy_config[ 'buy_print_orig_amount' ]
+						),
+						'adjust' => array(
+							'price' => array(
+								'domestic'      => 0,
+								'international' => 0,
+								'original'      => 0
+							),
+							'shipping' => array(
+								'domestic'      => 0,
+								'international' => 0,
+								'original'      => 0
+							),
+							'total'  => array(
+								'domestic'      => 0,
+								'international' => 0,
+								'original'      => 0
+							)
+						)
+					) );
+					
+					delete_post_meta( $post, 'hovertext' );
+					delete_post_meta( $post, 'transcript' );
+					
+					$wpdb->update( $wpdb->posts, array( 'post_type' => 'webcomic1' ), array( 'ID' => ( integer ) $post ) );
+					
+					self::$config[ 'collections' ][ 'webcomic1' ][ 'updated' ] = get_the_time( 'U', $post );
+					
+					update_option( 'webcomic_options', self::$config );
+					
+					if ( microtime( true ) - $start >= $this->limit ) {
+						return $stage;
+					}
 				}
 			}
 		}
