@@ -20,11 +20,13 @@ class WebcomicWidgets extends Webcomic {
 	/** Register widgets.
 	 * 
 	 * @hook widgets_init
-	 * @uses WebcomicWidgetLink
-	 * @uses WebcomicWidgetDonation
-	 * @uses WebcomicWidgetStorylines
-	 * @uses WebcomicWidgetCharacters
-	 * @uses WebcomicWidgetCollections
+	 * @uses Widget_WebcomicLink
+	 * @uses Widget_DynamicWebcomic
+	 * @uses Widget_RecentWebcomics
+	 * @uses Widget_WebcomicDonation
+	 * @uses Widget_WebcomicStorylines
+	 * @uses Widget_WebcomicCharacters
+	 * @uses Widget_WebcomicCollections
 	 */
 	public function widgets_init() {
 		register_widget( 'Widget_WebcomicLink' );
