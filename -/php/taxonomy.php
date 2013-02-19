@@ -291,7 +291,7 @@ class WebcomicTaxonomy extends Webcomic {
 				<?php $storyline ? _e( 'Cover', 'webcomic' ) : _e( 'Avatar', 'webcomic' ); ?>
 			</label>
 			<div id="webcomic_term_image" data-webcomic-admin-url="<?php echo admin_url(); ?>" data-webcomic-taxonomy="<?php echo $storyline ? 'storyline' : 'character'; ?>"><?php self::ajax_term_image( 0, $storyline ? 'storyline' : 'character', '' ); ?></div>
-			<p><?php $storyline ? _e( "The cover is a representative image that can be displayed on your site." ) : _e( "The avatar is a representative image that can be displayed on your site.", 'webcomic' ); ?></p>
+			<p><?php $storyline ? _e( "The cover is a representative image that can be displayed on your site.", 'webcomic' ) : _e( "The avatar is a representative image that can be displayed on your site.", 'webcomic' ); ?></p>
 		</div>
 		<?php
 	}
