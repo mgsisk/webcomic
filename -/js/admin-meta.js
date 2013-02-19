@@ -1,3 +1,5 @@
+var wpActiveEditor;
+
 jQuery( function( $ ) {
 	/** Refresh the webcomic media meta box. */
 	$( document ).on( 'mousedown', '.media-modal-close,.media-modal-backdrop,.media-button-insert', function() {
