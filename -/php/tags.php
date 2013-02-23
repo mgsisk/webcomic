@@ -2536,44 +2536,46 @@ class WebcomicTag extends Webcomic {
 		$output = $options = '';
 		
 		foreach ( $collections as $v ) {
-			if ( ( $collection and $v[ 'id' ] === $collection ) or ( $readable_count = wp_count_posts( $v[ 'id' ], 'readable' ) and 0 < ( $readable_count->publish + $readable_count->private ) ) or !$hide_empty ) {
-				$readable_count   = $readable_count->publish + $readable_count->private;
-				$collection_title = apply_filters( 'webcomic_collection_dropdown_title', $v[ 'name' ], $v );
+			if ( ( $readable_count = wp_count_posts( $v[ 'id' ], 'readable' ) and 0 < ( $readable_count->publish + $readable_count->private ) ) or !$hide_empty ) {
+				if ( !$collection or $v[ 'id' ] === $collection ) {
+					$readable_count   = $readable_count ? $readable_count->publish + $readable_count->private : 0;
+					$collection_title = apply_filters( 'webcomic_collection_dropdown_title', $v[ 'name' ], $v );
 				
-				if ( $webcomics ) {
-					$the_posts = new WP_Query( array( 'posts_per_page' => -1, 'post_type' => $v[ 'id' ], 'order' => $webcomic_order, 'orderby' => $webcomic_orderby ) );
+					if ( $webcomics ) {
+						$the_posts = new WP_Query( array( 'posts_per_page' => -1, 'post_type' => $v[ 'id' ], 'order' => $webcomic_order, 'orderby' => $webcomic_orderby ) );
 					
-					if ( $the_posts->have_posts() ) {
-						if ( $callback ) {
-							$options .= call_user_func( $callback, $v, $r, $the_posts );
-						} else {
-							$options .= sprintf( '<optgroup label="%s%s">',
-								$collection_title,
-								$show_count ? " ({$readable_count})" : ''
-							);
-							
-							while ( $the_posts->have_posts() ) { $the_posts->the_post();
-								$options .= sprintf( '<option value="%s" data-webcomic-url="%s"%s>%s</option>',
-									get_the_ID(),
-									apply_filters( 'the_permalink', get_permalink() ),
-									$selected === get_the_ID() ? ' selected' : '',
-									the_title( '', '', false )
+						if ( $the_posts->have_posts() ) {
+							if ( $callback ) {
+								$options .= call_user_func( $callback, $v, $r, $the_posts );
+							} else {
+								$options .= sprintf( '<optgroup label="%s%s">',
+									$collection_title,
+									$show_count ? " ({$readable_count})" : ''
 								);
-							}
 							
-							$options .= '</optgroup>';
+								while ( $the_posts->have_posts() ) { $the_posts->the_post();
+									$options .= sprintf( '<option value="%s" data-webcomic-url="%s"%s>%s</option>',
+										get_the_ID(),
+										apply_filters( 'the_permalink', get_permalink() ),
+										$selected === get_the_ID() ? ' selected' : '',
+										the_title( '', '', false )
+									);
+								}
+							
+								$options .= '</optgroup>';
+							}
 						}
-					}
 					
-					wp_reset_postdata();
-				} else {
-					$options .= $callback ? call_user_func( $callback, $v, $r ) : sprintf( '<option value="%s" data-webcomic-url="%s" %s>%s%s</option>',
-						$v[ 'id' ],
-						'archive' === $target ? get_post_type_archive_link( $v[ 'id' ] ) : self::get_relative_webcomic_link( $target, false, false, '', $v[ 'id' ] ),
-						$selected === $v[ 'id' ] ? ' selected' : '',
-						$collection_title,
-						$show_count ? " ({$readable_count})" : ''
-					);
+						wp_reset_postdata();
+					} else {
+						$options .= $callback ? call_user_func( $callback, $v, $r ) : sprintf( '<option value="%s" data-webcomic-url="%s" %s>%s%s</option>',
+							$v[ 'id' ],
+							'archive' === $target ? get_post_type_archive_link( $v[ 'id' ] ) : self::get_relative_webcomic_link( $target, false, false, '', $v[ 'id' ] ),
+							$selected === $v[ 'id' ] ? ' selected' : '',
+							$collection_title,
+							$show_count ? " ({$readable_count})" : ''
+						);
+					}
 				}
 			}
 		}
@@ -2583,7 +2585,7 @@ class WebcomicTag extends Webcomic {
 				$before,
 				$name ? sprintf( ' name="%s"', esc_attr( $name ) ) : '',
 				$id ? sprintf( ' id="%s"', esc_attr( $id ) ) : '',
-				join( ' ', array_merge( array( 'webcomic-collections', $k ), ( array ) $class ) ),
+				join( ' ', array_merge( array( 'webcomic-collections' ), ( array ) $class ) ),
 				$show_option_all ? sprintf( '<option value="0"%s>%s</option>', 0 === $selected ? ' selected' : '', $show_option_all ) : '',
 				$show_option_none ? sprintf( '<option value="-1"%s>%s</option>', -1 === $selected ? ' selected' : '', $show_option_none ) : '',
 				$options,
