@@ -1014,18 +1014,64 @@ class Webcomic {
 			$status = self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'format' ];
 			
 			if ( false !== strpos( self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'format' ], '%' ) ) {
-				$s = $c = $m = array();
-				$link = wp_get_shortlink( $post->ID );
+				$link   = wp_get_shortlink( $post->ID );
+				$tokens = array_merge( array(
+					'%url'               => $link ? $link : get_permalink( $post->ID ),
+					'%date'              => get_the_time( get_option( 'date_format' ), $post ),
+					'%time'              => get_the_time( get_option( 'time_format' ), $post ),
+					'%title'             => get_the_title( $post->ID ),
+					'%author'            => get_the_author_meta( 'display_name', $post->post_author ),
+					'%site-url'          => home_url(),
+					'%permalink'         => get_permalink( $post->ID ),
+					'%site-name'         => get_bloginfo( 'name' ),
+					'%collection-names'  => self::$config[ 'collections' ][ $post->post_type ][ 'name' ],
+					'%collection-name'   => self::$config[ 'collections' ][ $post->post_type ][ 'name' ],
+					'%collections'       => '#' . str_replace( array( '_', '-' ), '', self::$config[ 'collections' ][ $post->post_type ][ 'slugs' ][ 'name' ] ),
+					'%collection'        => '#' . str_replace( array( '_', '-' ), '', self::$config[ 'collections' ][ $post->post_type ][ 'slugs' ][ 'name' ] ),
+					'%xcollection-names' => '',
+					'%xcollections'      => '',
+					'%!storyline-names'  => '',
+					'%xstoryline-names'  => '',
+					'%storyline-names'   => '',
+					'%!storylines'       => '',
+					'%xstorylines'       => '',
+					'%storylines'        => '',
+					'%!character-names'  => '',
+					'%xcharacter-names'  => '',
+					'%character-names'   => '',
+					'%!characters'       => '',
+					'%xcharacters'       => '',
+					'%characters'        => ''
+				) );
 				
-				if ( false !== strpos( self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'format' ], '%storylines' ) and $storylines = wp_get_object_terms( $post->ID, "{$post->post_type}_storyline" ) and !is_wp_error( $storylines ) ) {
-					foreach ( $storylines as $storyline ) {
-						$s[] = str_replace( array( '_', '-' ), '', "#{$storyline->slug}" );
-					}
-				}
-				
-				if ( false !== strpos( self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'format' ], '%characters' ) and $characters = wp_get_object_terms( $post->ID, "{$post->post_type}_character" ) and !is_wp_error( $characters ) ) {
-					foreach ( $characters as $character ) {
-						$c[] = str_replace( array( '_', '-' ), '', "#{$character->slug}" );
+				if ( preg_match( sprintf( '/%%%s/', join( '|%', array_merge( array( 'storyline', 'character' ), self::$config[ 'collections' ][ $post->post_type ][ 'taxonomies' ] ) ) ), self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'format' ] ) and $terms = wp_get_object_terms( $post->ID, array_merge( array( "{$post->post_type}_storyline", "{$post->post_type}_character" ), self::$config[ 'collections' ][ $post->post_type ][ 'taxonomies' ] ) ) and !is_wp_error( $terms ) ) {
+					foreach ( $terms as $term ) {
+						$hash = str_replace( array( '_', '-' ), '', "#{$term->slug}" );
+					
+						if ( preg_match( '/^webcomic\d+_(storyline|character)$/', $term->taxonomy ) ) {
+							$parts = explode( '_', $term->taxonomy );
+						
+							if ( false === strpos( $tokens[ 'collection-names' ], self::$config[ 'collections' ][ $parts[ 0 ] ][ 'name' ] ) ) {
+								$tokens[ '%collections' ]       .= '#' . str_replace( array( '_', '-' ), '', self::$config[ 'collections' ][ $parts[ 0 ] ][ 'slugs' ][ 'name' ] );
+								$tokens[ '%collection-names' ]  .= self::$config[ 'collections' ][ $parts[ 0 ] ][ 'name' ];
+								$tokens[ '%xcollections' ]      .= '#' . str_replace( array( '_', '-' ), '', self::$config[ 'collections' ][ $parts[ 0 ] ][ 'slugs' ][ 'name' ] );
+								$tokens[ '%xcollection-names' ] .= self::$config[ 'collections' ][ $parts[ 0 ] ][ 'name' ];
+							}
+						
+							$tokens[ "%{$parts[ 1 ]}s" ]      .= empty( $tokens[ '%{$parts[ 1 ]}s' ] ) ? "{$hash}" : " {$hash}";
+							$tokens[ "%{$parts[ 1 ]}-names" ] .= empty( $tokens[ '%{$parts[ 1 ]}-names' ] ) ? "{$term->name}" : " {$term->name}";
+						
+							if ( 0 === strpos( $term->taxonomy, $post->post_type ) ) {
+								$tokens[ '%!{$parts[ 1 ]}s' ]      .= empty( $tokens[ '%!{$parts[ 1 ]}s' ] ) ? "{$hash}" : " {$hash}";
+								$tokens[ '%!{$parts[ 1 ]}-names' ] .= empty( $tokens[ '%!{$parts[ 1 ]}-names' ] ) ? "{$term->name}" : " {$term->name}";
+							} else {
+								$tokens[ '%x{$parts[ 1 ]}s' ]      .= empty( $tokens[ '%x{$parts[ 1 ]}s' ] ) ? "{$hash}" : " {$hash}";
+								$tokens[ '%x{$parts[ 1 ]}-names' ] .= empty( $tokens[ '%x{$parts[ 1 ]}-names' ] ) ? "{$term->name}" : " {$term->name}";
+							}
+						} else {
+							$tokens[ "%{$term->taxonomy}-names" ] = isset( $tokens[ "%{$term->taxonomy}-names" ] ) ? $tokens[ "%{$term->taxonomy}-names" ] . " {$term->name}" : "{$term->name}";
+							$tokens[ "%{$term->taxonomy}" ]       = isset( $tokens[ "%{$term->taxonomy}" ] ) ? $tokens[ "%{$term->taxonomy}" ]  . " {$hash}" : "{$hash}";
+						}
 					}
 				}
 				
@@ -1036,21 +1082,6 @@ class Webcomic {
 						}
 					}
 				}
-				
-				$tokens = array_merge( array(
-					'%url'             => $link ? $link : get_permalink( $post->ID ),
-					'%date'            => get_the_time( get_option( 'date_format' ), $post ),
-					'%time'            => get_the_time( get_option( 'time_format' ), $post ),
-					'%title'           => get_the_title( $post->ID ),
-					'%author'          => get_the_author_meta( 'display_name', $post->post_author ),
-					'%site-url'        => home_url(),
-					'%permalink'       => get_permalink( $post->ID ),
-					'%site-name'       => get_bloginfo( 'name' ),
-					'%storylines'      => join( ' ', $s ),
-					'%characters'      => join( ' ', $c ),
-					'%collection'      => '#' . str_replace( array( '_', '-' ), '', self::$config[ 'collections' ][ $post->post_type ][ 'slugs' ][ 'name' ] ),
-					'%collection-name' => strip_tags( self::$config[ 'collections' ][ $post->post_type ][ 'name' ] )
-				), $m );
 				
 				$status = apply_filters( 'webcomic_tweet', str_replace( array_keys( $tokens ), $tokens, $status ), $post );
 			}
