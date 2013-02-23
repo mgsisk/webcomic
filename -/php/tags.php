@@ -883,7 +883,7 @@ class WebcomicTag extends Webcomic {
 	 */
 	public static function purchase_webcomic_link( $format, $link = '', $the_post = false ) {
 		if ( $the_post = get_post( $the_post ) and $href = self::get_purchase_webcomic_link( $the_post ) ) {
-			$class = array( 'webcomic-link', "{$the_post->post_type}-link", "purchase-webcomic-link", "purchase-{$the_post->post_type}-link" );
+			$class = array( "{$the_post->post_type}-link", "purchase-webcomic-link", "purchase-{$the_post->post_type}-link" );
 			$link  = $link ? $link : __( '&curren;', 'webcomic' );
 			
 			if ( false !== strpos( $link, '%' ) ) {

@@ -34,7 +34,7 @@ jQuery( function( $ ) {
 			}
 		} );
 		
-		$( document ).on( 'click', '[data-webcomic-container] [href]', function( e ) {
+		$( document ).on( 'click', '[data-webcomic-container] [href].webcomic-link', function( e ) {
 			e.preventDefault();
 			
 			var url = $( this ).attr( 'href' );
