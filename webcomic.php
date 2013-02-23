@@ -811,9 +811,21 @@ class Webcomic {
 		$match = $permalinks = array();
 		
 		if ( $wp_rewrite->using_permalinks() ) {
+			$tokens = array(
+				'%year%'     => '(?P<year>\d{4})',
+				'%monthnum%' => '(?P<monthnum>0[1-9]|1[012])',
+				'%day%'      => '(?P<day>0[1-9]|[12][0-9]|3[01])',
+				'%hour%'     => '(?P<hour>0[0-9]|1[0-9]|2[0-3])',
+				'%minute%'   => '(?P<minute>0[1-9]|[1-5][0-9])',
+				'%second%'   => '(?P<second>0[1-9]|[1-5][0-9])',
+				'%post_id%'  => '(?P<post_id>\d+)',
+				'%author%'   => '(?P<author>[\w-]+)'
+			);
+			
 			foreach ( self::$config[ 'collections' ] as $k => $v ) {
+				$tokens[ "%{$k}_storyline%" ]   = "(?P<{$k}_storyline>([\w-]+/?)+)";
 				$permalinks[ "{$k}_archive" ]   = $v[ 'slugs' ][ 'archive' ];
-				$permalinks[ "{$k}_webcomic" ]  = $v[ 'slugs' ][ 'webcomic' ];
+				$permalinks[ "{$k}_webcomic" ]  = str_replace( array_keys( $tokens ), $tokens, $v[ 'slugs' ][ 'webcomic' ] );
 				$permalinks[ "{$k}_storyline" ] = $v[ 'slugs' ][ 'storyline' ];
 				$permalinks[ "{$k}_character" ] = $v[ 'slugs' ][ 'character' ];
 			}
@@ -828,8 +840,17 @@ class Webcomic {
 				)
 			and $match
 		) {
-			$match[ 0 ]       = preg_replace( '/_(storyline|character)$/', '', $match[ 0 ] );
-			self::$collection = empty( self::$config[ 'collections' ][ $match[ 0 ] ] ) ? preg_replace( '/_(archive|webcomic|storyline|character)$/', '', array_search( $match[ 1 ], $permalinks ) ) : $match[ 0 ];
+			if ( 2 < count( $match ) ) {
+				foreach ( $permalinks as $k => $v ) {
+					if ( false !== strpos( $k, '_webcomic' ) and preg_match( sprintf( '{%s}', $v ), $match[ 1 ] ) ) {
+						self::$collection = str_replace( '_webcomic', '', $k );
+						break;
+					}
+				}
+			} else {
+				$match[ 0 ]       = preg_replace( '/_(storyline|character)$/', '', $match[ 0 ] );
+				self::$collection = empty( self::$config[ 'collections' ][ $match[ 0 ] ] ) ? preg_replace( '/_(archive|webcomic|storyline|character)$/', '', array_search( $match[ 1 ], $permalinks ) ) : $match[ 0 ];
+			}
 		}
 		
 		$active_theme    = new WP_Theme( get_stylesheet_directory(), '' );
