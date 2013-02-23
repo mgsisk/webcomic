@@ -1276,20 +1276,17 @@ class Webcomic {
 		
 		if ( false !== strpos( $link, "%{$post->post_type}_storyline%" ) and $storylines = get_the_terms( $post->ID, "{$post->post_type}_storyline" ) and !is_wp_error( $storylines ) ) {
 			$storylines = array_reverse( $storylines );
-			$storyline  = $storylines[ 0 ]->slug;
+			$storyline  = array( $storylines[ 0 ]->slug );
 			
 			if ( $parent = $storylines[ 0 ]->parent and $parents = get_ancestors( $storylines[ 0 ]->term_id, $storylines[ 0 ]->taxonomy ) ) {
-				$storyline = array();
-				
 				foreach ( $parents as $parent ) {
-					$the_parent   = get_term( $parent, $storylines[ 0 ]->taxonomy );
-					$storylines[] = $the_parent->slug;
+					$the_parent  = get_term( $parent, $storylines[ 0 ]->taxonomy );
+					$storyline[] = $the_parent->slug;
 				}
-				
-				$storyline   = array_reverse( $storylines );
-				$storyline[] = $storylines[ 0 ]->slug;
-				$storyline   = join( '/', $storyline );
 			}
+			
+			$storyline = array_reverse( $storyline );
+			$storyline = join( '/', $storyline );
 		} else {
 			$storyline = '';
 		}
