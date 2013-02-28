@@ -1027,21 +1027,7 @@ class Webcomic {
 					'%collection-names'  => self::$config[ 'collections' ][ $post->post_type ][ 'name' ],
 					'%collection-name'   => self::$config[ 'collections' ][ $post->post_type ][ 'name' ],
 					'%collections'       => '#' . str_replace( array( '_', '-' ), '', self::$config[ 'collections' ][ $post->post_type ][ 'slugs' ][ 'name' ] ),
-					'%collection'        => '#' . str_replace( array( '_', '-' ), '', self::$config[ 'collections' ][ $post->post_type ][ 'slugs' ][ 'name' ] ),
-					'%xcollection-names' => '',
-					'%xcollections'      => '',
-					'%!storyline-names'  => '',
-					'%xstoryline-names'  => '',
-					'%storyline-names'   => '',
-					'%!storylines'       => '',
-					'%xstorylines'       => '',
-					'%storylines'        => '',
-					'%!character-names'  => '',
-					'%xcharacter-names'  => '',
-					'%character-names'   => '',
-					'%!characters'       => '',
-					'%xcharacters'       => '',
-					'%characters'        => ''
+					'%collection'        => '#' . str_replace( array( '_', '-' ), '', self::$config[ 'collections' ][ $post->post_type ][ 'slugs' ][ 'name' ] )
 				) );
 				
 				if ( preg_match( sprintf( '/%%%s/', join( '|%', array_merge( array( 'storyline', 'character' ), self::$config[ 'collections' ][ $post->post_type ][ 'taxonomies' ] ) ) ), self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'format' ] ) and $terms = wp_get_object_terms( $post->ID, array_merge( array( "{$post->post_type}_storyline", "{$post->post_type}_character" ), self::$config[ 'collections' ][ $post->post_type ][ 'taxonomies' ] ) ) and !is_wp_error( $terms ) ) {
@@ -1052,10 +1038,10 @@ class Webcomic {
 							$parts = explode( '_', $term->taxonomy );
 						
 							if ( false === strpos( $tokens[ 'collection-names' ], self::$config[ 'collections' ][ $parts[ 0 ] ][ 'name' ] ) ) {
-								$tokens[ '%collections' ]       .= '#' . str_replace( array( '_', '-' ), '', self::$config[ 'collections' ][ $parts[ 0 ] ][ 'slugs' ][ 'name' ] );
-								$tokens[ '%collection-names' ]  .= self::$config[ 'collections' ][ $parts[ 0 ] ][ 'name' ];
-								$tokens[ '%xcollections' ]      .= '#' . str_replace( array( '_', '-' ), '', self::$config[ 'collections' ][ $parts[ 0 ] ][ 'slugs' ][ 'name' ] );
-								$tokens[ '%xcollection-names' ] .= self::$config[ 'collections' ][ $parts[ 0 ] ][ 'name' ];
+								$tokens[ '%collections' ]       .= ' #' . str_replace( array( '_', '-' ), '', self::$config[ 'collections' ][ $parts[ 0 ] ][ 'slugs' ][ 'name' ] );
+								$tokens[ '%collection-names' ]  .= ' ' . self::$config[ 'collections' ][ $parts[ 0 ] ][ 'name' ];
+								$tokens[ '%xcollections' ]      .= empty( $tokens[ '%xcollection-names' ] ) ? '#' . str_replace( array( '_', '-' ), '', self::$config[ 'collections' ][ $parts[ 0 ] ][ 'slugs' ][ 'name' ] ) : ' #' . str_replace( array( '_', '-' ), '', self::$config[ 'collections' ][ $parts[ 0 ] ][ 'slugs' ][ 'name' ] );
+								$tokens[ '%xcollection-names' ] .= empty( $tokens[ '%xcollection-names' ] ) ? self::$config[ 'collections' ][ $parts[ 0 ] ][ 'name' ] : ' ' . self::$config[ 'collections' ][ $parts[ 0 ] ][ 'name' ];
 							}
 						
 							$tokens[ "%{$parts[ 1 ]}s" ]      .= empty( $tokens[ '%{$parts[ 1 ]}s' ] ) ? "{$hash}" : " {$hash}";
