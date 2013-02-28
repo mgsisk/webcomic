@@ -2492,6 +2492,8 @@ class WebcomicTag extends Webcomic {
 	 * @filter string webcomic_dropdown_collections Filters the output of `webcomic_dropdown_collections`.
 	 */
 	public static function webcomic_dropdown_collections( $args = array() ) {
+		global $post;
+		
 		$r = wp_parse_args( $args, array(
 			'name'             => 'webcomic_collections',
 			'id'               => '',
@@ -2542,6 +2544,7 @@ class WebcomicTag extends Webcomic {
 					$collection_title = apply_filters( 'webcomic_collection_dropdown_title', $v[ 'name' ], $v );
 				
 					if ( $webcomics ) {
+						$temp_post = $post;
 						$the_posts = new WP_Query( array( 'posts_per_page' => -1, 'post_type' => $v[ 'id' ], 'order' => $webcomic_order, 'orderby' => $webcomic_orderby ) );
 					
 						if ( $the_posts->have_posts() ) {
@@ -2565,8 +2568,8 @@ class WebcomicTag extends Webcomic {
 								$options .= '</optgroup>';
 							}
 						}
-					
-						wp_reset_postdata();
+						
+						$post = $temp_post;
 					} else {
 						$options .= $callback ? call_user_func( $callback, $v, $r ) : sprintf( '<option value="%s" data-webcomic-url="%s" %s>%s%s</option>',
 							$v[ 'id' ],
@@ -2719,6 +2722,8 @@ class WebcomicTag extends Webcomic {
 	 * @filter string webcomic_list_collections Filters the output of `webcomic_list_collections`.
 	 */
 	public static function webcomic_list_collections( $args = array() ) {
+		global $post;
+		
 		$r = wp_parse_args( $args, array(
 			'id'               => '',
 			'class'            => '',
@@ -2778,6 +2783,7 @@ class WebcomicTag extends Webcomic {
 					) : '';
 					
 					if ( $webcomics ) {
+						$temp_post = $post;
 						$the_posts = new WP_Query( array( 'posts_per_page' => -1, 'post_type' => $v[ 'id' ], 'order' => $webcomic_order, 'orderby' => $webcomic_orderby ) );
 						
 						if ( $the_posts->have_posts() ) {
@@ -2807,7 +2813,7 @@ class WebcomicTag extends Webcomic {
 							}
 						}
 						
-						wp_reset_postdata();
+						$post = $temp_post;
 					} else {
 						$items .= $callback ? call_user_func( $callback, $v, $r ) : sprintf( '<li class="webcomic-collection %s%s"><a href="%s" class="webcomic-collection-link">%s%s</a>%s%s</li>',
 							$v[ 'id' ],
@@ -6510,12 +6516,15 @@ if ( !class_exists( 'Walker_WebcomicTerm_Dropdown' ) ) {
 		 * @filter string webcomic_term_dropdown_title Filters the term titles used by `webcomic_dropdown_storylines` and `webcomic_dropdown_characters`.
 		 */
 		public function start_el( &$output, $term, $depth, $args ) {
+			global $post;
+			
 			extract( $args, $args[ 'hierarchical' ] ? EXTR_SKIP : EXTR_OVERWRITE );
 			
 			$term_pad   = str_repeat( '&nbsp;', $depth * 4 );
 			$term_title = apply_filters( 'webcomic_term_dropdown_title', esc_attr( $term->name ), $term );
 			
 			if ( $webcomics ) {
+				$temp_post = $post;
 				$the_posts = new WP_Query( array(
 					'posts_per_page' => -1,
 					'post_type'      => str_replace( array( '_storyline', '_character' ), '', $term->taxonomy ),
@@ -6550,7 +6559,7 @@ if ( !class_exists( 'Walker_WebcomicTerm_Dropdown' ) ) {
 					$output .= '</optgroup>';
 				}
 				
-				wp_reset_postdata();
+				$post = $temp_post;
 			} else {
 				$output .= sprintf( '<option value="%s" data-webcomic-url="%s"%s>%s%s%s</option>',
 					$term->term_id,
@@ -6626,6 +6635,8 @@ if ( !class_exists( 'Walker_WebcomicTerm_List' ) ) {
 		 * @filter string webcomic_term_description Filters the term titles used by `webcomic_dropdown_transcript_languages`.
 		 */
 		public function start_el( &$output, $term, $depth, $args ) {
+			global $post;
+			
 			extract( $args, $args[ 'hierarchical' ] ? EXTR_SKIP : EXTR_OVERWRITE );
 			
 			$term_title = apply_filters( 'webcomic_term_list_title', esc_attr( $term->name ), $term );
@@ -6636,6 +6647,7 @@ if ( !class_exists( 'Walker_WebcomicTerm_List' ) ) {
 			) : '';
 			
 			if ( $webcomics ) {
+				$temp_post = $post;
 				$the_posts = new WP_Query( array(
 					'posts_per_page' => -1,
 					'post_type'      => str_replace( array( '_storyline', '_character' ), '', $term->taxonomy ),
@@ -6674,7 +6686,7 @@ if ( !class_exists( 'Walker_WebcomicTerm_List' ) ) {
 					$output .= $ordered ? '</ol>' : '</ul>';
 				}
 				
-				wp_reset_postdata();
+				$post = $temp_post;
 			} else {
 				$output .= sprintf( '<li class="webcomic-term %s webcomic-term-%s%s"><a href="%s" class="webcomic-term-link">%s%s</a>%s%s',
 					$term->taxonomy,
