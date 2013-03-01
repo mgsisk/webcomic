@@ -126,7 +126,7 @@ class WebcomicLegacy extends Webcomic {
 	 * @hook admin_menu
 	 */
 	public function admin_menu() {
-		add_submenu_page( 'tools.php', __( 'Upgrade to Webcomic 4', 'webcomic' ), __( 'Upgrade Webcomic', 'webcomic' ), 'manage_options', 'webcomic-upgrader', array( $this, 'page' ) );
+		add_submenu_page( 'tools.php', sprintf( __( 'Upgrade to Webcomic %s', 'webcomic' ), self::$version ), __( 'Upgrade Webcomic', 'webcomic' ), 'manage_options', 'webcomic-upgrader', array( $this, 'page' ) );
 	}
 	
 	/** Render upgrade tool notification.
