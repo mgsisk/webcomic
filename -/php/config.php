@@ -763,16 +763,16 @@ class WebcomicConfig extends Webcomic {
 		$first = true;
 		
 		foreach ( get_taxonomies( array( 'public' => true ), 'objects' ) as $k => $v ) {
-			//if ( 'post_format' === $v->name or 'webcomic_language' === $v->name or preg_match( '/^webcomic\d+_(storyline|character)$/', $v->name ) ) {
 			if ( 'post_format' === $v->name or 'webcomic_language' === $v->name or "{$_GET[ 'post_type' ]}_storyline" === $v->name or "{$_GET[ 'post_type' ]}_character" === $v->name ) {
 				continue;
 			}
 			
-			printf( '<label><input type="checkbox" name="webcomic_taxonomies[]" value="%s"%s%s> %s</label><br>',
+			printf( '<label><input type="checkbox" name="webcomic_taxonomies[]" value="%s"%s%s> %s <a class="add-new-h2">%s</a></label><br>',
 				$v->name,
 				$first ? ' id="webcomic_posts_taxonomy"' : '',
 				checked( in_array( $v->name, self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'taxonomies' ] ), true, false ),
-				$v->labels->name
+				$v->labels->name,
+				$v->name
 			);
 			
 			$first = false;
