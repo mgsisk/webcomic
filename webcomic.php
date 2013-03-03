@@ -186,7 +186,7 @@ class Webcomic {
 	 * @hook init
 	 */
 	public function init() {
-		load_plugin_textdomain( 'webcomic', '', self::$dir . '-/locale/' );
+		load_plugin_textdomain( 'webcomic', '', self::$dir . '-/i18n/' );
 		
 		define( 'EP_WEBCOMIC', 1099511627776 ); // 2^40
 		define( 'EP_WEBCOMIC_TERM', 2199023255552 ); // 2^41
