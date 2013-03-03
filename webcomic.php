@@ -589,7 +589,7 @@ class Webcomic {
 	public function twitter_oauth() {
 		if ( isset( $_GET[ 'webcomic_twitter_oauth' ] ) ) {
 			if ( !class_exists( 'TwitterOAuth' ) ) {
-				require_once self::$dir . '-/library/twitter.php';
+				require_once self::$dir . '-/lib/twitter.php';
 			}
 			
 			$admin_url = add_query_arg( array( 'post_type' => $_GET[ 'webcomic_collection' ], 'page' => "{$_GET[ 'webcomic_collection' ]}-options" ), admin_url( 'edit.php' ) );
@@ -1074,7 +1074,7 @@ class Webcomic {
 			
 			if ( $status ) {
 				if ( !class_exists( 'TwitterOAuth' ) ) {
-					require_once self::$dir . '-/library/twitter.php';
+					require_once self::$dir . '-/lib/twitter.php';
 				}
 				
 				$oauth    = new TwitterOAuth( self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'consumer_key' ], self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'consumer_secret' ], self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'oauth_token' ], self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'oauth_secret' ] );

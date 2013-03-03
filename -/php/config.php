@@ -1235,7 +1235,7 @@ class WebcomicConfig extends Webcomic {
 	 */
 	public static function ajax_twitter_account( $consumer_key, $consumer_secret, $collection ) {
 		if ( !class_exists( 'TwitterOAuth' ) ) {
-			require_once self::$dir . '-/library/twitter.php';
+			require_once self::$dir . '-/lib/twitter.php';
 		}
 		
 		if ( $consumer_key and $consumer_secret ) {
