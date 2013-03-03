@@ -6546,13 +6546,17 @@ if ( !class_exists( 'Walker_WebcomicTerm_Dropdown' ) ) {
 						$show_count ? " ({$term->count})" : ''
 					);
 					
+					$i = 0;
+					
 					while ( $the_posts->have_posts() ) { $the_posts->the_post();
+						$i++;
+						
 						$output .= sprintf( '<option value="%s" data-webcomic-url="%s"%s>%s%s</option>',
 							get_the_ID(),
 							apply_filters( 'the_permalink', get_permalink() ),
 							$selected === get_the_ID() ? ' selected' : '',
 							$term_pad,
-							the_title( '', '', false )
+							apply_filters( 'term_dropdown_webcomic_title', the_title( '', '', false ), $args, $i )
 						);
 					}
 					
@@ -6675,11 +6679,15 @@ if ( !class_exists( 'Walker_WebcomicTerm_List' ) ) {
 						$ordered ? 'ol' : 'ul'
 					);
 					
+					$i = 0;
+					
 					while ( $the_posts->have_posts() ) { $the_posts->the_post();
+						$i++;
+						
 						$output .= sprintf( '<li%s><a href="%s">%s</a></li>',
 							$selected === get_the_ID() ? ' class="current"' : '',
 							apply_filters( 'the_permalink', get_permalink() ),
-							$webcomic_image ? WebcomicTag::the_webcomic( $webcomic_image, 'self' ) : the_title( '', '', false )
+							$webcomic_image ? WebcomicTag::the_webcomic( $webcomic_image, 'self' ) : apply_filters( 'term_list_webcomic_title', the_title( '', '', false ), $args, $i )
 						);
 					}
 					
