@@ -2490,6 +2490,7 @@ class WebcomicTag extends Webcomic {
 	 * @uses WebcomicTag::get_relative_webcomic_link()
 	 * @filter string webcomic_collection_dropdown_title Filters the collection titles used by `webcomic_dropdown_collections`.
 	 * @filter string webcomic_dropdown_collections Filters the output of `webcomic_dropdown_collections`.
+	 * @filter string collection_dropdown_webcomic_title Filters the webcomic titles used by `webcomic_dropdown_collections`.
 	 */
 	public static function webcomic_dropdown_collections( $args = array() ) {
 		global $post;
@@ -2561,7 +2562,7 @@ class WebcomicTag extends Webcomic {
 										get_the_ID(),
 										apply_filters( 'the_permalink', get_permalink() ),
 										$selected === get_the_ID() ? ' selected' : '',
-										the_title( '', '', false )
+										apply_filters( 'collection_dropdown_webcomic_title', the_title( '', '', false ), get_post(), $i )
 									);
 								}
 							
@@ -2720,6 +2721,7 @@ class WebcomicTag extends Webcomic {
 	 * @uses WebcomicTag::get_relative_webcomic_link()
 	 * @filter string webcomic_collection_list_title Filters the collection titles used by `webcomic_list_collections`.
 	 * @filter string webcomic_list_collections Filters the output of `webcomic_list_collections`.
+	 * @filter string collection_list_webcomic_title Filters the webcomic titles used by `webcomic_list_collections`.
 	 */
 	public static function webcomic_list_collections( $args = array() ) {
 		global $post;
@@ -2801,11 +2803,15 @@ class WebcomicTag extends Webcomic {
 									$ordered ? 'ol' : 'ul'
 								);
 								
+								$i = 0;
+								
 								while ( $the_posts->have_posts() ) { $the_posts->the_post();
+									$i++;
+									
 									$items .= sprintf( '<li%s><a href="%s">%s</a></li>',
 										$selected === get_the_ID() ? ' class="current"' : '',
 										apply_filters( 'the_permalink', get_permalink() ),
-										$webcomic_image ? WebcomicTag::the_webcomic( $webcomic_image, 'self' ) : the_title( '', '', false )
+										$webcomic_image ? WebcomicTag::the_webcomic( $webcomic_image, 'self' ) : apply_filters( 'collection_list_webcomic_title', the_title( '', '', false ), get_post(), $i )
 									);
 								}
 								
