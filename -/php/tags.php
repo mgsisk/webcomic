@@ -6514,6 +6514,7 @@ if ( !class_exists( 'Walker_WebcomicTerm_Dropdown' ) ) {
 		 * @param array $args Arguments passed to the walker.
 		 * @uses WebcomicTag::get_relative_webcomic_link()
 		 * @filter string webcomic_term_dropdown_title Filters the term titles used by `webcomic_dropdown_storylines` and `webcomic_dropdown_characters`.
+		 * @filter string term_dropdown_webcomic_title Fitlers the webcomic titles used by `webcomic_dropdown_storylines` and `webcomic_dropdown_characters`.
 		 */
 		public function start_el( &$output, $term, $depth, $args ) {
 			global $post;
@@ -6637,6 +6638,7 @@ if ( !class_exists( 'Walker_WebcomicTerm_List' ) ) {
 		 * @filter string webcomic_term_list_title Filters the term titles used by `webcomic_list_storylines` and `webcomic_list_characters`.
 		 * @filter string webcomic_term_image Filters the term images used by `webcomic_list_storylines` and `webcomic_list_characters`.
 		 * @filter string webcomic_term_description Filters the term titles used by `webcomic_dropdown_transcript_languages`.
+		 * @filter string term_list_webcomic_title Fitlers the webcomic titles used by `webcomic_list_storylines` and `webcomic_list_characters`.
 		 */
 		public function start_el( &$output, $term, $depth, $args ) {
 			global $post;
