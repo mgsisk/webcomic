@@ -358,7 +358,7 @@ class Webcomic {
 				curl_setopt( $curl, CURLOPT_URL, 'https://www.paypal.com/cgi-bin/webscr' );
 				curl_setopt( $curl, CURLOPT_HEADER, 0 );
 				curl_setopt( $curl, CURLOPT_POST, 1 );
-				curl_setopt( $curl, CURLOPT_RETURNTRANSFER,1);
+				curl_setopt( $curl, CURLOPT_RETURNTRANSFER, 1 );
 				curl_setopt( $curl, CURLOPT_POSTFIELDS, $request );
 				curl_setopt( $curl, CURLOPT_SSL_VERIFYPEER, 1 );
 				curl_setopt( $curl, CURLOPT_SSL_VERIFYHOST, 2 );
@@ -490,7 +490,9 @@ class Webcomic {
 		global $wp_query, $post;
 		
 		$object = $wp_query->get_queried_object();
-		$output = array();
+		$output = array(
+			'generator' => sprintf( 'Webcomic %s', self::$version )
+		);
 		
 		if ( self::$collection and !is_404() ) {
 			$output[ 'og:type' ]        = empty( $object->post_type ) ? 'website' : 'article';
@@ -558,14 +560,14 @@ class Webcomic {
 				$output[ 'og:image:width' ]  = $attributes[ 1 ];
 				$output[ 'og:image:height' ] = $attributes[ 2 ];
 			}
-			
-			$output[ 'generator' ] = sprintf( 'Webcomic %s', self::$version );
 		}
 		
 		$output = apply_filters( 'webcomic_opengraph', $output, $object, self::$collection );
 		
 		foreach ( ( array ) $output as $k => $v ) {
-			if ( is_array( $v ) ) {
+			if ( 'generator' === $k ) {
+				echo sprintf( '<meta name="%s" content="%s">', $k, $v ), "\n";
+			} elseif ( is_array( $v ) ) {
 				foreach( $v as $x ) {
 					if ( is_array( $x ) ) {
 						foreach ( $x as $a => $b ) {
@@ -588,7 +590,7 @@ class Webcomic {
 	 */
 	public function twitter_oauth() {
 		if ( isset( $_GET[ 'webcomic_twitter_oauth' ] ) ) {
-			if ( !class_exists( 'TwitterOAuth' ) ) {
+			if ( !class_exists( 'tmhOAuth' ) ) {
 				require_once self::$dir . '-/lib/twitter.php';
 			}
 			
@@ -597,22 +599,43 @@ class Webcomic {
 			if ( isset( $_GET[ 'denied' ] ) ) {
 				wp_die( sprintf( __( 'Authorization was denied. <a href="%1$s">Return to %2$s Settings</a>', 'webcomic' ), $admin_url, self::$config[ 'collections' ][ $_GET[ 'webcomic_collection' ] ][ 'name' ] ), __( 'Twitter Authorization Denied | Webcomic', 'webcomic' ), array( 'response' => 200 ) );
 			} else {
-				$oauth = new TwitterOAuth( self::$config[ 'collections' ][ $_GET[ 'webcomic_collection' ] ][ 'twitter' ][ 'consumer_key' ], self::$config[ 'collections' ][ $_GET[ 'webcomic_collection' ] ][ 'twitter' ][ 'consumer_secret' ], $_GET[ 'oauth_token' ], self::$config[ 'collections' ][ $_GET[ 'webcomic_collection' ] ][ 'twitter' ][ 'request_token' ] );
-				$token = $oauth->getAccessToken( $_GET[ 'oauth_verifier' ] );
+				$oauth = new tmhOAuth( array(
+					'consumer_key'    => self::$config[ 'collections' ][ $_GET[ 'webcomic_collection' ] ][ 'twitter' ][ 'consumer_key' ],
+					'consumer_secret' => self::$config[ 'collections' ][ $_GET[ 'webcomic_collection' ] ][ 'twitter' ][ 'consumer_secret' ],
+					'user_token'      => self::$config[ 'collections' ][ $_GET[ 'webcomic_collection' ] ][ 'twitter' ][ 'request_token' ],
+					'user_secret'     => self::$config[ 'collections' ][ $_GET[ 'webcomic_collection' ] ][ 'twitter' ][ 'request_secret' ]
+				) );
 				
-				if ( isset( $token[ 'oauth_token' ], $token[ 'oauth_token_secret' ] ) ) {
-					self::$config[ 'collections' ][ $_GET[ 'webcomic_collection' ] ][ 'twitter' ][ 'oauth_token' ]   = $token[ 'oauth_token' ];
-					self::$config[ 'collections' ][ $_GET[ 'webcomic_collection' ] ][ 'twitter' ][ 'oauth_secret' ]  = $token[ 'oauth_token_secret' ];
+				$code = $oauth->request( 'POST', str_replace( '.json', '', $oauth->url( 'oauth/access_token', '' ) ), array(
+					'oauth_verifier' => $_GET[ 'oauth_verifier' ]
+				) );
+				
+				if ( 200 === intval( $code ) ) {
+					$response = $oauth->extract_params( $oauth->response[ 'response' ] );
+					
+					self::$config[ 'collections' ][ $_GET[ 'webcomic_collection' ] ][ 'twitter' ][ 'oauth_token' ]   = $response[ 'oauth_token' ];
+					self::$config[ 'collections' ][ $_GET[ 'webcomic_collection' ] ][ 'twitter' ][ 'oauth_secret' ]  = $response[ 'oauth_token_secret' ];
 					self::$config[ 'collections' ][ $_GET[ 'webcomic_collection' ] ][ 'twitter' ][ 'request_token' ] = self::$config[ 'collections' ][ $_GET[ 'webcomic_collection' ] ][ 'twitter' ][ 'request_secret' ] = '';
 					
 					update_option( 'webcomic_options', self::$config );
 					
-					wp_die( sprintf( __( 'Newly published %1$s webcomics will be tweeted to <a href="%2$s">%3$s</a>. <a href="%4$s">Return to %1s Settings</a>', 'webcomic' ),
-						self::$config[ 'collections' ][ $_GET[ 'webcomic_collection' ] ][ 'name' ],
-						"http://twitter.com/{$token[ 'screen_name' ]}",
-						$token[ 'screen_name' ],
-						$admin_url
-					), __( 'Twitter Authorization Complete | Webcomic', 'webcomic' ), array( 'response' => 200 ) );
+					$oauth->config[ 'user_token' ]  = $response[ 'oauth_token' ];
+					$oauth->config[ 'user_secret' ] = $response[ 'oauth_token_secret' ];
+					
+					$code = $oauth->request( 'GET', $oauth->url( '1/account/verify_credentials' ) );
+					
+					if ( 200 === intval( $code ) ) {
+						$response = json_decode( $oauth->response[ 'response' ] );
+						
+						wp_die( sprintf( __( 'Newly published %1$s webcomics will be tweeted to <a href="%2$s">%3$s</a>. <a href="%4$s">Return to %1s Settings</a>', 'webcomic' ),
+							self::$config[ 'collections' ][ $_GET[ 'webcomic_collection' ] ][ 'name' ],
+							"http://twitter.com/{$response->screen_name}",
+							$response->screen_name,
+							$admin_url
+						), __( 'Twitter Authorization Complete | Webcomic', 'webcomic' ), array( 'response' => 200 ) );
+					} else {
+						wp_die( sprintf( __( 'Your credentials could not be verified. Please ensure that your <b>consumer key</b> and <b>consumer secret</b> were entered correctly and <a href="%s">try again.</a>', 'webcomic' ), $admin_url ), __( 'Twitter Authorization Failed | Webcomic', 'webcomic' ), array( 'response' => 200 ) );
+					}
 				} else {
 					wp_die( sprintf( __( 'Your credentials could not be verified. Please ensure that your <b>consumer key</b> and <b>consumer secret</b> were entered correctly and <a href="%s">try again.</a>', 'webcomic' ), $admin_url ), __( 'Twitter Authorization Failed | Webcomic', 'webcomic' ), array( 'response' => 200 ) );
 				}
@@ -1011,7 +1034,9 @@ class Webcomic {
 	 */
 	public function tweet_webcomic( $new, $old, $post ) {
 		if ( 'publish' === $new and 'publish' !== $old and !empty( self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'format' ] ) and !empty( self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'oauth_token' ] ) and !empty( self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'oauth_secret' ] ) ) {
-			$status = self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'format' ];
+			$status      = self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'format' ];
+			$attachments = self::get_attachments( $post->ID );
+			$attachment  = current( $attachments );
 			
 			if ( false !== strpos( self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'format' ], '%' ) ) {
 				$link   = wp_get_shortlink( $post->ID );
@@ -1029,6 +1054,10 @@ class Webcomic {
 					'%collections'       => '#' . str_replace( array( '_', '-' ), '', self::$config[ 'collections' ][ $post->post_type ][ 'slugs' ][ 'name' ] ),
 					'%collection'        => '#' . str_replace( array( '_', '-' ), '', self::$config[ 'collections' ][ $post->post_type ][ 'slugs' ][ 'name' ] )
 				) );
+				
+				foreach ( array_merge( get_intermediate_image_sizes(), array( 'full' ) ) as $size ) {
+					$tokens[ "%{$size}" ] = ( false !== strpos( $status, "%{$size}" ) and $image = wp_get_attachment_image_src( $attachment->ID, $size ) ) ? $image[ 0 ] : '';
+				}
 				
 				if ( preg_match( sprintf( '/%%%s/', join( '|%', array_merge( array( 'storyline', 'character' ), self::$config[ 'collections' ][ $post->post_type ][ 'taxonomies' ] ) ) ), self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'format' ] ) and $terms = wp_get_object_terms( $post->ID, array_merge( array( "{$post->post_type}_storyline", "{$post->post_type}_character" ), self::$config[ 'collections' ][ $post->post_type ][ 'taxonomies' ] ) ) and !is_wp_error( $terms ) ) {
 					foreach ( $terms as $term ) {
@@ -1073,17 +1102,34 @@ class Webcomic {
 			}
 			
 			if ( $status ) {
-				if ( !class_exists( 'TwitterOAuth' ) ) {
+				if ( !class_exists( 'tmhOAuth' ) ) {
 					require_once self::$dir . '-/lib/twitter.php';
 				}
 				
-				$oauth    = new TwitterOAuth( self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'consumer_key' ], self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'consumer_secret' ], self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'oauth_token' ], self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'oauth_secret' ] );
-				$response = $oauth->post( 'statuses/update', array( 'status' => substr( strip_tags( $status ), 0, 140 ) ) );
+				$oauth = new tmhOAuth( array(
+					'consumer_key'    => self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'consumer_key' ],
+					'consumer_secret' => self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'consumer_secret' ],
+					'user_token'      => self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'oauth_token' ],
+					'user_secret'     => self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'oauth_secret' ]
+				) );
 				
-				if ( isset( $response->error ) ) {
+				if ( self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'media' ] and $attachment ) {
+					$file = get_attached_file( $attachment->ID );
+					$name = basename( $file );
+					$code = $oauth->request( 'POST', $oauth->url( '1.1/statuses/update_with_media' ), array(
+						'media[]' => "@{$file};type={$attachment->post_mime_type};filename={$name}",
+						'status'  => substr( strip_tags( $status ), 0, 140 )
+					), true, true );
+				} else {
+					$code = $oauth->request( 'POST', $oauth->url( '1/statuses/update' ), array(
+						'status'  => substr( strip_tags( $status ), 0, 140 )
+					) );
+				}
+				
+				if ( 200 !== intval( $code ) ) {
 					$errors = get_transient( 'webcomic_error' );
 					
-					set_transient( 'webcomic_error', array_merge( array( sprintf( __( '<b>Twitter Error: %s</b>', 'webcomic' ), $response->error ) ), $errors ? $errors : array() ), 1 );
+					set_transient( 'webcomic_error', array_merge( array( sprintf( __( '<b>Twitter Error: %s</b>', 'webcomic' ), $oauth->response[ 'response' ] ? $oauth->response[ 'response' ] : $oauth->response[ 'error' ] ) ), $errors ? $errors : array() ), 1 );
 				}
 			}
 		}
@@ -1649,5 +1695,7 @@ class Webcomic {
 if ( is_admin() ) { // Load and instantiate the administrative class.
 	require_once dirname( __FILE__ ) . '/-/php/admin.php'; new WebcomicAdmin;
 } else { // Instantiate the standard class.
+	new Webcomic;
+} the standard class.
 	new Webcomic;
 }

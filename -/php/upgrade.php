@@ -25,6 +25,10 @@ class WebcomicUpgrade extends Webcomic {
 			$this->_406();
 		}
 		
+		if ( version_compare( self::$config[ 'version' ], '4.0.9', '<' ) ) {
+			$this->_409();
+		}
+		
 		self::$config[ 'version' ] = self::$version;
 		
 		update_option( 'webcomic_options', self::$config );
@@ -58,6 +62,16 @@ class WebcomicUpgrade extends Webcomic {
 	private function _406() {
 		if ( empty( self::$config[ 'gestures' ] ) ) {
 			self::$config[ 'gestures' ] = false;
+		}
+	}
+	
+	/** Upgrade to 4.0.9
+	 * 
+	 * @uses Webcomic::$config
+	 */
+	private function _409() {
+		foreach ( self::$config[ 'collections' ] as $k => $v ) {
+			self::$config[ 'collections' ][ $k ][ 'twitter' ][ 'media' ] = false;
 		}
 	}
 }

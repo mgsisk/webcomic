@@ -126,6 +126,7 @@ class WebcomicConfig extends Webcomic {
 			add_settings_field( "{$k}_twitter_consumer_key", __( 'Consumer Key', 'webcomic' ), array( $this, 'collection_twitter_consumer_key' ), "{$k}-options", "{$k}-twitter", array( 'label_for' => 'webcomic_twitter_consumer_key' ) );
 			add_settings_field( "{$k}_twitter_consumer_secret", __( 'Consumer Secret', 'webcomic' ), array( $this, 'collection_twitter_consumer_secret' ), "{$k}-options", "{$k}-twitter", array( 'label_for' => 'webcomic_twitter_consumer_secret' ) );
 			add_settings_field( "{$k}_twitter_format", __( 'Tweet Format', 'webcomic' ), array( $this, 'collection_twitter_format' ), "{$k}-options", "{$k}-twitter", array( 'label_for' => 'webcomic_twitter_format' ) );
+			add_settings_field( "{$k}_twitter_media", __( 'Upload Media', 'webcomic' ), array( $this, 'collection_twitter_media' ), "{$k}-options", "{$k}-twitter", array( 'label_for' => 'webcomic_twitter_media' ) );
 		}
 		
 		if ( ( isset( $_GET[ 'page' ], $_GET[ 'settings-updated' ] ) and 'webcomic-options' === $_GET[ 'page' ] and 'true' === $_GET[ 'settings-updated' ] ) or ( isset( $_GET[ 'page' ], $_GET[ 'post_type' ], $_GET[ 'settings-updated' ] ) and preg_match( '/^webcomic\d+-options$/', $_GET[ 'page' ] ) and isset( self::$config[ 'collections' ][ $_GET[ 'post_type' ] ] ) and 'true' === $_GET[ 'settings-updated' ] ) ) {
@@ -870,6 +871,16 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
+	/** Render Twitter > Media
+	 * 
+	 * @uses Webcomic::$config
+	 */
+	public function collection_twitter_media() {
+		?>
+		<label><input type="checkbox" name="webcomic_twitter_media" id="webcomic_twitter_media"<?php checked( self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'twitter' ][ 'media' ] ); ?>> <?php _e( 'Upload media with tweet', 'webcomic' ); ?></label>
+		<?php
+	}
+	
 	/** Save callback for the webcomic option.
 	 * 
 	 * If 'webcomic_general' is set we're working on the general
@@ -995,6 +1006,7 @@ class WebcomicConfig extends Webcomic {
 					'roles'  => array( '!' )
 				),
 				'twitter' => array(
+					'media'           => isset( $_POST[ 'webcomic_twitter_media' ] ),
 					'format'          => $_POST[ 'webcomic_twitter_format' ],
 					'oauth_token'     => self::$config[ 'collections' ][ $id ][ 'twitter' ][ 'oauth_token' ],
 					'oauth_secret'    => self::$config[ 'collections' ][ $id ][ 'twitter' ][ 'oauth_secret' ],
@@ -1234,43 +1246,56 @@ class WebcomicConfig extends Webcomic {
 	 * @param string $collection Collection the Twitter credentials belong to.
 	 */
 	public static function ajax_twitter_account( $consumer_key, $consumer_secret, $collection ) {
-		if ( !class_exists( 'TwitterOAuth' ) ) {
+		if ( !class_exists( 'tmhOAuth' ) ) {
 			require_once self::$dir . '-/lib/twitter.php';
 		}
 		
+		$oauth = new tmhOAuth( array_merge( array(
+				'consumer_key'    => $consumer_key,
+				'consumer_secret' => $consumer_secret
+			), ( $consumer_key and $consumer_secret ) ? array(
+				'user_token'  => self::$config[ 'collections' ][ $collection ][ 'twitter' ][ 'oauth_token' ],
+				'user_secret' => self::$config[ 'collections' ][ $collection ][ 'twitter' ][ 'oauth_secret' ]
+			) : array()
+		) );
+		
 		if ( $consumer_key and $consumer_secret ) {
-			$oauth       = new TwitterOAuth( $consumer_key, $consumer_secret, self::$config[ 'collections' ][ $collection ][ 'twitter' ][ 'oauth_token' ], self::$config[ 'collections' ][ $collection ][ 'twitter' ][ 'oauth_secret' ] );
-			$credentials = $oauth->get( 'account/verify_credentials' );
-			
 			self::$config[ 'collections' ][ $collection ][ 'twitter' ][ 'consumer_key' ]    = $consumer_key;
 			self::$config[ 'collections' ][ $collection ][ 'twitter' ][ 'consumer_secret' ] = $consumer_secret;
 			
 			update_option( 'webcomic_options', self::$config );
 			
-			if ( isset( $credentials->screen_name ) ) {
+			$code = $oauth->request( 'GET', $oauth->url( '1/account/verify_credentials' ) );
+			
+			if ( 200 === intval( $code ) ) {
+				$response = json_decode( $oauth->response[ 'response' ] );
+				
 				printf( '<a href="http://twitter.com/%s" target="_blank"><b>@%s</b></a> <a href="https://twitter.com/settings/applications" target="_blank" class="button">%s</a>',
-					$credentials->screen_name,
-					$credentials->screen_name,
+					$response->screen_name,
+					$response->screen_name,
 					__( 'Revoke Access', 'webcomic' )
 				);
 			} else {
-				$oauth   = new TwitterOAuth( $consumer_key, $consumer_secret );
-				$request = $oauth->getRequestToken( add_query_arg( array( 'webcomic_twitter_oauth' => true, 'webcomic_collection' => $collection ), get_site_url() ) );
+				$code = $oauth->request( 'POST', $oauth->url( 'oauth/request_token', '' ), array(
+					'oauth_callback' => add_query_arg( array( 'webcomic_twitter_oauth' => true, 'webcomic_collection' => $collection ), get_site_url() )
+				) );
 				
-				if ( isset( $request[ 'Failed to validate oauth signature and token' ] ) ) {
-					_e( 'Validation error. Please ensure your <a href="https://dev.twitter.com/apps/new" target="_blank">Twitter Application</a> <b>consumer key</b> and <b>consumer secret</b> are entered correctly.', 'webcomic' );
-				} else {
-					self::$config[ 'collections' ][ $collection ][ 'twitter' ][ 'request_token' ]   = isset( $request[ 'oauth_token' ] ) ? $request[ 'oauth_token' ] : '';
-					self::$config[ 'collections' ][ $collection ][ 'twitter' ][ 'request_secret' ]  = isset( $request[ 'oauth_token_secret' ] ) ? $request[ 'oauth_token_secret' ] : '';
+				if ( 200 === intval( $code ) ) {
+					$response = $oauth->extract_params( $oauth->response[ 'response' ] );
+					
+					self::$config[ 'collections' ][ $collection ][ 'twitter' ][ 'request_token' ]  = isset( $response[ 'oauth_token' ] ) ? $response[ 'oauth_token' ] : '';
+					self::$config[ 'collections' ][ $collection ][ 'twitter' ][ 'request_secret' ] = isset( $response[ 'oauth_token_secret' ] ) ? $response[ 'oauth_token_secret' ] : '';
 					
 					update_option( 'webcomic_options', self::$config );
 					
 					printf( '%s<a href="%s"><img src="%s-/img/twitter.png" alt="%s"></a>',
 						( self::$config[ 'collections' ][ $collection ][ 'twitter' ][ 'oauth_token' ] and self::$config[ 'collections' ][ $collection ][ 'twitter' ][ 'oauth_secret' ]  ) ? __( '<p class="description">Your credentials could not be verified.</p>', 'webcomic' ) : '',
-						$oauth->getAuthorizeURL( $request ),
+						add_query_arg( array( 'oauth_token' => $response[ 'oauth_token' ] ), $oauth->url( 'oauth/authorize', '' ) ),
 						self::$url,
 						__( 'Sign in with Twitter', 'webcomic' )
 					);
+				} else {
+					_e( 'Validation error. Please ensure your <a href="https://dev.twitter.com/apps/new" target="_blank">Twitter Application</a> <b>consumer key</b> and <b>consumer secret</b> are entered correctly.', 'webcomic' );
 				}
 			}
 		} else {

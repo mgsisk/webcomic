@@ -132,6 +132,7 @@ class WebcomicAdmin extends Webcomic {
 							'roles'  => array( '!' )
 						),
 						'twitter' => array(
+							'media'           => false,
 							'format'          => __( '%collection-name has updated! %site-url', 'webcomic' ),
 							'oauth_token'     => '',
 							'oauth_secret'    => '',
