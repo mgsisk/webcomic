@@ -178,7 +178,7 @@ class WebcomicPages extends Webcomic {
 	 * 
 	 * Because of how WordPress handles custom field queries, sorting
 	 * this way has the unintentional side effect of filtering out any
-	 * pages without a `webcomci_collection` custom field.
+	 * pages without a `webcomic_collection` custom field.
 	 * 
 	 * @param array $request An array of request parameters.
 	 * @return array
