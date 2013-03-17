@@ -1071,10 +1071,10 @@ class Webcomic {
 					}
 				}
 				
-				if ( preg_match_all( '/%field:(?(?=\{).+?\}|\S+)/', self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'format' ], $matches ) ) {
+				if ( preg_match_all( '/%field:\{.+?\}/', self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'format' ], $matches ) ) {
 					foreach ( $matches[ 0 ] as $match ) {
-						if ( empty( $m[ $match ] ) ) {
-							$m[ $match ] = get_post_meta( $post->ID, str_replace( array( '%field:', '{', '}' ), '', $match ), true );
+						if ( empty( $tokens[ $match ] ) ) {
+							$tokens[ $match ] = get_post_meta( $post->ID, str_replace( array( '%field:{', '}' ), '', $match ), $match, true );
 						}
 					}
 				}
