@@ -23,7 +23,7 @@ class WebcomicTag extends Webcomic {
 	 * @uses Webcomic::$collection
 	 */
 	public static function get_webcomic_collection( $config = false ) {
-		return ( $config and isset( self::$config[ 'collections' ][ self::$collection ] ) ) ? array( self::$collection => self::$config[ 'collections' ][ self::$collection ] ) : self::$collection;
+		return ( $config and isset( self::$config[ 'collections' ][ self::$collection ] ) ) ? self::$config[ 'collections' ][ self::$collection ] : self::$collection;
 	}
 	
 	/** Return all collection ID's or configurations.
