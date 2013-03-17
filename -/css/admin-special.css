@@ -1,68 +1,3 @@
-@-moz-keyframes thanks {
-	0%   { color: #00acdc; }
-	25%  { color: #cadb2a; }
-	50%  { color: #f68a1f; }
-	75%  { color: #b72367; }
-	100% { color: #00acdc; }
-}
-
-@-ms-keyframes thanks {
-	0%   { color: #00acdc; }
-	25%  { color: #cadb2a; }
-	50%  { color: #f68a1f; }
-	75%  { color: #b72367; }
-	100% { color: #00acdc; }
-}
-
-@-o-keyframes thanks {
-	0%   { color: #00acdc; }
-	25%  { color: #cadb2a; }
-	50%  { color: #f68a1f; }
-	75%  { color: #b72367; }
-	100% { color: #00acdc; }
-}
-
-@-webkit-keyframes thanks {
-	0%   { color: #00acdc; }
-	25%  { color: #cadb2a; }
-	50%  { color: #f68a1f; }
-	75%  { color: #b72367; }
-	100% { color: #00acdc; }
-}
-
-@keyframes thanks {
-	0%   { color: #00acdc; }
-	25%  { color: #cadb2a; }
-	50%  { color: #f68a1f; }
-	75%  { color: #b72367; }
-	100% { color: #00acdc; }
-}
-
-@-moz-keyframes fadein {
-	0%   { opacity: 0; }
-	100% { opacity: 1; }
-}
-
-@-ms-keyframes fadein {
-	0%   { opacity: 0; }
-	100% { opacity: 1; }
-}
-
-@-o-keyframes fadein {
-	0%   { opacity: 0; }
-	100% { opacity: 1; }
-}
-
-@-webkit-keyframes fadein {
-	0%   { opacity: 0; }
-	100% { opacity: 1; }
-}
-
-@keyframes fadein {
-	0%   { opacity: 0; }
-	100% { opacity: 1; }
-}
-
 .updated.webcomic {
 	-moz-animation: fadein 1.5s;
 	-ms-animation: fadein 1.5s;
@@ -171,4 +106,69 @@
 .updated.webcomic.legacy b:before {
 	bottom: -1.15em;
 	left: .5em;
+}
+
+@-moz-keyframes thanks {
+	0%   { color: #00acdc; }
+	25%  { color: #cadb2a; }
+	50%  { color: #f68a1f; }
+	75%  { color: #b72367; }
+	100% { color: #00acdc; }
+}
+
+@-ms-keyframes thanks {
+	0%   { color: #00acdc; }
+	25%  { color: #cadb2a; }
+	50%  { color: #f68a1f; }
+	75%  { color: #b72367; }
+	100% { color: #00acdc; }
+}
+
+@-o-keyframes thanks {
+	0%   { color: #00acdc; }
+	25%  { color: #cadb2a; }
+	50%  { color: #f68a1f; }
+	75%  { color: #b72367; }
+	100% { color: #00acdc; }
+}
+
+@-webkit-keyframes thanks {
+	0%   { color: #00acdc; }
+	25%  { color: #cadb2a; }
+	50%  { color: #f68a1f; }
+	75%  { color: #b72367; }
+	100% { color: #00acdc; }
+}
+
+@keyframes thanks {
+	0%   { color: #00acdc; }
+	25%  { color: #cadb2a; }
+	50%  { color: #f68a1f; }
+	75%  { color: #b72367; }
+	100% { color: #00acdc; }
+}
+
+@-moz-keyframes fadein {
+	0%   { opacity: 0; }
+	100% { opacity: 1; }
+}
+
+@-ms-keyframes fadein {
+	0%   { opacity: 0; }
+	100% { opacity: 1; }
+}
+
+@-o-keyframes fadein {
+	0%   { opacity: 0; }
+	100% { opacity: 1; }
+}
+
+@-webkit-keyframes fadein {
+	0%   { opacity: 0; }
+	100% { opacity: 1; }
+}
+
+@keyframes fadein {
+	0%   { opacity: 0; }
+	100% { opacity: 1; }
 }
