@@ -1412,7 +1412,7 @@ class Webcomic {
 					$template = array( 'webcomic/' . ( false !== strpos( $object->taxonomy, 'storyline' ) ? 'storyline' : 'character' ) . '.php', 'webcomic/taxonomy.php', 'taxonomy.php', 'webcomic/archive.php', $template );
 				}
 			} elseif ( is_post_type_archive() and false === strpos( $template, $collection ) ) {
-				$template = array( 'webcomic/archive.php', $template );
+				$template = array( 'webcomic/collection.php', 'webcomic/archive.php', $template );
 			}
 		} elseif ( is_front_page() and is_home() ) {
 			$template = array( 'webcomic/home.php', $template );
