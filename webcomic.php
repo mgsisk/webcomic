@@ -1623,10 +1623,11 @@ class Webcomic {
 	 * @param object $query WP_Query object.
 	 * @uses WebcomicTag::is_webcomic_archive()
 	 * @uses WebcomicTag::is_webcomic_tax()
+	 * @filter string webcomic_integrate_sort Filters the sort order of webcomics on post type and taxonomy archive pages.
 	 */
 	public function integrate_sort_asc( $query ) {
 		if ( self::$integrate and $query->is_main_query() and ( WebcomicTag::is_webcomic_archive() or WebcomicTag::is_webcomic_tax() ) ) {
-			$query->set( 'order', 'ASC' );
+			$query->set( 'order', apply_filters( 'webcomic_integrate_sort', 'ASC' ) );
 		}
 	}
 	
