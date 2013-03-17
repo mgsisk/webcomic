@@ -1,4 +1,6 @@
 jQuery( function( $ ) {
+	var url = $( '[data-webcomic-admin-url]' ).data( 'webcomic-admin-url' );
+	
 	/** Warn if no selected days match the start date. */
 	$( 'form.webcomic-generator' ).on( 'submit', function() {
 		var v = $( 'input[name="webcomic_generate_start"]' ).val().split( '-' ),
@@ -28,7 +30,7 @@ jQuery( function( $ ) {
 	/** Handle webcomic media reordering. */
 	$( '.webcomic-media-sort' ).sortable( {
 		update: function() {
-			$.post( $( '[data-webcomic-admin-url]' ).data( 'webcomic-admin-url' ), {
+			$.post( url, {
 				ids: $( '[name="ids[]"]' ).serializeArray(),
 				webcomic_admin_ajax: 'WebcomicMedia::ajax_sort_media'
 			}, function( data ) {
@@ -68,6 +70,6 @@ jQuery( function( $ ) {
 		
 		$el.attr( 'name', 'webcomic_action' );
 		$form.attr( 'method', 'post' );
-		$form.attr( 'action', $( '[data-webcomic-admin-url]' ).data( 'webcomic-admin-url' ) );
+		$form.attr( 'action', url );
 	}
 } );

@@ -39,14 +39,15 @@ jQuery( function( $ ) {
 		} );
 	} );
 	
-	/** Remove the collection image. */
-	$( document ).on( 'click', '.webcomic-collection-image-x', function() {
+	/** Remove the webcomic image. */
+	$( document ).on( 'click', '.webcomic-image-x', function() {
+		$e = $( this );
+		
 		$.get( url, {
 			id: 0,
-			collection: $( '[name=webcomic_collection]' ).val(),
-			webcomic_admin_ajax: 'WebcomicConfig::ajax_collection_image'
+			webcomic_admin_ajax: $e.data( 'callback' )
 		}, function( data ) {
-			$( '#webcomic_collection_image' ).html( data );
+			$( $e.data( 'target' ) ).html( data );
 		} );
 	} );
 	
@@ -65,15 +66,15 @@ jQuery( function( $ ) {
 		$( this ).nextAll( 'table:first' ).toggle();
 	} );
 	
-	$( '.wrap h3:first' ).trigger( 'click' );
+	$( '.wrap :not(table) + h3:first' ).trigger( 'click' );
 } );
 
-/** Enable fancy collection images. */
+/** Enable fancy image selection. */
 ( function( $ ) {
 	var frame;
 	
 	$( function() {
-		$( document ). on( 'click', '.webcomic-collection-image', function( e ) {
+		$( document ). on( 'click', '.webcomic-image', function( e ) {
 			var $e = $( this );
 			
 			e.preventDefault();
@@ -97,10 +98,9 @@ jQuery( function( $ ) {
 			frame.on( 'select', function() {
 				$.get( $( '[data-webcomic-admin-url]' ).data( 'webcomic-admin-url' ), {
 					id: frame.state().get( 'selection' ).first().id,
-					collection: $( '[name=webcomic_collection]' ).val(),
-					webcomic_admin_ajax: 'WebcomicConfig::ajax_collection_image'
+					webcomic_admin_ajax: $e.data( 'callback' )
 				}, function( data ) {
-					$( '#webcomic_collection_image' ).html( data );
+					$( $e.data( 'target' ) ).html( data );
 				} );
 			} );
 			

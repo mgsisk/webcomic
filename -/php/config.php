@@ -1191,15 +1191,10 @@ class WebcomicConfig extends Webcomic {
 			);
 		}
 		
-		printf( '<input type="hidden" name="webcomic_image" value="%s"><a class="button webcomic-collection-image" data-title="%s" data-update="%s">%s</a>',
-			$id,
-			sprintf( __( 'Choose a Poster for %s', 'webcomic' ), esc_attr( self::$config[ 'collections' ][ $collection ][ 'name' ] ) ),
-			__( 'Update', 'webcomic' ),
-			$id ? __( 'Change', 'webcomic' ) : __( 'Select', 'webcomic' )
-		);
+		echo '<input type="hidden" name="webcomic_image" value="', $id, '"><a class="button webcomic-image" data-title="', __( 'Select a Poster', 'webcomic' ), '" data-update="', __( 'Update', 'webcomic' ), '" data-callback="WebcomicConfig::ajax_collection_image" data-target="#webcomic_collection_image">', $id ? __( 'Change', 'webcomic' ) : __( 'Select', 'webcomic' ), '</a>';
 		
 		if ( $id ) {
-			printf( ' <a class="button webcomic-collection-image-x">%s</a>', __( 'Remove', 'webcomic' ) );
+			echo ' <a class="button webcomic-image-x" data-callback="WebcomicConfig::ajax_collection_image" data-target="#webcomic_collection_image">', __( 'Remove', 'webcomic' ), '</a>';
 		}
 	}
 	
@@ -1270,11 +1265,7 @@ class WebcomicConfig extends Webcomic {
 			if ( 200 === intval( $code ) ) {
 				$response = json_decode( $oauth->response[ 'response' ] );
 				
-				printf( '<a href="http://twitter.com/%s" target="_blank"><b>@%s</b></a> <a href="https://twitter.com/settings/applications" target="_blank" class="button">%s</a>',
-					$response->screen_name,
-					$response->screen_name,
-					__( 'Revoke Access', 'webcomic' )
-				);
+				echo '<a href="http://twitter.com/', $response->screen_name, '" target="_blank"><b>@', $response->screen_name, '</b></a> <a href="https://twitter.com/settings/applications" target="_blank" class="button">', __( 'Revoke Access', 'webcomic' ), '</a>';
 			} else {
 				$code = $oauth->request( 'POST', $oauth->url( 'oauth/request_token', '' ), array(
 					'oauth_callback' => add_query_arg( array( 'webcomic_twitter_oauth' => true, 'webcomic_collection' => $collection ), get_site_url() )

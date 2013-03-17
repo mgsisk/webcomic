@@ -360,10 +360,7 @@ class WebcomicPosts extends Webcomic {
 		if ( 'webcomic_attachments' === $column ) {
 			if ( $attachments = self::get_attachments( $id ) ) {
 				foreach ( $attachments as $attachment ) {
-					printf( '<a href="%s">%s</a>',
-						esc_url( add_query_arg( array( 'post' => $attachment->ID, 'action' => 'edit' ), admin_url( 'post.php' ) ) ),
-						wp_get_attachment_image( $attachment->ID )
-					);
+					echo '<a href="', esc_url( add_query_arg( array( 'post' => $attachment->ID, 'action' => 'edit' ), admin_url( 'post.php' ) ) ), '">', wp_get_attachment_image( $attachment->ID ), '</a>';
 				}
 			} else {
 				_e( '&mdash;', 'webcomic' );
@@ -388,12 +385,7 @@ class WebcomicPosts extends Webcomic {
 			}
 			
 			if ( 0 < $orphans ) {
-				$views[ 'webcomic_orphans' ] = sprintf( '<a href="%s"%s>%s <span class="count">(%d)</span></a>',
-					esc_url( add_query_arg( array( 'post_type' => $_GET[ 'post_type' ], 'post_status' => 'all', 'webcomic_orphaned' => true ), admin_url( 'edit.php' ) ) ),
-					isset( $_GET[ 'webcomic_orphaned' ] ) ? ' class="current"' : '',
-					__( 'Orphaned', 'webcomic' ),
-					$orphans
-				);
+				$views[ 'webcomic_orphans' ] = '<a href="' . esc_url( add_query_arg( array( 'post_type' => $_GET[ 'post_type' ], 'post_status' => 'all', 'webcomic_orphaned' => true ), admin_url( 'edit.php' ) ) ) . '"' . ( isset( $_GET[ 'webcomic_orphaned' ] ) ? ' class="current"' : '' ) . '>' . __( 'Orphaned', 'webcomic' ) . ' <span class="count">(' . $orphans . ')</span></a>';
 			}
 		}
 		
@@ -570,23 +562,18 @@ class WebcomicPosts extends Webcomic {
 							$terms = __( ' - ', 'webcomic' );
 						}
 						
-						printf( '
+						echo '
 							<tr>
 								<td style="width:33%%">
-									%s<br>%s
+									', current_user_can( 'edit_post', $p->ID ) ? '<b><a href="' . get_edit_post_link( $p->ID ) . '" class="row-title">' . esc_html( $p->post_title ) . '</a></b>' : '<b>' . esc_html( $p->post_title ) . '</b>', '<br>', $status, '
 								</td>
 								<td>
-									<div class="submitted-on">%s</div>%s
+									<div class="submitted-on">', sprintf( __( 'Submitted on %1$s at %2$s by %3$s (%4$s)', 'webcomic' ), date( 'Y/n/j', $date ), date( 'g:i a', $date ), $authors, $terms ), '</div>', apply_filters( 'the_content', $p->post_content ), '
 								</td>
-							</tr>',
-							current_user_can( 'edit_post', $p->ID ) ? sprintf( '<strong><a href="%s" class="row-title">%s</a></strong>', get_edit_post_link( $p->ID ), esc_html( $p->post_title ) ) : sprintf( '<strong>%s</strong>', esc_html( $p->post_title ) ),
-							$status,
-							sprintf( __( 'Submitted on %1$s at %2$s by %3$s (%4$s)', 'webcomic' ), date( 'Y/n/j', $date ), date( 'g:i a', $date ), $authors, $terms ),
-							apply_filters( 'the_content', $p->post_content )
-						);
+							</tr>';
 					}
 				} else {
-					printf( '<tr><td><div class="submitted-on">%s</div></td></tr>', get_post_type_object( 'webcomic_transcript' )->labels->not_found );
+					echo '<tr><td><div class="submitted-on">', get_post_type_object( 'webcomic_transcript' )->labels->not_found, '</div></td></tr>';
 				}
 			?>
 			</table>
@@ -618,10 +605,7 @@ class WebcomicPosts extends Webcomic {
 		} else {
 			$post_ID = $post_ID ? $post_ID : $id;
 			
-			printf( '<a href="#" class="button insert-media">%s</a><p>%s</p>',
-				__( 'Add Media', 'webcomic' ),
-				__( 'Webcomic will automatically recognize any images attached to this post. You <strong>do not</strong> have to insert them directly into the post content.', 'webcomic' )
-			);
+			echo '<a href="#" class="button insert-media">', __( 'Add Media', 'webcomic' ), '</a><p>', __( 'Webcomic will automatically recognize any images attached to this post. You <b>do not</b> have to insert them directly into the post content.', 'webcomic' ), '</p>';
 		}
 	}
 	

@@ -137,7 +137,7 @@ class WebcomicShortcode extends Webcomic {
 		if ( $clear = WebcomicTag::verify_webcomic_age( $collection, false, $age ) ) {
 			return do_shortcode( $content );
 		} else {
-			return apply_filters( 'webcomic_verify_age_inline', is_null( $clear ) ? sprintf( __( 'Please verify your age to view this content:%s', 'webcomic' ), sprintf( '<form method="post"><label>%s <input type="date" name="webcomic_birthday"></label><input type="submit"></form>', __( 'Birthday', 'webcomic' ) ) ) : __( "You don't have permission to view this content.", 'webcomic' ), $clear, $collection, $age, $content );
+			return apply_filters( 'webcomic_verify_age_inline', is_null( $clear ) ? __( 'Please verify your age to view this content:', 'webcomic' ) . '<form method="post"><label>' . __( 'Birthday', 'webcomic' ) . ' <input type="date" name="webcomic_birthday"></label><input type="submit"></form>' : __( "You don't have permission to view this content.", 'webcomic' ), $clear, $collection, $age, $content );
 		}
 	}
 	

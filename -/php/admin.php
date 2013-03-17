@@ -51,14 +51,14 @@ class WebcomicAdmin extends Webcomic {
 			add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 3 );
 			add_filter( 'plugin_action_links', array( $this, 'plugin_action_links' ), 10, 4 );
 			
-			require_once self::$dir . '-/php/posts.php';       new WebcomicPosts;
-			require_once self::$dir . '-/php/pages.php';       new WebcomicPages;
-			require_once self::$dir . '-/php/users.php';       new WebcomicUsers;
-			require_once self::$dir . '-/php/media.php';       new WebcomicMedia;
-			require_once self::$dir . '-/php/config.php';      new WebcomicConfig;
-			require_once self::$dir . '-/php/commerce.php';    new WebcomicCommerce;
-			require_once self::$dir . '-/php/taxonomy.php';    new WebcomicTaxonomy;
-			require_once self::$dir . '-/php/transcripts.php'; new WebcomicTranscripts;
+			require_once self::$dir . '-/php/posts.php';		new WebcomicPosts;
+			require_once self::$dir . '-/php/pages.php';		new WebcomicPages;
+			require_once self::$dir . '-/php/users.php';		new WebcomicUsers;
+			require_once self::$dir . '-/php/media.php';		new WebcomicMedia;
+			require_once self::$dir . '-/php/config.php';		new WebcomicConfig;
+			require_once self::$dir . '-/php/commerce.php';		new WebcomicCommerce;
+			require_once self::$dir . '-/php/taxonomy.php';		new WebcomicTaxonomy;
+			require_once self::$dir . '-/php/transcripts.php';	new WebcomicTranscripts;
 			
 			if ( !empty( self::$config[ 'legacy' ] ) ) {
 				require_once self::$dir . '-/php/legacy.php'; new WebcomicLegacy;
@@ -181,8 +181,6 @@ class WebcomicAdmin extends Webcomic {
 				self::$config[ 'legacy' ] = 3;
 				
 				$legacy_config = $legacy;
-				
-				delete_option( 'webcomic_options' );
 			} elseif ( $legacy ) {
 				self::$config[ 'legacy' ] = version_compare( $legacy, '2', '>=' ) ? 2 : 1;
 				
@@ -272,6 +270,8 @@ class WebcomicAdmin extends Webcomic {
 				
 				update_option( 'webcomic_legacy', $legacy_config, '', 'no' );
 			}
+			
+			delete_option( 'webcomic_options' );
 			
 			add_option( 'webcomic_options', self::$config );
 			
@@ -458,25 +458,25 @@ class WebcomicAdmin extends Webcomic {
 	
 	/** Render administrative notifications and the thank you message.
 	 * 
-	 * @uses Webcomic::$error
-	 * @uses Webcomic::$notice
 	 * @uses Webcomic::$config
 	 * @uses Webcomic::$version
 	 * @hook admin_notices
 	 */
 	public function admin_notices() {
-		$notice = $error = '';
-		
-		if ( self::$notice or $notice = get_transient( 'webcomic_notice' ) ) {
-			echo '<div class="updated"><p>', join( '</p></div><div class="updated"><p>', self::$notice ), join( '</p></div><div class="updated"><p>', $notice ? $notice : array() ), '</p></div>';
+		if ( $notice = get_transient( 'webcomic_notice' ) ) {
+			delete_transient( 'webcomic_notice' );
+			
+			echo '<div class="updated"><p>', join( '</p></div><div class="updated"><p>', $notice ), '</p></div>';
 		}
 				
-		if ( self::$error or $error = get_transient( 'webcomic_error' ) ) {
-			echo '<div class="error"><p>', join( '</p></div><div class="error"><p>', array_merge( self::$error, $error ? $error : array() ) ), '</p></div>';
+		if ( $error = get_transient( 'webcomic_error' ) ) {
+			delete_transient( 'webcomic_error' );
+			
+			echo '<div class="error"><p>', join( '</p></div><div class="error"><p>', $error ), '</p></div>';
 		}
 		
 		if ( isset( self::$config[ 'thanks' ] ) ) {
-			printf( '<div class="updated webcomic"><a href="http://webcomic.nu" target="_blank"><b>&#x2764;</b>%s</a></div>', sprintf( __( 'Thank you for using Webcomic %s', 'webcomic' ), self::$version ) );
+			echo '<div class="updated webcomic"><a href="http://webcomic.nu" target="_blank"><b>&#x2764;</b>', sprintf( __( 'Thank you for using %s', 'webcomic' ), 'Webcomic ' . self::$version ), '</a></div>';
 			
 			unset( self::$config[ 'thanks' ] );
 			
@@ -493,9 +493,8 @@ class WebcomicAdmin extends Webcomic {
 	public function admin_enqueue_scripts() {
 		if ( isset( self::$config[ 'thanks' ] ) ) {
 			wp_register_style( 'webcomic-google-font', 'http://fonts.googleapis.com/css?family=Maven+Pro' );
-			wp_register_style( 'webcomic-special', self::$url . '-/css/admin-special.css', array( 'webcomic-google-font' ) );
 			
-			wp_enqueue_style( 'webcomic-special' );
+			wp_enqueue_style( 'webcomic-special', self::$url . '-/css/admin-special.css', array( 'webcomic-google-font' ) );
 		}
 	}
 	
@@ -510,10 +509,11 @@ class WebcomicAdmin extends Webcomic {
 	 */
 	public function plugin_row_meta( $meta, $file, $data ) {
 		if ( 'Webcomic' === $data[ 'Name' ] ) {
-			$meta[] = sprintf( '<a href="%s" target="_blank">%s</a>', add_query_arg( array( 'hosted_button_id' => 'UD3J2DJPSN9UC' ), '//paypal.com/cgi-bin/webscr?cmd=_s-xclick' ), __( 'Donate', 'webcomic' ) );
+			$meta[] = '<a href="' . add_query_arg( array( 'cmd' => 's-xclick', 'hosted_button_id' => 'UD3J2DJPSN9UC' ), '//paypal.com/cgi-bin/webscr' ) . '" target="_blank">' . __( 'Donate', 'webcomic' ) . '</a>';
 			
 			if ( self::$config[ 'uninstall' ] ) {
-				$meta[] = sprintf( '<strong style="color:#bc0b0b">%s</strong>', self::$config[ 'convert' ] ?  __( 'Webcomic data will be converted to posts, categories, and tags if the plugin is deactivated.', 'webcomic' ) : __( 'Webcomic data will be deleted if the plugin is deactivated.', 'webcomic' ) );
+				$meta[] = '<b style="color:#d98500">' . ( self::$config[ 'convert' ] ?  __( 'Webcomic data will be converted if the plugin is deactivated.', 'webcomic' ) : __( 'Webcomic data will be deleted if the plugin is deactivated.', 'webcomic' ) ) . '</b>';
+			}
 			}
 		}
 		
@@ -531,8 +531,8 @@ class WebcomicAdmin extends Webcomic {
 	 */
 	public function plugin_action_links( $actions, $file, $data, $context ) {
 		if ( 'Webcomic' === $data[ 'Name' ] ) {
-			$actions[ 'settings' ] = sprintf( '<a href="%s">%s</a>', esc_url( add_query_arg( array( 'page' => 'webcomic-options' ), admin_url( 'options-general.php' ) ) ), __( 'Settings', 'webcomic' ) );
-			$actions[ 'support' ]  = sprintf( '<a href="//groups.google.com/d/forum/webcomicnu" target="_blank">%s</a>', __( 'Support', 'webcomic' ) );
+			$actions[ 'settings' ] = '<a href="' . esc_url( add_query_arg( array( 'page' => 'webcomic-options' ), admin_url( 'options-general.php' ) ) ) . '">' . __( 'Settings', 'webcomic' ) . '</a>';
+			$actions[ 'support' ]  = '<a href="//groups.google.com/d/forum/webcomicnu" target="_blank">' . __( 'Support', 'webcomic' ) . '</a>';
 		}
 		
 		return $actions;

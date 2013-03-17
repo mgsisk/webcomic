@@ -1,5 +1,5 @@
 <?php
-/** Contains WebcomicWidgets and related classes.
+/** Contains WebcomicWidget and related classes.
  * 
  * @package Webcomic
  */
@@ -8,18 +8,18 @@
  * 
  * @package Webcomic
  */
-class WebcomicWidgets extends Webcomic {
+class WebcomicWidget extends Webcomic {
 	/** Register action and filter hooks.
 	 * 
-	 * @uses WebcomicWidgets::widgets_init()
+	 * @uses WebcomicWidget::widgets_init()
 	 */
 	public function __construct() {
 		add_action( 'widgets_init', array( $this, 'widgets_init' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 	}
 	
 	/** Register widgets.
 	 * 
-	 * @hook widgets_init
 	 * @uses Widget_WebcomicLink
 	 * @uses Widget_DynamicWebcomic
 	 * @uses Widget_RecentWebcomics
@@ -27,6 +27,7 @@ class WebcomicWidgets extends Webcomic {
 	 * @uses Widget_WebcomicStorylines
 	 * @uses Widget_WebcomicCharacters
 	 * @uses Widget_WebcomicCollections
+	 * @hook widgets_init
 	 */
 	public function widgets_init() {
 		register_widget( 'Widget_WebcomicLink' );
@@ -36,6 +37,35 @@ class WebcomicWidgets extends Webcomic {
 		register_widget( 'Widget_WebcomicStorylines' );
 		register_widget( 'Widget_WebcomicCharacters' );
 		register_widget( 'Widget_WebcomicCollections' );
+	}
+	
+	/** Register scripts for widget feature checks.
+	 * 
+	 * Registering (not enqueueing) these scripts in the administrative
+	 * dashboard allows us to verify that these features have been
+	 * enabled using wp_script_is().
+	 * 
+	 * @uses Webcomic::$dir
+	 * @uses Webcomic::$config
+	 * @hook admin_enqueue_scripts
+	 */
+	public function admin_enqueue_scripts() {
+		if ( self::$config[ 'dynamic' ] ) {
+			wp_register_script( 'webcomic-dynamic', self::$url . '-/js/dynamic.js', array( 'jquery' ), false, true );
+		}
+		
+		if ( self::$config[ 'gestures' ] ) {
+			wp_register_script( 'webcomic-gestures', self::$url . '-/js/gestures.js', array( 'jquery' ), false, true );
+		}
+	}
+	
+	/** Provides access to the plugin directory path.
+	 * 
+	 * @uses Webcomic::$dir
+	 * @return string
+	 */
+	public static function dir() {
+		return self::$dir;
 	}
 }
 
@@ -87,12 +117,12 @@ class Widget_WebcomicLink extends WP_Widget {
 	/** Render widget settings.
 	 * 
 	 * @param array $instance Specific instance settings.
-	 * @uses Webcomic::config()
+	 * @uses WebcomicTag::get_webcomic_collections()
 	 */
 	public function form( $instance ) {
 		extract( $instance );
 		
-		$config = Webcomic::config();
+		$collections = WebcomicTag::get_webcomic_collections( true );
 		?>
 		<p>
 			<label>
@@ -115,12 +145,8 @@ class Widget_WebcomicLink extends WP_Widget {
 				<select name="<?php echo $this->get_field_name( 'collection' ); ?>">
 					<option value=""><?php _e( '(current collection)', 'webcomic' ); ?></option>
 					<?php
-						foreach ( $config[ 'collections' ] as $k => $v ) {
-							printf( '<option value="%s"%s>%s</option>',
-								$k,
-								empty( $collection ) ? '' : selected( $k, $collection, false ),
-								esc_html( $v[ 'name' ] )
-							);
+						foreach ( $collections as $k => $v ) {
+							echo '<option value="', $k, '"', empty( $collection ) ? '' : selected( $k, $collection, false ), '>', esc_html( $v[ 'name' ] ), '</option>';
 						}
 					?>
 				</select>
@@ -155,7 +181,7 @@ class Widget_WebcomicLink extends WP_Widget {
 								$sizes .= "<tr><td>%{$size}</td></tr>";
 							}
 							
-							echo preg_replace( '/<\/td><\/tr>/', sprintf( '</td><td rowspan="%s" style="border-left:thin solid #dfdfdf">%s</td></tr>', $count, __( 'Image Preview', 'webcomic' ) ), $sizes, 1 );
+							echo preg_replace( '/<\/td><\/tr>/', '</td><td rowspan="' . $count . '" style="border-left:thin solid #dfdfdf">' . __( 'Image Preview', 'webcomic' ) . '</td></tr>', $sizes, 1 );
 						?>
 					</tbody>
 				</table>
@@ -180,15 +206,12 @@ class Widget_DynamicWebcomic extends WP_Widget {
 	 * 
 	 * @param array $args General widget arguments.
 	 * @param array $instance Specific instance arguments.
-	 * @uses Webcomic::dir()
-	 * @uses Webcomic::config()
+	 * @uses WebcomicWidget::dir()
 	 * @uses WebcomicTag::get_webcomic_collection()
 	 * @uses WebcomicTag::get_webcomic_collections()
 	 */
 	public function widget( $args, $instance ) {
-		$config = Webcomic::config();
-		
-		if ( $config[ 'dynamic' ] ) {
+		if ( wp_script_is( 'webcomic-dynamic', 'queue' ) ) {
 			extract( $args );
 			extract( $instance );
 			
@@ -202,11 +225,11 @@ class Widget_DynamicWebcomic extends WP_Widget {
 				$webcomic = new WP_Query( array( 'post_type' => $collection, 'posts_per_page' => 1, 'order' => $reverse ? 'ASC' : 'DESC' ) );
 				
 				if ( $webcomic->have_posts() ) {
-					echo $before_widget, empty( $title ) ? '' : $before_title . $title . $after_title, sprintf( '<div data-webcomic-container="%s"%s>', $widget_id, empty( $gesture ) ?  '' : ' data-webcomic-gestures' );
+					echo $before_widget, empty( $title ) ? '' : $before_title . $title . $after_title, '<div data-webcomic-container="', $widget_id, '"', empty( $gesture ) ?  '' : ' data-webcomic-gestures', '>';
 					
 					while ( $webcomic->have_posts() ) { $webcomic->the_post();
-						if ( !locate_template( array( "webcomic/dynamic-{$widget_id}-{$collection}.php", "webcomic/dynamic-{$widget_id}.php", "webcomic/dynamic-{$collection}.php", 'webcomic/dynamic.php' ), true, false ) ) {
-							require Webcomic::dir() . '-/php/integrate/dynamic.php';
+						if ( !locate_template( array( "webcomic/dynamic-{$collection}-{$widget_id}.php", "webcomic/dynamic-{$widget_id}.php", "webcomic/dynamic-{$collection}.php", 'webcomic/dynamic.php' ), true, false ) ) {
+							require WebcomicWidget::dir() . '-/php/integrate/dynamic.php';
 						}
 					}
 					
@@ -240,14 +263,15 @@ class Widget_DynamicWebcomic extends WP_Widget {
 	 * message will be displayed in place of the widget settings.
 	 * 
 	 * @param array $instance Specific instance settings.
-	 * @uses Webcomic::config()
+	 * @uses WebcomicTag::get_webcomic_collections()
 	 */
 	public function form( $instance ) {
 		extract( $instance );
 		
-		$config = Webcomic::config();
+		$collections = WebcomicTag::get_webcomic_collections( true );
 		
-		if ( $config[ 'dynamic' ] ) { ?>
+		if ( wp_script_is( 'webcomic-dynamic', 'registered' ) ) :
+		?>
 		<p>
 			<label>
 				<?php _e( 'Title', 'webcomic' ); ?>
@@ -260,12 +284,8 @@ class Widget_DynamicWebcomic extends WP_Widget {
 					<option value=""><?php _e( '(current collection)', 'webcomic' ); ?></option>
 					<option value="-1"<?php echo empty( $collection ) ? '' : selected( -1, $collection, false ); ?>><?php _e( '(all collections)', 'webcomic' ); ?></option>
 					<?php
-						foreach ( $config[ 'collections' ] as $k => $v ) {
-							printf( '<option value="%s"%s>%s</option>',
-								$k,
-								empty( $collection ) ? '' : selected( $k, $collection, false ),
-								esc_html( $v[ 'name' ] )
-							);
+						foreach ( $collections as $k => $v ) {
+							echo '<option value="', $k, '"', empty( $collection ) ? '' : selected( $k, $collection, false ), '>', esc_html( $v[ 'name' ] ), '</option>';
 						}
 					?>
 				</select>
@@ -274,21 +294,19 @@ class Widget_DynamicWebcomic extends WP_Widget {
 		<p>
 			<label><input type="checkbox" name="<?php echo $this->get_field_name( 'reverse' ); ?>" value="1"<?php echo empty( $reverse ) ? '' : checked( $reverse, true, false ); ?>> <?php _e( 'Start with first webcomic', 'webcomic' ); ?></label>
 		</p>
-		<?php if ( $config[ 'gestures' ] ) { ?>
+		<?php if ( wp_script_is( 'webcomic-gestures', 'registered' ) ) : ?>
 		<p>
 			<label><input type="checkbox" name="<?php echo $this->get_field_name( 'gestures' ); ?>" value="1"<?php echo empty( $gestures ) ? '' : checked( $gestures, true, false ); ?>> <?php _e( 'Enable touch gestures for webcomic navigation', 'webcomic' ); ?></label>
 		</p>
-		<?php } else { ?>
+		<?php else : ?>
 			<input type="hidden" name="<?php echo $this->get_field_name( 'gestures' ); ?>" value="<?php echo empty( $gestures ) ? '' : $gestures; ?>">
-		<?php } ?>
-		<?php } else { ?>
-		<p style="color:#bc0b0b"><strong><?php _e( 'Please enable the dynamic navigation option on the Settings > Webcomic administrative page to use this widget.', 'webcomic' ); ?></strong></p>
+		<?php endif; else : ?>
+		<p style="color:#bc0b0b"><b><?php _e( 'Please enable the dynamic navigation option on the Settings > Webcomic administrative page to use this widget.', 'webcomic' ); ?></b></p>
 		<input type="hidden" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo empty( $title ) ? '' : esc_attr( $title ); ?>">
 		<input type="hidden" name="<?php echo $this->get_field_name( 'collection' ); ?>" value="<?php echo empty( $collection ) ? '' : $collection; ?>">
 		<input type="hidden" name="<?php echo $this->get_field_name( 'reverse' ); ?>" value="<?php echo empty( $reverse ) ? '' : $reverse; ?>">
 		<input type="hidden" name="<?php echo $this->get_field_name( 'gestures' ); ?>" value="<?php echo empty( $gestures ) ? '' : $gestures; ?>">
-		<?php	
-		}
+		<?php endif;
 	}
 }
 
@@ -328,7 +346,7 @@ class Widget_RecentWebcomics extends WP_Widget {
 				echo $before_widget, empty( $title ) ? '' : $before_title . $title . $after_title, '<ul class="recent-webcomics">';
 				
 				while ( $the_posts->have_posts() ) { $the_posts->the_post();
-					echo '<li>', $image ? WebcomicTag::the_webcomic( $image, 'self' ) : sprintf( '<a href="%s">%s</a>', get_permalink(), get_the_title( '', '', false ) ), '</li>';
+					echo '<li>', $image ? WebcomicTag::the_webcomic( $image, 'self' ) : '<a href="' . get_permalink() . '">' . get_the_title( '', '', false ) . '</a>', '</li>';
 				}
 				
 				echo '</ul>', $after_widget;
@@ -356,12 +374,12 @@ class Widget_RecentWebcomics extends WP_Widget {
 	/** Render widget settings.
 	 * 
 	 * @param array $instance Specific instance settings.
-	 * @uses Webcomic::config()
+	 * @uses WebcomicTag::get_webcomic_collections()
 	 */
 	public function form( $instance ) {
 		extract( $instance );
 		
-		$config = Webcomic::config();
+		$collections = WebcomicTag::get_webcomic_collections( true );
 		?>
 		<p>
 			<label>
@@ -375,12 +393,8 @@ class Widget_RecentWebcomics extends WP_Widget {
 					<option value=""><?php _e( '(current collection)', 'webcomic' ); ?></option>
 					<option value="-1"<?php echo empty( $collection ) ? '' : selected( -1, $collection, false ); ?>><?php _e( '(all collections)', 'webcomic' ); ?></option>
 					<?php
-						foreach ( $config[ 'collections' ] as $k => $v ) {
-							printf( '<option value="%s"%s>%s</option>',
-								$k,
-								empty( $collection ) ? '' : selected( $k, $collection, false ),
-								esc_html( $v[ 'name' ] )
-							);
+						foreach ( $collections as $k => $v ) {
+							echo '<option value="', $k, '"', empty( $collection ) ? '' : selected( $k, $collection, false ), '>', esc_html( $v[ 'name' ] ), '</option>';
 						}
 					?>
 				</select>
@@ -447,15 +461,15 @@ class Widget_WebcomicDonation extends WP_Widget {
 	 * settings.
 	 * 
 	 * @param array $instance Specific instance settings.
-	 * @uses Webcomic::config()
+	 * @uses WebcomicTag::get_webcomic_collections()
 	 */
 	public function form( $instance ) {
 		extract( $instance );
 		
-		$config   = Webcomic::config();
-		$commerce = array();
+		$commerce    = array();
+		$collections = WebcomicTag::get_webcomic_collections( true );
 		
-		foreach( $config[ 'collections' ] as $k => $v ) {
+		foreach( $collections as $k => $v ) {
 			if ( $v[ 'commerce' ][ 'business' ] ) {
 				$commerce[ $k ] = $v[ 'name' ];
 			}
@@ -479,18 +493,14 @@ class Widget_WebcomicDonation extends WP_Widget {
 				<select name="<?php echo $this->get_field_name( 'collection' ); ?>" id="<?php echo $this->get_field_id( 'collection' ); ?>">
 				<?php
 					foreach ( $commerce as $k => $v ) {
-						printf( '<option value="%s"%s>%s</option>',
-							$k,
-							empty( $collection ) ? '' : selected( $k, $collection, false ),
-							esc_html( $v )
-						);
+						echo '<option value="', $k, '"', empty( $collection ) ? '' : selected( $k, $collection, false ), '>', esc_html( $v ), '</option>';
 					}
 				?>
 				</select>
 			</label>
 		</p>
 		<?php } else { ?>
-		<p style="color:#bc0b0b"><strong><?php _e( 'Please add a business email to one or more of your collections to use this widget.', 'webcomic' ); ?></strong></p>
+		<p style="color:#bc0b0b"><b><?php _e( 'Please add a business email to one or more of your collections to use this widget.', 'webcomic' ); ?></b></p>
 		<input type="hidden" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo empty( $title ) ? '' : esc_attr( $title ); ?>">
 		<input type="hidden" name="<?php echo $this->get_field_name( 'label' ); ?>" value="<?php echo empty( $label ) ? '' : esc_attr( $label ); ?>">
 		<input type="hidden" name="<?php echo $this->get_field_name( 'collection' ); ?>" value="<?php echo empty( $collection ) ? '' : $collection; ?>">
@@ -570,12 +580,12 @@ class Widget_WebcomicStorylines extends WP_Widget {
 	/** Render widget settings.
 	 * 
 	 * @param array $instance Specific instance settings.
-	 * @uses Webcomic::config()
+	 * @uses WebcomicTag::get_webcomic_collections()
 	 */
 	public function form( $instance ) {
 		extract( $instance );
 		
-		$config = Webcomic::config();
+		$collections = WebcomicTag::get_webcomic_collections( true );
 		?>
 		<p>
 			<label>
@@ -598,12 +608,8 @@ class Widget_WebcomicStorylines extends WP_Widget {
 				<select name="<?php echo $this->get_field_name( 'collection' ); ?>">
 					<option value=""><?php _e( '(current collection)', 'webcomic' ); ?></option>
 					<?php
-						foreach ( $config[ 'collections' ] as $k => $v ) {
-							printf( '<option value="%s"%s>%s</option>',
-								$k,
-								empty( $collection ) ? '' : selected( $k, $collection, false ),
-								esc_html( $v[ 'name' ] )
-							);
+						foreach ( $collections as $k => $v ) {
+							echo '<option value="', $k, '"', empty( $collection ) ? '' : selected( $k, $collection, false ), '>', esc_html( $v[ 'name' ] ), '</option>';
 						}
 					?>
 				</select>
@@ -691,12 +697,12 @@ class Widget_WebcomicCharacters extends WP_Widget {
 	/** Render widget settings.
 	 * 
 	 * @param array $instance Specific instance settings.
-	 * @uses Webcomic::config()
+	 * @uses WebcomicTag::get_webcomic_collections()
 	 */
 	public function form( $instance ) {
 		extract( $instance );
 		
-		$config = Webcomic::config();
+		$collections = WebcomicTag::get_webcomic_collections( true );
 		?>
 		<p>
 			<label>
@@ -719,12 +725,8 @@ class Widget_WebcomicCharacters extends WP_Widget {
 				<select name="<?php echo $this->get_field_name( 'collection' ); ?>">
 					<option value=""><?php _e( '(current collection)', 'webcomic' ); ?></option>
 					<?php
-						foreach ( $config[ 'collections' ] as $k => $v ) {
-							printf( '<option value="%s"%s>%s</option>',
-								$k,
-								empty( $collection ) ? '' : selected( $k, $collection, false ),
-								esc_html( $v[ 'name' ] )
-							);
+						foreach ( $collections as $k => $v ) {
+							echo '<option value="', $k, '"', empty( $collection ) ? '' : selected( $k, $collection, false ), '>', esc_html( $v[ 'name' ] ), '</option>';
 						}
 					?>
 				</select>

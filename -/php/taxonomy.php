@@ -52,9 +52,8 @@ class WebcomicTaxonomy extends Webcomic {
 	
 	/** Handle storyline sorting.
 	 * 
-	 * @uses Webcomic::$error
-	 * @uses Webcomic::$notice
 	 * @hook admin_init
+	 * @uses WebcomicAdmin::notify()
 	 */
 	public function admin_init() {
 		global $wpdb;
@@ -78,7 +77,7 @@ class WebcomicTaxonomy extends Webcomic {
 				
 				clean_term_cache( array_keys( $terms[ 'term' ] ), $_POST[ 'webcomic_taxonomy' ] );
 				
-				self::$notice[] = sprintf( '<strong>%s</strong>', __( 'Order updated.', 'webcomic' ) );
+				WebcomicAdmin::notify( '<b>' . __( 'Order updated.', 'webcomic' ) . '</b>' );
 			}
 		}
 	}
@@ -279,7 +278,7 @@ class WebcomicTaxonomy extends Webcomic {
 	 * 
 	 * @filter integer webcomic_upload_size_limit Filters the maximum allowed upload size for cover and avatar uploads. Defaults to the value returned by `wp_max_upload_size`.
 	 * @param string $taxonomy The add term form taxonomy.
-	 * @uses WebcomciTaxonomy::ajax_term_image()
+	 * @uses WebcomicTaxonomy::ajax_term_image()
 	 * @hook (webcomic\d+)_storyline_add_form_fields
 	 * @hook (webcomic\d+)_character_add_form_fields
 	 */
@@ -290,7 +289,7 @@ class WebcomicTaxonomy extends Webcomic {
 			<label>
 				<?php $storyline ? _e( 'Cover', 'webcomic' ) : _e( 'Avatar', 'webcomic' ); ?>
 			</label>
-			<div id="webcomic_term_image" data-webcomic-admin-url="<?php echo admin_url(); ?>" data-webcomic-taxonomy="<?php echo $storyline ? 'storyline' : 'character'; ?>"><?php self::ajax_term_image( 0, $storyline ? 'storyline' : 'character', '' ); ?></div>
+			<div id="webcomic_term_image" data-webcomic-admin-url="<?php echo admin_url(); ?>" data-webcomic-taxonomy="<?php echo $storyline ? 'storyline' : 'character'; ?>"><?php self::ajax_term_image( 0, $storyline ? 'storyline' : 'character' ); ?></div>
 			<p><?php $storyline ? _e( "The cover is a representative image that can be displayed on your site.", 'webcomic' ) : _e( "The avatar is a representative image that can be displayed on your site.", 'webcomic' ); ?></p>
 		</div>
 		<?php
@@ -314,7 +313,7 @@ class WebcomicTaxonomy extends Webcomic {
 			<th><label for="webcomic_image"><?php $storyline ? _e( 'Cover', 'webcomic' ) : _e( 'Avatar', 'webcomic' ); ?></label></th>
 			<td>
 				<div id="webcomic_term_image" data-webcomic-admin-url="<?php echo admin_url(); ?>" data-webcomic-taxonomy="<?php echo $storyline ? 'storyline' : 'character'; ?>" data-webcomic-term="<?php echo esc_attr( $term->name ); ?>"><?php self::ajax_term_image( $term->webcomic_image, $storyline ? 'storyline' : 'character', $term->name ); ?></div>
-				<p class="description"><?php $storyline ? _e( "The cover is a representative image that can be displayed on your site. Don't forget to <strong>Save Changes</strong> after updating the cover." ) : _e( "The avatar is a representative image that can be displayed on your site. Don't forget to <strong>Save Changes</strong> after updating the avatar.", 'webcomic' ); ?></p>
+				<p class="description"><?php $storyline ? _e( "The cover is a representative image that can be displayed on your site. Don't forget to <b>Update</b> after updating the cover." ) : _e( "The avatar is a representative image that can be displayed on your site. Don't forget to <b>Update</b> after updating the avatar.", 'webcomic' ); ?></p>
 			</td>
 		</tr>
 		<?php
@@ -330,10 +329,7 @@ class WebcomicTaxonomy extends Webcomic {
 	 */
 	public function manage_custom_column( $value, $column, $id ) {
 		if ( 'webcomic_image' === $column and isset( self::$config[ 'terms' ][ $id ][ 'image' ] ) and $image = wp_get_attachment_image( self::$config[ 'terms' ][ $id ][ 'image' ] ) ) {
-			echo current_user_can( 'edit_post', self::$config[ 'terms' ][ $id ][ 'image' ] ) ? sprintf( '<a href="%s">%s</a>',
-				esc_url( add_query_arg( array( 'post' => self::$config[ 'terms' ][ $id ][ 'image' ], 'action' => 'edit' ), admin_url( 'post.php' ) ) ),
-				$image
-			) : $image;
+			echo current_user_can( 'edit_post', self::$config[ 'terms' ][ $id ][ 'image' ] ) ? '<a href="' . esc_url( add_query_arg( array( 'post' => self::$config[ 'terms' ][ $id ][ 'image' ], 'action' => 'edit' ), admin_url( 'post.php' ) ) ) . '">' . $image . '</a>' : $image;
 		}
 	}
 	
@@ -401,25 +397,15 @@ class WebcomicTaxonomy extends Webcomic {
 	 * @param integer $id ID of the selected image.
 	 * @param string $taxonomy Collection the poster is for.
 	 */
-	public static function ajax_term_image( $id, $taxonomy, $term ) {
-		$choose = 'storyline' === $taxonomy ? __( 'a Cover', 'webcomic' ) : __( 'an Avatar', 'webcomic' );
-		
+	public static function ajax_term_image( $id, $taxonomy ) {
 		if ( $id ) {
-			printf( '<a href="%s">%s</a><br>',
-				esc_url( add_query_arg( array( 'post' => $id, 'action' => 'edit' ), admin_url( 'post.php' ) ) ),
-				wp_get_attachment_image( $id )
-			);
+			echo '<a href="', esc_url( add_query_arg( array( 'post' => $id, 'action' => 'edit' ), admin_url( 'post.php' ) ) ), '">', wp_get_attachment_image( $id ), '</a><br>';
 		}
 		
-		printf( '<input type="hidden" name="webcomic_image" value="%s"><a class="button webcomic-term-image" data-title="%s" data-update="%s">%s</a>',
-			$id,
-			$term ? sprintf( __( 'Choose %s for %s', 'webcomic' ), $choose, esc_html( $term ) ) : sprintf( __( 'Choose %s', 'webcomic' ), $choose ),
-			__( 'Update', 'webcomic' ),
-			$id ? __( 'Change', 'webcomic' ) : __( 'Select', 'webcomic' )
-		);
+		echo '<input type="hidden" name="webcomic_image" value="', $id, '"><a class="button webcomic-image" data-title="', 'storyline' === $taxonomy ? __( 'Select a Cover', 'webcomic' ) : __( 'Select an Avatar', 'webcomic' ), '" data-update="', __( 'Update', 'webcomic' ), '">', $id ? __( 'Change', 'webcomic' ) : __( 'Select', 'webcomic' ), '</a>';
 		
 		if ( $id ) {
-			printf( ' <a class="button webcomic-term-image-x">%s</a>', __( 'Remove', 'webcomic' ) );
+			echo ' <a class="button webcomic-image-x">', __( 'Remove', 'webcomic' ), '</a>';
 		}
 	}
 }
@@ -478,11 +464,7 @@ class Walker_WebcomicTerm_SortList extends Walker {
 	public function start_el( &$output, $term, $depth, $args ) {
 		extract( $args, EXTR_SKIP );
 		
-		$output .= sprintf( '<li id="term_%s"><b><i>%s</i>%s</b>',
-			$term->term_id,
-			$term->webcomic_image ? wp_get_attachment_image( $term->webcomic_image, array( 36, 0 ) ) : '',
-			$term->name
-		);
+		$output .= '<li id="term_' . $term->term_id . '"><b><i>' . ( $term->webcomic_image ? wp_get_attachment_image( $term->webcomic_image, array( 36, 0 ) ) : '' ) . '</i>' . $term->name . '</b>';
 	}
 	
 	/** End element output.

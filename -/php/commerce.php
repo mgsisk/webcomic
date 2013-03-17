@@ -9,12 +9,19 @@
  * @package Webcomic
  */
 class WebcomicCommerce extends Webcomic {
+	private $logfile = '';
+	
 	/** Register hooks.
 	 * 
 	 * @uses WebcomicCommerce::admin_init()
 	 * @uses WebcomicCommerce::admin_menu()
 	 */
 	public function __construct() {
+		global $blog_id;
+		
+		$blog_id = $blog_id ? $blog_id : 1;
+		$this->logfile = self::$dir . "-/log/ipn-{$blog_id}.php";
+		
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 	}
@@ -22,19 +29,15 @@ class WebcomicCommerce extends Webcomic {
 	/** Empty the current ipn log file.
 	 * 
 	 * @uses Webcomic::$dir
-	 * @uses Webcomic::$error
+	 * @uses WebcomicAdmin::notify()
 	 * @hook admin_init
 	 */
 	public function admin_init() {
-		global $blog_id;
-		
 		if ( isset( $_POST[ 'webcomic_commerce' ], $_POST[ 'empty_log' ] ) and wp_verify_nonce( $_POST[ 'webcomic_commerce' ], 'webcomic_commerce' ) ) {
-			$logfile = self::$dir . sprintf( '-/log/ipn-%s.php', $blog_id ? $blog_id : 1 );
-			
-			if ( is_writable( $logfile ) ) {
-				file_put_contents( $logfile, "<?php die; ?>\n" );
+			if ( is_writable( $this->logfile ) ) {
+				file_put_contents( $this->logfile, "<?php die; ?>\n" );
 			} else {
-				self::$error[] = __( 'Webcomic could not empty the log file. Please try again.', 'webcomic' );
+				WebcomicAdmin::notify( __( 'Webcomic could not empty the log file. Please try again.', 'webcomic' ), 'error' );
 			}
 			
 		}
@@ -51,10 +54,7 @@ class WebcomicCommerce extends Webcomic {
 	
 	/** Render the commerce tool page. */
 	public function page() { 
-		global $blog_id;
-		
-		$logfile = self::$dir . sprintf( '-/log/ipn-%s.php', $blog_id ? $blog_id : 1 );
-		$log     = is_readable( $logfile ) ? str_replace( "<?php die; ?>\n", '', file_get_contents( $logfile ) ) : '';
+		$log = is_readable( $this->logfile ) ? str_replace( "<?php die; ?>\n", '', file_get_contents( $this->logfile ) ) : '';
 		?>
 		<div class="wrap">
 			<div id="icon-tools" class="icon32"></div>
@@ -92,7 +92,7 @@ class WebcomicCommerce extends Webcomic {
 						<td<?php echo $error; ?>><?php echo $l[ 0 ]; ?></td>
 						<td<?php echo $error; ?>><?php echo $l[ 2 ]; ?></td>
 						<td<?php echo $error; ?>><?php echo $l[ 3 ]; ?></td>
-						<td<?php echo $error; ?>><?php echo empty( $l[ 1 ] ) ? '' : sprintf( '<abbr title="%s">%s</abbr>', date( __( 'Y/m/d g:i:s A', 'webcomic' ), $l[ 1 ] ), date( __( 'Y/m/d', 'webcomic' ), $l[ 1 ] ) ); ?></td>
+						<td<?php echo $error; ?>><?php echo empty( $l[ 1 ] ) ? '' : '<abbr title="' . date( __( 'Y/m/d g:i:s A', 'webcomic' ), $l[ 1 ] ) . '">' . date( __( 'Y/m/d', 'webcomic' ), $l[ 1 ] ) .'</abbr>'; ?></td>
 					</tr>
 					<?php $i++; } } else { ?>
 					<tr>

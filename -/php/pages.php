@@ -120,7 +120,7 @@ class WebcomicPages extends Webcomic {
 						<option value=""><?php _e( '&mdash; No Change &mdash;', 'webcomic' ); ?></option>
 					<?php
 						foreach ( self::$config[ 'collections' ] as $collection ) {
-							printf( '<option value="%s">%s</option>', $collection[ 'id' ], esc_html( $collection[ 'name' ] ) );
+							echo '<option value="', $collection[ 'id' ], '">', esc_html( $collection[ 'name' ] ), '</option>';
 						}
 					?>
 					</select>
@@ -150,7 +150,7 @@ class WebcomicPages extends Webcomic {
 							<option value=""><?php _e( '(no collection)', 'webcomic' ); ?></option>
 						<?php
 							foreach ( self::$config[ 'collections' ] as $collection ) {
-								printf( '<option value="%s">%s</option>', $collection[ 'id' ], esc_html( $collection[ 'name' ] ) );
+								echo '<option value="', $collection[ 'id' ], '">', esc_html( $collection[ 'name' ] ), '</option>';
 							}
 						?>
 						</select>
@@ -170,7 +170,7 @@ class WebcomicPages extends Webcomic {
 	 */
 	public function manage_page_posts_custom_column( $column, $id ) {
 		if ( 'webcomic_collection' === $column ) {
-			echo ( $collection = get_post_meta( $id, 'webcomic_collection', true ) and isset( self::$config[ 'collections' ][ $collection ] ) ) ? sprintf( '<a href="%s">%s</a>', esc_url( add_query_arg( array( 'post_type' => 'page', 'meta_key' => 'webcomic_collection', 'meta_value' => $collection ), admin_url( 'edit.php' ) ) ), self::$config[ 'collections' ][ $collection ][ 'name' ] ) : __( 'No Collection', 'webcomic' );
+			echo ( $collection = get_post_meta( $id, 'webcomic_collection', true ) and isset( self::$config[ 'collections' ][ $collection ] ) ) ? '<a href="' . esc_url( add_query_arg( array( 'post_type' => 'page', 'meta_key' => 'webcomic_collection', 'meta_value' => $collection ), admin_url( 'edit.php' ) ) ) . '">' . esc_html( self::$config[ 'collections' ][ $collection ][ 'name' ] ) . '</a>' : __( 'No Collection', 'webcomic' );
 		}
 	}
 	
@@ -239,11 +239,7 @@ class WebcomicPages extends Webcomic {
 				<option value=""><?php _e( '(no collection)', 'webcomic' ); ?></option>
 				<?php
 					foreach ( self::$config[ 'collections' ] as $k => $v ) {
-						printf( '<option value="%s"%s>%s</option>',
-							$k,
-							selected( $k, $page_collection, false ),
-							esc_html( $v[ 'name' ] )
-						);
+						echo '<option value="', $k, '"', selected( $k, $page_collection, false ), '>', esc_html( $v[ 'name' ] ), '</option>';
 					}
 				?>
 			</select>

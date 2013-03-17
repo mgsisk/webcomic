@@ -11,8 +11,6 @@
 class WebcomicMedia extends Webcomic {
 	/** Register hooks.
 	 * 
-	 * @uses Webcomic::$error
-	 * @uses Webcomic::$notice
 	 * @uses WebcomicMedia::admin_init()
 	 * @uses WebcomicMedia::admin_menu()
 	 * @uses WebcomicMedia::admin_foot()
@@ -42,9 +40,8 @@ class WebcomicMedia extends Webcomic {
 	
 	/** Handle media functions.
 	 * 
-	 * @uses Webcomic::$error
-	 * @uses Webcomic::$notice
 	 * @uses Webcomic::$config
+	 * @uses WebcomicAdmin::notify()
 	 * @hook admin_init
 	 */
 	public function admin_init() {
@@ -61,22 +58,22 @@ class WebcomicMedia extends Webcomic {
 				}
 			}
 			
-			if ( is_wp_error( $meta = wp_generate_attachment_metadata( $_GET[ 'post' ], get_attached_file( $_GET[ 'post' ] ) ) ) ) {
-				self::$error[] = __( 'Images could not be regenerated.', 'webcomic' );
-			} else {
+			if ( is_wp_error( $meta = wp_generate_attachment_metadata( $_GET[ 'post' ], get_attached_file( $_GET[ 'post' ] ) ) ) and empty( $_GET[ 'webcomic_hide_notice' ] ) ) {
+				WebcomicAdmin::notify( __( 'Images could not be regenerated.', 'webcomic' ), 'error' );
+			} elseif ( empty( $_GET[ 'webcomic_hide_notice' ] ) ) {
 				wp_update_attachment_metadata( $_GET[ 'post' ], $meta );
 				
-				self::$notice[] = __( 'Regenerated images for media attachments.', 'webcomic' );
+				WebcomicAdmin::notify( __( 'Regenerated images for media attachments.', 'webcomic' ) );
 			}
 		}
 		
 		if ( isset( $_GET[ 'webcomic_action' ], $_GET[ 'post' ] ) and 'detach' === $_GET[ 'webcomic_action' ] and intval( $_GET[ 'post' ] ) ) {
 			check_admin_referer( 'webcomic_detach' );
 			
-			if ( wp_update_post( array( 'ID' => ( integer ) $_GET[ 'post' ], 'post_parent' => 0 ) ) ) {
-				self::$notice[] = __( 'Detached media.', 'webcomic' );
-			} else {
-				self::$error[] = __( 'Media could not be detached.', 'webcomic' );
+			if ( wp_update_post( array( 'ID' => ( integer ) $_GET[ 'post' ], 'post_parent' => 0 ) ) and empty( $_GET[ 'webcomic_hide_notice' ] ) ) {
+				WebcomicAdmin::notify( __( 'Detached media.', 'webcomic' ) );
+			} elseif ( empty( $_GET[ 'webcomic_hide_notice' ] ) ) {
+				WebcomicAdmin::notify( __( 'Media could not be detached.', 'webcomic' ), 'error' );
 			}
 		}
 		
@@ -106,11 +103,11 @@ class WebcomicMedia extends Webcomic {
 			}
 			
 			if ( $bad ) {
-				self::$error[] = sprintf( _n( 'Images could not be regenerated for %s media attachment.', 'Images could not be regenerated for %s media attachments.', $bad, 'webcomic' ), $bad );
+				WebcomicAdmin::notify( sprintf( _n( 'Images could not be regenerated for %s media attachment.', 'Images could not be regenerated for %s media attachments.', $bad, 'webcomic' ), $bad ), 'error' );
 			}
 			
 			if ( $good ) {
-				self::$notice[] = sprintf( _n( 'Images regenerated for %s media attachment.', 'Images regenerated for %s media attachments.', $good, 'webcomic' ), $good );
+				WebcomicAdmin::notify( sprintf( _n( 'Images regenerated for %s media attachment.', 'Images regenerated for %s media attachments.', $good, 'webcomic' ), $good ) );
 			}
 		}
 		
@@ -129,17 +126,17 @@ class WebcomicMedia extends Webcomic {
 			}
 			
 			if ( $bad ) {
-				self::$error[] = sprintf( _n( 'Could not detach %s attachment.', 'Could not detach %s attachments.', $bad, 'webcomic' ), $bad );
+				WebcomicAdmin::notify( sprintf( _n( 'Could not detach %s attachment.', 'Could not detach %s attachments.', $bad, 'webcomic' ), $bad ), 'error' );
 			}
 			
 			if ( $good ) {
-				self::$notice[] = sprintf( _n( 'Detached %s attachment.', 'Detached %s attachments.', $good, 'webcomic' ), $good );
+				WebcomicAdmin::notify( sprintf( _n( 'Detached %s attachment.', 'Detached %s attachments.', $good, 'webcomic' ), $good ) );
 			}
 		}
 		
 		if ( isset( $_POST[ 'webcomic_action' ] ) and 'attach' === $_POST[ 'webcomic_action' ] and wp_verify_nonce( $_POST[ 'webcomic_attach' ], 'webcomic_attach' ) ) {
 			if ( empty( $_POST[ 'matches' ] ) ) {
-				self::$error[] = __( 'No matches selected.', 'webcomic' );
+				WebcomicAdmin::notify( __( 'No matches selected.', 'webcomic' ), 'error' );
 			} else {
 				$good = $bad = 0;
 				
@@ -154,20 +151,20 @@ class WebcomicMedia extends Webcomic {
 				}
 				
 				if ( $bad ) {
-					self::$error[] = sprintf( _n( 'A media could not be attached to %d post.', 'Media could not be attached to %d posts.', $bad, 'webcomic' ), $bad );
+					WebcomicAdmin::notify( sprintf( _n( 'A media could not be attached to %s post.', 'Media could not be attached to %s posts.', $bad, 'webcomic' ), $bad ), 'error' );
 				}
 				
-				self::$notice[] = sprintf( _n( 'Media attached to %d post.', 'Media attached to %d posts.', $good, 'webcomic' ), $good );
+				WebcomicAdmin::notify( sprintf( _n( 'Media attached to %s post.', 'Media attached to %s posts.', $good, 'webcomic' ), $good ) );
 			}
 		}
 		
 		if ( isset( $_POST[ 'webcomic_action' ] ) and 'generate' === $_POST[ 'webcomic_action' ] and wp_verify_nonce( $_POST[ 'webcomic_generate' ], 'webcomic_generate' ) ) {
 			if ( empty( $_POST[ 'attachments' ] ) or !$attachments = $_POST[ 'attachments' ] ) {
-				self::$error[] = sprintf( '<strong>%s</strong>', __( 'No media selected.', 'webcomic' ) );
+				WebcomicAdmin::notify( '<b>' . __( 'No media selected.', 'webcomic' ) . '</b>', 'error' );
 			} elseif ( !$start = strtotime( $_POST[ 'webcomic_generate_start' ] ) ) {
-				self::$error[] = sprintf( '<strong>%s</strong>', __( 'The start date could not be understood.', 'webcomic' ) );
+				WebcomicAdmin::notify( '<b>' . __( 'The start date could not be understood.', 'webcomic' ) . '</b>', 'error' );
 			} elseif ( !$days = $_POST[ 'webcomic_generate_days' ] ) {
-				self::$error[] = sprintf( '<strong>%s</strong>', __( 'No weekdays selected.', 'webcomic' ) );
+				WebcomicAdmin::notify( '<b>' . __( 'No weekdays selected.', 'webcomic' ) . '</b>', 'error' );
 			} else {
 				$now      = $start;
 				$good     = $bad = 0;
@@ -224,10 +221,10 @@ class WebcomicMedia extends Webcomic {
 				}
 				
 				if ( $bad ) {
-					self::$error[] = sprintf( _n( 'A post could not be generated for %d media.', 'Posts could not be generated for %d media.', $bad, 'webcomic' ), $bad );
+					WebcomicAdmin::notify( sprintf( _n( 'A post could not be generated for %d media.', 'Posts could not be generated for %d media.', $bad, 'webcomic' ), $bad ), 'error' );
 				}
 				
-				self::$notice[] = sprintf( _n( 'Post created for %d media.', 'Posts created for %d media.', $good, 'webcomic' ), $good );
+				WebcomicAdmin::notify( sprintf( _n( 'Post created for %d media.', 'Posts created for %d media.', $good, 'webcomic' ), $good ) );
 			}
 		}
 	}
@@ -250,11 +247,7 @@ class WebcomicMedia extends Webcomic {
 		$screen = get_current_screen();
 		
 		if ( 'upload' === $screen->id ) {
-			printf( '<span data-webcomic-admin-url="%s" data-webcomic-regenerate="%s" data-webcomic-detach="%s"></span>',
-				admin_url( 'upload.php' ),
-				esc_attr( __( 'Regenerate Images', 'webcomic' ) ),
-				esc_attr( __( 'Detach', 'webcomic' ) )
-			);
+			echo'<span data-webcomic-admin-url="', admin_url( 'upload.php' ), '" data-webcomic-regenerate="', esc_attr__( 'Regenerate Images', 'webcomic' ), '" data-webcomic-detach="', esc_attr__( 'Detach', 'webcomic' ), '"></span>';
 		}
 	}
 	
@@ -265,22 +258,13 @@ class WebcomicMedia extends Webcomic {
 	public function media_upload_webcomic_media( $output = false ) {
 		if ( $output ) {
 			if ( $attachments = self::get_attachments( $_GET[ 'post_id' ] ) ) {
-				printf( '<div data-webcomic-modal-media="%s"><p>%s</p><hr></div><ul class="webcomic-media-sort">', admin_url(), __( 'Drag and drop the media attachments to change the order Webcomic will display them.', 'webcomic' ) );
+				echo '<div data-webcomic-modal-media="', admin_url(), '"><p>', __( 'Drag and drop the media attachments to change the order Webcomic will display them.', 'webcomic' ), '</p><hr></div><ul class="webcomic-media-sort">';
 				
 				foreach ( $attachments as $attachment ) {
-					printf( '<li><b>%s</b><a href="%s" title="%s">%s</a><a href="%s" title="%s">%s</a><input type="hidden" name="ids[]" value="%s"></li>',
-						wp_get_attachment_image( $attachment->ID ),
-						esc_html( wp_nonce_url( add_query_arg( array_merge( $_GET, array( 'post' => $attachment->ID, 'action' => 'edit', 'webcomic_action' => 'regenerate' ) ), admin_url( 'media-upload.php' ) ), 'webcomic_regenerate' ) ),
-						__( 'Regenerate', 'webcomic' ),
-						__( 'Regenerate', 'webcomic' ),
-						esc_html( wp_nonce_url( add_query_arg( array_merge( $_GET, array( 'post' => $attachment->ID, 'action' => 'edit', 'webcomic_action' => 'detach' ) ), admin_url( 'media-upload.php' ) ), 'webcomic_detach' ) ),
-						__( 'Detach', 'webcomic' ),
-						__( 'Detach', 'webcomic' ),
-						$attachment->ID
-					);
+					echo '<li><b>', wp_get_attachment_image( $attachment->ID ), '</b><a href="', esc_html( wp_nonce_url( add_query_arg( array_merge( $_GET, array( 'post' => $attachment->ID, 'action' => 'edit', 'webcomic_action' => 'regenerate', 'webcomic_hide_notice' => true ) ), admin_url( 'media-upload.php' ) ), 'webcomic_regenerate' ) ), '" title="', __( 'Regenerate', 'webcomic' ), '">', __( 'Regenerate', 'webcomic' ), '</a><a href="', esc_html( wp_nonce_url( add_query_arg( array_merge( $_GET, array( 'post' => $attachment->ID, 'action' => 'edit', 'webcomic_action' => 'detach', 'webcomic_hide_notice' => true ) ), admin_url( 'media-upload.php' ) ), 'webcomic_detach' ) ), '" title="', __( 'Detach', 'webcomic' ), '">', __( 'Detach', 'webcomic' ), '</a><input type="hidden" name="ids[]" value="', $attachment->ID, '"></li>';
 				}
 			} else {
-				printf( '<div><p>%s</p></div>', __( 'To manage Webcomic Media please attach one or more images to this webcomic.', 'webcomic' ) );
+				echo '<div><p>', __( 'To manage Webcomic Media please attach one or more images to this webcomic.', 'webcomic' ), '</p></div>';
 			}
 		} else {
 			wp_iframe( array( $this, 'media_upload_webcomic_media' ), true );
@@ -343,18 +327,7 @@ class WebcomicMedia extends Webcomic {
 		global $post;
 		
 		if ( $post->post_parent ) {
-			printf( '
-				<div class="misc-pub-section">
-					%s <strong>%s</strong><br><a href="%s" class="button">%s</a>
-				</div>',
-				__( 'Attached to:', 'webcomic' ),
-				sprintf( '%s, %s',
-					( current_user_can( 'edit_post', $post->post_parent ) and 'trash' !== get_post_status( $post->post_parent ) ) ? sprintf( '<a href="%s">%s</a>', get_edit_post_link( $post->post_parent ), esc_html( get_the_title( $post->post_parent ) ) ) : esc_html( get_the_title( $post->post_parent ) ),
-					get_the_time( 'Y/m/d', $post->post_parent )
-				),
-				esc_html( wp_nonce_url( add_query_arg( array( 'post' => $post->ID, 'action' => 'edit', 'webcomic_action' => 'detach' ), admin_url( 'post.php' ) ), 'webcomic_detach' ) ),
-				__( 'Detach', 'webcomic' )
-			);
+			echo '<div class="misc-pub-section">', __( 'Attached to:', 'webcomic' ), ' <b>', ( current_user_can( 'edit_post', $post->post_parent ) and 'trash' !== get_post_status( $post->post_parent ) ) ? '<a href="' . get_edit_post_link( $post->post_parent ) . '">' . esc_html( get_the_title( $post->post_parent ) ) . '</a>' : esc_html( get_the_title( $post->post_parent ) ), ' ', get_the_time( 'Y/m/d', $post->post_parent ), '</b><br><a href="', esc_html( wp_nonce_url( add_query_arg( array( 'post' => $post->ID, 'action' => 'edit', 'webcomic_action' => 'detach' ), admin_url( 'post.php' ) ), 'webcomic_detach' ) ), '" class="button">', __( 'Detach', 'webcomic' ), '</a></div>';
 		}
 		
 		if ( 0 === strpos( $post->post_mime_type, 'image' ) ) {
@@ -362,21 +335,13 @@ class WebcomicMedia extends Webcomic {
 			
 			foreach ( get_intermediate_image_sizes() as $size ) {
 				if ( $file = image_get_intermediate_size( $post->ID, $size ) ) {
-					$sizes[ $file[ 'width' ] * $file[ 'height' ] ] = sprintf( '%s &ndash; %s &times; %s', $size, $file[ 'width' ], $file[ 'height' ] );
+					$sizes[ $file[ 'width' ] * $file[ 'height' ] ] = $size . ' &ndash; ' . $file[ 'width' ] . ' &times; ' . $file[ 'height' ];
 				}
 			}
 			
 			krsort( $sizes );
 			
-			printf( '
-				<div class="misc-pub-section">
-					%s<br><strong>%s</strong><br><a href="%s" class="button">%s</a>
-				</div>',
-				__( 'Alternate Sizes:', 'webcomic' ),
-				$sizes ? join( '<br>', $sizes ) : __( 'None available', 'webcomic' ),
-				esc_html( wp_nonce_url( add_query_arg( array( 'post' => $post->ID, 'action' => 'edit', 'webcomic_action' => 'regenerate' ), admin_url( 'post.php' ) ), 'webcomic_regenerate' ) ),
-				__( 'Regenerate', 'webcomic' )
-			);
+			echo '<div class="misc-pub-section">', __( 'Alternate Sizes:', 'webcomic' ), '<br><b>', $sizes ? join( '<br>', $sizes ) : __( 'None available', 'webcomic' ), '</b><br><a href="', esc_html( wp_nonce_url( add_query_arg( array( 'post' => $post->ID, 'action' => 'edit', 'webcomic_action' => 'regenerate' ), admin_url( 'post.php' ) ), 'webcomic_regenerate' ) ), '" class="button">', __( 'Regenerate', 'webcomic' ), '</a></div>';
 		}
 	}
 	
@@ -416,17 +381,11 @@ class WebcomicMedia extends Webcomic {
 	 */
 	public function media_row_actions( $actions, $attachment ) {
 		if ( 0 === strpos( $attachment->post_mime_type, 'image' ) ) {
-			$actions[ 'webcomic_regen' ] = sprintf( '<a href="%s">%s</a>',
-				esc_html( wp_nonce_url( add_query_arg( array( 'post' => $attachment->ID, 'webcomic_action' => 'regenerate' ), admin_url( 'upload.php' ) ), 'webcomic_regenerate' ) ),
-				__( 'Regenerate', 'webcomic' )
-			);
+			$actions[ 'webcomic_regen' ] = '<a href="' . esc_html( wp_nonce_url( add_query_arg( array( 'post' => $attachment->ID, 'webcomic_action' => 'regenerate' ), admin_url( 'upload.php' ) ), 'webcomic_regenerate' ) ) . '">' . __( 'Regenerate', 'webcomic' ) . '</a>';
 		}
 		
 		if ( $attachment->post_parent ) {
-			$actions[ 'webcomic_detach' ] = sprintf( '<a href="%s">%s</a>',
-				esc_html( wp_nonce_url( add_query_arg( array( 'post' => $attachment->ID, 'webcomic_action' => 'detach' ), admin_url( 'upload.php' ) ), 'webcomic_detach' ) ),
-				__( 'Detach', 'webcomic' )
-			);
+			$actions[ 'webcomic_detach' ] = '<a href="' . esc_html( wp_nonce_url( add_query_arg( array( 'post' => $attachment->ID, 'webcomic_action' => 'detach' ), admin_url( 'upload.php' ) ), 'webcomic_detach' ) ) . '">' . __( 'Detach', 'webcomic' ) . '</a>';
 		}
 		
 		return $actions;
@@ -485,16 +444,13 @@ class WebcomicMedia extends Webcomic {
 						if ( $_POST ) {
 							$matches = $dupe = array();
 							
-							$columns = sprintf( '
+							$columns = '
 								<tr>
 									<th class="check-column"><input type="checkbox"></th>
 									<th class="column-icon"></th>
-									<th>%s</th>
-									<th>%s</th>
-								</tr>',
-								__( 'File', 'webcomic' ),
-								__( 'Matched With', 'webcomic' )
-							);
+									<th>' . __( 'File', 'webcomic' ) . '</th>
+									<th>' . __( 'Matched With', 'webcomic' ) . '</th>
+								</tr>';
 							
 							$attachments = get_posts( array(
 								'post_type'      => 'attachment',
@@ -558,10 +514,7 @@ class WebcomicMedia extends Webcomic {
 											<?php
 												$post = $match[ 'post' ];
 												
-												printf( '<strong>%s</strong><p>%s</p>',
-													( current_user_can( 'edit_post', $post->post_parent ) and 'trash' !== get_post_status( $post->post_parent ) ) ? sprintf( '<a href="%s">%s</a>', get_edit_post_link( $post->post_parent ), esc_html( get_the_title( $post->post_parent ) ) ) : esc_html( get_the_title( $post->post_parent ) ),
-													get_the_time( 'Y/m/d', $post->post_parent )
-												);
+												echo '<b>', ( current_user_can( 'edit_post', $post->post_parent ) and 'trash' !== get_post_status( $post->post_parent ) ) ? '<a href="' . get_edit_post_link( $post->post_parent ) . '">' . esc_html( get_the_title( $post->post_parent ) ) . '</a>' : esc_html( get_the_title( $post->post_parent ) ), '</b><p>', get_the_time( 'Y/m/d', $post->post_parent ), '</p>';
 											?>
 										</td>
 									</tr>
@@ -606,11 +559,7 @@ class WebcomicMedia extends Webcomic {
 									<select name="webcomic_collection">
 									<?php
 										foreach ( self::$config[ 'collections' ] as $k => $v ) {
-											printf( '<option value="%s"%s>%s</option>',
-												$k,
-												selected( $k, empty( $_POST[ 'webcomic_collection' ] ) ? '' : $_POST[ 'webcomic_collection' ] ),
-												esc_html( $v[ 'name' ] )
-											);
+											echo '<option value="', $k, '"', selected( $k, empty( $_POST[ 'webcomic_collection' ] ) ? '' : $_POST[ 'webcomic_collection' ] ), '>', esc_html( $v[ 'name' ] ), '</option>';
 										}
 									?>
 									</select>
@@ -662,14 +611,12 @@ class WebcomicMedia extends Webcomic {
 		global $post;
 		
 		$attachments = self::get_attachments();
-		$columns = sprintf( '
+		$columns = '
 			<tr>
 				<th class="check-column"><input type="checkbox"></th>
 				<th class="column-icon"></th>
-				<th>%s</th>
-			</tr>',
-			__( 'File', 'webcomic' )
-		);
+				<th>' . __( 'File', 'webcomic' ) . '</th>
+			</tr>';
 		?>
 		<div class="wrap">
 			<div class="icon32" id="icon-upload"></div>
@@ -709,7 +656,7 @@ class WebcomicMedia extends Webcomic {
 									<select name="webcomic_collection">
 									<?php
 										foreach ( self::$config[ 'collections' ] as $k => $v ) {
-											printf( '<option value="%s">%s</option>', $k, esc_html( $v[ 'name' ] ) );
+											echo '<option value="', $k, '">', esc_html( $v[ 'name' ] ), '</option>';
 										}
 									?>
 									</select>

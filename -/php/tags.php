@@ -504,7 +504,7 @@ class WebcomicTag extends Webcomic {
 			$output = apply_filters( 'the_webcomic', $output, $the_post, $attachments );
 			
 			if ( 'self' === $relative ) {
-				return sprintf( '<a href="%s" rel="bookmark">%s</a>', apply_filters( 'the_permalink', get_permalink( $the_post ) ), $output );
+				return '<a href="' . apply_filters( 'the_permalink', get_permalink( $the_post ) ) . '" rel="bookmark">' . $output . '</a>';
 			} elseif ( $relative ) {
 				return self::relative_webcomic_link( '%link', $output, $relative, $in_same_term, $excluded_terms, $taxonomy, $the_post->post_type );
 			} else {
@@ -619,7 +619,7 @@ class WebcomicTag extends Webcomic {
 					$label = get_the_title( $webcomic );
 				}
 				
-				$related[] = sprintf( '<a href="%s">%s</a>', apply_filters( 'the_permalink', get_permalink( $webcomic ) ), $label );
+				$related[] = '<a href="' . apply_filters( 'the_permalink', get_permalink( $webcomic ) ) . '">' . $label . '</a>';
 				
 				if ( 0 < $limit and $count >= $limit ) {
 					break;
@@ -661,7 +661,7 @@ class WebcomicTag extends Webcomic {
 			
 			if ( $taxonomy and !is_array( $taxonomy ) ) {
 				if ( '!storyline' === $taxonomy or '!character' === $taxonomy ) {
-					$taxonomy = array( sprintf( "{$collection}_%s", substr( $taxonomy, 1 ) ) );
+					$taxonomy = array( "{$collection}_" . substr( $taxonomy, 1 ) );
 				} elseif ( 'storyline' === $taxonomy or 'character' === $taxonomy or 'xstoryline' === $taxonomy or 'xcharacter' === $taxonomy ) {
 					$tax_array = array();
 					$crossover = false;
@@ -687,7 +687,7 @@ class WebcomicTag extends Webcomic {
 			
 			if ( ( $in_same_term or $excluded_terms ) and $taxonomy ) {
 				$join    = " INNER JOIN {$wpdb->term_relationships} AS tr ON p.ID = tr.object_id INNER JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id";
-				$exclude = sprintf( " AND tt.taxonomy IN ( '%s' )", join( "', '", $taxonomy ) );
+				$exclude = " AND tt.taxonomy IN ( '" . join( "', '", $taxonomy ) . "' )";
 				
 				if ( true === $in_same_term and $post_id ) {
 					$include = wp_get_object_terms( $post_id, $taxonomy, array( 'fields' => 'ids' ) );
@@ -698,7 +698,7 @@ class WebcomicTag extends Webcomic {
 				}
 				
 				if ( !is_wp_error( $include ) ) {
-					$join .= sprintf( " AND tt.taxonomy IN ( '%s' ) AND tt.term_id IN ( %s )", join( "', '", $taxonomy ), $include ? join( ', ', $include ) : 0 );
+					$join .= " AND tt.taxonomy IN ( '" . join( "', '", $taxonomy ) . "' ) AND tt.term_id IN ( " . ( $include ? join( ', ', $include ) : 0 ) . " )";
 				}
 				
 				if ( $excluded_terms ) {
@@ -707,7 +707,7 @@ class WebcomicTag extends Webcomic {
 					$excluded_terms = $include ? array_diff( $excluded_terms, $include ) : $excluded_terms;
 					
 					if ( $excluded_terms ) {
-						$exclude = sprintf( " AND tt.taxonomy IN ( '%s' ) AND tt.term_id NOT IN ( %s )", join( "', '", $taxonomy ), join( ', ', $excluded_terms ) );
+						$exclude = " AND tt.taxonomy IN ( '" . join( "', '", $taxonomy ) . "' ) AND tt.term_id NOT IN ( " . join( ', ', $excluded_terms ) . " )";
 					}
 				}
 			}
@@ -762,7 +762,7 @@ class WebcomicTag extends Webcomic {
 	 */
 	public static function get_relative_webcomic_link( $relative = 'random', $in_same_term = false, $excluded_terms = false, $taxonomy = 'storyline', $collection = '' ) {
 		if ( 'first-nocache' === $relative or 'last-nocache' === $relative or 'random-nocache' === $relative ) {
-			return apply_filters( "get_{$relative}_webcomic_link", add_query_arg( array( sprintf( '%s_webcomic', str_replace( '-nocache', '', $relative ) ) => $collection, 'in_same_story' => $in_same_term ? urlencode( maybe_serialize( $in_same_term ) ) : false, 'excluded_storylines' => $excluded_terms ? urlencode( maybe_serialize( $excluded_terms ) ) : false, 'taxonomy' => $taxonomy ? urlencode( maybe_serialize( $taxonomy ) ) : false ), home_url() ), $in_same_term, $excluded_terms, $taxonomy, $collection );
+			return apply_filters( "get_{$relative}_webcomic_link", add_query_arg( array( str_replace( '-nocache', '', $relative ) . '_webcomic' => $collection, 'in_same_story' => $in_same_term ? urlencode( maybe_serialize( $in_same_term ) ) : false, 'excluded_storylines' => $excluded_terms ? urlencode( maybe_serialize( $excluded_terms ) ) : false, 'taxonomy' => $taxonomy ? urlencode( maybe_serialize( $taxonomy ) ) : false ), home_url() ), $in_same_term, $excluded_terms, $taxonomy, $collection );
 		} elseif ( $the_post = self::get_relative_webcomic( $relative, $in_same_term, $excluded_terms, $taxonomy, $collection ) ) {
 			return apply_filters( "get_{$relative}_webcomic_link", apply_filters( 'the_permalink', get_permalink( $the_post ) ), $in_same_term, $excluded_terms, $taxonomy, $collection, $the_post );
 		}
@@ -841,12 +841,7 @@ class WebcomicTag extends Webcomic {
 				$link = str_replace( array_keys( $tokens ), $tokens, $link );
 			}
 			
-			$link = sprintf( '<a href="%s" class="%s"%s>%s</a>',
-				$href,
-				join( ' ', $class ),
-				( 'previous' === $relative or 'next' === $relative ) ? sprintf( ' rel="%s"', str_replace( 'ious', '', $relative ) ) : '',
-				$link
-			);
+			$link = '<a href="' . $href . '" class="' . join( ' ', $class ) . '"' . ( ( 'previous' === $relative or 'next' === $relative ) ? ' rel="' . str_replace( 'ious', '', $relative ) . '"' : '' ) . '>' . $link . '</a>';
 			
 			$format = str_replace( '%link', $link, $format );
 			
@@ -913,7 +908,7 @@ class WebcomicTag extends Webcomic {
 				$link = str_replace( array_keys( $tokens ), $tokens, $link );
 			}
 			
-			$link   = sprintf( '<a href="%s" class="%s">%s</a>', $href, join( ' ', $class ), $link );
+			$link   = '<a href="' . $href . '" class="' . join( ' ', $class ) . '">' . $link . '</a>';
 			$format = str_replace( '%link', $link, $format );
 			
 			return apply_filters( 'purchase_webcomic_link', $format, $link, $the_post );
@@ -952,7 +947,7 @@ class WebcomicTag extends Webcomic {
 				$link = str_replace( array_keys( $tokens ), $tokens, $link );
 			}
 			
-			$link   = sprintf( '<a href="%s" class="%s">%s</a>', $href, join( ' ', $class ), $link );
+			$link   = '<a href="' . $href . '" class="' . join( ' ', $class ) . '">' . $link . '</a>';
 			$format = str_replace( '%link', $link, $format );
 			
 			return apply_filters( 'webcomic_collection_link', $format, $link, $target, $collection );
@@ -1009,7 +1004,7 @@ class WebcomicTag extends Webcomic {
 				
 				$label = ( $image and self::$config[ 'collections' ][ $k ][ 'image' ] ) ? wp_get_attachment_image( self::$config[ 'collections' ][ $k ][ 'image' ], $image ) : esc_html( self::$config[ 'collections' ][ $k ][ 'name' ] );
 				
-				$collection_links[] = sprintf( '<a href="%s"%s>%s</a>', $link, $k === $collection ? '' : sprintf( ' class="webcomic-crossover-collection %s-crossover-collection"', $k ), $label );
+				$collection_links[] = '<a href="' . $link . '"' . ( $k === $collection ? '' : ' class="webcomic-crossover-collection ' . $k . '-crossover-collection"' ) . '>' . $label . '</a>';
 			}
 			
 			$term_links = apply_filters( "webcomic_collection_links", $collection_links, $collections, $before, $sep, $after, $target, $image, $crossover, $collection );
@@ -1042,7 +1037,7 @@ class WebcomicTag extends Webcomic {
 			
 		if ( $taxonomy and !is_array( $taxonomy ) ) {
 			if ( '!storyline' === $taxonomy or '!character' === $taxonomy ) {
-				$taxonomy = array( sprintf( "{$collection}_%s", substr( $taxonomy, 1 ) ) );
+				$taxonomy = array( "{$collection}_" . substr( $taxonomy, 1 ) );
 			} elseif ( 'storyline' === $taxonomy or 'character' === $taxonomy or 'xstoryline' === $taxonomy or 'xcharacter' === $taxonomy ) {
 				$tax_array = array();
 				$crossover = false;
@@ -1082,7 +1077,7 @@ class WebcomicTag extends Webcomic {
 				
 				$label = ( $image and $term->webcomic_image ) ? wp_get_attachment_image( $term->webcomic_image, $image ) : $term->name;
 				
-				$term_links[] = sprintf( '<a href="%s"%s rel="tag">%s</a>', $link, ( preg_match( '/^webcomic\d+_(storyline|character)/', $term->taxonomy ) and false === strpos( $term->taxonomy, $collection ) ) ? sprintf( ' class="webcomic-crossover-term %s-crossover-term"', str_replace( array( '_storyline', '_character' ), '', $term->taxonomy ) ) : '', $label );
+				$term_links[] = '<a href="' . $link . '"' . ( ( preg_match( '/^webcomic\d+_(storyline|character)/', $term->taxonomy ) and false === strpos( $term->taxonomy, $collection ) ) ? ' class="webcomic-crossover-term ' . str_replace( array( '_storyline', '_character' ), '', $term->taxonomy ) . '-crossover-term"' : '' ) . ' rel="tag">' . $label . '</a>';
 			}
 			
 			$term_links = apply_filters( "webcomic_term_links-{$taxonomy}", $term_links, $terms, $before, $sep, $after, $target, $image );
@@ -1185,7 +1180,7 @@ class WebcomicTag extends Webcomic {
 		$args = 'archive' === $target ? $args : array_merge( $args, array( 'hide_empty' => true ) );
 		
 		if ( 'first-nocache' === $relative or 'last-nocache' === $relative or 'random-nocache' === $relative ) {
-			return apply_filters( "get_{$relative}_webcomic_term_link", add_query_arg( array( sprintf( '%s_webcomic_term', str_replace( '-nocache', '', $relative ) ) => $taxonomy, 'target' => $target, 'args' => $args ? urlencode( maybe_serialize( $args ) ) : false ), home_url() ), $target, $taxonomy, $args );
+			return apply_filters( "get_{$relative}_webcomic_term_link", add_query_arg( array( str_replace( '-nocache', '', $relative ) . '_webcomic_term' => $taxonomy, 'target' => $target, 'args' => $args ? urlencode( maybe_serialize( $args ) ) : false ), home_url() ), $target, $taxonomy, $args );
 		} elseif ( $term = self::get_relative_webcomic_term( $relative, $taxonomy, $args ) ) {
 			if ( 'archive' !== $target and $objects = get_objects_in_term( $term->term_id, $term->taxonomy ) ) {
 				if ( 'first' === $target or 'last' === $target ) {
@@ -1262,13 +1257,7 @@ class WebcomicTag extends Webcomic {
 				$link = str_replace( array_keys( $tokens ), $tokens, $link );
 			}
 			
-			$link = sprintf( '<a href="%s" class="%s"%s>%s</a>',
-				$href,
-				join( ' ', $class ),
-				( 'previous' === $relative or 'next' === $relative ) ? sprintf( ' rel="%s"', str_replace( 'ious', '', $relative ) ) : '',
-				$link
-			);
-			
+			$link   = '<a href="' . $href . '" class="' . join( ' ', $class ) . '"' . ( ( 'previous' === $relative or 'next' === $relative ) ? ' rel="' . str_replace( 'ious', '', $relative ) . '"' : '' ) . '>' . $link . '</a>';
 			$format = str_replace( '%link', $link, $format );
 			
 			return apply_filters( "{$relative}_webcomic_term_link", $format, $link, $target, $term, $args );
@@ -1384,7 +1373,7 @@ class WebcomicTag extends Webcomic {
 				
 				$label = ( $image and self::$config[ 'collections' ][ $k ][ 'image' ] ) ? wp_get_attachment_image( self::$config[ 'collections' ][ $k ][ 'image' ], $image ) : esc_html( self::$config[ 'collections' ][ $k ][ 'name' ] );
 				
-				$collection_links[] = sprintf( '<a href="%s" class="%s">%s</a>', $link, sprintf( 'webcomic-crossover-collection %s-crossover-collection', $k ), $label );
+				$collection_links[] = '<a href="' . $link . '" class="webcomic-crossover-collection ' . $k . '-crossover-collection">' . $label . '</a>';
 			}
 			
 			$term_links = apply_filters( "webcomic_term_crossover_links", $collection_links, $before, $sep, $after, $target, $image );
@@ -1525,10 +1514,7 @@ class WebcomicTag extends Webcomic {
 		
 		$type   = explode( '-', $type );
 		$amount = empty( $type[ 1 ] ) ? self::$config[ 'collections' ][ $collection ][ 'total' ][ $type[ 0 ] ] : self::$config[ 'collections' ][ $collection ][ $type[ 1 ] ][ $type[ 0 ] ];
-		$output = sprintf( '%s %s',
-			number_format( $amount, 2, $dec, $sep ),
-			self::$config[ 'collections' ][ $collection ][ 'commerce' ][ 'currency' ]
-		);
+		$output = number_format( $amount, 2, $dec, $sep ) . ' ' . self::$config[ 'collections' ][ $collection ][ 'commerce' ][ 'currency' ];
 		
 		return apply_filters( 'webcomic_collection_print_amount', $output, $dec, $sep, $collection );
 	}
@@ -1576,7 +1562,7 @@ class WebcomicTag extends Webcomic {
 				
 				$label = ( $image and self::$config[ 'collections' ][ $k ][ 'image' ] ) ? wp_get_attachment_image( self::$config[ 'collections' ][ $k ][ 'image' ], $image ) : esc_html( self::$config[ 'collections' ][ $k ][ 'name' ] );
 				
-				$collection_links[] = sprintf( '<a href="%s" class="%s">%s</a>', $link, sprintf( 'webcomic-crossover-collection %s-crossover-collection', $k ), $label );
+				$collection_links[] = '<a href="' . $link . '" class="webcomic-crossover-collection ' . $k . '-crossover-collection">' . $label . '</a>';
 			}
 			
 			$term_links = apply_filters( "webcomic_collection_crossover_links", $collection_links, $before, $sep, $after, $target, $image );
@@ -1606,10 +1592,7 @@ class WebcomicTag extends Webcomic {
 			return '';
 		}
 		
-		$output = sprintf( '%s %s',
-			number_format( self::$config[ 'collections' ][ $collection ][ 'commerce' ][ 'donation' ], 2, $dec, $sep ),
-			self::$config[ 'collections' ][ $collection ][ 'commerce' ][ 'currency' ]
-		);
+		$output = number_format( self::$config[ 'collections' ][ $collection ][ 'commerce' ][ 'donation' ], 2, $dec, $sep ) . self::$config[ 'collections' ][ $collection ][ 'commerce' ][ 'currency' ];
 		
 		return apply_filters( 'webcomic_donation_amount', $output, $dec, $sep, $collection );
 	}
@@ -1628,22 +1611,14 @@ class WebcomicTag extends Webcomic {
 			return '';
 		}
 		
-		$output = sprintf( '
-			<input type="hidden" name="return" value="%s">
-			<input type="hidden" name="business" value="%s">
-			<input type="hidden" name="item_name" value="%s">
-			<input type="hidden" name="notify_url" value="%s">
-			<input type="hidden" name="item_number" value="%s">
+		$output = '
+			<input type="hidden" name="return" value="' . home_url() . '">
+			<input type="hidden" name="business" value="' . self::$config[ 'collections' ][ $collection ][ 'commerce' ][ 'business' ] . '">
+			<input type="hidden" name="item_name" value="' . esc_attr( substr( self::$config[ 'collections' ][ $collection ][ 'name' ], 0, 127 ) ) . '">
+			<input type="hidden" name="notify_url" value="' . add_query_arg( array( 'webcomic_commerce_ipn' => 'donation' ), home_url( '/' ) ) . '">
+			<input type="hidden" name="item_number" value="' . $collection . '">
 			<input type="hidden" name="cmd" value="_donations">
-			<input type="hidden" name="currency_code" value="%s">%s',
-			home_url(),
-			self::$config[ 'collections' ][ $collection ][ 'commerce' ][ 'business' ],
-			esc_attr( substr( self::$config[ 'collections' ][ $collection ][ 'name' ], 0, 127 ) ),
-			add_query_arg( array( 'webcomic_commerce_ipn' => 'donation' ), home_url( '/' ) ),
-			$collection,
-			self::$config[ 'collections' ][ $collection ][ 'commerce' ][ 'currency' ],
-			self::$config[ 'collections' ][ $collection ][ 'commerce' ][ 'donation' ] ? sprintf( '<input type="hidden" name="amount" value="%s">', self::$config[ 'collections' ][ $collection ][ 'commerce' ][ 'donation' ] ) : ''
-		);
+			<input type="hidden" name="currency_code" value="' . self::$config[ 'collections' ][ $collection ][ 'commerce' ][ 'currency' ] . '">' . ( self::$config[ 'collections' ][ $collection ][ 'commerce' ][ 'donation' ] ? '<input type="hidden" name="amount" value="' . self::$config[ 'collections' ][ $collection ][ 'commerce' ][ 'donation' ] . '">' : '' );
 		
 		$output = apply_filters( 'webcomic_donation_fields', $output, $collection );
 		
@@ -1669,15 +1644,11 @@ class WebcomicTag extends Webcomic {
 			return;
 		}
 		
-		$output = sprintf( '
-			<form action="https://www.paypal.com/cgi-bin/webscr" method="post" class="webcomic-donation-form %s-donation-form">
-				<button type="submit">%s</button>
-				%s
-			</form>',
-			$collection,
-			$label ? $label : sprintf( __( 'Support %s', 'webcomic' ), esc_html( self::$config[ 'collections' ][ $collection ][ 'name' ] ) ),
-			$fields
-		);
+		$output = '
+			<form action="https://www.paypal.com/cgi-bin/webscr" method="post" class="webcomic-donation-form ' . $collection . '-donation-form">
+				<button type="submit">' . ( $label ? $label : sprintf( __( 'Support %s', 'webcomic' ), esc_html( self::$config[ 'collections' ][ $collection ][ 'name' ] ) ) ) . '</button>
+				' . $fields . '
+			</form>';
 		
 		return apply_filters( 'webcomic_donation_form', $output, $label, $collection );
 	}
@@ -1701,10 +1672,7 @@ class WebcomicTag extends Webcomic {
 		
 		$commerce = get_post_meta( $the_post->ID, 'webcomic_commerce', true );
 		$amount   = 1 === count( $type ) ? $commerce[ 'total' ][ $type[ 0 ] ] : $commerce[ $type[ 1 ] ][ $type[ 0 ] ];
-		$output   = sprintf( '%s %s',
-			number_format( $amount, 2, $dec, $sep ),
-			self::$config[ 'collections' ][ $the_post->post_type ][ 'commerce' ][ 'currency' ]
-		);
+		$output   = number_format( $amount, 2, $dec, $sep ) . ' ' . self::$config[ 'collections' ][ $the_post->post_type ][ 'commerce' ][ 'currency' ];
 		
 		return apply_filters( 'webcomic_print_amount', $output, $type, $dec, $sep, $the_post );
 	}
@@ -1725,7 +1693,7 @@ class WebcomicTag extends Webcomic {
 		}
 		
 		$commerce = get_post_meta( $the_post->ID, 'webcomic_commerce', true );
-		$output   = sprintf( '%s%%', $commerce[ 'adjust' ][ 1 === count( $type ) ? 'total' : $type[ 1 ] ][ $type[ 0 ] ] );
+		$output   = $commerce[ 'adjust' ][ 1 === count( $type ) ? 'total' : $type[ 1 ] ][ $type[ 0 ] ] . '%';
 		
 		return apply_filters( 'webcomic_print_adjustment', $output, $type, $the_post );
 	}
@@ -1745,33 +1713,19 @@ class WebcomicTag extends Webcomic {
 		
 		$commerce = get_post_meta( $the_post->ID, 'webcomic_commerce', true );
 		$quantity = 'original' === $type ? 'quantity' : 'undefined_quantity';
-		$output   = 'cart' === $type ? sprintf( '
-			<input type="hidden" name="cmd" value="%s">
-			<input type="hidden" name="business" value="%s">
-			<input type="hidden" name="display" value="1">',
-			self::$config[ 'collections' ][ $the_post->post_type ][ 'commerce' ][ 'method' ],
-			self::$config[ 'collections' ][ $the_post->post_type ][ 'commerce' ][ 'business' ]
-		) : sprintf( '
-			<input type="hidden" name="cmd" value="%s">
-			<input type="hidden" name="return" value="%s">
-			<input type="hidden" name="amount" value="%s">
-			<input type="hidden" name="business" value="%s">
-			<input type="hidden" name="item_name" value="%s">
-			<input type="hidden" name="notify_url" value="%s">
-			<input type="hidden" name="item_number" value="%s">
-			<input type="hidden" name="currencey_code" value="%s">
-			<input type="hidden" name="%s" value="1">%s',
-			self::$config[ 'collections' ][ $the_post->post_type ][ 'commerce' ][ 'method' ],
-			self::get_purchase_webcomic_link( $the_post ),
-			$commerce[ 'total' ][ $type ],
-			self::$config[ 'collections' ][ $the_post->post_type ][ 'commerce' ][ 'business' ],
-			substr( $the_post->post_title, 0, 127 ),
-			add_query_arg( array( 'webcomic_commerce_ipn' => 'print' ), home_url( '/' ) ),
-			substr( "{$the_post->ID}-{$the_post->post_type}-{$type}", 0, 127 ),
-			self::$config[ 'collections' ][ $the_post->post_type ][ 'commerce' ][ 'currency' ],
-			'_cart' === self::$config[ 'collections' ][ $the_post->post_type ][ 'commerce' ][ 'method' ] ? 'add' : $quantity,
-			'_cart' === self::$config[ 'collections' ][ $the_post->post_type ][ 'commerce' ][ 'method' ] ? sprintf( '<input type="hidden" name="shopping_url" value="%s">', self::get_purchase_webcomic_link( $the_post ) ) : ''
-		);
+		$output   = 'cart' === $type ? '
+			<input type="hidden" name="cmd" value="' . self::$config[ 'collections' ][ $the_post->post_type ][ 'commerce' ][ 'method' ] . '">
+			<input type="hidden" name="business" value="' . self::$config[ 'collections' ][ $the_post->post_type ][ 'commerce' ][ 'business' ] . '">
+			<input type="hidden" name="display" value="1">' : '
+			<input type="hidden" name="cmd" value="' . self::$config[ 'collections' ][ $the_post->post_type ][ 'commerce' ][ 'method' ] . '">
+			<input type="hidden" name="return" value="' . self::get_purchase_webcomic_link( $the_post ) . '">
+			<input type="hidden" name="amount" value="' . $commerce[ 'total' ][ $type ] . '">
+			<input type="hidden" name="business" value="' . self::$config[ 'collections' ][ $the_post->post_type ][ 'commerce' ][ 'business' ] . '">
+			<input type="hidden" name="item_name" value="' . substr( $the_post->post_title, 0, 127 ) . '">
+			<input type="hidden" name="notify_url" value="' . add_query_arg( array( 'webcomic_commerce_ipn' => 'print' ), home_url( '/' ) ) . '">
+			<input type="hidden" name="item_number" value="' . substr( "{$the_post->ID}-{$the_post->post_type}-{$type}", 0, 127 ) . '">
+			<input type="hidden" name="currencey_code" value="' . self::$config[ 'collections' ][ $the_post->post_type ][ 'commerce' ][ 'currency' ] . '">
+			<input type="hidden" name="' . ( '_cart' === self::$config[ 'collections' ][ $the_post->post_type ][ 'commerce' ][ 'method' ] ? 'add' : $quantity ) . '" value="1">' . ( '_cart' === self::$config[ 'collections' ][ $the_post->post_type ][ 'commerce' ][ 'method' ] ? '<input type="hidden" name="shopping_url" value="' . self::get_purchase_webcomic_link( $the_post ) . '">' : '' );
 		
 		$output = apply_filters( 'webcomic_print_fields', $output, $type, $the_post, $commerce );
 		
@@ -1823,18 +1777,11 @@ class WebcomicTag extends Webcomic {
 			$label = str_replace( array_keys( $tokens ), $tokens, $label );
 		}
 		
-		$output = sprintf( '
-			<form action="https://www.paypal.com/cgi-bin/webscr" method="post" class="webcomic-print-form webcomic-%s-print-form %s-print-form %s-%s-print-form">
-				<button type="submit">%s</button>
-				%s
-			</form>',
-			$type,
-			$the_post->post_type,
-			$the_post->post_type,
-			$type,
-			$label,
-			$fields
-		);
+		$output = '
+			<form action="https://www.paypal.com/cgi-bin/webscr" method="post" class="webcomic-print-form webcomic-' . $type . '-print-form ' . $the_post->post_type . '-print-form ' . $the_post->post_type . '-' . $type . '-print-form">
+				<button type="submit">' . $label . '</button>
+				' . $fields . '
+			</form>';
 		
 		return apply_filters( 'webcomic_print_form', $output, $type, $label, $the_post );
 	}
@@ -1926,7 +1873,7 @@ class WebcomicTag extends Webcomic {
 				$link = str_replace( array_keys( $tokens ), $tokens, $link );
 			}
 			
-			$link   = sprintf( '<a href="%s" class="%s">%s</a>', $href, join( ' ', $class ), $link );
+			$link   = '<a href="' . $href . '" class="' . join( ' ', $class ) . '">' . $link . '</a>';
 			$format = str_replace( '%link', $link, $format );
 			
 			return apply_filters( 'webcomic_transcripts_link', $format, $link, $the_post );
@@ -2005,7 +1952,7 @@ class WebcomicTag extends Webcomic {
 			$term_list = array();
 			
 			foreach ( $terms as $term ) {
-				$term_list[] = sprintf( '<a rel="tag">%s</a>', $term->name );
+				$term_list[] = '<a rel="tag">' . $term->name . '</a>';
 			}
 			
 			return apply_filters( 'the_webcomic_transcript_term_list', $before . join( $sep, $term_list ) . $after, $id, $before, $sep, $after, $taxonomy );
@@ -2024,14 +1971,10 @@ class WebcomicTag extends Webcomic {
 		if ( $the_post = get_post( $the_post ) and isset( self::$config[ 'collections' ][ $the_post->post_type ] ) and get_post_meta( $the_post->ID, 'webcomic_transcripts', true ) ) {
 			$transcript = ( $transcript and $update_post = get_post( $transcript ) and $the_post->ID !== $update_post->ID ) ? $update_post->ID : 0;
 			
-			$output = sprintf( '
-				<input type="hidden" name="webcomic_transcript_post" value="%s">
-				<input type="hidden" name="webcomic_transcript_update" value="%s">
-				%s',
-				$the_post->ID,
-				$transcript,
-				wp_nonce_field( 'webcomic_user_transcript', 'webcomic_user_transcript', true, false )
-			);
+			$output = '
+				<input type="hidden" name="webcomic_transcript_post" value="' . $the_post->ID . '">
+				<input type="hidden" name="webcomic_transcript_update" value="' . $transcript . '">
+				' . wp_nonce_field( 'webcomic_user_transcript', 'webcomic_user_transcript', true, false );
 			
 			return apply_filters( 'webcomic_transcript_fields', $output, $transcript, $the_post );
 		}
@@ -2092,11 +2035,7 @@ class WebcomicTag extends Webcomic {
 			$queried_language = get_query_var( 'transcripts' );
 			
 			foreach ( $terms as $term ) {
-				$languages[] = sprintf( '<option value="%s"%s>%s</option>',
-					$term->slug,
-					( $update_terms and in_array( $term->term_id, $update_terms ) or ( $term->slug === $queried_language ) ) ? ' selected' : '',
-					$term->name
-				);
+				$languages[] = '<option value="' . $term->slug . '"' . ( ( $update_terms and in_array( $term->term_id, $update_terms ) or ( $term->slug === $queried_language ) ) ? ' selected' : '' ) . '>' . $term->name . '</option>';
 			}
 		}
 		
@@ -2106,37 +2045,18 @@ class WebcomicTag extends Webcomic {
 		
 		extract( wp_parse_args( $args, apply_filters( 'webcomic_transcript_form_defaults', array(
 			'fields' => apply_filters( 'webcomic_transcript_form_default_fields', array(
-				'author' => sprintf( '<p class="webcomic-transcript-author"><label for="webcomic-transcript-author' . $c . '">%s</label>%s<input type="text" name="webcomic_transcript_author" id="webcomic-transcript-author' . $c . '" value="%s"%s></p>',
-					 __( 'Name', 'webcomic' ),
-					 $required ? '<span class="required">*</span>' : '',
-					 esc_attr( $commenter[ 'comment_author' ] ),
-					 $required ? ' required' : ''
-				),
-				'email' => sprintf( '<p class="webcomic-transcript-email"><label for="webcomic-transcript-email' . $c . '">%s</label>%s<input type="email" name="webcomic_transcript_email" id="webcomic-transcript-email' . $c . '" value="%s"%s></p>',
-					__( 'Email', 'webcomic' ),
-					 $required ? '<span class="required">*</span>' : '',
-					 esc_attr(  $commenter[ 'comment_author_email' ] ),
-					 $required ? ' required' : ''
-				),
-				'url' => sprintf( '<p class="webcomic-transcript-url"><label for="webcomic-transcript-url' . $c . '">%s</label><input type="url" name="webcomic_transcript_url" id="webcomic-transcript-url' . $c . '" value="%s"></p>',
-					__( 'Website', 'webcomic' ),
-					esc_attr( $commenter[ 'comment_author_url' ] )
-				)
+				'author' => '<p class="webcomic-transcript-author"><label for="webcomic-transcript-author' . $c . '">' . __( 'Name', 'webcomic' ) . '</label>' . ( $required ? '<span class="required">*</span>' : '' ) . '<input type="text" name="webcomic_transcript_author" id="webcomic-transcript-author' . $c . '" value="' . esc_attr( $commenter[ 'comment_author' ] ) . '"' . ( $required ? ' required' : '' ) . '></p>',
+				'email'  => '<p class="webcomic-transcript-email"><label for="webcomic-transcript-email' . $c . '">' . __( 'Email', 'webcomic' ) . '</label>' . ( $required ? '<span class="required">*</span>' : '' ) . '<input type="email" name="webcomic_transcript_email" id="webcomic-transcript-email' . $c . '" value="' . esc_attr(  $commenter[ 'comment_author_email' ] ) . '"' . ( $required ? ' required' : '' ) . '></p>',
+				'url'    => '<p class="webcomic-transcript-url"><label for="webcomic-transcript-url' . $c . '">' . __( 'Website', 'webcomic' ) . '</label><input type="url" name="webcomic_transcript_url" id="webcomic-transcript-url' . $c . '" value="' . esc_attr( $commenter[ 'comment_author_url' ] ) . '"></p>',
 			), $the_post->post_type ),
-			'language_field' => $languages ? sprintf( '<p class="webcomic-transcript-language"><label for="webcomic-transcript-language' . $c . '">%s</label><select name="webcomic_transcript_language" id="webcomic-transcript-language' . $c . '">%s</select></p>',
-				__( 'Language', 'webcomic' ),
-				join( '', $languages )
-			) : '',
-			'transcript_field' => sprintf( '<p class="webcomic-transcript-content"><label for="webcomic-transcript-content' . $c . '">%s</label><textarea name="webcomic_transcript_content" id="webcomic-transcript-content' . $c . '" rows="10" cols="40" required>%s</textarea></p>',
-				__( 'Transcript', 'webcomic' ),
-				empty( $update_post ) ? '' : esc_html( $update_post->post_content )
-			),
-			'must_log_in'              => sprintf( '<p class="must-log-in">%s</p>', sprintf( __( 'You must be <a href="%s">logged in</a> to transcribe this webcomic.' ), wp_login_url( apply_filters( 'the_permalink', get_permalink( $the_post ) ) ) ) ),
-			'logged_in_as'             => sprintf( '<p class="logged-in-as">%s</p>', sprintf( __( 'Logged in as <a href="%1$s">%2$s</a>. <a href="%3$s">Log out?</a>' ), admin_url( 'profile.php' ), $user->display_name, wp_logout_url( apply_filters( 'the_permalink', get_permalink( $the_post ) ) ) ) ),
+			'language_field'           => $languages ? '<p class="webcomic-transcript-language"><label for="webcomic-transcript-language' . $c . '">' . __( 'Language', 'webcomic' ) . '</label><select name="webcomic_transcript_language" id="webcomic-transcript-language' . $c . '">' . join( '', $languages ) . '</select></p>' : '',
+			'transcript_field'         => '<p class="webcomic-transcript-content"><label for="webcomic-transcript-content' . $c . '">' . __( 'Transcript', 'webcomic' ) . '</label><textarea name="webcomic_transcript_content" id="webcomic-transcript-content' . $c . '" rows="10" cols="40" required>' . ( empty( $update_post ) ? '' : esc_html( $update_post->post_content ) ) . '</textarea></p>',
+			'must_log_in'              => '<p class="must-log-in">' . sprintf( __( 'You must be <a href="%s">logged in</a> to transcribe this webcomic.' ), wp_login_url( apply_filters( 'the_permalink', get_permalink( $the_post ) ) ) ) . '</p>',
+			'logged_in_as'             => '<p class="logged-in-as">' . sprintf( __( 'Logged in as <a href="%1$s">%2$s</a>. <a href="%3$s">Log out?</a>' ), admin_url( 'profile.php' ), $user->display_name, wp_logout_url( apply_filters( 'the_permalink', get_permalink( $the_post ) ) ) ) . '</p>',
 			'transcript_notes_before'  => '<p class="webcomic-transcript-notes">' . __( 'Your email address will not be published.', 'webcomic' ) . ( $required ? sprintf( __( ' Required fields are marked %s', 'webcomic' ), '<span class="required">*</span>' ) : '' ) . '</p>',
 			'transcript_notes_after'   => '',
-			'transcript_notes_success' => sprintf( '<p class="webcomic-transcript-success">%s</p>', __( 'Thank you! Your transcript has been submitted.', 'webcomic' ) ),
-			'transcript_notes_failure' => sprintf( '<p class="webcomic-transcript-failure">%s</p>', __( 'There was a problem submitting your transcript. Please try again.', 'webcomic' ) ),
+			'transcript_notes_success' => '<p class="webcomic-transcript-success">' . __( 'Thank you! Your transcript has been submitted.', 'webcomic' ) . '</p>',
+			'transcript_notes_failure' => '<p class="webcomic-transcript-failure">' . __( 'There was a problem submitting your transcript. Please try again.', 'webcomic' ) . '</p>',
 			'id_form'                  => "webcomic-transcribe-form%s",
 			'title_submit'             => empty( $update_post ) ? __( 'Transcribe %s', 'webcomic' ) : __( 'Improve %s Transcript', 'webcomic' ),
 			'label_submit'             => __( 'Submit Transcript', 'webcomic' ),
@@ -2146,21 +2066,18 @@ class WebcomicTag extends Webcomic {
 		if ( self::webcomic_transcripts_open( $the_post ) ) {
 			do_action( 'webcomic_transcript_form_before', $the_post->post_type );
 			
-			printf( '
-				<section id="webcomic-transcribe%s" class="webcomic-transcribe">
+			echo '
+				<section id="webcomic-transcribe', $c, '" class="webcomic-transcribe">
 					<header class="webcomic-transcribe-header">
-						<h3>%s</h3>
-					</header>',
-				$c,
-				sprintf( $title_submit, get_the_title( $the_post->ID ) )
-			);
+						<h3>', sprintf( $title_submit, get_the_title( $the_post->ID ) ), '</h3>
+					</header>';
 			
 			if ( 'register' === self::$config[ 'collections' ][ $the_post->post_type ][ 'transcripts' ][ 'permission' ] and !is_user_logged_in() ) {
 				echo $must_log_in;
 				
 				do_action( 'webcomic_transcript_form_must_log_in_after', $the_post->post_type );
 			} else {
-				printf( '<form method="post" id="%s" class="webcomic-transcribe-form">', sprintf( esc_attr( $id_form ), $c ) );
+				echo '<form method="post" id="', sprintf( esc_attr( $id_form ), $c ), '" class="webcomic-transcribe-form">';
 				
 				do_action( 'webcomic_transcript_form_top', $the_post->post_type );
 				
@@ -2193,7 +2110,7 @@ class WebcomicTag extends Webcomic {
 				}
 				
 				echo $transcript_notes_after,
-					 apply_filters( 'webcomic_transcript_form_field_submit', sprintf( '<p class="webcomic-transcript-submit"><button type="submit" name="webcomic_transcript_submit">%s</button></p>', esc_html( $label_submit ) ), $the_post->post_type ),
+					 apply_filters( 'webcomic_transcript_form_field_submit', '<p class="webcomic-transcript-submit"><button type="submit" name="webcomic_transcript_submit">' . esc_html( $label_submit ) . '</button></p>', $the_post->post_type ),
 					 self::webcomic_transcript_fields( empty( $update_post ) ? 0 : $update_post->ID, $the_post );
 				
 				do_action( 'webcomic_transcript_form', $the_post );
@@ -2278,16 +2195,7 @@ class WebcomicTag extends Webcomic {
 			$output = '';
 			
 			if ( ( $terms = get_terms( $r[ 'taxonomy' ], $r ) and !is_wp_error( $terms ) ) and count( $terms ) > 1 or !$hide_if_empty ) {
-				$output = sprintf( '%s<select%s%s class="%s">%s%s%s</select>%s',
-					$before,
-					$name ? sprintf( ' name="%s"', esc_attr( $name ) ) : '',
-					$id ? sprintf( ' id="%s"', esc_attr( $id ) ) : '',
-					join( ' ', array_merge( array( 'webcomic-transcript-terms', $taxonomy ), ( array ) $class ) ),
-					$show_option_all ? sprintf( '<option value="0"%s>%s</option>', 0 === $selected ? ' selected' : '', $show_option_all ) : '',
-					$show_option_none ? sprintf( '<option value="-1"%s>%s</option>', -1 === $selected ? ' selected' : '', $show_option_none ) : '',
-					( $terms and !is_wp_error( $terms ) ) ? call_user_func( array( $walker ? $walker : new Walker_WebcomicTranscriptTerm_Dropdown, 'walk' ), $terms, 0, $r ) : '',
-					$after
-				);
+				$output = $before . '<select' . ( $name ? ' name="' . esc_attr( $name ) . '"' : '' ) . ( $id ? ' id="' . esc_attr( $id ) . '"' : '' ) . ' class="' . join( ' ', array_merge( array( 'webcomic-transcript-terms', $taxonomy ), ( array ) $class ) ) . '">' . ( $show_option_all ? '<option value="0"' . ( 0 === $selected ? ' selected' : '' ) . '>' . $show_option_all . '</option>' : '' ) . ( $show_option_none ? '<option value="-1"' . ( -1 === $selected ? ' selected' : '' ) . '>' . $show_option_none . '</option>' : '' ) . ( ( $terms and !is_wp_error( $terms ) ) ? call_user_func( array( $walker ? $walker : new Walker_WebcomicTranscriptTerm_Dropdown, 'walk' ), $terms, 0, $r ) : '' ) . '</select>' . $after;
 			}
 			
 			return apply_filters( 'webcomic_dropdown_transcript_terms', $output, $r );
@@ -2355,15 +2263,7 @@ class WebcomicTag extends Webcomic {
 			$output = '';
 			
 			if ( $terms = get_terms( $r[ 'taxonomy' ], $r ) and !is_wp_error( $terms ) and count( $terms ) > 1 ) {
-				$output = sprintf( '%s<%s%s class="%s">%s</%s>%s',
-					$before,
-					$ordered ? 'ol' : 'ul',
-					$id ? sprintf( ' id="%s"', esc_attr( $id ) ) : '',
-					join( ' ', array_merge( array( 'webcomic-transcript-terms', $taxonomy ), ( array ) $class ) ),
-					call_user_func( array( $walker ? $walker : new Walker_WebcomicTranscriptTerm_List, 'walk' ), $terms, $depth, $r ),
-					$ordered ? 'ol' : 'ul',
-					$after
-				);
+				$output = $before . '<' . ( $ordered ? 'ol' : 'ul' ) . ( $id ? ' id="' . esc_attr( $id ) . '"' : '' ) . ' class="' . join( ' ', array_merge( array( 'webcomic-transcript-terms', $taxonomy ), ( array ) $class ) ) . '">' . call_user_func( array( $walker ? $walker : new Walker_WebcomicTranscriptTerm_List, 'walk' ), $terms, $depth, $r ) . '</' . ( $ordered ? 'ol' : 'ul' ) . '>' . $after;
 			}
 			
 			return apply_filters( 'webcomic_list_transcript_terms', $output, $r );
@@ -2440,16 +2340,7 @@ class WebcomicTag extends Webcomic {
 		$output = '';
 		
 		if ( ( $terms = get_terms( $r[ 'taxonomy' ], $r ) and !is_wp_error( $terms ) ) or !$hide_if_empty ) {
-			$output = sprintf( '%s<select%s%s class="%s">%s%s%s</select>%s',
-				$before,
-				$name ? sprintf( ' name="%s"', esc_attr( $name ) ) : '',
-				$id ? sprintf( ' id="%s"', esc_attr( $id ) ) : '',
-				join( ' ', array_merge( array( 'webcomic-terms', $taxonomy ), ( array ) $class ) ),
-				$show_option_all ? sprintf( '<option value="0"%s>%s</option>', 0 === $selected ? ' selected' : '', $show_option_all ) : '',
-				$show_option_none ? sprintf( '<option value="-1"%s>%s</option>', -1 === $selected ? ' selected' : '', $show_option_none ) : '',
-				( $terms and !is_wp_error( $terms ) ) ? call_user_func( array( $walker ? $walker : new Walker_WebcomicTerm_Dropdown, 'walk' ), $terms, $depth, $r ) : '',
-				$after
-			);
+			$output = $before . '<select' . ( $name ? ' name="' . esc_attr( $name ) . '"' : '' ) . ( $id ? ' id="' . esc_attr( $id ) . '"' : '' ) . ' class="' . join( ' ', array_merge( array( 'webcomic-terms', $taxonomy ), ( array ) $class ) ) . '">' . ( $show_option_all ? '<option value="0"' . ( 0 === $selected ? ' selected' : '' ) . '>' . $show_option_all . '</option>' : '' ) . ( $show_option_none ? '<option value="-1"' . ( -1 === $selected ? ' selected' : '' ) . '>' . $show_option_none . '</option>' : '' ) . ( ( $terms and !is_wp_error( $terms ) ) ? call_user_func( array( $walker ? $walker : new Walker_WebcomicTerm_Dropdown, 'walk' ), $terms, $depth, $r ) : '' ) . '</select>' . $after;
 		}
 		
 		return apply_filters( 'webcomic_dropdown_terms', $output, $r );
@@ -2552,18 +2443,10 @@ class WebcomicTag extends Webcomic {
 							if ( $callback ) {
 								$options .= call_user_func( $callback, $v, $r, $the_posts );
 							} else {
-								$options .= sprintf( '<optgroup label="%s%s">',
-									$collection_title,
-									$show_count ? " ({$readable_count})" : ''
-								);
+								$options .= '<optgroup label="' . $collection_title . ( $show_count ? " ({$readable_count})" : '' ) . '">';
 							
 								while ( $the_posts->have_posts() ) { $the_posts->the_post();
-									$options .= sprintf( '<option value="%s" data-webcomic-url="%s"%s>%s</option>',
-										get_the_ID(),
-										apply_filters( 'the_permalink', get_permalink() ),
-										$selected === get_the_ID() ? ' selected' : '',
-										apply_filters( 'collection_dropdown_webcomic_title', the_title( '', '', false ), get_post(), $i )
-									);
+									$options .= '<option value="' . get_the_ID() . '" data-webcomic-url="' . apply_filters( 'the_permalink', get_permalink() ) . '"' . ( $selected === get_the_ID() ? ' selected' : '' ) . '>' . apply_filters( 'collection_dropdown_webcomic_title', the_title( '', '', false ), get_post(), $i ) . '</option>';
 								}
 							
 								$options .= '</optgroup>';
@@ -2572,29 +2455,14 @@ class WebcomicTag extends Webcomic {
 						
 						$post = $temp_post;
 					} else {
-						$options .= $callback ? call_user_func( $callback, $v, $r ) : sprintf( '<option value="%s" data-webcomic-url="%s" %s>%s%s</option>',
-							$v[ 'id' ],
-							'archive' === $target ? get_post_type_archive_link( $v[ 'id' ] ) : self::get_relative_webcomic_link( $target, false, false, '', $v[ 'id' ] ),
-							$selected === $v[ 'id' ] ? ' selected' : '',
-							$collection_title,
-							$show_count ? " ({$readable_count})" : ''
-						);
+						$options .= $callback ? call_user_func( $callback, $v, $r ) : '<option value="' . $v[ 'id' ] . '" data-webcomic-url="' . ( 'archive' === $target ? get_post_type_archive_link( $v[ 'id' ] ) : self::get_relative_webcomic_link( $target, false, false, '', $v[ 'id' ] ) ) . '"' . $selected === $v[ 'id' ] ? ' selected' : '' . '>' . $collection_title . ( $show_count ? " ({$readable_count})" : '' ) . '</option>';
 					}
 				}
 			}
 		}
 		
 		if ( $options or !$hide_if_empty ) {
-			$output = sprintf( '%s<select%s%s class="%s">%s%s%s</select>%s',
-				$before,
-				$name ? sprintf( ' name="%s"', esc_attr( $name ) ) : '',
-				$id ? sprintf( ' id="%s"', esc_attr( $id ) ) : '',
-				join( ' ', array_merge( array( 'webcomic-collections' ), ( array ) $class ) ),
-				$show_option_all ? sprintf( '<option value="0"%s>%s</option>', 0 === $selected ? ' selected' : '', $show_option_all ) : '',
-				$show_option_none ? sprintf( '<option value="-1"%s>%s</option>', -1 === $selected ? ' selected' : '', $show_option_none ) : '',
-				$options,
-				$after
-			);
+			$output = $before . '<select' . ( $name ? ' name="' . esc_attr( $name ) . '"' : '' ) . ( $id ? ' id="' . esc_attr( $id ) . '"' : '' ) . ' class="' . join( ' ', array_merge( array( 'webcomic-collections' ), ( array ) $class ) ) . '">' . ( $show_option_all ? '<option value="0"' . ( 0 === $selected ? ' selected' : '' ) . '>' . $show_option_all . '</option>' : '' ) . ( $show_option_none ? '<option value="-1"' . ( -1 === $selected ? ' selected' : '' ) . '>' . $show_option_none . '</option>' : '' ) . $options . '</select>' . $after;
 		}
 		
 		return apply_filters( 'webcomic_dropdown_collections', $output, $r );
@@ -2670,15 +2538,7 @@ class WebcomicTag extends Webcomic {
 		$output = '';
 		
 		if ( $terms = get_terms( $r[ 'taxonomy' ], $r ) and !is_wp_error( $terms ) ) {
-			$output = sprintf( '%s<%s%s class="%s">%s</%s>%s',
-				$before,
-				$ordered ? 'ol' : 'ul',
-				$id ? sprintf( ' id="%s"', esc_attr( $id ) ) : '',
-				join( ' ', array_merge( array( 'webcomic-terms', $taxonomy ), ( array ) $class ) ),
-				call_user_func( array( $walker ? $walker : new Walker_WebcomicTerm_List, 'walk' ), $terms, $depth, $r ),
-				$ordered ? 'ol' : 'ul',
-				$after
-			);
+			$output = $before . '<' . ( $ordered ? 'ol' : 'ul' ) . ( $id ? ' id="' . esc_attr( $id ) . '"' : '' ) . ' class="' . join( ' ', array_merge( array( 'webcomic-terms', $taxonomy ), ( array ) $class ) ) . '">' . call_user_func( array( $walker ? $walker : new Walker_WebcomicTerm_List, 'walk' ), $terms, $depth, $r ) . '</' . ( $ordered ? 'ol' : 'ul' ) . '>' . $after;
 		}
 		
 		return apply_filters( 'webcomic_list_terms', $output, $r );
@@ -2779,10 +2639,7 @@ class WebcomicTag extends Webcomic {
 				if ( !$hide_empty or 0 < $readable_count ) {
 					$collection_title = apply_filters( 'webcomic_collection_list_title', $v[ 'name' ], $v );
 					$feed_image       = filter_var( $feed, FILTER_VALIDATE_URL );
-					$feed_link        = $feed ? sprintf( '<a href="%s" class="webcomic-collection-feed">%s</a>',
-						get_post_type_archive_feed_link( $v[ 'id' ], $feed_type ),
-						$feed_image ? sprintf( '<img src="%s" alt="%s">', $feed, sprintf( __( 'Feed for %s', 'webcomic' ), get_post_type_object( $v[ 'id' ] )->labels->name ) ) : $feed
-					) : '';
+					$feed_link        = $feed ? '<a href="' . get_post_type_archive_feed_link( $v[ 'id' ], $feed_type ) . '" class="webcomic-collection-feed">' . ( $feed_image ? '<img src="' . $feed . '" alt="' . sprintf( __( 'Feed for %s', 'webcomic' ), get_post_type_object( $v[ 'id' ] )->labels->name ) . '">' : $feed ) . '</a>' : '';
 					
 					if ( $webcomics ) {
 						$temp_post = $post;
@@ -2792,27 +2649,14 @@ class WebcomicTag extends Webcomic {
 							if ( $callback ) {
 								$items .= call_user_func( $callback, $v, $r, $the_posts );
 							} else {
-								$items .= sprintf( '<li class=""webcomic-collection %s%s"><a href="%s" class="webcomic-collection-link">%s%s</a>%s%s<%s class="webcomics">',
-									$v[ 'id' ],
-									$selected === $v[ 'id' ] ? ' current' : '',
-									'archive' === $target ? get_post_type_archive_link( $v[ 'id' ] ) : self::get_relative_webcomic_link( $target, false, false, '', $v[ 'id' ] ),
-									sprintf( '<div class="webcomic-collection-name">%s%s</div>', $collection_title, $show_count ? " ({$readable_count})" : '' ),
-									( $show_image and $v[ 'image' ] ) ? sprintf( '<div class="webcomic-collection-image">%s</div>', apply_filters( 'webcomic_collection_image', wp_get_attachment_image( $v[ 'image' ], $show_image ), $show_image, $v[ 'id' ] ) ) : '',
-									( $show_description and $v[ 'description' ] ) ? sprintf( '<div class="webcomic-collection-description">%s</div>', apply_filters( 'webcomic_collection_description', wpautop( $v[ 'description' ] ), $v[ 'id' ] ) ) : '',
-									$feed_link,
-									$ordered ? 'ol' : 'ul'
-								);
+								$items .= '<li class="webcomic-collection ' . $v[ 'id' ] . ( $selected === $v[ 'id' ] ? ' current' : '' ) . '"><a href="' . ( 'archive' === $target ? get_post_type_archive_link( $v[ 'id' ] ) : self::get_relative_webcomic_link( $target, false, false, '', $v[ 'id' ] ) ) . '" class="webcomic-collection-link"><div class="webcomic-collection-name">' . $collection_title . ( $show_count ? " ({$readable_count})" : '' ) .'</div>' . ( ( $show_image and $v[ 'image' ] ) ? '<div class="webcomic-collection-image">' . apply_filters( 'webcomic_collection_image', wp_get_attachment_image( $v[ 'image' ], $show_image ), $show_image, $v[ 'id' ] ) . '</div>' : '' ) . '</a>' . ( ( $show_description and $v[ 'description' ] ) ? '<div class="webcomic-collection-description">' . apply_filters( 'webcomic_collection_description', wpautop( $v[ 'description' ] ), $v[ 'id' ] ) . '</div>' : '' ) . $feed_link . '<' . ( $ordered ? 'ol' : 'ul' ) . ' class="webcomics">';
 								
 								$i = 0;
 								
 								while ( $the_posts->have_posts() ) { $the_posts->the_post();
 									$i++;
 									
-									$items .= sprintf( '<li%s><a href="%s">%s</a></li>',
-										$selected === get_the_ID() ? ' class="current"' : '',
-										apply_filters( 'the_permalink', get_permalink() ),
-										$webcomic_image ? WebcomicTag::the_webcomic( $webcomic_image, 'self' ) : apply_filters( 'collection_list_webcomic_title', the_title( '', '', false ), get_post(), $i )
-									);
+									$items .= '<li' . ( $selected === get_the_ID() ? ' class="current"' : '' ) . '><a href="' . apply_filters( 'the_permalink', get_permalink() ) . '">' . ( $webcomic_image ? WebcomicTag::the_webcomic( $webcomic_image, 'self' ) : apply_filters( 'collection_list_webcomic_title', the_title( '', '', false ), get_post(), $i ) ) . '</a></li>';
 								}
 								
 								$items .= $ordered ? '</ol></li>' : '</ul></li>';
@@ -2821,30 +2665,14 @@ class WebcomicTag extends Webcomic {
 						
 						$post = $temp_post;
 					} else {
-						$items .= $callback ? call_user_func( $callback, $v, $r ) : sprintf( '<li class="webcomic-collection %s%s"><a href="%s" class="webcomic-collection-link">%s%s</a>%s%s</li>',
-							$v[ 'id' ],
-							$selected === $v[ 'id' ] ? ' current' : '',
-							'archive' === $target ? get_post_type_archive_link( $v[ 'id' ] ) : self::get_relative_webcomic_link( $target, false, false, '', $v[ 'id' ] ),
-							sprintf( '<div class="webcomic-collection-name">%s%s</div>', $collection_title, $show_count ? " ({$readable_count})" : '' ),
-							( $show_image and $v[ 'image' ] ) ? sprintf( '<div class="webcomic-collection-image">%s</div>', apply_filters( 'webcomic_collection_image', wp_get_attachment_image( $v[ 'image' ], $show_image ), $show_image, $v[ 'id' ] ) ) : '',
-							( $show_description and $v[ 'description' ] ) ? sprintf( '<div class="webcomic-collection-description">%s</div>', apply_filters( 'webcomic_collection_description', wpautop( $v[ 'description' ] ), $v[ 'id' ] ) ) : '',
-							$feed_link
-						);
+						$items .= $callback ? call_user_func( $callback, $v, $r ) : '<li class="webcomic-collection ' . $v[ 'id' ] . ( $selected === $v[ 'id' ] ? ' current' : '' ) . '"><a href="' . ( 'archive' === $target ? get_post_type_archive_link( $v[ 'id' ] ) : self::get_relative_webcomic_link( $target, false, false, '', $v[ 'id' ] ) ) . '" class="webcomic-collection-link"><div class="webcomic-collection-name">' . $collection_title . ( $show_count ? " ({$readable_count})" : '' ) . '</div>' . ( ( $show_image and $v[ 'image' ] ) ? '<div class="webcomic-collection-image">' . apply_filters( 'webcomic_collection_image', wp_get_attachment_image( $v[ 'image' ], $show_image ), $show_image, $v[ 'id' ] ) . '</div>' : '' ) . '</a>' . ( ( $show_description and $v[ 'description' ] ) ? '<div class="webcomic-collection-description">' . apply_filters( 'webcomic_collection_description', wpautop( $v[ 'description' ] ), $v[ 'id' ] ) . '</div>' : '' ) . $feed_link . '</li>';
 					}
 				}
 			}
 		}
 		
 		if ( $items ) {
-			$output = sprintf( '%s<%s%s class="%s">%s</%s>%s',
-				$before,
-				$ordered ? 'ol' : 'ul',
-				$id ? sprintf( ' id="%s"', esc_attr( $id ) ) : '',
-				join( ' ', array_merge( array( 'webcomic-collections', $collection ), ( array ) $class ) ),
-				$items,
-				$ordered ? 'ol' : 'ul',
-				$after
-			);
+			$output = $before . '<' . ( $ordered ? 'ol' : 'ul' ) . ( $id ? ' id="' . esc_attr( $id ) . '"' : '' ) . ' class="' . join( ' ', array_merge( array( 'webcomic-collections', $collection ), ( array ) $class ) ) . '">' . $items . '</' . ( $ordered ? 'ol' : 'ul' ) . '>' . $after;
 		}
 		
 		return apply_filters( 'webcomic_list_collections', $output, $r );
@@ -2935,23 +2763,15 @@ class WebcomicTag extends Webcomic {
 						$width  = $dimensions[ 1 ] * ( $size / 100 );
 						$height = $dimensions[ 2 ] * ( $size / 100 );
 						
-						$term_image = preg_replace( '/width="\d+" height="\d+"/', sprintf( 'width="%s" height="%s"', $width, $height ), $term_image );
+						$term_image = preg_replace( '/width="\d+" height="\d+"/', 'width="' . $width . '" height="' . $height . '"', $term_image );
 					}
 				}
 				
-				$links[] = $callback ? call_user_func( $callback, $v, $r ) : sprintf( '<a href="%s" class="webcomic-term webcomic-term-link-%s%s"%s style="font-size:%s%s">%s</a>',
-					'archive' === $target ? get_term_link( $v, $v->taxonomy ) : self::get_relative_webcomic_link( $target, $v->term_id, false, $v->taxonomy, preg_replace( '/_(storyline|character)$/', '', $v->taxonomy ) ),
-					$v->term_id,
-					$selected === $v->term_id ? ' current' : '',
-					$show_count ? ' title="' . sprintf( _n( '%s Webcomic', '%s Webcomics', $v->count, 'webcomic' ), $v->count ) . '"' : '',
-					$size,
-					$unit,
-					$term_image ? $term_image : $v->name
-				);
+				$links[] = $callback ? call_user_func( $callback, $v, $r ) : '<a href="' . ( 'archive' === $target ? get_term_link( $v, $v->taxonomy ) : self::get_relative_webcomic_link( $target, $v->term_id, false, $v->taxonomy, preg_replace( '/_(storyline|character)$/', '', $v->taxonomy ) ) ) . '" class="webcomic-term webcomic-term-link-' . $v->term_id . ( $selected === $v->term_id ? ' current' : '' ) . '"' . ( $show_count ? ' title="' . sprintf( _n( '%s Webcomic', '%s Webcomics', $v->count, 'webcomic' ), $v->count ) . '"' : '' ) . ' style="font-size:' . $size . $unit . '">' . ( $term_image ? $term_image : $v->name ) . '</a>';
 			}
 			
 			$id     = $id ? ' id="' . $id . '"' : '';
-			$class  = sprintf( ' class="%s"', join( ' ', array_merge( array( 'webcomic-terms', $taxonomy, 'webcomic-terms-cloud', "{$taxonomy}-cloud" ), ( array ) $class ) ) );
+			$class  = ' class="' . join( ' ', array_merge( array( 'webcomic-terms', $taxonomy, 'webcomic-terms-cloud', "{$taxonomy}-cloud" ), ( array ) $class ) ) . '"';
 			$output = $before . ( $sep ? "<div{$id}{$class}>" : '<ul{$id}{$class}><li>' ) .  join( $sep ? $sep : '</li><li>', $links ) . ( $sep ? '</div>' : '</li></ul>' ) . $after;
 		}
 		
@@ -3055,23 +2875,15 @@ class WebcomicTag extends Webcomic {
 					$width  = $dimensions[ 1 ] * ( $size / 100 );
 					$height = $dimensions[ 2 ] * ( $size / 100 );
 					
-					$collection_image = preg_replace( '/width="\d+" height="\d+"/', sprintf( 'width="%s" height="%s"', $width, $height ), $collection_image );
+					$collection_image = preg_replace( '/width="\d+" height="\d+"/', 'width="' . $width . '" height="' . $height . '"', $collection_image );
 				}
 			}
 			
-			$links[] = $callback ? call_user_func( $callback, $v, $r ) : sprintf( '<a href="%s" class="webcomic-collection %s-collection-link%s"%s style="font-size:%s%s">%s</a>',
-				'archive' === $target ? get_post_type_archive_link( $v[ 'id' ] ) : self::get_relative_webcomic_link( $target, false, false, '', $v[ 'id' ] ),
-				$v[ 'id' ],
-				$selected === $v[ 'id' ] ? ' current' : '',
-				$show_count ? ' title="' . sprintf( _n( '%s Webcomic', '%s Webcomics', $count[ $v[ 'id' ] ], 'webcomic' ), $count[ $v[ 'id' ] ] ) . '"' : '',
-				$size,
-				$unit,
-				$collection_image ? $collection_image : $v[ 'name' ]
-			);
+			$links[] = $callback ? call_user_func( $callback, $v, $r ) : '<a href="' . ( 'archive' === $target ? get_post_type_archive_link( $v[ 'id' ] ) : self::get_relative_webcomic_link( $target, false, false, '', $v[ 'id' ] ) ) . '" class="webcomic-collection ' . $v[ 'id' ] . '-collection-link' . ( $selected === $v[ 'id' ] ? ' current' : '' ) . '"' . ( $show_count ? ' title="' . sprintf( _n( '%s Webcomic', '%s Webcomics', $count[ $v[ 'id' ] ], 'webcomic' ), $count[ $v[ 'id' ] ] ) . '"' : '' ) . ' style="font-size:' . $size . $unit . '">' . ( $collection_image ? $collection_image : $v[ 'name' ] ) . '</a>';
 		}
 		
 		$id     = $id ? ' id="' . $id . '"' : '';
-		$class  = sprintf( ' class="%s"', join( ' ', array_merge( array( 'webcomic-collections', 'webcomic-collections-cloud' ), ( array ) $class ) ) );
+		$class  = ' class="' . join( ' ', array_merge( array( 'webcomic-collections', 'webcomic-collections-cloud' ), ( array ) $class ) ) . '"';
 		$output = $before . ( $sep ? "<div{$id}{$class}>" : '<ul{$id}{$class}><li>' ) .  join( $sep ? $sep : '</li><li>', $links ) . ( $sep ? '</div>' : '</li></ul>' ) . $after;
 		
 		return apply_filters( 'webcomic_collections_cloud', $output, $r );
@@ -6547,24 +6359,14 @@ if ( !class_exists( 'Walker_WebcomicTerm_Dropdown' ) ) {
 				) );
 				
 				if ( $the_posts->have_posts() ) {
-					$output .= sprintf( '<optgroup label="%s%s%s">',
-						$term_pad,
-						$term_title,
-						$show_count ? " ({$term->count})" : ''
-					);
+					$output .= '<optgroup label="' . $term_pad . $term_title . ( $show_count ? " ({$term->count})" : '' ) . '">';
 					
 					$i = 0;
 					
 					while ( $the_posts->have_posts() ) { $the_posts->the_post();
 						$i++;
 						
-						$output .= sprintf( '<option value="%s" data-webcomic-url="%s"%s>%s%s</option>',
-							get_the_ID(),
-							apply_filters( 'the_permalink', get_permalink() ),
-							$selected === get_the_ID() ? ' selected' : '',
-							$term_pad,
-							apply_filters( 'term_dropdown_webcomic_title', the_title( '', '', false ), get_post(), $i )
-						);
+						$output .= '<option value="' . get_the_ID() . '" data-webcomic-url="' . apply_filters( 'the_permalink', get_permalink() ) . '"' . ( $selected === get_the_ID() ? ' selected' : '' ) . '>' . $term_pad . apply_filters( 'term_dropdown_webcomic_title', the_title( '', '', false ), get_post(), $i ) . '</option>';
 					}
 					
 					$output .= '</optgroup>';
@@ -6572,14 +6374,7 @@ if ( !class_exists( 'Walker_WebcomicTerm_Dropdown' ) ) {
 				
 				$post = $temp_post;
 			} else {
-				$output .= sprintf( '<option value="%s" data-webcomic-url="%s"%s>%s%s%s</option>',
-					$term->term_id,
-					'archive' === $target ? get_term_link( $term, $term->taxonomy ) : WebcomicTag::get_relative_webcomic_link( $target, $term->term_id, false, $term->taxonomy, preg_replace( '/_(storyline|character)$/', '', $term->taxonomy ) ),
-					$selected === $term->term_id ? ' selected' : '',
-					$term_pad,
-					$term_title,
-					$show_count ? " ({$term->count})" : ''
-				);
+				$output .= '<option value="' . $term->term_id . '" data-webcomic-url="' . ( 'archive' === $target ? get_term_link( $term, $term->taxonomy ) : WebcomicTag::get_relative_webcomic_link( $target, $term->term_id, false, $term->taxonomy, preg_replace( '/_(storyline|character)$/', '', $term->taxonomy ) ) ) . '"' . ( $selected === $term->term_id ? ' selected' : '' ) . '>' . $term_pad . $term_title . ( $show_count ? " ({$term->count})" : '' ) . '</option>';
 			}
 		}
 	}
@@ -6653,10 +6448,7 @@ if ( !class_exists( 'Walker_WebcomicTerm_List' ) ) {
 			
 			$term_title = apply_filters( 'webcomic_term_list_title', esc_attr( $term->name ), $term );
 			$feed_image = filter_var( $feed, FILTER_VALIDATE_URL );
-			$feed_link  = $feed ? sprintf( '<a href="%s" class="webcomic-term-feed">%s</a>',
-				get_term_feed_link( $term->term_id, $term->taxonomy, $feed_type ),
-				$feed_image ? sprintf( '<img src="%s" alt="%s">', $feed, sprintf( __( 'Feed for %s', 'webcomic' ), $term->name ) ) : $feed
-			) : '';
+			$feed_link  = $feed ? '<a href="' . get_term_feed_link( $term->term_id, $term->taxonomy, $feed_type ) . '" class="webcomic-term-feed">' . ( $feed_image ? '<img src="' . $feed . '" alt="' . sprintf( __( 'Feed for %s', 'webcomic' ), $term->name ) . '">' : $feed ) . '</a>' : '';
 			
 			if ( $webcomics ) {
 				$temp_post = $post;
@@ -6675,28 +6467,14 @@ if ( !class_exists( 'Walker_WebcomicTerm_List' ) ) {
 				) );
 				
 				if ( $the_posts->have_posts() ) {
-					$output .= sprintf( '<li class="webcomic-term %s webcomic-term-%s%s"><a href="%s" class="webcomic-term-link">%s%s</a>%s%s<%s class="webcomics">',
-						$term->taxonomy,
-						$term->term_id,
-						$selected === $term->term_id ? ' current' : '',
-						'archive' === $target ? get_term_link( $term, $term->taxonomy ) : WebcomicTag::get_relative_webcomic_link( $target, $term->term_id, false, $term->taxonomy, preg_replace( '/_(storyline|character)$/', '', $term->taxonomy ) ),
-						sprintf( '<div class="webcomic-term-name">%s%s</div>', $term_title, $show_count ? " ({$term->count})" : '' ),
-						( $show_image and $term->webcomic_image ) ? sprintf( '<div class="webcomic-term-image">%s</div>', apply_filters( 'webcomic_term_image', wp_get_attachment_image( $term->webcomic_image, $show_image ), $show_image, $term ) ) : '',
-						( $show_description and $term->description ) ? sprintf( '<div class="webcomic-term-description">%s</div>', apply_filters( 'webcomic_term_description', $term->description, $term ) ) : '',
-						$feed_link,
-						$ordered ? 'ol' : 'ul'
-					);
+					$output .= '<li class="webcomic-term ' . $term->taxonomy . ' webcomic-term-' . $term->term_id . ( $selected === $term->term_id ? ' current' : '' ) . '"><a href="' . ( 'archive' === $target ? get_term_link( $term, $term->taxonomy ) : WebcomicTag::get_relative_webcomic_link( $target, $term->term_id, false, $term->taxonomy, preg_replace( '/_(storyline|character)$/', '', $term->taxonomy ) ) ) . '" class="webcomic-term-link"><div class="webcomic-term-name">' . $term_title . ( $show_count ? " ({$term->count})" : '' ) . '</div>' . ( ( $show_image and $term->webcomic_image ) ? '<div class="webcomic-term-image">' . apply_filters( 'webcomic_term_image', wp_get_attachment_image( $term->webcomic_image, $show_image ), $show_image, $term ) . '</div>' : '' ) . '</a>' . ( ( $show_description and $term->description ) ? '<div class="webcomic-term-description">' . apply_filters( 'webcomic_term_description', $term->description, $term ) . '</div>' : '' ) . $feed_link . '<' . ( $ordered ? 'ol' : 'ul' ) . ' class="webcomics">';
 					
 					$i = 0;
 					
 					while ( $the_posts->have_posts() ) { $the_posts->the_post();
 						$i++;
 						
-						$output .= sprintf( '<li%s><a href="%s">%s</a></li>',
-							$selected === get_the_ID() ? ' class="current"' : '',
-							apply_filters( 'the_permalink', get_permalink() ),
-							$webcomic_image ? WebcomicTag::the_webcomic( $webcomic_image, 'self' ) : apply_filters( 'term_list_webcomic_title', the_title( '', '', false ), get_post(), $i )
-						);
+						$output .= '<li' . ( $selected === get_the_ID() ? ' class="current"' : '' ) . '><a href="' . apply_filters( 'the_permalink', get_permalink() ) . '">' . ( $webcomic_image ? WebcomicTag::the_webcomic( $webcomic_image, 'self' ) : apply_filters( 'term_list_webcomic_title', the_title( '', '', false ), get_post(), $i ) ) . '</a></li>';
 					}
 					
 					$output .= $ordered ? '</ol>' : '</ul>';
@@ -6704,16 +6482,7 @@ if ( !class_exists( 'Walker_WebcomicTerm_List' ) ) {
 				
 				$post = $temp_post;
 			} else {
-				$output .= sprintf( '<li class="webcomic-term %s webcomic-term-%s%s"><a href="%s" class="webcomic-term-link">%s%s</a>%s%s',
-					$term->taxonomy,
-					$term->term_id,
-					$selected === $term->term_id ? ' current' : '',
-					'archive' === $target ? get_term_link( $term, $term->taxonomy ) : WebcomicTag::get_relative_webcomic_link( $target, $term->term_id, false, $term->taxonomy, preg_replace( '/_(storyline|character)$/', '', $term->taxonomy ) ),
-					sprintf( '<div class="webcomic-term-name">%s%s</div>', $term_title, $show_count ? " ({$term->count})" : '' ),
-					( $show_image and $term->webcomic_image ) ? sprintf( '<div class="webcomic-term-image">%s</div>', apply_filters( 'webcomic_term_image', wp_get_attachment_image( $term->webcomic_image, $show_image ), $show_image, $term ) ) : '',
-					( $show_description and $term->description ) ? sprintf( '<div class="webcomic-term-description">%s</div>', apply_filters( 'webcomic_term_description', $term->description, $term ) ) : '',
-					$feed_link
-				);
+				$output .= '<li class="webcomic-term ' . $term->taxonomy . ' webcomic-term-' . $term->term_id . ( $selected === $term->term_id ? ' current' : '' ) . '"><a href="' . ( 'archive' === $target ? get_term_link( $term, $term->taxonomy ) : WebcomicTag::get_relative_webcomic_link( $target, $term->term_id, false, $term->taxonomy, preg_replace( '/_(storyline|character)$/', '', $term->taxonomy ) ) ) . '" class="webcomic-term-link"><div class="webcomic-term-name">' . $term_title . ( $show_count ? " ({$term->count})" : '' ) . '</div>' . ( ( $show_image and $term->webcomic_image ) ? '<div class="webcomic-term-image">' . apply_filters( 'webcomic_term_image', wp_get_attachment_image( $term->webcomic_image, $show_image ), $show_image, $term ) . '</div>' : '' ) . '</a>' . ( ( $show_description and $term->description ) ? '<div class="webcomic-term-description">' . apply_filters( 'webcomic_term_description', $term->description, $term ) . '</div>' : '' ) . $feed_link;
 			}
 		}
 		
@@ -6772,13 +6541,7 @@ if ( !class_exists( 'Walker_WebcomicTranscriptTerm_Dropdown' ) ) {
 			extract( $args, $args[ 'hierarchical' ] ? EXTR_SKIP : EXTR_OVERWRITE );
 			
 			$term_title = apply_filters( 'webcomic_transcript_term_dropdown_title', esc_attr( $term->name ), $term );
-			
-			$output .= sprintf( '<option value="%s" data-webcomic-url="%s"%s>%s</option>',
-				$term->term_id,
-				WebcomicTag::get_webcomic_transcripts_link( $term, $the_post ),
-				$selected === $term->term_id ? ' selected' : '',
-				$term_title
-			);
+			$output    .= '<option value="' . $term->term_id . '" data-webcomic-url="' . WebcomicTag::get_webcomic_transcripts_link( $term, $the_post ) . '"' . ( $selected === $term->term_id ? ' selected' : '' ) . '>' . $term_title . '</option>';
 		}
 	}
 }
@@ -6845,14 +6608,7 @@ if ( !class_exists( 'Walker_WebcomicTranscriptTerm_List' ) ) {
 			extract( $args, $args[ 'hierarchical' ] ? EXTR_SKIP : EXTR_OVERWRITE );
 			
 			$term_title = apply_filters( 'webcomic_transcript_term_list_title', esc_attr( $term->name ), $term );
-			
-			$output .= sprintf( '<li class="webcomic-transcript-term %s webcomic-transcript-term-%s%s"><a href="%s" class="webcomic-term-link">%s</a>',
-				$term->taxonomy,
-				$term->term_id,
-				$selected === $term->term_id ? ' current' : '',
-				WebcomicTag::get_webcomic_transcripts_link( $term, $the_post ),
-				$term_title
-			);
+			$output    .= '<li class="webcomic-transcript-term ' . $term->taxonomy . ' webcomic-transcript-term-' . $term->term_id . ( $selected === $term->term_id ? ' current' : '' ) . '"><a href="' . WebcomicTag::get_webcomic_transcripts_link( $term, $the_post ) . '" class="webcomic-term-link">' . $term_title . '</a>';
 		}
 		
 		/** End element output.

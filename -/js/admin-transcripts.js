@@ -1,9 +1,7 @@
 jQuery( function( $ ) {
 	var url = $( '[data-webcomic-admin-url]' ).data( 'webcomic-admin-url' );
 	
-	/**
-	 * Update the post list when the collection is changed.
-	 */
+	/** Update the post list when the collection is changed. */
 	$( '#webcomic_collection' ).attr( 'disabled', false ).on( 'change', function() {
 		$.get( url, {
 			collection: $( '#webcomic_collection' ).val(),

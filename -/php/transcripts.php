@@ -130,10 +130,10 @@ class WebcomicTranscripts extends Webcomic {
 		if ( 'webcomic_transcript' === $post_type ) {
 			$collection = isset( $_GET[ 'webcomic_collection' ] ) ? $_GET[ 'webcomic_collection' ] : '';
 			
-			printf( '<select name="webcomic_collection"><option value="">%s</option>', __( 'View all collections', 'webcomic' ) );
+			echo '<select name="webcomic_collection"><option value="">', __( 'View all collections', 'webcomic' ), '</option>';
 			
 			foreach ( self::$config[ 'collections' ] as $k => $v ) {
-				printf( '<option value="%s"%s>%s</option>', $k, selected( $k, $collection, false ), esc_html( $v[ 'name' ] ) );
+				echo '<option value="', $k, '"', selected( $k, $collection, false ), '>', esc_html( $v[ 'name' ] ), '</option>';
 			}
 			
 			echo '</select>';
@@ -243,10 +243,7 @@ class WebcomicTranscripts extends Webcomic {
 		global $post;
 		
 		if ( 'webcomic_author' === $column ) {
-			$authors = array( sprintf( '<a href="%s">%s</a>',
-				esc_url( add_query_arg( array( 'post_type' => $post->post_type, 'author' => get_the_author_meta( 'ID' ) ), 'edit.php' ) ),
-				get_the_author()
-			) );
+			$authors = array( '<a href="' . esc_url( add_query_arg( array( 'post_type' => $post->post_type, 'author' => get_the_author_meta( 'ID' ) ), 'edit.php' ) ) . '">' . get_the_author() . '</a>' );
 			
 			foreach ( get_post_meta( $id, 'webcomic_author' ) as $author ) {
 				$authors[] = esc_html( $author[ 'name' ] );
@@ -254,12 +251,7 @@ class WebcomicTranscripts extends Webcomic {
 			
 			echo join( ', ', $authors );
 		} elseif ( 'webcomic_parent' === $column ) {
-			echo $post->post_parent ? sprintf( '<strong><a href="%s">%s</a> - %s</strong>, %s',
-				esc_url( add_query_arg( array( 'post_type' => get_post_type( $post->post_parent ) ), admin_url( 'edit.php' ) ) ),
-				esc_html( get_post_type_object( get_post_type( $post->post_parent ) )->labels->name ),
-				( current_user_can( 'edit_post', $post->post_parent ) and 'trash' !== get_post_status( $post->post_parent ) ) ? sprintf( '<a href="%s">%s</a>', get_edit_post_link( $post->post_parent ), esc_html( get_the_title( $post->post_parent ) ) ) : esc_html( get_the_title( $post->post_parent ) ),
-				get_the_time( 'Y/m/d', $post->post_parent )
-			) : __( 'No Webcomic', 'webcomic' );
+			echo $post->post_parent ? '<b><a href="' . esc_url( add_query_arg( array( 'post_type' => get_post_type( $post->post_parent ) ), admin_url( 'edit.php' ) ) ) . '">' . esc_html( get_post_type_object( get_post_type( $post->post_parent ) )->labels->name ) . '</a> - ' . ( ( current_user_can( 'edit_post', $post->post_parent ) and 'trash' !== get_post_status( $post->post_parent ) ) ? '<a href="' . get_edit_post_link( $post->post_parent ) . '">' . esc_html( get_the_title( $post->post_parent ) ) . '</a>' : esc_html( get_the_title( $post->post_parent ) ) ) . '</b>, ' . get_the_time( 'Y/m/d', $post->post_parent ) : __( 'No Webcomic', 'webcomic' );
 		}
 	}
 	
@@ -321,12 +313,7 @@ class WebcomicTranscripts extends Webcomic {
 			}
 			
 			if ( $orphans >= 1 ) {
-				$views[ 'webcomic_orphans' ] = sprintf( '<a href="%s"%s>%s <span class="count">(%d)</span></a>',
-					esc_url( add_query_arg( array( 'post_type' => 'webcomic_transcript', 'post_status' => 'all', 'webcomic_orphaned' => true ), admin_url( 'edit.php' ) ) ),
-					isset( $_GET[ 'webcomic_orphaned' ] ) ? ' class="current"' : '',
-					__( 'Orphaned', 'webcomic' ),
-					$orphans
-				);
+				$views[ 'webcomic_orphans' ] = '<a href="' . esc_url( add_query_arg( array( 'post_type' => 'webcomic_transcript', 'post_status' => 'all', 'webcomic_orphaned' => true ), admin_url( 'edit.php' ) ) ) . '"' . ( isset( $_GET[ 'webcomic_orphaned' ] ) ? ' class="current"' : '' ) . '>' . __( 'Orphaned', 'webcomic' ) . ' <span class="count">(' . $orphans . ')</span></a>';
 			}
 		}
 		
@@ -396,11 +383,7 @@ class WebcomicTranscripts extends Webcomic {
 				<optgroup label="<?php esc_attr_e( 'Collection', 'webcomic' ); ?>">
 				<?php
 					foreach ( self::$config[ 'collections' ] as $k => $v ) {
-						printf( '<option value="%s"%s>%s</option>',
-							$k,
-							selected( $k, $parent_type, false ),
-							esc_html( $v[ 'name' ] )
-						);
+						echo '<option value="', $k, '"', selected( $k, $parent_type, false ), '>', esc_html( $v[ 'name' ] ), '</option>';
 					}
 				?>
 				</optgroup>
@@ -440,29 +423,21 @@ class WebcomicTranscripts extends Webcomic {
 				<tbody>
 		<?php
 		foreach ( $authors as $author ) {
-			printf( '
+			echo '
 				<tr>
 					<th class="check-column">
-						<input type="checkbox" name="webcomic_author[' . $count . '][delete]">
-						<input type="hidden" name="webcomic_author[' . $count . '][original]" value="%s">
+						<input type="checkbox" name="webcomic_author[', $count, '][delete]">
+						<input type="hidden" name="webcomic_author[', $count, '][original]" value="', esc_attr( serialize( $author ) ), '">
 					</th>
-					<td><input type="text" name="webcomic_author[' . $count . '][name]" value="%s"></td>
-					<td><input type="email" name="webcomic_author[' . $count . '][email]" value="%s"></td>
-					<td><input type="url" name="webcomic_author[' . $count . '][url]" value="%s"></td>
-					<td><input type="text" name="webcomic_author[' . $count . '][ip]" value="%s"></td>
+					<td><input type="text" name="webcomic_author[', $count, '][name]" value="', $author[ 'name' ], '"></td>
+					<td><input type="email" name="webcomic_author[', $count, '][email]" value="', $author[ 'email' ], '"></td>
+					<td><input type="url" name="webcomic_author[', $count, '][url]" value="', $author[ 'url' ], '"></td>
+					<td><input type="text" name="webcomic_author[', $count, '][ip]" value="', $author[ 'ip' ], '"></td>
 					<td>
-						<input type="text" name="webcomic_author[' . $count . '][date]" value="%s">
-						<input type="hidden" name="webcomic_author[' . $count . '][time]" value="%s">
+						<input type="text" name="webcomic_author[', $count, '][date]" value="', date( get_option( 'date_format' ), ( integer ) $author[ 'time' ] ), '">
+						<input type="hidden" name="webcomic_author[', $count, '][time]" value="', date( 'H:i:s', ( integer ) $author[ 'time' ] ), '">
 					</td>
-				</tr>',
-				esc_attr( serialize( $author ) ),
-				$author[ 'name' ],
-				$author[ 'email' ],
-				$author[ 'url' ],
-				$author[ 'ip' ],
-				date( get_option( 'date_format' ), ( integer ) $author[ 'time' ] ),
-				date( 'H:i:s', ( integer ) $author[ 'time' ] )
-			);
+				</tr>';
 			
 			$count++;
 		}
@@ -485,11 +460,7 @@ class WebcomicTranscripts extends Webcomic {
 			<option value=""><?php _e( '(no parent)', 'webcomic' ); ?></option>
 			<?php
 				foreach ( get_posts( array( 'numberposts' => -1, 'post_status' => get_post_stati( array( 'show_in_admin_all_list' => true ) ), 'post_type' => $collection ) ) as $p ) {
-					printf( '<option value="%s"%s>%s</option>',
-						$p->ID,
-						selected( $p->ID, ( integer ) $parent, false ),
-						esc_html( $p->post_title )
-					);
+					echo '<option value="', $p->ID, '"', selected( $p->ID, ( integer ) $parent, false ), '>', esc_html( $p->post_title ), '</option>';
 				}
 			?>
 		</select>
@@ -517,7 +488,7 @@ class WebcomicTranscripts extends Webcomic {
 				echo wp_get_attachment_image( $attachment->ID, 'full' ), '<br>';
 			}
 		} elseif ( $post ) {
-			printf( '<p>%s</p>', __( 'No Attachments', 'webcomic' ) );
+			echo '<p>', __( 'No Attachments', 'webcomic' ), '</p>';
 		}
 	}
 }

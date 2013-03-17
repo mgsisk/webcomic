@@ -1,10 +1,9 @@
 jQuery( function( $ ) {
 	/** Remove the term image. */
-	$( document ).on( 'click', '.webcomic-term-image-x', function() {
+	$( document ).on( 'click', '.webcomic-image-x', function() {
 		$.get( $( '[data-webcomic-admin-url]' ).data( 'webcomic-admin-url' ), {
 			id: 0,
 			taxonomy: $( '[data-webcomic-taxonomy]' ).data( 'webcomic-taxonomy' ),
-			term: $( 'data-webcomic-term' ).data( 'webcomic-term' ),
 			webcomic_admin_ajax: 'WebcomicTaxonomy::ajax_term_image'
 		}, function( data ) {
 			$( '#webcomic_term_image' ).html( data );
@@ -31,7 +30,7 @@ jQuery( function( $ ) {
 	var frame;
 	
 	$( function() {
-		$( document ). on( 'click', '.webcomic-term-image', function( e ) {
+		$( document ). on( 'click', '.webcomic-image', function( e ) {
 			var $e = $( this );
 			
 			e.preventDefault();

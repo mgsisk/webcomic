@@ -126,7 +126,7 @@ class WebcomicLegacy extends Webcomic {
 	 * @hook admin_menu
 	 */
 	public function admin_menu() {
-		add_submenu_page( 'tools.php', sprintf( __( 'Upgrade to Webcomic %s', 'webcomic' ), self::$version ), __( 'Upgrade Webcomic', 'webcomic' ), 'manage_options', 'webcomic-upgrader', array( $this, 'page' ) );
+		add_submenu_page( 'tools.php', sprintf( __( 'Upgrade to %s', 'webcomic' ), 'Webcomic ' . self::$version ), __( 'Upgrade Webcomic', 'webcomic' ), 'manage_options', 'webcomic-upgrader', array( $this, 'page' ) );
 	}
 	
 	/** Render upgrade tool notification.
@@ -147,7 +147,7 @@ class WebcomicLegacy extends Webcomic {
 				return;
 			}
 			
-			printf( '<div class="updated webcomic legacy"><a href="%s"><b>&#x2605;</b> %s &raquo;</a></div>', esc_url( add_query_arg( array( 'page' => 'webcomic-upgrader' ), admin_url( 'tools.php' ) ) ), __( 'Upgrading? Let Webcomic Help', 'webcomic' ) );
+			echo '<div class="updated webcomic legacy"><a href="', esc_url( add_query_arg( array( 'page' => 'webcomic-upgrader' ), admin_url( 'tools.php' ) ) ), '"><b>&#x2605;</b> ', __( 'Upgrading? Let Webcomic Help', 'webcomic' ),'</a></div>';
 		}
 	}
 	
@@ -199,7 +199,7 @@ class WebcomicLegacy extends Webcomic {
 					<?php if ( isset( $_POST[ 'webcomic_upgrade_status' ] ) and 0 === $_POST[ 'webcomic_upgrade_status' ] ) { ?>
 					
 					<h3 style="color:green;font-size:larger"><?php _e( "Just one more click!", 'webcomic' ); ?></h3>
-					<p><?php printf( __( 'Thanks again for using Webcomic! Clicking <strong>Complete the Upgrade</strong> will remove the upgrade tool, delete any leftover data, and take you to the administrative dashboard. If you notice any problems with the upgrade please <a href="%1$s" target="_blank">let the developer know</a>.', 'webcomic' ), '//github.com/mgsisk/webcomic/issues' ); ?></p>
+					<p><?php printf( __( 'Thanks again for using Webcomic! Clicking <b>Complete the Upgrade</b> will remove the upgrade tool, delete any leftover data, and take you to the administrative dashboard. If you notice any problems with the upgrade please <a href="%s" target="_blank">let the developer know</a>.', 'webcomic' ), '//github.com/mgsisk/webcomic/issues' ); ?></p>
 					<form method="post">
 						<?php wp_nonce_field( 'webcomic_upgrade', 'webcomic_upgrade' ); ?>
 						<div class="form-wrap">
@@ -210,8 +210,8 @@ class WebcomicLegacy extends Webcomic {
 					
 					<?php } elseif ( isset( $_POST[ 'webcomic_upgrade_status' ] ) ) { ?>
 					
-					<p style="color:#e66f00;font-size:larger"><strong><?php _e( 'Webcomic has paused the upgrade to prevent a timeout error.', 'webcomic' ); ?></strong></p>
-					<p><?php _e( 'The upgrade will automatically resume in 5 seconds, or you may click <strong>Continue Upgrading</strong> to resume now.', 'webcomic' ); ?></p>
+					<p style="color:#e66f00;font-size:larger"><b><?php _e( 'Webcomic has paused the upgrade to prevent a timeout error.', 'webcomic' ); ?></b></p>
+					<p><?php _e( 'The upgrade will automatically resume in 5 seconds, or you may click <b>Continue Upgrading</b> to resume now.', 'webcomic' ); ?></p>
 					<form method="post" class="webcomic-auto" data-webcomic-upgrade-continue="<?php _e( 'Continuing upgrade&hellip;', 'webcomic' ); ?>">
 						<?php wp_nonce_field( 'webcomic_upgrade', 'webcomic_upgrade' ); ?>
 						<div class="form-wrap">
@@ -223,8 +223,8 @@ class WebcomicLegacy extends Webcomic {
 					
 					<?php } else { ?>
 					
-					<p><?php printf( __( 'This tool will attempt to automatically convert your existing %1$s data to Webcomic %2$s. Depending on the size of your site the upgrade may require multiple steps. If you do not want to upgrade click <strong>Not Interested</strong> to uninstall Webcomic %2$s.', 'webcomic' ), is_numeric( self::$config[ 'legacy' ] ) ? sprintf( 'Webcomic %s', self::$config[ 'legacy' ] ) : self::$config[ 'legacy' ], self::$version ); ?></p>
-					<div class="error"><p><strong><?php printf( __( 'Upgrades are not reversible and, once begun, should not be stopped. Please <a href="%1$s" target="_blank">read this</a> and <a href="%2$s">backup your site</a> before upgrading.', 'webcomic' ), '//github.com/mgsisk/webcomic/wiki/Upgrading', esc_url( admin_url( 'export.php' ) ) ); ?></strong></p></div>
+					<p><?php printf( __( 'This tool will attempt to automatically convert your existing %1$s data to Webcomic %2$s. Depending on the size of your site the upgrade may require multiple steps. If you do not want to upgrade click <b>Not Interested</b> to uninstall Webcomic %2$s.', 'webcomic' ), is_numeric( self::$config[ 'legacy' ] ) ? 'Webcomic %s' . self::$config[ 'legacy' ] : self::$config[ 'legacy' ], self::$version ); ?></p>
+					<div class="error"><p><b><?php printf( __( 'Upgrades are not reversible and, once begun, should not be stopped. Please <a href="%1$s" target="_blank">read this</a> and <a href="%2$s">backup your site</a> before upgrading.', 'webcomic' ), '//github.com/mgsisk/webcomic/wiki/Upgrading', esc_url( admin_url( 'export.php' ) ) ); ?></b></p></div>
 					<form method="post">
 						<?php wp_nonce_field( 'webcomic_upgrade', 'webcomic_upgrade' ); ?>
 						<div class="form-wrap">

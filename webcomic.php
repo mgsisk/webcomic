@@ -33,7 +33,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 
  * @package Webcomic
  * @copyright 2008 - 2013 Michael Sisk
- * @license //gnu.org/licenses/gpl-2.0.html GPL2
+ * @license http://gnu.org/licenses/gpl-2.0.html GPL2
  * @version 4.0.9
  * @link http://webcomic.nu
  */
@@ -57,16 +57,6 @@ class Webcomic {
 	 * @var string
 	 */
 	protected static $url = '';
-	
-	/** Stores error notifications.
-	 * @var array
-	 */
-	protected static $error = array();
-	
-	/** Stores success notifications.
-	 * @var array
-	 */
-	protected static $notice = array();
 	
 	/** Stores the configuration.
 	 * @var array
@@ -93,6 +83,7 @@ class Webcomic {
 	 * @uses Webcomic::wp_head()
 	 * @uses Webcomic::twitter_oauth()
 	 * @uses Webcomic::save_transcript()
+	 * @uses Webcomic::dynamic_defaults()
 	 * @uses Webcomic::webcomic_redirect()
 	 * @uses Webcomic::setup_theme()
 	 * @uses Webcomic::the_post()
@@ -120,8 +111,8 @@ class Webcomic {
 	 * @uses Webcomic::the_excerpt()
 	 * @uses Webcomic::the_content()
 	 * @uses Webcomic::integrate_sort_asc()
-	 * @uses WebcomicWidgets
-	 * @uses WebcomicShortcodes
+	 * @uses WebcomicWidget
+	 * @uses WebcomicShortcode
 	 */
 	public function __construct() {
 		self::$dir    = plugin_dir_path( __FILE__ );
@@ -168,8 +159,8 @@ class Webcomic {
 			}
 			
 			require_once self::$dir . '-/php/tags.php';
-			require_once self::$dir . '-/php/widgets.php';    new WebcomicWidgets;
-			require_once self::$dir . '-/php/shortcodes.php'; new WebcomicShortcode;
+			require_once self::$dir . '-/php/widgets.php';		new WebcomicWidget;
+			require_once self::$dir . '-/php/shortcodes.php';	new WebcomicShortcode;
 		}
 	}
 	
@@ -218,7 +209,6 @@ class Webcomic {
 				'public'      => true,
 				'menu_icon'   => self::$url . '-/img/webcomic-small.png',
 				'supports'    => $v[ 'supports' ],
-				'taxonomies'  => $v[ 'taxonomies' ],
 				'has_archive' => $v[ 'slugs' ][ 'archive' ],
 				'rewrite' => array(
 					'slug'       => $v[ 'slugs' ][ 'webcomic' ],
@@ -346,7 +336,8 @@ class Webcomic {
 			
 			$output  = array();
 			$header  = $message = $error = '';
-			$logfile = self::$dir . sprintf( '-/log/ipn-%s.php', $blog_id ? $blog_id : 1 );
+			$blog_id = $blog_id ? $blog_id : 1;
+			$logfile = self::$dir . "-/log/ipn-{$blog_id}.php";
 			$request = 'cmd=' . urlencode( '_notify-validate' );
 			
 			foreach ( $_POST as $k => $v ) {
@@ -355,14 +346,16 @@ class Webcomic {
 			}
 			
 			if ( $curl = curl_init() ) {
-				curl_setopt( $curl, CURLOPT_URL, 'https://www.paypal.com/cgi-bin/webscr' );
-				curl_setopt( $curl, CURLOPT_HEADER, 0 );
-				curl_setopt( $curl, CURLOPT_POST, 1 );
-				curl_setopt( $curl, CURLOPT_RETURNTRANSFER, 1 );
-				curl_setopt( $curl, CURLOPT_POSTFIELDS, $request );
-				curl_setopt( $curl, CURLOPT_SSL_VERIFYPEER, 1 );
-				curl_setopt( $curl, CURLOPT_SSL_VERIFYHOST, 2 );
-				curl_setopt( $curl, CURLOPT_HTTPHEADER, array( 'Host: www.paypal.com' ) );
+				curl_setopt_array( $curl, array(
+					CURLOPT_URL    => 'https://www.paypal.com/cgi-bin/webscr',
+					CURLOPT_HEADER => 0,
+					CURLOPT_POST => 1,
+					CURLOPT_RETURNTRANSFER => 1,
+					CURLOPT_POSTFIELDS => $request,
+					CURLOPT_SSL_VERIFYPEER => 1,
+					CURLOPT_SSL_VERIFYHOST => 2,
+					CURLOPT_HTTPHEADER => array( 'Host: www.paypal.com' )
+				) );
 				
 				$log      = is_readable( $logfile ) ? file_get_contents( $logfile ) : '';
 				$response = curl_exec( $curl );
@@ -371,7 +364,7 @@ class Webcomic {
 					if ( 'Completed' !== $_POST[ 'payment_status' ] ) {
 						$error   = true;
 						$message = __( 'Incomplete transaction', 'webcomic' );
-					} elseif ( preg_match( sprintf( '/^%s/', $_POST[ 'txn_id' ] ), $log ) ) {
+					} elseif ( preg_match( '/^' . $_POST[ 'txn_id' ] . '/', $log ) ) {
 						$error   = true;
 						$message = __( 'Transaction already completed', 'webcomic' );
 					} elseif ( 'cart' === $_POST[ 'txn_type' ] ) {
@@ -406,13 +399,13 @@ class Webcomic {
 								$message = __( 'Good', 'webcomic' );
 							}
 							
-							$output[] = sprintf( "\t\t%s\t%s\t%s", $_POST[ "item_number{$i}" ], $message, $error ? 'x' : '' );
+							$output[] = "\t\t" . $_POST[ "item_number{$i}" ] . "\t{$message}\t" . ( $error ? 'x' : '' );
 							$error = false;
 							
 							$i++;
 						}
 						
-						array_unshift( $output, sprintf( "%s\t%s\t%s\t%s\t%s", $_POST[ 'txn_id' ], $_POST[ 'payment_date' ], '', $e ? sprintf( _n( '%s Error', '%s Errors', $e, 'webcomic' ), $e ) : __( 'Sale Get!', 'webcomic' ) ), $e ? 'x' : '' );
+						array_unshift( $output, $_POST[ 'txn_id' ] . "\t" . $_POST[ 'payment_date' ] . "\t\t" . ( $e ? sprintf( _n( '%s Error', '%s Errors', $e, 'webcomic' ), $e ) : __( 'Sale Get!', 'webcomic' ) ) . "\t" . ( $e ? 'x' : '' ) );
 					} elseif ( 'donation' === $_GET[ 'webcomic_commerce_ipn' ] ) {
 						if ( empty( self::$config[ 'collections' ][ $_POST[ 'item_number' ] ] ) ) {
 							$error   = true;
@@ -464,7 +457,7 @@ class Webcomic {
 			}
 			
 			if ( !$output ) {
-				$output[] = sprintf( "%s\t%s\t%s\t%s\t%s", $_POST[ 'txn_id' ], $_POST[ 'payment_date' ], $_POST[ 'item_number' ], $message, $error ? 'x' : '' );
+				$output[] = $_POST[ 'txn_id' ] . "\t" . $_POST[ 'payment_date' ] . "\t" . $_POST[ 'item_number' ] . "\t" . $message . "\t" . ( $error ? 'x' : '' );
 			}
 			
 			if ( file_exists( $logfile ) and is_writable( $logfile ) ) {
@@ -475,7 +468,7 @@ class Webcomic {
 		}
 	}
 	
-	/** Add Open Graph metadata for Webcomic-related pages.
+	/** Add Generator, Open Graph, and Twitter Card metadata.
 	 * 
 	 * Use of the 'property' attribute is obnoxious but intentional; see
 	 * [ogp.me](http://ogp.me/) for details on the Open Graph protocol.
@@ -490,11 +483,10 @@ class Webcomic {
 		global $wp_query, $post;
 		
 		$object = $wp_query->get_queried_object();
-		$output = array(
-			'generator' => sprintf( 'Webcomic %s', self::$version )
-		);
+		$output = array();
 		
 		if ( self::$collection and !is_404() ) {
+			$output[ 'generator' ]      = 'Webcomic ' . self::$version;
 			$output[ 'og:type' ]        = empty( $object->post_type ) ? 'website' : 'article';
 			$output[ 'twitter:card' ]   = is_singular() ? 'photo' : 'summary';
 			$output[ 'og:site_name' ]   = get_bloginfo( 'name' );
@@ -562,23 +554,21 @@ class Webcomic {
 			}
 		}
 		
-		$output = apply_filters( 'webcomic_opengraph', $output, $object, self::$collection );
-		
-		foreach ( ( array ) $output as $k => $v ) {
-			if ( 'generator' === $k ) {
-				echo sprintf( '<meta name="%s" content="%s">', $k, $v ), "\n";
-			} elseif ( is_array( $v ) ) {
-				foreach( $v as $x ) {
-					if ( is_array( $x ) ) {
-						foreach ( $x as $a => $b ) {
-							echo sprintf( '<meta %s="%s%s" content="%s">', 0 === strpos( $k, 'twitter' ) ? 'name' : 'property', $k, is_string( $a ) ? $a : '', $b ), "\n";
+		if ( $output = apply_filters( 'webcomic_opengraph', $output, $object, self::$collection ) ) {
+			foreach ( ( array ) $output as $k => $v ) {
+				if ( is_array( $v ) ) {
+					foreach( $v as $x ) {
+						if ( is_array( $x ) ) {
+							foreach ( $x as $a => $b ) {
+								echo '<meta ', 0 === strpos( $k, 'twitter' ) ? 'name' : 'property', '="', $k, is_string( $a ) ? $a : '', '" content="', $b, '">', "\n";
+							}
+						} else {
+							echo '<meta ', 0 === strpos( $k, 'twitter' ) ? 'name' : 'property', '="', $k, '" content="', $x, '">', "\n";
 						}
-					} else {
-						echo sprintf( '<meta %s="%s" content="%s">', 0 === strpos( $k, 'twitter' ) ? 'name' : 'property', $k, $x ), "\n";
 					}
+				} else {
+					echo '<meta ', ( 0 === strpos( $k, 'twitter' ) or 'generator' === $k ) ? 'name' : 'property', '="', $k, '" content="', $v, '">', "\n";
 				}
-			} else {
-				echo sprintf( '<meta %s="%s" content="%s">', ( 0 === strpos( $k, 'twitter' ) or 'generator' === $k ) ? 'name' : 'property', $k, $v ), "\n";
 			}
 		}
 	}
@@ -597,7 +587,7 @@ class Webcomic {
 			$admin_url = add_query_arg( array( 'post_type' => $_GET[ 'webcomic_collection' ], 'page' => "{$_GET[ 'webcomic_collection' ]}-options" ), admin_url( 'edit.php' ) );
 			
 			if ( isset( $_GET[ 'denied' ] ) ) {
-				wp_die( sprintf( __( 'Authorization was denied. <a href="%1$s">Return to %2$s Settings</a>', 'webcomic' ), $admin_url, self::$config[ 'collections' ][ $_GET[ 'webcomic_collection' ] ][ 'name' ] ), __( 'Twitter Authorization Denied | Webcomic', 'webcomic' ), array( 'response' => 200 ) );
+				wp_die( sprintf( __( 'Authorization denied. <a href="%1$s">Return to %2$s Settings</a>', 'webcomic' ), $admin_url, self::$config[ 'collections' ][ $_GET[ 'webcomic_collection' ] ][ 'name' ] ), __( 'Twitter Authorization Denied | Webcomic', 'webcomic' ), array( 'response' => 200 ) );
 			} else {
 				$oauth = new tmhOAuth( array(
 					'consumer_key'    => self::$config[ 'collections' ][ $_GET[ 'webcomic_collection' ] ][ 'twitter' ][ 'consumer_key' ],
@@ -725,7 +715,7 @@ class Webcomic {
 								$_POST[ 'webcomic_transcript_email' ] ? " &lt;{$_POST[ 'webcomic_transcript_email' ]}&gt;" : '',
 								esc_url( admin_url( "post.php?post={$new_post}&action=edit" ) ),
 								$_POST[ 'webcomic_transcript_update' ] ? __( 'improved a transcript', 'webcomic' ) : __( 'submitted a transcript', 'webcomic' ),
-								sprintf( '<a href="%s">%s</a> - <a href="%s">%s</a>', esc_url( admin_url( "edit.php?post_type={$the_post->post_type}" ) ), self::$config[ 'collections' ][ $the_post->post_type ][ 'name' ], esc_url( admin_url( "post.php?post={$the_post->ID}&action=edit" ) ), $the_post->post_title )
+								'<a href="' . esc_url( admin_url( "edit.php?post_type={$the_post->post_type}" ) ) . '">' . self::$config[ 'collections' ][ $the_post->post_type ][ 'name' ] . '</a> - <a href="' . esc_url( admin_url( "post.php?post={$the_post->ID}&action=edit" ) ) . '">' . $the_post->post_title . '</a>'
 							),
 							'content-type: text/html'
 						);
@@ -798,10 +788,7 @@ class Webcomic {
 			}
 			
 			if ( empty( $_GET[ "{$relative}_webcomic_term" ] ) ) {
-				$taxonomy = sprintf( '%s_%s',
-					array_rand( self::$config[ 'collections' ] ),
-					array_rand( array( 'storyline' => true, 'character' => true ) )
-				);
+				$taxonomy = array_rand( self::$config[ 'collections' ] ) . '_' . array_rand( array( 'storyline' => true, 'character' => true ) );
 			} else {
 				$taxonomy = $_GET[ "{$relative}_webcomic_term" ];
 			}
@@ -821,7 +808,8 @@ class Webcomic {
 	 * 
 	 * We have to do this as early as possible to ensure that the
 	 * correct template can be set if the collection is using a custom
-	 * theme.
+	 * theme. Unfortunately, this means checking even before any
+	 * conditional tags are available.
 	 * 
 	 * @uses Webcomic::$config
 	 * @uses Webcomic::$integrate
@@ -858,14 +846,14 @@ class Webcomic {
 				(
 					preg_match( '/webcomic\d+(_(storyline|character))?/', join( ' ', array_keys( $_GET ) ), $match )
 					or ( isset( $_GET[ 'post_type' ] ) and isset( self::$config[ 'collections' ][ $_GET[ 'post_type' ] ] ) and $match[ 0 ] = $_GET[ 'post_type' ] )
-					or ( $wp_rewrite->using_permalinks() and preg_match( sprintf( '{/(%s)/}', join( '|', $permalinks ) ), $_SERVER[ 'REQUEST_URI' ], $match ) )
+					or ( $wp_rewrite->using_permalinks() and preg_match( '{/(' . join( '|', $permalinks ) . ')/}', $_SERVER[ 'REQUEST_URI' ], $match ) )
 					or ( $id = url_to_postid( $_SERVER[ 'REQUEST_URI' ] ) and $match[ 0 ] = get_post_meta( $id, 'webcomic_collection', true ) and isset( self::$config[ 'collections' ][ $match[ 0 ] ] ) )
 				)
 			and $match
 		) {
 			if ( 2 < count( $match ) ) {
 				foreach ( $permalinks as $k => $v ) {
-					if ( false !== strpos( $k, '_webcomic' ) and preg_match( sprintf( '{%s}', $v ), $match[ 1 ] ) ) {
+					if ( false !== strpos( $k, '_webcomic' ) and preg_match( '{' . $v . '}', $match[ 1 ] ) ) {
 						self::$collection = str_replace( '_webcomic', '', $k );
 						break;
 					}
@@ -986,7 +974,7 @@ class Webcomic {
 					$v[ 'buffer' ][ 'email' ],
 					sprintf( _n( '[%s] %s Buffer Alert - %s Day Left', '[%s] %s Buffer Alert - %s Days Left', $eta, 'webcomic' ), get_bloginfo( 'name' ), $v[ 'name' ], $eta ),
 					sprintf( __( 'This is an automated reminder that the buffer for %1$s expires on %2%s.', 'webcomic' ),
-						sprintf( '<a href="%s">%s</a>', esc_url( admin_url( "edit.php?post_type={$k}" ) ), $v[ 'name' ] ),
+						'<a href="' . esc_url( admin_url( "edit.php?post_type={$k}" ) ) . '">' . $v[ 'name' ] . '</a>',
 						date( 'j F Y', $buffer )
 					),
 					'content-type: text/html'
@@ -1002,25 +990,18 @@ class Webcomic {
 	 */
 	public function wp_enqueue_scripts() {
 		if ( self::$config[ 'shortcuts' ] ) {
-			wp_register_script( 'webcomic-shortcuts', self::$url . '-/js/shortcuts.js', array( 'jquery', 'jquery-hotkeys' ), false, true );
-			
-			wp_enqueue_script( 'webcomic-shortcuts' );
+			wp_enqueue_script( 'webcomic-shortcuts', self::$url . '-/js/shortcuts.js', array( 'jquery', 'jquery-hotkeys' ), false, true );
 		}
 		
 		if ( self::$config[ 'dynamic' ] ) {
-			wp_register_script( 'webcomic-dynamic', self::$url . '-/js/dynamic.js', array( 'jquery' ), false, true );
-			
-			wp_enqueue_script( 'webcomic-dynamic' );
+			wp_enqueue_script( 'webcomic-dynamic', self::$url . '-/js/dynamic.js', array( 'jquery' ), false, true );
 		}
 		
 		if ( self::$config[ 'gestures' ] ) {
-			wp_register_script( 'webcomic-gestures', self::$url . '-/js/gestures.js', array( 'jquery' ), false, true );
-			
-			wp_enqueue_script( 'webcomic-gestures' );
+			wp_enqueue_script( 'webcomic-gestures', self::$url . '-/js/gestures.js', array( 'jquery' ), false, true );
 		}
 		
-		wp_register_script( 'webcomic-dropdown', self::$url . '-/js/dropdown.js', array( 'jquery' ), false, true );
-		wp_enqueue_script( 'webcomic-dropdown' );
+		wp_enqueue_script( 'webcomic-dropdown', self::$url . '-/js/dropdown.js', array( 'jquery' ), false, true );
 	}
 	
 	/** Auto tweet on webcomic publish.
@@ -1059,7 +1040,7 @@ class Webcomic {
 					$tokens[ "%{$size}" ] = ( false !== strpos( $status, "%{$size}" ) and $image = wp_get_attachment_image_src( $attachment->ID, $size ) ) ? $image[ 0 ] : '';
 				}
 				
-				if ( preg_match( sprintf( '/%%%s/', join( '|%', array_merge( array( 'storyline', 'character' ), self::$config[ 'collections' ][ $post->post_type ][ 'taxonomies' ] ) ) ), self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'format' ] ) and $terms = wp_get_object_terms( $post->ID, array_merge( array( "{$post->post_type}_storyline", "{$post->post_type}_character" ), self::$config[ 'collections' ][ $post->post_type ][ 'taxonomies' ] ) ) and !is_wp_error( $terms ) ) {
+				if ( preg_match( '/%' .  join( '|%', array_merge( array( 'storyline', 'character' ), self::$config[ 'collections' ][ $post->post_type ][ 'taxonomies' ] ) ) . '/', self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'format' ] ) and $terms = wp_get_object_terms( $post->ID, array_merge( array( "{$post->post_type}_storyline", "{$post->post_type}_character" ), self::$config[ 'collections' ][ $post->post_type ][ 'taxonomies' ] ) ) and !is_wp_error( $terms ) ) {
 					foreach ( $terms as $term ) {
 						$hash = str_replace( array( '_', '-' ), '', "#{$term->slug}" );
 					
@@ -1129,7 +1110,7 @@ class Webcomic {
 				if ( 200 !== intval( $code ) ) {
 					$errors = get_transient( 'webcomic_error' );
 					
-					set_transient( 'webcomic_error', array_merge( array( sprintf( __( '<b>Twitter Error: %s</b>', 'webcomic' ), $oauth->response[ 'response' ] ? $oauth->response[ 'response' ] : $oauth->response[ 'error' ] ) ), $errors ? $errors : array() ), 1 );
+					WebcomicAdmin::notify( sprintf( __( '<b>Twitter Error:</b> %s', 'webcomic' ), $oauth->response[ 'response' ] ? $oauth->response[ 'response' ] : $oauth->response[ 'error' ] ), 'error' );
 				}
 			}
 		}
@@ -1260,7 +1241,8 @@ class Webcomic {
 	public function body_class( $classes, $class ) {
 		if ( self::$collection ) {
 			$classes[] = 'webcomic';
-			$classes[] = esc_attr( sprintf( 'webcomic-%s', self::$config[ 'collections' ][ self::$collection ][ 'slugs' ][ 'name' ] ) );
+			$classes[] = self::$collection;
+			$classes[] = esc_attr( 'webcomic-' . self::$config[ 'collections' ][ self::$collection ][ 'slugs' ][ 'name' ] );
 		}
 		
 		return $classes;
@@ -1279,7 +1261,7 @@ class Webcomic {
 		$post_type = get_post_type( $id );
 		
 		if ( preg_match( '/^webcomic\d+$/', $post_type ) and $attachments = self::get_attachments( $id ) ) {
-			$classes[] = sprintf( 'webcomic-attachments-%s', count( $attachments ) );
+			$classes[] = 'webcomic-attachments-' . count( $attachments );
 		}
 		
 		if ( $taxonomies = get_object_taxonomies( get_post( $id ) ) ) {
@@ -1425,9 +1407,9 @@ class Webcomic {
 				$template = array( "webcomic/page-{$collection}.php", 'webcomic/page.php', $template );
 			} elseif ( is_tax() ) {
 				if ( isset( $wp_query->query_vars[ 'crossover' ] ) ) {
-					$template = array( "webcomic/crossover-{$object->taxonomy}-{$object->slug}.php", "webcomic/crossover-{$object->taxonomy}.php", sprintf( 'webcomic/crossover-%s.php', false !== strpos( $object->taxonomy, 'storyline' ) ? 'storyline' : 'character' ), 'webcomic/crossover.php', "taxonomy-{$object->taxonomy}-{$object->slug}.php", "taxonomy-{$object->taxonomy}.php", sprintf( 'webcomic/%s.php', false !== strpos( $object->taxonomy, 'storyline' ) ? 'storyline' : 'character' ), 'webcomic/taxonomy.php', 'taxonomy.php', 'webcomic/archive.php', $template );
+					$template = array( "webcomic/crossover-{$object->taxonomy}-{$object->slug}.php", "webcomic/crossover-{$object->taxonomy}.php", 'webcomic/crossover-' . ( false !== strpos( $object->taxonomy, 'storyline' ) ? 'storyline' : 'character' ) . '.php', 'webcomic/crossover.php', "taxonomy-{$object->taxonomy}-{$object->slug}.php", "taxonomy-{$object->taxonomy}.php", 'webcomic/' . ( false !== strpos( $object->taxonomy, 'storyline' ) ? 'storyline' : 'character' ) . '.php', 'webcomic/taxonomy.php', 'taxonomy.php', 'webcomic/archive.php', $template );
 				} elseif ( false === strpos( $template, $object->taxonomy ) ) {
-					$template = array( sprintf( 'webcomic/%s.php', false !== strpos( $object->taxonomy, 'storyline' ) ? 'storyline' : 'character' ), 'webcomic/taxonomy.php', 'taxonomy.php', 'webcomic/archive.php', $template );
+					$template = array( 'webcomic/' . ( false !== strpos( $object->taxonomy, 'storyline' ) ? 'storyline' : 'character' ) . '.php', 'webcomic/taxonomy.php', 'taxonomy.php', 'webcomic/archive.php', $template );
 				}
 			} elseif ( is_post_type_archive() and false === strpos( $template, $collection ) ) {
 				$template = array( 'webcomic/archive.php', $template );
@@ -1446,7 +1428,6 @@ class Webcomic {
 	 * @uses Webcomic::$config
 	 * @uses Webcomic:get_attachments()
 	 * @hook the_content_feed
-	 * @template feed-{$collectionID}.php, feed.php
 	 */
 	public function the_content_feed( $content ) {
 		global $post;
@@ -1496,7 +1477,7 @@ class Webcomic {
 	 * adding a Webcomic key with the minimum required version of
 	 * Webcomic, like:
 	 * 
-	 * `Webcomic: 4`
+	 * `Webcomic: 4.0.9`
 	 * 
 	 * @param array $extra Extra theme header fields.
 	 * @return array
@@ -1537,7 +1518,6 @@ class Webcomic {
 	 * @uses Webcomic::$integrate
 	 * @hook loop_start
 	 * @action webcomic_loop_end Triggered during integration just before Webcomic content is appended to the end of a WordPress loop.
-	 * @template loop_end-{$collection}.php, loop_end.php
 	 */
 	public function loop_end( $query ) {
 		global $post;
@@ -1545,7 +1525,9 @@ class Webcomic {
 		if ( self::$integrate and $query->is_main_query() and is_singular( array_keys( self::$config[ 'collections' ] ) ) ) {
 			do_action( 'webcomic_loop_end', self::$collection );
 			
-			if ( !locate_template( array( 'webcomic/loop_end-' . self::$collection . '.php', 'webcomic/loop_end.php' ), true, false ) ) {
+			if ( $template = locate_template( array( 'webcomic/loop_end-' . self::$collection . '.php', 'webcomic/loop_end.php' ) ) ) {
+				require $template;
+			} else {
 				require self::$dir . '-/php/integrate/loop_end.php';
 			}
 		}
@@ -1560,7 +1542,6 @@ class Webcomic {
 	 * @uses Webcomic::$integrate
 	 * @hook loop_start
 	 * @action webcomic_loop_start Triggered during integration just before Webcomic content is prepended to the start of a WordPress loop.
-	 * @template loop_start-{$collection}.php, loop_start.php
 	 */
 	public function loop_start( $query ) {
 		global $post;
@@ -1578,7 +1559,9 @@ class Webcomic {
 			
 			do_action( 'webcomic_loop_start', self::$collection );
 			
-			if ( !locate_template( array( 'webcomic/loop_start-' . self::$collection . '.php', 'webcomic/loop_start.php' ), true, false ) ) {
+			if ( $template = locate_template( array( 'webcomic/loop_start-' . self::$collection . '.php', 'webcomic/loop_start.php' ) ) ) {
+				require $template;
+			} else {
 				require self::$dir . '-/php/integrate/loop_start.php';
 			}
 		}
@@ -1590,7 +1573,6 @@ class Webcomic {
 	 * @return string
 	 * @uses Webcomic::$integrate
 	 * @hook the_content
-	 * @template the_excerpt-{$collection}.php, the_excerpt.php
 	 */
 	public function the_excerpt( $excerpt ) {
 		global $wp_query, $post;
@@ -1614,7 +1596,6 @@ class Webcomic {
 	 * @return string
 	 * @uses Webcomic::$integrate
 	 * @hook the_content
-	 * @template the_content-{$collection}.php, the_content.php
 	 */
 	public function the_content( $content ) {
 		global $wp_query, $post;
@@ -1664,38 +1645,14 @@ class Webcomic {
 		) );
 	}
 	
-	/** Provides access to the plugin directory path.
 	 * 
-	 * @uses Webcomic::$dir
-	 * @return string
-	 */
-	public static function dir() {
-		return self::$dir;
-	}
-	
-	/** Provides access to the plugin URL path.
-	 * 
-	 * @uses Webcomic::$url
-	 * @return string
-	 */
-	public static function url() {
-		return self::$url;
-	}
-	
-	/** Provides access to the plugin configuration.
-	 * 
-	 * @uses Webcomic::$config
 	 * @return array
 	 */
-	public static function config() {
-		return self::$config;
 	}
 }
 
 if ( is_admin() ) { // Load and instantiate the administrative class.
 	require_once dirname( __FILE__ ) . '/-/php/admin.php'; new WebcomicAdmin;
 } else { // Instantiate the standard class.
-	new Webcomic;
-} the standard class.
 	new Webcomic;
 }
