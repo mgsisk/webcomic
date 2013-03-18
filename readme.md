@@ -17,6 +17,7 @@ Webcomic is a plugin for [WordPress](http://wordpress.org) that provides a host 
 - [Transcripts](http://github.com/mgsisk/webcomic/wiki/Transcripts) are now a custom post type, taking full advantage of the administrative features WordPress provides.
 - Improved [theme integration](http://github.com/mgsisk/webcomic/wiki/Configuring) makes it easier than ever to start using Webcomic right away with almost any WordPress theme.
 - New and refactored [template tags, shortcode](http://github.com/mgsisk/webcomic/wiki/Template-Tags-and-Shortcodes), and [widgets](http://github.com/mgsisk/webcomic/wiki/Widgets) for greater control and customization of your Webcomic-powered site.
+- Join the [Webcomic Network](http://webcomic.nu) and share your site directly with other Webcomic users and on [webcomic.nu](http://webcomic.nu) via the Webcomic Showcase.
 
 ## Installation
 

@@ -345,11 +345,11 @@ class WebcomicHelp extends Webcomic {
 	private function sidebar() {
 		return '
 			<p><b>' . __( 'For more information:', 'webcomic' ) . '</b></p>
-			<p><a href="//github.com/mgsisk/webcomic/wiki" target="_blank">' . __( "Beginner's Guide", 'webcomic' ) . '</a></p>
-			<p><a href="//vimeo.com/channels/webcomic" target="_blank">' . __( 'Video Tutorials', 'webcomic' ) . '</a></p>
-			<p><a href="//groups.google.com/d/forum/webcomicnu" target="_blank">' . __( 'Support Forum', 'webcomic' ) . '</a></p>
-			<p><a href="//github.com/mgsisk/webcomic/issues" target="_blank">' . __( 'Issue Tracker', 'webcomic' ) . '</a></p>
-			<hr>
+			<p><a href="http://github.com/mgsisk/webcomic/wiki" target="_blank">' . __( "Beginner's Guide", 'webcomic' ) . '</a></p>
+			<p><a href="http://vimeo.com/channels/webcomic" target="_blank">' . __( 'Video Tutorials', 'webcomic' ) . '</a></p>
+			<p><a href="http://groups.google.com/d/forum/webcomicnu" target="_blank">' . __( 'Support Forum', 'webcomic' ) . '</a></p>
+			<p><a href="http://github.com/mgsisk/webcomic/issues" target="_blank">' . __( 'Issue Tracker', 'webcomic' ) . '</a></p>
+			<hr style="border:0;border-top:thin solid #ccc">
 			<p><a href="support@webcomic.nu">' . __( 'Email Support', 'webcomic' ) . '</a></p>';
 	}
 	
@@ -359,7 +359,7 @@ class WebcomicHelp extends Webcomic {
 	 */
 	private function dashboard_showcase() {
 		return '
-		<p>' . sprintf( __( 'The <b>Webcomic Showcase</b> highlights other sites using Webcomic that have opted to share their information via the showcase. To view the showcase you must have a Webcomic Network API key, which requires <a href="%s">joining the Webcomic Network</a>. After you have joined the network you may optionally list your site in the showcase. You can configure how may and what kinds of sites appear in the showcase using the <b>Configure</b> link in the widget title.', 'webcomic' ), add_query_arg( array( 'page' => 'webcomic-network' ), admin_url( 'options.php' ) ) ) . '</p>';
+		<p>' . sprintf( __( 'The <b>Webcomic Showcase</b> highlights other Webcomic-powered sites that have opted to share their information via the showcase. To view the showcase you must have a Webcomic Network API key, which requires <a href="%s">joining the Webcomic Network</a>. After you have joined the network you may optionally list your site in the showcase. You can configure how may and what kinds of sites appear in the showcase using the <b>Configure</b> link in the widget title.', 'webcomic' ), add_query_arg( array( 'page' => 'webcomic-network' ), admin_url( 'options.php' ) ) ) . '</p>';
 	}
 	
 	/** Return webcomic attacher overview help.

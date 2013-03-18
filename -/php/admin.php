@@ -564,7 +564,7 @@ class WebcomicAdmin extends Webcomic {
 	public function plugin_action_links( $actions, $file, $data, $context ) {
 		if ( 'Webcomic' === $data[ 'Name' ] ) {
 			$actions[ 'settings' ] = '<a href="' . esc_url( add_query_arg( array( 'page' => 'webcomic-options' ), admin_url( 'options-general.php' ) ) ) . '">' . __( 'Settings', 'webcomic' ) . '</a>';
-			$actions[ 'support' ]  = '<a href="//groups.google.com/d/forum/webcomicnu" target="_blank">' . __( 'Support', 'webcomic' ) . '</a>';
+			$actions[ 'support' ]  = '<a href="http://groups.google.com/d/forum/webcomicnu" target="_blank">' . __( 'Support', 'webcomic' ) . '</a>';
 		}
 		
 		return $actions;
@@ -652,7 +652,7 @@ class WebcomicAdmin extends Webcomic {
 					foreach ( $http[ 200 ] as $entry ) {
 						foreach ( $entry[ 'creators' ] as $k => $v ) {
 							if ( 0 === strpos( $v, '@' ) ) {
-								$entry[ 'creators' ][ $k ] = '<a href="//twitter.com/' . str_replace( '@', '', $v ) . '" target="_blank">' . str_replace( '@', '', $v ) . '</a>';
+								$entry[ 'creators' ][ $k ] = '<a href="http://twitter.com/' . str_replace( '@', '', $v ) . '" target="_blank">' . str_replace( '@', '', $v ) . '</a>';
 							}
 						}
 						
