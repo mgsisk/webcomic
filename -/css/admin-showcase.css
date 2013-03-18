@@ -1,0 +1,176 @@
+#webcomic-showcase .slideshow {
+	margin: 0 -12px -10px -10px;
+}
+
+#webcomic-showcase .slideshow:after,
+#webcomic-showcase .slideshow:before {
+	content: ' ';
+	display: table;
+}
+
+#webcomic-showcase .slideshow:after {
+	clear: both;
+}
+
+#webcomic-showcase .slideshow * {
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+#webcomic-showcase .slideshow a {
+	color: #333;
+}
+
+#webcomic-showcase .slideshow > a {
+	background: -moz-linear-gradient( #fff, #eee );
+	background: -ms-linear-gradient( #fff, #eee );
+	background: -o-linear-gradient( #fff, #eee );
+	background: -webkit-linear-gradient( #fff, #eee );
+	background: linear-gradient( #fff, #eee );
+	border-right: thin solid #eee;
+	border-top: thin solid #dfdfdf;
+	color: #00acdc;
+	display: block;
+	float: left;
+	font-size: 300%;
+	font-weight: bold;
+	line-height: 1;
+	text-align: center;
+	text-shadow: 0 .1em .1em #fff;
+	width: 50%;
+}
+
+#webcomic-showcase .slideshow > a:last-child {
+	border-left: thin solid #fff;
+	border-right: 0;
+}
+
+#webcomic-showcase .slideshow figure {
+	font: 100%/1.4 'Maven Pro', sans-serif;
+	margin: 0 12px 10px 10px;
+}
+
+#webcomic-showcase .slideshow img {
+	border-radius: .5rem;
+	display: block;
+	height: auto;
+	margin: 0 0 1rem;
+	max-width: 100%;
+}
+
+#webcomic-showcase .slideshow h4 {
+	font: bold larger/1.4 'Maven Pro', sans-serif;
+	margin: 1rem 0;
+}
+
+#webcomic-showcase .slideshow blockquote {
+	margin: 0;
+}
+
+#webcomic-showcase .slideshow figcaption a {
+	color: #00addc;
+	font-weight: bold;
+}
+
+#webcomic-showcase .slideshow figcaption span {
+	color: #999;
+}
+
+#webcomic-showcase label {
+	float: left;
+	line-height: 2;
+	width: 33%;
+}
+
+#webcomic-showcase b {
+	clear: both;
+	display: block;
+}
+
+#webcomic-showcase b label {
+	float: none;
+	line-height: normal;
+	width: auto;
+}
+
+#webcomic-showcase hr {
+	border: 0;
+	clear: both;
+}
+
+#webcomic-showcase .slideshow > a:focus,
+#webcomic-showcase .slideshow > a:hover,
+#webcomic-showcase .slideshow figcaption a:focus,
+#webcomic-showcase .slideshow figcaption a:hover {
+	-moz-animation: prismatic 4s infinite;
+	-ms-animation: prismatic 4s infinite;
+	-o-animation: prismatic 4s infinite;
+	-webkit-animation: prismatic 4s infinite;
+	animation: prismatic 4s infinite;
+}
+
+@-moz-keyframes prismatic {
+	0%   { color: #00acdc; }
+	25%  { color: #cadb2a; }
+	50%  { color: #f68a1f; }
+	75%  { color: #b72367; }
+	100% { color: #00acdc; }
+}
+
+@-ms-keyframes prismatic {
+	0%   { color: #00acdc; }
+	25%  { color: #cadb2a; }
+	50%  { color: #f68a1f; }
+	75%  { color: #b72367; }
+	100% { color: #00acdc; }
+}
+
+@-o-keyframes prismatic {
+	0%   { color: #00acdc; }
+	25%  { color: #cadb2a; }
+	50%  { color: #f68a1f; }
+	75%  { color: #b72367; }
+	100% { color: #00acdc; }
+}
+
+@-webkit-keyframes prismatic {
+	0%   { color: #00acdc; }
+	25%  { color: #cadb2a; }
+	50%  { color: #f68a1f; }
+	75%  { color: #b72367; }
+	100% { color: #00acdc; }
+}
+
+@keyframes prismatic {
+	0%   { color: #00acdc; }
+	25%  { color: #cadb2a; }
+	50%  { color: #f68a1f; }
+	75%  { color: #b72367; }
+	100% { color: #00acdc; }
+}
+
+@-moz-keyframes fadein {
+	0%   { opacity: 0; }
+	100% { opacity: 1; }
+}
+
+@-ms-keyframes fadein {
+	0%   { opacity: 0; }
+	100% { opacity: 1; }
+}
+
+@-o-keyframes fadein {
+	0%   { opacity: 0; }
+	100% { opacity: 1; }
+}
+
+@-webkit-keyframes fadein {
+	0%   { opacity: 0; }
+	100% { opacity: 1; }
+}
+
+@keyframes fadein {
+	0%   { opacity: 0; }
+	100% { opacity: 1; }
+}

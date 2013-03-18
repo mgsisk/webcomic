@@ -1646,9 +1646,30 @@ class Webcomic {
 		) );
 	}
 	
+	/** Perform a Webcomic API request.
 	 * 
+	 * @param string $method The request method.
+	 * @param string $endpoing The API endpoint to access.
+	 * @param array $data A data bundle to send to the API.
 	 * @return array
 	 */
+	protected function api_request( $endpoint, $method = 'GET', $data = array() ) {
+		$curl             = curl_init( "http://webcomic.nu/api/{$endpoint}" );
+		$data[ 'domain' ] = home_url();
+		$data[ 'key' ]    = self::$config[ 'api' ];
+		$data[ 0 ]        = hash( 'whirlpool', serialize( $data ) );
+		
+		curl_setopt_array( $curl, array(
+			CURLOPT_REFERER        => home_url(),
+			CURLOPT_POSTFIELDS     => json_encode( $data ),
+			CURLOPT_CUSTOMREQUEST  => $method,
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_FOLLOWLOCATION => true
+		) );
+		
+		$response = curl_exec( $curl );
+		
+		return array( curl_getinfo( $curl, CURLINFO_HTTP_CODE ) => json_decode( $response, true ) );
 	}
 }
 

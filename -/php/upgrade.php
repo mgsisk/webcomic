@@ -70,6 +70,11 @@ class WebcomicUpgrade extends Webcomic {
 	 * @uses Webcomic::$config
 	 */
 	private function _409() {
+		self::$config[ 'api' ]     = '';
+		self::$config[ 'network' ] = array(
+			'showcase' => false
+		);
+		
 		foreach ( self::$config[ 'collections' ] as $k => $v ) {
 			self::$config[ 'collections' ][ $k ][ 'twitter' ][ 'media' ] = false;
 		}

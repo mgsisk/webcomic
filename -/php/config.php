@@ -9,6 +9,13 @@
  * @package Webcomic
  */
 class WebcomicConfig extends Webcomic {
+	/** Stores Webcomic Network data.
+	 * @var array
+	 */
+	private static $network = array(
+		'showcase' => array()
+	);
+	
 	/** Register hooks.
 	 * 
 	 * @uses WebcomicConfig::admin_init()
@@ -20,6 +27,7 @@ class WebcomicConfig extends Webcomic {
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
 		add_action( 'admin_init', array( $this, 'save_sizes' ) );
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
+		add_action( 'admin_init', array( $this, 'get_network' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 	}
 	
@@ -35,11 +43,20 @@ class WebcomicConfig extends Webcomic {
 	 * @uses Webcomic::$config
 	 * @uses WebcomicConfig::save()
 	 * @uses WebcomicConfig::section()
+	 * @uses WebcomicConfig::network()
 	 * @uses WebcomicConfig::integrate()
 	 * @uses WebcomicConfig::navigate()
 	 * @uses WebcomicConfig::uninstall()
 	 * @uses WebcomicConfig::collections()
 	 * @uses WebcomicConfig::sizes()
+	 * @uses WebcomicConfig::network_key()
+	 * @uses WebcomicConfig::network_showcase()
+	 * @uses WebcomicConfig::network_showcase_name()
+	 * @uses WebcomicConfig::network_showcase_url()
+	 * @uses WebcomicConfig::network_showcase_creators()
+	 * @uses WebcomicConfig::network_showcase_description()
+	 * @uses WebcomicConfig::network_showcase_image()
+	 * @uses WebcomicConfig::network_showcase_testimonial()
 	 * @uses WebcomicConfig::collection_name()
 	 * @uses WebcomicConfig::collection_description()
 	 * @uses WebcomicConfig::collection_image()
@@ -74,6 +91,7 @@ class WebcomicConfig extends Webcomic {
 		register_setting( 'webcomic-options', 'webcomic_options', array( $this, 'save' ) );
 		
 		add_settings_section( 'webcomic-main', '', array( $this, 'section' ), 'webcomic-options' );
+		add_settings_field( 'webcomic_network', __( 'Network', 'webcomic' ), array( $this, 'network' ), 'webcomic-options', 'webcomic-main', array( 'label_for' => 'webcomic_network' ) );
 		add_settings_field( 'webcomic_integrate', __( 'Integrate', 'webcomic' ), array( $this, 'integrate' ), 'webcomic-options', 'webcomic-main', array( 'label_for' => 'webcomic_integrate' ) );
 		add_settings_field( 'webcomic_navigate', __( 'Navigate', 'webcomic' ), array( $this, 'navigate' ), 'webcomic-options', 'webcomic-main', array( 'label_for' => 'webcomic_dynamic' ) );
 		add_settings_field( 'webcomic_uninstall', __( 'Uninstall', 'webcomic' ), array( $this, 'uninstall' ), 'webcomic-options', 'webcomic-main', array( 'label_for' => 'webcomic_uninstall' ) );
@@ -81,6 +99,22 @@ class WebcomicConfig extends Webcomic {
 		add_settings_section( 'webcomic-collections', __( 'Collections', 'webcomic' ), array( $this, 'collections' ), 'webcomic-options' );
 		
 		add_settings_section( 'webcomic-sizes', __( 'Additional Image Sizes', 'webcomic' ), array( $this, 'sizes' ), 'media' );
+		
+		add_settings_section( 'webcomic-network-main', '', array( $this, 'section' ), 'webcomic-network' );
+		add_settings_field( 'webcomic_network_key', self::$config[ 'api' ] ? __( 'API Key', 'webcomic' ) : __( 'Terms of Service', 'webcomic' ), array( $this, 'network_key' ), 'webcomic-network', 'webcomic-network-main', array( 'label_for' => 'webcomic_network_key' ) );
+		
+		if ( self::$config[ 'api' ] ) {
+			add_settings_section( 'webcomic-showcase', __( 'Showcase', 'webcomic' ), array( $this, 'section' ), 'webcomic-network' );
+			add_settings_field( 'webcomic_showcase', __( 'Activate', 'webcomic' ), array( $this, 'network_showcase' ), 'webcomic-network', 'webcomic-showcase', array( 'label_for' => 'webcomic_showcase' ) );
+			add_settings_field( 'webcomic_showcase_name', __( 'Name', 'webcomic' ), array( $this, 'network_showcase_name' ), 'webcomic-network', 'webcomic-showcase', array( 'label_for' => 'webcomic_name' ) );
+			add_settings_field( 'webcomic_showcase_url', __( 'URL', 'webcomic' ), array( $this, 'network_showcase_url' ), 'webcomic-network', 'webcomic-showcase', array( 'label_for' => 'webcomic_url' ) );
+			add_settings_field( 'webcomic_showcase_creators', __( 'Creators', 'webcomic' ), array( $this, 'network_showcase_creators' ), 'webcomic-network', 'webcomic-showcase', array( 'label_for' => 'webcomic_creators' ) );
+			add_settings_field( 'webcomic_showcase_description', __( 'Description', 'webcomic' ), array( $this, 'network_showcase_description' ), 'webcomic-network', 'webcomic-showcase', array( 'label_for' => 'webcomic_description' ) );
+			add_settings_field( 'webcomic_showcase_genre', __( 'Genre', 'webcomic' ), array( $this, 'network_showcase_genre' ), 'webcomic-network', 'webcomic-showcase', array( 'label_for' => 'webcomic_genre' ) );
+			add_settings_field( 'webcomic_showcase_rating', __( 'Rating', 'webcomic' ), array( $this, 'network_showcase_rating' ), 'webcomic-network', 'webcomic-showcase', array( 'label_for' => 'webcomic_rating' ) );
+			add_settings_field( 'webcomic_showcase_image', __( 'Billboard', 'webcomic' ), array( $this, 'network_showcase_image' ), 'webcomic-network', 'webcomic-showcase', array( 'label_for' => 'webcomic_image' ) );
+			add_settings_field( 'webcomic_showcase_testimonial', __( 'Testimonial', 'webcomic' ), array( $this, 'network_showcase_testimonial' ), 'webcomic-network', 'webcomic-showcase', array( 'label_for' => 'webcomic_testimonial' ) );
+		}
 		
 		foreach ( array_keys( self::$config[ 'collections' ] ) as $k ) {
 			add_settings_section( "{$k}-main", __( 'General', 'webcomic' ), array( $this, 'section' ), "{$k}-options" );
@@ -185,9 +219,48 @@ class WebcomicConfig extends Webcomic {
 	 */
 	public function admin_menu() {
 		add_submenu_page( 'options-general.php', __( 'Webcomic Settings', 'webcomic' ), __( 'Webcomic', 'webcomic' ), 'manage_options', 'webcomic-options', array( $this, 'page' ) );
+		add_submenu_page( 'options.php', __( 'Webcomic Network', 'webcomic' ), __( 'Webcomic Network', 'webcomic' ), 'manage_options', 'webcomic-network', array( $this, 'page_network' ) );
 		
 		foreach ( self::$config[ 'collections' ] as $k => $v ) {
 			add_submenu_page( "edit.php?post_type={$k}", sprintf( __( '%s Settings', 'webcomic' ), esc_html( $v[ 'name' ] ) ), __( 'Settings', 'webcomic' ), 'manage_options', "{$k}-options", array( $this, 'page' ) );
+		}
+	}
+	
+	/** Validate the API key and load Network data.
+	 * 
+	 * @uses Webcomic::$config
+	 * @uses Webcomic::api_request()
+	 * @uses WebcomicConfig::$network
+	 * @hook admin_init
+	 */
+	public function get_network() {
+		if ( isset( $_GET[ 'page' ], self::$config[ 'api' ] ) and 'webcomic-network' === $_GET[ 'page' ] ) {
+			if ( self::$config[ 'api' ] ) {
+				$http = self::api_request( 'key/' . self::$config[ 'api' ] );
+				
+				if ( empty( $http[ 200 ] ) ) {
+					if ( isset( $http[ 403 ] ) or isset( $http[ 404 ] ) ) {
+						self::$config[ 'api' ]     = '';
+						self::$config[ 'network' ] = array(
+							'showcase' => false
+						);
+						
+						update_option( 'webcomic_options', self::$config );
+					}
+					
+					WebcomicAdmin::notify( array_shift( $http ), 'error' );
+				} else {
+					if ( self::$config[ 'network' ][ 'showcase' ] ) {
+						$http = self::api_request( 'showcase/' . self::$config[ 'api' ] );
+				
+						if ( isset( $http[ 200 ] ) ) {
+							self::$network[ 'showcase' ] = array_shift( $http );
+						} else {
+							WebcomicAdmin::notify( array_shift( $http ), 'error' );
+						}
+					}
+				}
+			}
 		}
 	}
 	
@@ -199,13 +272,23 @@ class WebcomicConfig extends Webcomic {
 	public function admin_enqueue_scripts() {
 		$screen = get_current_screen();
 		
-		if ( preg_match( '/^webcomic\d+_page_webcomic\d+-options$/', $screen->id ) ) {
+		if ( preg_match( '/^admin_page_webcomic-network|webcomic\d+_page_webcomic\d+-options$/', $screen->id ) ) {
 			wp_register_script( 'webcomic-config', self::$url . '-/js/admin-config.js', array( 'jquery' ) );
 			
 			wp_enqueue_script( 'webcomic-config' );
 			
 			wp_enqueue_media();
 		}
+	}
+	
+	/** Render the Network setting
+	 * 
+	 * @uses Webcomic::$config
+	 */
+	public function network() {
+		?>
+		<a href="<?php echo esc_url( add_query_arg( array( 'page' => 'webcomic-network' ), admin_url( 'options.php' ) ) ); ?>" class="button"><?php _e( 'Access the Webcomic Network', 'webcomic' ); ?></a>
+		<?php
 	}
 	
 	/** Render the Integrate setting.
@@ -362,6 +445,168 @@ class WebcomicConfig extends Webcomic {
 				</select>
 			</div>
 		</div>
+		<?php
+	}
+	
+	/** Render the Network > Key setting.
+	 * 
+	 * @uses Webcomic::$config
+	 */
+	public function network_key() {
+		if ( self::$config[ 'api' ] ) {
+		?>
+		<input type="text" name="webcomic_network_key" id="webcomic_network_key" class="large-text" value="<?php echo esc_attr( self::$config[ 'api' ] ); ?>" readonly>
+		<p class="description"><?php _e( 'The API key is specific to your site. Never share your API key.', 'webcomic' ); ?></p>
+		<?php } else {
+			$http = self::api_request( 'info/legal', 'GET', array( 'format' => 'html' ) );
+			
+			if ( isset( $http[ 200 ] ) ) {
+				echo preg_replace( '/<(\/?)h2>/', '<${1}h3>', $http[ 200 ] );
+			} else {
+				printf( __( 'Your use of the Webcomic Network is governed by the <a href="%s">Webcomic Network Terms of Service</a>', 'webcomic' ), 'http://webcomic.nu/legal' );
+			}
+		}
+	}
+	
+	/** Render the Network > Showcase > Activate setting.
+	 * 
+	 * @uses Webcomic::$config
+	 */
+	public function network_showcase() {
+		?>
+		<label><input type="checkbox" name="webcomic_showcase" id="webcomic_showcase"<?php checked( self::$config[ 'network' ][ 'showcase' ] ); ?>> <?php _e( 'Include this site in the Webcomic Showcase', 'webcomic' ); ?></label>
+		<?php
+	}
+	
+	/** Render the Network > Showcase > Name setting.
+	 * 
+	 * @uses WebcomicConfig::$network
+	 */
+	public function network_showcase_name() {
+		?>
+		<input type="text" name="webcomic_name" id="webcomic_name" value="<?php echo esc_attr( self::$network[ 'showcase' ] ? self::$network[ 'showcase' ][ 'name' ] : get_bloginfo( 'name' ) ); ?>" class="regular-text">
+		<p class="description"><?php _e( 'The name is how your site is labeled in the showcase.', 'webcomic' ); ?></p>
+		<?php
+	}
+	
+	/** Render the Network > Showcase > URL setting.
+	 * 
+	 * @uses WebcomicConfig::$network
+	 */
+	public function network_showcase_url() {
+		?>
+		<input type="text" name="webcomic_url" id="webcomic_url" value="<?php echo esc_attr( self::$network[ 'showcase' ] ? self::$network[ 'showcase' ][ 'url' ] : home_url() ); ?>" class="regular-text">
+		<p class="description"><?php _e( 'Enter the address you want your showcase entry to link to.', 'webcomic' ); ?></p>
+		<?php
+	}
+	
+	/** Render the Network > Showcase > Creators setting.
+	 * 
+	 * @uses WebcomicConfig::$network
+	 */
+	public function network_showcase_creators() {
+		$user = wp_get_current_user();
+		?>
+		<input type="text" name="webcomic_creators" id="webcomic_creators" value="<?php echo esc_attr( self::$network[ 'showcase' ] ? join( ', ', self::$network[ 'showcase' ][ 'creators' ] ) : $user->display_name ); ?>" class="regular-text">
+		<p class="description"><?php _e( 'Enter the names or Twitter @usernames of the creators of this site, separated by commas.', 'webcomic' ); ?></p>
+		<?php
+	}
+	
+	/** Render the Network > Showcase > Description setting.
+	 * 
+	 * @uses WebcomicConfig::$network
+	 */
+	public function network_showcase_description() {
+		?>
+		<input type="text" name="webcomic_description" id="webcomic_description" maxlength="160" class="large-text" value="<?php echo esc_attr( self::$network[ 'showcase' ] ? self::$network[ 'showcase' ][ 'description' ] : get_bloginfo( 'description' ) ); ?>">
+		<p class="description"><?php _e( 'The description is displayed with your showcase entry. 160 characters or less.', 'webcomic' ); ?></p>
+		<?php
+	}
+	
+	/** Render the Network > Showcase > Rating setting.
+	 * 
+	 * @uses WebcomicConfig::$network
+	 */
+	public function network_showcase_rating() {
+		?>
+		<select name="webcomic_rating" id="webcomic_rating">
+			<?php
+				foreach ( array(
+					'everyone' => __( 'Everyone', 'webcomic' ),
+					'teen'     => __( 'Teen', 'webcomic' ),
+					'mature'   => __( 'Mature', 'webcomic' ),
+					'adult'    => __( 'Adult', 'webcomic' )
+				) as $k => $v ) {
+					echo '<option value="', $k, '"', selected( $k, empty( self::$network[ 'showcase' ][ 'rating' ] ) ? 'teen' : self::$network[ 'showcase' ][ 'rating' ], false ), '>', esc_html( $v ), '</option>';
+				}
+			?>
+		</select>
+		<p class="description"><?php _e( 'Select the rating that most fits the intended audience of your site.', 'webcomic' ); ?></p>
+		<?php
+	}
+	
+	/** Render the Network > Showcase > Rating setting.
+	 * 
+	 * @uses WebcomicConfig::$network
+	 */
+	public function network_showcase_genre() {
+		?>
+		<select name="webcomic_genre[]" id="webcomic_genre" size="6" multiple>
+			<?php
+				foreach ( array(
+					'absurdist'     => __( 'Absurdist', 'webcomic' ),
+					'adventure'     => __( 'Adventure', 'webcomic' ),
+					'comedy'        => __( 'Comedy', 'webcomic' ),
+					'drama'         => __( 'Drama', 'webcomic' ),
+					'education'     => __( 'Education', 'webcomic' ),
+					'experimental'  => __( 'Experimental', 'webcomic' ),
+					'erotic'        => __( 'Erotic', 'webcomic' ),
+					'fantasy'       => __( 'Fantasy', 'webcomic' ),
+					'historical'    => __( 'Historical', 'webcomic' ),
+					'horror'        => __( 'Horror', 'webcomic' ),
+					'meta'          => __( 'Meta', 'webcomic' ),
+					'nonfiction'    => __( 'Nonfiction', 'webcomic' ),
+					'philosophical' => __( 'Philosophical', 'webcomic' ),
+					'political'     => __( 'Political', 'webcomic' ),
+					'pulp'          => __( 'Pulp', 'webcomic' ),
+					'religious'     => __( 'Religious', 'webcomic' ),
+					'romance'       => __( 'Romance', 'webcomic' ),
+					'saga'          => __( 'Saga', 'webcomic' ),
+					'satire'        => __( 'Satire', 'webcomic' ),
+					'scifi'         => __( 'Science Fiction', 'webcomic' ),
+					'suspense'      => __( 'Suspense', 'webcomic' ),
+					'thriller'      => __( 'Thriller', 'webcomic' ),
+					'tragedy'       => __( 'Tragedy', 'webcomic' ),
+					'western'       => __( 'Western', 'webcomic' )
+				) as $k => $v ) {
+					echo '<option value="', $k, '"', selected( in_array( $k, empty( self::$network[ 'showcase' ][ 'genre' ] ) ? array() : self::$network[ 'showcase' ][ 'genre' ] ), true, false ), '>', esc_html( $v ), '</option>';
+				}
+			?>
+		</select>
+		<p class="description"><?php _e( 'Hold <code>CTRL</code>, <code>Command</code>, or <code>Shift</code> to select multiple genres (up to 5).', 'webcomic' ); ?></p>
+		<?php
+	}
+	
+	/** Render the Network > Showcase > Image setting.
+	 * 
+	 * @uses WebcomicConfig::$network
+	 * @uses WebcomicConfig::ajax_showcase_image()
+	 */
+	public function network_showcase_image() {
+		?>
+		<div id="webcomic_showcase_image"><?php self::ajax_showcase_image( isset( self::$network[ 'showcase' ][ 'image' ] ) ? self::$network[ 'showcase' ][ 'image' ] : '' ); ?></div>
+		<p class="description"><?php _e( 'The billboard is a representative image for your site. It should be 640&times;360 pixels in size and will be hotlinked directly from your site.', 'webcomic' ); ?></p>
+		<?php
+	}
+	
+	/** Render the Network > Showcase > Testimonial setting.
+	 * 
+	 * @uses WebcomicConfig::$network
+	 */
+	public function network_showcase_testimonial() {
+		?>
+		<textarea name="webcomic_testimonial" id="webcomic_testimonial" rows="5" cols="50" class="large-text"><?php echo esc_html( self::$network[ 'showcase' ] ? self::$network[ 'showcase' ][ 'testimonial' ] : '' ); ?></textarea>
+		<p class="description"><?php printf( __( 'If provided, the testimonial will be displayed on %s', 'webcomic' ), '<a href="http://webcomic.nu" target="_blank">webcomic.nu</a>' ); ?></p>
 		<?php
 	}
 	
@@ -867,6 +1112,8 @@ class WebcomicConfig extends Webcomic {
 	 * If 'webcomic_general' is set we're working on the general
 	 * settings page.
 	 * 
+	 * if 'webcomic_network' is set we're working on the network
+	 * settings page.
 	 * 
 	 * If 'webcomic_collection is set we're working on a collection
 	 * settings page.
@@ -874,6 +1121,7 @@ class WebcomicConfig extends Webcomic {
 	 * @param array $options Configuration array.
 	 * @return array
 	 * @uses Webcomic::$config
+	 * @uses Webcomic::api_request()
 	 * @uses WebcomicAdmin::notify
 	 * @uses WebcomicAdmin::save_collection()
 	 */
@@ -945,6 +1193,88 @@ class WebcomicConfig extends Webcomic {
 				self::$config[ 'shortcuts' ] = isset( $_POST[ 'webcomic_shortcuts' ] );
 				self::$config[ 'uninstall' ] = isset( $_POST[ 'webcomic_uninstall' ] );
 				self::$config[ 'convert' ]   = isset( $_POST[ 'webcomic_uninstall' ], $_POST[ 'webcomic_convert' ] );
+			}
+		} elseif ( isset( $_POST[ 'webcomic_network' ] ) ) {
+			if ( self::$config[ 'api' ] ) {
+				if ( isset( $_POST[ 'webcomic_network_x' ] ) ) {
+					$http = self::api_request( 'key/' . self::$config[ 'api' ], 'DELETE' );
+					
+					if ( isset( $http[ 200 ] ) ) {
+						self::$config[ 'api' ] = '';
+						self::$config[ 'network' ] = array(
+							'showcase' => false
+						);
+					} else {
+						WebcomicAdmin::notify( array_shift( $http ), 'error' );
+					}
+					
+					WebcomicAdmin::notify( __( '<b>Settings saved.</b> Your information has been purged from the Webcomic Network.', 'webcomic' ) );
+				} else {
+					if ( isset( $_POST[ 'webcomic_showcase' ] ) ) {
+						self::$config[ 'network' ][ 'showcase' ] = true;
+						
+						$user     = wp_get_current_user();
+						$theme    = new WP_Theme( get_stylesheet_directory(), '' );
+						$template = $theme->get( 'Template' ) ? new WP_Theme( get_template_directory(), '' ) : false;
+						$data     = array(
+							'name'        => $_POST[ 'webcomic_name' ] ? strip_tags( stripslashes( $_POST[ 'webcomic_name' ] ) ) : get_bloginfo( 'name' ),
+							'url'         => filter_var( $_POST[ 'webcomic_url' ], FILTER_VALIDATE_URL ) ? $_POST[ 'webcomic_url' ] : home_url(),
+							'creators'    => $_POST[ 'webcomic_creators' ] ? preg_split( '/\s,\s/', strip_tags( stripslashes( $_POST[ 'webcomic_creators' ] ) ) ) : array( $user->display_name ),
+							'description' => substr( strip_tags( stripslashes( $_POST[ 'webcomic_description' ] ) ), 0, 160 ),
+							'rating'      => $_POST[ 'webcomic_rating' ],
+							'genre'       => empty( $_POST[ 'webcomic_genre' ] ) ? array( 'meta' ) : array_slice( $_POST[ 'webcomic_genre' ], 0, 5 ),
+							'image'       => $_POST[ 'webcomic_image' ] ? $_POST[ 'webcomic_image' ] : 'http://webcomic.nu/-/img/showcase.png',
+							'testimonial' => strip_tags( stripslashes( $_POST[ 'webcomic_testimonial' ] ) ),
+							'version'     => self::$version,
+							'theme'       => array( 'name' => $theme->get( 'Name' ), 'url' => $theme->get( 'ThemeURI' ), 'author' => $theme->get( 'Author' ), 'author_url' => $theme->get( 'AuthorURI' ) ),
+							'template'    => $template ? array( 'name' => $template->get( 'Name' ), 'url' => $template->get( 'ThemeURI' ), 'author' => $template->get( 'Author' ), 'author_url' => $template->get( 'AuthorURI' ) ) : array()
+						);
+						
+						$http = self::api_request( 'showcase/' . self::$config[ 'api' ], 'GET' );
+						
+						if ( isset( $http[ 200 ] ) ) {
+							$http = self::api_request( 'showcase/' . self::$config[ 'api' ], 'PUT', $data );
+							
+							if ( !isset( $http[ 200 ] ) ) {
+								WebcomicAdmin::notify( array_shift( $http ), 'error' );
+							}
+						} elseif ( isset( $http[ 404 ] ) ) {
+							$http = self::api_request( 'showcase', 'POST', $data );
+							
+							if ( !isset( $http[ 200 ] ) ) {
+								WebcomicAdmin::notify( array_shift( $http ), 'error' );
+							}
+						} else {
+							WebcomicAdmin::notify( array_shift( $http ), 'error' );
+						}
+					} else {
+						$http = self::api_request( 'showcase/' . self::$config[ 'api' ], 'DELETE' );
+						
+						if ( isset( $http[ 200 ] ) ) {
+							self::$config[ 'network' ][ 'showcase' ] = false;
+						}
+						
+						if ( empty( $http[ 404 ] ) and empty( $http[ 200 ] ) ) {
+							WebcomicAdmin::notify( array_shift( $http ), 'error' );
+						}
+					}
+					
+					WebcomicAdmin::notify( '<b>' . __( 'Settings saved.', 'webcomic' ) . '</b>' );
+				}
+			} elseif ( isset( $_POST[ 'webcomic_network_x' ] ) ) {
+				wp_redirect( add_query_arg( array( 'page' => 'webcomic-options' ), admin_url( 'options-general.php' ) ) );
+				
+				die;
+			} else {
+				$http = self::api_request( 'key', 'POST', array_merge( $_POST, array( 'salt' => wp_salt() ) ) );
+				
+				if ( isset( $http[ 200 ] ) ) {
+					self::$config[ 'api' ] = $http[ 200 ];
+					
+					WebcomicAdmin::notify( __( '<b>Welcome to the Webcomic Network!</b> You can configure your network settings below.', 'webcomic' ) );
+				} else {
+					WebcomicAdmin::notify( array_shift( $http ), 'error' );
+				}
 			}
 		} elseif ( isset( $_POST[ 'webcomic_collection' ] ) ) {
 			$id         = $_POST[ 'webcomic_collection' ];
@@ -1064,6 +1394,8 @@ class WebcomicConfig extends Webcomic {
 			
 			WebcomicAdmin::notify( '<b>' . __( 'Settings saved.', 'webcomic' ) . '</b>' );
 		}
+		
+		return ( isset( $_POST[ 'webcomic_general' ] ) or isset( $_POST[ 'webcomic_network' ] ) or isset( $_POST[ 'webcomic_collection' ] ) ) ? self::$config : $options;
 	}
 	
 	/** Render a settings page.
@@ -1098,6 +1430,31 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
+	/** Render the showcase page.
+	 * 
+	 * @uses Webcomic::$config
+	 * @uses Webcomic::$version
+	 */
+	public function page_network() {
+		?>
+		<div class="wrap" >
+			<div id="icon-options-general" class="icon32" data-webcomic-admin-url="<?php echo admin_url(); ?>"></div>
+			<h2><?php echo get_admin_page_title(); ?></h2>
+			<form action="options.php" method="post">
+				<?php
+					settings_fields( 'webcomic-options' );
+					do_settings_sections( 'webcomic-network' );
+				?>
+				<input type="hidden" name="webcomic_network" value="1">
+				<p class="submit">
+					<?php submit_button( self::$config[ 'api' ] ? '' : __( 'Join the Webcomic Network', 'webcomic' ), 'primary', '', false ); ?>
+					<?php submit_button( self::$config[ 'api' ] ? __( 'Leave the Webcomic Network', 'webcomic' ) : __( 'Not Interested', 'webcomic' ), 'secondary', 'webcomic_network_x', false ); ?>
+				</p>
+			</form>
+		</div>
+		<?php
+	}
+	
 	/** Generic settings section callback.
 	 * 
 	 * Most sections don't include a description, but if permalinks are
@@ -1109,6 +1466,31 @@ class WebcomicConfig extends Webcomic {
 			echo '<p>', sprintf( __( "These URL's won't work unless you <a href='%s'>change the permalink setting</a> to something other than <b>Default</b>.", 'webcomic' ), admin_url( 'options-permalink.php' ) ), '</p>';
 		}
 	}
+	
+	/** Handle showcase image updating.
+	 * 
+	 * @param integer $id ID of the selected image.
+	 */
+	public static function ajax_showcase_image( $id ) {
+		global $wpdb;
+		
+		$url = '';
+		
+		if ( $id ) {
+			if ( !is_numeric( $id ) ) {
+				$url = $id;
+				$id  = array_shift( $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM {$wpdb->posts} WHERE guid = %s", $id ) ) );
+			} else {
+				$url = array_shift( wp_get_attachment_image_src( $id, 'full' ) );
+			}
+			
+			echo $id ? '<a href="' . esc_url( add_query_arg( array( 'post' => $id, 'action' => 'edit' ), admin_url( 'post.php' ) ) ) . '"><img src="' . $url . '" alt="" height="360" width="640"></a><br>' : '<img src="' . $url . '" alt="" height="360" width="640"><br>';
+		}
+		
+		echo '<input type="hidden" name="webcomic_image" value="', $url, '"><a class="button webcomic-image" data-title="', __( 'Select a Billboard', 'webcomic' ), '" data-update="', __( 'Update', 'webcomic' ), '" data-callback="WebcomicConfig::ajax_showcase_image" data-target="#webcomic_showcase_image">', $id ? __( 'Change', 'webcomic' ) : __( 'Select', 'webcomic' ), '</a>';
+		
+		if ( $id ) {
+			echo ' <a class="button webcomic-image-x" data-callback="WebcomicConfig::ajax_showcase_image" data-target="#webcomic_showcase_image">', __( 'Remove', 'webcomic' ), '</a>';
 		}
 	}
 	
