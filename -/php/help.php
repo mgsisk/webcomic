@@ -845,7 +845,7 @@ class WebcomicHelp extends Webcomic {
 				<li>' . __( '<b>Description</b> - The description is displayed with your showcase entry. 160 characters or less.', 'webcomic' ) . '</li>
 				<li>' . __( '<b>Genre</b> - Select up to five genres that describe your site.', 'webcomic' ) . '</li>
 				<li>' . __( '<b>Rating</b> - Select the rating that most fits the intended audience of your site.', 'webcomic' ) . '</li>
-				<li>' . __( '<b>Billboard</b> - The billboard is a representative image for your site. It should be 640×360 pixels in size and will be hotlinked directly from your site.', 'webcomic' ) . '</li>
+				<li>' . __( '<b>Billboard</b> - The billboard is a representative image for your site. It should be 640x360 pixels in size and will be hotlinked directly from your site.', 'webcomic' ) . '</li>
 				<li>' . sprintf( __( '<b>Testimonial</b> - If provided, the testimonial will be displayed on %s', 'webcomic' ), '<a href="http://webcomic.nu" target="_blank">webcomic.nu</a>' ) . '</li>
 			</ul>
 			<p>' . __( "Some additional data is sent with your showcase entry, including the version of Webcomic you're using and information about your sites theme (name, url, author, and author url) and template (if you're using a child theme).", 'webcomic' ) . '</p>';
