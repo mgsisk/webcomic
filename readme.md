@@ -1,4 +1,6 @@
-# Webcomic - Comic publishing power for the web.
+# Webcomic
+
+## Comic publishing power for the web.
 
 Webcomic is a plugin for [WordPress](http://wordpress.org) that provides a host of features for creating, managing, and sharing webcomics. Take control of your webcomic with multi-comic management, theme integration, dynamic navigation, and more.
 
