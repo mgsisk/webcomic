@@ -479,7 +479,7 @@ class WebcomicAdmin extends Webcomic {
 			
 			echo '<div class="updated"><p>', join( '</p></div><div class="updated"><p>', $notice ), '</p></div>';
 		}
-				
+		
 		if ( $error = get_transient( 'webcomic_error' ) ) {
 			delete_transient( 'webcomic_error' );
 			
@@ -487,7 +487,7 @@ class WebcomicAdmin extends Webcomic {
 		}
 		
 		if ( isset( self::$config[ 'thanks' ] ) ) {
-			echo '<div class="updated webcomic"><a href="http://webcomic.nu" target="_blank"><b>&#x2764;</b>', sprintf( __( 'Thank you for using %s', 'webcomic' ), 'Webcomic ' . self::$version ), '</a></div>';
+			echo '<div class="updated webcomic"><a href="' . add_query_arg( array( 'cmd' => 's-xclick', 'hosted_button_id' => 'UD3J2DJPSN9UC' ), '//paypal.com/cgi-bin/webscr' ) . '" target="_blank"><b>&#x2764;</b>', sprintf( __( 'Thank you for using %s', 'webcomic' ), 'Webcomic ' . self::$version ), '</a></div>';
 			
 			unset( self::$config[ 'thanks' ] );
 			
@@ -524,6 +524,12 @@ class WebcomicAdmin extends Webcomic {
 			wp_register_style( 'webcomic-google-font', 'http://fonts.googleapis.com/css?family=Maven+Pro' );
 			
 			wp_enqueue_style( 'webcomic-special', self::$url . '-/css/admin-special.css', array( 'webcomic-google-font' ) );
+		}
+		
+		if ( '41' === date( 'nj' ) ) {
+			wp_register_script( 'webcomic-cornify', 'http://cornify.com/js/cornify.js' );
+			
+			wp_enqueue_script( 'webcomic-special', self::$url . '-/js/admin-special.js', array( 'webcomic-cornify' ) );
 		}
 	}
 	
