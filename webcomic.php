@@ -4,7 +4,7 @@ Text Domain: webcomic
 Plugin Name: Webcomic
 Plugin URI: http://webcomic.nu
 Description: Comic publishing power for the web.
-Version: 4.0.9
+Version: 4.1
 Author: Michael Sisk
 Author URI: http://mgsisk.com
 License: GPL2
@@ -34,7 +34,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * @package Webcomic
  * @copyright 2008 - 2013 Michael Sisk
  * @license http://gnu.org/licenses/gpl-2.0.html GPL2
- * @version 4.0.9
+ * @version 4.1
  * @link http://webcomic.nu
  */
 
@@ -46,7 +46,7 @@ class Webcomic {
 	/** Internal version number.
 	 * @var string
 	 */
-	protected static $version = '4.0.9';
+	protected static $version = '4.1';
 	
 	/** Absolute path to the Webcomic directory.
 	 * @var string
@@ -1477,7 +1477,7 @@ class Webcomic {
 	 * adding a Webcomic key with the minimum required version of
 	 * Webcomic, like:
 	 * 
-	 * `Webcomic: 4.0.9`
+	 * `Webcomic: 4.1`
 	 * 
 	 * @param array $extra Extra theme header fields.
 	 * @return array
