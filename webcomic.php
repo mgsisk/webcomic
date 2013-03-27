@@ -56,6 +56,11 @@ class Webcomic {
 	 */
 	protected static $url = '';
 	
+	/** Whether to enable debug mode.
+	 * @var boolean
+	 */
+	protected static $debug = false;
+	
 	/** Stores the configuration.
 	 * @var array
 	 */

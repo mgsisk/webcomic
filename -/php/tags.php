@@ -1633,8 +1633,6 @@ class WebcomicTag extends Webcomic {
 	
 	/** Return a donation form.
 	 * 
-	 * https://www.paypal.com/cgi-bin/webscr | https://www.sandbox.paypal.com/cgi-bin/webscr
-	 * 
 	 * @param string $label The form submit button label.
 	 * @param string $collection The collection to render a donation form for.
 	 * @return string
@@ -1651,7 +1649,7 @@ class WebcomicTag extends Webcomic {
 		}
 		
 		$output = '
-			<form action="https://www.paypal.com/cgi-bin/webscr" method="post" class="webcomic-donation-form ' . $collection . '-donation-form">
+			<form action="' . ( self::$debug ? 'https://www.sandbox.paypal.com/cgi-bin/webscr' : 'https://www.paypal.com/cgi-bin/webscr' ) . '" method="post" class="webcomic-donation-form ' . $collection . '-donation-form">
 				<button type="submit">' . ( $label ? $label : sprintf( __( 'Support %s', 'webcomic' ), esc_html( self::$config[ 'collections' ][ $collection ][ 'name' ] ) ) ) . '</button>
 				' . $fields . '
 			</form>';
@@ -1740,8 +1738,6 @@ class WebcomicTag extends Webcomic {
 	
 	/** Return a print purchase form.
 	 * 
-	 * https://www.paypal.com/cgi-bin/webscr | https://www.sandbox.paypal.com/cgi-bin/webscr
-	 * 
 	 * @param string $type The type of print form, one of 'domestic', 'international', 'original', or 'cart'.
 	 * @param string $label The form submit button label. Accepts %dec, %sep, %total, %price, and %shipping tokens.
 	 * @param mixed $the_post The post object or ID to get print adjustments for.
@@ -1784,7 +1780,7 @@ class WebcomicTag extends Webcomic {
 		}
 		
 		$output = '
-			<form action="https://www.paypal.com/cgi-bin/webscr" method="post" class="webcomic-print-form webcomic-' . $type . '-print-form ' . $the_post->post_type . '-print-form ' . $the_post->post_type . '-' . $type . '-print-form">
+			<form action="' . ( self::$debug ? 'https://www.sandbox.paypal.com/cgi-bin/webscr' : 'https://www.paypal.com/cgi-bin/webscr' ) . '" method="post" class="webcomic-print-form webcomic-' . $type . '-print-form ' . $the_post->post_type . '-print-form ' . $the_post->post_type . '-' . $type . '-print-form">
 				<button type="submit">' . $label . '</button>
 				' . $fields . '
 			</form>';
