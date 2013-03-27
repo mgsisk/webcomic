@@ -917,9 +917,15 @@ class WebcomicTag extends Webcomic {
 	
 	/** Return a webcomic collection link.
 	 * 
-	 * @deprecated 4.0.7 4.1 Use WebcomicTag::get_the_webcomic_collection_list() instead.
+	 * @param string $format Format string for the link. Should include the %link token, which will be replaced by the actual link.
+	 * @param string $link Format string for the link text. Accepts %title and image size tokens tokens.
+	 * @param string $collection The collection ID to return a link for.
+	 * @return string
+	 * @uses Webcomic::$config
+	 * @uses WebcomicTag::get_relative_webcomic_link()
+	 * @filter string webcomic_collection_link Filters the output of `the_webcomic_collection`.
 	 */
-	public static function webcomic_collection_link( $format, $link = '', $target = 'archive', $collection = '' ) {
+	public static function webcomic_collection_link( $format, $link = '', $collection = '' ) {
 		global $post;
 		
 		if ( !$collection ) {
@@ -928,8 +934,8 @@ class WebcomicTag extends Webcomic {
 		
 		if ( $collection ) {
 			$class  = array( 'webcomic-link', 'webcomic-collection-link', "{$collection}-collection-link" );
-			$href   = ( 'first' === $target or 'last' === $target or 'random' === $target ) ? self::get_relative_webcomic_link( $target, false, false, '', $collection ) : get_post_type_archive_link( $collection );
-			$link   = $link ? $link : __( '%title', 'webcomic' );
+			$href   = get_post_type_archive_link( $collection );
+			$link   = $link ? $link : self::$config[ 'collections' ][ $collection ][ 'name' ];
 			
 			if ( false !== strpos( $link, '%' ) ) {
 				$tokens = array(
@@ -950,7 +956,7 @@ class WebcomicTag extends Webcomic {
 			$link   = '<a href="' . $href . '" class="' . join( ' ', $class ) . '">' . $link . '</a>';
 			$format = str_replace( '%link', $link, $format );
 			
-			return apply_filters( 'webcomic_collection_link', $format, $link, $target, $collection );
+			return apply_filters( 'webcomic_collection_link', $format, $link, $collection );
 		}
 	}
 	
@@ -1007,7 +1013,7 @@ class WebcomicTag extends Webcomic {
 				$collection_links[] = '<a href="' . $link . '"' . ( $k === $collection ? '' : ' class="webcomic-crossover-collection ' . $k . '-crossover-collection"' ) . '>' . $label . '</a>';
 			}
 			
-			$term_links = apply_filters( "webcomic_collection_links", $collection_links, $collections, $before, $sep, $after, $target, $image, $crossover, $collection );
+			$term_links = apply_filters( 'webcomic_collection_links', $collection_links, $collections, $before, $sep, $after, $target, $image, $crossover, $collection );
 			
 			return apply_filters( 'the_webcomic_collection_list', $before . join( $sep, $collection_links ) . $after, $id, $before, $sep, $after, $target, $image, $crossover, $collection );
 		}
@@ -1146,7 +1152,7 @@ class WebcomicTag extends Webcomic {
 				} else {
 					$next = $object;
 					
-					while ( $next = get_term( $next->parent, $next->taxonomy ) ) {
+					while ( $next = get_term( $next->parent, $next->taxonomy ) and !is_wp_error( $next ) ) {
 						if ( $children = get_terms( $next->taxonomy, array_merge( $args, array( 'parent' => $next->parent ) ) ) and !is_wp_error( $children ) and false !== ( $key = array_search( $next, $children ) ) and isset( $children[ $key + 1 ] ) ) {
 							$object = $children[ $key + 1 ];
 							
@@ -3908,13 +3914,33 @@ if ( !function_exists( 'purchase_webcomic_link' ) ) {
 	}
 }
 
-if ( !function_exists( 'the_webcomic_collection' ) ) {
+if ( !function_exists( 'webcomic_collection_link' ) ) {
 	/** Render a webcomic collection link.
 	 * 
-	 * @deprecated 4.0.7 4.1 the_webcomic_collections
+	 * <code class="php">
+	 * // render a link to the collection archive page for the collection the current webcomic belongs to
+	 * webcomic_collection_link();
+	 * 
+	 * // render a link to the collection 42 archive with a small poster preview
+	 * webcomic_collection_link( '%link', '%thumbnail', 'webcomic42' );
+	 * </code>
+	 * 
+	 * <code class="bbcode">
+	 * // render a link to the collection archive page for the collection the current webcomic belongs to
+	 * [webcomic_collection_link]
+	 * 
+	 * // render a link to the collection 42 archive with a small poster preview
+	 * [webcomic_collection_link collection="webcomic42"]%thumbnail[/the_webcomic_collection]
+	 * </code>
+	 * 
+	 * @package Webcomic
+	 * @param string $format Format string for the link. Should include the %link token, which will be replaced by the actual link.
+	 * @param string $link Format string for the link text. Accepts %title and image size tokens tokens.
+	 * @param string $collection The collection ID to render a link for.
+	 * @uses WebcomicTag::webcomic_collection_link()
 	 */
-	function the_webcomic_collection( $format = '%link', $link = '', $target = 'archive', $collection = '' ) {
-		echo WebcomicTag::webcomic_collection_link( $format, $link, $target, $collection );
+	function webcomic_collection_link( $format = '%link', $link = '', $collection = '' ) {
+		echo WebcomicTag::webcomic_collection_link( $format, $link, $collection );
 	}
 }
 

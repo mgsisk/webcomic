@@ -29,7 +29,7 @@ class WebcomicShortcode extends Webcomic {
 	 * @uses WebcomicShortcode::the_webcomic_terms()
 	 * @uses WebcomicShortcode::the_related_webcomics()
 	 * @uses WebcomicShortcode::the_webcomic_term_link()
-	 * @uses WebcomicShortcode::the_webcomic_collection()
+	 * @uses WebcomicShortcode::webcomic_collection_link()
 	 * @uses WebcomicShortcode::the_webcomic_collections()
 	 * @uses WebcomicShortcode::webcomic_term_title()
 	 * @uses WebcomicShortcode::webcomic_term_description()
@@ -69,7 +69,7 @@ class WebcomicShortcode extends Webcomic {
 		add_shortcode( 'last_webcomic_link', array( $this, 'the_webcomic_link' ) );
 		add_shortcode( 'random_webcomic_link', array( $this, 'the_webcomic_link' ) );
 		add_shortcode( 'purchase_webcomic_link', array( $this, 'the_webcomic_link' ) );
-		add_shortcode( 'the_webcomic_collection', array( $this, 'the_webcomic_collection' ) );
+		add_shortcode( 'webcomic_collection_link', array( $this, 'webcomic_collection_link' ) );
 		add_shortcode( 'the_webcomic_collections', array( $this, 'the_webcomic_collections' ) );
 		add_shortcode( 'the_webcomic_storylines', array( $this, 'the_webcomic_terms' ) );
 		add_shortcode( 'the_webcomic_characters', array( $this, 'the_webcomic_terms' ) );
@@ -299,19 +299,26 @@ class WebcomicShortcode extends Webcomic {
 		return 'purchase' === $relative ? WebcomicTag::purchase_webcomic_link( $format, $link, $the_post ) : WebcomicTag::relative_webcomic_link( $format, $link, $relative, $in_same_term, $excluded_terms, $taxonomy, $collection );
 	}
 	
-	/** Handle the_webcomic_collection shortcode.
+	/** Handle webcomic_collection_link shortcode.
 	 * 
-	 * @deprecated 4.0.7 4.1 Use the_webcomic_collections instead.
+	 * @param array $atts Shortcode attributes.
+	 * @param string $content Shortcode content.
+	 * @param string $name Shortcode name.
+	 * @return string
+	 * @uses WebcomicTag::webcomic_collection_link()
 	 */
-	public function the_webcomic_collection( $atts ) {
+	public function webcomic_collection_link( $atts, $content, $name ) {
 		extract( shortcode_atts( array(
 			'format'     => '%link',
-			'link'       => '%title',
-			'target'     => 'archive',
+			'link'       => '',
 			'collection' => ''
 		), $atts ) );
 		
-		return WebcomicTag::webcomic_collection_link( $format, $link, $target, $collection );
+		if ( !$link and $content ) {
+			$link = do_shortcode( $content );
+		}
+		
+		return WebcomicTag::webcomic_collection_link( $format, $link, $collection );
 	}
 	
 	/** Handle the_webcomic_collections shortcode.

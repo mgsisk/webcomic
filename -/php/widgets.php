@@ -12,6 +12,7 @@ class WebcomicWidget extends Webcomic {
 	/** Register action and filter hooks.
 	 * 
 	 * @uses WebcomicWidget::widgets_init()
+	 * @uses WebcomicWidget::admin_enqueue_scripts()
 	 */
 	public function __construct() {
 		add_action( 'widgets_init', array( $this, 'widgets_init' ) );
@@ -27,6 +28,9 @@ class WebcomicWidget extends Webcomic {
 	 * @uses Widget_WebcomicStorylines
 	 * @uses Widget_WebcomicCharacters
 	 * @uses Widget_WebcomicCollections
+	 * @uses Widget_WebcomicStorylineLink
+	 * @uses Widget_WebcomicCharacterLink
+	 * @uses Widget_WebcomicCollectionLink
 	 * @hook widgets_init
 	 */
 	public function widgets_init() {
@@ -37,6 +41,9 @@ class WebcomicWidget extends Webcomic {
 		register_widget( 'Widget_WebcomicStorylines' );
 		register_widget( 'Widget_WebcomicCharacters' );
 		register_widget( 'Widget_WebcomicCollections' );
+		register_widget( 'Widget_WebcomicStorylineLink' );
+		register_widget( 'Widget_WebcomicCharacterLink' );
+		register_widget( 'Widget_WebcomicCollectionLink' );
 	}
 	
 	/** Register scripts for widget feature checks.
@@ -50,6 +57,14 @@ class WebcomicWidget extends Webcomic {
 	 * @hook admin_enqueue_scripts
 	 */
 	public function admin_enqueue_scripts() {
+		$screen = get_current_screen();
+		
+		if ( 'widgets' === $screen->id ) {
+			wp_enqueue_script( 'webcomic-widgets', self::$url . '-/js/admin-widgets.js', array( 'jquery' ) );
+			
+			wp_enqueue_media();
+		}
+		
 		if ( self::$config[ 'dynamic' ] ) {
 			wp_register_script( 'webcomic-dynamic', self::$url . '-/js/dynamic.js', array( 'jquery' ), false, true );
 		}
@@ -69,7 +84,7 @@ class WebcomicWidget extends Webcomic {
 	}
 }
 
-/** Webcomic Characters widget.
+/** Webcomic Link widget.
  * 
  * @package Webcomic
  */
@@ -77,7 +92,7 @@ class Widget_WebcomicLink extends WP_Widget {
 	/** Initialize the widget.
 	 */
 	public function __construct() {
-		parent::__construct( false, __( 'Webcomic Link', 'webcomic' ), array( 'description' => __( 'Link to the first, last, or a random webcomic.', 'webcomic' ) ) );
+		parent::__construct( false, __( 'Webcomic Link', 'webcomic' ), array( 'description' => __( 'Link to the first, last, previous, next, or a random webcomic, or the print purchase page for a webcomic.', 'webcomic' ) ) );
 	}
 	
 	/** Render the widget.
@@ -93,7 +108,13 @@ class Widget_WebcomicLink extends WP_Widget {
 		
 		$collection = $collection ? $collection : WebcomicTag::get_webcomic_collection();
 		
-		if ( $output = WebcomicTag::relative_webcomic_link( '%link', $link, $relative, false, false, 'storyline', $collection ) ) {
+		if ( $image and $image = wp_get_attachment_image( $image, 'full' ) ) {
+			$link = preg_replace( '/alt=".+?"/', 'alt="' . $link . '"', $image );
+		}
+		
+		$output = 'purchase' === $relative ? WebcomicTag::purchase_webcomic_link( '%link', $link ) : WebcomicTag::relative_webcomic_link( '%link', $link, $relative, false, false, 'storyline', $collection );
+		
+		if ( $output ) {
 			echo $before_widget, empty( $title ) ? '' : $before_title . $title . $after_title, $output, $after_widget;
 		}
 		
@@ -106,8 +127,19 @@ class Widget_WebcomicLink extends WP_Widget {
 	 * @return array
 	 */
 	public function update( $new, $old ) {
+		if ( $new[ 'image' ] ) {
+			if ( $old[ 'image' ] and $old[ 'image' ] !== $new[ 'image' ] ) {
+				delete_post_meta( $old[ 'image' ], '_wp_attachment_context', 'webcomic-link' );
+			}
+			
+			update_post_meta( $new[ 'image' ], '_wp_attachment_context', 'webcomic-link' );
+		} else {
+			delete_post_meta( $old[ 'image' ], '_wp_attachment_context', 'webcomic-link' );
+		}
+		
 		$old[ 'title' ]          = strip_tags( $new[ 'title' ] );
 		$old[ 'link' ]           = $new[ 'link' ];
+		$old[ 'image' ]          = $new[ 'image' ];
 		$old[ 'relative' ]       = $new[ 'relative' ];
 		$old[ 'collection' ]     = $new[ 'collection' ];
 		
@@ -136,7 +168,10 @@ class Widget_WebcomicLink extends WP_Widget {
 				<select name="<?php echo $this->get_field_name( 'relative' ); ?>">
 					<option value="first"<?php echo empty( $relative ) ? '' : selected( 'first', $relative, false ); ?>><?php _e( 'First', 'webcomic' ); ?></option>
 					<option value="last"<?php echo empty( $relative ) ? '' : selected( 'last', $relative, false ); ?>><?php _e( 'Last', 'webcomic' ); ?></option>
+					<option value="previous"<?php echo empty( $relative ) ? '' : selected( 'previous', $relative, false ); ?>><?php _e( 'Previous', 'webcomic' ); ?></option>
+					<option value="next"<?php echo empty( $relative ) ? '' : selected( 'next', $relative, false ); ?>><?php _e( 'Next', 'webcomic' ); ?></option>
 					<option value="random"<?php echo empty( $relative ) ? '' : selected( 'random', $relative, false ); ?>><?php _e( 'Random', 'webcomic' ); ?></option>
+					<option value="purchase"<?php echo empty( $relative ) ? '' : selected( 'purchase', $relative, false ); ?>><?php _e( 'Purchase', 'webcomic' ); ?></option>
 				</select>
 			</label>
 		</p>
@@ -153,9 +188,14 @@ class Widget_WebcomicLink extends WP_Widget {
 			</label>
 		</p>
 		<p>
+			<?php _e( 'Image:', 'webcomic' ); ?>
+			<div id="<?php echo str_replace( array( '[', ']' ), array( '-', '' ), $this->get_field_name( 'image' ) ); ?>"><?php self::ajax_image( empty( $image ) ? 0 : $image, $this->get_field_name( 'image' ) ); ?></div>
+		</p>
+		<p>
 			<label>
 				<?php _e( 'Link:', 'webcomic' ); ?>
 				<input type="text" name="<?php echo $this->get_field_name( 'link' ); ?>" value="<?php echo empty( $link ) ? '' : esc_attr( $link ); ?>" class="widefat">
+				<span class="description"><?php _e( 'The link text will be used as alternate text if you have selected an image above.', 'webcomic' ); ?></span>
 				<table class="widefat">
 					<thead>
 						<tr>
@@ -188,6 +228,23 @@ class Widget_WebcomicLink extends WP_Widget {
 			</label>
 		</p>
 		<?php
+	}
+	
+	/** Handle webcomic link image updating.
+	 * 
+	 * @param integer $id ID of the selected image.
+	 * @param string $field The widget field ID.
+	 */
+	public static function ajax_image( $id, $field ) {
+		if ( $id ) {
+			echo '<a href="', esc_url( add_query_arg( array( 'post' => $id, 'action' => 'edit' ), admin_url( 'post.php' ) ) ), '">', wp_get_attachment_image( $id ), '</a><br>';
+		}
+		
+		echo '<input type="hidden" name="', $field, '" value="', $id, '"><a class="button webcomic-image" data-title="', __( 'Select a Link Image', 'webcomic' ), '" data-update="', __( 'Update', 'webcomic' ), '" data-callback="Widget_WebcomicLink::ajax_image" data-field="', $field, '" data-target="#', str_replace( array( '[', ']' ), array( '-', '' ), $field ), '", data-webcomic-admin-url="', admin_url(), '">', $id ? __( 'Change', 'webcomic' ) : __( 'Select', 'webcomic' ), '</a>';
+		
+		if ( $id ) {
+			echo ' <a class="button webcomic-image-x" data-callback="Widget_WebcomicLink::ajax_image" data-target="#', str_replace( array( '[', ']' ), array( '-', '' ), $field ), '">', __( 'Remove', 'webcomic' ), '</a>';
+		}
 	}
 }
 
@@ -848,5 +905,489 @@ class Widget_WebcomicCollections extends WP_Widget {
 			<label><input type="checkbox" name="<?php echo $this->get_field_name( 'target' ); ?>" value="first"<?php echo empty( $target ) ? '' : checked( 'first' === $target, true, false ); ?>> <?php _e( 'Link to the beginning of collections', 'webcomic' ); ?></label>
 		</p>
 		<?php
+	}
+}
+
+/** Webcomic Storyline Link widget.
+ * 
+ * @package Webcomic
+ */
+class Widget_WebcomicStorylineLink extends WP_Widget {
+	/** Initialize the widget.
+	 */
+	public function __construct() {
+		parent::__construct( false, __( 'Webcomic Storyline Link', 'webcomic' ), array( 'description' => __( 'Link to the first, last, previous, next, or a random webcomic storyline.', 'webcomic' ) ) );
+	}
+	
+	/** Render the widget.
+	 * 
+	 * @param array $args General widget arguments.
+	 * @param array $instance Specific instance arguments.
+	 * @uses WebcomicTag::get_webcomic_collection()
+	 * @uses WebcomicTag::relative_webcomic_term_link()
+	 */
+	public function widget( $args, $instance ) {
+		extract( $args );
+		extract( $instance );
+		
+		$collection = $collection ? $collection : WebcomicTag::get_webcomic_collection();
+		
+		if ( $image and $image = wp_get_attachment_image( $image, 'full' ) ) {
+			$link = preg_replace( '/alt=".+?"/', 'alt="' . $link . '"', $image );
+		}
+		
+		if ( $output = WebcomicTag::relative_webcomic_term_link( '%link', $link, $target, $relative, "{$collection}_storyline" ) ) {
+			echo $before_widget, empty( $title ) ? '' : $before_title . $title . $after_title, $output, $after_widget;
+		}
+		
+	}
+	
+	/** Update an instance of the widget.
+	 * 
+	 * @param array $new New instance settings.
+	 * @param array $old Old instance settings.
+	 * @return array
+	 */
+	public function update( $new, $old ) {
+		if ( $new[ 'image' ] ) {
+			if ( $old[ 'image' ] and $old[ 'image' ] !== $new[ 'image' ] ) {
+				delete_post_meta( $old[ 'image' ], '_wp_attachment_context', 'webcomic-storyline-link' );
+			}
+			
+			update_post_meta( $new[ 'image' ], '_wp_attachment_context', 'webcomic-storyline-link' );
+		} else {
+			delete_post_meta( $old[ 'image' ], '_wp_attachment_context', 'webcomic-storyline-link' );
+		}
+		
+		$old[ 'title' ]          = strip_tags( $new[ 'title' ] );
+		$old[ 'link' ]           = $new[ 'link' ];
+		$old[ 'image' ]          = $new[ 'image' ];
+		$old[ 'target' ]         = $new[ 'target' ];
+		$old[ 'relative' ]       = $new[ 'relative' ];
+		$old[ 'collection' ]     = $new[ 'collection' ];
+		
+		return $old;
+	}
+	
+	/** Render widget settings.
+	 * 
+	 * @param array $instance Specific instance settings.
+	 * @uses WebcomicTag::get_webcomic_collections()
+	 */
+	public function form( $instance ) {
+		extract( $instance );
+		
+		$collections = WebcomicTag::get_webcomic_collections( true );
+		?>
+		<p>
+			<label>
+				<?php _e( 'Title', 'webcomic' ); ?>
+				<input type="text" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo empty( $title ) ? '' : esc_attr( $title ); ?>" class="widefat">
+			</label>
+		</p>
+		<p>
+			<label>
+				<?php _e( 'Storyline:', 'webcomic' ); ?><br>
+				<select name="<?php echo $this->get_field_name( 'relative' ); ?>">
+					<option value="first"<?php echo empty( $relative ) ? '' : selected( 'first', $relative, false ); ?>><?php _e( 'First', 'webcomic' ); ?></option>
+					<option value="last"<?php echo empty( $relative ) ? '' : selected( 'last', $relative, false ); ?>><?php _e( 'Last', 'webcomic' ); ?></option>
+					<option value="previous"<?php echo empty( $relative ) ? '' : selected( 'previous', $relative, false ); ?>><?php _e( 'Previous', 'webcomic' ); ?></option>
+					<option value="next"<?php echo empty( $relative ) ? '' : selected( 'next', $relative, false ); ?>><?php _e( 'Next', 'webcomic' ); ?></option>
+					<option value="random"<?php echo empty( $relative ) ? '' : selected( 'random', $relative, false ); ?>><?php _e( 'Random', 'webcomic' ); ?></option>
+				</select>
+			</label>
+		</p>
+		<p>
+			<label>
+				<?php _e( 'Target:', 'webcomic' ); ?><br>
+				<select name="<?php echo $this->get_field_name( 'target' ); ?>">
+					<option value="archive"<?php echo empty( $target ) ? '' : selected( 'archive', $target, false ); ?>><?php _e( 'Archive', 'webcomic' ); ?></option>
+					<option value="first"<?php echo empty( $target ) ? '' : selected( 'first', $target, false ); ?>><?php _e( 'First Webcomic', 'webcomic' ); ?></option>
+					<option value="last"<?php echo empty( $target ) ? '' : selected( 'last', $target, false ); ?>><?php _e( 'Last Webcomic', 'webcomic' ); ?></option>
+					<option value="random"<?php echo empty( $target ) ? '' : selected( 'random', $target, false ); ?>><?php _e( 'Random Webcomic', 'webcomic' ); ?></option>
+				</select>
+			</label><br>
+			<span class="description"><?php _e( 'Where the storyline link will point to.', 'webcomic' ); ?></span>
+		</p>
+		<p>
+			<label><?php _e( 'Collection:', 'webcomic' ); ?><br>
+				<select name="<?php echo $this->get_field_name( 'collection' ); ?>">
+					<option value=""><?php _e( '(current collection)', 'webcomic' ); ?></option>
+					<?php
+						foreach ( $collections as $k => $v ) {
+							echo '<option value="', $k, '"', empty( $collection ) ? '' : selected( $k, $collection, false ), '>', esc_html( $v[ 'name' ] ), '</option>';
+						}
+					?>
+				</select>
+			</label>
+		</p>
+		<p>
+			<?php _e( 'Image:', 'webcomic' ); ?>
+			<div id="<?php echo str_replace( array( '[', ']' ), array( '-', '' ), $this->get_field_name( 'image' ) ); ?>"><?php self::ajax_image( empty( $image ) ? 0 : $image, $this->get_field_name( 'image' ) ); ?></div>
+		</p>
+		<p>
+			<label>
+				<?php _e( 'Link:', 'webcomic' ); ?>
+				<input type="text" name="<?php echo $this->get_field_name( 'link' ); ?>" value="<?php echo empty( $link ) ? '' : esc_attr( $link ); ?>" class="widefat">
+				<span class="description"><?php _e( 'The link text will be used as alternate text if you have selected an image above.', 'webcomic' ); ?></span>
+				<table class="widefat">
+					<thead>
+						<tr>
+							<th><?php _e( 'Token', 'webcomic' ); ?></th>
+							<th><?php _e( 'Replacement', 'webcomic' ); ?></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>%title</td>
+							<td><?php _e( 'Storyline Title', 'webcomic' ); ?></td>
+						</tr>
+						<?php
+							$count = 1;
+							$sizes = '<tr><td>%full</td></tr>';
+							
+							foreach ( get_intermediate_image_sizes() as $size ) {
+								$count++;
+								$sizes .= "<tr><td>%{$size}</td></tr>";
+							}
+							
+							echo preg_replace( '/<\/td><\/tr>/', '</td><td rowspan="' . $count . '" style="border-left:thin solid #dfdfdf">' . __( 'Cover Image', 'webcomic' ) . '</td></tr>', $sizes, 1 );
+						?>
+					</tbody>
+				</table>
+			</label>
+		</p>
+		<?php
+	}
+	
+	/** Handle webcomic link image updating.
+	 * 
+	 * @param integer $id ID of the selected image.
+	 * @param string $field The widget field ID.
+	 */
+	public static function ajax_image( $id, $field ) {
+		if ( $id ) {
+			echo '<a href="', esc_url( add_query_arg( array( 'post' => $id, 'action' => 'edit' ), admin_url( 'post.php' ) ) ), '">', wp_get_attachment_image( $id ), '</a><br>';
+		}
+		
+		echo '<input type="hidden" name="', $field, '" value="', $id, '"><a class="button webcomic-image" data-title="', __( 'Select a Storyline Link Image', 'webcomic' ), '" data-update="', __( 'Update', 'webcomic' ), '" data-callback="Widget_WebcomicStorylineLink::ajax_image" data-field="', $field, '" data-target="#', str_replace( array( '[', ']' ), array( '-', '' ), $field ), '", data-webcomic-admin-url="', admin_url(), '">', $id ? __( 'Change', 'webcomic' ) : __( 'Select', 'webcomic' ), '</a>';
+		
+		if ( $id ) {
+			echo ' <a class="button webcomic-image-x" data-callback="Widget_WebcomicStorylineLink::ajax_image" data-target="#', str_replace( array( '[', ']' ), array( '-', '' ), $field ), '">', __( 'Remove', 'webcomic' ), '</a>';
+		}
+	}
+}
+
+/** Webcomic Character Link widget.
+ * 
+ * @package Webcomic
+ */
+class Widget_WebcomicCharacterLink extends WP_Widget {
+	/** Initialize the widget.
+	 */
+	public function __construct() {
+		parent::__construct( false, __( 'Webcomic Character Link', 'webcomic' ), array( 'description' => __( 'Link to the first, last, previous, next, or a random webcomic character.', 'webcomic' ) ) );
+	}
+	
+	/** Render the widget.
+	 * 
+	 * @param array $args General widget arguments.
+	 * @param array $instance Specific instance arguments.
+	 * @uses WebcomicTag::get_webcomic_collection()
+	 * @uses WebcomicTag::relative_webcomic_term_link()
+	 */
+	public function widget( $args, $instance ) {
+		extract( $args );
+		extract( $instance );
+		
+		$collection = $collection ? $collection : WebcomicTag::get_webcomic_collection();
+		
+		if ( $image and $image = wp_get_attachment_image( $image, 'full' ) ) {
+			$link = preg_replace( '/alt=".+?"/', 'alt="' . $link . '"', $image );
+		}
+		
+		if ( $output = WebcomicTag::relative_webcomic_term_link( '%link', $link, $target, $relative, "{$collection}_character" ) ) {
+			echo $before_widget, empty( $title ) ? '' : $before_title . $title . $after_title, $output, $after_widget;
+		}
+		
+	}
+	
+	/** Update an instance of the widget.
+	 * 
+	 * @param array $new New instance settings.
+	 * @param array $old Old instance settings.
+	 * @return array
+	 */
+	public function update( $new, $old ) {
+		if ( $new[ 'image' ] ) {
+			if ( $old[ 'image' ] and $old[ 'image' ] !== $new[ 'image' ] ) {
+				delete_post_meta( $old[ 'image' ], '_wp_attachment_context', 'webcomic-character-link' );
+			}
+			
+			update_post_meta( $new[ 'image' ], '_wp_attachment_context', 'webcomic-character-link' );
+		} else {
+			delete_post_meta( $old[ 'image' ], '_wp_attachment_context', 'webcomic-character-link' );
+		}
+		
+		$old[ 'title' ]          = strip_tags( $new[ 'title' ] );
+		$old[ 'link' ]           = $new[ 'link' ];
+		$old[ 'image' ]          = $new[ 'image' ];
+		$old[ 'target' ]         = $new[ 'target' ];
+		$old[ 'relative' ]       = $new[ 'relative' ];
+		$old[ 'collection' ]     = $new[ 'collection' ];
+		
+		return $old;
+	}
+	
+	/** Render widget settings.
+	 * 
+	 * @param array $instance Specific instance settings.
+	 * @uses WebcomicTag::get_webcomic_collections()
+	 */
+	public function form( $instance ) {
+		extract( $instance );
+		
+		$collections = WebcomicTag::get_webcomic_collections( true );
+		?>
+		<p>
+			<label>
+				<?php _e( 'Title', 'webcomic' ); ?>
+				<input type="text" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo empty( $title ) ? '' : esc_attr( $title ); ?>" class="widefat">
+			</label>
+		</p>
+		<p>
+			<label>
+				<?php _e( 'Character:', 'webcomic' ); ?><br>
+				<select name="<?php echo $this->get_field_name( 'relative' ); ?>">
+					<option value="first"<?php echo empty( $relative ) ? '' : selected( 'first', $relative, false ); ?>><?php _e( 'First', 'webcomic' ); ?></option>
+					<option value="last"<?php echo empty( $relative ) ? '' : selected( 'last', $relative, false ); ?>><?php _e( 'Last', 'webcomic' ); ?></option>
+					<option value="previous"<?php echo empty( $relative ) ? '' : selected( 'previous', $relative, false ); ?>><?php _e( 'Previous', 'webcomic' ); ?></option>
+					<option value="next"<?php echo empty( $relative ) ? '' : selected( 'next', $relative, false ); ?>><?php _e( 'Next', 'webcomic' ); ?></option>
+					<option value="random"<?php echo empty( $relative ) ? '' : selected( 'random', $relative, false ); ?>><?php _e( 'Random', 'webcomic' ); ?></option>
+				</select>
+			</label>
+		</p>
+		<p>
+			<label>
+				<?php _e( 'Target:', 'webcomic' ); ?><br>
+				<select name="<?php echo $this->get_field_name( 'target' ); ?>">
+					<option value="archive"<?php echo empty( $target ) ? '' : selected( 'archive', $target, false ); ?>><?php _e( 'Archive', 'webcomic' ); ?></option>
+					<option value="first"<?php echo empty( $target ) ? '' : selected( 'first', $target, false ); ?>><?php _e( 'First Webcomic', 'webcomic' ); ?></option>
+					<option value="last"<?php echo empty( $target ) ? '' : selected( 'last', $target, false ); ?>><?php _e( 'Last Webcomic', 'webcomic' ); ?></option>
+					<option value="random"<?php echo empty( $target ) ? '' : selected( 'random', $target, false ); ?>><?php _e( 'Random Webcomic', 'webcomic' ); ?></option>
+				</select>
+			</label><br>
+			<span class="description"><?php _e( 'Where the character link will point to.', 'webcomic' ); ?></span>
+		</p>
+		<p>
+			<label><?php _e( 'Collection:', 'webcomic' ); ?><br>
+				<select name="<?php echo $this->get_field_name( 'collection' ); ?>">
+					<option value=""><?php _e( '(current collection)', 'webcomic' ); ?></option>
+					<?php
+						foreach ( $collections as $k => $v ) {
+							echo '<option value="', $k, '"', empty( $collection ) ? '' : selected( $k, $collection, false ), '>', esc_html( $v[ 'name' ] ), '</option>';
+						}
+					?>
+				</select>
+			</label>
+		</p>
+		<p>
+			<?php _e( 'Image:', 'webcomic' ); ?>
+			<div id="<?php echo str_replace( array( '[', ']' ), array( '-', '' ), $this->get_field_name( 'image' ) ); ?>"><?php self::ajax_image( empty( $image ) ? 0 : $image, $this->get_field_name( 'image' ) ); ?></div>
+		</p>
+		<p>
+			<label>
+				<?php _e( 'Link:', 'webcomic' ); ?>
+				<input type="text" name="<?php echo $this->get_field_name( 'link' ); ?>" value="<?php echo empty( $link ) ? '' : esc_attr( $link ); ?>" class="widefat">
+				<span class="description"><?php _e( 'The link text will be used as alternate text if you have selected an image above.', 'webcomic' ); ?></span>
+				<table class="widefat">
+					<thead>
+						<tr>
+							<th><?php _e( 'Token', 'webcomic' ); ?></th>
+							<th><?php _e( 'Replacement', 'webcomic' ); ?></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>%title</td>
+							<td><?php _e( 'Character Title', 'webcomic' ); ?></td>
+						</tr>
+						<?php
+							$count = 1;
+							$sizes = '<tr><td>%full</td></tr>';
+							
+							foreach ( get_intermediate_image_sizes() as $size ) {
+								$count++;
+								$sizes .= "<tr><td>%{$size}</td></tr>";
+							}
+							
+							echo preg_replace( '/<\/td><\/tr>/', '</td><td rowspan="' . $count . '" style="border-left:thin solid #dfdfdf">' . __( 'Avatar Image', 'webcomic' ) . '</td></tr>', $sizes, 1 );
+						?>
+					</tbody>
+				</table>
+			</label>
+		</p>
+		<?php
+	}
+	
+	/** Handle webcomic link image updating.
+	 * 
+	 * @param integer $id ID of the selected image.
+	 * @param string $field The widget field ID.
+	 */
+	public static function ajax_image( $id, $field ) {
+		if ( $id ) {
+			echo '<a href="', esc_url( add_query_arg( array( 'post' => $id, 'action' => 'edit' ), admin_url( 'post.php' ) ) ), '">', wp_get_attachment_image( $id ), '</a><br>';
+		}
+		
+		echo '<input type="hidden" name="', $field, '" value="', $id, '"><a class="button webcomic-image" data-title="', __( 'Select a Character Link Image', 'webcomic' ), '" data-update="', __( 'Update', 'webcomic' ), '" data-callback="Widget_WebcomicCharacterLink::ajax_image" data-field="', $field, '" data-target="#', str_replace( array( '[', ']' ), array( '-', '' ), $field ), '", data-webcomic-admin-url="', admin_url(), '">', $id ? __( 'Change', 'webcomic' ) : __( 'Select', 'webcomic' ), '</a>';
+		
+		if ( $id ) {
+			echo ' <a class="button webcomic-image-x" data-callback="Widget_WebcomicCharacterLink::ajax_image" data-target="#', str_replace( array( '[', ']' ), array( '-', '' ), $field ), '">', __( 'Remove', 'webcomic' ), '</a>';
+		}
+	}
+}
+
+/** Webcomic Character Link widget.
+ * 
+ * @package Webcomic
+ */
+class Widget_WebcomicCollectionLink extends WP_Widget {
+	/** Initialize the widget.
+	 */
+	public function __construct() {
+		parent::__construct( false, __( 'Webcomic Collection Link', 'webcomic' ), array( 'description' => __( 'Link to a Webcomic collection archive.', 'webcomic' ) ) );
+	}
+	
+	/** Render the widget.
+	 * 
+	 * @param array $args General widget arguments.
+	 * @param array $instance Specific instance arguments.
+	 * @uses WebcomicTag::get_webcomic_collection()
+	 * @uses WebcomicTag::relative_webcomic_term_link()
+	 */
+	public function widget( $args, $instance ) {
+		extract( $args );
+		extract( $instance );
+		
+		$collection = $collection ? $collection : WebcomicTag::get_webcomic_collection();
+		
+		if ( $image and $image = wp_get_attachment_image( $image, 'full' ) ) {
+			$link = preg_replace( '/alt=".+?"/', 'alt="' . $link . '"', $image );
+		}
+		
+		if ( $output = WebcomicTag::webcomic_collection_link( '%link', $link, $collection ) ) {
+			echo $before_widget, empty( $title ) ? '' : $before_title . $title . $after_title, $output, $after_widget;
+		}
+		
+	}
+	
+	/** Update an instance of the widget.
+	 * 
+	 * @param array $new New instance settings.
+	 * @param array $old Old instance settings.
+	 * @return array
+	 */
+	public function update( $new, $old ) {
+		if ( $new[ 'image' ] ) {
+			if ( $old[ 'image' ] and $old[ 'image' ] !== $new[ 'image' ] ) {
+				delete_post_meta( $old[ 'image' ], '_wp_attachment_context', 'webcomic-collection-link' );
+			}
+			
+			update_post_meta( $new[ 'image' ], '_wp_attachment_context', 'webcomic-collection-link' );
+		} else {
+			delete_post_meta( $old[ 'image' ], '_wp_attachment_context', 'webcomic-collection-link' );
+		}
+		
+		$old[ 'title' ]          = strip_tags( $new[ 'title' ] );
+		$old[ 'link' ]           = $new[ 'link' ];
+		$old[ 'image' ]          = $new[ 'image' ];
+		$old[ 'collection' ]     = $new[ 'collection' ];
+		
+		return $old;
+	}
+	
+	/** Render widget settings.
+	 * 
+	 * @param array $instance Specific instance settings.
+	 * @uses WebcomicTag::get_webcomic_collections()
+	 */
+	public function form( $instance ) {
+		extract( $instance );
+		
+		$collections = WebcomicTag::get_webcomic_collections( true );
+		?>
+		<p>
+			<label>
+				<?php _e( 'Title', 'webcomic' ); ?>
+				<input type="text" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo empty( $title ) ? '' : esc_attr( $title ); ?>" class="widefat">
+			</label>
+		</p>
+		<p>
+			<label><?php _e( 'Collection:', 'webcomic' ); ?><br>
+				<select name="<?php echo $this->get_field_name( 'collection' ); ?>">
+					<option value=""><?php _e( '(current collection)', 'webcomic' ); ?></option>
+					<?php
+						foreach ( $collections as $k => $v ) {
+							echo '<option value="', $k, '"', empty( $collection ) ? '' : selected( $k, $collection, false ), '>', esc_html( $v[ 'name' ] ), '</option>';
+						}
+					?>
+				</select>
+			</label>
+		</p>
+		<p>
+			<?php _e( 'Image:', 'webcomic' ); ?>
+			<div id="<?php echo str_replace( array( '[', ']' ), array( '-', '' ), $this->get_field_name( 'image' ) ); ?>"><?php self::ajax_image( empty( $image ) ? 0 : $image, $this->get_field_name( 'image' ) ); ?></div>
+		</p>
+		<p>
+			<label>
+				<?php _e( 'Link:', 'webcomic' ); ?>
+				<input type="text" name="<?php echo $this->get_field_name( 'link' ); ?>" value="<?php echo empty( $link ) ? '' : esc_attr( $link ); ?>" class="widefat">
+				<span class="description"><?php _e( 'The link text will be used as alternate text if you have selected an image above.', 'webcomic' ); ?></span>
+				<table class="widefat">
+					<thead>
+						<tr>
+							<th><?php _e( 'Token', 'webcomic' ); ?></th>
+							<th><?php _e( 'Replacement', 'webcomic' ); ?></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>%title</td>
+							<td><?php _e( 'Collection Title', 'webcomic' ); ?></td>
+						</tr>
+						<?php
+							$count = 1;
+							$sizes = '<tr><td>%full</td></tr>';
+							
+							foreach ( get_intermediate_image_sizes() as $size ) {
+								$count++;
+								$sizes .= "<tr><td>%{$size}</td></tr>";
+							}
+							
+							echo preg_replace( '/<\/td><\/tr>/', '</td><td rowspan="' . $count . '" style="border-left:thin solid #dfdfdf">' . __( 'Poster Image', 'webcomic' ) . '</td></tr>', $sizes, 1 );
+						?>
+					</tbody>
+				</table>
+			</label>
+		</p>
+		<?php
+	}
+	
+	/** Handle webcomic collection link image updating.
+	 * 
+	 * @param integer $id ID of the selected image.
+	 * @param string $field The widget field ID.
+	 */
+	public static function ajax_image( $id, $field ) {
+		if ( $id ) {
+			echo '<a href="', esc_url( add_query_arg( array( 'post' => $id, 'action' => 'edit' ), admin_url( 'post.php' ) ) ), '">', wp_get_attachment_image( $id ), '</a><br>';
+		}
+		
+		echo '<input type="hidden" name="', $field, '" value="', $id, '"><a class="button webcomic-image" data-title="', __( 'Select a Collection Link Image', 'webcomic' ), '" data-update="', __( 'Update', 'webcomic' ), '" data-callback="Widget_WebcomicCollectionLink::ajax_image" data-field="', $field, '" data-target="#', str_replace( array( '[', ']' ), array( '-', '' ), $field ), '", data-webcomic-admin-url="', admin_url(), '">', $id ? __( 'Change', 'webcomic' ) : __( 'Select', 'webcomic' ), '</a>';
+		
+		if ( $id ) {
+			echo ' <a class="button webcomic-image-x" data-callback="Widget_WebcomicCollectionLink::ajax_image" data-target="#', str_replace( array( '[', ']' ), array( '-', '' ), $field ), '">', __( 'Remove', 'webcomic' ), '</a>';
+		}
 	}
 }

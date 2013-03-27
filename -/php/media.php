@@ -398,10 +398,18 @@ class WebcomicMedia extends Webcomic {
 	public function display_media_states( $states ) {
 		global $post;
 		
-		if ( $type = get_post_meta( $post->ID, '_wp_attachment_context', true ) and preg_match( '/^webcomic\d+(_(storyline|character))?$/', $type ) ) {
+		if ( $type = get_post_meta( $post->ID, '_wp_attachment_context', true ) and preg_match( '/^(webcomic(-(collection|storyline|character))?-link|webcomic\d+(_(storyline|character)))?$/', $type ) ) {
 			$type = explode( '_', $type );
 			
-			if ( empty( $type[ 1 ] ) ) {
+			if ( 'webcomic-link' === $type[ 0 ] ) {
+				$states[] = __( 'Webcomic Link Image', 'webcomic' );
+			} elseif ( 'webcomic-collection-link' === $type[ 0 ] ) {
+				$states[] = __( 'Webcomic Collection Link Image', 'webcomic' );
+			} elseif ( 'webcomic-storyline-link' === $type[ 0 ] ) {
+				$states[] = __( 'Webcomic Storyline Link Image', 'webcomic' );
+			} elseif ( 'webcomic-character-link' === $type[ 0 ] ) {
+				$states[] = __( 'Webcomic Character Link Image', 'webcomic' );
+			} elseif ( empty( $type[ 1 ] ) ) {
 				$states[] = sprintf( __( '%s Poster', 'webcomic' ), esc_html( self::$config[ 'collections' ][ $type[ 0 ] ][ 'name' ] ) );
 			} elseif ( 'storyline' === $type[ 1 ] ) {
 				$states[] = sprintf( __( '%s Cover', 'webcomic' ), esc_html( self::$config[ 'collections' ][ $type[ 0 ] ][ 'name' ] ) );
