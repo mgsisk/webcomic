@@ -273,9 +273,7 @@ class WebcomicConfig extends Webcomic {
 		$screen = get_current_screen();
 		
 		if ( preg_match( '/^admin_page_webcomic-network|webcomic\d+_page_webcomic\d+-options$/', $screen->id ) ) {
-			wp_register_script( 'webcomic-config', self::$url . '-/js/admin-config.js', array( 'jquery' ) );
-			
-			wp_enqueue_script( 'webcomic-config' );
+			wp_enqueue_script( 'webcomic-config', self::$url . '-/js/admin-config.js', array( 'jquery' ) );
 			
 			wp_enqueue_media();
 		}
@@ -1495,7 +1493,6 @@ class WebcomicConfig extends Webcomic {
 	/** Handle collection poster image updating.
 	 * 
 	 * @param integer $id ID of the selected image.
-	 * @param string $collection Collection the poster is for.
 	 */
 	public static function ajax_collection_image( $id ) {
 		if ( $id ) {

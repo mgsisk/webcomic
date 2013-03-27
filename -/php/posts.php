@@ -114,13 +114,9 @@ class WebcomicPosts extends Webcomic {
 		$screen = get_current_screen();
 		
 		if ( preg_match( '/^edit-webcomic\d+$/', $screen->id ) ) {
-			wp_register_script( 'webcomic-admin-posts', self::$url . '-/js/admin-posts.js', array( 'jquery' ) );
-			
-			wp_enqueue_script( 'webcomic-admin-posts' );
+			wp_enqueue_script( 'webcomic-admin-posts', self::$url . '-/js/admin-posts.js', array( 'jquery' ) );
 		} elseif ( isset( self::$config[ 'collections' ][ $screen->id ] ) ) {
-			wp_register_script( 'webcomic-admin-meta', self::$url . '-/js/admin-meta.js', array( 'jquery' ) );
-			
-			wp_enqueue_script( 'webcomic-admin-meta' );
+			wp_enqueue_script( 'webcomic-admin-meta', self::$url . '-/js/admin-meta.js', array( 'jquery' ) );
 			
 			if ( !in_array( 'editor', self::$config[ 'collections' ][ $screen->id ][ 'supports' ] ) ) {
 				wp_enqueue_media( array( 'post' => get_post() ) );

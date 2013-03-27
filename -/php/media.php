@@ -307,15 +307,11 @@ class WebcomicMedia extends Webcomic {
 		$screen = get_current_screen();
 		
 		if ( 'upload' === $screen->id or 'media_page_webcomic-generator' === $screen->id or ( isset( $_GET[ 'tab' ] ) and 'webcomic_media' === $_GET[ 'tab' ] ) ) {
-			wp_register_script( 'webcomic-admin-media', self::$url . '-/js/admin-media.js', array( 'jquery-ui-sortable' ) );
-			
-			wp_enqueue_script( 'webcomic-admin-media' );
+			wp_enqueue_script( 'webcomic-admin-media', self::$url . '-/js/admin-media.js', array( 'jquery-ui-sortable' ) );
 		}
 		
 		if ( isset( $_GET[ 'tab' ] ) and 'webcomic_media' === $_GET[ 'tab' ] ) {
-			wp_register_style( 'webcomic-admin-media', self::$url . '-/css/admin-media.css' );
-			
-			wp_enqueue_style( 'webcomic-admin-media' );
+			wp_enqueue_style( 'webcomic-admin-media', self::$url . '-/css/admin-media.css' );
 		}
 	}
 	

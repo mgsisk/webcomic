@@ -487,7 +487,7 @@ class WebcomicAdmin extends Webcomic {
 		}
 		
 		if ( isset( self::$config[ 'thanks' ] ) ) {
-			echo '<div class="updated webcomic"><a href="' . add_query_arg( array( 'cmd' => 's-xclick', 'hosted_button_id' => 'UD3J2DJPSN9UC' ), '//paypal.com/cgi-bin/webscr' ) . '" target="_blank"><b>&#x2764;</b>', sprintf( __( 'Thank you for using %s', 'webcomic' ), 'Webcomic ' . self::$version ), '</a></div>';
+			echo '<div class="updated webcomic"><a href="' . add_query_arg( array( 'cmd' => 's-xclick', 'hosted_button_id' => 'UD3J2DJPSN9UC' ), 'http://paypal.com/cgi-bin/webscr' ) . '" target="_blank"><b>&#x2764;</b>', sprintf( __( 'Thank you for using %s', 'webcomic' ), 'Webcomic ' . self::$version ), '</a></div>';
 			
 			unset( self::$config[ 'thanks' ] );
 			
@@ -517,6 +517,7 @@ class WebcomicAdmin extends Webcomic {
 			wp_register_style( 'webcomic-google-font', 'http://fonts.googleapis.com/css?family=Maven+Pro' );
 			
 			wp_enqueue_style( 'webcomic-showcase', self::$url . '-/css/admin-showcase.css', array( 'webcomic-google-font' ) );
+			
 			wp_enqueue_script( 'webcomic-showcase', self::$url . '-/js/admin-showcase.js' );
 		}
 		
@@ -544,7 +545,7 @@ class WebcomicAdmin extends Webcomic {
 	 */
 	public function plugin_row_meta( $meta, $file, $data ) {
 		if ( 'Webcomic' === $data[ 'Name' ] ) {
-			$meta[] = '<a href="' . add_query_arg( array( 'cmd' => 's-xclick', 'hosted_button_id' => 'UD3J2DJPSN9UC' ), '//paypal.com/cgi-bin/webscr' ) . '" target="_blank">' . __( 'Donate', 'webcomic' ) . '</a>';
+			$meta[] = '<a href="' . add_query_arg( array( 'cmd' => 's-xclick', 'hosted_button_id' => 'UD3J2DJPSN9UC' ), 'http://paypal.com/cgi-bin/webscr' ) . '" target="_blank">' . __( 'Donate', 'webcomic' ) . '</a>';
 			
 			if ( self::$config[ 'uninstall' ] ) {
 				$meta[] = '<b style="color:#d98500">' . ( self::$config[ 'convert' ] ?  __( 'Webcomic data will be converted if the plugin is deactivated.', 'webcomic' ) : __( 'Webcomic data will be deleted if the plugin is deactivated.', 'webcomic' ) ) . '</b>';

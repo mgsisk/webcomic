@@ -153,9 +153,7 @@ class WebcomicTranscripts extends Webcomic {
 		$screen = get_current_screen();
 		
 		if ( 'webcomic_transcript' === $screen->id ) {
-			wp_register_script( 'webcomic-admin-transcripts', self::$url . '-/js/admin-transcripts.js', array( 'jquery' ) );
-			
-			wp_enqueue_script( 'webcomic-admin-transcripts' );
+			wp_enqueue_script( 'webcomic-admin-transcripts', self::$url . '-/js/admin-transcripts.js', array( 'jquery' ) );
 		}
 	}
 	

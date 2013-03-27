@@ -229,17 +229,14 @@ class WebcomicTaxonomy extends Webcomic {
 		
 		if ( preg_match( '/^admin_page_webcomic-term-sort|edit-webcomic\d+_(storyline|character)$/', $screen->id ) ) {
 			wp_register_script( 'jquery-nestedsortable', self::$url . '-/lib/jquery.nestedsortable.js', array( 'jquery', 'jquery-ui-sortable' ) );
-			wp_register_script( 'webcomic-admin-taxonomy', self::$url . '-/js/admin-taxonomy.js', array( 'jquery-nestedsortable' ) );
 			
-			wp_enqueue_script( 'webcomic-admin-taxonomy' );
+			wp_enqueue_script( 'webcomic-admin-taxonomy', self::$url . '-/js/admin-taxonomy.js', array( 'jquery-nestedsortable' ) );
 			
 			wp_enqueue_media();
 		}
 		
 		if ( 'admin_page_webcomic-term-sort' === $screen->id ) {
-			wp_register_style( 'webcomic-admin-taxonomy', self::$url . '-/css/admin-taxonomy.css' );
-			
-			wp_enqueue_style( 'webcomic-admin-taxonomy' );
+			wp_enqueue_style( 'webcomic-admin-taxonomy', self::$url . '-/css/admin-taxonomy.css' );
 		}
 	}
 	

@@ -93,9 +93,7 @@ class WebcomicPages extends Webcomic {
 		$screen = get_current_screen();
 		
 		if ( 'edit-page' === $screen->id ) {
-			wp_register_script( 'webcomic-admin-pages', self::$url . '-/js/admin-pages.js', array( 'jquery' ) );
-			
-			wp_enqueue_script( 'webcomic-admin-pages' );
+			wp_enqueue_script( 'webcomic-admin-pages', self::$url . '-/js/admin-pages.js', array( 'jquery' ) );
 		}
 	}
 	

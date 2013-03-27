@@ -158,15 +158,12 @@ class WebcomicLegacy extends Webcomic {
 	 * @hook admin_enqueue_scripts
 	 */
 	public function admin_enqueue_scripts() {
-		wp_register_script( 'webcomic-legacy', self::$url . '-/js/admin-legacy.js', array( 'jquery' ) );
-		
-		wp_enqueue_script( 'webcomic-legacy' );
+		wp_enqueue_script( 'webcomic-legacy', self::$url . '-/js/admin-legacy.js', array( 'jquery' ) );
 		
 		if ( isset( self::$config[ 'legacy_notice' ] ) ) {
 			wp_register_style( 'webcomic-google-font', 'http://fonts.googleapis.com/css?family=Maven+Pro' );
-			wp_register_style( 'webcomic-special', self::$url . '-/css/admin-special.css', array( 'webcomic-google-font' ) );
 			
-			wp_enqueue_style( 'webcomic-special' );
+			wp_enqueue_style( 'webcomic-special', self::$url . '-/css/admin-special.css', array( 'webcomic-google-font' ) );
 		}
 	}
 	
