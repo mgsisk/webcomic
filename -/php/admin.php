@@ -589,6 +589,8 @@ class WebcomicAdmin extends Webcomic {
 		$webcomics = get_posts( array( 'numberposts' => -1, 'post_type' => $collection, 'post_status' => get_post_stati() ) );
 		$terms     = array_merge( ( array ) get_terms( "{$collection}_storyline", array( 'get' => 'all' ) ), ( array ) get_terms( "{$collection}_character", array( 'get' => 'all' ) ) );
 		
+		delete_post_meta( self::$config[ 'collections' ][ $collection ][ 'image' ], '_wp_attachment_context', $collection );
+		
 		foreach ( $webcomics as $webcomic ) {
 			wp_update_post( array( 'ID' => $webcomic->ID, 'post_type' => 'post' ) );
 		}

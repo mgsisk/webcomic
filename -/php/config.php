@@ -1165,6 +1165,8 @@ class WebcomicConfig extends Webcomic {
 							wp_delete_term( $character, "{$id}_character" );
 						}
 						
+						delete_post_meta( self::$config[ 'collections' ][ $id ][ 'image' ], '_wp_attachment_context', $id );
+						
 						unset( self::$config[ 'collections' ][ $id ] );
 						
 						$count++;
@@ -1343,6 +1345,16 @@ class WebcomicConfig extends Webcomic {
 					)
 				)
 			);
+			
+			if ( $_POST[ 'webcomic_image' ] ) {
+				if ( isset( self::$config[ 'collections' ][ $id ][ 'image' ] ) and self::$config[ 'collections' ][ $id ][ 'image' ] !== $_POST[ 'webcomic_image' ] ) {
+					delete_post_meta( self::$config[ 'collections' ][ $id ][ 'image' ], '_wp_attachment_context', $id );
+				}
+				
+				update_post_meta( $_POST[ 'webcomic_image' ], '_wp_attachment_context', $id );
+			} else {
+				delete_post_meta( self::$config[ 'collections' ][ $id ][ 'image' ], '_wp_attachment_context', $id );
+			}
 			
 			foreach ( $_POST[ 'webcomic_slugs' ] as $k  => $v ) {
 				$slug = array();
@@ -1573,7 +1585,7 @@ class WebcomicConfig extends Webcomic {
 			if ( 200 === intval( $code ) ) {
 				$response = json_decode( $oauth->response[ 'response' ] );
 				
-				echo '<a href="http://twitter.com/', $response->screen_name, '" target="_blank"><b>@', $response->screen_name, '</b></a> <a href="https://twitter.com/settings/applications" target="_blank" class="button">', __( 'Revoke Access', 'webcomic' ), '</a>';
+				echo '<a href="http://twitter.com/', $response->screen_name, '" target="_blank"><b>@', $response->screen_name, '</b></a> <a href="http://twitter.com/settings/applications" target="_blank" class="button">', __( 'Revoke Access', 'webcomic' ), '</a>';
 			} else {
 				$code = $oauth->request( 'POST', $oauth->url( 'oauth/request_token', '' ), array(
 					'oauth_callback' => add_query_arg( array( 'webcomic_twitter_oauth' => true, 'webcomic_collection' => $collection ), get_site_url() )
@@ -1589,11 +1601,11 @@ class WebcomicConfig extends Webcomic {
 					
 					echo ( self::$config[ 'collections' ][ $collection ][ 'twitter' ][ 'oauth_token' ] and self::$config[ 'collections' ][ $collection ][ 'twitter' ][ 'oauth_secret' ]  ) ? __( '<p class="description">Your credentials could not be verified.</p>', 'webcomic' ) : '', '<a href="', add_query_arg( array( 'oauth_token' => $response[ 'oauth_token' ] ), $oauth->url( 'oauth/authorize', '' ) ), '"><img src="', self::$url, '-/img/twitter.png" alt="', __( 'Sign in with Twitter', 'webcomic' ), '"></a>';
 				} else {
-					_e( 'Validation error. Please ensure your <a href="https://dev.twitter.com/apps/new" target="_blank">Twitter Application</a> <b>consumer key</b> and <b>consumer secret</b> are entered correctly.', 'webcomic' );
+					_e( 'Validation error. Please ensure your <a href="http://dev.twitter.com/apps/new" target="_blank">Twitter Application</a> <b>consumer key</b> and <b>consumer secret</b> are entered correctly.', 'webcomic' );
 				}
 			}
 		} else {
-			echo '<span class="description">', __( 'Please enter your <a href="https://dev.twitter.com/apps/new" target="_blank">Twitter Application</a> <b>consumer key</b> and <b>consumer secret</b> below.', 'webcomic' ), '</span>';
+			echo '<span class="description">', __( 'Please enter your <a href="http://dev.twitter.com/apps/new" target="_blank">Twitter Application</a> <b>consumer key</b> and <b>consumer secret</b> below.', 'webcomic' ), '</span>';
 		}
 	}
 }
