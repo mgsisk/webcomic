@@ -16,6 +16,7 @@ class WebcomicUpgrade extends Webcomic {
 	 * @uses WebcomicUpgrade::_403
 	 * @uses WebcomicUpgrade::_406
 	 * @uses WebcomicUpgrade::_409
+	 * @uses WebcomicUpgrade::_41
 	 */
 	public function __construct() {
 		if ( version_compare( self::$config[ 'version' ], '4.0.3', '<' ) ) {
@@ -28,6 +29,10 @@ class WebcomicUpgrade extends Webcomic {
 		
 		if ( version_compare( self::$config[ 'version' ], '4.0.9', '<' ) ) {
 			$this->_409();
+		}
+		
+		if ( version_compare( self::$config[ 'version' ], '4.1', '<' ) ) {
+			$this->_41();
 		}
 		
 		self::$config[ 'thanks' ]  = true;
@@ -81,6 +86,65 @@ class WebcomicUpgrade extends Webcomic {
 		
 		foreach ( self::$config[ 'collections' ] as $k => $v ) {
 			self::$config[ 'collections' ][ $k ][ 'twitter' ][ 'media' ] = false;
+		}
+	}
+	
+	/** Upgrade to 4.1
+	 * 
+	 * @todo import old commerce logs
+	 */
+	private function _41() {
+		global $blog_id;
+		
+		$blog_id = $blog_id ? $blog_id : 1;
+		
+		if ( is_readable( self::$dir . "-/log/ipn-{$blog_id}.php" ) and $logfile = str_replace( "<?php die; ?>\n", '', file_get_contents( self::$dir . "-/log/ipn-{$blog_id}.php" ) ) ) {
+			$log  = explode( "\n", $logfile );
+			$cart = '';
+			$post = array(
+				'post_type'   => 'webcomic_commerce',
+				'post_author' => 1,
+				'post_status' => 'puglish'
+			);
+			
+			foreach ( $log as $l ) {
+				$l = explode( "\t", $l );
+				
+				if ( empty( $l ) ) {
+					continue;
+				} elseif ( $cart and empty( $l[ 1 ] ) ) {
+					$error = empty( $l[ 4 ] ) ? '' : ' class="error"';
+					$cart .= '<dt' . $error . '>' . $l[ 2 ] . '</dt><dd' . $error . '>' . $l[ 3 ] . '</dd>';
+				} else {
+					if ( $cart ) {
+						$post[ 'post_content' ] = $cart . '</dl>';
+						
+						wp_insert_post( $post );
+						
+						$cart = false;
+					}
+					
+					$date = date( 'Y-m-d H:i:s', strtotime( $l[ 1 ] ) );
+					
+					$post[ 'post_name' ]     = sanitize_title( $l[ 0 ] );
+					$post[ 'post_date' ]     = $date;
+					$post[ 'post_title' ]    = $l[ 0 ];
+					$post[ 'post_excerpt' ]  = empty( $l[ 2 ] ) ? __( 'Shopping Cart', 'webcomic' ) : $l[ 3 ];
+					$post[ 'post_date_gmt' ] = get_gmt_from_date( $date );
+					
+					if ( empty( $l[ 2 ] ) ) {
+						$cart = '<dl>';
+						
+						continue;
+					} else {
+						$post[ 'post_content' ] = $l[ 2 ];
+					}
+				}
+				
+				wp_insert_post( $post );
+			}
+			
+			@unlink( self::$dir . "-/log/ipn-{$blog_id}.php" );
 		}
 	}
 }

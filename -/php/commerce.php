@@ -9,19 +9,12 @@
  * @package Webcomic
  */
 class WebcomicCommerce extends Webcomic {
-	private $logfile = '';
-	
 	/** Register hooks.
 	 * 
 	 * @uses WebcomicCommerce::admin_init()
 	 * @uses WebcomicCommerce::admin_menu()
 	 */
 	public function __construct() {
-		global $blog_id;
-		
-		$blog_id = $blog_id ? $blog_id : 1;
-		$this->logfile = self::$dir . "-/log/ipn-{$blog_id}.php";
-		
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 	}
@@ -29,17 +22,13 @@ class WebcomicCommerce extends Webcomic {
 	/** Empty the current ipn log file.
 	 * 
 	 * @uses Webcomic::$dir
-	 * @uses WebcomicAdmin::notify()
 	 * @hook admin_init
 	 */
 	public function admin_init() {
+		global $wpdb;
+		
 		if ( isset( $_POST[ 'webcomic_commerce' ], $_POST[ 'empty_log' ] ) and wp_verify_nonce( $_POST[ 'webcomic_commerce' ], 'webcomic_commerce' ) ) {
-			if ( is_writable( $this->logfile ) ) {
-				file_put_contents( $this->logfile, "<?php die; ?>\n" );
-			} else {
-				WebcomicAdmin::notify( __( 'Webcomic could not empty the log file. Please try again.', 'webcomic' ), 'error' );
-			}
-			
+			$wpdb->query( "DELETE FROM {$wpdb->posts} WHERE post_type = 'webcomic_commerce'" );
 		}
 	}
 	
@@ -54,7 +43,7 @@ class WebcomicCommerce extends Webcomic {
 	
 	/** Render the commerce tool page. */
 	public function page() { 
-		$log = is_readable( $this->logfile ) ? str_replace( "<?php die; ?>\n", '', file_get_contents( $this->logfile ) ) : '';
+		$transactions = get_posts( array( 'post_type' => 'webcomic_commerce', 'numberposts' => -1, 'post_status' => 'any' ) );
 		?>
 		<div class="wrap">
 			<div id="icon-tools" class="icon32"></div>
@@ -71,37 +60,30 @@ class WebcomicCommerce extends Webcomic {
 				</thead>
 				<tbody>
 					<?php
-						if ( $log ) {
-							$i   = 0;
-							$log = explode( "\n", $log );
+						if ( $transactions ) {
+							global $post;
 							
-							foreach ( $log as $l ) {
-								if ( empty( $l ) ) {
-									continue;
-								} else {
-									$l      = explode( "\t", $l );
-									$l[ 1 ] = empty( $l[ 1 ] ) ? '' : strtotime( $l[ 1 ] );
-									$error  = empty( $l[ 4 ] ) ? '' : ' style="color:#bc0b0b;font-weight:bold"';
-									
-									if ( empty( $l[ 2 ] ) ) {
-										$l[ 2 ] = __( '- Shopping Cart -', 'webcomic' );
-									}
-								}
+							$i = 0;
+							
+							foreach ( $transactions as $post ) {
+								setup_postdata( $post );
+								
+								$error = get_post_meta( get_the_ID(), 'webcomic_commerce_error', true ) ? ' style="color:#bc0b0b;font-weight:bold"' : '';
 					?>
 					<tr<?php echo $i % 2 ? '' : ' class="alternate"'; ?>>
-						<td<?php echo $error; ?>><?php echo $l[ 0 ]; ?></td>
-						<td<?php echo $error; ?>><?php echo $l[ 2 ]; ?></td>
-						<td<?php echo $error; ?>><?php echo $l[ 3 ]; ?></td>
-						<td<?php echo $error; ?>><?php echo empty( $l[ 1 ] ) ? '' : '<abbr title="' . date( __( 'Y/m/d g:i:s A', 'webcomic' ), $l[ 1 ] ) . '">' . date( __( 'Y/m/d', 'webcomic' ), $l[ 1 ] ) .'</abbr>'; ?></td>
+						<td<?php echo $error; ?>><?php the_title(); ?></td>
+						<td<?php echo $error; ?>><?php the_content(); ?></td>
+						<td<?php echo $error; ?>><?php the_excerpt(); ?></td>
+						<td<?php echo $error; ?>><?php echo '<abbr title="', get_the_time( __( 'Y/m/d g:i:s A', 'webcomic' ) ), '">', get_the_time( __( 'Y/m/d', 'webcomic' ) ), '</abbr>'; ?></td>
 					</tr>
 					<?php $i++; } } else { ?>
 					<tr>
-						<td colspan="4" class="alternate"><p><?php _e( "Webcomic hasn't logged any commerce activity.", 'webcomic' ); ?></p></td>
+						<td colspan="4" class="alternate"><p><?php _e( "No commerce activity has been logged.", 'webcomic' ); ?></p></td>
 					</tr>
 					<?php } ?>
 				</tbody>
 			</table>
-			<?php if ( $log ) { ?>
+			<?php if ( $transactions ) { ?>
 			<form method="post" style="float:right">
 				<?php
 					wp_nonce_field( 'webcomic_commerce', 'webcomic_commerce' );
