@@ -29,8 +29,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 
 /** Comic Publishing Power for the Web
  * 
- * @todo core.trac.wordpress.org/ticket/16031
- * 
  * @package Webcomic
  * @copyright 2008 - 2013 Michael Sisk
  * @license http://gnu.org/licenses/gpl-2.0.html GPL2
@@ -324,6 +322,8 @@ class Webcomic {
 	 * 
 	 * https://www.paypal.com/cgi-bin/webscr | https://www.sandbox.paypal.com/cgi-bin/webscr
 	 * 
+	 * @todo developer.paypal.com/webapps/developer/docs/api
+	 * 
 	 * @uses Webcomic::$config
 	 * @action webcomic_ipn Triggered prior to processing a Paypal IPN request.
 	 * @hook init
@@ -345,20 +345,17 @@ class Webcomic {
 				$request .= "&{$k}={$value}";
 			}
 			
-			if ( $curl = curl_init() ) {
-				curl_setopt_array( $curl, array(
-					CURLOPT_URL    => 'https://www.paypal.com/cgi-bin/webscr',
-					CURLOPT_HEADER => 0,
-					CURLOPT_POST => 1,
-					CURLOPT_RETURNTRANSFER => 1,
-					CURLOPT_POSTFIELDS => $request,
-					CURLOPT_SSL_VERIFYPEER => 1,
-					CURLOPT_SSL_VERIFYHOST => 2,
-					CURLOPT_HTTPHEADER => array( 'Host: www.paypal.com' )
-				) );
-				
+			$remote = wp_remote_post( 'https://www.paypal.com/cgi-bin/webscr', array(
+				'body' => $request,
+				'sslverify' => true,
+				'headers' => array(
+					'Host' => 'www.sandbox.paypal.com'
+				)
+			) );
+			
+			if ( 200 === wp_remote_retrieve_response_code( $remote ) ) {
 				$log      = is_readable( $logfile ) ? file_get_contents( $logfile ) : '';
-				$response = curl_exec( $curl );
+				$response = wp_remote_retrieve_body( $remote );
 				
 				if ( 0 === strcmp( $response, 'VERIFIED' ) ) {
 					if ( 'Completed' !== $_POST[ 'payment_status' ] ) {
@@ -450,8 +447,6 @@ class Webcomic {
 					$error   = true;
 					$message = __( 'Invalid response', 'webcomic' );
 				}
-				
-				curl_close( $curl );
 			} else {
 				$message = __( 'HTTP Error', 'webcomic' );
 			}
@@ -471,7 +466,7 @@ class Webcomic {
 	/** Add Generator, Open Graph, and Twitter Card metadata.
 	 * 
 	 * Use of the 'property' attribute is obnoxious but intentional; see
-	 * [ogp.me](http://ogp.me/) for details on the Open Graph protocol.
+	 * [ogp.me](http://ogp.me) for details on the Open Graph protocol.
 	 * 
 	 * @uses Webcomic::$config
 	 * @uses Webcomic::$collection
@@ -515,15 +510,15 @@ class Webcomic {
 					}
 				}
 			} elseif ( is_tax() ) {
-				$output[ 'og:url' ]         = get_term_link( ( integer ) $object->term_id, $object->taxonomy );
-				$output[ 'og:title' ]       = esc_attr( single_term_title( '', false ) );
+				$output[ 'og:url' ]   = get_term_link( ( integer ) $object->term_id, $object->taxonomy );
+				$output[ 'og:title' ] = esc_attr( single_term_title( '', false ) );
 				
 				if ( $description = esc_attr( strip_tags( term_description( $object->term_id, $object->taxonomy ) ) ) ) {
 					$output[ 'og:description' ] = $description;
 				}
 			} else {
-				$output[ 'og:url' ]         = get_post_type_archive_link( $object->name );
-				$output[ 'og:title' ]       = esc_attr( self::$config[ 'collections' ][ $object->name ][ 'name' ] );
+				$output[ 'og:url' ]   = get_post_type_archive_link( $object->name );
+				$output[ 'og:title' ] = esc_attr( self::$config[ 'collections' ][ $object->name ][ 'name' ] );
 				
 				if ( $description = esc_attr( strip_tags( self::$config[ 'collections' ][ $object->name ][ 'description' ] ) ) ) {
 					$output[ 'og:description' ] = $description;
@@ -1304,7 +1299,7 @@ class Webcomic {
 	
 	/** Handle custom permalink tokens.
 	 * 
-	 * @todo Use get_term_parents; see core.trac.wordpress.org/ticket/17069
+	 * @todo core.trac.wordpress.org/ticket/17069
 	 * 
 	 * @param string $link Permalink to swap tokens in.
 	 * @param object $post Post object.
@@ -1654,22 +1649,21 @@ class Webcomic {
 	 * @return array
 	 */
 	protected function api_request( $endpoint, $method = 'GET', $data = array() ) {
-		$curl             = curl_init( "http://webcomic.nu/api/{$endpoint}" );
 		$data[ 'domain' ] = home_url();
 		$data[ 'key' ]    = self::$config[ 'api' ];
 		$data[ 0 ]        = hash( 'whirlpool', serialize( $data ) );
 		
-		curl_setopt_array( $curl, array(
-			CURLOPT_REFERER        => home_url(),
-			CURLOPT_POSTFIELDS     => json_encode( $data ),
-			CURLOPT_CUSTOMREQUEST  => $method,
-			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_FOLLOWLOCATION => true
+		$remote = wp_remote_request( "http://webcomic.nu/api/{$endpoint}", array(
+			'body'    => json_encode( $data ),
+			'method'  => $method,
+			'headers' => array(
+				'Referer' => home_url()
+			)
 		) );
 		
-		$response = curl_exec( $curl );
+		$code = wp_remote_retrieve_response_code( $remote );
 		
-		return array( curl_getinfo( $curl, CURLINFO_HTTP_CODE ) => json_decode( $response, true ) );
+		return $code ? array( $code => json_decode( wp_remote_retrieve_body( $remote ), true ) ) : array( 999 => __( 'The Webcomic Network is currently unavailable.', 'webcomic' ) );
 	}
 }
 
