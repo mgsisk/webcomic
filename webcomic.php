@@ -7,7 +7,7 @@ Description: Comic publishing power for the web.
 Version: 4.1
 Author: Michael Sisk
 Author URI: http://mgsisk.com
-License: GPL2
+License: GPLv2 or later
 
 Copyright 2008 - 2013 Michael Sisk (contact@mgsisk.com)
 

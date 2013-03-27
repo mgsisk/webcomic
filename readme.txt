@@ -14,7 +14,7 @@ Comic publishing power for the web.
 
 Webcomic provides a host of features for creating, managing, and sharing webcomics. Take control of your webcomic with multi-comic management, theme integration, dynamic navigation, and more.
 
-[**Existing Webcomic users should read this before upgrading.**](https://github.com/mgsisk/webcomic/wiki/Upgrading#Upgrading-from-Webcomic-1%2C-2%2C-or-3)
+[**Existing Webcomic users should read this before upgrading.**](http://github.com/mgsisk/webcomic/wiki/Upgrading#Upgrading-from-Webcomic-1%2C-2%2C-or-3)
 
 = ★ New in Webcomic 4 ★ =
 
@@ -64,13 +64,13 @@ Once installed and activated you can use Webcomic in one of three ways:
 = 4 =
 
 - **[Existing Webcomic users should read this before upgrading](//github.com/mgsisk/webcomic/wiki/Upgrading)**
-- All Webcomic changes can be followed at [the master GitHub repository](https://github.com/mgsisk/webcomic/commits/master).
+- All Webcomic changes can be followed at [the master GitHub repository](http://github.com/mgsisk/webcomic/commits/master).
 
 == Upgrade Notice ==
 
 = 4 =
 
-Existing Webcomic users should read this before upgrading: https://github.com/mgsisk/webcomic/wiki/Upgrading
+Existing Webcomic users should read this before upgrading: http://github.com/mgsisk/webcomic/wiki/Upgrading
 
 == Special Thanks ==
 
