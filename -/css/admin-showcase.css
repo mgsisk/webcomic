@@ -36,9 +36,11 @@
 	font-size: 300%;
 	font-weight: bold;
 	line-height: 1;
+	position: relative;
 	text-align: center;
 	text-shadow: 0 .1em .1em #fff;
 	width: 50%;
+	z-index: 100;
 }
 
 #webcomic-showcase .slideshow > a:last-child {
@@ -54,7 +56,6 @@
 #webcomic-showcase .slideshow img {
 	border-radius: .5rem;
 	display: block;
-	height: auto;
 	margin: 0 0 1rem;
 	max-width: 100%;
 }
