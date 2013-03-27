@@ -1,6 +1,8 @@
 <?php
 /** Contains the WebcomicMedia class.
  * 
+ * @todo core.trac.wordpress.org/ticket/16031
+ * 
  * @package Webcomic
  */
 
@@ -258,7 +260,7 @@ class WebcomicMedia extends Webcomic {
 	public function media_upload_webcomic_media( $output = false ) {
 		if ( $output ) {
 			if ( $attachments = self::get_attachments( $_GET[ 'post_id' ] ) ) {
-				echo '<div data-webcomic-modal-media="', admin_url(), '"><p>', __( 'Drag and drop the media attachments to change the order Webcomic will display them.', 'webcomic' ), '</p><hr></div><ul class="webcomic-media-sort">';
+				echo '<div data-webcomic-modal-media="', admin_url(), '"><p>', __( 'Drag and drop the media attachments to change the order Webcomic will display them.', 'webcomic' ), '</p></div><ul class="webcomic-media-sort">';
 				
 				foreach ( $attachments as $attachment ) {
 					echo '<li><b>', wp_get_attachment_image( $attachment->ID ), '</b><a href="', esc_html( wp_nonce_url( add_query_arg( array_merge( $_GET, array( 'post' => $attachment->ID, 'action' => 'edit', 'webcomic_action' => 'regenerate', 'webcomic_hide_notice' => true ) ), admin_url( 'media-upload.php' ) ), 'webcomic_regenerate' ) ), '" title="', __( 'Regenerate', 'webcomic' ), '">', __( 'Regenerate', 'webcomic' ), '</a><a href="', esc_html( wp_nonce_url( add_query_arg( array_merge( $_GET, array( 'post' => $attachment->ID, 'action' => 'edit', 'webcomic_action' => 'detach', 'webcomic_hide_notice' => true ) ), admin_url( 'media-upload.php' ) ), 'webcomic_detach' ) ), '" title="', __( 'Detach', 'webcomic' ), '">', __( 'Detach', 'webcomic' ), '</a><input type="hidden" name="ids[]" value="', $attachment->ID, '"></li>';

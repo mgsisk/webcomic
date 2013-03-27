@@ -52,8 +52,3 @@ li a + a:focus,
 li a + a:hover {
 	background-position: -24px -24px;
 }
-
-hr {
-	border: 0;
-	border-bottom: thin solid rgba( 0, 0, 0, .2 );
-}

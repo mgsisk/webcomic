@@ -40,7 +40,7 @@ jQuery( function( $ ) {
 				
 				setTimeout( function() {
 					$( 'div p' ).html( message );
-				}, 5000 );
+				}, 3000 );
 			} );
 		}
 	} );
