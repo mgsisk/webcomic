@@ -593,7 +593,7 @@ class WebcomicConfig extends Webcomic {
 	public function network_showcase_image() {
 		?>
 		<div id="webcomic_showcase_image"><?php self::ajax_showcase_image( isset( self::$network[ 'showcase' ][ 'image' ] ) ? self::$network[ 'showcase' ][ 'image' ] : '' ); ?></div>
-		<p class="description"><?php _e( 'The billboard is a representative image for your site. It should be 640&times;360 pixels in size and will be hotlinked directly from your site.', 'webcomic' ); ?></p>
+		<p class="description"><?php _e( 'The billboard is a representative image for your site. It must be 640&times;360 pixels in size and will be hotlinked directly from your site.', 'webcomic' ); ?></p>
 		<?php
 	}
 	
@@ -1492,7 +1492,19 @@ class WebcomicConfig extends Webcomic {
 				$url = array_shift( wp_get_attachment_image_src( $id, 'full' ) );
 			}
 			
-			echo $id ? '<a href="' . esc_url( add_query_arg( array( 'post' => $id, 'action' => 'edit' ), admin_url( 'post.php' ) ) ) . '"><img src="' . $url . '" alt="" height="360" width="640"></a><br>' : '<img src="' . $url . '" alt="" height="360" width="640"><br>';
+			if ( $id ) {
+				$attributes = wp_get_attachment_image_src( $id, 'full' );
+				
+				if ( 640 === $attributes[ 1 ] and 360 === $attributes[ 2 ] ) {
+					echo '<a href="', esc_url( add_query_arg( array( 'post' => $id, 'action' => 'edit' ), admin_url( 'post.php' ) ) ), '"><img src="', $url, '" alt="" height="360" width="640"></a><br>';
+				} else {
+					$id = 0;
+					
+					echo '<b style="color:#bc0b0b;font-weight:bold">', __( 'Images must be 640&times;360 pixels in size.', 'webcomic' ), '</b><br>';
+				}
+			} else {
+				echo '<img src="' . $url . '"><br>';
+			}
 		}
 		
 		echo '<input type="hidden" name="webcomic_image" value="', $url, '"><a class="button webcomic-image" data-title="', __( 'Select a Billboard', 'webcomic' ), '" data-update="', __( 'Update', 'webcomic' ), '" data-callback="WebcomicConfig::ajax_showcase_image" data-target="#webcomic_showcase_image">', $id ? __( 'Change', 'webcomic' ) : __( 'Select', 'webcomic' ), '</a>';
