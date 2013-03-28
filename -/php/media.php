@@ -398,11 +398,15 @@ class WebcomicMedia extends Webcomic {
 	public function display_media_states( $states ) {
 		global $post;
 		
-		if ( $type = get_post_meta( $post->ID, '_wp_attachment_context', true ) and preg_match( '/^(webcomic(-(collection|storyline|character))?-link|webcomic\d+(_(storyline|character)))?$/', $type ) ) {
+		if ( $type = get_post_meta( $post->ID, '_wp_attachment_context', true ) and preg_match( '/^(webcomic-donation|(purchase-)?webcomic(-(collection|storyline|character))?-link|webcomic\d+(_(storyline|character)))?$/', $type ) ) {
 			$type = explode( '_', $type );
 			
-			if ( 'webcomic-link' === $type[ 0 ] ) {
+			if ( 'webcomic-donation' === $type[ 0 ] ) {
+				$states[] = __( 'Webcomic Donation Image', 'webcomic' );
+			} elseif ( 'webcomic-link' === $type[ 0 ] ) {
 				$states[] = __( 'Webcomic Link Image', 'webcomic' );
+			} elseif ( 'purchase-webcomic-link' === $type[ 0 ] ) {
+				$states[] = __( 'Purchase Webcomic Link Image', 'webcomic' );
 			} elseif ( 'webcomic-collection-link' === $type[ 0 ] ) {
 				$states[] = __( 'Webcomic Collection Link Image', 'webcomic' );
 			} elseif ( 'webcomic-storyline-link' === $type[ 0 ] ) {
