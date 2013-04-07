@@ -526,12 +526,6 @@ class WebcomicAdmin extends Webcomic {
 			
 			wp_enqueue_style( 'webcomic-special', self::$url . '-/css/admin-special.css', array( 'webcomic-google-font' ) );
 		}
-		
-		if ( '41' === date( 'nj' ) ) {
-			wp_register_script( 'webcomic-cornify', 'http://cornify.com/js/cornify.js' );
-			
-			wp_enqueue_script( 'webcomic-special', self::$url . '-/js/admin-special.js', array( 'webcomic-cornify' ) );
-		}
 	}
 	
 	/** Add donate link and uninstallation reminder.
