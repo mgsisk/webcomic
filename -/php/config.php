@@ -1592,7 +1592,7 @@ class WebcomicConfig extends Webcomic {
 			
 			update_option( 'webcomic_options', self::$config );
 			
-			$code = $oauth->request( 'GET', $oauth->url( '1/account/verify_credentials' ) );
+			$code = $oauth->request( 'GET', $oauth->url( '1.1/account/verify_credentials' ) );
 			
 			if ( 200 === intval( $code ) ) {
 				$response = json_decode( $oauth->response[ 'response' ] );

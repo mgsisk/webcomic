@@ -614,7 +614,7 @@ class Webcomic {
 					$oauth->config[ 'user_token' ]  = $response[ 'oauth_token' ];
 					$oauth->config[ 'user_secret' ] = $response[ 'oauth_token_secret' ];
 					
-					$code = $oauth->request( 'GET', $oauth->url( '1/account/verify_credentials' ) );
+					$code = $oauth->request( 'GET', $oauth->url( '1.1/account/verify_credentials' ) );
 					
 					if ( 200 === intval( $code ) ) {
 						$response = json_decode( $oauth->response[ 'response' ] );
@@ -1104,7 +1104,7 @@ class Webcomic {
 						'status'  => substr( strip_tags( $status ), 0, 140 )
 					), true, true );
 				} else {
-					$code = $oauth->request( 'POST', $oauth->url( '1/statuses/update' ), array(
+					$code = $oauth->request( 'POST', $oauth->url( '1.1/statuses/update' ), array(
 						'status'  => substr( strip_tags( $status ), 0, 140 )
 					) );
 				}
