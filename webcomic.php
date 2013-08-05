@@ -948,8 +948,8 @@ class Webcomic {
 			}
 		}
 		
-		if ( $query->is_main_query() and is_archive() and !$query->get( 'post_type' ) ) {
-			$query->set( 'post_type', array_merge( array( 'post' ), array_keys( self::$config[ 'collections' ] ) ) );
+		if ( $query->is_main_query() and !$query->get( 'post_type' ) and is_archive() ) {
+			$query->set( 'post_type', array_merge( get_post_types( array( 'public' => true ) ), array_keys( self::$config[ 'collections' ] ) ) );
 		}
 		
 		return $query;
