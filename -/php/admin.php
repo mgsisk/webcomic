@@ -539,6 +539,7 @@ class WebcomicAdmin extends Webcomic {
 	 */
 	public function plugin_row_meta( $meta, $file, $data ) {
 		if ( 'Webcomic' === $data[ 'Name' ] ) {
+			$meta[] = '<a href="http://wordpress.org/support/view/plugin-reviews/webcomic#postform" target="_blank">' . __( 'Review', 'webcomic' ) . '</a>';
 			$meta[] = '<a href="' . add_query_arg( array( 'cmd' => 's-xclick', 'hosted_button_id' => 'UD3J2DJPSN9UC' ), 'http://paypal.com/cgi-bin/webscr' ) . '" target="_blank">' . __( 'Donate', 'webcomic' ) . '</a>';
 			
 			if ( self::$config[ 'uninstall' ] ) {
