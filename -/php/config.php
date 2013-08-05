@@ -1217,7 +1217,7 @@ class WebcomicConfig extends Webcomic {
 						$data     = array(
 							'name'        => $_POST[ 'webcomic_name' ] ? strip_tags( stripslashes( $_POST[ 'webcomic_name' ] ) ) : get_bloginfo( 'name' ),
 							'url'         => filter_var( $_POST[ 'webcomic_url' ], FILTER_VALIDATE_URL ) ? $_POST[ 'webcomic_url' ] : home_url(),
-							'creators'    => $_POST[ 'webcomic_creators' ] ? preg_split( '/\s,\s/', strip_tags( stripslashes( $_POST[ 'webcomic_creators' ] ) ) ) : array( $user->display_name ),
+							'creators'    => $_POST[ 'webcomic_creators' ] ? preg_split( '/\s*,\s*/', strip_tags( stripslashes( $_POST[ 'webcomic_creators' ] ) ) ) : array( $user->display_name ),
 							'description' => substr( strip_tags( stripslashes( $_POST[ 'webcomic_description' ] ) ), 0, 160 ),
 							'rating'      => $_POST[ 'webcomic_rating' ],
 							'genre'       => empty( $_POST[ 'webcomic_genre' ] ) ? array( 'meta' ) : array_slice( $_POST[ 'webcomic_genre' ], 0, 5 ),
