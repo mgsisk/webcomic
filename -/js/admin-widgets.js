@@ -3,14 +3,15 @@ jQuery( function( $ ) {
 	
 	/** Remove the webcomic image. */
 	$( document ).on( 'click', '.webcomic-image-x', function() {
-		$e = $( this );
+		var $e = $( this );
 		
 		$.get( url, {
 			id: 0,
-			field: $e.data( 'field' ),
+			name: $e.data( 'name' ),
+			target: $e.data( 'target' ),
 			webcomic_admin_ajax: $e.data( 'callback' )
 		}, function( data ) {
-			$( $e.data( 'target' ) ).html( data );
+			$( $e.closest( $e.data( 'target' ) ) ).html( data );
 		} );
 	} );
 } );
@@ -25,13 +26,7 @@ jQuery( function( $ ) {
 			
 			e.preventDefault();
 			
-			if ( frame ) {
-				frame.open();
-				
-				return;
-			}
-			
-			frame = wp.media.frames.webcomicPoster = wp.media( {
+			frame = wp.media.frames.webcomicWidgetImage = wp.media( {
 				title: $e.data( 'title' ),
 				library: {
 					type: 'image'
@@ -44,10 +39,11 @@ jQuery( function( $ ) {
 			frame.on( 'select', function() {
 				$.get( $( '[data-webcomic-admin-url]' ).data( 'webcomic-admin-url' ), {
 					id: frame.state().get( 'selection' ).first().id,
-					field: $e.data( 'field' ),
+					name: $e.data( 'name' ),
+					target: $e.data( 'target' ),
 					webcomic_admin_ajax: $e.data( 'callback' )
 				}, function( data ) {
-					$( $e.data( 'target' ) ).html( data );
+					$( $e.closest( $e.data( 'target' ) ) ).html( data );
 				} );
 			} );
 			

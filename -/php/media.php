@@ -398,21 +398,25 @@ class WebcomicMedia extends Webcomic {
 	public function display_media_states( $states ) {
 		global $post;
 		
-		if ( $type = get_post_meta( $post->ID, '_wp_attachment_context', true ) and preg_match( '/^(webcomic-donation|(purchase-)?webcomic(-(collection|storyline|character))?-link|webcomic\d+(_(storyline|character)))?$/', $type ) ) {
+		if ( $type = get_post_meta( $post->ID, '_wp_attachment_context', true ) and preg_match( '/^(widget-webcomic-print|widget-webcomic-donation|widget-(purchase-)?webcomic(-(collection|storyline|character|transcripts))?-link|webcomic\d+(_(storyline|character)))?$/', $type ) ) {
 			$type = explode( '_', $type );
 			
-			if ( 'webcomic-donation' === $type[ 0 ] ) {
-				$states[] = __( 'Webcomic Donation Image', 'webcomic' );
-			} elseif ( 'webcomic-link' === $type[ 0 ] ) {
+			if ( 'widget-webcomic-print' === $type[ 0 ] ) {
+				$states[] = __( 'Webcomic Print Image', 'webcomic' );
+			} elseif ( 'widget-webcomic-link' === $type[ 0 ] ) {
 				$states[] = __( 'Webcomic Link Image', 'webcomic' );
-			} elseif ( 'purchase-webcomic-link' === $type[ 0 ] ) {
+			} elseif ( 'widget-webcomic-donation' === $type[ 0 ] ) {
+				$states[] = __( 'Webcomic Donation Image', 'webcomic' );
+			} elseif ( 'widget-purchase-webcomic-link' === $type[ 0 ] ) {
 				$states[] = __( 'Purchase Webcomic Link Image', 'webcomic' );
-			} elseif ( 'webcomic-collection-link' === $type[ 0 ] ) {
-				$states[] = __( 'Webcomic Collection Link Image', 'webcomic' );
-			} elseif ( 'webcomic-storyline-link' === $type[ 0 ] ) {
+			} elseif ( 'widget-webcomic-storyline-link' === $type[ 0 ] ) {
 				$states[] = __( 'Webcomic Storyline Link Image', 'webcomic' );
-			} elseif ( 'webcomic-character-link' === $type[ 0 ] ) {
+			} elseif ( 'widget-webcomic-character-link' === $type[ 0 ] ) {
 				$states[] = __( 'Webcomic Character Link Image', 'webcomic' );
+			} elseif ( 'widget-webcomic-collection-link' === $type[ 0 ] ) {
+				$states[] = __( 'Webcomic Collection Link Image', 'webcomic' );
+			} elseif ( 'widget-webcomic-transcripts-link' === $type[ 0 ] ) {
+				$states[] = __( 'Webcomic Transcripts Link Image', 'webcomic' );
 			} elseif ( empty( $type[ 1 ] ) ) {
 				$states[] = sprintf( __( '%s Poster', 'webcomic' ), esc_html( self::$config[ 'collections' ][ $type[ 0 ] ][ 'name' ] ) );
 			} elseif ( 'storyline' === $type[ 1 ] ) {
