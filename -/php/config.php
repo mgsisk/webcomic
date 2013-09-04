@@ -1111,7 +1111,7 @@ class WebcomicConfig extends Webcomic {
 	 * if 'webcomic_network' is set we're working on the network
 	 * settings page.
 	 * 
-	 * If 'webcomic_collection is set we're working on a collection
+	 * If 'webcomic_collection' is set we're working on a collection
 	 * settings page.
 	 * 
 	 * @param array $options Configuration array.
@@ -1123,6 +1123,8 @@ class WebcomicConfig extends Webcomic {
 	 */
 	public function save( $options ) {
 		$new = $bulk = false;
+		
+		$_POST = stripslashes_deep( $_POST );
 		
 		if ( isset( $_POST[ 'webcomic_general' ] ) ) {
 			if ( isset( $_POST[ 'webcomic_add_collection' ] ) ) {
@@ -1215,14 +1217,14 @@ class WebcomicConfig extends Webcomic {
 						$theme    = new WP_Theme( get_stylesheet_directory(), '' );
 						$template = $theme->get( 'Template' ) ? new WP_Theme( get_template_directory(), '' ) : false;
 						$data     = array(
-							'name'        => $_POST[ 'webcomic_name' ] ? strip_tags( stripslashes( $_POST[ 'webcomic_name' ] ) ) : get_bloginfo( 'name' ),
+							'name'        => $_POST[ 'webcomic_name' ] ? strip_tags( $_POST[ 'webcomic_name' ] ) : get_bloginfo( 'name' ),
 							'url'         => filter_var( $_POST[ 'webcomic_url' ], FILTER_VALIDATE_URL ) ? $_POST[ 'webcomic_url' ] : home_url(),
-							'creators'    => $_POST[ 'webcomic_creators' ] ? preg_split( '/\s*,\s*/', strip_tags( stripslashes( $_POST[ 'webcomic_creators' ] ) ) ) : array( $user->display_name ),
-							'description' => substr( strip_tags( stripslashes( $_POST[ 'webcomic_description' ] ) ), 0, 160 ),
+							'creators'    => $_POST[ 'webcomic_creators' ] ? preg_split( '/\s*,\s*/', strip_tags( $_POST[ 'webcomic_creators' ] ) ) : array( $user->display_name ),
+							'description' => substr( strip_tags( $_POST[ 'webcomic_description' ] ), 0, 160 ),
 							'rating'      => $_POST[ 'webcomic_rating' ],
 							'genre'       => empty( $_POST[ 'webcomic_genre' ] ) ? array( 'meta' ) : array_slice( $_POST[ 'webcomic_genre' ], 0, 5 ),
 							'image'       => $_POST[ 'webcomic_image' ] ? $_POST[ 'webcomic_image' ] : 'http://webcomic.nu/-/img/showcase.png',
-							'testimonial' => strip_tags( stripslashes( $_POST[ 'webcomic_testimonial' ] ) ),
+							'testimonial' => strip_tags( $_POST[ 'webcomic_testimonial' ] ),
 							'version'     => self::$version,
 							'theme'       => array( 'name' => $theme->get( 'Name' ), 'url' => $theme->get( 'ThemeURI' ), 'author' => $theme->get( 'Author' ), 'author_url' => $theme->get( 'AuthorURI' ) ),
 							'template'    => $template ? array( 'name' => $template->get( 'Name' ), 'url' => $template->get( 'ThemeURI' ), 'author' => $template->get( 'Author' ), 'author_url' => $template->get( 'AuthorURI' ) ) : array()
