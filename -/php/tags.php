@@ -1109,7 +1109,7 @@ class WebcomicTag extends Webcomic {
 		
 		$object = is_tax() ? get_queried_object() : false;
 		
-		if ( !taxonomy_exists( $taxonomy ) and is_tax() ) {
+		if ( !taxonomy_exists( $taxonomy ) and WebcomicTag::is_webcomic_tax() ) {
 			$taxonomy = $object->taxonomy;
 		} elseif ( ( 'next' === $relative or 'previous' === $relative ) and is_singular() and $terms = wp_get_object_terms( $post->ID, $taxonomy, array_merge( array( 'hide_empty' => true, 'orderby' => is_taxonomy_hierarchical( $taxonomy ) ? 'term_group' : 'name' ), ( array ) $args, array( 'cache_domain' => 'get_relative_webcomic_term' ) ) ) and !is_wp_error( $terms ) ) {
 			$object = 'next' === $relative ? array_pop( $terms ) : array_shift( $terms );
@@ -1117,7 +1117,7 @@ class WebcomicTag extends Webcomic {
 		
 		$args = array_merge( array( 'hide_empty' => true, 'orderby' => is_taxonomy_hierarchical( $taxonomy ) ? 'term_group' : 'name' ), ( array ) $args, array( 'cache_domain' => 'get_relative_webcomic_term' ) );
 		
-		if ( taxonomy_exists( $taxonomy ) and ( 'previous' === $relative or 'next' === $relative ) ? isset( $object ) : true ) {
+		if ( taxonomy_exists( $taxonomy ) and ( 'previous' === $relative or 'next' === $relative ) ? !empty( $object ) : true ) {
 			if ( 'first' === $relative and $terms = get_terms( $taxonomy, array_merge( $args, array( 'parent' => 0 ) ) ) and !is_wp_error( $terms ) ) {
 				$object = $terms[ 0 ];
 			} elseif ( 'random' === $relative and $terms = get_terms( $taxonomy, $args ) and !is_wp_error( $terms ) ) {
@@ -1252,7 +1252,7 @@ class WebcomicTag extends Webcomic {
 					'%title' => $term->name
 				);
 				
-				if ( $term->webcomic_image ) {
+				if ( isset( $term->webcomic_image ) ) {
 					foreach ( array_merge( get_intermediate_image_sizes(), array( 'full' ) ) as $size ) {
 						if ( false !== strpos( $link, "%{$size}" ) ) {
 							$tokens[ "%{$size}" ] = wp_get_attachment_image( $term->webcomic_image, $size );
@@ -1598,7 +1598,7 @@ class WebcomicTag extends Webcomic {
 			return '';
 		}
 		
-		$output = number_format( self::$config[ 'collections' ][ $collection ][ 'commerce' ][ 'donation' ], 2, $dec, $sep ) . self::$config[ 'collections' ][ $collection ][ 'commerce' ][ 'currency' ];
+		$output = number_format( self::$config[ 'collections' ][ $collection ][ 'commerce' ][ 'donation' ], 2, $dec, $sep ) . ' ' . self::$config[ 'collections' ][ $collection ][ 'commerce' ][ 'currency' ];
 		
 		return apply_filters( 'webcomic_donation_amount', $output, $dec, $sep, $collection );
 	}
