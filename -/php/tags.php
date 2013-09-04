@@ -1761,12 +1761,13 @@ class WebcomicTag extends Webcomic {
 	/** Return a print purchase form.
 	 * 
 	 * @param string $type The type of print form, one of 'domestic', 'international', 'original', or 'cart'.
-	 * @param string $label The form submit button label. Accepts %dec, %sep, %total, %price, and %shipping tokens.
+	 * @param string $label The form submit button label. Accepts %dec, %sep, %total, %price, %shipping, %collection-total, %collection-price, and %collection-shipping tokens.
 	 * @param mixed $the_post The post object or ID to get print adjustments for.
 	 * @return string
 	 * @uses Webcomic::$config
 	 * @uses WebcomicTag::webcomic_print_amount()
 	 * @uses WebcomicTag::webcomic_print_fields()
+	 * @uses WebcomicTag::webcomic_collection_print_amount()
 	 * @filter string webcomic_print_form Filters the output of `webcomic_print_form`.
 	 */
 	public static function webcomic_print_form( $type, $label = '', $the_post = false ) {
@@ -1780,8 +1781,9 @@ class WebcomicTag extends Webcomic {
 			} else {
 				$label = '_cart' === self::$config[ 'collections' ][ $the_post->post_type ][ 'commerce' ][ 'method' ] ? __( 'Add to Cart', 'webcomic' ) : __( 'Buy Now', 'webcomic' );
 			}
-		} else {
-			$match = array();
+		} elseif ( false !== strpos( $label, '%' ) ) {
+			$match      = array();
+			$collection = get_post_type( $the_post );
 			
 			preg_match( '/%dec(.)/', $label, $match );
 			
@@ -1793,9 +1795,12 @@ class WebcomicTag extends Webcomic {
 			$label = preg_replace( '/(%dec.|%sep.)/', '', $label );
 			
 			$tokens = array(
-				'%total'    => self::webcomic_print_amount( $type, $dec, $sep, $the_post ),
-				'%price'    => self::webcomic_print_amount( "{$type}-price", $dec, $sep, $the_post ),
-				'%shipping' => self::webcomic_print_amount( "{$type}-shipping", $dec, $sep, $the_post )
+				'%total'               => self::webcomic_print_amount( $type, $dec, $sep, $the_post ),
+				'%price'               => self::webcomic_print_amount( "{$type}-price", $dec, $sep, $the_post ),
+				'%shipping'            => self::webcomic_print_amount( "{$type}-shipping", $dec, $sep, $the_post ),
+				'%collection-total'    => self::webcomic_collection_print_amount( $type, $dec, $sep, $collection ),
+				'%collection-price'    => self::webcomic_collection_print_amount( "{$type}-price", $dec, $sep, $collection ),
+				'%collection-shipping' => self::webcomic_collection_print_amount( "{$type}-shipping", $dec, $sep, $collection )
 			);
 			
 			$label = str_replace( array_keys( $tokens ), $tokens, $label );
