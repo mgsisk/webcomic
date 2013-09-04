@@ -1633,11 +1633,12 @@ class WebcomicTag extends Webcomic {
 	
 	/** Return a donation form.
 	 * 
-	 * @param string $label The form submit button label.
+	 * @param string $label The form submit button label. Accepts the %amount token.
 	 * @param string $collection The collection to render a donation form for.
 	 * @return string
 	 * @uses Webcomic::$config
 	 * @uses Webcomic::$collection
+	 * @uses WebcomicTag::webcomic_donation_amount()
 	 * @uses WebcomicTag::webcomic_donation_fields()
 	 * @filter string webcomic_donation_form Filters the output of `webcomic_donation_form`.
 	 */
@@ -1648,9 +1649,30 @@ class WebcomicTag extends Webcomic {
 			return;
 		}
 		
+		if ( !$label ) {
+			$label = sprintf( __( 'Support %s', 'webcomic' ), esc_html( self::$config[ 'collections' ][ $collection ][ 'name' ] ) );
+		} elseif ( false !== strpos( $label, '%' ) ) {
+			$match = array();
+			
+			preg_match( '/%dec(.)/', $label, $match );
+			
+			$dec = !empty( $match[ 1 ] ) ? $match[ 1 ] : '.';
+			
+			preg_match( '/%sep(.)/', $label, $match );
+			
+			$sep   = !empty( $match[ 1 ] ) ? $match[ 1 ] : ',';
+			$label = preg_replace( '/(%dec.|%sep.)/', '', $label );
+			
+			$tokens = array(
+				'%amount' => self::webcomic_donation_amount( $dec, $sep, $collection )
+			);
+			
+			$label = str_replace( array_keys( $tokens ), $tokens, $label );
+		}
+		
 		$output = '
 			<form action="' . ( self::$debug ? 'https://www.sandbox.paypal.com/cgi-bin/webscr' : 'https://www.paypal.com/cgi-bin/webscr' ) . '" method="post" class="webcomic-donation-form ' . $collection . '-donation-form">
-				<button type="submit">' . ( $label ? $label : sprintf( __( 'Support %s', 'webcomic' ), esc_html( self::$config[ 'collections' ][ $collection ][ 'name' ] ) ) ) . '</button>
+				<button type="submit">' . $label . '</button>
 				' . $fields . '
 			</form>';
 		
