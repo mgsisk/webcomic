@@ -90,8 +90,6 @@ class WebcomicUpgrade extends Webcomic {
 	}
 	
 	/** Upgrade to 4.1
-	 * 
-	 * @todo import old commerce logs
 	 */
 	private function _41() {
 		global $blog_id;
