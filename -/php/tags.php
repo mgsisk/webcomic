@@ -1878,6 +1878,7 @@ class WebcomicTag extends Webcomic {
 			
 			if ( false !== strpos( $link, '%' ) ) {
 				$tokens = array(
+					'%date'  => mysql2date( get_option( 'date_format' ), $the_post->post_date ),
 					'%title' => apply_filters( 'the_title', $the_post->post_title, $the_post->ID )
 				);
 				
