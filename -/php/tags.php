@@ -3638,7 +3638,7 @@ if ( !function_exists( 'webcomic_count' ) ) {
 	 * </code>
 	 * 
 	 * @package Webcomic
-	 * @param mixed The post object or ID to retrieve the attachment count for.
+	 * @param mixed $the_post The post object or ID to retrieve the attachment count for.
 	 * @return integer
 	 * @uses WebcomicTag::webcomic_count()
 	 */
