@@ -973,7 +973,7 @@ class Webcomic {
 				wp_mail(
 					$v[ 'buffer' ][ 'email' ],
 					sprintf( _n( '[%s] %s Buffer Alert - %s Day Left', '[%s] %s Buffer Alert - %s Days Left', $eta, 'webcomic' ), get_bloginfo( 'name' ), $v[ 'name' ], $eta ),
-					sprintf( __( 'This is an automated reminder that the buffer for %1$s expires on %2%s.', 'webcomic' ),
+					sprintf( __( 'This is an automated reminder that the buffer for %1$s expires on %2$s.', 'webcomic' ),
 						'<a href="' . esc_url( admin_url( "edit.php?post_type={$k}" ) ) . '">' . $v[ 'name' ] . '</a>',
 						date( 'j F Y', $buffer )
 					),
