@@ -192,7 +192,7 @@ class WebcomicTag extends Webcomic {
 			return false;
 		}
 		
-		return ( $post->ID === $the_post->ID );
+		return ( ( int ) $post->ID === ( int ) $the_post->ID );
 	}
 	
 	/** Is the query for a Webcomic-recognized attachment?
