@@ -1633,21 +1633,6 @@ class Webcomic {
 		}
 	}
 	
-	/** Return Webcomic attachments for a post.
-	 * 
-	 * @param integer $id Post ID to retrieve attachments for.
-	 * @return array
-	 */
-	protected function get_attachments( $id = 0 ) {
-		return get_children( array(
-			'order'          => 'ASC',
-			'orderby'        => 'menu_order',
-			'post_type'      => 'attachment',
-			'post_parent'    => $id,
-			'post_mime_type' => 'image'
-		) );
-	}
-	
 	/** Perform a Webcomic API request.
 	 * 
 	 * @param string $method The request method.
@@ -1671,6 +1656,21 @@ class Webcomic {
 		$code = wp_remote_retrieve_response_code( $remote );
 		
 		return $code ? array( $code => json_decode( wp_remote_retrieve_body( $remote ), true ) ) : array( 999 => __( 'The Webcomic Network is currently unavailable.', 'webcomic' ) );
+	}
+	
+	/** Return Webcomic attachments for a post.
+	 * 
+	 * @param integer $id Post ID to retrieve attachments for.
+	 * @return array
+	 */
+	protected static function get_attachments( $id = 0 ) {
+		return get_children( array(
+			'order'          => 'ASC',
+			'orderby'        => 'menu_order',
+			'post_type'      => 'attachment',
+			'post_parent'    => $id,
+			'post_mime_type' => 'image'
+		) );
 	}
 }
 
