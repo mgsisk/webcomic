@@ -437,7 +437,7 @@ class Walker_WebcomicTerm_SortList extends Walker {
 	 * @param integer $depth Depth the walker is currently at.
 	 * @param array $args Arguments passed to the walker.
 	 */
-	public function start_lvl( &$output, $depth, $args ) {
+	public function start_lvl( &$output, $depth = 0, $args = array() ) {
 		$output .= '<ol>';
 	}
 	
@@ -447,7 +447,7 @@ class Walker_WebcomicTerm_SortList extends Walker {
 	 * @param integer $depth Depth the walker is currently at.
 	 * @param array $args Arguments passed to the walker.
 	 */
-	public function end_lvl( &$output, $depth, $args ) {
+	public function end_lvl( &$output, $depth = 0, $args = array() ) {
 		$output .= '</ol>';
 	}
 	
@@ -458,7 +458,7 @@ class Walker_WebcomicTerm_SortList extends Walker {
 	 * @param integer $depth Depth the walker is currently at.
 	 * @param array $args Arguments passed to the walker.
 	 */
-	public function start_el( &$output, $term, $depth, $args ) {
+	public function start_el( &$output, $term, $depth = 0, $args = array(), $current = 0 ) {
 		extract( $args, EXTR_SKIP );
 		
 		$output .= '<li id="term_' . $term->term_id . '"><b><i>' . ( $term->webcomic_image ? wp_get_attachment_image( $term->webcomic_image, array( 36, 0 ) ) : '' ) . '</i>' . $term->name . '</b>';
@@ -471,7 +471,7 @@ class Walker_WebcomicTerm_SortList extends Walker {
 	 * @param integer $depth Depth the walker is currently at.
 	 * @param array $args Arguments passed to the walker.
 	 */
-	public function end_el( &$output, $term, $depth, $args ) {
+	public function end_el( &$output, $term, $depth = 0, $args = array() ) {
 		$output .= '</li>';
 	}
 }

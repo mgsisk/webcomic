@@ -6384,7 +6384,7 @@ if ( !class_exists( 'Walker_WebcomicTerm_Dropdown' ) ) {
 		 * @filter string webcomic_term_dropdown_title Filters the term titles used by `webcomic_dropdown_storylines` and `webcomic_dropdown_characters`.
 		 * @filter string term_dropdown_webcomic_title Fitlers the webcomic titles used by `webcomic_dropdown_storylines` and `webcomic_dropdown_characters`.
 		 */
-		public function start_el( &$output, $term, $depth, $args ) {
+		public function start_el( &$output, $term, $depth = 0, $args = array(), $current = 0 ) {
 			global $post;
 			
 			extract( $args, $args[ 'hierarchical' ] ? EXTR_SKIP : EXTR_OVERWRITE );
@@ -6461,7 +6461,7 @@ if ( !class_exists( 'Walker_WebcomicTerm_List' ) ) {
 		 * @param integer $depth Depth the walker is currently at.
 		 * @param array $args Arguments passed to the walker.
 		 */
-		public function start_lvl( &$output, $depth, $args ) {
+		public function start_lvl( &$output, $depth = 0, $args = array() ) {
 			if ( $args[ 'hierarchical' ] ) {
 				$output .= $args[ 'ordered' ] ? '<ol class="children">' : '<ul class="children">';
 			}
@@ -6473,7 +6473,7 @@ if ( !class_exists( 'Walker_WebcomicTerm_List' ) ) {
 		 * @param integer $depth Depth the walker is currently at.
 		 * @param array $args Arguments passed to the walker.
 		 */
-		public function end_lvl( &$output, $depth, $args ) {
+		public function end_lvl( &$output, $depth = 0, $args = array() ) {
 			if ( $args[ 'hierarchical' ] ) {
 				$output .= $args[ 'ordered' ] ? '</ol>' : '</ul>';
 			}
@@ -6491,7 +6491,7 @@ if ( !class_exists( 'Walker_WebcomicTerm_List' ) ) {
 		 * @filter string webcomic_term_description Filters the term titles used by `webcomic_dropdown_transcript_languages`.
 		 * @filter string term_list_webcomic_title Fitlers the webcomic titles used by `webcomic_list_storylines` and `webcomic_list_characters`.
 		 */
-		public function start_el( &$output, $term, $depth, $args ) {
+		public function start_el( &$output, $term, $depth = 0, $args = array(), $current = 0 ) {
 			global $post;
 			
 			extract( $args, $args[ 'hierarchical' ] ? EXTR_SKIP : EXTR_OVERWRITE );
@@ -6543,7 +6543,7 @@ if ( !class_exists( 'Walker_WebcomicTerm_List' ) ) {
 		 * @param integer $depth Depth the walker is currently at.
 		 * @param array $args Arguments passed to the walker.
 		 */
-		public function end_el( &$output, $term, $depth, $args ) {
+		public function end_el( &$output, $term, $depth = 0, $args = array() ) {
 			$output .= '</li>';
 		}
 	}
@@ -6587,7 +6587,7 @@ if ( !class_exists( 'Walker_WebcomicTranscriptTerm_Dropdown' ) ) {
 		 * @uses WebcomicTag::get_webcomic_transcripts_link()
 		 * @filter string webcomic_transcript_term_dropdown_title Filters the term titles used by `webcomic_dropdown_transcript_languages`.
 		 */
-		public function start_el( &$output, $term, $depth, $args ) {
+		public function start_el( &$output, $term, $depth = 0, $args = array(), $current = 0 ) {
 			extract( $args, $args[ 'hierarchical' ] ? EXTR_SKIP : EXTR_OVERWRITE );
 			
 			$term_title = apply_filters( 'webcomic_transcript_term_dropdown_title', esc_attr( $term->name ), $term );
@@ -6627,7 +6627,7 @@ if ( !class_exists( 'Walker_WebcomicTranscriptTerm_List' ) ) {
 		 * @param integer $depth Depth the walker is currently at.
 		 * @param array $args Arguments passed to the walker.
 		 */
-		public function start_lvl( &$output, $depth, $args ) {
+		public function start_lvl( &$output, $depth = 0, $args = array() ) {
 			if ( $args[ 'hierarchical' ] ) {
 				$output .= $args[ 'ordered' ] ? '<ol class="children">' : '<ul class="children">';
 			}
@@ -6639,7 +6639,7 @@ if ( !class_exists( 'Walker_WebcomicTranscriptTerm_List' ) ) {
 		 * @param integer $depth Depth the walker is currently at.
 		 * @param array $args Arguments passed to the walker.
 		 */
-		public function end_lvl( &$output, $depth, $args ) {
+		public function end_lvl( &$output, $depth = 0, $args = array() ) {
 			if ( $args[ 'hierarchical' ] ) {
 				$output .= $args[ 'ordered' ] ? '</ol>' : '</ul>';
 			}
@@ -6654,7 +6654,7 @@ if ( !class_exists( 'Walker_WebcomicTranscriptTerm_List' ) ) {
 		 * @uses WebcomicTag::get_webcomic_transcripts_link()
 		 * @filter string webcomic_transcript_term_list_title Filters the term titles used by `webcomic_list_transcript_languages`.
 		 */
-		public function start_el( &$output, $term, $depth, $args ) {
+		public function start_el( &$output, $term, $depth = 0, $args = array(), $current = 0 ) {
 			extract( $args, $args[ 'hierarchical' ] ? EXTR_SKIP : EXTR_OVERWRITE );
 			
 			$term_title = apply_filters( 'webcomic_transcript_term_list_title', esc_attr( $term->name ), $term );
@@ -6668,7 +6668,7 @@ if ( !class_exists( 'Walker_WebcomicTranscriptTerm_List' ) ) {
 		 * @param integer $depth Depth the walker is currently at.
 		 * @param array $args Arguments passed to the walker.
 		 */
-		public function end_el( &$output, $term, $depth, $args ) {
+		public function end_el( &$output, $term, $depth = 0, $args = array() ) {
 			$output .= '</li>';
 		}
 	}
