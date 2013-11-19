@@ -1045,26 +1045,26 @@ class Webcomic {
 				if ( preg_match( '/%' .  join( '|%', array_merge( array( 'storyline', 'character' ), self::$config[ 'collections' ][ $post->post_type ][ 'taxonomies' ] ) ) . '/', self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'format' ] ) and $terms = wp_get_object_terms( $post->ID, array_merge( array( "{$post->post_type}_storyline", "{$post->post_type}_character" ), self::$config[ 'collections' ][ $post->post_type ][ 'taxonomies' ] ) ) and !is_wp_error( $terms ) ) {
 					foreach ( $terms as $term ) {
 						$hash = str_replace( array( '_', '-' ), '', "#{$term->slug}" );
-					
+						
 						if ( preg_match( '/^webcomic\d+_(storyline|character)$/', $term->taxonomy ) ) {
 							$parts = explode( '_', $term->taxonomy );
-						
+							
 							if ( false === strpos( $tokens[ 'collection-names' ], self::$config[ 'collections' ][ $parts[ 0 ] ][ 'name' ] ) ) {
 								$tokens[ '%collections' ]       .= ' #' . str_replace( array( '_', '-' ), '', self::$config[ 'collections' ][ $parts[ 0 ] ][ 'slugs' ][ 'name' ] );
 								$tokens[ '%collection-names' ]  .= ' ' . self::$config[ 'collections' ][ $parts[ 0 ] ][ 'name' ];
 								$tokens[ '%xcollections' ]      .= empty( $tokens[ '%xcollection-names' ] ) ? '#' . str_replace( array( '_', '-' ), '', self::$config[ 'collections' ][ $parts[ 0 ] ][ 'slugs' ][ 'name' ] ) : ' #' . str_replace( array( '_', '-' ), '', self::$config[ 'collections' ][ $parts[ 0 ] ][ 'slugs' ][ 'name' ] );
 								$tokens[ '%xcollection-names' ] .= empty( $tokens[ '%xcollection-names' ] ) ? self::$config[ 'collections' ][ $parts[ 0 ] ][ 'name' ] : ' ' . self::$config[ 'collections' ][ $parts[ 0 ] ][ 'name' ];
 							}
-						
-							$tokens[ "%{$parts[ 1 ]}s" ]      .= empty( $tokens[ '%{$parts[ 1 ]}s' ] ) ? "{$hash}" : " {$hash}";
-							$tokens[ "%{$parts[ 1 ]}-names" ] .= empty( $tokens[ '%{$parts[ 1 ]}-names' ] ) ? "{$term->name}" : " {$term->name}";
-						
+							
+							$tokens[ "%{$parts[ 1 ]}s" ]      .= empty( $tokens[ "%{$parts[ 1 ]}s" ] ) ? "{$hash}" : " {$hash}";
+							$tokens[ "%{$parts[ 1 ]}-names" ] .= empty( $tokens[ "%{$parts[ 1 ]}-names" ] ) ? "{$term->name}" : " {$term->name}";
+							
 							if ( 0 === strpos( $term->taxonomy, $post->post_type ) ) {
-								$tokens[ '%!{$parts[ 1 ]}s' ]      .= empty( $tokens[ '%!{$parts[ 1 ]}s' ] ) ? "{$hash}" : " {$hash}";
-								$tokens[ '%!{$parts[ 1 ]}-names' ] .= empty( $tokens[ '%!{$parts[ 1 ]}-names' ] ) ? "{$term->name}" : " {$term->name}";
+								$tokens[ "%!{$parts[ 1 ]}s" ]      .= empty( $tokens[ "%!{$parts[ 1 ]}s" ] ) ? "{$hash}" : " {$hash}";
+								$tokens[ "%!{$parts[ 1 ]}-names" ] .= empty( $tokens[ "%!{$parts[ 1 ]}-names" ] ) ? "{$term->name}" : " {$term->name}";
 							} else {
-								$tokens[ '%x{$parts[ 1 ]}s' ]      .= empty( $tokens[ '%x{$parts[ 1 ]}s' ] ) ? "{$hash}" : " {$hash}";
-								$tokens[ '%x{$parts[ 1 ]}-names' ] .= empty( $tokens[ '%x{$parts[ 1 ]}-names' ] ) ? "{$term->name}" : " {$term->name}";
+								$tokens[ "%x{$parts[ 1 ]}s" ]      .= empty( $tokens[ "%x{$parts[ 1 ]}s" ] ) ? "{$hash}" : " {$hash}";
+								$tokens[ "%x{$parts[ 1 ]}-names" ] .= empty( $tokens[ "%x{$parts[ 1 ]}-names" ] ) ? "{$term->name}" : " {$term->name}";
 							}
 						} else {
 							$tokens[ "%{$term->taxonomy}-names" ] = isset( $tokens[ "%{$term->taxonomy}-names" ] ) ? $tokens[ "%{$term->taxonomy}-names" ] . " {$term->name}" : "{$term->name}";
