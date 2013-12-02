@@ -26,7 +26,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see http://www.gnu.org/licenses.
 */
 
-/** Comic Publishing Power for the Web
+/**
+ * Comic Publishing Power for the Web
  * 
  * @package Webcomic
  * @copyright 2008 - 2013 Michael Sisk
@@ -75,7 +76,8 @@ class Webcomic {
 	 */
 	protected static $collection = '';
 	
-	/** Set class properties and register hooks.
+	/**
+	 * Set class properties and register hooks.
 	 * 
 	 * @uses Webcomic::$dir
 	 * @uses Webcomic::$url
@@ -161,7 +163,7 @@ class Webcomic {
 			}
 			
 			require_once self::$dir . '-/php/tags.php';
-			require_once self::$dir . '-/php/widgets.php';		new WebcomicWidget;
+			require_once self::$dir . '-/php/widgets.php';	new WebcomicWidget;
 			require_once self::$dir . '-/php/shortcodes.php';	new WebcomicShortcode;
 		}
 	}
@@ -262,9 +264,9 @@ class Webcomic {
 				),
 				'show_admin_column' => true,
 				'rewrite' => array(
-					'slug'       => $v[ 'slugs' ][ 'character' ],
+					'slug' => $v[ 'slugs' ][ 'character' ],
 					'with_front' => false,
-					'ep_mask'      => EP_WEBCOMIC_TERM
+					'ep_mask' => EP_WEBCOMIC_TERM
 				)
 			) );
 		}
