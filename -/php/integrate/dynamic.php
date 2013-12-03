@@ -1,5 +1,6 @@
 <?php
-/** Automagic integration for dynamic requests.
+/**
+ * Automagic integration for dynamic requests.
  * 
  * Unlike the other integration templates this file will be loaded
  * for dynamic requests regardless of the integration setting if no
@@ -19,17 +20,18 @@
 ?>
 <div class="integrated-webcomic">
 	<nav class="webcomic-above"><?php first_webcomic_link(); previous_webcomic_link(); random_webcomic_link(); next_webcomic_link(); last_webcomic_link(); ?></nav><!-- .webcomic-above -->
-	<div class="webcomic-img"><?php the_webcomic( 'full', 'next' ); ?></div><!-- .webcomic-img -->
+	<div class="webcomic-img"><?php the_webcomic( "full", "next" ); ?></div><!-- .webcomic-img -->
 	<nav class="webcomic-below"><?php first_webcomic_link(); previous_webcomic_link(); random_webcomic_link(); next_webcomic_link(); last_webcomic_link(); ?></nav><!-- .webcomic-below -->
 </div><!-- .integrated-webcomic -->
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 	<header class="entry-header">
-		<h1 class="entry-title"><a href="<?php the_permalink(); ?>" title="<?php printf( esc_attr__( 'Permalink to %s', 'webcomic' ), the_title_attribute( 'echo=0' ) ); ?>" rel="bookmark"><?php the_title(); ?></a></h1><!-- .entry-title -->
-		
+		<h1 class="entry-title"><a href="<?php the_permalink(); ?>" title="<?php printf( esc_attr__( "Permalink to %s", "webcomic" ), the_title_attribute( "echo=0" ) ); ?>" rel="bookmark"><?php the_title(); ?></a></h1><!-- .entry-title -->
 		<?php if ( comments_open() and !post_password_required() ) { ?>
+		
 		<div class="comments-link">
-			<?php comments_popup_link( 0, 1, '%' ); ?>
+			<?php comments_popup_link( 0, 1, "%" ); ?>
 		</div><!-- .comments-link -->
+		
 		<?php } ?>
 	</header><!-- .entry-header -->
 	
@@ -47,7 +49,7 @@
 		<span class="sep"> | </span><span class="comments-link"><?php comments_popup_link(); ?></span>
 		<?php }
 		
-		edit_post_link( __( 'Edit', 'webcomic' ), '<span class="edit-link">', '</span>' );
+		edit_post_link( __( 'Edit', "webcomic" ), '<span class="edit-link">', '</span>' );
 	?>
 	</footer><!-- .entry-meta -->
 </article><!-- #post-<?php the_ID(); ?> -->

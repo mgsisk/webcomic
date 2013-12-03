@@ -1,5 +1,6 @@
 <?php
-/** Automagic integration for loop_start.
+/**
+ * Automagic integration for loop_start.
  * 
  * @package Webcomic
  * @uses first_webcomic_link()

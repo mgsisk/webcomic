@@ -1,14 +1,16 @@
 <?php
-/** Basic feed integration.
+/**
+ * Basic feed integration.
  * 
  * @package Webcomic
  */
 global $post;
 
-$prepend = '<p><a href="' . get_permalink( $post->ID ) . '">';
+$link = get_permalink( $post->ID );
+$images = "";
 
 foreach ( $attachments as $attachment ) {
-	$prepend .= wp_get_attachment_image( $attachment->ID, $feed_size );
+	$images .= wp_get_attachment_image( $attachment->ID, $feed_size );
 }
 
-$prepend .= '</a></p>';
+$prepend = "<p><a href='{$link}'>{$images}</a></p>";
