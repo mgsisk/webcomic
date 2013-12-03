@@ -317,9 +317,9 @@ class WebcomicConfig extends Webcomic {
 	 */
 	public function navigate() {
 		?>
-		<label><input type="checkbox" name="webcomic_dynamic" id="webcomic_dynamic"<?php checked( self::$config[ 'dynamic' ] ); ?>> <?php _e( 'Enable dynamic webcomic navigation', 'webcomic' ); ?></label><br>
-		<label><input type="checkbox" name="webcomic_gestures"<?php checked( self::$config[ 'gestures' ] ); ?>> <?php _e( 'Enable touch gestures for webcomic navigation', 'webcomic' ); ?></label><br>
-		<label><input type="checkbox" name="webcomic_shortcuts"<?php checked( self::$config[ 'shortcuts' ] ); ?>> <?php _e( 'Enable keyboard shortcuts for webcomic navigation', 'webcomic' ); ?></label>
+		<label><input type="checkbox" name="webcomic_dynamic" id="webcomic_dynamic"<?php checked( self::$config[ 'dynamic' ] ); ?>> <?php _e( 'Dynamic webcomic navigation', 'webcomic' ); ?></label><br>
+		<label><input type="checkbox" name="webcomic_gestures"<?php checked( self::$config[ 'gestures' ] ); ?>> <?php _e( 'Touch gestures for webcomic navigation', 'webcomic' ); ?></label><br>
+		<label><input type="checkbox" name="webcomic_shortcuts"<?php checked( self::$config[ 'shortcuts' ] ); ?>> <?php _e( 'Keyboard shortcuts for webcomic navigation', 'webcomic' ); ?></label>
 		<?php
 	}
 	
@@ -1000,10 +1000,10 @@ class WebcomicConfig extends Webcomic {
 	 */
 	public function collection_supports_content() {
 		?>
-		<label><input type="checkbox" name="webcomic_supports[]" value="title" id="webcomic_posts_title"<?php checked( in_array( 'title', self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'supports' ] ) ); ?>> <?php _e( 'Enable post titles', 'webcomic' ); ?></label><br>
-		<label><input type="checkbox" name="webcomic_supports[]" value="excerpt"<?php checked( in_array( 'excerpt', self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'supports' ] ) ); ?>> <?php _e( 'Enable post excerpts', 'webcomic' ); ?></label><br>
-		<label><input type="checkbox" name="webcomic_supports[]" value="editor"<?php checked( in_array( 'editor', self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'supports' ] ) ); ?>> <?php _e( 'Enable the post editor', 'webcomic' ); ?></label><br>
-		<label><input type="checkbox" name="webcomic_supports[]" value="thumbnail"<?php checked( in_array( 'thumbnail', self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'supports' ] ) ); ?>> <?php _e( 'Enable featured images', 'webcomic' ); ?></label>
+		<label><input type="checkbox" name="webcomic_supports[]" value="title" id="webcomic_posts_title"<?php checked( in_array( 'title', self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'supports' ] ) ); ?>> <?php _e( 'Post titles', 'webcomic' ); ?></label><br>
+		<label><input type="checkbox" name="webcomic_supports[]" value="excerpt"<?php checked( in_array( 'excerpt', self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'supports' ] ) ); ?>> <?php _e( 'Post excerpts', 'webcomic' ); ?></label><br>
+		<label><input type="checkbox" name="webcomic_supports[]" value="editor"<?php checked( in_array( 'editor', self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'supports' ] ) ); ?>> <?php _e( 'Post editor', 'webcomic' ); ?></label><br>
+		<label><input type="checkbox" name="webcomic_supports[]" value="thumbnail"<?php checked( in_array( 'thumbnail', self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'supports' ] ) ); ?>> <?php _e( 'Featured images', 'webcomic' ); ?></label>
 		<?php
 	}
 	
@@ -1014,8 +1014,8 @@ class WebcomicConfig extends Webcomic {
 	 */
 	public function collection_supports_discussion() {
 		?>
-		<label><input type="checkbox" name="webcomic_supports[]" value="comments" id="webcomic_posts_comments"<?php checked( in_array( 'comments', self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'supports' ] ) ); ?>> <?php _e( 'Enable comments', 'webcomic' ); ?></label><br>
-		<label><input type="checkbox" name="webcomic_supports[]" value="trackbacks"<?php checked( in_array( 'trackbacks', self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'supports' ] ) ); ?>> <?php _e( 'Enable trackbacks', 'webcomic' ); ?></label>
+		<label><input type="checkbox" name="webcomic_supports[]" value="comments" id="webcomic_posts_comments"<?php checked( in_array( 'comments', self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'supports' ] ) ); ?>> <?php _e( 'Comments', 'webcomic' ); ?></label><br>
+		<label><input type="checkbox" name="webcomic_supports[]" value="trackbacks"<?php checked( in_array( 'trackbacks', self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'supports' ] ) ); ?>> <?php _e( 'Trackbacks', 'webcomic' ); ?></label>
 		<?php
 	}
 	
@@ -1026,9 +1026,9 @@ class WebcomicConfig extends Webcomic {
 	 */
 	public function collection_supports_miscellanea() {
 		?>
-		<label><input type="checkbox" name="webcomic_supports[]" value="revisions" id="webcomic_posts_revisions"<?php checked( in_array( 'revisions', self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'supports' ] ) ); ?>> <?php _e( 'Enable revisions', 'webcomic' ); ?></label><br>
-		<label><input type="checkbox" name="webcomic_supports[]" value="custom-fields"<?php checked( in_array( 'custom-fields', self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'supports' ] ) ); ?>> <?php _e( 'Enable custom fields', 'webcomic' ); ?></label><br>
-		<label><input type="checkbox" name="webcomic_supports[]" value="post-formats"<?php checked( in_array( 'post-formats', self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'supports' ] ) ); ?>> <?php _e( 'Enable post formats', 'webcomic' ); ?></label>
+		<label><input type="checkbox" name="webcomic_supports[]" value="revisions" id="webcomic_posts_revisions"<?php checked( in_array( 'revisions', self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'supports' ] ) ); ?>> <?php _e( 'Revisions', 'webcomic' ); ?></label><br>
+		<label><input type="checkbox" name="webcomic_supports[]" value="custom-fields"<?php checked( in_array( 'custom-fields', self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'supports' ] ) ); ?>> <?php _e( 'Custom fields', 'webcomic' ); ?></label><br>
+		<label><input type="checkbox" name="webcomic_supports[]" value="post-formats"<?php checked( in_array( 'post-formats', self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'supports' ] ) ); ?>> <?php _e( 'Post formats', 'webcomic' ); ?></label>
 		<?php
 	}
 	
