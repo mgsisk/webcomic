@@ -1,15 +1,18 @@
 <?php
-/** Contains the WebcomicPages class.
+/**
+ * Contains the WebcomicPages class.
  * 
  * @package Webcomic
  */
 
-/** Handle page-related tasks.
+/**
+ * Handle page-related tasks.
  * 
  * @package Webcomic
  */
 class WebcomicPages extends Webcomic {
-	/** Register hooks.
+	/**
+	 * Register hooks.
 	 * 
 	 * @uses WebcomicPages::add_meta_boxes()
 	 * @uses WebcomicPages::wp_insert_post()
@@ -36,7 +39,8 @@ class WebcomicPages extends Webcomic {
 		add_filter( 'manage_edit-page_sortable_columns', array( $this, 'manage_edit_page_sortable_columns' ), 10, 1 );
 	}
 	
-	/** Add page meta boxes.
+	/**
+	 * Add page meta boxes.
 	 * 
 	 * @uses WebcomicPages::box_webcomic_collection()
 	 * @hook add_meta_boxes
@@ -45,7 +49,8 @@ class WebcomicPages extends Webcomic {
 		add_meta_box( 'webcomic-collection', __( 'Webcomic Collection', 'webcomic' ), array( $this, 'box_webcomic_collection' ), 'page', 'side' );
 	}
 	
-	/** Save metadata with pages.
+	/**
+	 * Save metadata with pages.
 	 * 
 	 * @param integer $id The page ID to update.
 	 * @param object $post Post object to update.
@@ -71,7 +76,8 @@ class WebcomicPages extends Webcomic {
 		}
 	}
 	
-	/** Handle bulk edit meta updates.
+	/**
+	 * Handle bulk edit meta updates.
 	 * 
 	 * @param integer $id Bulk-edited post ID.
 	 * @hook pre_post_update
@@ -84,7 +90,8 @@ class WebcomicPages extends Webcomic {
 		}
 	}
 	
-	/** Register and enqueue meta box scripts.
+	/**
+	 * Register and enqueue meta box scripts.
 	 * 
 	 * @uses Webcomic::$url
 	 * @hook admin_enqueue_scripts
@@ -97,7 +104,8 @@ class WebcomicPages extends Webcomic {
 		}
 	}
 	
-	/** Render bulk edit options.
+	/**
+	 * Render bulk edit options.
 	 * 
 	 * @param string $column Name of the custom column.
 	 * @param string $type Post type.
@@ -129,7 +137,8 @@ class WebcomicPages extends Webcomic {
 		}
 	}
 	
-	/** Render quick edit options.
+	/**
+	 * Render quick edit options.
 	 *
 	 * @param string $column Name of the custom column.
 	 * @param string $type Post type.
@@ -160,7 +169,8 @@ class WebcomicPages extends Webcomic {
 		}
 	}
 	
-	/** Render column content for page admin pages.
+	/**
+	 * Render column content for page admin pages.
 	 * 
 	 * @param string $column The column name.
 	 * @param integer $id Current post ID.
@@ -172,7 +182,8 @@ class WebcomicPages extends Webcomic {
 		}
 	}
 	
-	/** Handle sorting and filtering pages by webcomic collection.
+	/**
+	 * Handle sorting and filtering pages by webcomic collection.
 	 * 
 	 * Because of how WordPress handles custom field queries, sorting
 	 * this way has the unintentional side effect of filtering out any
@@ -198,7 +209,8 @@ class WebcomicPages extends Webcomic {
 		return $request;
 	}
 	
-	/** Add custom webcomic collection to management pages.
+	/**
+	 * Add custom webcomic collection to management pages.
 	 * 
 	 * @param array $columns Array of of post columns.
 	 * @return array
@@ -212,7 +224,8 @@ class WebcomicPages extends Webcomic {
 		return array_merge( $pre, $columns );
 	}
 	
-	/** Add sortable webcomic collection column.
+	/**
+	 * Add sortable webcomic collection column.
 	 * 
 	 * @param array $columns An array of sortable columns.
 	 * @return array
@@ -222,7 +235,8 @@ class WebcomicPages extends Webcomic {
 		return array_merge( array( 'webcomic_collection' => 'webcomic_collection' ), $columns );
 	}
 	
-	/** Render the page collection meta box.
+	/**
+	 * Render the page collection meta box.
 	 * 
 	 * @param object $page Current page object.
 	 * @uses Webcomic::$config
@@ -245,7 +259,8 @@ class WebcomicPages extends Webcomic {
 		<?php
 	}
 	
-	/** Update quick edit meta values.
+	/**
+	 * Update quick edit meta values.
 	 * 
 	 * @param integer $id Post ID to retrieve values for.
 	 */
@@ -255,7 +270,8 @@ class WebcomicPages extends Webcomic {
 		) );
 	}
 	
-	/** Save quick edit meta values.
+	/**
+	 * Save quick edit meta values.
 	 * 
 	 * @param integer $id Post ID to save values for.
 	 * @param string $page_collection Update collection meta value.

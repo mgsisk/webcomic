@@ -1,22 +1,26 @@
 <?php
-/** Contains the WebcomicConfig class.
+/**
+ * Contains the WebcomicConfig class.
  * 
  * @package Webcomic
  */
 
-/** Handle configuration tasks.
+/**
+ * Handle configuration tasks.
  * 
  * @package Webcomic
  */
 class WebcomicConfig extends Webcomic {
-	/** Stores Webcomic Network data.
+	/**
+	 * Stores Webcomic Network data.
 	 * @var array
 	 */
 	private static $network = array(
 		'showcase' => array()
 	);
 	
-	/** Register hooks.
+	/**
+	 * Register hooks.
 	 * 
 	 * @uses WebcomicConfig::admin_init()
 	 * @uses WebcomicConfig::save_sizes()
@@ -31,7 +35,8 @@ class WebcomicConfig extends Webcomic {
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 	}
 	
-	/** Regester settings via the Settings API.
+	/**
+	 * Regester settings via the Settings API.
 	 * 
 	 * Registers the 'webcomic' setting (an array that stores all of the
 	 * plugin's configuration data), adds setting sections and fields for
@@ -170,7 +175,8 @@ class WebcomicConfig extends Webcomic {
 		}
 	}
 	
-	/** Update size information when media options are saved.
+	/**
+	 * Update size information when media options are saved.
 	 * 
 	 * @uses Webcomic::$config
 	 * @hook admin_init
@@ -211,7 +217,8 @@ class WebcomicConfig extends Webcomic {
 		}
 	}
 	
-	/** Register submenu settings pages.
+	/**
+	 * Register submenu settings pages.
 	 * 
 	 * @uses Webcomic::$config
 	 * @uses WebcomicConfig::page()
@@ -226,7 +233,8 @@ class WebcomicConfig extends Webcomic {
 		}
 	}
 	
-	/** Validate the API key and load Network data.
+	/**
+	 * Validate the API key and load Network data.
 	 * 
 	 * @uses Webcomic::$config
 	 * @uses Webcomic::api_request()
@@ -264,7 +272,8 @@ class WebcomicConfig extends Webcomic {
 		}
 	}
 	
-	/** Register and enqueue settings scripts.
+	/**
+	 * Register and enqueue settings scripts.
 	 * 
 	 * @uses Webcomic::$url
 	 * @hook admin_enqueue_scripts
@@ -279,7 +288,8 @@ class WebcomicConfig extends Webcomic {
 		}
 	}
 	
-	/** Render the Network setting
+	/**
+	 * Render the Network setting
 	 * 
 	 * @uses Webcomic::$config
 	 */
@@ -289,7 +299,8 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
-	/** Render the Integrate setting.
+	/**
+	 * Render the Integrate setting.
 	 * 
 	 * @uses Webcomic::$config
 	 */
@@ -299,7 +310,8 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
-	/** Render the Navigate settings.
+	/**
+	 * Render the Navigate settings.
 	 * 
 	 * @uses Webcomic::$config
 	 */
@@ -311,7 +323,8 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
-	/** Render the Uninstall setting.
+	/**
+	 * Render the Uninstall setting.
 	 * 
 	 * @uses Webcomic::$config
 	 */
@@ -323,7 +336,8 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
-	/** Render the Collections setting section.
+	/**
+	 * Render the Collections setting section.
 	 * 
 	 * @uses Webcomic::$config
 	 */
@@ -382,7 +396,8 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
-	/** Render the Additional Sizes settings section.
+	/**
+	 * Render the Additional Sizes settings section.
 	 * 
 	 * @uses Webcomic::$config
 	 */
@@ -446,7 +461,8 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
-	/** Render the Network > Key setting.
+	/**
+	 * Render the Network > Key setting.
 	 * 
 	 * @uses Webcomic::$config
 	 */
@@ -466,7 +482,8 @@ class WebcomicConfig extends Webcomic {
 		}
 	}
 	
-	/** Render the Network > Showcase > Activate setting.
+	/**
+	 * Render the Network > Showcase > Activate setting.
 	 * 
 	 * @uses Webcomic::$config
 	 */
@@ -476,7 +493,8 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
-	/** Render the Network > Showcase > Name setting.
+	/**
+	 * Render the Network > Showcase > Name setting.
 	 * 
 	 * @uses WebcomicConfig::$network
 	 */
@@ -487,7 +505,8 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
-	/** Render the Network > Showcase > URL setting.
+	/**
+	 * Render the Network > Showcase > URL setting.
 	 * 
 	 * @uses WebcomicConfig::$network
 	 */
@@ -498,7 +517,8 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
-	/** Render the Network > Showcase > Creators setting.
+	/**
+	 * Render the Network > Showcase > Creators setting.
 	 * 
 	 * @uses WebcomicConfig::$network
 	 */
@@ -510,7 +530,8 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
-	/** Render the Network > Showcase > Description setting.
+	/**
+	 * Render the Network > Showcase > Description setting.
 	 * 
 	 * @uses WebcomicConfig::$network
 	 */
@@ -521,7 +542,8 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
-	/** Render the Network > Showcase > Rating setting.
+	/**
+	 * Render the Network > Showcase > Rating setting.
 	 * 
 	 * @uses WebcomicConfig::$network
 	 */
@@ -543,7 +565,8 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
-	/** Render the Network > Showcase > Rating setting.
+	/**
+	 * Render the Network > Showcase > Rating setting.
 	 * 
 	 * @uses WebcomicConfig::$network
 	 */
@@ -585,7 +608,8 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
-	/** Render the Network > Showcase > Image setting.
+	/**
+	 * Render the Network > Showcase > Image setting.
 	 * 
 	 * @uses WebcomicConfig::$network
 	 * @uses WebcomicConfig::ajax_showcase_image()
@@ -597,7 +621,8 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
-	/** Render the Network > Showcase > Testimonial setting.
+	/**
+	 * Render the Network > Showcase > Testimonial setting.
 	 * 
 	 * @uses WebcomicConfig::$network
 	 */
@@ -608,7 +633,8 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
-	/** Render the Name setting.
+	/**
+	 * Render the Name setting.
 	 * 
 	 * @uses Webcomic::$config
 	 */
@@ -619,7 +645,8 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
-	/** Render the Slug setting.
+	/**
+	 * Render the Slug setting.
 	 * 
 	 * @uses Webcomic::$config
 	 */
@@ -630,7 +657,8 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
-	/** Render the Description setting.
+	/**
+	 * Render the Description setting.
 	 * 
 	 * @uses Webcomic::$config
 	 */
@@ -641,7 +669,8 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
-	/** Render the Cover setting.
+	/**
+	 * Render the Cover setting.
 	 * 
 	 * @uses Webcomic::$config
 	 * @uses WebcomicConfig::ajax_collection_image()
@@ -653,7 +682,8 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
-	/** Render the Theme setting.
+	/**
+	 * Render the Theme setting.
 	 * 
 	 * @uses Webcomic::$config
 	 */
@@ -671,7 +701,8 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
-	/** Render the Feeds setting.
+	/**
+	 * Render the Feeds setting.
 	 * 
 	 * @uses Webcomic::$config
 	 */
@@ -690,7 +721,8 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
-	/** Render the Buffer setting.
+	/**
+	 * Render the Buffer setting.
 	 * 
 	 * @uses Webcomic::$config
 	 */
@@ -704,7 +736,8 @@ class WebcomicConfig extends Webcomic {
 		);
 	}
 	
-	/** Render the Transcripts setting.
+	/**
+	 * Render the Transcripts setting.
 	 * 
 	 * @uses Webcomic::$config
 	 */
@@ -714,7 +747,8 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
-	/** Render the Transcripts setting.
+	/**
+	 * Render the Transcripts setting.
 	 * 
 	 * @uses Webcomic::$config
 	 */
@@ -727,7 +761,8 @@ class WebcomicConfig extends Webcomic {
 			</select>' ), '</label>';
 	}
 	
-	/** Render the Transcripts setting.
+	/**
+	 * Render the Transcripts setting.
 	 * 
 	 * @uses Webcomic::$config
 	 */
@@ -740,7 +775,8 @@ class WebcomicConfig extends Webcomic {
 		);
 	}
 	
-	/** Render the Transcripts > Languages setting.
+	/**
+	 * Render the Transcripts > Languages setting.
 	 * 
 	 * @uses Webcomic::$config
 	 */
@@ -763,7 +799,8 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
-	/** Render the Commerce > Business Email setting.
+	/**
+	 * Render the Commerce > Business Email setting.
 	 * 
 	 * @uses Webcomic::$config
 	 */
@@ -775,7 +812,8 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
-	/** Render the Commerce > Default webcomic settings setting.
+	/**
+	 * Render the Commerce > Default webcomic settings setting.
 	 * 
 	 * @uses Webcomic::$config
 	 */
@@ -786,7 +824,8 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
-	/** Render the Commerce > Sales setting.
+	/**
+	 * Render the Commerce > Sales setting.
 	 * @uses Webcomic::$config
 	 */
 	public function collection_commerce_sales() {
@@ -804,7 +843,8 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
-	/** Render the Commerce > Prices setting.
+	/**
+	 * Render the Commerce > Prices setting.
 	 * 
 	 * @uses Webcomic::$config
 	 */
@@ -827,7 +867,8 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
-	/** Render the Commerce > Shipping setting.
+	/**
+	 * Render the Commerce > Shipping setting.
 	 * 
 	 * @uses Webcomic::$config
 	 */
@@ -850,7 +891,8 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
-	/** Render the Commerce > Donation setting.
+	/**
+	 * Render the Commerce > Donation setting.
 	 * 
 	 * @uses Webcomic::$config
 	 */
@@ -861,7 +903,8 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
-	/** Render the Commerce > Currencey setting.
+	/**
+	 * Render the Commerce > Currencey setting.
 	 * 
 	 * @uses Webcomic::$config
 	 */
@@ -906,7 +949,8 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
-	/** Render the Access > Age setting.
+	/**
+	 * Render the Access > Age setting.
 	 * 
 	 * @uses Webcomic::$config
 	 */
@@ -923,7 +967,8 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
-	/** Render the Access > Role setting.
+	/**
+	 * Render the Access > Role setting.
 	 * 
 	 * @uses Webcomic::$config
 	 */
@@ -948,7 +993,8 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
-	/** Render the Posts > Content settings.
+	/**
+	 * Render the Posts > Content settings.
 	 * 
 	 * @uses Webcomic::$config
 	 */
@@ -961,7 +1007,8 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
-	/** Render the Posts > Discussion settings.
+	/**
+	 * Render the Posts > Discussion settings.
 	 * 
 	 * @uses Webcomic::$config
 	 */
@@ -972,7 +1019,8 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
-	/** Render the Posts > Miscellanea settings.
+	/**
+	 * Render the Posts > Miscellanea settings.
 	 * 
 	 * @uses Webcomic::$config
 	 */
@@ -984,7 +1032,8 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
-	/** Render the Posts > Taxonomies settings.
+	/**
+	 * Render the Posts > Taxonomies settings.
 	 * 
 	 * @uses Webcomic::$config
 	 */
@@ -1002,7 +1051,8 @@ class WebcomicConfig extends Webcomic {
 		}
 	}
 	
-	/** Render the Slug > Archive setting.
+	/**
+	 * Render the Slug > Archive setting.
 	 * 
 	 * @uses Webcomic::$config
 	 */
@@ -1015,7 +1065,8 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
-	/** Render the Slug > Webcomics setting.
+	/**
+	 * Render the Slug > Webcomics setting.
 	 * 
 	 * @uses Webcomic::$config
 	 */
@@ -1028,7 +1079,8 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
-	/** Render the Slugs > Storylines setting.
+	/**
+	 * Render the Slugs > Storylines setting.
 	 * 
 	 * @uses Webcomic::$config
 	 */
@@ -1041,7 +1093,8 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
-	/** Render the Slugs > Characters setting.
+	/**
+	 * Render the Slugs > Characters setting.
 	 * 
 	 * @uses Webcomic::$config
 	 */
@@ -1054,7 +1107,8 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
-	/** Render Twitter > Authorized Account
+	/**
+	 * Render Twitter > Authorized Account
 	 * 
 	 * @uses Webcomic::$config
 	 * @uses WebcomicConfig::ajax_twitter_account()
@@ -1063,7 +1117,8 @@ class WebcomicConfig extends Webcomic {
 		echo '<div id="webcomic_twitter_account">', self::ajax_twitter_account( self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'twitter' ][ 'consumer_key' ], self::$config[ 'collections' ][ $_GET[ 'post_type' ] ][ 'twitter' ][ 'consumer_secret' ], $_GET[ 'post_type' ] ), '</div>';
 	}
 	
-	/** Render Twitter > Consumer Key
+	/**
+	 * Render Twitter > Consumer Key
 	 * 
 	 * @uses Webcomic::$config
 	 */
@@ -1073,7 +1128,8 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
-	/** Render Twitter > Consumer Secret
+	/**
+	 * Render Twitter > Consumer Secret
 	 * 
 	 * @uses Webcomic::$config
 	 */
@@ -1083,7 +1139,8 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
-	/** Render Twitter > Format
+	/**
+	 * Render Twitter > Format
 	 * 
 	 * @uses Webcomic::$config
 	 */
@@ -1093,7 +1150,8 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
-	/** Render Twitter > Media
+	/**
+	 * Render Twitter > Media
 	 * 
 	 * @uses Webcomic::$config
 	 */
@@ -1103,7 +1161,8 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
-	/** Save callback for the webcomic option.
+	/**
+	 * Save callback for the webcomic option.
 	 * 
 	 * If 'webcomic_general' is set we're working on the general
 	 * settings page.
@@ -1408,7 +1467,8 @@ class WebcomicConfig extends Webcomic {
 		return ( isset( $_POST[ 'webcomic_general' ] ) or isset( $_POST[ 'webcomic_network' ] ) or isset( $_POST[ 'webcomic_collection' ] ) ) ? self::$config : $options;
 	}
 	
-	/** Render a settings page.
+	/**
+	 * Render a settings page.
 	 * 
 	 * @uses Webcomic::$config
 	 * @uses Webcomic::$version
@@ -1440,7 +1500,8 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
-	/** Render the showcase page.
+	/**
+	 * Render the showcase page.
 	 * 
 	 * @uses Webcomic::$config
 	 * @uses Webcomic::$version
@@ -1465,7 +1526,8 @@ class WebcomicConfig extends Webcomic {
 		<?php
 	}
 	
-	/** Generic settings section callback.
+	/**
+	 * Generic settings section callback.
 	 * 
 	 * Most sections don't include a description, but if permalinks are
 	 * set to Default we need to warn users that the permalink URL's
@@ -1477,7 +1539,8 @@ class WebcomicConfig extends Webcomic {
 		}
 	}
 	
-	/** Handle showcase image updating.
+	/**
+	 * Handle showcase image updating.
 	 * 
 	 * @param integer $id ID of the selected image.
 	 */
@@ -1516,7 +1579,8 @@ class WebcomicConfig extends Webcomic {
 		}
 	}
 	
-	/** Handle collection poster image updating.
+	/**
+	 * Handle collection poster image updating.
 	 * 
 	 * @param integer $id ID of the selected image.
 	 */
@@ -1532,7 +1596,8 @@ class WebcomicConfig extends Webcomic {
 		}
 	}
 	
-	/** Handle dynamic slug previews.
+	/**
+	 * Handle dynamic slug previews.
 	 * 
 	 * @param string $slug New slug.
 	 * @param string $preview ID of the element theupdated slug will be loaded into for preview.
@@ -1560,7 +1625,8 @@ class WebcomicConfig extends Webcomic {
 		) );
 	}
 	
-	/** Handle dynamic commerce defaults.
+	/**
+	 * Handle dynamic commerce defaults.
 	 * 
 	 * @param string $email Email to validate.
 	 */
@@ -1568,7 +1634,8 @@ class WebcomicConfig extends Webcomic {
 		echo json_encode( array( 'clear' => filter_var( $email, FILTER_VALIDATE_EMAIL ) ) );
 	}
 	
-	/** Handle dynamic Twitter authorization updates.
+	/**
+	 * Handle dynamic Twitter authorization updates.
 	 * 
 	 * @param string $consumer_key Twitter application consumer key.
 	 * @param string $consumer_secret Twitter application consumer secret.

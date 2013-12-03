@@ -1,20 +1,24 @@
 <?php
-/** Contains the WebcomicLegacy class.
+/**
+ * Contains the WebcomicLegacy class.
  * 
  * @package Webcomic
  */
 
-/** Upgrade legacy Webcomic installations.
+/**
+ * Upgrade legacy Webcomic installations.
  * 
  * @package Webcomic
  */
 class WebcomicLegacy extends Webcomic {
-	/** Stores the maximum safe script execution time.
+	/**
+	 * Stores the maximum safe script execution time.
 	 * @var integer
 	 */
 	private $limit;
 	
-	/** Register action and filter hooks.
+	/**
+	 * Register action and filter hooks.
 	 * 
 	 * Also sets the maximum "safe" script execution time, defined here
 	 * as the `max_execution_time` minus a 10% buffer.
@@ -37,7 +41,8 @@ class WebcomicLegacy extends Webcomic {
 		add_action( 'list_term_exclusions', array( $this, 'list_term_exclusions' ), 10, 2 );
 	}
 	
-	/** Register legacy post types and taxonomies.
+	/**
+	 * Register legacy post types and taxonomies.
 	 * 
 	 * @uses Webcomic::$config
 	 */
@@ -70,7 +75,8 @@ class WebcomicLegacy extends Webcomic {
 		}
 	}
 	
-	/** Disable or upgrade the plugin.
+	/**
+	 * Disable or upgrade the plugin.
 	 * 
 	 * @uses Webcomic::$dir
 	 * @uses Webcomic::$config
@@ -120,7 +126,8 @@ class WebcomicLegacy extends Webcomic {
 		}
 	}
 	
-	/** Register submenu page for legacy upgrades.
+	/**
+	 * Register submenu page for legacy upgrades.
 	 * 
 	 * @uses WebcomicLegacy::page()
 	 * @hook admin_menu
@@ -129,7 +136,8 @@ class WebcomicLegacy extends Webcomic {
 		add_submenu_page( 'tools.php', sprintf( __( 'Upgrade to %s', 'webcomic' ), 'Webcomic ' . self::$version ), __( 'Upgrade Webcomic', 'webcomic' ), 'manage_options', 'webcomic-upgrader', array( $this, 'page' ) );
 	}
 	
-	/** Render upgrade tool notification.
+	/**
+	 * Render upgrade tool notification.
 	 * 
 	 * @return null
 	 * @uses Webcomic::$config
@@ -151,7 +159,8 @@ class WebcomicLegacy extends Webcomic {
 		}
 	}
 	
-	/** Enqueue custom styles for upgrade notice.
+	/**
+	 * Enqueue custom styles for upgrade notice.
 	 * 
 	 * @uses Webcomic::$url
 	 * @uses Webcomic::$config
@@ -167,7 +176,8 @@ class WebcomicLegacy extends Webcomic {
 		}
 	}
 	
-	/** Allow retrieving terms by term_group.
+	/**
+	 * Allow retrieving terms by term_group.
 	 * 
 	 * @param string $exclusions The WHERE clause used by get_terms.
 	 * @param array $args The array of arguments passed to get_terms.
@@ -181,7 +191,8 @@ class WebcomicLegacy extends Webcomic {
 		return $exclusions;
 	}
 	
-	/** Render the upgrade tool page.
+	/**
+	 * Render the upgrade tool page.
 	 * 
 	 * @uses Webcomic::$config
 	 * @uses Webcomic::$version
@@ -237,7 +248,8 @@ class WebcomicLegacy extends Webcomic {
 		<?php
 	}
 	
-	/** Upgrade Webcomic 1 installations.
+	/**
+	 * Upgrade Webcomic 1 installations.
 	 * 
 	 * @return integer
 	 * @uses Webcomic::$config
@@ -513,7 +525,8 @@ class WebcomicLegacy extends Webcomic {
 		return 0;
 	}
 	
-	/** Upgrade Webcomic 2 installations.
+	/**
+	 * Upgrade Webcomic 2 installations.
 	 * 
 	 * @return integer
 	 * @uses Webcomic::$config
@@ -798,7 +811,8 @@ class WebcomicLegacy extends Webcomic {
 		return 0;
 	}
 	
-	/** Upgrade Webcomic 3 installations.
+	/**
+	 * Upgrade Webcomic 3 installations.
 	 * 
 	 * @return integer
 	 * @uses Webcomic::$config
@@ -1140,7 +1154,8 @@ class WebcomicLegacy extends Webcomic {
 		return 0;
 	}
 	
-	/** Upgrade ComicPress installations.
+	/**
+	 * Upgrade ComicPress installations.
 	 * 
 	 * @return integer
 	 * @uses Webcomic::$config
@@ -1293,7 +1308,8 @@ class WebcomicLegacy extends Webcomic {
 		return 0;
 	}
 	
-	/** Insert legacy Webcomic files into the Media Library.
+	/**
+	 * Insert legacy Webcomic files into the Media Library.
 	 * 
 	 * @param string $file Absolute path and filename of the file to insert into the Media Library.
 	 * @param mixed $context Context to add to the new file, or the integer ID of the attachment parent.
@@ -1331,7 +1347,8 @@ class WebcomicLegacy extends Webcomic {
 		return ( integer ) $attachment_id;
 	}
 	
-	/** Gets the comic file path for legacy installations.
+	/**
+	 * Gets the comic file path for legacy installations.
 	 * 
 	 * @param string $directory The `comic_directory` option from the legacy configuration.
 	 * @param string $category The category slug for subdirectories, if any.

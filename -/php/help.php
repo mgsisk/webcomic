@@ -1,15 +1,18 @@
 <?php
-/** Contains the WebcomicHelp class.
+/**
+ * Contains the WebcomicHelp class.
  * 
  * @package Webcomic
  */
 
-/** Provide contextual assistance.
+/**
+ * Provide contextual assistance.
  * 
  * @package Webcomic
  */
 class WebcomicHelp extends Webcomic {
-	/** Add contextual help information.
+	/**
+	 * Add contextual help information.
 	 * 
 	 * @param object $screen Current screen object.
 	 * @uses WebcomicHelp::sidebar()
@@ -338,7 +341,8 @@ class WebcomicHelp extends Webcomic {
 		}
 	}
 	
-	/** Return help sidebar.
+	/**
+	 * Return help sidebar.
 	 * 
 	 * @return string
 	 */
@@ -353,7 +357,8 @@ class WebcomicHelp extends Webcomic {
 			<p><a href="support@webcomic.nu">' . __( 'Email Support', 'webcomic' ) . '</a></p>';
 	}
 	
-	/** Return Webcomic Showcase widget help.
+	/**
+	 * Return Webcomic Showcase widget help.
 	 * 
 	 * @return string
 	 */
@@ -362,7 +367,8 @@ class WebcomicHelp extends Webcomic {
 		<p>' . sprintf( __( 'The <b>Webcomic Showcase</b> highlights other Webcomic-powered sites that have opted to share their information via the showcase. To view the showcase you must have a Webcomic Network API key, which requires <a href="%s">joining the Webcomic Network</a>. After you have joined the network you may optionally list your site in the showcase. You can configure how may and what kinds of sites appear in the showcase using the <b>Configure</b> link in the widget title.', 'webcomic' ), add_query_arg( array( 'page' => 'webcomic-network' ), admin_url( 'options.php' ) ) ) . '</p>';
 	}
 	
-	/** Return webcomic attacher overview help.
+	/**
+	 * Return webcomic attacher overview help.
 	 * 
 	 * @return string
 	 */
@@ -381,7 +387,8 @@ class WebcomicHelp extends Webcomic {
 			<p>' . __( "When you're ready click <b>Attach Media</b> to attach selected media to their matched post.", 'webcomic' ) . '</p>';
 	}
 	
-	/** Return webcomic generator overview help.
+	/**
+	 * Return webcomic generator overview help.
 	 * 
 	 * @return string
 	 */
@@ -397,7 +404,8 @@ class WebcomicHelp extends Webcomic {
 			<p>' . __( 'Webcomics created by the generator will use the image filename for the webcomic title.', 'webcomic' ) . '</p>';
 	}
 	
-	/** Return term order overview help.
+	/**
+	 * Return term order overview help.
 	 * 
 	 * @return string
 	 */
@@ -405,7 +413,8 @@ class WebcomicHelp extends Webcomic {
 		return '<p>' . __( 'From here you can change the sorting order of your terms. Drag and drop the terms on the right to change their order. When everything looks good click <b>Save Changes</b>.', 'webcomic' ) . '</p>';
 	}
 	
-	/** Return transcript overview help.
+	/**
+	 * Return transcript overview help.
 	 * 
 	 * @return string
 	 */
@@ -413,7 +422,8 @@ class WebcomicHelp extends Webcomic {
 		return '<p>' . __( 'This screen provides access to all of your webcomic transcripts. You can customize the display of this screen to suit your workflow.', 'webcomic' ) . '</p>';
 	}
 	
-	/** Return transcript screen help.
+	/**
+	 * Return transcript screen help.
 	 * 
 	 * @return string
 	 */
@@ -428,7 +438,8 @@ class WebcomicHelp extends Webcomic {
 			</ul>';
 	}
 	
-	/** Return transcript actions help.
+	/**
+	 * Return transcript actions help.
 	 * 
 	 * @return string
 	 */
@@ -442,7 +453,8 @@ class WebcomicHelp extends Webcomic {
 			</ul>';
 	}
 	
-	/** Return transcript bulk help.
+	/**
+	 * Return transcript bulk help.
 	 * 
 	 * @return string
 	 */
@@ -452,7 +464,8 @@ class WebcomicHelp extends Webcomic {
 			<p>' . __( 'When using Bulk Edit, you can change the metadata (languages, author, etc.) for all selected transcripts at once. To remove a transcript from the grouping, just click the x next to its name in the Bulk Edit area that appears.', 'webcomic' ) . '</p>';
 	}
 	
-	/** Return transcript customize help.
+	/**
+	 * Return transcript customize help.
 	 * 
 	 * @return string
 	 */
@@ -460,7 +473,8 @@ class WebcomicHelp extends Webcomic {
 		return '<p>' . __( 'The title field and the big Transcript Editing Area are fixed in place, but you can reposition all the other boxes using drag and drop, and can minimize or expand them by clicking the title bar of each box. Use the Screen Options tab to unhide more boxes (Slug, Author, Revisions) or to choose a 1- or 2-column layout for this screen.', 'webcomic' ) . '</p>';
 	}
 	
-	/** Return transcript editor help.
+	/**
+	 * Return transcript editor help.
 	 * 
 	 * @return string
 	 */
@@ -468,7 +482,8 @@ class WebcomicHelp extends Webcomic {
 		return '<p>' . __( 'Enter the text for your transcript. There are two modes of editing: Visual and HTML. Choose the mode by clicking on the appropriate tab. Visual mode gives you a WYSIWYG editor. Click the last icon in the row to get a second row of controls. The HTML mode allows you to enter raw HTML along with your transcript text. You can insert media files by clicking the icons above the transcript editor and following the directions. You can go to the distraction-free writing screen via the Fullscreen icon in Visual mode (second to last in the top row) or the Fullscreen button in HTML mode (last in the row). Once there, you can make buttons visible by hovering over the top area. Exit Fullscreen back to the regular transcript editor.', 'webcomic' ) . '</p>';
 	}
 	
-	/** Return transcript publish help.
+	/**
+	 * Return transcript publish help.
 	 * 
 	 * @return string
 	 */
@@ -476,7 +491,8 @@ class WebcomicHelp extends Webcomic {
 		return '<p>' . __( 'You can set the terms of publishing your transcript in the Publish box. For Status, Visibility, and Publish (immediately), click on the Edit link to reveal more options. Visibility includes options for password-protecting a transcript. Publish (immediately) allows you to set a future or past date and time, so you can schedule a transcript to be published in the future or backdate a transcript.', 'webcomic' ) . '</p>';
 	}
 	
-	/** Return transcript parent help.
+	/**
+	 * Return transcript parent help.
 	 * 
 	 * @return string
 	 */
@@ -484,7 +500,8 @@ class WebcomicHelp extends Webcomic {
 		return '<p>' . __( 'You can set the webcomic your transcript is related to in the Parent Webcomic box. First select the collection the webcomic belgons to, then the webcomic in that collection your transcript is related to. Any attached imagery will be loaded so you can view the webcomic as you write your transcript.', 'webcomic' ) . '</p>';
 	}
 	
-	/** Return transcript authors help.
+	/**
+	 * Return transcript authors help.
 	 * 
 	 * @return string
 	 */
@@ -492,7 +509,8 @@ class WebcomicHelp extends Webcomic {
 		return '<p>' . __( 'Identified but unregistered users that submit or improve a transcript will be listed in the Transcript Authors box. These additional authors may be displayed alongside (or instead of) the registered author to provide appropriate transcription credit on your site. Authors may be removed by checking the box next to their name and saving the transcript. Additional authors may be added by clicking the <b>Add Author</b> button and filling in the authors name; email, url, IP address, and transcription date are optional.', 'webcomic' ) . '</p>';
 	}
 	
-	/** Return webcomic overview help.
+	/**
+	 * Return webcomic overview help.
 	 * 
 	 * @param object $screen Current screen object.
 	 * @return string
@@ -502,7 +520,8 @@ class WebcomicHelp extends Webcomic {
 		return '<p>' . sprintf( __( 'This screen provides access to all of your %s webcomics. You can customize the display of this screen to suit your workflow.', 'webcomic' ), self::$config[ 'collections' ][ $screen->post_type ][ 'name' ] ) . '</p>';
 	}
 	
-	/** Return webcomic screen help.
+	/**
+	 * Return webcomic screen help.
 	 * 
 	 * @return string
 	 */
@@ -517,7 +536,8 @@ class WebcomicHelp extends Webcomic {
 			</ul>';
 	}
 	
-	/** Return webcomic actions help.
+	/**
+	 * Return webcomic actions help.
 	 * 
 	 * @return string
 	 */
@@ -532,7 +552,8 @@ class WebcomicHelp extends Webcomic {
 			</ul>';
 	}
 	
-	/** Return webcomic bulk help.
+	/**
+	 * Return webcomic bulk help.
 	 * 
 	 * @return string
 	 */
@@ -542,7 +563,8 @@ class WebcomicHelp extends Webcomic {
 			<p>' . __( 'When using Bulk Edit, you can change the metadata (storylines, author, etc.) for all selected webcomics at once. To remove a webcomic from the grouping, just click the x next to its name in the Bulk Edit area that appears.', 'webcomic' ) . '</p>';
 	}
 	
-	/** Return webcomic customize help.
+	/**
+	 * Return webcomic customize help.
 	 * 
 	 * @return string
 	 */
@@ -550,7 +572,8 @@ class WebcomicHelp extends Webcomic {
 		return '<p>' . __( 'The title field and the big Webcomic Editing Area are fixed in place, but you can reposition all the other boxes using drag and drop, and can minimize or expand them by clicking the title bar of each box. Use the Screen Options tab to unhide more boxes (Excerpt, Send Trackbacks, Custom Fields, Discussion, Slug, Author) or to choose a 1- or 2-column layout for this screen.', 'webcomic' ) . '</p>';
 	}
 	
-	/** Return webcomic media help.
+	/**
+	 * Return webcomic media help.
 	 * 
 	 * @return string
 	 */
@@ -560,7 +583,8 @@ class WebcomicHelp extends Webcomic {
 			<p>' . __( "Once one or more images have been attached to a webcomic you can view them in the <b>Webcomic Media</b> tab in the media popup. From here you can rearrange the images to change the order Webcomic will display them in, regenerate the alternate image sizes (useful if you've updated the dimensions for your thumbnail, medium, or large images or added new alternate sizes), or detach them from the current webcomic.", 'webcomic' ) . '</p>';
 	}
 	
-	/** Return webcomic editor help.
+	/**
+	 * Return webcomic editor help.
 	 * 
 	 * @return string
 	 */
@@ -570,7 +594,8 @@ class WebcomicHelp extends Webcomic {
 			<p>' . __( '<b>Post Editor</b> - Enter any accompanying text for your webcomic. There are two modes of editing: Visual and HTML. Choose the mode by clicking on the appropriate tab. Visual mode gives you a WYSIWYG editor. Click the last icon in the row to get a second row of controls. The HTML mode allows you to enter raw HTML along with your webcomic text. You can go to the distraction-free writing screen via the Fullscreen icon in Visual mode (second to last in the top row) or the Fullscreen button in HTML mode (last in the row). Once there, you can make buttons visible by hovering over the top area. Exit Fullscreen back to the regular webcomic editor.', 'webcomic' ) . '</p>';
 	}
 	
-	/** Return webcomic publish help.
+	/**
+	 * Return webcomic publish help.
 	 * 
 	 * @return string
 	 */
@@ -578,7 +603,8 @@ class WebcomicHelp extends Webcomic {
 		return '<p>' . __( '<b>Publish</b> - You can set the terms of publishing your webcomic in the Publish box. For Status, Visibility, and Publish (immediately), click on the Edit link to reveal more options. Visibility includes options for password-protecting a webcomic. Publish (immediately) allows you to set a future or past date and time, so you can schedule a webcomic to be published in the future or backdate a webcomic.', 'webcomic' ) . '</p>';
 	}
 	
-	/** Return webcomic commerce help.
+	/**
+	 * Return webcomic commerce help.
 	 * 
 	 * @return string
 	 */
@@ -588,7 +614,8 @@ class WebcomicHelp extends Webcomic {
 			<p>' . __( 'The table in the commerce box displays the default prices and shipping for domestic, international, and original prints, as well as the total cost of each. You can adjust these prices by setting a premium or discount, and the total will adjust to show what the new price will be when you update the webcomic. Uncheck the <b>Original</b> print option if the original print (for traditional media webcomics) has been sold or is otherwise unavailable.', 'webcomic' ) . '</p>';
 	}
 	
-	/** Return webcomic transcripts help.
+	/**
+	 * Return webcomic transcripts help.
 	 * 
 	 * @return string
 	 */
@@ -598,7 +625,8 @@ class WebcomicHelp extends Webcomic {
 			<p>' . __( 'The list in the transcripts box displays the transcripts submitted for this webcomic, along with the transcript status, who it was submitted by, when it was submitted, what languages it contains, and a preview of the transcript. Click a transcript title to edit that transcript.', 'webcomic' ) . '</p>';
 	}
 	
-	/** Return webcomic discussion help.
+	/**
+	 * Return webcomic discussion help.
 	 * 
 	 * @return string
 	 */
@@ -608,7 +636,8 @@ class WebcomicHelp extends Webcomic {
 			<p>' . __( '<b>Discussion</b> - You can turn comments and pings on or off, and if there are comments on the webcomic, you can see them here and moderate them.', 'webcomic' ) . '</p>';
 	}
 	
-	/** Return storyline overview help.
+	/**
+	 * Return storyline overview help.
 	 * 
 	 * @return string
 	 */
@@ -618,7 +647,8 @@ class WebcomicHelp extends Webcomic {
 		return '<p>' . sprintf( __( 'You can organize your webcomics into story arcs using <b>storylines</b>. Click <b>Sort %s</b> to reorganize storylines.', 'webcomic' ), $taxonomy->label ) . '</p>';
 	}
 	
-	/** Return storyline adding help.
+	/**
+	 * Return storyline adding help.
 	 * 
 	 * @return string
 	 */
@@ -635,7 +665,8 @@ class WebcomicHelp extends Webcomic {
 			<p>' . __( 'You can change the display of this screen using the Screen Options tab to set how many items are displayed per screen and to display/hide columns in the table.', 'webcomic' ) . '</p>';
 	}
 	
-	/** Return characters overview help.
+	/**
+	 * Return characters overview help.
 	 * 
 	 * @return string
 	 */
@@ -643,7 +674,8 @@ class WebcomicHelp extends Webcomic {
 		return '<p>' . __( 'You can specify the characrters that appear in your webcomics using <b>characters</b>.', 'webcomic' ) . '</p>';
 	}
 	
-	/** Return characters adding help.
+	/**
+	 * Return characters adding help.
 	 * 
 	 * @return string
 	 */
@@ -659,7 +691,8 @@ class WebcomicHelp extends Webcomic {
 			<p>' . __( 'You can change the display of this screen using the Screen Options tab to set how many items are displayed per screen and to display/hide columns in the table.', 'webcomic' ) . '</p>';
 	}
 	
-	/** Return languages overview help.
+	/**
+	 * Return languages overview help.
 	 * 
 	 * @return string
 	 */
@@ -667,7 +700,8 @@ class WebcomicHelp extends Webcomic {
 		return '<p>' . __( 'You can specify the language used in your webcomic transcripts using <b>languages</b>.', 'webcomic' ) . '</p>';
 	}
 	
-	/** Return languages adding help.
+	/**
+	 * Return languages adding help.
 	 * 
 	 * @return string
 	 */
@@ -682,7 +716,8 @@ class WebcomicHelp extends Webcomic {
 			<p>' . __( 'You can change the display of this screen using the Screen Options tab to set how many items are displayed per screen and to display/hide columns in the table.', 'webcomic' ) . '</p>';
 	}
 	
-	/** Return collection general settings help.
+	/**
+	 * Return collection general settings help.
 	 * 
 	 * @return string
 	 */
@@ -700,7 +735,8 @@ class WebcomicHelp extends Webcomic {
 			</ul>';
 	}
 	
-	/** Return collection general settings help.
+	/**
+	 * Return collection general settings help.
 	 * 
 	 * @return string
 	 */
@@ -715,7 +751,8 @@ class WebcomicHelp extends Webcomic {
 			</ul>';
 	}
 	
-	/** Return collection commerce settings help.
+	/**
+	 * Return collection commerce settings help.
 	 * 
 	 * @return string
 	 */
@@ -733,7 +770,8 @@ class WebcomicHelp extends Webcomic {
 			</ul>';
 	}
 	
-	/** Return collection access settings help.
+	/**
+	 * Return collection access settings help.
 	 * 
 	 * @return string
 	 */
@@ -746,7 +784,8 @@ class WebcomicHelp extends Webcomic {
 			</ul>';
 	}
 	
-	/** Return collection post settings help.
+	/**
+	 * Return collection post settings help.
 	 * 
 	 * @return string
 	 */
@@ -755,7 +794,8 @@ class WebcomicHelp extends Webcomic {
 			<p>' . __( "These settings control some of the basic features of your webcomic posts. Disabling a feature will completely remove it's associated box from the Add New Webcomic and Edit Webcomic screens. When titles are disabled Webcomic will automatically set the title of new webcomics to their post ID. Featured images require an active theme with featured image support.", 'webcomic' ) . '</p>';
 	}
 	
-	/** Return collection permalink settings help.
+	/**
+	 * Return collection permalink settings help.
 	 * 
 	 * @param object $screen Current screen object.
 	 * @return string
@@ -766,7 +806,8 @@ class WebcomicHelp extends Webcomic {
 			<p>' . sprintf( __( 'Be careful when modifying permalinks: incorrect settings may result in broken pages. <a href="%s" target="_blank">Read more about permalinks at the WordPress Codex &raquo;</a>', 'webcomic' ), '//codex.wordpress.org/Using_Permalinks' ) . '</p>';
 	}
 	
-	/** Return collection twitter settings help.
+	/**
+	 * Return collection twitter settings help.
 	 * 
 	 * @param object $screen Current screen object.
 	 * @return string
@@ -796,7 +837,8 @@ class WebcomicHelp extends Webcomic {
 			' . $cards;
 	}
 	
-	/** Return collection general settings help.
+	/**
+	 * Return collection general settings help.
 	 * 
 	 * @return string
 	 */
@@ -811,7 +853,8 @@ class WebcomicHelp extends Webcomic {
 			</ul>';
 	}
 	
-	/** Return collection settings help.
+	/**
+	 * Return collection settings help.
 	 * 
 	 * @return string
 	 */
@@ -821,7 +864,8 @@ class WebcomicHelp extends Webcomic {
 			<p>' . __( 'To delete a collection, check the box next to it and select either <b>Delete Permanently</b> or <b>Delete and Save</b> from the Bulk Actions dropdown at the bottom of the list. If <b>Delete and Save</b> is selected the checked collections will have their webcomics and transcripts converted into posts, storylines converted into categories, and characters converted into tags before being deleted.', 'webcomic' ) . '</p>';
 	}
 	
-	/** Return general network settings help.
+	/**
+	 * Return general network settings help.
 	 * 
 	 * @return string
 	 */
@@ -831,7 +875,8 @@ class WebcomicHelp extends Webcomic {
 			: '<p>' . sprintf( __( 'Your use of the Webcomic Network is governed by the <a href="%s">Webcomic Network Terms of Service</a>', 'webcomic' ), 'http://webcomic.nu/legal' ) . '</p>';
 	}
 	
-	/** Return general network settings help.
+	/**
+	 * Return general network settings help.
 	 * 
 	 * @return string
 	 */
@@ -851,7 +896,8 @@ class WebcomicHelp extends Webcomic {
 			<p>' . __( "Some additional data is sent with your showcase entry, including the version of Webcomic you're using and information about your sites theme (name, url, author, and author url) and template (if you're using a child theme).", 'webcomic' ) . '</p>';
 	}
 	
-	/** Return additional sizes help.
+	/**
+	 * Return additional sizes help.
 	 * 
 	 * @return string
 	 */
@@ -866,7 +912,8 @@ class WebcomicHelp extends Webcomic {
 			<p>' . __( 'Sizes may be adjusted by editing the width, height, and crop of the size within the list and clicking <b>Save Changes</b>. Sizes my be deleted by checking the box next to one or more sizes name, selecting <b>Delete</b> from the Bulk Actions dropdown below the list, and clicking <b>Save Changes</b>. Sizes added outside of this section cannot be edited, but are listed for informational purposes.', 'webcomic' ) . '</p>';
 	}
 	
-	/** Return commerce overview help.
+	/**
+	 * Return commerce overview help.
 	 * 
 	 * @return string
 	 */
@@ -882,7 +929,8 @@ class WebcomicHelp extends Webcomic {
 			<p>' . __( 'Webcomic records this data for informational purposes only, such as noting transaction errors (which will appear as bold red entries in the list). Similar information should be available through your PayPal account. You may remove all of the IPN data Webcomic has recorded by clicking <b>Empty Log</b> at the bottom of the list.', 'webcomic' ) . '</p>';
 	}
 	
-	/** Return upgrade webcomic help.
+	/**
+	 * Return upgrade webcomic help.
 	 * 
 	 * @return string
 	 */
@@ -897,7 +945,8 @@ class WebcomicHelp extends Webcomic {
 			</ol>';
 	}
 	
-	/** Return additional page collection help.
+	/**
+	 * Return additional page collection help.
 	 * 
 	 * @return string
 	 */

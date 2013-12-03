@@ -1,15 +1,18 @@
 <?php
-/** Contains the WebcomicPosts class.
+/**
+ * Contains the WebcomicPosts class.
  * 
  * @package Webcomic
  */
 
-/** Handle post-related tasks.
+/**
+ * Handle post-related tasks.
  * 
  * @package Webcomic
  */
 class WebcomicPosts extends Webcomic {
-	/** Register hooks.
+	/**
+	 * Register hooks.
 	 * 
 	 * @uses Webcomic::$config
 	 * @uses WebcomicPosts::add_meta_boxes()
@@ -49,7 +52,8 @@ class WebcomicPosts extends Webcomic {
 		}
 	}
 	
-	/** Add webcomic meta boxes.
+	/**
+	 * Add webcomic meta boxes.
 	 * 
 	 * @uses Webcomic::$config
 	 * @uses WebcomicPosts::media()
@@ -65,7 +69,8 @@ class WebcomicPosts extends Webcomic {
 		}
 	}
 	
-	/** Handle bulk edit meta updates.
+	/**
+	 * Handle bulk edit meta updates.
 	 * 
 	 * @param integer $id Bulk-edited post ID.
 	 * @hook pre_post_update
@@ -86,7 +91,8 @@ class WebcomicPosts extends Webcomic {
 		}
 	}
 	
-	/** Update the collection updated time.
+	/**
+	 * Update the collection updated time.
 	 * 
 	 * @param integer $id Post ID to update.
 	 * @param object $post Post object to update.
@@ -101,7 +107,8 @@ class WebcomicPosts extends Webcomic {
 		}
 	}
 	
-	/** Register and enqueue meta box scripts.
+	/**
+	 * Register and enqueue meta box scripts.
 	 * 
 	 * If the post editor is disabled we also need to enqueue the media
 	 * upload script and thickbox stylesheet to ensure uploads work.
@@ -124,7 +131,8 @@ class WebcomicPosts extends Webcomic {
 		}
 	}
 	
-	/** Render additional post filtering options.
+	/**
+	 * Render additional post filtering options.
 	 * 
 	 * The wp_dropdown_categories() function works well enough, but we
 	 * need to swap out the term ID values for term slug values to get
@@ -163,7 +171,8 @@ class WebcomicPosts extends Webcomic {
 		}
 	}
 	
-	/** Save commerce metadata with webcomics.
+	/**
+	 * Save commerce metadata with webcomics.
 	 * 
 	 * @param integer $id Post ID to update.
 	 * @param object $post Post object to update.
@@ -207,7 +216,8 @@ class WebcomicPosts extends Webcomic {
 		}
 	}
 	
-	/** Update webcomic title, slug, and content prior to saving.
+	/**
+	 * Update webcomic title, slug, and content prior to saving.
 	 * 
 	 * @param array $data An array of post data.
 	 * @param array $raw An array of raw post data.
@@ -233,7 +243,8 @@ class WebcomicPosts extends Webcomic {
 		return $data;
 	}
 	
-	/** Save transcript metadata with webcomics.
+	/**
+	 * Save transcript metadata with webcomics.
 	 * 
 	 * @param integer $id The post ID to update.
 	 * @param object $post Post object to update.
@@ -255,7 +266,8 @@ class WebcomicPosts extends Webcomic {
 		}
 	}
 	
-	/** Render bulk edit options.
+	/**
+	 * Render bulk edit options.
 	 * 
 	 * @param string $column Name of the custom column.
 	 * @param string $type Post type.
@@ -302,7 +314,8 @@ class WebcomicPosts extends Webcomic {
 		}
 	}
 	
-	/** Render quick edit options.
+	/**
+	 * Render quick edit options.
 	 *
 	 * @param string $column Name of the custom column.
 	 * @param string $type Post type.
@@ -327,7 +340,8 @@ class WebcomicPosts extends Webcomic {
 		}
 	}
 	
-	/** Filter posts list to display webcomics with no attachments.
+	/**
+	 * Filter posts list to display webcomics with no attachments.
 	 * 
 	 * @param string $where The WHERE query string.
 	 * @return string
@@ -343,7 +357,8 @@ class WebcomicPosts extends Webcomic {
 		return $where;
 	}
 	
-	/** Render column content for post admin pages.
+	/**
+	 * Render column content for post admin pages.
 	 * 
 	 * @param string $column The column name.
 	 * @param integer $id Current post ID.
@@ -364,7 +379,8 @@ class WebcomicPosts extends Webcomic {
 		}
 	}
 	
-	/** Add Orphaned view for webcomic posts.
+	/**
+	 * Add Orphaned view for webcomic posts.
 	 * 
 	 * @param array $views Array of view links.
 	 * @return array
@@ -388,7 +404,8 @@ class WebcomicPosts extends Webcomic {
 		return $views;
 	}
 	
-	/** Add custom webcomic post type columns to management pages.
+	/**
+	 * Add custom webcomic post type columns to management pages.
 	 * 
 	 * @param array $columns Array of of post columns.
 	 * @return array
@@ -406,7 +423,8 @@ class WebcomicPosts extends Webcomic {
 		return array_merge( $pre, $columns );
 	}
 	
-	/** Render the webcomic media meta box.
+	/**
+	 * Render the webcomic media meta box.
 	 * 
 	 * @param object $post Current post object.
 	 * @uses WebcomicPosts::ajax_media_preview()
@@ -417,7 +435,8 @@ class WebcomicPosts extends Webcomic {
 		<?php
 	}
 	
-	/** Render the webcomic commerce meta box.
+	/**
+	 * Render the webcomic commerce meta box.
 	 * 
 	 * @param object $post Current post object.
 	 * @uses Webcomic::$config
@@ -428,13 +447,17 @@ class WebcomicPosts extends Webcomic {
 		
 		wp_nonce_field( 'webcomic_meta_commerce', 'webcomic_meta_commerce' );
 		?>
-		<p><label><input type="checkbox" name="webcomic_commerce_prints"<?php checked( ( 'auto-draft' === $post->post_status and self::$config[ 'collections' ][ $post->post_type ][ 'commerce' ][ 'prints' ] ) or ( self::$config[ 'collections' ][ $post->post_type ][ 'commerce' ][ 'business' ] and get_post_meta( $post->ID, 'webcomic_prints', true ) ) ); disabled( !self::$config[ 'collections' ][ $post->post_type ][ 'commerce' ][ 'business' ] ); ?>> <?php _e( 'Sell prints', 'webcomic' ); ?></label></p>
+		<!-- <p><label><input type="checkbox" name="webcomic_commerce_prints"<?php checked( ( 'auto-draft' === $post->post_status and self::$config[ 'collections' ][ $post->post_type ][ 'commerce' ][ 'prints' ] ) or ( self::$config[ 'collections' ][ $post->post_type ][ 'commerce' ][ 'business' ] and get_post_meta( $post->ID, 'webcomic_prints', true ) ) ); disabled( !self::$config[ 'collections' ][ $post->post_type ][ 'commerce' ][ 'business' ] ); ?>> <?php _e( 'Sell prints', 'webcomic' ); ?></label></p> -->
 		<div style="margin:0 -11px" data-webcomic-currency="<?php echo self::$config[ 'collections' ][ $post->post_type ][ 'commerce' ][ 'currency' ]; ?>" data-webcomic-original="<?php esc_attr_e( '- SOLD -', 'webcomic' ); ?>">
-			<table class="widefat fixed">
+			<table class="widefat" style="border-left:0;border-right:0">
 				<thead>
 					<tr>
-						<th class="check-column"></th>
-						<th></th>
+						<th class="check-column" style="text-align:center">
+							<input type="checkbox" id="webcomic_commerce_prints" name="webcomic_commerce_prints"<?php checked( ( 'auto-draft' === $post->post_status and self::$config[ 'collections' ][ $post->post_type ][ 'commerce' ][ 'prints' ] ) or ( self::$config[ 'collections' ][ $post->post_type ][ 'commerce' ][ 'business' ] and get_post_meta( $post->ID, 'webcomic_prints', true ) ) ); disabled( !self::$config[ 'collections' ][ $post->post_type ][ 'commerce' ][ 'business' ] ); ?>>
+						</th>
+						<th>
+							<label for="webcomic_commerce_prints"><?php _e( 'Sell prints', 'webcomic' ); ?></label>
+						</th>
 						<th><?php _e( 'Price', 'webcomic' ); ?></th>
 						<th><?php _e( 'Shipping', 'webcomic' ); ?></th>
 						<th><?php _e( 'Total', 'webcomic' ); ?></th>
@@ -520,7 +543,8 @@ class WebcomicPosts extends Webcomic {
 		<?php
 	}
 	
-	/** Render the webcomic transcripts meta box.
+	/**
+	 * Render the webcomic transcripts meta box.
 	 * 
 	 * @param object $post Current post object.
 	 * @uses Webcomic::$config
@@ -530,7 +554,7 @@ class WebcomicPosts extends Webcomic {
 		?>
 		<p><label><input type="checkbox" name="webcomic_transcripts"<?php checked( ( 'auto-draft' === $post->post_status and self::$config[ 'collections' ][ $post->post_type ][ 'transcripts' ][ 'open' ] ) or get_post_meta( $post->ID, 'webcomic_transcripts', true ) ); ?>> <?php _e( 'Allow transcribing', 'webcomic' ); ?></label></p>
 		<div style="margin: 0 -11px">
-			<table class="widefat fixed">
+			<table class="widefat" style="border-left:0;border-right:0">
 			<?php
 				$posts = get_posts( array( 'post_type' => 'webcomic_transcript', 'post_status' => 'any', 'post_parent' => $post->ID ) );
 				
@@ -577,7 +601,8 @@ class WebcomicPosts extends Webcomic {
 		<?php
 	}
 	
-	/** Render the webcomic attachments meta box.
+	/**
+	 * Render the webcomic attachments meta box.
 	 * 
 	 * @param integer $id Post ID to render attachments for.
 	 * @uses Webcomic::get_attachments()
@@ -605,7 +630,8 @@ class WebcomicPosts extends Webcomic {
 		}
 	}
 	
-	/** Update quick edit meta values.
+	/**
+	 * Update quick edit meta values.
 	 * 
 	 * @param integer $id Post ID to retrieve values for.
 	 */
@@ -620,7 +646,8 @@ class WebcomicPosts extends Webcomic {
 		) );
 	}
 	
-	/** Save quick edit meta values.
+	/**
+	 * Save quick edit meta values.
 	 * 
 	 * @param integer $id Post ID to save values for.
 	 * @param boolean $prints Updated prints meta value.

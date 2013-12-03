@@ -36,42 +36,50 @@ along with this program.  If not, see http://www.gnu.org/licenses.
  * @link http://webcomic.nu
  */
 
-/** Initialize the plugin.
+/**
+ * Initialize the plugin.
  * 
  * @package Webcomic
  */
 class Webcomic {
-	/** Internal version number.
+	/**
+	 * Internal version number.
 	 * @var string
 	 */
 	protected static $version = '4.1';
 	
-	/** Absolute path to the Webcomic directory.
+	/**
+	 * Absolute path to the Webcomic directory.
 	 * @var string
 	 */
 	protected static $dir = '';
 	
-	/** URL to the Webcomic directory.
+	/**
+	 * URL to the Webcomic directory.
 	 * @var string
 	 */
 	protected static $url = '';
 	
-	/** Whether to enable debug mode.
+	/**
+	 * Whether to enable debug mode.
 	 * @var boolean
 	 */
 	protected static $debug = false;
 	
-	/** Stores the configuration.
+	/**
+	 * Stores the configuration.
 	 * @var array
 	 */
 	protected static $config = array();
 	
-	/** Whether to attempt integration with the active theme.
+	/**
+	 * Whether to attempt integration with the active theme.
 	 * @var boolean
 	 */
 	protected static $integrate = false;
 	
-	/** Stores the collection the current page is related to.
+	/**
+	 * Stores the collection the current page is related to.
 	 * @var string
 	 */
 	protected static $collection = '';
@@ -168,7 +176,8 @@ class Webcomic {
 		}
 	}
 	
-	/** Initialize major plugin features.
+	/**
+	 * Initialize major plugin features.
 	 * 
 	 * This hook performs a number of important functions, including
 	 * loading the plugin text domain, defining the 'prints',
@@ -211,7 +220,7 @@ class Webcomic {
 				),
 				'description' => esc_html( $v[ 'description' ] ),
 				'public'      => true,
-				'menu_icon'   => self::$url . '-/img/webcomic-small.png',
+				'menu_icon'   => self::$url . '-/img/webcomic.png',
 				'supports'    => $v[ 'supports' ],
 				'has_archive' => $v[ 'slugs' ][ 'archive' ],
 				'rewrite' => array(
@@ -295,7 +304,7 @@ class Webcomic {
 			'show_ui'   => true,
 			'exclude_from_search' => false,
 			'supports'  => array( 'editor', 'author', 'revisions' ),
-			'menu_icon' => self::$url . '-/img/transcript-small.png'
+			'menu_icon' => self::$url . '-/img/transcript.png'
 		) );
 		
 		register_taxonomy( 'webcomic_language', 'webcomic_transcript', array(
@@ -325,7 +334,8 @@ class Webcomic {
 		) );
 	}
 	
-	/** Handle PayPal IPN's.
+	/**
+	 * Handle PayPal IPN's.
 	 * 
 	 * Logs instant payment notifications and updates the original print
 	 * availability of webcomics as necessary.
@@ -472,7 +482,8 @@ class Webcomic {
 		}
 	}
 	
-	/** Add Generator, Open Graph, and Twitter Card metadata.
+	/**
+	 * Add Generator, Open Graph, and Twitter Card metadata.
 	 * 
 	 * Use of the 'property' attribute is obnoxious but intentional; see
 	 * [ogp.me](http://ogp.me) for details on the Open Graph protocol.
@@ -577,7 +588,8 @@ class Webcomic {
 		}
 	}
 	
-	/** Handle Twitter OAuth authentication.
+	/**
+	 * Handle Twitter OAuth authentication.
 	 * 
 	 * @uses Webcomic::$config
 	 * @hook init
@@ -637,7 +649,8 @@ class Webcomic {
 		}
 	}
 	
-	/** Handle transcript submissions.
+	/**
+	 * Handle transcript submissions.
 	 * 
 	 * @uses Webcomic::$config
 	 * @action webcomic_transcript_submit Triggered prior to processing a user-submitted transcript.
@@ -735,7 +748,8 @@ class Webcomic {
 		}
 	}
 	
-	/** Get default dynamic webcomic container URL's.
+	/**
+	 * Get default dynamic webcomic container URL's.
 	 * 
 	 * @hook init
 	 */
@@ -756,7 +770,8 @@ class Webcomic {
 		}
 	}
 	
-	/** Handle parameterized webcomic URL's.
+	/**
+	 * Handle parameterized webcomic URL's.
 	 * 
 	 * @uses WebcomicTag::get_relative_webcomic_term_link()
 	 * @uses WebcomicTag::get_relative_webcomic_link()
@@ -808,7 +823,8 @@ class Webcomic {
 		}
 	}
 	
-	/** Check to see if the current page is webcomic-related.
+	/**
+	 * Check to see if the current page is webcomic-related.
 	 * 
 	 * We have to do this as early as possible to ensure that the
 	 * correct template can be set if the collection is using a custom
@@ -872,7 +888,8 @@ class Webcomic {
 		self::$integrate = !$active_theme->get( 'Webcomic' );
 	}
 	
-	/** Filter titles and content for restricted webcomics.
+	/**
+	 * Filter titles and content for restricted webcomics.
 	 * 
 	 * @param object $post The global post object.
 	 * @uses WebcomicTag::verify_webcomic_age()
@@ -899,7 +916,8 @@ class Webcomic {
 		}
 	}
 	
-	/** Include webcomic posts on standard archive pages.
+	/**
+	 * Include webcomic posts on standard archive pages.
 	 * 
 	 * Also handles the crossover ep_mask for term crossover archives.
 	 * 
@@ -957,7 +975,8 @@ class Webcomic {
 		return $query;
 	}
 	
-	/** Email buffer alert notifications.
+	/**
+	 * Email buffer alert notifications.
 	 * 
 	 * Hooks into the webcomic_buffer_alert event scheduled during
 	 * installation. As with all WordPress scheduled events this
@@ -987,7 +1006,8 @@ class Webcomic {
 		}
 	}
 	
-	/** Register and enqueue javascript.
+	/**
+	 * Register and enqueue javascript.
 	 * 
 	 * @uses Webcomic::$config
 	 * @hook wp_enqueue_scripts
@@ -1008,7 +1028,8 @@ class Webcomic {
 		wp_enqueue_script( 'webcomic-dropdown', self::$url . '-/js/dropdown.js', array( 'jquery' ), false, true );
 	}
 	
-	/** Auto tweet on webcomic publish.
+	/**
+	 * Auto tweet on webcomic publish.
 	 * 
 	 * @param string $new New post status.
 	 * @param string $old Old post status.
@@ -1120,7 +1141,8 @@ class Webcomic {
 		}
 	}
 	
-	/** Integrate webcomics into the main site feed.
+	/**
+	 * Integrate webcomics into the main site feed.
 	 * 
 	 * @param array $query Post request query.
 	 * @return array
@@ -1145,7 +1167,8 @@ class Webcomic {
 		return $query;
 	}
 	
-	/** Add a webcomic_image property to term objects.
+	/**
+	 * Add a webcomic_image property to term objects.
 	 * 
 	 * @param object $term Retrieved term.
 	 * @param string $taxonomy Taxonomy the term belongs to.
@@ -1161,7 +1184,8 @@ class Webcomic {
 		return $term;
 	}
 	
-	/** Return the appropriate theme ID for custom collection themes.
+	/**
+	 * Return the appropriate theme ID for custom collection themes.
 	 * 
 	 * @param string $theme Name of the current theme.
 	 * @return string
@@ -1173,7 +1197,8 @@ class Webcomic {
 		return ( self::$collection and self::$config[ 'collections' ][ self::$collection ][ 'theme' ] and $template = substr( self::$config[ 'collections' ][ self::$collection ][ 'theme' ], 0, strpos( self::$config[ 'collections' ][ self::$collection ][ 'theme' ], '|' ) ) and is_readable( get_theme_root() . "/{$template}" ) ) ? $template : $theme;
 	}
 	
-	/** Display webcomics in place of transcripts in searches.
+	/**
+	 * Display webcomics in place of transcripts in searches.
 	 * 
 	 * @param array $posts Posts array.
 	 * @param object $query WP_Query object.
@@ -1200,7 +1225,8 @@ class Webcomic {
 		return $posts;
 	}
 	
-	/** Add a webcomic_image property to term objects.
+	/**
+	 * Add a webcomic_image property to term objects.
 	 * 
 	 * @param array $terms Array of retrieved terms.
 	 * @param array $taxonomies Array of taxonomies the terms belong to.
@@ -1221,7 +1247,8 @@ class Webcomic {
 		return $terms;
 	}
 	
-	/** Return the appropriate theme ID for custom collection themes.
+	/**
+	 * Return the appropriate theme ID for custom collection themes.
 	 * 
 	 * @param string $theme Name of the current theme.
 	 * @return string
@@ -1233,7 +1260,8 @@ class Webcomic {
 		return ( self::$collection and self::$config[ 'collections' ][ self::$collection ][ 'theme' ] and $stylesheet = substr( self::$config[ 'collections' ][ self::$collection ][ 'theme' ], strpos( self::$config[ 'collections' ][ self::$collection ][ 'theme' ], '|' ) + 1 ) and is_readable( get_theme_root() . "/{$stylesheet}" ) ) ? $stylesheet : $theme;
 	}
 	
-	/** Add webcomic classes to the body tag.
+	/**
+	 * Add webcomic classes to the body tag.
 	 * 
 	 * @param array $classes Array of body classes.
 	 * @param mixed $class Additional classes passed to body_class().
@@ -1252,7 +1280,8 @@ class Webcomic {
 		return $classes;
 	}
 	
-	/** Add webcomic classes to posts.
+	/**
+	 * Add webcomic classes to posts.
 	 * 
 	 * @param array $classes Array of post classes.
 	 * @param mixed $class Additional classes passed to post_class().
@@ -1287,7 +1316,8 @@ class Webcomic {
 		return $classes;
 	}
 	
-	/** Add a webcomic_image property to term objects.
+	/**
+	 * Add a webcomic_image property to term objects.
 	 * 
 	 * @param array $terms Array of retrieved terms.
 	 * @param integer $id Object ID the terms are related to.
@@ -1306,7 +1336,8 @@ class Webcomic {
 		return $terms;
 	}
 	
-	/** Handle custom permalink tokens.
+	/**
+	 * Handle custom permalink tokens.
 	 * 
 	 * @todo core.trac.wordpress.org/ticket/17069
 	 * 
@@ -1356,7 +1387,8 @@ class Webcomic {
 		return str_replace( array_keys( $tokens ), $tokens, $link );
 	}
 	
-	/** Load custom templates for Webcomic-related pages.
+	/**
+	 * Load custom templates for Webcomic-related pages.
 	 * 
 	 * Changes the template hierarchy when a Webcomic-related page is
 	 * found, loadig Webcomic-specific templates from a `webcomic`
@@ -1425,7 +1457,8 @@ class Webcomic {
 		return locate_template( $template );
 	}
 	
-	/** Add webcomic previews to feed content.
+	/**
+	 * Add webcomic previews to feed content.
 	 * 
 	 * @param string $content The post content.
 	 * @return string
@@ -1453,7 +1486,8 @@ class Webcomic {
 		return $content;
 	}
 	
-	/** Add a webcomic_image property to term objects.
+	/**
+	 * Add a webcomic_image property to term objects.
 	 * 
 	 * @param array $terms Array of retrieved terms.
 	 * @param integer $objects Object ID's the terms are related to.
@@ -1475,7 +1509,8 @@ class Webcomic {
 		return $terms;
 	}
 	
-	/** Add the 'Webcomic' key for theme headers.
+	/**
+	 * Add the 'Webcomic' key for theme headers.
 	 * 
 	 * Theme authors can specify a theme as being 'Webcomic ready' by
 	 * adding a Webcomic key with the minimum required version of
@@ -1493,7 +1528,8 @@ class Webcomic {
 		return $extra;
 	}
 	
-	/** Use caption for title of media objects attached to a webcomic.
+	/**
+	 * Use caption for title of media objects attached to a webcomic.
 	 *  
 	 * @param array $attributes An array of media attributes.
 	 * @param object $attachment The media object.
@@ -1513,7 +1549,8 @@ class Webcomic {
 		return $attributes;
 	}
 	
-	/** Automagically integrate basic webcomic functionality.
+	/**
+	 * Automagically integrate basic webcomic functionality.
 	 * 
 	 * @param object $query WP_Query object for the loop.
 	 * @return null
@@ -1537,7 +1574,8 @@ class Webcomic {
 		}
 	}
 	
-	/** Automagically integrate basic webcomic functionality.
+	/**
+	 * Automagically integrate basic webcomic functionality.
 	 * 
 	 * @param object $query WP_Query object for the loop.
 	 * @return null
@@ -1571,7 +1609,8 @@ class Webcomic {
 		}
 	}
 	
-	/** Automagically integrate basic webcomic functionality.
+	/**
+	 * Automagically integrate basic webcomic functionality.
 	 * 
 	 * @param string $excerpt The post excerpt.
 	 * @return string
@@ -1594,7 +1633,8 @@ class Webcomic {
 		return $excerpt;
 	}
 	
-	/** Automagically integrate basic webcomic functionality.
+	/**
+	 * Automagically integrate basic webcomic functionality.
 	 * 
 	 * @param string $content The post content.
 	 * @return string
@@ -1619,7 +1659,8 @@ class Webcomic {
 		return $content;
 	}
 	
-	/** Automagically integrate basic webcomic functionality.
+	/**
+	 * Automagically integrate basic webcomic functionality.
 	 * 
 	 * Reorders webcomics on post type and taxonomy archive pages so
 	 * that they appear in chronological order.
@@ -1635,7 +1676,8 @@ class Webcomic {
 		}
 	}
 	
-	/** Perform a Webcomic API request.
+	/**
+	 * Perform a Webcomic API request.
 	 * 
 	 * @param string $method The request method.
 	 * @param string $endpoing The API endpoint to access.
@@ -1660,7 +1702,8 @@ class Webcomic {
 		return $code ? array( $code => json_decode( wp_remote_retrieve_body( $remote ), true ) ) : array( 999 => __( 'The Webcomic Network is currently unavailable.', 'webcomic' ) );
 	}
 	
-	/** Return Webcomic attachments for a post.
+	/**
+	 * Return Webcomic attachments for a post.
 	 * 
 	 * @param integer $id Post ID to retrieve attachments for.
 	 * @return array

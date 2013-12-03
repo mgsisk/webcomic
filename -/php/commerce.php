@@ -1,15 +1,18 @@
 <?php
-/** Contains the WebcomicCommerce class.
+/**
+ * Contains the WebcomicCommerce class.
  * 
  * @package Webcomic
  */
 
-/** Handle the IPN log tool.
+/**
+ * Handle the IPN log tool.
  * 
  * @package Webcomic
  */
 class WebcomicCommerce extends Webcomic {
-	/** Register hooks.
+	/**
+	 * Register hooks.
 	 * 
 	 * @uses WebcomicCommerce::admin_init()
 	 * @uses WebcomicCommerce::admin_menu()
@@ -19,7 +22,8 @@ class WebcomicCommerce extends Webcomic {
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 	}
 	
-	/** Empty the current ipn log file.
+	/**
+	 * Empty the current ipn log file.
 	 * 
 	 * @uses Webcomic::$dir
 	 * @hook admin_init
@@ -32,7 +36,8 @@ class WebcomicCommerce extends Webcomic {
 		}
 	}
 	
-	/** Register submenu page for ipn log viewer.
+	/**
+	 * Register submenu page for ipn log viewer.
 	 * 
 	 * @uses WebcomicCommerce::page()
 	 * @hook admin_menu
@@ -41,7 +46,8 @@ class WebcomicCommerce extends Webcomic {
 		add_submenu_page( 'tools.php', __( 'Webcomic Commerce', 'webcomic' ), __( 'Webcomic Commerce', 'webcomic' ), 'manage_options', 'webcomic-commerce', array( $this, 'page' ) );
 	}
 	
-	/** Render the commerce tool page. */
+	/**
+	 * Render the commerce tool page. */
 	public function page() { 
 		$transactions = get_posts( array( 'post_type' => 'webcomic_commerce', 'numberposts' => -1, 'post_status' => 'any' ) );
 		?>

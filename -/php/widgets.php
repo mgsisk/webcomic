@@ -1,15 +1,18 @@
 <?php
-/** Contains WebcomicWidget and related classes.
+/**
+ * Contains WebcomicWidget and related classes.
  * 
  * @package Webcomic
  */
 
-/** Handle widget-related tasks.
+/**
+ * Handle widget-related tasks.
  * 
  * @package Webcomic
  */
 class WebcomicWidget extends Webcomic {
-	/** Register action and filter hooks.
+	/**
+	 * Register action and filter hooks.
 	 * 
 	 * @uses WebcomicWidget::widgets_init()
 	 * @uses WebcomicWidget::admin_enqueue_scripts()
@@ -19,7 +22,8 @@ class WebcomicWidget extends Webcomic {
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 	}
 	
-	/** Register widgets.
+	/**
+	 * Register widgets.
 	 * 
 	 * @uses Widget_WebcomicLink
 	 * @uses Widget_WebcomicPrint
@@ -54,7 +58,8 @@ class WebcomicWidget extends Webcomic {
 		register_widget( 'Widget_WebcomicTranscriptsLink' );
 	}
 	
-	/** Register scripts for widgets.
+	/**
+	 * Register scripts for widgets.
 	 * 
 	 * @uses Webcomic::$dir
 	 * @uses Webcomic::$config
@@ -70,7 +75,8 @@ class WebcomicWidget extends Webcomic {
 		}
 	}
 	
-	/** Provides access to the plugin directory path.
+	/**
+	 * Provides access to the plugin directory path.
 	 * 
 	 * @uses Webcomic::$dir
 	 * @return string
@@ -85,12 +91,14 @@ class WebcomicWidget extends Webcomic {
  * @package Webcomic
  */
 class Widget_WebcomicLink extends WP_Widget {
-	/** Initialize the widget. */
+	/**
+	 * Initialize the widget. */
 	public function __construct() {
 		parent::__construct( false, __( '[Webcomic] Link', 'webcomic' ), array( 'description' => __( 'Link to the previous, next, first, last, or a random webcomic', 'webcomic' ) ) );
 	}
 	
-	/** Render the widget.
+	/**
+	 * Render the widget.
 	 * 
 	 * @param array $args General widget arguments.
 	 * @param array $instance Specific instance arguments.
@@ -113,7 +121,8 @@ class Widget_WebcomicLink extends WP_Widget {
 		
 	}
 	
-	/** Update an instance of the widget.
+	/**
+	 * Update an instance of the widget.
 	 * 
 	 * @param array $new New instance settings.
 	 * @param array $old Old instance settings.
@@ -140,7 +149,8 @@ class Widget_WebcomicLink extends WP_Widget {
 		return $old;
 	}
 	
-	/** Render widget settings.
+	/**
+	 * Render widget settings.
 	 * 
 	 * @param array $instance Specific instance settings.
 	 * @uses WebcomicTag::get_webcomic_collections()
@@ -231,7 +241,8 @@ class Widget_WebcomicLink extends WP_Widget {
 		<?php
 	}
 	
-	/** Handle webcomic link image updating.
+	/**
+	 * Handle webcomic link image updating.
 	 * 
 	 * @param integer $id ID of the selected image.
 	 * @param string $name The widget field name.
@@ -257,12 +268,14 @@ class Widget_WebcomicLink extends WP_Widget {
  * @package Webcomic
  */
 class Widget_WebcomicPrint extends WP_Widget {
-	/** Initialize the widget. */
+	/**
+	 * Initialize the widget. */
 	public function __construct() {
 		parent::__construct( false, __( '[Webcomic] Print', 'webcomic' ), array( 'description' => __( 'A purchase print form for individual webcomics', 'webcomic' ) ) );
 	}
 	
-	/** Render the widget.
+	/**
+	 * Render the widget.
 	 * 
 	 * @param array $args General widget arguments.
 	 * @param array $instance Specific instance arguments.
@@ -281,7 +294,8 @@ class Widget_WebcomicPrint extends WP_Widget {
 		}
 	}
 	
-	/** Update an instance of the widget.
+	/**
+	 * Update an instance of the widget.
 	 * 
 	 * @param array $new New instance settings.
 	 * @param array $old Old instance settings.
@@ -306,7 +320,8 @@ class Widget_WebcomicPrint extends WP_Widget {
 		return $old;
 	}
 	
-	/** Render widget settings.
+	/**
+	 * Render widget settings.
 	 * 
 	 * The Webcomic Donation widget requires that at least one
 	 * collection have a business email. If no collection has a business
@@ -396,7 +411,8 @@ class Widget_WebcomicPrint extends WP_Widget {
 		}
 	}
 	
-	/** Handle webcomic donation image updating.
+	/**
+	 * Handle webcomic donation image updating.
 	 * 
 	 * @param integer $id ID of the selected image.
 	 * @param string $name The widget field name.
@@ -422,12 +438,14 @@ class Widget_WebcomicPrint extends WP_Widget {
  * @package Webcomic
  */
 class Widget_DynamicWebcomic extends WP_Widget {
-	/** Initialize the widget. */
+	/**
+	 * Initialize the widget. */
 	public function __construct() {
 		parent::__construct( false, __( '[Webcomic] Dynamic', 'webcomic' ), array( 'description' => __( 'A dynamic browser for your webcomics', 'webcomic' ) ) );
 	}
 	
-	/** Render the widget.
+	/**
+	 * Render the widget.
 	 * 
 	 * @param array $args General widget arguments.
 	 * @param array $instance Specific instance arguments.
@@ -470,7 +488,8 @@ class Widget_DynamicWebcomic extends WP_Widget {
 		}
 	}
 	
-	/** Update an instance of the widget.
+	/**
+	 * Update an instance of the widget.
 	 * 
 	 * @param array $new New instance settings.
 	 * @param array $old Old instance settings.
@@ -485,7 +504,8 @@ class Widget_DynamicWebcomic extends WP_Widget {
 		return $old;
 	}
 	
-	/** Render widget settings.
+	/**
+	 * Render widget settings.
 	 * 
 	 * The Dynamic Webcomic widget requires that the dynamic navigation
 	 * option be enabled. If dynamic navigation is not enabled an error
@@ -542,12 +562,14 @@ class Widget_DynamicWebcomic extends WP_Widget {
  * @package Webcomic
  */
 class Widget_RecentWebcomics extends WP_Widget {
-	/** Initialize the widget. */
+	/**
+	 * Initialize the widget. */
 	public function __construct() {
 		parent::__construct( false, __( '[Webcomic] Recent', 'webcomic' ), array( 'description' => __( 'The most recently published webcomics on your site', 'webcomic' ) ) );
 	}
 	
-	/** Render the widget.
+	/**
+	 * Render the widget.
 	 * 
 	 * @param array $args General widget arguments.
 	 * @param array $instance Specific instance arguments.
@@ -586,7 +608,8 @@ class Widget_RecentWebcomics extends WP_Widget {
 		}
 	}
 	
-	/** Update an instance of the widget.
+	/**
+	 * Update an instance of the widget.
 	 * 
 	 * @param array $new New instance settings.
 	 * @param array $old Old instance settings.
@@ -601,7 +624,8 @@ class Widget_RecentWebcomics extends WP_Widget {
 		return $old;
 	}
 	
-	/** Render widget settings.
+	/**
+	 * Render widget settings.
 	 * 
 	 * @param array $instance Specific instance settings.
 	 * @uses WebcomicTag::get_webcomic_collections()
@@ -648,12 +672,14 @@ class Widget_RecentWebcomics extends WP_Widget {
  * @package Webcomic
  */
 class Widget_WebcomicDonation extends WP_Widget {
-	/** Initialize the widget. */
+	/**
+	 * Initialize the widget. */
 	public function __construct() {
 		parent::__construct( false, __( '[Webcomic] Donation', 'webcomic' ), array( 'description' => __( 'A donation form for your webcomics', 'webcomic' ) ) );
 	}
 	
-	/** Render the widget.
+	/**
+	 * Render the widget.
 	 * 
 	 * @param array $args General widget arguments.
 	 * @param array $instance Specific instance arguments.
@@ -672,7 +698,8 @@ class Widget_WebcomicDonation extends WP_Widget {
 		}
 	}
 	
-	/** Update an instance of the widget.
+	/**
+	 * Update an instance of the widget.
 	 * 
 	 * @param array $new New instance settings.
 	 * @param array $old Old instance settings.
@@ -697,7 +724,8 @@ class Widget_WebcomicDonation extends WP_Widget {
 		return $old;
 	}
 	
-	/** Render widget settings.
+	/**
+	 * Render widget settings.
 	 * 
 	 * The Webcomic Donation widget requires that at least one
 	 * collection have a business email. If no collection has a business
@@ -770,7 +798,8 @@ class Widget_WebcomicDonation extends WP_Widget {
 		}
 	}
 	
-	/** Handle webcomic donation image updating.
+	/**
+	 * Handle webcomic donation image updating.
 	 * 
 	 * @param integer $id ID of the selected image.
 	 * @param string $name The widget field name.
@@ -796,12 +825,14 @@ class Widget_WebcomicDonation extends WP_Widget {
  * @package Webcomic
  */
 class Widget_ScheduledWebcomics extends WP_Widget {
-	/** Initialize the widget. */
+	/**
+	 * Initialize the widget. */
 	public function __construct() {
 		parent::__construct( false, __( '[Webcomic] Scheduled', 'webcomic' ), array( 'description' => __( 'Share upcomming webcomics from your buffer.', 'webcomic' ) ) );
 	}
 	
-	/** Render the widget.
+	/**
+	 * Render the widget.
 	 * 
 	 * @param array $args General widget arguments.
 	 * @param array $instance Specific instance arguments.
@@ -840,7 +871,8 @@ class Widget_ScheduledWebcomics extends WP_Widget {
 		}
 	}
 	
-	/** Update an instance of the widget.
+	/**
+	 * Update an instance of the widget.
 	 * 
 	 * @param array $new New instance settings.
 	 * @param array $old Old instance settings.
@@ -856,7 +888,8 @@ class Widget_ScheduledWebcomics extends WP_Widget {
 		return $old;
 	}
 	
-	/** Render widget settings.
+	/**
+	 * Render widget settings.
 	 * 
 	 * @param array $instance Specific instance settings.
 	 * @uses WebcomicTag::get_webcomic_collections()
@@ -904,12 +937,14 @@ class Widget_ScheduledWebcomics extends WP_Widget {
  * @package Webcomic
  */
 class Widget_WebcomicStorylines extends WP_Widget {
-	/** Initialize the widget. */
+	/**
+	 * Initialize the widget. */
 	public function __construct() {
 		parent::__construct( false, __( '[Webcomic] Storylines', 'webcomic' ), array( 'description' => __( 'A list, dropdown, or cloud of Webcomic storylines', 'webcomic' ) ) );
 	}
 	
-	/** Render the widget.
+	/**
+	 * Render the widget.
 	 * 
 	 * @param array $args General widget arguments.
 	 * @param array $instance Specific instance arguments.
@@ -947,7 +982,8 @@ class Widget_WebcomicStorylines extends WP_Widget {
 		
 	}
 	
-	/** Update an instance of the widget.
+	/**
+	 * Update an instance of the widget.
 	 * 
 	 * @param array $new New instance settings.
 	 * @param array $old Old instance settings.
@@ -966,7 +1002,8 @@ class Widget_WebcomicStorylines extends WP_Widget {
 		return $old;
 	}
 	
-	/** Render widget settings.
+	/**
+	 * Render widget settings.
 	 * 
 	 * @param array $instance Specific instance settings.
 	 * @uses WebcomicTag::get_webcomic_collections()
@@ -1029,12 +1066,14 @@ class Widget_WebcomicStorylines extends WP_Widget {
  * @package Webcomic
  */
 class Widget_WebcomicCharacters extends WP_Widget {
-	/** Initialize the widget. */
+	/**
+	 * Initialize the widget. */
 	public function __construct() {
 		parent::__construct( false, __( '[Webcomic] Characters', 'webcomic' ), array( 'description' => __( 'A list, dropdown, or cloud of Webcomic characters', 'webcomic' ) ) );
 	}
 	
-	/** Render the widget.
+	/**
+	 * Render the widget.
 	 * 
 	 * @param array $args General widget arguments.
 	 * @param array $instance Specific instance arguments.
@@ -1072,7 +1111,8 @@ class Widget_WebcomicCharacters extends WP_Widget {
 		
 	}
 	
-	/** Update an instance of the widget.
+	/**
+	 * Update an instance of the widget.
 	 * 
 	 * @param array $new New instance settings.
 	 * @param array $old Old instance settings.
@@ -1091,7 +1131,8 @@ class Widget_WebcomicCharacters extends WP_Widget {
 		return $old;
 	}
 	
-	/** Render widget settings.
+	/**
+	 * Render widget settings.
 	 * 
 	 * @param array $instance Specific instance settings.
 	 * @uses WebcomicTag::get_webcomic_collections()
@@ -1154,12 +1195,14 @@ class Widget_WebcomicCharacters extends WP_Widget {
  * @package Webcomic
  */
 class Widget_WebcomicCollections extends WP_Widget {
-	/** Initialize the widget. */
+	/**
+	 * Initialize the widget. */
 	public function __construct() {
 		parent::__construct( false, __( '[Webcomic] Collections', 'webcomic' ), array( 'description' => __( 'A list, dropdown, or cloud of Webcomic collections', 'webcomic' ) ) );
 	}
 	
-	/** Render the widget.
+	/**
+	 * Render the widget.
 	 * 
 	 * @param array $args General widget arguments.
 	 * @param array $instance Specific instance arguments.
@@ -1196,7 +1239,8 @@ class Widget_WebcomicCollections extends WP_Widget {
 		
 	}
 	
-	/** Update an instance of the widget.
+	/**
+	 * Update an instance of the widget.
 	 * 
 	 * @param array $new New instance settings.
 	 * @param array $old Old instance settings.
@@ -1214,7 +1258,8 @@ class Widget_WebcomicCollections extends WP_Widget {
 		return $old;
 	}
 	
-	/** Render widget settings.
+	/**
+	 * Render widget settings.
 	 * 
 	 * @param array $instance Specific instance settings.
 	 */
@@ -1262,12 +1307,14 @@ class Widget_WebcomicCollections extends WP_Widget {
  * @package Webcomic
  */
 class Widget_PurchaseWebcomicLink extends WP_Widget {
-	/** Initialize the widget. */
+	/**
+	 * Initialize the widget. */
 	public function __construct() {
 		parent::__construct( false, __( '[Webcomic] Purchase Link', 'webcomic' ), array( 'description' => __( 'Link to the purchase prints page for a webcomic', 'webcomic' ) ) );
 	}
 	
-	/** Render the widget.
+	/**
+	 * Render the widget.
 	 * 
 	 * @param array $args General widget arguments.
 	 * @param array $instance Specific instance arguments.
@@ -1288,7 +1335,8 @@ class Widget_PurchaseWebcomicLink extends WP_Widget {
 		
 	}
 	
-	/** Update an instance of the widget.
+	/**
+	 * Update an instance of the widget.
 	 * 
 	 * @param array $new New instance settings.
 	 * @param array $old Old instance settings.
@@ -1312,7 +1360,8 @@ class Widget_PurchaseWebcomicLink extends WP_Widget {
 		return $old;
 	}
 	
-	/** Render widget settings.
+	/**
+	 * Render widget settings.
 	 * 
 	 * @param array $instance Specific instance settings.
 	 * @uses WebcomicTag::get_webcomic_collections()
@@ -1368,7 +1417,8 @@ class Widget_PurchaseWebcomicLink extends WP_Widget {
 		<?php
 	}
 	
-	/** Handle webcomic link image updating.
+	/**
+	 * Handle webcomic link image updating.
 	 * 
 	 * @param integer $id ID of the selected image.
 	 * @param string $name The widget field name.
@@ -1394,12 +1444,14 @@ class Widget_PurchaseWebcomicLink extends WP_Widget {
  * @package Webcomic
  */
 class Widget_WebcomicStorylineLink extends WP_Widget {
-	/** Initialize the widget. */
+	/**
+	 * Initialize the widget. */
 	public function __construct() {
 		parent::__construct( false, __( '[Webcomic] Storyline Link', 'webcomic' ), array( 'description' => __( 'Link to the previous, next, first, last, or a random webcomic storyline', 'webcomic' ) ) );
 	}
 	
-	/** Render the widget.
+	/**
+	 * Render the widget.
 	 * 
 	 * @param array $args General widget arguments.
 	 * @param array $instance Specific instance arguments.
@@ -1422,7 +1474,8 @@ class Widget_WebcomicStorylineLink extends WP_Widget {
 		
 	}
 	
-	/** Update an instance of the widget.
+	/**
+	 * Update an instance of the widget.
 	 * 
 	 * @param array $new New instance settings.
 	 * @param array $old Old instance settings.
@@ -1449,7 +1502,8 @@ class Widget_WebcomicStorylineLink extends WP_Widget {
 		return $old;
 	}
 	
-	/** Render widget settings.
+	/**
+	 * Render widget settings.
 	 * 
 	 * @param array $instance Specific instance settings.
 	 * @uses WebcomicTag::get_webcomic_collections()
@@ -1537,7 +1591,8 @@ class Widget_WebcomicStorylineLink extends WP_Widget {
 		<?php
 	}
 	
-	/** Handle webcomic link image updating.
+	/**
+	 * Handle webcomic link image updating.
 	 * 
 	 * @param integer $id ID of the selected image.
 	 * @param string $name The widget field name.
@@ -1563,12 +1618,14 @@ class Widget_WebcomicStorylineLink extends WP_Widget {
  * @package Webcomic
  */
 class Widget_WebcomicCharacterLink extends WP_Widget {
-	/** Initialize the widget. */
+	/**
+	 * Initialize the widget. */
 	public function __construct() {
 		parent::__construct( false, __( '[Webcomic] Character Link', 'webcomic' ), array( 'description' => __( 'Link to the previous, next, first, last, or a random webcomic character', 'webcomic' ) ) );
 	}
 	
-	/** Render the widget.
+	/**
+	 * Render the widget.
 	 * 
 	 * @param array $args General widget arguments.
 	 * @param array $instance Specific instance arguments.
@@ -1591,7 +1648,8 @@ class Widget_WebcomicCharacterLink extends WP_Widget {
 		
 	}
 	
-	/** Update an instance of the widget.
+	/**
+	 * Update an instance of the widget.
 	 * 
 	 * @param array $new New instance settings.
 	 * @param array $old Old instance settings.
@@ -1618,7 +1676,8 @@ class Widget_WebcomicCharacterLink extends WP_Widget {
 		return $old;
 	}
 	
-	/** Render widget settings.
+	/**
+	 * Render widget settings.
 	 * 
 	 * @param array $instance Specific instance settings.
 	 * @uses WebcomicTag::get_webcomic_collections()
@@ -1706,7 +1765,8 @@ class Widget_WebcomicCharacterLink extends WP_Widget {
 		<?php
 	}
 	
-	/** Handle webcomic link image updating.
+	/**
+	 * Handle webcomic link image updating.
 	 * 
 	 * @param integer $id ID of the selected image.
 	 * @param string $name The widget field name.
@@ -1732,12 +1792,14 @@ class Widget_WebcomicCharacterLink extends WP_Widget {
  * @package Webcomic
  */
 class Widget_WebcomicCollectionLink extends WP_Widget {
-	/** Initialize the widget. */
+	/**
+	 * Initialize the widget. */
 	public function __construct() {
 		parent::__construct( false, __( '[Webcomic] Collection Link', 'webcomic' ), array( 'description' => __( 'Link to a Webcomic collection archive', 'webcomic' ) ) );
 	}
 	
-	/** Render the widget.
+	/**
+	 * Render the widget.
 	 * 
 	 * @param array $args General widget arguments.
 	 * @param array $instance Specific instance arguments.
@@ -1760,7 +1822,8 @@ class Widget_WebcomicCollectionLink extends WP_Widget {
 		
 	}
 	
-	/** Update an instance of the widget.
+	/**
+	 * Update an instance of the widget.
 	 * 
 	 * @param array $new New instance settings.
 	 * @param array $old Old instance settings.
@@ -1785,7 +1848,8 @@ class Widget_WebcomicCollectionLink extends WP_Widget {
 		return $old;
 	}
 	
-	/** Render widget settings.
+	/**
+	 * Render widget settings.
 	 * 
 	 * @param array $instance Specific instance settings.
 	 * @uses WebcomicTag::get_webcomic_collections()
@@ -1849,7 +1913,8 @@ class Widget_WebcomicCollectionLink extends WP_Widget {
 		<?php
 	}
 	
-	/** Handle webcomic collection link image updating.
+	/**
+	 * Handle webcomic collection link image updating.
 	 * 
 	 * @param integer $id ID of the selected image.
 	 * @param string $name The widget field name.
@@ -1875,12 +1940,14 @@ class Widget_WebcomicCollectionLink extends WP_Widget {
  * @package Webcomic
  */
 class Widget_WebcomicTranscriptsLink extends WP_Widget {
-	/** Initialize the widget. */
+	/**
+	 * Initialize the widget. */
 	public function __construct() {
 		parent::__construct( false, __( '[Webcomic] Transcripts Link', 'webcomic' ), array( 'description' => __( 'Link to the transcripts for a webcomic', 'webcomic' ) ) );
 	}
 	
-	/** Render the widget.
+	/**
+	 * Render the widget.
 	 * 
 	 * @param array $args General widget arguments.
 	 * @param array $instance Specific instance arguments.
@@ -1901,7 +1968,8 @@ class Widget_WebcomicTranscriptsLink extends WP_Widget {
 		
 	}
 	
-	/** Update an instance of the widget.
+	/**
+	 * Update an instance of the widget.
 	 * 
 	 * @param array $new New instance settings.
 	 * @param array $old Old instance settings.
@@ -1950,7 +2018,8 @@ class Widget_WebcomicTranscriptsLink extends WP_Widget {
 		return $old;
 	}
 	
-	/** Render widget settings.
+	/**
+	 * Render widget settings.
 	 * 
 	 * @param array $instance Specific instance settings.
 	 * @uses WebcomicTag::get_webcomic_collections()
@@ -2022,7 +2091,8 @@ class Widget_WebcomicTranscriptsLink extends WP_Widget {
 		<?php
 	}
 	
-	/** Handle webcomic transcript link image updating.
+	/**
+	 * Handle webcomic transcript link image updating.
 	 * 
 	 * @param integer $id ID of the selected image.
 	 * @param string $name The widget field name.

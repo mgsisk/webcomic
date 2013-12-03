@@ -1,15 +1,18 @@
 <?php
-/** Contains the WebcomicAdmin class.
+/**
+ * Contains the WebcomicAdmin class.
  * 
  * @package Webcomic
  */
 
-/** Handle general administrative tasks.
+/**
+ * Handle general administrative tasks.
  * 
  * @package Webcomic
  */
 class WebcomicAdmin extends Webcomic {
-	/** Register hooks and istantiate the administrative classes.
+	/**
+	 * Register hooks and istantiate the administrative classes.
 	 * 
 	 * @uses Webcomic::$dir
 	 * @uses Webcomic::$config
@@ -67,7 +70,8 @@ class WebcomicAdmin extends Webcomic {
 		}
 	}
 	
-	/** Activation hook.
+	/**
+	 * Activation hook.
 	 *
 	 * If no configuration exists or a legacy configuration is detected
 	 * we load the default configuration (saving legacy configurations
@@ -288,7 +292,8 @@ class WebcomicAdmin extends Webcomic {
 		flush_rewrite_rules();
 	}
 	
-	/** Deactivation hook.
+	/**
+	 * Deactivation hook.
 	 * 
 	 * Flushes rewrite rules and purges Webcomic Network data when
 	 * deactivated. If the uninstall option has been set we also need to
@@ -420,7 +425,8 @@ class WebcomicAdmin extends Webcomic {
 		flush_rewrite_rules();
 	}
 	
-	/** Handle dynamic requests and remove taxonomy submenus.
+	/**
+	 * Handle dynamic requests and remove taxonomy submenus.
 	 * 
 	 * Dynamic request must have a 'webcomic_admin_ajax' value that is a
 	 * valid callback in the form of a static class method, like
@@ -444,7 +450,8 @@ class WebcomicAdmin extends Webcomic {
 		}
 	}
 	
-	/** Add contextual help and change the post type icon.
+	/**
+	 * Add contextual help.
 	 * 
 	 * @uses Webcomic::$dir
 	 * @uses Webcomic::$url
@@ -458,16 +465,11 @@ class WebcomicAdmin extends Webcomic {
 			require_once self::$dir . '-/php/help.php';
 			
 			new WebcomicHelp( $screen );
-			
-			if ( preg_match( '/^(edit-)?webcomic_(transcript|language)$/', $screen->id ) ) {
-				echo '<style>#icon-edit{background:url("', self::$url, '-/img/transcript.png")}</style>';
-			} elseif ( 'admin_page_webcomic-term-sort' === $screen->id or preg_match( '/^(edit-)?webcomic\d+(_storyline|_character)?$/', $screen->id ) ) {
-				echo '<style>#icon-edit{background:url("', self::$url, '-/img/webcomic.png")}</style>';
-			}
 		}
 	}
 	
-	/** Render administrative notifications and the thank you message.
+	/**
+	 * Render administrative notifications and the thank you message.
 	 * 
 	 * @uses Webcomic::$config
 	 * @uses Webcomic::$version
@@ -495,7 +497,8 @@ class WebcomicAdmin extends Webcomic {
 		}
 	}
 	
-	/** Add administrative dashboard widgets.
+	/**
+	 * Add administrative dashboard widgets.
 	 * 
 	 * @uses WebcomicAdmin::widget_showcase()
 	 * @hook wp_dhasboard_setup
@@ -504,7 +507,8 @@ class WebcomicAdmin extends Webcomic {
 		wp_add_dashboard_widget( 'webcomic-showcase', __( 'Webcomic Showcase', 'webcomic' ), array( $this, 'widget_showcase' ), array( $this, 'widget_showcase_config' ) );
 	}
 	
-	/** Enqueue custom styles for thank you message.
+	/**
+	 * Enqueue custom styles for thank you message.
 	 * 
 	 * @uses Webcomic::$url
 	 * @uses Webcomic::$config
@@ -514,8 +518,6 @@ class WebcomicAdmin extends Webcomic {
 		$screen = get_current_screen();
 		
 		if ( 'dashboard' === $screen->id and self::$config[ 'api' ] ) {
-			wp_register_style( 'webcomic-google-font', 'http://fonts.googleapis.com/css?family=Maven+Pro' );
-			
 			wp_enqueue_style( 'webcomic-showcase', self::$url . '-/css/admin-showcase.css', array( 'webcomic-google-font' ) );
 			
 			wp_enqueue_script( 'webcomic-showcase', self::$url . '-/js/admin-showcase.js' );
@@ -528,7 +530,8 @@ class WebcomicAdmin extends Webcomic {
 		}
 	}
 	
-	/** Add donate link and uninstallation reminder.
+	/**
+	 * Add donate link and uninstallation reminder.
 	 * 
 	 * @param array $meta Array of metadata.
 	 * @param array $file Plugin basename.
@@ -554,7 +557,8 @@ class WebcomicAdmin extends Webcomic {
 		return $meta;
 	}
 	
-	/** Add quick links to the general settings page and official support.
+	/**
+	 * Add quick links to the general settings page and official support.
 	 * 
 	 * @param array $actions Array of actions.
 	 * @param array $file Plugin basename.
@@ -572,7 +576,8 @@ class WebcomicAdmin extends Webcomic {
 		return $actions;
 	}
 	
-	/** Save collection data as posts, categories, and tags.
+	/**
+	 * Save collection data as posts, categories, and tags.
 	 * 
 	 * @param string $collection ID of the collection to save.
 	 */
@@ -632,7 +637,8 @@ class WebcomicAdmin extends Webcomic {
 		}
 	}
 	
-	/** Render the Webcomic Showcase dashboard widget.
+	/**
+	 * Render the Webcomic Showcase dashboard widget.
 	 * 
 	 * @uses Webcomic::$config
 	 * @uses Webcomic::api_request()
@@ -682,7 +688,9 @@ class WebcomicAdmin extends Webcomic {
 		}
 	}
 	
-	/** Render the Webcomic Showcase dashboard widget configuration form. */
+	/**
+	 * Render the Webcomic Showcase dashboard widget configuration form.
+	 */
 	public function widget_showcase_config() {
 		$options = get_option( 'dashboard_widget_options' );
 		
@@ -762,7 +770,8 @@ class WebcomicAdmin extends Webcomic {
 		<?php
 	}
 	
-	/** Save administrative notifications.
+	/**
+	 * Save administrative notifications.
 	 * 
 	 * @param string $message The message to display.
 	 * @param string $type The type of message, one of 'notice' or 'error'.

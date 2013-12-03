@@ -1,15 +1,18 @@
 <?php
-/** Contains the WebcomicUsers class.
+/**
+ * Contains the WebcomicUsers class.
  * 
  * @package Webcomic
  */
 
-/** Handle user-related tasks.
+/**
+ * Handle user-related tasks.
  * 
  * @package Webcomic
  */
 class WebcomicUsers extends Webcomic {
-	/** Register hooks.
+	/**
+	 * Register hooks.
 	 * 
 	 * @uses WebcomicUsers::profile_update()
 	 * @uses WebcomicUsers::user_profile()
@@ -20,7 +23,8 @@ class WebcomicUsers extends Webcomic {
 		add_action( 'edit_user_profile', array( $this, 'user_profile' ), 10, 1 );
 	}
 	
-	/** Save user metadata.
+	/**
+	 * Save user metadata.
 	 * 
 	 * @param integer $id Current user ID.
 	 * @param array $data Current user data array.
@@ -32,7 +36,8 @@ class WebcomicUsers extends Webcomic {
 		}
 	}
 	
-	/** Render meta inputs for user profile form.
+	/**
+	 * Render meta inputs for user profile form.
 	 * 
 	 * @param object $user Current user object.
 	 * @hook show_user_profile

@@ -1,17 +1,20 @@
 <?php
-/** Contains the WebcomicMedia class.
+/**
+ * Contains the WebcomicMedia class.
  * 
  * @todo core.trac.wordpress.org/ticket/16031
  * 
  * @package Webcomic
  */
 
-/** Handle media-related tasks.
+/**
+ * Handle media-related tasks.
  * 
  * @package Webcomic
  */
 class WebcomicMedia extends Webcomic {
-	/** Register hooks.
+	/**
+	 * Register hooks.
 	 * 
 	 * @uses WebcomicMedia::admin_init()
 	 * @uses WebcomicMedia::admin_menu()
@@ -40,7 +43,8 @@ class WebcomicMedia extends Webcomic {
 		add_filter( 'image_size_names_choose', array( $this, 'image_size_names_choose' ), 10, 1 );
 	}
 	
-	/** Handle media functions.
+	/**
+	 * Handle media functions.
 	 * 
 	 * @uses Webcomic::$config
 	 * @uses WebcomicAdmin::notify()
@@ -231,7 +235,8 @@ class WebcomicMedia extends Webcomic {
 		}
 	}
 	
-	/** Register Media submenu pages.
+	/**
+	 * Register Media submenu pages.
 	 * 
 	 * @uses WebcomicMedia::generator()
 	 * @hook admin_menu
@@ -241,7 +246,8 @@ class WebcomicMedia extends Webcomic {
 		add_submenu_page( 'upload.php', __( 'Webcomic Generator', 'webcomic' ), __( 'Webcomic Generator', 'webcomic' ), 'upload_files', 'webcomic-generator', array( $this, 'page_generator' ) );
 	}
 	
-	/** Render HTML data for bulk media actions.
+	/**
+	 * Render HTML data for bulk media actions.
 	 * 
 	 * @hook admin_footer
 	 */
@@ -253,7 +259,8 @@ class WebcomicMedia extends Webcomic {
 		}
 	}
 	
-	/** Manage webcomic media from the modal media manager.
+	/**
+	 * Manage webcomic media from the modal media manager.
 	 * 
 	 * @hook media_upload_webcomic_media
 	 */
@@ -273,7 +280,8 @@ class WebcomicMedia extends Webcomic {
 		}
 	}
 	
-	/** Unset term attachment info when a media object is deleted.
+	/**
+	 * Unset term attachment info when a media object is deleted.
 	 * 
 	 * @param integer $id The deleted attachment ID.
 	 * @uses Webcomic::$config
@@ -301,7 +309,8 @@ class WebcomicMedia extends Webcomic {
 		}
 	}
 	
-	/** Register and enqueue media scripts.
+	/**
+	 * Register and enqueue media scripts.
 	 * 
 	 * @hook admin_enqueue_scripts
 	 */
@@ -317,7 +326,8 @@ class WebcomicMedia extends Webcomic {
 		}
 	}
 	
-	/** Display attachment and alternate size details on Edit Media page.
+	/**
+	 * Display attachment and alternate size details on Edit Media page.
 	 * 
 	 * @hook attachment_submitbox_misc_actions
 	 */
@@ -343,7 +353,8 @@ class WebcomicMedia extends Webcomic {
 		}
 	}
 	
-	/** Add 'Webcomic Media' modal media page.
+	/**
+	 * Add 'Webcomic Media' modal media page.
 	 * 
 	 * @return array
 	 * @hook media_upload_tabs
@@ -366,7 +377,8 @@ class WebcomicMedia extends Webcomic {
 		return $tabs;
 	}
 	
-	/** Add regenerate and detach options to media table.
+	/**
+	 * Add regenerate and detach options to media table.
 	 * 
 	 * This feature is not Webcomic-specific; any attached media object
 	 * will gain a functional Detach option. With luck a future
@@ -389,7 +401,8 @@ class WebcomicMedia extends Webcomic {
 		return $actions;
 	}
 	
-	/** Display relevant status for webcomic media.
+	/**
+	 * Display relevant status for webcomic media.
 	 * 
 	 * @param array $states List of media states.
 	 * @return array
@@ -429,7 +442,8 @@ class WebcomicMedia extends Webcomic {
 		return $states;
 	}
 	
-	/** Add additional image sizes for inserting into posts.
+	/**
+	 * Add additional image sizes for inserting into posts.
 	 * 
 	 * @uses Webcomic::$config
 	 */
@@ -441,7 +455,8 @@ class WebcomicMedia extends Webcomic {
 		return $sizes;
 	}
 	
-	/** Render the webcomic attacher.
+	/**
+	 * Render the webcomic attacher.
 	 * 
 	 * @uses Webcomic::$config
 	 */
@@ -616,7 +631,8 @@ class WebcomicMedia extends Webcomic {
 		<?php
 	}
 	
-	/** Render the webcomic generator.
+	/**
+	 * Render the webcomic generator.
 	 * 
 	 * @uses Webcomic::$config
 	 * @uses Webcomic::get_attachments()
@@ -699,7 +715,8 @@ class WebcomicMedia extends Webcomic {
 		<?php
 	}
 	
-	/** Save new media order.
+	/**
+	 * Save new media order.
 	 * 
 	 * @param array $ids Array of attachment ID's to update.
 	 */

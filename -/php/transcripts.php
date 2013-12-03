@@ -1,15 +1,18 @@
 <?php
-/** Contains the WebcomicTranscripts class.
+/**
+ * Contains the WebcomicTranscripts class.
  * 
  * @package Webcomic
  */
 
-/** Handle transcript-related tasks.
+/**
+ * Handle transcript-related tasks.
  * 
  * @package Webcomic
  */
 class WebcomicTranscripts extends Webcomic {
-	/** Register hooks.
+	/**
+	 * Register hooks.
 	 * 
 	 * @uses WebcomicTranscripts::delete_post()
 	 * @uses WebcomicTranscripts::add_meta_boxes()
@@ -44,7 +47,8 @@ class WebcomicTranscripts extends Webcomic {
 		add_filter( 'manage_edit-webcomic_transcript_sortable_columns', array( $this, 'manage_edit_webcomic_transcript_sortable_columns' ), 10, 1 );
 	}
 	
-	/** Remove parent from transcripts.
+	/**
+	 * Remove parent from transcripts.
 	 * 
 	 * @param integer $id The deleted post ID.
 	 * @uses Webcomic::$config
@@ -58,7 +62,8 @@ class WebcomicTranscripts extends Webcomic {
 		}
 	}
 	
-	/** Add transcript meta boxes.
+	/**
+	 * Add transcript meta boxes.
 	 * 
 	 * @uses WebcomicTranscripts::box_parent()
 	 * @uses WebcomicTranscripts::box_authors()
@@ -69,7 +74,8 @@ class WebcomicTranscripts extends Webcomic {
 		add_meta_box( 'webcomic-authors', __( 'Transcript Authors', 'webcomic' ), array( $this, 'box_authors' ), 'webcomic_transcript', 'normal', 'high' );
 	}
 	
-	/** Update transcripts when their parent webcomics are updated.
+	/**
+	 * Update transcripts when their parent webcomics are updated.
 	 * 
 	 * Updates the transcript post type and languages when a parent
 	 * webcomic is converted, and the transcript name when the parent
@@ -115,7 +121,8 @@ class WebcomicTranscripts extends Webcomic {
 		}
 	}
 	
-	/** Render additional post filtering options.
+	/**
+	 * Render additional post filtering options.
 	 * 
 	 * The wp_dropdown_categories() function works well enough, but we
 	 * need to swap out the term ID values for term slug values to get
@@ -144,7 +151,8 @@ class WebcomicTranscripts extends Webcomic {
 		}
 	}
 	
-	/** Register and enqueue meta box scripts.
+	/**
+	 * Register and enqueue meta box scripts.
 	 * 
 	 * @uses Webcomic::$url
 	 * @hook admin_enqueue_scripts
@@ -157,7 +165,8 @@ class WebcomicTranscripts extends Webcomic {
 		}
 	}
 	
-	/** Update transcript authors when saving.
+	/**
+	 * Update transcript authors when saving.
 	 * 
 	 * @param integer $id The page ID to update.
 	 * @param object $post Post object to update.
@@ -202,7 +211,8 @@ class WebcomicTranscripts extends Webcomic {
 		}
 	}
 	
-	/** Update transcript parent, title, and slug prior to saving.
+	/**
+	 * Update transcript parent, title, and slug prior to saving.
 	 * 
 	 * @param array $data An array of post data.
 	 * @param array $raw An array of raw post data.
@@ -231,7 +241,8 @@ class WebcomicTranscripts extends Webcomic {
 		return $data;
 	}
 	
-	/** Render custom transcript columns.
+	/**
+	 * Render custom transcript columns.
 	 * 
 	 * @param string $column Name of the current column.
 	 * @param integer $id Current post ID.
@@ -253,7 +264,8 @@ class WebcomicTranscripts extends Webcomic {
 		}
 	}
 	
-	/** Handle sorting by webcomic parent.
+	/**
+	 * Handle sorting by webcomic parent.
 	 * 
 	 * @param array $request An array of request parameters.
 	 * @return array
@@ -269,7 +281,8 @@ class WebcomicTranscripts extends Webcomic {
 		return $request;
 	}
 	
-	/** Handle additional post list filters.
+	/**
+	 * Handle additional post list filters.
 	 * 
 	 * Adds additional WHERE conditions to display transcripts without a
 	 * parent (orphans) or belonging to a particular collection.
@@ -294,7 +307,8 @@ class WebcomicTranscripts extends Webcomic {
 		return $where;
 	}
 	
-	/** Add Orphaned view for webcomic posts.
+	/**
+	 * Add Orphaned view for webcomic posts.
 	 * 
 	 * @param array $views Array of view links.
 	 * @return array
@@ -318,7 +332,8 @@ class WebcomicTranscripts extends Webcomic {
 		return $views;
 	}
 	
-	/** Rename the language 'Posts' column.
+	/**
+	 * Rename the language 'Posts' column.
 	 * 
 	 * @param array $columns An array of term columns.
 	 * @return array
@@ -330,7 +345,8 @@ class WebcomicTranscripts extends Webcomic {
 		return $columns;
 	}
 	
-	/** Add transcript languages, parent, and custom author columns.
+	/**
+	 * Add transcript languages, parent, and custom author columns.
 	 * 
 	 * @param array $columns An array of post columns.
 	 * @return array
@@ -348,7 +364,8 @@ class WebcomicTranscripts extends Webcomic {
 		return array_merge( $pre, $columns );
 	}
 	
-	/** Add sortable parent and author columns.
+	/**
+	 * Add sortable parent and author columns.
 	 * 
 	 * @param array $columns An array of sortable columns.
 	 * @return array
@@ -358,7 +375,8 @@ class WebcomicTranscripts extends Webcomic {
 		return array_merge( array( 'webcomic_author' => 'webcomic_author', 'webcomic_parent' => 'webcomic_parent' ), $columns );
 	}
 	
-	/** Render the transcript parent meta box.
+	/**
+	 * Render the transcript parent meta box.
 	 * 
 	 * @param object $post Current post object.
 	 * @uses Webcomic::$config
@@ -394,7 +412,8 @@ class WebcomicTranscripts extends Webcomic {
 		<?php
 	}
 	
-	/** Render the transcript author meta box.
+	/**
+	 * Render the transcript author meta box.
 	 * 
 	 * @param object $post Current post object.
 	 * @uses Webcomic::$config
@@ -447,7 +466,8 @@ class WebcomicTranscripts extends Webcomic {
 		<?php
 	}
 	
-	/** Render a `<selec>` element for transcript parent posts.
+	/**
+	 * Render a `<selec>` element for transcript parent posts.
 	 * 
 	 * @param string $collection The collection ID to retrive posts from.
 	 * @param integer $parent The parent post of the current transcript.
@@ -465,7 +485,8 @@ class WebcomicTranscripts extends Webcomic {
 		<?php
 	}
 	
-	/** Render a checkbox for enabling or disabling parent post transcribing.
+	/**
+	 * Render a checkbox for enabling or disabling parent post transcribing.
 	 * 
 	 * @param integer $parent The parent post of the current transcript.
 	 */
@@ -475,7 +496,8 @@ class WebcomicTranscripts extends Webcomic {
 		<?php
 	}
 	
-	/** Render preview images for transcript parent posts.
+	/**
+	 * Render preview images for transcript parent posts.
 	 * 
 	 * @param integer $post Thep arent post to retrieve images for.
 	 * @uses Webcomic::get_attachments()
