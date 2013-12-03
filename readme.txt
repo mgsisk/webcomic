@@ -3,8 +3,8 @@ Contributors: mgsisk
 Donate link: http://webcomic.nu
 Tags: webcomics, comics, multiple comics, storylines, characters, custom post type, custom taxonomy, template tags, shortcodes, widgets, twitter, facebook, open graph
 Requires at least: 3.5
-Tested up to: 3.5.1
-Stable tag: 4.0.9
+Tested up to: 3.8-beta-1
+Stable tag: 4.0.9.1
 License: GPL3
 License URI: http://www.gnu.org/licenses/gpl.html
 
@@ -12,17 +12,17 @@ Comic publishing power for the web.
 
 == Description ==
 
-Webcomic provides a host of features for creating, managing, and sharing webcomics. Take control of your webcomic with multi-comic management, theme integration, dynamic navigation, and more. You can read all about Webcomic's etensive features in [The Beginner's Guide to Webcomic](http://github.com/mgsisk/webcomic/wiki), or watch this video!
+Webcomic provides a host of features for creating, managing, and sharing webcomics. Take control of your webcomic with multi-comic management, theme integration, dynamic navigation, and more. You can read all about Webcomic's extensive features in [The Beginner's Guide to Webcomic](http://github.com/mgsisk/webcomic/wiki).
 
-= ★ New in Webcomic 4.1 ★ =
+= ☆ New in Webcomic 4.1 ☆ =
 
 Everything from the version 4 point releases and then some! Highlights include:
 
-- Extensive refactoring to improve performance and correct bugs.
-- Join the Webcomic Network and share your site with other Webcomic users in the Webcomic Showcase.
-- Upgrade directly from Webcomic 1, 2, 3, or ComicPress.
+- Extensive refactoring to improve performance and fix bugs.
+- Experimental support for upgrading directly from Webcomic 1, 2, 3, or ComicPress 2.7+.
 - Automatically upload webcomic previews with your tweets.
-- Utilize new and enhanced widgets for even greater site customization.
+- Utilize new and enhanced widgets for greater site customization.
+- Join the Webcomic Network and share your site with other Webcomic users on webcomic.nu and right in their WordPress dashboard.
 
 == Installation ==
 
@@ -47,7 +47,6 @@ Once installed and activated you can use Webcomic in one of three ways:
 = Where can I get help with Webcomic? =
 
 - [Beginner's Guide](http://github.com/mgsisk/webcomic/wiki)
-- [Video Tutorials](http://vimeo.com/channels/webcomic)
 - [Support Forum](http://groups.google.com/d/forum/webcomicnu)
 - [Issue Tracker](http://github.com/mgsisk/webcomic/issues)
 - [Email Support](mailto:support@webcomic.nu)
@@ -615,8 +614,10 @@ Existing Webcomic users should read this before upgrading: http://github.com/mgs
 
 == Special Thanks ==
 
-To [Mihari]() for continued feedback and feature suggestions.
+To [Mihari](http://katbox.net) for ongoing feedback and feature suggestions.
 
 To [Seel](http://twitter.com/webcrumblick), [Kikirini](http://twitter.com/Kikirini) [Natty Bumpercar](http://twitter.com/nattybumpercar), and the many other users that helped to resolve legacy upgrade issues.
 
 To [BigBagel](http://twitter.com/DrPotatoMonster), [Miluette](http://twitter.com/miluette), [LordRembo](http://twitter.com/lordrembo), [Fesworks](http://twitter.com/fesworks), [Naomiyaki](http://twitter.com/naomiyaki), [AlexWoolfson](http://twitter.com/alexwoolfson), and [Kuipou](http://twitter.com/kuipou) for pre-release testing and feedback, and to the thousands of users that share their amazing work with Webcomic.
+
+To everyone that continues to use and support Webcomic.

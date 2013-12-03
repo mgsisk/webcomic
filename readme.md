@@ -4,22 +4,15 @@
 
 Webcomic is a plugin for [WordPress](http://wordpress.org) that provides a host of features for creating, managing, and sharing webcomics. Take control of your webcomic with multi-comic management, theme integration, dynamic navigation, and more.
 
-[**Existing Webcomic users should read this before upgrading.**](http://github.com/mgsisk/webcomic/wiki/Upgrading)
+## ☆ New in Webcomic 4.1 ☆
 
-## [★ New in Webcomic 4 ★](http://vimeo.com/channels/webcomic)
+Everything from the version 4 point releases and then some! Highlights include:
 
-[_**Everything!**_](http://github.com/mgsisk/webcomic/wiki) Webcomic has been rebuilt to provide you with leaner, meaner webcomic management. Highlights include:
-
-- [OpenGraph](http://ogp.me) and [Twitter Card](http://dev.twitter.com/docs/cards) support for any Webcomic-related page.
-- [Twitter](http://twitter.com) integration for automatically tweeting new webcomics.
-- [Touch gestures](http://github.com/mgsisk/webcomic/wiki/Touch-Gestures) for webcomic navigation.
-- [File management](http://github.com/mgsisk/webcomic/wiki/Media) handled through the WordPress Media Library.
-- Each [collection](http://github.com/mgsisk/webcomic/wiki/Webcomic-Collections) is now a custom post type with unique [storyline](http://github.com/mgsisk/webcomic/wiki/Storylines) and [character](http://github.com/mgsisk/webcomic/wiki/Characters) taxonomies.
-- [More](http://github.com/mgsisk/webcomic/wiki/General-Settings) [collection](http://github.com/mgsisk/webcomic/wiki/Transcript-Settings)-[specific](http://github.com/mgsisk/webcomic/wiki/Commerce-Settings) [settings](http://github.com/mgsisk/webcomic/wiki/Access-Settings) [provide](http://github.com/mgsisk/webcomic/wiki/Post-Settings) [greater](http://github.com/mgsisk/webcomic/wiki/Permalink-Settings) [control](http://github.com/mgsisk/webcomic/wiki/Twitter-Settings) over each webcomic on your site.
-- [Transcripts](http://github.com/mgsisk/webcomic/wiki/Transcripts) are now a custom post type, taking full advantage of the administrative features WordPress provides.
-- Improved [theme integration](http://github.com/mgsisk/webcomic/wiki/Configuring) makes it easier than ever to start using Webcomic right away with almost any WordPress theme.
-- New and refactored [template tags, shortcode](http://github.com/mgsisk/webcomic/wiki/Template-Tags-and-Shortcodes), and [widgets](http://github.com/mgsisk/webcomic/wiki/Widgets) for greater control and customization of your Webcomic-powered site.
-- Join the [Webcomic Network](http://webcomic.nu) and share your site directly with other Webcomic users and on [webcomic.nu](http://webcomic.nu) via the Webcomic Showcase.
+- Extensive refactoring to improve performance and fix bugs.
+- Experimental support for upgrading directly from Webcomic 1, 2, 3, or ComicPress 2.7+.
+- Automatically upload webcomic previews with your tweets.
+- Utilize new and enhanced widgets for greater site customization.
+- Join the Webcomic Network and share your site with other Webcomic users on webcomic.nu and right in their WordPress dashboard.
 
 ## Installation
 
@@ -44,20 +37,23 @@ Once installed and activated you can use Webcomic in one of three ways:
 ### Where can I get help with Webcomic?
 
 - [Beginner's Guide](http://github.com/mgsisk/webcomic/wiki)
-- [Video Tutorials](http://vimeo.com/channels/webcomic)
 - [Support Forum](http://groups.google.com/d/forum/webcomicnu)
 - [Issue Tracker](http://github.com/mgsisk/webcomic/issues)
 - [Email Support](mailto:support@webcomic.nu)
 
 ## Special Thanks
 
-To [Seel](http://twitter.com/webcrumblick), [Kikirini](http://twitter.com/Kikirini), [Natty Bumpercar](http://twitter.com/nattybumpercar), and the many other users that stuck it out and helped to resolve legacy upgrade issues.
+To [Mihari](http://katbox.net) for ongoing feedback and feature suggestions.
+
+To [Seel](http://twitter.com/webcrumblick), [Kikirini](http://twitter.com/Kikirini) [Natty Bumpercar](http://twitter.com/nattybumpercar), and the many other users that helped to resolve legacy upgrade issues.
 
 To [BigBagel](http://twitter.com/DrPotatoMonster), [Miluette](http://twitter.com/miluette), [LordRembo](http://twitter.com/lordrembo), [Fesworks](http://twitter.com/fesworks), [Naomiyaki](http://twitter.com/naomiyaki), [AlexWoolfson](http://twitter.com/alexwoolfson), and [Kuipou](http://twitter.com/kuipou) for pre-release testing and feedback, and to the thousands of users that share their amazing work with Webcomic.
 
+To everyone that continues to use and support Webcomic.
+
 ---
 
-© 2008 - 2013 Michael Sisk (contact@mgsisk.com)
+© 2008 - 2014 Michael Sisk (contact@mgsisk.com)
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
