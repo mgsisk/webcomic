@@ -350,10 +350,9 @@ class WebcomicHelp extends Webcomic {
 		return '
 			<p><b>' . __( 'For more information:', 'webcomic' ) . '</b></p>
 			<p><a href="http://github.com/mgsisk/webcomic/wiki" target="_blank">' . __( "Beginner's Guide", 'webcomic' ) . '</a></p>
-			<p><a href="http://vimeo.com/channels/webcomic" target="_blank">' . __( 'Video Tutorials', 'webcomic' ) . '</a></p>
 			<p><a href="http://groups.google.com/d/forum/webcomicnu" target="_blank">' . __( 'Support Forum', 'webcomic' ) . '</a></p>
 			<p><a href="http://github.com/mgsisk/webcomic/issues" target="_blank">' . __( 'Issue Tracker', 'webcomic' ) . '</a></p>
-			<hr style="border:0;border-top:thin solid #ccc">
+			<hr style="border:0;border-top:thin solid #ddd">
 			<p><a href="support@webcomic.nu">' . __( 'Email Support', 'webcomic' ) . '</a></p>';
 	}
 	
