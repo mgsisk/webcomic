@@ -10,7 +10,7 @@ Author URI: http://mgsisk.com
 License: GPL3
 License URI: http://www.gnu.org/licenses/gpl.html
 
-Copyright 2008 - 2013 Michael Sisk (contact@mgsisk.com)
+Copyright 2008 - 2014 Michael Sisk (contact@mgsisk.com)
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ along with this program.  If not, see http://www.gnu.org/licenses.
  * Comic Publishing Power for the Web
  * 
  * @package Webcomic
- * @copyright 2008 - 2013 Michael Sisk
+ * @copyright 2008 - 2014 Michael Sisk
  * @license http://www.gnu.org/licenses/gpl.html GPL3
  * @version 4.1
  * @link http://webcomic.nu
