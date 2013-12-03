@@ -1,4 +1,5 @@
-body {
+#media-upload {
+	background: #eee;
 	margin: .5em;
 }
 
@@ -7,9 +8,25 @@ div {
 }
 
 li {
+	background: #fff;
+	box-shadow: 0 .1em .2em rgba( 0, 0, 0, .1 );
 	float: left;
 	margin: .5em;
-	text-align: right;
+	padding: .5em;
+}
+
+a {
+	border-top: thin solid #fff;
+	color: #444;
+	display: block;
+	padding: .25em;
+	text-decoration: none;
+}
+
+a:focus,
+a:hover {
+	background: #444;
+	color: #fff;
 }
 
 b {
@@ -17,7 +34,7 @@ b {
 	box-shadow: 0 0 1em 0 rgba( 0, 0, 0, .1 ) inset;
 	display: block;
 	height: 10em;
-	line-height: 10em;
+	line-height: 9em;
 	outline: thin solid rgba( 0, 0, 0, .2 );
 	overflow: hidden;
 	text-align: center;
@@ -25,30 +42,7 @@ b {
 }
 
 img {
+	height: auto;
+	max-width: 100%;
 	vertical-align: middle;
-}
-
-li a {
-	background: url( ../img/media-actions.png ) no-repeat;
-    display: inline-block;
-	margin: 0 0 0 .25em;
-	height: 24px;
-    overflow: hidden;
-    text-indent: 100%;
-    white-space: nowrap;
-	width: 24px;
-}
-
-li a + a {
-	background-position: -24px 0;
-}
-
-li a:focus,
-li a:hover {
-	background-position: 0 -24px;
-}
-
-li a + a:focus,
-li a + a:hover {
-	background-position: -24px -24px;
 }

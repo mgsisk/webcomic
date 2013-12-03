@@ -1,10 +1,10 @@
 #webcomic-showcase .slideshow {
-	margin: 0 -12px -10px -10px;
+	margin: 0 -11px -11px;
 }
 
 #webcomic-showcase .slideshow:after,
 #webcomic-showcase .slideshow:before {
-	content: ' ';
+	content: " ";
 	display: table;
 }
 
@@ -23,14 +23,8 @@
 }
 
 #webcomic-showcase .slideshow > a {
-	background: -moz-linear-gradient( #fff, #eee );
-	background: -ms-linear-gradient( #fff, #eee );
-	background: -o-linear-gradient( #fff, #eee );
-	background: -webkit-linear-gradient( #fff, #eee );
-	background: linear-gradient( #fff, #eee );
-	border-right: thin solid #eee;
-	border-top: thin solid #dfdfdf;
-	color: #00acdc;
+	border-right: thin solid #ddd;
+	border-top: thin solid #ddd;
 	display: block;
 	float: left;
 	font-size: 300%;
@@ -44,24 +38,22 @@
 }
 
 #webcomic-showcase .slideshow > a:last-child {
-	border-left: thin solid #fff;
 	border-right: 0;
 }
 
 #webcomic-showcase .slideshow figure {
-	font: 100%/1.4 'Maven Pro', sans-serif;
 	margin: 0 12px 10px 10px;
 }
 
 #webcomic-showcase .slideshow img {
-	border-radius: .5rem;
 	display: block;
 	margin: 0 0 1rem;
 	max-width: 100%;
 }
 
 #webcomic-showcase .slideshow h4 {
-	font: bold larger/1.4 'Maven Pro', sans-serif;
+	font-size: larger;
+	font-weight: bold;
 	margin: 1rem 0;
 }
 
@@ -70,7 +62,6 @@
 }
 
 #webcomic-showcase .slideshow figcaption a {
-	color: #00addc;
 	font-weight: bold;
 }
 
