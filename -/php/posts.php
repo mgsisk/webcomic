@@ -614,19 +614,29 @@ class WebcomicPosts extends Webcomic {
 			$old_content_width = $content_width;
 			$content_width = 266;
 			
-			echo '<style scoped>.insert-media img{height:auto;max-width:100%;vertical-align:bottom}</style><a href="#" class="insert-media">';
+			echo "<style scoped>.insert-media img{height:auto;max-width:100%;vertical-align:bottom}</style><a href='#' class='insert-media'>";
 			
 			foreach ( $attachments as $attachment ) {
 				echo wp_get_attachment_image( $attachment->ID, array( $content_width, $content_width ) );
 			}
 			
-			echo '</a>';
+			echo "</a>";
 			
 			$content_width = $old_content_width;
 		} else {
 			$post_ID = $post_ID ? $post_ID : $id;
-			
-			echo '<a href="#" class="button insert-media">', __( 'Add Media', 'webcomic' ), '</a><p>', __( 'Webcomic will automatically recognize any images attached to this post. You <b>do not</b> have to insert them directly into the post content.', 'webcomic' ), '</p>';
+			printf( "
+				<p><a href='#' class='button insert-media'>%s</a></p>
+				<h4>%s</h4>
+				<p>%s</p>
+				<h4>%s</h4>
+				<p>%s</p>",
+				__( "Add Media", "webcomic" ),
+				__( "New Images", "webcomic" ),
+				__( "Click <strong>Add Media</strong> above and upload one or more images to attach them to this post. <strong>These images do not need to be inserted into the post.</strong> You can dismiss the media popup without inserting your images by clicking the X or anywhere in the darkened area outside of the popup.", "webcomic" ),
+				__( "Existing Images", "webcomic" ),
+				__( "If you've already uploaded one or more images for this post they can be attached from the <strong>Media > Library</strong> page. After saving this post find the image or images you want to attach in the Media Library and click <strong>Attach</strong> in the <strong>Uploaded to</strong> column. You may have to <strong>Detach</strong> the images first if they were uploaded to another post.", "webcomic" )
+			);
 		}
 	}
 	
