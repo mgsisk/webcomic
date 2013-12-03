@@ -9,18 +9,18 @@ a.pauseControls&&d.hover(function(){clearInterval(p)},function(){m()})}}if("unde
 
 jQuery( function( $ ) {
 	/** Handle the Webcomic Showcase slideshow. */
-	$( '#webcomic-showcase .slideshow div' ).responsiveSlides( {
-		'nav': true,
-		'auto': false,
-		'speed': 0,
-		'nextText': '&raquo;',
-		'prevText': '&laquo;',
-		'namespace': 'webcomic-showcase-slides',
-		'before': function() {
-			$( '#webcomic-showcase .slideshow div' ).children( '[class=""]' ).css( 'display', 'block' );
+	$( "#webcomic-showcase .slideshow div" ).responsiveSlides( {
+		nav: true,
+		auto: false,
+		speed: 0,
+		nextText: "&raquo;",
+		prevText: "&laquo;",
+		namespace: "webcomic-showcase-slides",
+		before: function() {
+			$( "#webcomic-showcase .slideshow div" ).children( "[class='']" ).css( "display", "block" );
 		},
-		'after': function() {
-			$( '#webcomic-showcase .slideshow div' ).children( '[class=""]' ).css( 'display', 'none' );
+		after: function() {
+			$( "#webcomic-showcase .slideshow div" ).children( "[class='']" ).css( "display", "none" );
 		}
 	} );
 } );

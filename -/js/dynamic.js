@@ -1,12 +1,12 @@
 /** Enable dynamic webcomic navigation. */
 jQuery( function( $ ) {
-	if ( $( '[data-webcomic-container]' ) ) {
+	if ( $( "[data-webcomic-container]" ) ) {
 		var defaults = [];
 		
-		$( '[data-webcomic-container]' ).each( function() {
+		$( "[data-webcomic-container]" ).each( function() {
 			defaults.push( {
-				parent: $( this ).find( '[data-webcomic-parent]' ).data( 'webcomic-parent' ),
-				container: $( this ).data( 'webcomic-container' )
+				parent: $( this ).find( "[data-webcomic-parent]" ).data( "webcomic-parent" ),
+				container: $( this ).data( "webcomic-container" )
 			} );
 		} );
 		
@@ -16,11 +16,11 @@ jQuery( function( $ ) {
 		
 		function dynamic_webcomic( url, container ) {
 			$.get( url, { webcomic_dynamic: container }, function( data ) {
-				$( '[data-webcomic-container="' + container + '"]' ).html( data ).show();
+				$( "[data-webcomic-container='" + container + "']" ).html( data ).show();
 			} );
 		}
 		
-		$( window ).on( 'popstate', function( e ) {
+		$( window ).on( "popstate", function( e ) {
 			if ( e.originalEvent.state ) {
 				if ( e.originalEvent.state.webcomicReset ) {
 					$.each( defaults, function( i, v ) {
@@ -34,11 +34,11 @@ jQuery( function( $ ) {
 			}
 		} );
 		
-		$( document ).on( 'click', '[data-webcomic-container] [href].webcomic-link', function( e ) {
+		$( document ).on( "click", "[data-webcomic-container] [href].webcomic-link", function( e ) {
 			e.preventDefault();
 			
-			var url = $( this ).attr( 'href' );
-			var container = $( this ).closest( '[data-webcomic-container]' ).data( 'webcomic-container' );
+			var url = $( this ).attr( "href" );
+			var container = $( this ).closest( "[data-webcomic-container]" ).data( "webcomic-container" );
 			
 			dynamic_webcomic( url, container );
 			
