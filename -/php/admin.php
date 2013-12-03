@@ -260,15 +260,15 @@ class WebcomicAdmin extends Webcomic {
 					delete_option( 'comic_thumbnail_size_w' );
 					delete_option( 'comic_thumbnail_size_h' );
 				}
-			} elseif ( $legacy_config = get_option( 'comicpress-options' ) ) {
+			} elseif ( $legacy_config = get_option( "comicpress-options" ) or $legacy_config = get_option( "cp-options" ) ) {
 				global $comiccat, $comic_folder;
 				
-				self::$config[ 'legacy' ] = 'ComicPress';
+				self::$config[ "legacy" ] = "ComicPress";
 				
 				$legacy_config = array_merge( array(
-					'comiccat'     => $comiccat,
-					'date_format'  => CP_DATE_FORMAT,
-					'comic_folder' => $comic_folder
+					"comiccat" => $comiccat,
+					"date_format" => defined( "CP_DATE_FORMAT" ) ? CP_DATE_FORMAT : "Y-m-d",
+					"comic_folder" => $comic_folder
 				), $legacy_config );
 			}
 			
@@ -518,7 +518,7 @@ class WebcomicAdmin extends Webcomic {
 		$screen = get_current_screen();
 		
 		if ( 'dashboard' === $screen->id and self::$config[ 'api' ] ) {
-			wp_enqueue_style( 'webcomic-showcase', self::$url . '-/css/admin-showcase.css', array( 'webcomic-google-font' ) );
+			wp_enqueue_style( 'webcomic-showcase', self::$url . '-/css/admin-showcase.css' );
 			
 			wp_enqueue_script( 'webcomic-showcase', self::$url . '-/js/admin-showcase.js' );
 		}
