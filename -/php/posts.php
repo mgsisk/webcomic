@@ -568,7 +568,7 @@ class WebcomicPosts extends Webcomic {
 							$authors[] = esc_html( $author[ 'name' ] );
 						}
 						
-						$authors = join( ', ', $authors );
+						$authors = implode( ', ', $authors );
 						
 						if ( $languages = wp_get_object_terms( $p->ID, 'webcomic_language' ) ) {
 							$terms = array();
@@ -577,7 +577,7 @@ class WebcomicPosts extends Webcomic {
 								$terms[] = esc_html( sanitize_term_field( 'name', $language->name, $language->term_id, 'webcomic_transcript', 'display' ) );
 							}
 							
-							$terms = join( ', ', $terms );
+							$terms = implode( ', ', $terms );
 						} else {
 							$terms = __( ' - ', 'webcomic' );
 						}

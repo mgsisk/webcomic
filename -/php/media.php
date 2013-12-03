@@ -349,7 +349,7 @@ class WebcomicMedia extends Webcomic {
 			
 			krsort( $sizes );
 			
-			echo '<div class="misc-pub-section">', __( 'Alternate Sizes:', 'webcomic' ), '<br><b>', $sizes ? join( '<br>', $sizes ) : __( 'None available', 'webcomic' ), '</b><br><a href="', esc_html( wp_nonce_url( add_query_arg( array( 'post' => $post->ID, 'action' => 'edit', 'webcomic_action' => 'regenerate' ), admin_url( 'post.php' ) ), 'webcomic_regenerate' ) ), '" class="button">', __( 'Regenerate', 'webcomic' ), '</a></div>';
+			echo '<div class="misc-pub-section">', __( 'Alternate Sizes:', 'webcomic' ), '<br><b>', $sizes ? implode( '<br>', $sizes ) : __( 'None available', 'webcomic' ), '</b><br><a href="', esc_html( wp_nonce_url( add_query_arg( array( 'post' => $post->ID, 'action' => 'edit', 'webcomic_action' => 'regenerate' ), admin_url( 'post.php' ) ), 'webcomic_regenerate' ) ), '" class="button">', __( 'Regenerate', 'webcomic' ), '</a></div>';
 		}
 	}
 	

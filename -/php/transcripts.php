@@ -258,7 +258,7 @@ class WebcomicTranscripts extends Webcomic {
 				$authors[] = esc_html( $author[ 'name' ] );
 			}
 			
-			echo join( ', ', $authors );
+			echo implode( ', ', $authors );
 		} elseif ( 'webcomic_parent' === $column ) {
 			echo $post->post_parent ? '<b><a href="' . esc_url( add_query_arg( array( 'post_type' => get_post_type( $post->post_parent ) ), admin_url( 'edit.php' ) ) ) . '">' . esc_html( get_post_type_object( get_post_type( $post->post_parent ) )->labels->name ) . '</a> - ' . ( ( current_user_can( 'edit_post', $post->post_parent ) and 'trash' !== get_post_status( $post->post_parent ) ) ? '<a href="' . get_edit_post_link( $post->post_parent ) . '">' . esc_html( get_the_title( $post->post_parent ) ) . '</a>' : esc_html( get_the_title( $post->post_parent ) ) ) . '</b>, ' . get_the_time( 'Y/m/d', $post->post_parent ) : __( 'No Webcomic', 'webcomic' );
 		}

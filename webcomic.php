@@ -864,9 +864,9 @@ class Webcomic {
 		
 		if (
 				(
-					preg_match( '/webcomic\d+(_(storyline|character))?/', join( ' ', array_keys( $_GET ) ), $match )
+					preg_match( '/webcomic\d+(_(storyline|character))?/', implode( ' ', array_keys( $_GET ) ), $match )
 					or ( isset( $_GET[ 'post_type' ] ) and isset( self::$config[ 'collections' ][ $_GET[ 'post_type' ] ] ) and $match[ 0 ] = $_GET[ 'post_type' ] )
-					or ( $wp_rewrite->using_permalinks() and preg_match( '{/(' . join( '|', $permalinks ) . ')/}', $_SERVER[ 'REQUEST_URI' ], $match ) )
+					or ( $wp_rewrite->using_permalinks() and preg_match( '{/(' . implode( '|', $permalinks ) . ')/}', $_SERVER[ 'REQUEST_URI' ], $match ) )
 					or ( $id = url_to_postid( $_SERVER[ 'REQUEST_URI' ] ) and $match[ 0 ] = get_post_meta( $id, 'webcomic_collection', true ) and isset( self::$config[ 'collections' ][ $match[ 0 ] ] ) )
 				)
 			and $match
@@ -1065,7 +1065,7 @@ class Webcomic {
 					$tokens[ "%{$size}" ] = ( false !== strpos( $status, "%{$size}" ) and $image = wp_get_attachment_image_src( $attachment->ID, $size ) ) ? $image[ 0 ] : '';
 				}
 				
-				if ( preg_match( '/%' .  join( '|%', array_merge( array( 'storyline', 'character' ), self::$config[ 'collections' ][ $post->post_type ][ 'taxonomies' ] ) ) . '/', self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'format' ] ) and $terms = wp_get_object_terms( $post->ID, array_merge( array( "{$post->post_type}_storyline", "{$post->post_type}_character" ), self::$config[ 'collections' ][ $post->post_type ][ 'taxonomies' ] ) ) and !is_wp_error( $terms ) ) {
+				if ( preg_match( '/%' .  implode( '|%', array_merge( array( 'storyline', 'character' ), self::$config[ 'collections' ][ $post->post_type ][ 'taxonomies' ] ) ) . '/', self::$config[ 'collections' ][ $post->post_type ][ 'twitter' ][ 'format' ] ) and $terms = wp_get_object_terms( $post->ID, array_merge( array( "{$post->post_type}_storyline", "{$post->post_type}_character" ), self::$config[ 'collections' ][ $post->post_type ][ 'taxonomies' ] ) ) and !is_wp_error( $terms ) ) {
 					foreach ( $terms as $term ) {
 						$hash = str_replace( array( '_', '-' ), '', "#{$term->slug}" );
 						
@@ -1236,7 +1236,7 @@ class Webcomic {
 	 * @hook get_terms
 	 */
 	public function get_terms( $terms, $taxonomies, $args ) {
-		if ( preg_match( '/webcomic\d+_(storyline|character)/', join( ' ', ( array ) $taxonomies ) ) ) {
+		if ( preg_match( '/webcomic\d+_(storyline|character)/', implode( ' ', ( array ) $taxonomies ) ) ) {
 			foreach ( $terms as $k => $v ) {
 				if ( isset( $v->taxonomy ) and preg_match( '/^webcomic\d+_(storyline|character)$/', $v->taxonomy ) ) {
 					$terms[ $k ]->webcomic_image = empty( self::$config[ 'terms' ][ $v->term_id ][ 'image' ] ) ? 0 : self::$config[ 'terms' ][ $v->term_id ][ 'image' ];
@@ -1309,7 +1309,7 @@ class Webcomic {
 			}
 			
 			if ( $crossovers = array_unique( $crossovers ) ) {
-				$classes[] = join( ' ', $crossovers );
+				$classes[] = implode( ' ', $crossovers );
 			}
 		}
 		
@@ -1366,7 +1366,7 @@ class Webcomic {
 			}
 			
 			$storyline = array_reverse( $storyline );
-			$storyline = join( '/', $storyline );
+			$storyline = implode( '/', $storyline );
 		} else {
 			$storyline = '';
 		}
@@ -1498,7 +1498,7 @@ class Webcomic {
 	 * @hook get_the_terms
 	 */
 	public function wp_get_object_terms( $terms, $objects, $taxonomies, $args ) {
-		if ( 'all' === $args[ 'fields' ] and preg_match( '/webcomic\d+_(storyline|character)/', join( ' ', ( array ) $taxonomies ) ) ) {
+		if ( 'all' === $args[ 'fields' ] and preg_match( '/webcomic\d+_(storyline|character)/', implode( ' ', ( array ) $taxonomies ) ) ) {
 			foreach ( $terms as $k => $v ) {
 				if ( isset( $v->taxonomy ) and preg_match( '/^webcomic\d+_(storyline|character)$/', $v->taxonomy ) ) {
 					$terms[ $k ]->webcomic_image = empty( self::$config[ 'terms' ][ $v->term_id ][ 'image' ] ) ? 0 : self::$config[ 'terms' ][ $v->term_id ][ 'image' ];

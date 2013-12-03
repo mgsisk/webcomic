@@ -658,7 +658,7 @@ class WebcomicTag extends Webcomic {
 				}
 			}
 			
-			return $before . join( $sep, $related ) . $after;
+			return $before . implode( $sep, $related ) . $after;
 		}
 	}
 	
@@ -718,7 +718,7 @@ class WebcomicTag extends Webcomic {
 			
 			if ( ( $in_same_term or $excluded_terms ) and $taxonomy ) {
 				$join    = " INNER JOIN {$wpdb->term_relationships} AS tr ON p.ID = tr.object_id INNER JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id";
-				$exclude = " AND tt.taxonomy IN ( '" . join( "', '", $taxonomy ) . "' )";
+				$exclude = " AND tt.taxonomy IN ( '" . implode( "', '", $taxonomy ) . "' )";
 				
 				if ( true === $in_same_term and $post_id ) {
 					$include = wp_get_object_terms( $post_id, $taxonomy, array( 'fields' => 'ids' ) );
@@ -729,7 +729,7 @@ class WebcomicTag extends Webcomic {
 				}
 				
 				if ( !is_wp_error( $include ) ) {
-					$join .= " AND tt.taxonomy IN ( '" . join( "', '", $taxonomy ) . "' ) AND tt.term_id IN ( " . ( $include ? join( ', ', $include ) : 0 ) . " )";
+					$join .= " AND tt.taxonomy IN ( '" . implode( "', '", $taxonomy ) . "' ) AND tt.term_id IN ( " . ( $include ? implode( ', ', $include ) : 0 ) . " )";
 				}
 				
 				if ( $excluded_terms ) {
@@ -738,7 +738,7 @@ class WebcomicTag extends Webcomic {
 					$excluded_terms = $include ? array_diff( $excluded_terms, $include ) : $excluded_terms;
 					
 					if ( $excluded_terms ) {
-						$exclude = " AND tt.taxonomy IN ( '" . join( "', '", $taxonomy ) . "' ) AND tt.term_id NOT IN ( " . join( ', ', $excluded_terms ) . " )";
+						$exclude = " AND tt.taxonomy IN ( '" . implode( "', '", $taxonomy ) . "' ) AND tt.term_id NOT IN ( " . implode( ', ', $excluded_terms ) . " )";
 					}
 				}
 			}
@@ -874,7 +874,7 @@ class WebcomicTag extends Webcomic {
 				$link = str_replace( array_keys( $tokens ), $tokens, $link );
 			}
 			
-			$link = '<a href="' . $href . '" class="' . join( ' ', $class ) . '"' . ( ( 'previous' === $relative or 'next' === $relative ) ? ' rel="' . str_replace( 'ious', '', $relative ) . '"' : '' ) . '>' . $link . '</a>';
+			$link = '<a href="' . $href . '" class="' . implode( ' ', $class ) . '"' . ( ( 'previous' === $relative or 'next' === $relative ) ? ' rel="' . str_replace( 'ious', '', $relative ) . '"' : '' ) . '>' . $link . '</a>';
 			
 			$format = str_replace( '%link', $link, $format );
 			
@@ -943,7 +943,7 @@ class WebcomicTag extends Webcomic {
 				$link = str_replace( array_keys( $tokens ), $tokens, $link );
 			}
 			
-			$link   = '<a href="' . $href . '" class="' . join( ' ', $class ) . '">' . $link . '</a>';
+			$link   = '<a href="' . $href . '" class="' . implode( ' ', $class ) . '">' . $link . '</a>';
 			$format = str_replace( '%link', $link, $format );
 			
 			return apply_filters( 'purchase_webcomic_link', $format, $link, $the_post );
@@ -989,7 +989,7 @@ class WebcomicTag extends Webcomic {
 				$link = str_replace( array_keys( $tokens ), $tokens, $link );
 			}
 			
-			$link   = '<a href="' . $href . '" class="' . join( ' ', $class ) . '">' . $link . '</a>';
+			$link   = '<a href="' . $href . '" class="' . implode( ' ', $class ) . '">' . $link . '</a>';
 			$format = str_replace( '%link', $link, $format );
 			
 			return apply_filters( 'webcomic_collection_link', $format, $link, $collection );
@@ -1052,7 +1052,7 @@ class WebcomicTag extends Webcomic {
 			
 			$term_links = apply_filters( 'webcomic_collection_links', $collection_links, $collections, $before, $sep, $after, $target, $image, $crossover, $collection );
 			
-			return apply_filters( 'the_webcomic_collection_list', $before . join( $sep, $collection_links ) . $after, $id, $before, $sep, $after, $target, $image, $crossover, $collection );
+			return apply_filters( 'the_webcomic_collection_list', $before . implode( $sep, $collection_links ) . $after, $id, $before, $sep, $after, $target, $image, $crossover, $collection );
 		}
 	}
 	
@@ -1127,7 +1127,7 @@ class WebcomicTag extends Webcomic {
 			$term_links = apply_filters( "webcomic_term_links-{$taxonomy}", $term_links, $terms, $before, $sep, $after, $target, $image );
 			$term_links = apply_filters( "webcomic_term_links", $term_links, $terms, $before, $sep, $after, $target, $image, $taxonomy );
 			
-			return apply_filters( 'the_webcomic_term_list', $before . join( $sep, $term_links ) . $after, $id, $before, $sep, $after, $target, $image, $taxonomy );
+			return apply_filters( 'the_webcomic_term_list', $before . implode( $sep, $term_links ) . $after, $id, $before, $sep, $after, $target, $image, $taxonomy );
 		}
 	}
 	
@@ -1230,7 +1230,7 @@ class WebcomicTag extends Webcomic {
 		} elseif ( $term = self::get_relative_webcomic_term( $relative, $taxonomy, $args ) ) {
 			if ( 'archive' !== $target and $objects = get_objects_in_term( $term->term_id, $term->taxonomy ) ) {
 				if ( 'first' === $target or 'last' === $target ) {
-					$post_id = $wpdb->get_var( sprintf( "SELECT ID FROM {$wpdb->posts} WHERE ID IN ( %s ) ORDER BY post_date %s LIMIT 1", join( ', ', $objects ), 'last' === $target ? 'DESC' : 'ASC' ) );
+					$post_id = $wpdb->get_var( sprintf( "SELECT ID FROM {$wpdb->posts} WHERE ID IN ( %s ) ORDER BY post_date %s LIMIT 1", implode( ', ', $objects ), 'last' === $target ? 'DESC' : 'ASC' ) );
 					$link    = apply_filters( 'the_permalink', get_permalink( $post_id ) );
 				} else {
 					shuffle( $objects );
@@ -1304,7 +1304,7 @@ class WebcomicTag extends Webcomic {
 				$link = str_replace( array_keys( $tokens ), $tokens, $link );
 			}
 			
-			$link   = '<a href="' . $href . '" class="' . join( ' ', $class ) . '"' . ( ( 'previous' === $relative or 'next' === $relative ) ? ' rel="' . str_replace( 'ious', '', $relative ) . '"' : '' ) . '>' . $link . '</a>';
+			$link   = '<a href="' . $href . '" class="' . implode( ' ', $class ) . '"' . ( ( 'previous' === $relative or 'next' === $relative ) ? ' rel="' . str_replace( 'ious', '', $relative ) . '"' : '' ) . '>' . $link . '</a>';
 			$format = str_replace( '%link', $link, $format );
 			
 			return apply_filters( "{$relative}_webcomic_term_link", $format, $link, $target, $term, $args );
@@ -1430,7 +1430,7 @@ class WebcomicTag extends Webcomic {
 			
 			$term_links = apply_filters( "webcomic_term_crossover_links", $collection_links, $before, $sep, $after, $target, $image );
 			
-			return apply_filters( 'webcomic_term_crossovers', $before . join( $sep, $collection_links ) . $after, $term->term_id, $term->taxonomy, $before, $sep, $after, $target, $image );
+			return apply_filters( 'webcomic_term_crossovers', $before . implode( $sep, $collection_links ) . $after, $term->term_id, $term->taxonomy, $before, $sep, $after, $target, $image );
 		}
 	}
 	
@@ -1627,7 +1627,7 @@ class WebcomicTag extends Webcomic {
 			
 			$term_links = apply_filters( "webcomic_collection_crossover_links", $collection_links, $before, $sep, $after, $target, $image );
 			
-			return apply_filters( 'webcomic_collection_crossovers', $before . join( $sep, $collection_links ) . $after, $before, $sep, $after, $target, $image, $collection );
+			return apply_filters( 'webcomic_collection_crossovers', $before . implode( $sep, $collection_links ) . $after, $before, $sep, $after, $target, $image, $collection );
 		}
 	}
 	
@@ -1967,7 +1967,7 @@ class WebcomicTag extends Webcomic {
 				$link = str_replace( array_keys( $tokens ), $tokens, $link );
 			}
 			
-			$link   = '<a href="' . $href . '" class="' . join( ' ', $class ) . '">' . $link . '</a>';
+			$link   = '<a href="' . $href . '" class="' . implode( ' ', $class ) . '">' . $link . '</a>';
 			$format = str_replace( '%link', $link, $format );
 			
 			return apply_filters( 'webcomic_transcripts_link', $format, $link, $the_post );
@@ -2026,7 +2026,7 @@ class WebcomicTag extends Webcomic {
 			}
 		}
 		
-		return apply_filters( 'the_webcomic_transcript_authors', $before . join( $sep, $output ) . $after );
+		return apply_filters( 'the_webcomic_transcript_authors', $before . implode( $sep, $output ) . $after );
 	}
 	
 	/**
@@ -2052,7 +2052,7 @@ class WebcomicTag extends Webcomic {
 				$term_list[] = '<a rel="tag">' . $term->name . '</a>';
 			}
 			
-			return apply_filters( 'the_webcomic_transcript_term_list', $before . join( $sep, $term_list ) . $after, $id, $before, $sep, $after, $taxonomy );
+			return apply_filters( 'the_webcomic_transcript_term_list', $before . implode( $sep, $term_list ) . $after, $id, $before, $sep, $after, $taxonomy );
 		}
 	}
 	
@@ -2148,7 +2148,7 @@ class WebcomicTag extends Webcomic {
 				'email'  => '<p class="webcomic-transcript-email"><label for="webcomic-transcript-email' . $c . '">' . __( 'Email', 'webcomic' ) . '</label>' . ( $required ? '<span class="required">*</span>' : '' ) . '<input type="email" name="webcomic_transcript_email" id="webcomic-transcript-email' . $c . '" value="' . esc_attr(  $commenter[ 'comment_author_email' ] ) . '"' . ( $required ? ' required' : '' ) . '></p>',
 				'url'    => '<p class="webcomic-transcript-url"><label for="webcomic-transcript-url' . $c . '">' . __( 'Website', 'webcomic' ) . '</label><input type="url" name="webcomic_transcript_url" id="webcomic-transcript-url' . $c . '" value="' . esc_attr( $commenter[ 'comment_author_url' ] ) . '"></p>',
 			), $the_post->post_type ),
-			'language_field'           => $languages ? '<p class="webcomic-transcript-language"><label for="webcomic-transcript-language' . $c . '">' . __( 'Language', 'webcomic' ) . '</label><select name="webcomic_transcript_language" id="webcomic-transcript-language' . $c . '">' . join( '', $languages ) . '</select></p>' : '',
+			'language_field'           => $languages ? '<p class="webcomic-transcript-language"><label for="webcomic-transcript-language' . $c . '">' . __( 'Language', 'webcomic' ) . '</label><select name="webcomic_transcript_language" id="webcomic-transcript-language' . $c . '">' . implode( '', $languages ) . '</select></p>' : '',
 			'transcript_field'         => '<p class="webcomic-transcript-content"><label for="webcomic-transcript-content' . $c . '">' . __( 'Transcript', 'webcomic' ) . '</label><textarea name="webcomic_transcript_content" id="webcomic-transcript-content' . $c . '" rows="10" cols="40" required>' . ( empty( $update_post ) ? '' : esc_html( $update_post->post_content ) ) . '</textarea></p>',
 			'must_log_in'              => '<p class="must-log-in">' . sprintf( __( 'You must be <a href="%s">logged in</a> to transcribe this webcomic.' ), wp_login_url( apply_filters( 'the_permalink', get_permalink( $the_post ) ) ) ) . '</p>',
 			'logged_in_as'             => '<p class="logged-in-as">' . sprintf( __( 'Logged in as <a href="%1$s">%2$s</a>. <a href="%3$s">Log out?</a>' ), admin_url( 'profile.php' ), $user->display_name, wp_logout_url( apply_filters( 'the_permalink', get_permalink( $the_post ) ) ) ) . '</p>',
@@ -2295,7 +2295,7 @@ class WebcomicTag extends Webcomic {
 			$output = '';
 			
 			if ( ( $terms = get_terms( $r[ 'taxonomy' ], $r ) and !is_wp_error( $terms ) ) and count( $terms ) > 1 or !$hide_if_empty ) {
-				$output = $before . '<select' . ( $name ? ' name="' . esc_attr( $name ) . '"' : '' ) . ( $id ? ' id="' . esc_attr( $id ) . '"' : '' ) . ' class="' . join( ' ', array_merge( array( 'webcomic-transcript-terms', $taxonomy ), ( array ) $class ) ) . '">' . ( $show_option_all ? '<option value="0"' . ( 0 === $selected ? ' selected' : '' ) . '>' . $show_option_all . '</option>' : '' ) . ( $show_option_none ? '<option value="-1"' . ( -1 === $selected ? ' selected' : '' ) . '>' . $show_option_none . '</option>' : '' ) . ( ( $terms and !is_wp_error( $terms ) ) ? call_user_func( array( $walker ? $walker : new Walker_WebcomicTranscriptTerm_Dropdown, 'walk' ), $terms, 0, $r ) : '' ) . '</select>' . $after;
+				$output = $before . '<select' . ( $name ? ' name="' . esc_attr( $name ) . '"' : '' ) . ( $id ? ' id="' . esc_attr( $id ) . '"' : '' ) . ' class="' . implode( ' ', array_merge( array( 'webcomic-transcript-terms', $taxonomy ), ( array ) $class ) ) . '">' . ( $show_option_all ? '<option value="0"' . ( 0 === $selected ? ' selected' : '' ) . '>' . $show_option_all . '</option>' : '' ) . ( $show_option_none ? '<option value="-1"' . ( -1 === $selected ? ' selected' : '' ) . '>' . $show_option_none . '</option>' : '' ) . ( ( $terms and !is_wp_error( $terms ) ) ? call_user_func( array( $walker ? $walker : new Walker_WebcomicTranscriptTerm_Dropdown, 'walk' ), $terms, 0, $r ) : '' ) . '</select>' . $after;
 			}
 			
 			return apply_filters( 'webcomic_dropdown_transcript_terms', $output, $r );
@@ -2364,7 +2364,7 @@ class WebcomicTag extends Webcomic {
 			$output = '';
 			
 			if ( $terms = get_terms( $r[ 'taxonomy' ], $r ) and !is_wp_error( $terms ) and count( $terms ) > 1 ) {
-				$output = $before . '<' . ( $ordered ? 'ol' : 'ul' ) . ( $id ? ' id="' . esc_attr( $id ) . '"' : '' ) . ' class="' . join( ' ', array_merge( array( 'webcomic-transcript-terms', $taxonomy ), ( array ) $class ) ) . '">' . call_user_func( array( $walker ? $walker : new Walker_WebcomicTranscriptTerm_List, 'walk' ), $terms, $depth, $r ) . '</' . ( $ordered ? 'ol' : 'ul' ) . '>' . $after;
+				$output = $before . '<' . ( $ordered ? 'ol' : 'ul' ) . ( $id ? ' id="' . esc_attr( $id ) . '"' : '' ) . ' class="' . implode( ' ', array_merge( array( 'webcomic-transcript-terms', $taxonomy ), ( array ) $class ) ) . '">' . call_user_func( array( $walker ? $walker : new Walker_WebcomicTranscriptTerm_List, 'walk' ), $terms, $depth, $r ) . '</' . ( $ordered ? 'ol' : 'ul' ) . '>' . $after;
 			}
 			
 			return apply_filters( 'webcomic_list_transcript_terms', $output, $r );
@@ -2442,7 +2442,7 @@ class WebcomicTag extends Webcomic {
 		$output = '';
 		
 		if ( ( $terms = get_terms( $r[ 'taxonomy' ], $r ) and !is_wp_error( $terms ) ) or !$hide_if_empty ) {
-			$output = $before . '<select' . ( $name ? ' name="' . esc_attr( $name ) . '"' : '' ) . ( $id ? ' id="' . esc_attr( $id ) . '"' : '' ) . ' class="' . join( ' ', array_merge( array( 'webcomic-terms', $taxonomy ), ( array ) $class ) ) . '">' . ( $show_option_all ? '<option value="0"' . ( 0 === $selected ? ' selected' : '' ) . '>' . $show_option_all . '</option>' : '' ) . ( $show_option_none ? '<option value="-1"' . ( -1 === $selected ? ' selected' : '' ) . '>' . $show_option_none . '</option>' : '' ) . ( ( $terms and !is_wp_error( $terms ) ) ? call_user_func( array( $walker ? $walker : new Walker_WebcomicTerm_Dropdown, 'walk' ), $terms, $depth, $r ) : '' ) . '</select>' . $after;
+			$output = $before . '<select' . ( $name ? ' name="' . esc_attr( $name ) . '"' : '' ) . ( $id ? ' id="' . esc_attr( $id ) . '"' : '' ) . ' class="' . implode( ' ', array_merge( array( 'webcomic-terms', $taxonomy ), ( array ) $class ) ) . '">' . ( $show_option_all ? '<option value="0"' . ( 0 === $selected ? ' selected' : '' ) . '>' . $show_option_all . '</option>' : '' ) . ( $show_option_none ? '<option value="-1"' . ( -1 === $selected ? ' selected' : '' ) . '>' . $show_option_none . '</option>' : '' ) . ( ( $terms and !is_wp_error( $terms ) ) ? call_user_func( array( $walker ? $walker : new Walker_WebcomicTerm_Dropdown, 'walk' ), $terms, $depth, $r ) : '' ) . '</select>' . $after;
 		}
 		
 		return apply_filters( 'webcomic_dropdown_terms', $output, $r );
@@ -2565,7 +2565,7 @@ class WebcomicTag extends Webcomic {
 		}
 		
 		if ( $options or !$hide_if_empty ) {
-			$output = $before . '<select' . ( $name ? ' name="' . esc_attr( $name ) . '"' : '' ) . ( $id ? ' id="' . esc_attr( $id ) . '"' : '' ) . ' class="' . join( ' ', array_merge( array( 'webcomic-collections' ), ( array ) $class ) ) . '">' . ( $show_option_all ? '<option value="0"' . ( 0 === $selected ? ' selected' : '' ) . '>' . $show_option_all . '</option>' : '' ) . ( $show_option_none ? '<option value="-1"' . ( -1 === $selected ? ' selected' : '' ) . '>' . $show_option_none . '</option>' : '' ) . $options . '</select>' . $after;
+			$output = $before . '<select' . ( $name ? ' name="' . esc_attr( $name ) . '"' : '' ) . ( $id ? ' id="' . esc_attr( $id ) . '"' : '' ) . ' class="' . implode( ' ', array_merge( array( 'webcomic-collections' ), ( array ) $class ) ) . '">' . ( $show_option_all ? '<option value="0"' . ( 0 === $selected ? ' selected' : '' ) . '>' . $show_option_all . '</option>' : '' ) . ( $show_option_none ? '<option value="-1"' . ( -1 === $selected ? ' selected' : '' ) . '>' . $show_option_none . '</option>' : '' ) . $options . '</select>' . $after;
 		}
 		
 		return apply_filters( 'webcomic_dropdown_collections', $output, $r );
@@ -2642,7 +2642,7 @@ class WebcomicTag extends Webcomic {
 		$output = '';
 		
 		if ( $terms = get_terms( $r[ 'taxonomy' ], $r ) and !is_wp_error( $terms ) ) {
-			$output = $before . '<' . ( $ordered ? 'ol' : 'ul' ) . ( $id ? ' id="' . esc_attr( $id ) . '"' : '' ) . ' class="' . join( ' ', array_merge( array( 'webcomic-terms', $taxonomy ), ( array ) $class ) ) . '">' . call_user_func( array( $walker ? $walker : new Walker_WebcomicTerm_List, 'walk' ), $terms, $depth, $r ) . '</' . ( $ordered ? 'ol' : 'ul' ) . '>' . $after;
+			$output = $before . '<' . ( $ordered ? 'ol' : 'ul' ) . ( $id ? ' id="' . esc_attr( $id ) . '"' : '' ) . ' class="' . implode( ' ', array_merge( array( 'webcomic-terms', $taxonomy ), ( array ) $class ) ) . '">' . call_user_func( array( $walker ? $walker : new Walker_WebcomicTerm_List, 'walk' ), $terms, $depth, $r ) . '</' . ( $ordered ? 'ol' : 'ul' ) . '>' . $after;
 		}
 		
 		return apply_filters( 'webcomic_list_terms', $output, $r );
@@ -2777,7 +2777,7 @@ class WebcomicTag extends Webcomic {
 		}
 		
 		if ( $items ) {
-			$output = $before . '<' . ( $ordered ? 'ol' : 'ul' ) . ( $id ? ' id="' . esc_attr( $id ) . '"' : '' ) . ' class="' . join( ' ', array_merge( array( 'webcomic-collections', $collection ), ( array ) $class ) ) . '">' . $items . '</' . ( $ordered ? 'ol' : 'ul' ) . '>' . $after;
+			$output = $before . '<' . ( $ordered ? 'ol' : 'ul' ) . ( $id ? ' id="' . esc_attr( $id ) . '"' : '' ) . ' class="' . implode( ' ', array_merge( array( 'webcomic-collections', $collection ), ( array ) $class ) ) . '">' . $items . '</' . ( $ordered ? 'ol' : 'ul' ) . '>' . $after;
 		}
 		
 		return apply_filters( 'webcomic_list_collections', $output, $r );
@@ -2877,8 +2877,8 @@ class WebcomicTag extends Webcomic {
 			}
 			
 			$id     = $id ? ' id="' . $id . '"' : '';
-			$class  = ' class="' . join( ' ', array_merge( array( 'webcomic-terms', $taxonomy, 'webcomic-terms-cloud', "{$taxonomy}-cloud" ), ( array ) $class ) ) . '"';
-			$output = $before . ( $sep ? "<div{$id}{$class}>" : '<ul{$id}{$class}><li>' ) .  join( $sep ? $sep : '</li><li>', $links ) . ( $sep ? '</div>' : '</li></ul>' ) . $after;
+			$class  = ' class="' . implode( ' ', array_merge( array( 'webcomic-terms', $taxonomy, 'webcomic-terms-cloud', "{$taxonomy}-cloud" ), ( array ) $class ) ) . '"';
+			$output = $before . ( $sep ? "<div{$id}{$class}>" : '<ul{$id}{$class}><li>' ) .  implode( $sep ? $sep : '</li><li>', $links ) . ( $sep ? '</div>' : '</li></ul>' ) . $after;
 		}
 		
 		return apply_filters( 'webcomic_term_cloud', $output, $r );
@@ -2990,8 +2990,8 @@ class WebcomicTag extends Webcomic {
 		}
 		
 		$id     = $id ? ' id="' . $id . '"' : '';
-		$class  = ' class="' . join( ' ', array_merge( array( 'webcomic-collections', 'webcomic-collections-cloud' ), ( array ) $class ) ) . '"';
-		$output = $before . ( $sep ? "<div{$id}{$class}>" : '<ul{$id}{$class}><li>' ) .  join( $sep ? $sep : '</li><li>', $links ) . ( $sep ? '</div>' : '</li></ul>' ) . $after;
+		$class  = ' class="' . implode( ' ', array_merge( array( 'webcomic-collections', 'webcomic-collections-cloud' ), ( array ) $class ) ) . '"';
+		$output = $before . ( $sep ? "<div{$id}{$class}>" : '<ul{$id}{$class}><li>' ) .  implode( $sep ? $sep : '</li><li>', $links ) . ( $sep ? '</div>' : '</li></ul>' ) . $after;
 		
 		return apply_filters( 'webcomic_collections_cloud', $output, $r );
 	}

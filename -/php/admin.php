@@ -338,7 +338,7 @@ class WebcomicAdmin extends Webcomic {
 						}
 						
 						if ( $values ) {
-							$wpdb->query( sprintf( "INSERT INTO {$wpdb->term_relationships} ( object_id, term_taxonomy_id, term_order ) VALUES %s ON DUPLICATE KEY UPDATE term_order = VALUES( term_order )", join( ',', $values ) ) );
+							$wpdb->query( sprintf( "INSERT INTO {$wpdb->term_relationships} ( object_id, term_taxonomy_id, term_order ) VALUES %s ON DUPLICATE KEY UPDATE term_order = VALUES( term_order )", implode( ',', $values ) ) );
 							
 							$count = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->term_relationships} WHERE term_taxonomy_id = %d", $language->term_id ) );
 							
@@ -479,13 +479,13 @@ class WebcomicAdmin extends Webcomic {
 		if ( $notice = get_transient( 'webcomic_notice' ) ) {
 			delete_transient( 'webcomic_notice' );
 			
-			echo '<div class="updated"><p>', join( '</p></div><div class="updated"><p>', $notice ), '</p></div>';
+			echo '<div class="updated"><p>', implode( '</p></div><div class="updated"><p>', $notice ), '</p></div>';
 		}
 		
 		if ( $error = get_transient( 'webcomic_error' ) ) {
 			delete_transient( 'webcomic_error' );
 			
-			echo '<div class="error"><p>', join( '</p></div><div class="error"><p>', $error ), '</p></div>';
+			echo '<div class="error"><p>', implode( '</p></div><div class="error"><p>', $error ), '</p></div>';
 		}
 		
 		if ( isset( self::$config[ 'thanks' ] ) ) {
@@ -613,7 +613,7 @@ class WebcomicAdmin extends Webcomic {
 				}
 				
 				if ( $values ) {
-					$wpdb->query( sprintf( "INSERT INTO {$wpdb->term_relationships} ( object_id, term_taxonomy_id, term_order ) VALUES %s ON DUPLICATE KEY UPDATE term_order = VALUES( term_order )", join( ',', $values ) ) );
+					$wpdb->query( sprintf( "INSERT INTO {$wpdb->term_relationships} ( object_id, term_taxonomy_id, term_order ) VALUES %s ON DUPLICATE KEY UPDATE term_order = VALUES( term_order )", implode( ',', $values ) ) );
 					
 					$count = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->term_relationships} WHERE term_taxonomy_id = %d", $term->term_id ) );
 					
@@ -667,15 +667,15 @@ class WebcomicAdmin extends Webcomic {
 						}
 						
 						$caption = empty( $entry[ 'template' ] ) ? sprintf( __( 'Created by %1$s with %2$s', 'webcomic' ),
-							join( ', ', $entry[ 'creators' ] ),
+							implode( ', ', $entry[ 'creators' ] ),
 							'<a href="' . $entry[ 'theme' ][ 'url' ] . '" target="_blank">' . $entry[ 'theme' ][ 'name' ] . '</a>'
 						) : sprintf( __( 'Created by %1$s with %3$s (based on %4$s)', 'webcomic' ),
-							join( ', ', $entry[ 'creators' ] ),
+							implode( ', ', $entry[ 'creators' ] ),
 							'<a href="' . $entry[ 'theme' ][ 'url' ] . '" target="_blank">' . $entry[ 'theme' ][ 'name' ] . '</a>',
 							'<a href="' . $entry[ 'template' ][ 'url' ] . '" target="_blank">' . $entry[ 'template' ][ 'name' ] . '</a>'
 						);
 						
-						echo '<figure><a href="', $entry[ 'url' ], '" target="_blank"><img src="', $entry[ 'image' ], '" alt=""><h4>', $entry[ 'name' ], '</h4><blockquote>', wpautop( $entry[ 'description' ] ), '</blockquote></a><figcaption>', $caption, ' <span>#', $entry[ 'rating' ], $entry[ 'genre' ] ? ' #' . join( ' #', $entry[ 'genre' ] ) : '', '</span></figcaption></figure>';
+						echo '<figure><a href="', $entry[ 'url' ], '" target="_blank"><img src="', $entry[ 'image' ], '" alt=""><h4>', $entry[ 'name' ], '</h4><blockquote>', wpautop( $entry[ 'description' ] ), '</blockquote></a><figcaption>', $caption, ' <span>#', $entry[ 'rating' ], $entry[ 'genre' ] ? ' #' . implode( ' #', $entry[ 'genre' ] ) : '', '</span></figcaption></figure>';
 					}
 					
 					echo '</div></div>';

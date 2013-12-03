@@ -525,7 +525,7 @@ class WebcomicConfig extends Webcomic {
 	public function network_showcase_creators() {
 		$user = wp_get_current_user();
 		?>
-		<input type="text" name="webcomic_creators" id="webcomic_creators" value="<?php echo esc_attr( self::$network[ 'showcase' ] ? join( ', ', self::$network[ 'showcase' ][ 'creators' ] ) : $user->display_name ); ?>" class="regular-text">
+		<input type="text" name="webcomic_creators" id="webcomic_creators" value="<?php echo esc_attr( self::$network[ 'showcase' ] ? implode( ', ', self::$network[ 'showcase' ][ 'creators' ] ) : $user->display_name ); ?>" class="regular-text">
 		<p class="description"><?php _e( 'Enter the names or Twitter @usernames of the creators of this site, separated by commas.', 'webcomic' ); ?></p>
 		<?php
 	}
@@ -1426,7 +1426,7 @@ class WebcomicConfig extends Webcomic {
 					}
 				}
 				
-				if ( $slug = join( '/', $slug ) ) {
+				if ( $slug = implode( '/', $slug ) ) {
 					$collection[ 'slugs' ][ $k ] = $slug;
 				}
 			}
@@ -1616,7 +1616,7 @@ class WebcomicConfig extends Webcomic {
 			}
 		}
 		
-		$slug = join( '/', $slug );
+		$slug = implode( '/', $slug );
 		$slug = $slug ? $slug : self::$config[ 'collections' ][ $collection ][ 'slugs' ][ $fallback ];
 		
 		echo json_encode( array(
