@@ -20,7 +20,7 @@ if ( is_webcomic() ) {
 	global $post;
 	
 	if ( webcomic_prints_available() ) {
-		$prints   = array();
+		$prints = array();
 		$prints[] = WebcomicTag::webcomic_print_form( "domestic", sprintf( __( '%1$s%2$s%%total Domestic', "webcomic" ), __( "%dec.", "webcomic" ), __( "%sep,", "webcomic" ) ) );
 		$prints[] = WebcomicTag::webcomic_print_form( "international", sprintf( __( '%1$s%2$s%%total International', "webcomic" ), __( "%dec.", "webcomic" ), __( "%sep,", "webcomic" ) ) );
 		

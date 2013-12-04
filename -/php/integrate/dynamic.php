@@ -42,14 +42,16 @@
 	<footer class="entry-meta">
 	<?php 
 		the_webcomic_collection();
-		the_webcomic_storylines( '<span class="sep"> | </span>' );
-		the_webcomic_characters( '<span class="sep"> | </span>' );
+		the_webcomic_storylines( "<span class='sep'> | </span>" );
+		the_webcomic_characters( "<span class='sep'> | </span>" );
 		
-		if ( comments_open() ) { ?>
+		if ( comments_open() ) : ?>
+		
 		<span class="sep"> | </span><span class="comments-link"><?php comments_popup_link(); ?></span>
-		<?php }
 		
-		edit_post_link( __( 'Edit', "webcomic" ), '<span class="edit-link">', '</span>' );
+		<?php endif;
+		
+		edit_post_link( __( "Edit", "webcomic" ), "<span class='edit-link'>", "</span>" );
 	?>
 	</footer><!-- .entry-meta -->
 </article><!-- #post-<?php the_ID(); ?> -->
