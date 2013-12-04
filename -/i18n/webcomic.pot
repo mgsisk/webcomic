@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the Webcomic package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Webcomic 4.0.9\n"
+"Project-Id-Version: Webcomic 4.1\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/webcomic\n"
-"POT-Creation-Date: 2013-03-19 00:34:59+00:00\n"
+"POT-Creation-Date: 2013-12-04 13:32:59+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -12,40 +12,44 @@ msgstr ""
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 
-#: -/php/admin.php:86
+#: -/php/admin.php:90
 msgid "Untitled Webcomic"
 msgstr ""
 
-#: -/php/admin.php:141 -/php/legacy.php:319 -/php/legacy.php:604
-#: -/php/legacy.php:902
+#: -/php/admin.php:145 -/php/legacy.php:328 -/php/legacy.php:614
+#: -/php/legacy.php:913
 msgid "%collection-name has updated! %site-url"
 msgstr ""
 
-#: -/php/admin.php:490 -/php/config.php:1422
+#: -/php/admin.php:492 -/php/config.php:1494
 msgid "Thank you for using %s"
 msgstr ""
 
-#: -/php/admin.php:504 -/php/help.php:69
+#: -/php/admin.php:507 -/php/help.php:72
 msgid "Webcomic Showcase"
 msgstr ""
 
-#: -/php/admin.php:547
+#: -/php/admin.php:545
+msgid "Review"
+msgstr ""
+
+#: -/php/admin.php:546
 msgid "Donate"
 msgstr ""
 
-#: -/php/admin.php:550
+#: -/php/admin.php:549
 msgid "Webcomic data will be converted if the plugin is deactivated."
 msgstr ""
 
-#: -/php/admin.php:550
+#: -/php/admin.php:549
 msgid "Webcomic data will be deleted if the plugin is deactivated."
 msgstr ""
 
-#: -/php/admin.php:554
+#: -/php/admin.php:553
 msgid "Webcomic Network data will be purged if the plugin is deactivated."
 msgstr ""
 
-#: -/php/admin.php:572 -/php/config.php:225
+#: -/php/admin.php:572 -/php/config.php:232
 msgid "Settings"
 msgstr ""
 
@@ -53,1092 +57,1099 @@ msgstr ""
 msgid "Support"
 msgstr ""
 
-#: -/php/admin.php:654
+#: -/php/admin.php:658
 msgid "Join the Webcomic Showcase"
 msgstr ""
 
-#: -/php/admin.php:665
+#: -/php/admin.php:669
 msgid "Created by %1$s with %2$s"
 msgstr ""
 
-#: -/php/admin.php:668
+#: -/php/admin.php:672
 msgid "Created by %1$s with %3$s (based on %4$s)"
 msgstr ""
 
-#: -/php/admin.php:683 -/php/config.php:1448
+#: -/php/admin.php:687 -/php/config.php:1521
 msgid "Join the Webcomic Network"
 msgstr ""
 
-#: -/php/admin.php:713
+#: -/php/admin.php:719
 msgid "Number"
 msgstr ""
 
-#: -/php/admin.php:717
+#: -/php/admin.php:723
 msgid "Ratings"
 msgstr ""
 
-#: -/php/admin.php:720 -/php/config.php:535
+#: -/php/admin.php:726 -/php/config.php:555
 msgid "Everyone"
 msgstr ""
 
-#: -/php/admin.php:721 -/php/config.php:536
+#: -/php/admin.php:727 -/php/config.php:556
 msgid "Teen"
 msgstr ""
 
-#: -/php/admin.php:722 -/php/config.php:537
+#: -/php/admin.php:728 -/php/config.php:557
 msgid "Mature"
 msgstr ""
 
-#: -/php/admin.php:723 -/php/config.php:538
+#: -/php/admin.php:729 -/php/config.php:558
 msgid "Adult"
 msgstr ""
 
-#: -/php/admin.php:731
+#: -/php/admin.php:737
 msgid "Genres"
 msgstr ""
 
-#: -/php/admin.php:734 -/php/config.php:557
+#: -/php/admin.php:740 -/php/config.php:578
 msgid "Absurdist"
 msgstr ""
 
-#: -/php/admin.php:735 -/php/config.php:558
+#: -/php/admin.php:741 -/php/config.php:579
 msgid "Adventure"
 msgstr ""
 
-#: -/php/admin.php:736 -/php/config.php:559
+#: -/php/admin.php:742 -/php/config.php:580
 msgid "Comedy"
 msgstr ""
 
-#: -/php/admin.php:737 -/php/config.php:560
+#: -/php/admin.php:743 -/php/config.php:581
 msgid "Drama"
 msgstr ""
 
-#: -/php/admin.php:738 -/php/config.php:561
+#: -/php/admin.php:744 -/php/config.php:582
 msgid "Education"
 msgstr ""
 
-#: -/php/admin.php:739 -/php/config.php:562
+#: -/php/admin.php:745 -/php/config.php:583
 msgid "Experimental"
 msgstr ""
 
-#: -/php/admin.php:740 -/php/config.php:563
+#: -/php/admin.php:746 -/php/config.php:584
 msgid "Erotic"
 msgstr ""
 
-#: -/php/admin.php:741 -/php/config.php:564
+#: -/php/admin.php:747 -/php/config.php:585
 msgid "Fantasy"
 msgstr ""
 
-#: -/php/admin.php:742 -/php/config.php:565
+#: -/php/admin.php:748 -/php/config.php:586
 msgid "Historical"
 msgstr ""
 
-#: -/php/admin.php:743 -/php/config.php:566
+#: -/php/admin.php:749 -/php/config.php:587
 msgid "Horror"
 msgstr ""
 
-#: -/php/admin.php:744 -/php/config.php:567
+#: -/php/admin.php:750 -/php/config.php:588
 msgid "Meta"
 msgstr ""
 
-#: -/php/admin.php:745 -/php/config.php:568
+#: -/php/admin.php:751 -/php/config.php:589
 msgid "Nonfiction"
 msgstr ""
 
-#: -/php/admin.php:746 -/php/config.php:569
+#: -/php/admin.php:752 -/php/config.php:590
 msgid "Philosophical"
 msgstr ""
 
-#: -/php/admin.php:747 -/php/config.php:570
+#: -/php/admin.php:753 -/php/config.php:591
 msgid "Political"
 msgstr ""
 
-#: -/php/admin.php:748 -/php/config.php:571
+#: -/php/admin.php:754 -/php/config.php:592
 msgid "Pulp"
 msgstr ""
 
-#: -/php/admin.php:749 -/php/config.php:572
+#: -/php/admin.php:755 -/php/config.php:593
 msgid "Religious"
 msgstr ""
 
-#: -/php/admin.php:750 -/php/config.php:573
+#: -/php/admin.php:756 -/php/config.php:594
 msgid "Romance"
 msgstr ""
 
-#: -/php/admin.php:751 -/php/config.php:574
+#: -/php/admin.php:757 -/php/config.php:595
 msgid "Saga"
 msgstr ""
 
-#: -/php/admin.php:752 -/php/config.php:575
+#: -/php/admin.php:758 -/php/config.php:596
 msgid "Satire"
 msgstr ""
 
-#: -/php/admin.php:753 -/php/config.php:576
+#: -/php/admin.php:759 -/php/config.php:597
 msgid "Science Fiction"
 msgstr ""
 
-#: -/php/admin.php:754 -/php/config.php:577
+#: -/php/admin.php:760 -/php/config.php:598
 msgid "Suspense"
 msgstr ""
 
-#: -/php/admin.php:755 -/php/config.php:578
+#: -/php/admin.php:761 -/php/config.php:599
 msgid "Thriller"
 msgstr ""
 
-#: -/php/admin.php:756 -/php/config.php:579
+#: -/php/admin.php:762 -/php/config.php:600
 msgid "Tragedy"
 msgstr ""
 
-#: -/php/admin.php:757 -/php/config.php:580
+#: -/php/admin.php:763 -/php/config.php:601
 msgid "Western"
 msgstr ""
 
-#: -/php/commerce.php:40
-msgid "Webcomic could not empty the log file. Please try again."
-msgstr ""
-
-#: -/php/commerce.php:52 -/php/posts.php:63
+#: -/php/commerce.php:46 -/php/posts.php:67
 msgid "Webcomic Commerce"
 msgstr ""
 
-#: -/php/commerce.php:66
+#: -/php/commerce.php:61
 msgid "Transaction"
 msgstr ""
 
-#: -/php/commerce.php:67
+#: -/php/commerce.php:62
 msgid "Item"
 msgstr ""
 
-#: -/php/commerce.php:68
+#: -/php/commerce.php:63
 msgid "Message"
 msgstr ""
 
-#: -/php/commerce.php:69 -/php/media.php:572 -/php/media.php:582
-#: -/php/transcripts.php:420
+#: -/php/commerce.php:64 -/php/media.php:601 -/php/media.php:611
+#: -/php/transcripts.php:437
 msgid "Date"
 msgstr ""
 
-#: -/php/commerce.php:87
-msgid "- Shopping Cart -"
-msgstr ""
-
-#: -/php/commerce.php:95
+#: -/php/commerce.php:83
 msgid "Y/m/d g:i:s A"
 msgstr ""
 
-#: -/php/commerce.php:95
+#: -/php/commerce.php:83
 msgid "Y/m/d"
 msgstr ""
 
-#: -/php/commerce.php:99
-msgid "Webcomic hasn't logged any commerce activity."
+#: -/php/commerce.php:87
+msgid "No commerce activity has been logged."
 msgstr ""
 
-#: -/php/commerce.php:108
+#: -/php/commerce.php:96
 msgid "Empty Log"
 msgstr ""
 
-#: -/php/config.php:94
+#: -/php/config.php:99
 msgid "Network"
 msgstr ""
 
-#: -/php/config.php:95
+#: -/php/config.php:100
 msgid "Integrate"
 msgstr ""
 
-#: -/php/config.php:96
+#: -/php/config.php:101
 msgid "Navigate"
 msgstr ""
 
-#: -/php/config.php:97
+#: -/php/config.php:102
 msgid "Uninstall"
 msgstr ""
 
-#: -/php/config.php:99 -/php/help.php:123 -/php/legacy.php:53
+#: -/php/config.php:104 -/php/help.php:126 -/php/legacy.php:58
 msgid "Collections"
 msgstr ""
 
-#: -/php/config.php:101 -/php/help.php:81
+#: -/php/config.php:106 -/php/help.php:84
 msgid "Additional Image Sizes"
 msgstr ""
 
-#: -/php/config.php:104
+#: -/php/config.php:109
 msgid "API Key"
 msgstr ""
 
-#: -/php/config.php:104
+#: -/php/config.php:109
 msgid "Terms of Service"
 msgstr ""
 
-#: -/php/config.php:107
+#: -/php/config.php:112
 msgid "Showcase"
 msgstr ""
 
-#: -/php/config.php:108
+#: -/php/config.php:113
 msgid "Activate"
 msgstr ""
 
-#: -/php/config.php:109 -/php/config.php:121 -/php/config.php:344
-#: -/php/config.php:399 -/php/tags.php:2048 -/php/transcripts.php:416
+#: -/php/config.php:114 -/php/config.php:126 -/php/config.php:356
+#: -/php/config.php:412 -/php/tags.php:2147 -/php/transcripts.php:433
 msgid "Name"
 msgstr ""
 
-#: -/php/config.php:110 -/php/transcripts.php:418
+#: -/php/config.php:115 -/php/transcripts.php:435
 msgid "URL"
 msgstr ""
 
-#: -/php/config.php:111
+#: -/php/config.php:116
 msgid "Creators"
 msgstr ""
 
-#: -/php/config.php:112 -/php/config.php:123
+#: -/php/config.php:117 -/php/config.php:128
 msgid "Description"
 msgstr ""
 
-#: -/php/config.php:113
+#: -/php/config.php:118
 msgid "Genre"
 msgstr ""
 
-#: -/php/config.php:114
+#: -/php/config.php:119
 msgid "Rating"
 msgstr ""
 
-#: -/php/config.php:115
+#: -/php/config.php:120
 msgid "Billboard"
 msgstr ""
 
-#: -/php/config.php:116
+#: -/php/config.php:121
 msgid "Testimonial"
 msgstr ""
 
-#: -/php/config.php:120
+#: -/php/config.php:125
 msgid "General"
 msgstr ""
 
-#: -/php/config.php:122 -/php/media.php:571 -/php/media.php:581
+#: -/php/config.php:127 -/php/media.php:600 -/php/media.php:610
 msgid "Slug"
 msgstr ""
 
-#: -/php/config.php:124
+#: -/php/config.php:129
 msgid "Poster"
 msgstr ""
 
-#: -/php/config.php:125
+#: -/php/config.php:130
 msgid "Theme"
 msgstr ""
 
-#: -/php/config.php:126
+#: -/php/config.php:131
 msgid "Buffer"
 msgstr ""
 
-#: -/php/config.php:127
+#: -/php/config.php:132
 msgid "Feeds"
 msgstr ""
 
-#: -/php/config.php:129 -/php/transcripts.php:330
+#: -/php/config.php:134 -/php/transcripts.php:343
 msgid "Transcripts"
 msgstr ""
 
-#: -/php/config.php:130
+#: -/php/config.php:135
 msgid "Default"
 msgstr ""
 
-#: -/php/config.php:131
+#: -/php/config.php:136
 msgid "Permission"
 msgstr ""
 
-#: -/php/config.php:132
+#: -/php/config.php:137
 msgid "Notification"
 msgstr ""
 
-#: -/php/config.php:133 -/php/transcripts.php:348 webcomic.php:311
+#: -/php/config.php:138 -/php/transcripts.php:362 webcomic.php:324
 msgid "Languages"
 msgstr ""
 
-#: -/php/config.php:135
+#: -/php/config.php:140
 msgid "Commerce"
 msgstr ""
 
-#: -/php/config.php:136
+#: -/php/config.php:141
 msgid "Business Email"
 msgstr ""
 
-#: -/php/config.php:137 -/php/integrate/the_content.php:34 -/php/posts.php:288
+#: -/php/config.php:142 -/php/integrate/the_content.php:35 -/php/posts.php:296
 msgid "Prints"
 msgstr ""
 
-#: -/php/config.php:138
+#: -/php/config.php:143
 msgid "Sales"
 msgstr ""
 
-#: -/php/config.php:139
+#: -/php/config.php:144
 msgid "Prices"
 msgstr ""
 
-#: -/php/config.php:140 -/php/posts.php:443
+#: -/php/config.php:145 -/php/posts.php:462
 msgid "Shipping"
 msgstr ""
 
-#: -/php/config.php:141
+#: -/php/config.php:146
 msgid "Donations"
 msgstr ""
 
-#: -/php/config.php:142
+#: -/php/config.php:147
 msgid "Currency"
 msgstr ""
 
-#: -/php/config.php:144
+#: -/php/config.php:149
 msgid "Access"
 msgstr ""
 
-#: -/php/config.php:145
+#: -/php/config.php:150
 msgid "Age"
 msgstr ""
 
-#: -/php/config.php:146
+#: -/php/config.php:151
 msgid "Role"
 msgstr ""
 
-#: -/php/config.php:148
+#: -/php/config.php:153
 msgid "Posts"
 msgstr ""
 
-#: -/php/config.php:149
+#: -/php/config.php:154
 msgid "Content"
 msgstr ""
 
-#: -/php/config.php:150
+#: -/php/config.php:155
 msgid "Discussion"
 msgstr ""
 
-#: -/php/config.php:151
+#: -/php/config.php:156
 msgid "Miscellanea"
 msgstr ""
 
-#: -/php/config.php:152
+#: -/php/config.php:157
 msgid "Taxonomies"
 msgstr ""
 
-#: -/php/config.php:154
+#: -/php/config.php:159
 msgid "Permalinks"
 msgstr ""
 
-#: -/php/config.php:155
+#: -/php/config.php:160 -/php/widgets.php:1036 -/php/widgets.php:1165
+#: -/php/widgets.php:1289 -/php/widgets.php:1538 -/php/widgets.php:1712
 msgid "Archive"
 msgstr ""
 
-#: -/php/config.php:156 -/php/config.php:337 -/php/taxonomy.php:351
+#: -/php/config.php:161 -/php/config.php:349 -/php/taxonomy.php:363
 msgid "Webcomics"
 msgstr ""
 
-#: -/php/config.php:157 -/php/config.php:338 -/php/legacy.php:58
-#: -/php/posts.php:407 webcomic.php:233
+#: -/php/config.php:162 -/php/config.php:350 -/php/legacy.php:63
+#: -/php/posts.php:420 -/php/widgets.php:198 webcomic.php:246
 msgid "Storylines"
 msgstr ""
 
-#: -/php/config.php:158 -/php/config.php:339 -/php/posts.php:406
-#: webcomic.php:259
+#: -/php/config.php:163 -/php/config.php:351 -/php/posts.php:419
+#: -/php/widgets.php:199 webcomic.php:272
 msgid "Characters"
 msgstr ""
 
-#: -/php/config.php:160
+#: -/php/config.php:165
 msgid "Twitter"
 msgstr ""
 
-#: -/php/config.php:161
+#: -/php/config.php:166
 msgid "Authorized Account"
 msgstr ""
 
-#: -/php/config.php:162
+#: -/php/config.php:167
 msgid "Consumer Key"
 msgstr ""
 
-#: -/php/config.php:163
+#: -/php/config.php:168
 msgid "Consumer Secret"
 msgstr ""
 
-#: -/php/config.php:164
+#: -/php/config.php:169
 msgid "Tweet Format"
 msgstr ""
 
-#: -/php/config.php:165
+#: -/php/config.php:170
 msgid "Upload Media"
 msgstr ""
 
-#: -/php/config.php:182
+#: -/php/config.php:188
 msgid "The name <b>%s</b> is reserved by WordPress."
 msgstr ""
 
-#: -/php/config.php:184
+#: -/php/config.php:190
 msgid "A size with the name <b>%s</b> already exists."
 msgstr ""
 
-#: -/php/config.php:221
+#: -/php/config.php:228
 msgid "Webcomic Settings"
 msgstr ""
 
-#. #-#-#-#-#  plugin.pot (Webcomic 4.0.9)  #-#-#-#-#
+#. #-#-#-#-#  plugin.pot (Webcomic 4.1)  #-#-#-#-#
 #. Plugin Name of the plugin/theme
-#: -/php/config.php:221 -/php/transcripts.php:347 -/php/users.php:46
+#: -/php/config.php:228 -/php/transcripts.php:361 -/php/users.php:51
 msgid "Webcomic"
 msgstr ""
 
-#: -/php/config.php:222
+#: -/php/config.php:229
 msgid "Webcomic Network"
 msgstr ""
 
-#: -/php/config.php:225
+#: -/php/config.php:232
 msgid "%s Settings"
 msgstr ""
 
-#: -/php/config.php:290
+#: -/php/config.php:298
 msgid "Access the Webcomic Network"
 msgstr ""
 
-#: -/php/config.php:300
+#: -/php/config.php:309
 msgid "Attempt to integrate webcomics into the site automatically"
 msgstr ""
 
-#: -/php/config.php:310
-msgid "Enable dynamic webcomic navigation"
+#: -/php/config.php:320
+msgid "Dynamic webcomic navigation"
 msgstr ""
 
-#: -/php/config.php:311 -/php/widgets.php:299
-msgid "Enable touch gestures for webcomic navigation"
-msgstr ""
-
-#: -/php/config.php:312
-msgid "Enable keyboard shortcuts for webcomic navigation"
+#: -/php/config.php:321
+msgid "Touch gestures for webcomic navigation"
 msgstr ""
 
 #: -/php/config.php:322
+msgid "Keyboard shortcuts for webcomic navigation"
+msgstr ""
+
+#: -/php/config.php:333
 msgid "Delete Webcomic data when the plugin is deactivated"
 msgstr ""
 
-#: -/php/config.php:323
+#: -/php/config.php:334
 msgid ""
 "Save webcomics and transcripts as posts, storylines as categories, and "
 "characters and languages as tags"
 msgstr ""
 
-#: -/php/config.php:324
+#: -/php/config.php:335
 msgid "This cannot be undone. Uploaded media will not be deleted."
 msgstr ""
 
-#: -/php/config.php:336 -/php/media.php:558 -/php/media.php:655
-#: -/php/transcripts.php:383 -/php/widgets.php:492
+#: -/php/config.php:348 -/php/media.php:587 -/php/media.php:685
+#: -/php/transcripts.php:399 -/php/widgets.php:182 -/php/widgets.php:538
+#: -/php/widgets.php:645 -/php/widgets.php:758 -/php/widgets.php:909
+#: -/php/widgets.php:1043 -/php/widgets.php:1172 -/php/widgets.php:1547
+#: -/php/widgets.php:1721 -/php/widgets.php:1869
 msgid "Collection"
 msgstr ""
 
-#: -/php/config.php:345
+#: -/php/config.php:357
 msgid "Add Collection"
 msgstr ""
 
-#: -/php/config.php:378 -/php/config.php:443 -/php/help.php:161
-#: -/php/help.php:215
+#: -/php/config.php:390 -/php/config.php:456 -/php/help.php:164
+#: -/php/help.php:218
 msgid "Bulk Actions"
 msgstr ""
 
-#: -/php/config.php:379
+#: -/php/config.php:391
 msgid "Delete and Save"
 msgstr ""
 
-#: -/php/config.php:380
+#: -/php/config.php:392
 msgid "Delete Permanently"
 msgstr ""
 
-#: -/php/config.php:400
+#: -/php/config.php:413
 msgid "Width"
 msgstr ""
 
-#: -/php/config.php:401
+#: -/php/config.php:414
 msgid "Height"
 msgstr ""
 
-#: -/php/config.php:402
+#: -/php/config.php:415
 msgid "Crop"
 msgstr ""
 
-#: -/php/config.php:411
+#: -/php/config.php:424
 msgid "New Size"
 msgstr ""
 
-#: -/php/config.php:444
+#: -/php/config.php:457
 msgid "Delete"
 msgstr ""
 
-#: -/php/config.php:459
+#: -/php/config.php:473
 msgid "The API key is specific to your site. Never share your API key."
 msgstr ""
 
-#: -/php/config.php:466 -/php/help.php:831
+#: -/php/config.php:480 -/php/help.php:874
 msgid ""
 "Your use of the Webcomic Network is governed by the <a href=\"%s\">Webcomic "
 "Network Terms of Service</a>"
 msgstr ""
 
-#: -/php/config.php:477
+#: -/php/config.php:492
 msgid "Include this site in the Webcomic Showcase"
 msgstr ""
 
-#: -/php/config.php:488
+#: -/php/config.php:504
 msgid "The name is how your site is labeled in the showcase."
 msgstr ""
 
-#: -/php/config.php:499
+#: -/php/config.php:516
 msgid "Enter the address you want your showcase entry to link to."
 msgstr ""
 
-#: -/php/config.php:511
+#: -/php/config.php:529
 msgid ""
 "Enter the names or Twitter @usernames of the creators of this site, "
 "separated by commas."
 msgstr ""
 
-#: -/php/config.php:522
+#: -/php/config.php:541
 msgid ""
 "The description is displayed with your showcase entry. 160 characters or "
 "less."
 msgstr ""
 
-#: -/php/config.php:544
+#: -/php/config.php:564
 msgid "Select the rating that most fits the intended audience of your site."
 msgstr ""
 
-#: -/php/config.php:586
+#: -/php/config.php:607
 msgid ""
 "Hold <code>CTRL</code>, <code>Command</code>, or <code>Shift</code> to "
 "select multiple genres (up to 5)."
 msgstr ""
 
-#: -/php/config.php:598
+#: -/php/config.php:620
 msgid ""
-"The billboard is a representative image for your site. It should be "
+"The billboard is a representative image for your site. It must be "
 "640&times;360 pixels in size and will be hotlinked directly from your site."
 msgstr ""
 
-#: -/php/config.php:609
+#: -/php/config.php:632
 msgid "If provided, the testimonial will be displayed on %s"
 msgstr ""
 
-#: -/php/config.php:620
+#: -/php/config.php:644
 msgid "The name is how it appears on your site."
 msgstr ""
 
-#: -/php/config.php:631
+#: -/php/config.php:656
 msgid ""
 "The The \"slug\" is the URL-friendly version of the name. It is usually all "
 "lowercase and contains only letters, numbers, and hyphens."
 msgstr ""
 
-#: -/php/config.php:642
+#: -/php/config.php:668
 msgid ""
 "The description is not prominent by default; it may be used in various ways, "
 "however."
 msgstr ""
 
-#: -/php/config.php:654
+#: -/php/config.php:681
 msgid ""
 "The poster is a representative image that can be displayed on your site. "
 "Don't forget to <b>Save Changes</b> after updating the poster."
 msgstr ""
 
-#: -/php/config.php:665
+#: -/php/config.php:693
 msgid "(current theme)"
 msgstr ""
 
-#: -/php/config.php:672
+#: -/php/config.php:700
 msgid "The theme will be used for pages related to this collection."
 msgstr ""
 
-#: -/php/config.php:687
+#: -/php/config.php:716
 msgid "full"
 msgstr ""
 
-#: -/php/config.php:689
+#: -/php/config.php:718
 msgid "Include webcomics in the main syndication feed"
 msgstr ""
 
-#: -/php/config.php:691
+#: -/php/config.php:720
 msgid "Show %s previews in syndication feeds"
 msgstr ""
 
-#: -/php/config.php:703
+#: -/php/config.php:733
 msgid ""
 "<label>Start sending e-mail reminders to %s</label> <label>%s days before "
 "the buffer runs out</label>"
 msgstr ""
 
-#: -/php/config.php:715
+#: -/php/config.php:746
 msgid "Allow people to transcribe new webcomics"
 msgstr ""
 
-#: -/php/config.php:724
+#: -/php/config.php:756
 msgid "%s may transcribe webcomics"
 msgstr ""
 
-#: -/php/config.php:726
+#: -/php/config.php:758
 msgid "Anyone"
 msgstr ""
 
-#: -/php/config.php:727
+#: -/php/config.php:759
 msgid "Self-identified users"
 msgstr ""
 
-#: -/php/config.php:728
+#: -/php/config.php:760
 msgid "Registered users"
 msgstr ""
 
-#: -/php/config.php:740
+#: -/php/config.php:773
 msgid "Send email notifications to %s whenever a transcript is submitted"
 msgstr ""
 
-#: -/php/config.php:752
+#: -/php/config.php:786
 msgid "Transcript Languages"
 msgstr ""
 
-#: -/php/config.php:753 -/php/config.php:938
+#: -/php/config.php:787 -/php/config.php:981
 msgid "(any)"
 msgstr ""
 
-#: -/php/config.php:763
+#: -/php/config.php:797
 msgid "Manage Languages"
 msgstr ""
 
-#: -/php/config.php:764
+#: -/php/config.php:798
 msgid ""
 "Hold <code>CTRL</code>, <code>Command</code>, or <code>Shift</code> to "
 "select multiple languages."
 msgstr ""
 
-#: -/php/config.php:775
+#: -/php/config.php:810
 msgid "Get a PayPal Account"
 msgstr ""
 
-#: -/php/config.php:776
+#: -/php/config.php:811
 msgid "All transactions will use this PayPal account."
 msgstr ""
 
-#: -/php/config.php:786
+#: -/php/config.php:822
 msgid "Sell prints of new webcomics"
 msgstr ""
 
-#: -/php/config.php:787
+#: -/php/config.php:823
 msgid "Sell an original, traditional-media print of new webcomics"
 msgstr ""
 
-#: -/php/config.php:798
+#: -/php/config.php:835
 msgid "Sell prints using the %s method"
 msgstr ""
 
-#: -/php/config.php:800
+#: -/php/config.php:837
 msgid "single item"
 msgstr ""
 
-#: -/php/config.php:801
+#: -/php/config.php:838
 msgid "shopping cart"
 msgstr ""
 
-#: -/php/config.php:817 -/php/config.php:840 -/php/posts.php:450
+#: -/php/config.php:855 -/php/config.php:879 -/php/posts.php:469
+#: -/php/widgets.php:356
 msgid "Domestic"
 msgstr ""
 
-#: -/php/config.php:822 -/php/config.php:845 -/php/posts.php:471
+#: -/php/config.php:860 -/php/config.php:884 -/php/posts.php:490
+#: -/php/widgets.php:357
 msgid "International"
 msgstr ""
 
-#: -/php/config.php:827 -/php/config.php:850 -/php/posts.php:296
-#: -/php/posts.php:492
+#: -/php/config.php:865 -/php/config.php:889 -/php/posts.php:304
+#: -/php/posts.php:511 -/php/widgets.php:358
 msgid "Original"
 msgstr ""
 
-#: -/php/config.php:862
+#: -/php/config.php:902
 msgid "Use zero to allow donors to specify their own amount."
 msgstr ""
 
-#: -/php/config.php:872
+#: -/php/config.php:913
 msgid "Australian Dollar"
 msgstr ""
 
-#: -/php/config.php:873
+#: -/php/config.php:914
 msgid "Brazilian Real"
 msgstr ""
 
-#: -/php/config.php:874
+#: -/php/config.php:915
 msgid "Canadian Dollar"
 msgstr ""
 
-#: -/php/config.php:875
+#: -/php/config.php:916
 msgid "Swiss Franc"
 msgstr ""
 
-#: -/php/config.php:876
+#: -/php/config.php:917
 msgid "Czech Koruna"
 msgstr ""
 
-#: -/php/config.php:877
+#: -/php/config.php:918
 msgid "Danish Krone"
 msgstr ""
 
-#: -/php/config.php:878
+#: -/php/config.php:919
 msgid "Euro"
 msgstr ""
 
-#: -/php/config.php:879
+#: -/php/config.php:920
 msgid "Pound Sterling"
 msgstr ""
 
-#: -/php/config.php:880
+#: -/php/config.php:921
 msgid "Hong Kong Dollar"
 msgstr ""
 
-#: -/php/config.php:881
+#: -/php/config.php:922
 msgid "Hungarian Forint"
 msgstr ""
 
-#: -/php/config.php:882
+#: -/php/config.php:923
 msgid "Israeli New Sheqel"
 msgstr ""
 
-#: -/php/config.php:883
+#: -/php/config.php:924
 msgid "Japanese Yen"
 msgstr ""
 
-#: -/php/config.php:884
+#: -/php/config.php:925
 msgid "Mexican Peso"
 msgstr ""
 
-#: -/php/config.php:885
+#: -/php/config.php:926
 msgid "Malaysian Ringgit"
 msgstr ""
 
-#: -/php/config.php:886
+#: -/php/config.php:927
 msgid "Norwegian Krone"
 msgstr ""
 
-#: -/php/config.php:887
+#: -/php/config.php:928
 msgid "New Zealand Dollar"
 msgstr ""
 
-#: -/php/config.php:888
+#: -/php/config.php:929
 msgid "Philippine Peso"
 msgstr ""
 
-#: -/php/config.php:889
+#: -/php/config.php:930
 msgid "Polish Zloty"
 msgstr ""
 
-#: -/php/config.php:890
+#: -/php/config.php:931
 msgid "Swedish Krona"
 msgstr ""
 
-#: -/php/config.php:891
+#: -/php/config.php:932
 msgid "Singapore Dollar"
 msgstr ""
 
-#: -/php/config.php:892
+#: -/php/config.php:933
 msgid "Thai Baht"
 msgstr ""
 
-#: -/php/config.php:893
+#: -/php/config.php:934
 msgid "Turkish Lira"
 msgstr ""
 
-#: -/php/config.php:894
+#: -/php/config.php:935
 msgid "Taiwan New Dollar"
 msgstr ""
 
-#: -/php/config.php:895
+#: -/php/config.php:936
 msgid "U.S. Dollar"
 msgstr ""
 
-#: -/php/config.php:907
+#: -/php/config.php:948
 msgid "All transactions will use this currency."
 msgstr ""
 
-#: -/php/config.php:920
+#: -/php/config.php:962
 msgid ""
 "People must be at least %s years or older to view webcomics in this "
 "collection"
 msgstr ""
 
-#: -/php/config.php:934
+#: -/php/config.php:977
 msgid ""
 "People must be registered and logged in to view webcomics in this collection"
 msgstr ""
 
-#: -/php/config.php:937
+#: -/php/config.php:980
 msgid "Allowed Roles"
 msgstr ""
 
-#: -/php/config.php:948
+#: -/php/config.php:991
 msgid ""
 "Hold <code>CTRL</code>, <code>Command</code>, or <code>Shift</code> to "
 "select multiple roles."
 msgstr ""
 
-#: -/php/config.php:959
-msgid "Enable post titles"
+#: -/php/config.php:1003
+msgid "Post titles"
 msgstr ""
 
-#: -/php/config.php:960
-msgid "Enable post excerpts"
+#: -/php/config.php:1004
+msgid "Post excerpts"
 msgstr ""
 
-#: -/php/config.php:961
-msgid "Enable the post editor"
+#: -/php/config.php:1005
+msgid "Post editor"
 msgstr ""
 
-#: -/php/config.php:962
-msgid "Enable featured images"
+#: -/php/config.php:1006
+msgid "Featured images"
 msgstr ""
 
-#: -/php/config.php:972
-msgid "Enable comments"
+#: -/php/config.php:1017
+msgid "Comments"
 msgstr ""
 
-#: -/php/config.php:973
-msgid "Enable trackbacks"
+#: -/php/config.php:1018
+msgid "Trackbacks"
 msgstr ""
 
-#: -/php/config.php:983
-msgid "Enable revisions"
+#: -/php/config.php:1029
+msgid "Revisions"
 msgstr ""
 
-#: -/php/config.php:984
-msgid "Enable custom fields"
+#: -/php/config.php:1030
+msgid "Custom fields"
 msgstr ""
 
-#: -/php/config.php:985
-msgid "Enable post formats"
+#: -/php/config.php:1031
+msgid "Post formats"
 msgstr ""
 
-#: -/php/config.php:1104
+#: -/php/config.php:1160
 msgid "Upload media with tweet"
 msgstr ""
 
-#: -/php/config.php:1132
+#: -/php/config.php:1191
 msgid "Untitled Webcomic %d"
 msgstr ""
 
-#: -/php/config.php:1151
+#: -/php/config.php:1210
 msgid "Added <b>%s</b>"
 msgstr ""
 
-#: -/php/config.php:1185
+#: -/php/config.php:1246
 msgid "Deleted %s collection"
 msgid_plural "Deleted %s collections"
 msgstr[0] ""
 msgstr[1] ""
 
-#: -/php/config.php:1209
+#: -/php/config.php:1270
 msgid ""
 "<b>Settings saved.</b> Your information has been purged from the Webcomic "
 "Network."
 msgstr ""
 
-#: -/php/config.php:1260 -/php/config.php:1393
+#: -/php/config.php:1321 -/php/config.php:1464
 msgid "Settings saved."
 msgstr ""
 
-#: -/php/config.php:1272
+#: -/php/config.php:1333
 msgid ""
 "<b>Welcome to the Webcomic Network!</b> You can configure your network "
 "settings below."
 msgstr ""
 
-#: -/php/config.php:1409
+#: -/php/config.php:1481
 msgid "Collection ID"
 msgstr ""
 
-#: -/php/config.php:1449
+#: -/php/config.php:1522
 msgid "Leave the Webcomic Network"
 msgstr ""
 
-#: -/php/config.php:1449 -/php/legacy.php:232
+#: -/php/config.php:1522 -/php/legacy.php:240
 msgid "Not Interested"
 msgstr ""
 
-#: -/php/config.php:1464
+#: -/php/config.php:1538
 msgid ""
 "These URL's won't work unless you <a href='%s'>change the permalink setting</"
 "a> to something other than <b>Default</b>."
 msgstr ""
 
-#: -/php/config.php:1488
+#: -/php/config.php:1568
+msgid "Images must be 640&times;360 pixels in size."
+msgstr ""
+
+#: -/php/config.php:1575
 msgid "Select a Billboard"
 msgstr ""
 
-#: -/php/config.php:1488 -/php/config.php:1505 -/php/taxonomy.php:405
+#: -/php/config.php:1575 -/php/config.php:1592 -/php/taxonomy.php:419
+#: -/php/widgets.php:258 -/php/widgets.php:428 -/php/widgets.php:815
+#: -/php/widgets.php:1434 -/php/widgets.php:1608 -/php/widgets.php:1782
+#: -/php/widgets.php:1930 -/php/widgets.php:2108
 msgid "Update"
 msgstr ""
 
-#: -/php/config.php:1488 -/php/config.php:1505 -/php/taxonomy.php:405
+#: -/php/config.php:1575 -/php/config.php:1592 -/php/taxonomy.php:419
+#: -/php/widgets.php:258 -/php/widgets.php:428 -/php/widgets.php:815
+#: -/php/widgets.php:1434 -/php/widgets.php:1608 -/php/widgets.php:1782
+#: -/php/widgets.php:1930 -/php/widgets.php:2108
 msgid "Change"
 msgstr ""
 
-#: -/php/config.php:1488 -/php/config.php:1505 -/php/taxonomy.php:405
+#: -/php/config.php:1575 -/php/config.php:1592 -/php/taxonomy.php:419
 msgid "Select"
 msgstr ""
 
-#: -/php/config.php:1491 -/php/config.php:1508 -/php/taxonomy.php:408
+#: -/php/config.php:1578 -/php/config.php:1595 -/php/taxonomy.php:422
+#: -/php/widgets.php:261 -/php/widgets.php:431 -/php/widgets.php:818
+#: -/php/widgets.php:1437 -/php/widgets.php:1611 -/php/widgets.php:1785
+#: -/php/widgets.php:1933 -/php/widgets.php:2111
 msgid "Remove"
 msgstr ""
 
-#: -/php/config.php:1505
+#: -/php/config.php:1592
 msgid "Select a Poster"
 msgstr ""
 
-#: -/php/config.php:1579
+#: -/php/config.php:1669
 msgid "Revoke Access"
 msgstr ""
 
-#: -/php/config.php:1593
+#: -/php/config.php:1683
 msgid "<p class=\"description\">Your credentials could not be verified.</p>"
 msgstr ""
 
-#: -/php/config.php:1593
+#: -/php/config.php:1683
 msgid "Sign in with Twitter"
 msgstr ""
 
-#: -/php/config.php:1595
+#: -/php/config.php:1685
 msgid ""
-"Validation error. Please ensure your <a href=\"https://dev.twitter.com/apps/"
+"Validation error. Please ensure your <a href=\"http://dev.twitter.com/apps/"
 "new\" target=\"_blank\">Twitter Application</a> <b>consumer key</b> and "
 "<b>consumer secret</b> are entered correctly."
 msgstr ""
 
-#: -/php/config.php:1599
+#: -/php/config.php:1689
 msgid ""
-"Please enter your <a href=\"https://dev.twitter.com/apps/new\" target="
-"\"_blank\">Twitter Application</a> <b>consumer key</b> and <b>consumer "
-"secret</b> below."
+"Please enter your <a href=\"http://dev.twitter.com/apps/new\" target=\"_blank"
+"\">Twitter Application</a> <b>consumer key</b> and <b>consumer secret</b> "
+"below."
 msgstr ""
 
-#: -/php/help.php:75 -/php/pages.php:45 -/php/pages.php:118
-#: -/php/pages.php:148 -/php/pages.php:212
+#: -/php/help.php:78 -/php/pages.php:49 -/php/pages.php:124
+#: -/php/pages.php:155 -/php/pages.php:222
 msgid "Webcomic Collection"
 msgstr ""
 
-#: -/php/help.php:87 -/php/help.php:93 -/php/help.php:99 -/php/help.php:105
-#: -/php/help.php:111 -/php/help.php:129 -/php/help.php:143 -/php/help.php:197
-#: -/php/help.php:263 -/php/help.php:275 -/php/help.php:287
+#: -/php/help.php:90 -/php/help.php:96 -/php/help.php:102 -/php/help.php:108
+#: -/php/help.php:114 -/php/help.php:132 -/php/help.php:146 -/php/help.php:200
+#: -/php/help.php:266 -/php/help.php:278 -/php/help.php:290
 msgid "Overview"
 msgstr ""
 
-#: -/php/help.php:117 -/php/help.php:299
+#: -/php/help.php:120 -/php/help.php:302
 msgid "General Settings"
 msgstr ""
 
-#: -/php/help.php:136
+#: -/php/help.php:139
 msgid "Showcase Settings"
 msgstr ""
 
-#: -/php/help.php:149 -/php/help.php:203
+#: -/php/help.php:152 -/php/help.php:206
 msgid "Screen Content"
 msgstr ""
 
-#: -/php/help.php:155 -/php/help.php:209
+#: -/php/help.php:158 -/php/help.php:212
 msgid "Available Actions"
 msgstr ""
 
-#: -/php/help.php:167 -/php/help.php:221
+#: -/php/help.php:170 -/php/help.php:224
 msgid "Customizing This Display"
 msgstr ""
 
-#: -/php/help.php:173
+#: -/php/help.php:176
 msgid "Transcript Editor"
 msgstr ""
 
-#: -/php/help.php:179 -/php/help.php:239
+#: -/php/help.php:182 -/php/help.php:242
 msgid "Publish Box"
 msgstr ""
 
-#: -/php/help.php:185 -/php/transcripts.php:68
+#: -/php/help.php:188 -/php/transcripts.php:73
 msgid "Parent Webcomic"
 msgstr ""
 
-#: -/php/help.php:191 -/php/transcripts.php:69
+#: -/php/help.php:194 -/php/transcripts.php:74
 msgid "Transcript Authors"
 msgstr ""
 
-#: -/php/help.php:227
+#: -/php/help.php:230
 msgid "Media Management"
 msgstr ""
 
-#: -/php/help.php:233
+#: -/php/help.php:236
 msgid "Title and Post Editor"
 msgstr ""
 
-#: -/php/help.php:245 -/php/help.php:311
+#: -/php/help.php:248 -/php/help.php:314
 msgid "Commerce Settings"
 msgstr ""
 
-#: -/php/help.php:251
+#: -/php/help.php:254
 msgid "Transcripts Settings"
 msgstr ""
 
-#: -/php/help.php:257
+#: -/php/help.php:260
 msgid "Discussion Settings"
 msgstr ""
 
-#: -/php/help.php:269
+#: -/php/help.php:272
 msgid "Adding Storylines"
 msgstr ""
 
-#: -/php/help.php:281
+#: -/php/help.php:284
 msgid "Adding Characters"
 msgstr ""
 
-#: -/php/help.php:293
+#: -/php/help.php:296
 msgid "Adding Languages"
 msgstr ""
 
-#: -/php/help.php:305
+#: -/php/help.php:308
 msgid "Transcript Settings"
 msgstr ""
 
-#: -/php/help.php:317
+#: -/php/help.php:320
 msgid "Access Settings"
 msgstr ""
 
-#: -/php/help.php:323
+#: -/php/help.php:326
 msgid "Post Settings"
 msgstr ""
 
-#: -/php/help.php:329
+#: -/php/help.php:332
 msgid "Permalink Settings"
 msgstr ""
 
-#: -/php/help.php:335
+#: -/php/help.php:338
 msgid "Twitter Settings"
 msgstr ""
 
-#: -/php/help.php:347
+#: -/php/help.php:351
 msgid "For more information:"
 msgstr ""
 
-#: -/php/help.php:348
+#: -/php/help.php:352
 msgid "Beginner's Guide"
 msgstr ""
 
-#: -/php/help.php:349
-msgid "Video Tutorials"
-msgstr ""
-
-#: -/php/help.php:350
+#: -/php/help.php:353
 msgid "Support Forum"
 msgstr ""
 
-#: -/php/help.php:351
+#: -/php/help.php:354
 msgid "Issue Tracker"
 msgstr ""
 
-#: -/php/help.php:353
+#: -/php/help.php:356
 msgid "Email Support"
 msgstr ""
 
-#: -/php/help.php:362
+#: -/php/help.php:366
 msgid ""
 "The <b>Webcomic Showcase</b> highlights other Webcomic-powered sites that "
 "have opted to share their information via the showcase. To view the showcase "
@@ -1149,44 +1160,44 @@ msgid ""
 "in the widget title."
 msgstr ""
 
-#: -/php/help.php:371
+#: -/php/help.php:376
 msgid ""
 "The Webcomic Attacher can assist you in matching existing media to existing "
 "Webcomic posts. First, tell Webcomic how you want to match media with posts "
 "by adjusting the settings:"
 msgstr ""
 
-#: -/php/help.php:373
+#: -/php/help.php:378
 msgid ""
 "<b>Collection</b> specifies the collection that Webcomic posts will be "
 "matched from."
 msgstr ""
 
-#: -/php/help.php:374
+#: -/php/help.php:379
 msgid ""
 "<b>Match post&hellip;</b> specifies what post attribute should be used to "
 "match posts with media."
 msgstr ""
 
-#: -/php/help.php:375
+#: -/php/help.php:380
 msgid ""
 "<b>With media&hellip;</b> specifies what media attribute should be use to "
 "match media with posts."
 msgstr ""
 
-#: -/php/help.php:376
+#: -/php/help.php:381
 msgid ""
 "<b>Date Format</b> is <a href=\"%s\" target=\"_blank\">the date format</a> "
 "to use when using post or media dates for comparison"
 msgstr ""
 
-#: -/php/help.php:377
+#: -/php/help.php:382
 msgid ""
 "<b>Custom Field Key</b> is the name of the custom field to use when using a "
 "post custom field for comparison."
 msgstr ""
 
-#: -/php/help.php:379
+#: -/php/help.php:384
 msgid ""
 "After clicking <b>Find Matches</b> Webcomic will compare all orphaned posts "
 "in the selected collection to all unattached media in your Library and list "
@@ -1194,7 +1205,7 @@ msgid ""
 "the ones you don't want to save."
 msgstr ""
 
-#: -/php/help.php:380
+#: -/php/help.php:385
 msgid ""
 "Webcomic may find more than one match between media and posts, and will "
 "uncheck and highlight these additional matches. Media can only be attached "
@@ -1202,13 +1213,13 @@ msgid ""
 "they're a better fit than the first match Webcomic found."
 msgstr ""
 
-#: -/php/help.php:381
+#: -/php/help.php:386
 msgid ""
 "When you're ready click <b>Attach Media</b> to attach selected media to "
 "their matched post."
 msgstr ""
 
-#: -/php/help.php:390
+#: -/php/help.php:396
 msgid ""
 "The Webcomic Generator can assist you in publishing a large backlog of "
 "webcomics. The right column lists all of the images in your Media Library "
@@ -1216,19 +1227,19 @@ msgid ""
 "using the checkboxes, then adjust the publish settings on the left:"
 msgstr ""
 
-#: -/php/help.php:392
+#: -/php/help.php:398
 msgid ""
 "<b>Collection</b> specifies the collection that all of the generated "
 "webcomics will belong to."
 msgstr ""
 
-#: -/php/help.php:393
+#: -/php/help.php:399
 msgid ""
 "<b>Start on&hellip;</b> specifies the date to begin publishing the selected "
 "images. The first selected image in the list will be published on this date."
 msgstr ""
 
-#: -/php/help.php:394
+#: -/php/help.php:400
 msgid ""
 "<b>Publish every&hellip;</b> allows you to select which days of the week to "
 "publish subsequent files. The generator will work through the list from top "
@@ -1237,58 +1248,58 @@ msgid ""
 "ensure they publish in the correct order."
 msgstr ""
 
-#: -/php/help.php:395
+#: -/php/help.php:401
 msgid ""
 "<b>Save posts as drafts</b> will cause all of the webcomics created by the "
 "generator to be drafted. These posts will not appear on your site until you "
 "publish them."
 msgstr ""
 
-#: -/php/help.php:397
+#: -/php/help.php:403
 msgid ""
 "Webcomics created by the generator will use the image filename for the "
 "webcomic title."
 msgstr ""
 
-#: -/php/help.php:405
+#: -/php/help.php:412
 msgid ""
 "From here you can change the sorting order of your terms. Drag and drop the "
 "terms on the right to change their order. When everything looks good click "
 "<b>Save Changes</b>."
 msgstr ""
 
-#: -/php/help.php:413
+#: -/php/help.php:421
 msgid ""
 "This screen provides access to all of your webcomic transcripts. You can "
 "customize the display of this screen to suit your workflow."
 msgstr ""
 
-#: -/php/help.php:422 -/php/help.php:511
+#: -/php/help.php:431 -/php/help.php:529
 msgid ""
 "You can customize the display of this screen's contents in a number of ways:"
 msgstr ""
 
-#: -/php/help.php:424
+#: -/php/help.php:433
 msgid ""
 "You can hide/display columns based on your needs and decide how many "
 "transcripts to list per screen using the Screen Options tab."
 msgstr ""
 
-#: -/php/help.php:425
+#: -/php/help.php:434
 msgid ""
 "You can filter the list of transcripts by status using the text links in the "
 "upper left to show All, Published, Draft, Trashed, or Orphaned transcripts. "
 "The default view is to show all transcripts."
 msgstr ""
 
-#: -/php/help.php:426
+#: -/php/help.php:435
 msgid ""
 "You can view transcripts in a simple title list or with an excerpt. Choose "
 "the view you prefer by clicking on the icons at the top of the list on the "
 "right."
 msgstr ""
 
-#: -/php/help.php:427
+#: -/php/help.php:436
 msgid ""
 "You can refine the list to show only transcripts containing a specific "
 "language or from a specific month by using the dropdown menus above the "
@@ -1297,38 +1308,38 @@ msgid ""
 "the transcripts list."
 msgstr ""
 
-#: -/php/help.php:437
+#: -/php/help.php:447
 msgid ""
 "Hovering over a row in the transcripts list will display action links that "
 "allow you to manage your transcript. You can perform the following actions:"
 msgstr ""
 
-#: -/php/help.php:439
+#: -/php/help.php:449
 msgid ""
 "<b>Edit</b> takes you to the editing screen for that transcript. You can "
 "also reach that screen by clicking on the transcript title."
 msgstr ""
 
-#: -/php/help.php:440
+#: -/php/help.php:450
 msgid ""
 "<b>Quick Edit</b> provides inline access to the metadata of your transcript, "
 "allowing you to update transcript details without leaving this screen."
 msgstr ""
 
-#: -/php/help.php:441
+#: -/php/help.php:451
 msgid ""
 "<b>Trash</b> removes your transcript from this list and places it in the "
 "trash, from which you can permanently delete it."
 msgstr ""
 
-#: -/php/help.php:451
+#: -/php/help.php:462
 msgid ""
 "You can also edit or move multiple transcripts to the trash at once. Select "
 "the transcripts you want to act on using the checkboxes, then select the "
 "action you want to take from the Bulk Actions menu and click Apply."
 msgstr ""
 
-#: -/php/help.php:452
+#: -/php/help.php:463
 msgid ""
 "When using Bulk Edit, you can change the metadata (languages, author, etc.) "
 "for all selected transcripts at once. To remove a transcript from the "
@@ -1336,7 +1347,7 @@ msgid ""
 "appears."
 msgstr ""
 
-#: -/php/help.php:460
+#: -/php/help.php:472
 msgid ""
 "The title field and the big Transcript Editing Area are fixed in place, but "
 "you can reposition all the other boxes using drag and drop, and can minimize "
@@ -1345,7 +1356,7 @@ msgid ""
 "column layout for this screen."
 msgstr ""
 
-#: -/php/help.php:468
+#: -/php/help.php:481
 msgid ""
 "Enter the text for your transcript. There are two modes of editing: Visual "
 "and HTML. Choose the mode by clicking on the appropriate tab. Visual mode "
@@ -1359,7 +1370,7 @@ msgid ""
 "top area. Exit Fullscreen back to the regular transcript editor."
 msgstr ""
 
-#: -/php/help.php:476
+#: -/php/help.php:490
 msgid ""
 "You can set the terms of publishing your transcript in the Publish box. For "
 "Status, Visibility, and Publish (immediately), click on the Edit link to "
@@ -1369,7 +1380,7 @@ msgid ""
 "backdate a transcript."
 msgstr ""
 
-#: -/php/help.php:484
+#: -/php/help.php:499
 msgid ""
 "You can set the webcomic your transcript is related to in the Parent "
 "Webcomic box. First select the collection the webcomic belgons to, then the "
@@ -1378,7 +1389,7 @@ msgid ""
 "transcript."
 msgstr ""
 
-#: -/php/help.php:492
+#: -/php/help.php:508
 msgid ""
 "Identified but unregistered users that submit or improve a transcript will "
 "be listed in the Transcript Authors box. These additional authors may be "
@@ -1390,32 +1401,32 @@ msgid ""
 "optional."
 msgstr ""
 
-#: -/php/help.php:502
+#: -/php/help.php:519
 msgid ""
 "This screen provides access to all of your %s webcomics. You can customize "
 "the display of this screen to suit your workflow."
 msgstr ""
 
-#: -/php/help.php:513
+#: -/php/help.php:531
 msgid ""
 "You can hide/display columns based on your needs and decide how many "
 "webcomics to list per screen using the Screen Options tab."
 msgstr ""
 
-#: -/php/help.php:514
+#: -/php/help.php:532
 msgid ""
 "You can filter the list of webcomics by status using the text links in the "
 "upper left to show All, Published, Draft, Trashed, or Orphaned webcomics. "
 "The default view is to show all webcomics."
 msgstr ""
 
-#: -/php/help.php:515
+#: -/php/help.php:533
 msgid ""
 "You can view webcomics in a simple title list or with an excerpt. Choose the "
 "view you prefer by clicking on the icons at the top of the list on the right."
 msgstr ""
 
-#: -/php/help.php:516
+#: -/php/help.php:534
 msgid ""
 "You can refine the list to show only webcomics in a particular storyline or "
 "from a specific month by using the dropdown menus above the webcomics list. "
@@ -1424,52 +1435,52 @@ msgid ""
 "webcomics list."
 msgstr ""
 
-#: -/php/help.php:526
+#: -/php/help.php:545
 msgid ""
 "Hovering over a row in the webcomics list will display action links that "
 "allow you to manage your webcomic. You can perform the following actions:"
 msgstr ""
 
-#: -/php/help.php:528
+#: -/php/help.php:547
 msgid ""
 "<b>Edit</b> takes you to the editing screen for that webcomic. You can also "
 "reach that screen by clicking on the webcomic title."
 msgstr ""
 
-#: -/php/help.php:529
+#: -/php/help.php:548
 msgid ""
 "<b>Quick Edit</b> provides inline access to the metadata of your webcomic, "
 "allowing you to update webcomic details without leaving this screen."
 msgstr ""
 
-#: -/php/help.php:530
+#: -/php/help.php:549
 msgid ""
 "<b>Trash</b> removes your webcomic from this list and places it in the "
 "trash, from which you can permanently delete it."
 msgstr ""
 
-#: -/php/help.php:531
+#: -/php/help.php:550
 msgid ""
 "<b>Preview</b> will show you what your draft webcomic will look like if you "
 "publish it. View will take you to your live site to view the webcomic. Which "
 "link is available depends on your webcomic's status."
 msgstr ""
 
-#: -/php/help.php:541
+#: -/php/help.php:561
 msgid ""
 "You can also edit or move multiple webcomics to the trash at once. Select "
 "the webcomics you want to act on using the checkboxes, then select the "
 "action you want to take from the Bulk Actions menu and click Apply."
 msgstr ""
 
-#: -/php/help.php:542
+#: -/php/help.php:562
 msgid ""
 "When using Bulk Edit, you can change the metadata (storylines, author, etc.) "
 "for all selected webcomics at once. To remove a webcomic from the grouping, "
 "just click the x next to its name in the Bulk Edit area that appears."
 msgstr ""
 
-#: -/php/help.php:550
+#: -/php/help.php:571
 msgid ""
 "The title field and the big Webcomic Editing Area are fixed in place, but "
 "you can reposition all the other boxes using drag and drop, and can minimize "
@@ -1479,7 +1490,7 @@ msgid ""
 "screen."
 msgstr ""
 
-#: -/php/help.php:559
+#: -/php/help.php:581
 msgid ""
 "To attach a file to your webcomic, click <b>Add Media</b> in the Webcomic "
 "Media box or above the webcomic editor and follow the instructions. Webcomic "
@@ -1491,7 +1502,7 @@ msgid ""
 "has been dismissed."
 msgstr ""
 
-#: -/php/help.php:560
+#: -/php/help.php:582
 msgid ""
 "Once one or more images have been attached to a webcomic you can view them "
 "in the <b>Webcomic Media</b> tab in the media popup. From here you can "
@@ -1501,13 +1512,13 @@ msgid ""
 "alternate sizes), or detach them from the current webcomic."
 msgstr ""
 
-#: -/php/help.php:569
+#: -/php/help.php:592
 msgid ""
 "<b>Title</b> - Enter a title for your webcomic. After you enter a title, "
 "you'll see the permalink below, which you can edit."
 msgstr ""
 
-#: -/php/help.php:570
+#: -/php/help.php:593
 msgid ""
 "<b>Post Editor</b> - Enter any accompanying text for your webcomic. There "
 "are two modes of editing: Visual and HTML. Choose the mode by clicking on "
@@ -1520,7 +1531,7 @@ msgid ""
 "Fullscreen back to the regular webcomic editor."
 msgstr ""
 
-#: -/php/help.php:578
+#: -/php/help.php:602
 msgid ""
 "<b>Publish</b> - You can set the terms of publishing your webcomic in the "
 "Publish box. For Status, Visibility, and Publish (immediately), click on the "
@@ -1530,14 +1541,14 @@ msgid ""
 "future or backdate a webcomic."
 msgstr ""
 
-#: -/php/help.php:587
+#: -/php/help.php:612
 msgid ""
 "<b>Sell Prints</b> - Check this option to sell prints of this webcomic using "
 "your collection commerce settings. This option is unavailable if you haven't "
 "specified a business email on the collection settings page."
 msgstr ""
 
-#: -/php/help.php:588
+#: -/php/help.php:613
 msgid ""
 "The table in the commerce box displays the default prices and shipping for "
 "domestic, international, and original prints, as well as the total cost of "
@@ -1547,13 +1558,13 @@ msgid ""
 "(for traditional media webcomics) has been sold or is otherwise unavailable."
 msgstr ""
 
-#: -/php/help.php:597
+#: -/php/help.php:623
 msgid ""
 "<b>Allow Transcribing</b> - Check this option to allow user transcribing of "
 "this webcomic."
 msgstr ""
 
-#: -/php/help.php:598
+#: -/php/help.php:624
 msgid ""
 "The list in the transcripts box displays the transcripts submitted for this "
 "webcomic, along with the transcript status, who it was submitted by, when it "
@@ -1561,7 +1572,7 @@ msgid ""
 "Click a transcript title to edit that transcript."
 msgstr ""
 
-#: -/php/help.php:607
+#: -/php/help.php:634
 msgid ""
 "<b>Send Trackbacks</b> - Trackbacks are a way to notify legacy blog systems "
 "that you've linked to them. Enter the URL(s) you want to send trackbacks to. "
@@ -1569,35 +1580,35 @@ msgid ""
 "pingbacks, and this field is unnecessary."
 msgstr ""
 
-#: -/php/help.php:608
+#: -/php/help.php:635
 msgid ""
 "<b>Discussion</b> - You can turn comments and pings on or off, and if there "
 "are comments on the webcomic, you can see them here and moderate them."
 msgstr ""
 
-#: -/php/help.php:618
+#: -/php/help.php:646
 msgid ""
 "You can organize your webcomics into story arcs using <b>storylines</b>. "
 "Click <b>Sort %s</b> to reorganize storylines."
 msgstr ""
 
-#: -/php/help.php:627
+#: -/php/help.php:656
 msgid ""
 "When adding a new storyline on this screen, you'll fill in the following "
 "fields:"
 msgstr ""
 
-#: -/php/help.php:629 -/php/help.php:654 -/php/help.php:678 -/php/help.php:693
+#: -/php/help.php:658 -/php/help.php:685 -/php/help.php:711 -/php/help.php:727
 msgid "<b>Name</b> - The name is how it appears on your site."
 msgstr ""
 
-#: -/php/help.php:630 -/php/help.php:655 -/php/help.php:694
+#: -/php/help.php:659 -/php/help.php:686 -/php/help.php:728
 msgid ""
 "<b>Slug</b> - The \"slug\" is the URL-friendly version of the name. It is "
 "usually all lowercase and contains only letters, numbers, and hyphens."
 msgstr ""
 
-#: -/php/help.php:631
+#: -/php/help.php:660
 msgid ""
 "<b>Parent</b> - Storylines can have a hierarchy. You might have a Chapter 1 "
 "storyline, and under that have children storylines for each scene within "
@@ -1605,180 +1616,180 @@ msgid ""
 "another storyline from the Parent dropdown."
 msgstr ""
 
-#: -/php/help.php:632 -/php/help.php:656 -/php/help.php:680 -/php/help.php:695
+#: -/php/help.php:661 -/php/help.php:687 -/php/help.php:713 -/php/help.php:729
 msgid ""
 "<b>Description</b> - The description is not prominent by default; it may be "
 "used in various ways, however."
 msgstr ""
 
-#: -/php/help.php:633
+#: -/php/help.php:662
 msgid ""
 "<b>Cover</b> - The cover is a representative image that can be displayed on "
 "your site."
 msgstr ""
 
-#: -/php/help.php:635 -/php/help.php:659 -/php/help.php:682
+#: -/php/help.php:664 -/php/help.php:690 -/php/help.php:715
 msgid ""
 "You can change the display of this screen using the Screen Options tab to "
 "set how many items are displayed per screen and to display/hide columns in "
 "the table."
 msgstr ""
 
-#: -/php/help.php:643
+#: -/php/help.php:673
 msgid ""
 "You can specify the characrters that appear in your webcomics using "
 "<b>characters</b>."
 msgstr ""
 
-#: -/php/help.php:652
+#: -/php/help.php:683
 msgid ""
 "When adding a new character on this screen, you'll fill in the following "
 "fields:"
 msgstr ""
 
-#: -/php/help.php:657
+#: -/php/help.php:688
 msgid ""
 "<b>Avatar</b> - The avatar is a representative image that can be displayed "
 "on your site."
 msgstr ""
 
-#: -/php/help.php:667
+#: -/php/help.php:699
 msgid ""
 "You can specify the language used in your webcomic transcripts using "
 "<b>languages</b>."
 msgstr ""
 
-#: -/php/help.php:676
+#: -/php/help.php:709
 msgid ""
 "When adding a new language on this screen, you'll fill in the following "
 "fields:"
 msgstr ""
 
-#: -/php/help.php:679
+#: -/php/help.php:712
 msgid ""
 "<b>Slug</b> - The \"slug\" is the URL-friendly version of the name. It "
 "should be an appropriate <a href=\"%s\" target=\"_blank\">language subtag</"
 "a>."
 msgstr ""
 
-#: -/php/help.php:691
+#: -/php/help.php:725
 msgid ""
 "These settings allow you to change some of the basic information and "
 "features related to your collection:"
 msgstr ""
 
-#: -/php/help.php:696
+#: -/php/help.php:730
 msgid ""
 "<b>Poster</b> - The poster is a representative image that can be displayed "
 "on your site."
 msgstr ""
 
-#: -/php/help.php:697
+#: -/php/help.php:731
 msgid ""
 "<b>Theme</b> - Determines what theme will be used when a user is viewing a "
 "page related to this collection."
 msgstr ""
 
-#: -/php/help.php:698
+#: -/php/help.php:732
 msgid ""
 "<b>Buffers</b> - Sends daily email reminders to the specified address "
 "starting however many days prior to the buffer expiration you specify."
 msgstr ""
 
-#: -/php/help.php:699
+#: -/php/help.php:733
 msgid ""
 "<b>Feeds</b> - Integrates webcomic posts into the main syndication feed and "
 "shows a webcomic preview of the specified size in syndication feeds."
 msgstr ""
 
-#: -/php/help.php:709
+#: -/php/help.php:744
 msgid ""
 "These settings allow you to control who can submit webcomic transcripts for "
 "this collection:"
 msgstr ""
 
-#: -/php/help.php:711
+#: -/php/help.php:746
 msgid ""
 "<b>Default</b> - Whether to allow people to transcribe new webcomics. "
 "Transcription can also be handled on a webcomicy-by-webcomic basis. Changing "
 "this setting does not affect existing webcomics."
 msgstr ""
 
-#: -/php/help.php:712
+#: -/php/help.php:747
 msgid ""
 "<b>Permission</b> - Who has permission to transcribe webcomics. Self-"
 "identified users must provide a name and valid email address."
 msgstr ""
 
-#: -/php/help.php:713
+#: -/php/help.php:748
 msgid ""
 "<b>Notification</b> - Sends a notification whenever a transcript is "
 "submitted to the email you specify."
 msgstr ""
 
-#: -/php/help.php:714
+#: -/php/help.php:749
 msgid ""
 "<b>Languages</b> - Specifies what languages users may submit transcripts in."
 msgstr ""
 
-#: -/php/help.php:724
+#: -/php/help.php:760
 msgid ""
 "These settings allow you to accept print purchases and donations via PayPal:"
 msgstr ""
 
-#: -/php/help.php:726
+#: -/php/help.php:762
 msgid ""
 "<b>Business Email</b> - The email address associated with the PayPal account "
 "to use for transactions. All commerce-related features will be unavailable "
 "without a valid email address."
 msgstr ""
 
-#: -/php/help.php:727
+#: -/php/help.php:763
 msgid ""
 "<b>Prints</b> - Enables print sales and original, traditional-media print "
 "sales for new webcomics (print sales can also be handled on a webcomic-by-"
 "webcomic basis). These options are disabled without a valid Business Email."
 msgstr ""
 
-#: -/php/help.php:728
+#: -/php/help.php:764
 msgid ""
 "<b>Sales</b> -  How to handle print sales. The single item method is faster, "
 "but a shopping cart makes it easier for users to purchase multiple prints at "
 "once."
 msgstr ""
 
-#: -/php/help.php:729
+#: -/php/help.php:765
 msgid ""
 "<b>Prices</b> - The default prices for domestic, international, and original "
 "(if you work in traditional media) prints. These prices can be adjusted on a "
 "webcomic-by-webcomic basis."
 msgstr ""
 
-#: -/php/help.php:730
+#: -/php/help.php:766
 msgid ""
 "<b>Shipping</b> - The cost to ship domestic, international, and original "
 "prints. These prices can be adjusted on a webcomic-by-webcomic basis."
 msgstr ""
 
-#: -/php/help.php:731
+#: -/php/help.php:767
 msgid ""
 "<b>Donation</b> - Set a specific amount donors must contribute when "
 "donating, or leave at zero to allow donors to specify their own donation "
 "amount."
 msgstr ""
 
-#: -/php/help.php:732
+#: -/php/help.php:768
 msgid ""
 "<b>Currency</b> -  The currency your transactions will use. Note that the "
 "Brazilian Real and the Malaysian Ringgit are only supported for in-country "
 "PayPal accounts."
 msgstr ""
 
-#: -/php/help.php:742
+#: -/php/help.php:779
 msgid "These settings control who can view pages related to this collection:"
 msgstr ""
 
-#: -/php/help.php:744
+#: -/php/help.php:781
 msgid ""
 "<b>Age</b> - Requires that users be at least as many years old as you "
 "specify to view webcomics in this collection. Unverified users will be "
@@ -1786,14 +1797,14 @@ msgid ""
 "this collection."
 msgstr ""
 
-#: -/php/help.php:745
+#: -/php/help.php:782
 msgid ""
 "<b>Role</b> - Requires that users be registered and logged in to view "
 "webcomics in this collection. You may optionally select one or more specific "
 "roles a user must belong to."
 msgstr ""
 
-#: -/php/help.php:755
+#: -/php/help.php:793
 msgid ""
 "These settings control some of the basic features of your webcomic posts. "
 "Disabling a feature will completely remove it's associated box from the Add "
@@ -1802,7 +1813,7 @@ msgid ""
 "images require an active theme with featured image support."
 msgstr ""
 
-#: -/php/help.php:765
+#: -/php/help.php:804
 msgid ""
 "These settings affect the URL structure of the collection archive, "
 "webcomics, storylines, and characters. To the right of each input is an "
@@ -1812,26 +1823,26 @@ msgid ""
 "%%, %%post_id%%, %%author%%, and %%%s%%."
 msgstr ""
 
-#: -/php/help.php:766
+#: -/php/help.php:805
 msgid ""
 "Be careful when modifying permalinks: incorrect settings may result in "
 "broken pages. <a href=\"%s\" target=\"_blank\">Read more about permalinks at "
 "the WordPress Codex &raquo;</a>"
 msgstr ""
 
-#: -/php/help.php:783
+#: -/php/help.php:823
 msgid ""
 "For the <b>Example Summary Card URL</b> you should use a collection archive "
 "page, like:"
 msgstr ""
 
-#: -/php/help.php:785
+#: -/php/help.php:825
 msgid ""
 "For the <b>Example Photo Card URL</b> you should use a single webcomic page, "
 "like:"
 msgstr ""
 
-#: -/php/help.php:787
+#: -/php/help.php:827
 msgid ""
 "No published webcomics could be found in any collection. You should publish "
 "at least one webcomic before trying to opt-in to Twitter Cards. URL's to use "
@@ -1839,7 +1850,7 @@ msgid ""
 "will be provided here once you have published at least one webcomic."
 msgstr ""
 
-#: -/php/help.php:790
+#: -/php/help.php:830
 msgid ""
 "These settings allow you to connect a Twitter account with the collection "
 "via a Twitter Application. Anytime a new webcomic is published in this "
@@ -1850,7 +1861,7 @@ msgid ""
 "Application must be set to your site URL:"
 msgstr ""
 
-#: -/php/help.php:792
+#: -/php/help.php:832
 msgid ""
 "Once created, go to the <b>Settings</b> tab for your Twitter Application and "
 "ensure that <b>Read and Write</b> is selected for <b>Application Type</b>. "
@@ -1860,7 +1871,7 @@ msgid ""
 "appear in the <b>Authorized Account</b> area."
 msgstr ""
 
-#: -/php/help.php:793
+#: -/php/help.php:833
 msgid ""
 "Please refer to the <a href='%s' target='_blank'>Beginner's Guide</a> for a "
 "complete list of tags accepted by <b>Tweet Format</b>. When <b>Upload Media</"
@@ -1869,11 +1880,11 @@ msgid ""
 "twitter.com and displayed with the tweet."
 msgstr ""
 
-#: -/php/help.php:794
+#: -/php/help.php:834
 msgid "Twitter Cards"
 msgstr ""
 
-#: -/php/help.php:795
+#: -/php/help.php:835
 msgid ""
 "Twitter Cards do not require a Twitter Application. Webcomic automatially "
 "generates the necessary information for Twitter Cards on all Webcomic-"
@@ -1883,25 +1894,25 @@ msgid ""
 "Twitter Cards</a> to opt-in."
 msgstr ""
 
-#: -/php/help.php:805
+#: -/php/help.php:846
 msgid "The settings on this page affect your entire site:"
 msgstr ""
 
-#: -/php/help.php:807
+#: -/php/help.php:848
 msgid ""
 "<b>Network</b> - The Webcomic Network is an optional service provided by %s "
 "to help Webcomic users connect with each other. Click <b>Access the Webcomic "
 "Network</b> to go to the Webcomic Network settings page."
 msgstr ""
 
-#: -/php/help.php:808
+#: -/php/help.php:849
 msgid ""
 "<b>Integrate</b> - Webcomic will attempt to automatically integrate basic "
 "functionality into your site. Integration may not work with certain "
 "WordPress themes and plugins."
 msgstr ""
 
-#: -/php/help.php:809
+#: -/php/help.php:850
 msgid ""
 "<b>Navigate</b> - Changes how users browse through webcomics on your site. "
 "<a href=\"%1$s\" target=\"_blank\">Dynamic navigation</a> will attempt to "
@@ -1914,7 +1925,7 @@ msgid ""
 "navigate through webcomics."
 msgstr ""
 
-#: -/php/help.php:810
+#: -/php/help.php:851
 msgid ""
 "<b>Uninstall</b> - Deletes all data associated with Webcomic when the plugin "
 "is deactivated, including settings, webcomics, storylines, characters, "
@@ -1924,14 +1935,14 @@ msgid ""
 "tags."
 msgstr ""
 
-#: -/php/help.php:820
+#: -/php/help.php:862
 msgid ""
 "The Collections section provides a general overview of all of the "
 "collections on your site. To add a new collection enter a name in the box "
 "above the list and click <b>Add Collection</b>."
 msgstr ""
 
-#: -/php/help.php:821
+#: -/php/help.php:863
 msgid ""
 "To delete a collection, check the box next to it and select either <b>Delete "
 "Permanently</b> or <b>Delete and Save</b> from the Bulk Actions dropdown at "
@@ -1941,7 +1952,7 @@ msgid ""
 "before being deleted."
 msgstr ""
 
-#: -/php/help.php:830
+#: -/php/help.php:873
 msgid ""
 "The Webcomic Network is an optional service provided by %s to help Webcomic "
 "users connect with each other. Your site-specific <b>API key</b> grants you "
@@ -1952,7 +1963,7 @@ msgid ""
 "rescinded."
 msgstr ""
 
-#: -/php/help.php:840
+#: -/php/help.php:884
 msgid ""
 "The <b>Webcomic Showcase</b> allows you to share your site with other "
 "Webcomic users right in their administrative dashboard via the Webcomic "
@@ -1960,56 +1971,56 @@ msgid ""
 "following information about your site:"
 msgstr ""
 
-#: -/php/help.php:842
+#: -/php/help.php:886
 msgid "<b>Name</b> - The name is how your site is labeled in the showcase."
 msgstr ""
 
-#: -/php/help.php:843
+#: -/php/help.php:887
 msgid "<b>URL</b> - Enter the address you want your showcase entry to link to."
 msgstr ""
 
-#: -/php/help.php:844
+#: -/php/help.php:888
 msgid ""
 "<b>Creators</b> - Enter the names or Twitter @usernames of the creators of "
 "this site, separated by commas."
 msgstr ""
 
-#: -/php/help.php:845
+#: -/php/help.php:889
 msgid ""
 "<b>Description</b> - The description is displayed with your showcase entry. "
 "160 characters or less."
 msgstr ""
 
-#: -/php/help.php:846
+#: -/php/help.php:890
 msgid "<b>Genre</b> - Select up to five genres that describe your site."
 msgstr ""
 
-#: -/php/help.php:847
+#: -/php/help.php:891
 msgid ""
 "<b>Rating</b> - Select the rating that most fits the intended audience of "
 "your site."
 msgstr ""
 
-#: -/php/help.php:848
+#: -/php/help.php:892
 msgid ""
 "<b>Billboard</b> - The billboard is a representative image for your site. It "
 "should be 640x360 pixels in size and will be hotlinked directly from your "
 "site."
 msgstr ""
 
-#: -/php/help.php:849
+#: -/php/help.php:893
 msgid ""
 "<b>Testimonial</b> - If provided, the testimonial will be displayed on %s"
 msgstr ""
 
-#: -/php/help.php:851
+#: -/php/help.php:895
 msgid ""
 "Some additional data is sent with your showcase entry, including the version "
 "of Webcomic you're using and information about your sites theme (name, url, "
 "author, and author url) and template (if you're using a child theme)."
 msgstr ""
 
-#: -/php/help.php:860
+#: -/php/help.php:905
 msgid ""
 "The Additional Image Sizes section lists the image sizes that have been "
 "added to your site beyond the WordPress defaults of thumbnail, medium, and "
@@ -2017,25 +2028,25 @@ msgid ""
 "the list and click <b>Save Changes</b>:"
 msgstr ""
 
-#: -/php/help.php:862
+#: -/php/help.php:907
 msgid ""
 "<b>Name</b> - How the size is identified. Should be a \"slug\" containing "
 "only letters, numbers, and hyphens."
 msgstr ""
 
-#: -/php/help.php:863
+#: -/php/help.php:908
 msgid ""
 "<b>Dimensions</b> - The next two fields are for the maximum width and height "
 "of the new image size."
 msgstr ""
 
-#: -/php/help.php:864
+#: -/php/help.php:909
 msgid ""
 "<b>Crop</b> - Whether images should be hard cropped to the specified "
 "dimensions or proportionally resized."
 msgstr ""
 
-#: -/php/help.php:866
+#: -/php/help.php:911
 msgid ""
 "Sizes may be adjusted by editing the width, height, and crop of the size "
 "within the list and clicking <b>Save Changes</b>. Sizes my be deleted by "
@@ -2045,17 +2056,17 @@ msgid ""
 "informational purposes."
 msgstr ""
 
-#: -/php/help.php:875
+#: -/php/help.php:921
 msgid ""
 "The Webcomic Commerce tool displays the PayPal Instant Payment Notification "
 "(IPN) data that Webcomic has recorded, including:"
 msgstr ""
 
-#: -/php/help.php:877
+#: -/php/help.php:923
 msgid "<b>Transaction</b> - The transaction ID provided by PayPal."
 msgstr ""
 
-#: -/php/help.php:878
+#: -/php/help.php:924
 msgid ""
 "<b>Item</b> - The item ID generated by Webcomic and sent to PayPal. Item "
 "ID's may appear as a collection ID for donations (like <b>webcomic42</b>) or "
@@ -2063,17 +2074,17 @@ msgid ""
 "webcomic42-domestic</b>)."
 msgstr ""
 
-#: -/php/help.php:879
+#: -/php/help.php:925
 msgid "<b>Message</b> - A transaction message generated by Webcomic."
 msgstr ""
 
-#: -/php/help.php:880
+#: -/php/help.php:926
 msgid ""
 "<b>Date</b> - The date the transaction took place. Hover over the date to "
 "see the full timestamp provided by PayPal."
 msgstr ""
 
-#: -/php/help.php:882
+#: -/php/help.php:928
 msgid ""
 "Webcomic records this data for informational purposes only, such as noting "
 "transaction errors (which will appear as bold red entries in the list). "
@@ -2082,7 +2093,7 @@ msgid ""
 "b> at the bottom of the list."
 msgstr ""
 
-#: -/php/help.php:891
+#: -/php/help.php:938
 msgid ""
 "The Upgrade Webcomic tool attempts to automatically convert your existing "
 "%1$s data to Webcomic %2$s. Depending on the size of your site the upgrade "
@@ -2091,7 +2102,7 @@ msgid ""
 "read the following carefully:"
 msgstr ""
 
-#: -/php/help.php:893
+#: -/php/help.php:940
 msgid ""
 "Upgrades are not reversible and, once begun, should not be stopped. You "
 "should <a href=\"%1$s\">backup your site</a> before starting the "
@@ -2099,7 +2110,7 @@ msgid ""
 "b> to uninstall Webcomic %2$s."
 msgstr ""
 
-#: -/php/help.php:894
+#: -/php/help.php:941
 msgid ""
 "Webcomic %s uses <a href=\"%1$s\" target=\"_blank\">the WordPress Media "
 "Library</a> for file management. All of your existing webcomic images must "
@@ -2109,14 +2120,14 @@ msgid ""
 "to upgrading."
 msgstr ""
 
-#: -/php/help.php:895
+#: -/php/help.php:942
 msgid ""
 "The permalink URL's to your webcomics may change after upgrading. Permalinks "
 "<a href='%s' target=''>can be customized</a> for each of your collections "
 "once the upgrade is complete."
 msgstr ""
 
-#: -/php/help.php:896
+#: -/php/help.php:943
 msgid ""
 "Your current theme may not function properly with Webcomic %2$s, but a "
 "selection of <a href=\"%1$s\" target=\"_blank\">new Webcomic-ready themes</"
@@ -2126,124 +2137,124 @@ msgid ""
 "new template tags."
 msgstr ""
 
-#: -/php/help.php:905
+#: -/php/help.php:953
 msgid ""
 "The <b>Webcomic Collection</b> let's you associate your pages with a "
 "specific Webcomic Collection. Pages associated with a collection will use "
 "the theme defined in the collection settings."
 msgstr ""
 
-#: -/php/integrate/dynamic.php:27 -/php/integrate/loop_start.php:43
+#: -/php/integrate/dynamic.php:28 -/php/integrate/loop_start.php:44
 msgid "Permalink to %s"
 msgstr ""
 
-#: -/php/integrate/dynamic.php:50 -/php/integrate/loop_start.php:66
+#: -/php/integrate/dynamic.php:54 -/php/integrate/loop_start.php:71
 msgid "Edit"
 msgstr ""
 
-#: -/php/integrate/loop_end.php:18
+#: -/php/integrate/loop_end.php:22
 msgid "%s Transcripts"
 msgstr ""
 
-#: -/php/integrate/loop_end.php:21
+#: -/php/integrate/loop_end.php:29
 msgid "Transcribed by %1$s%2$s"
 msgstr ""
 
-#: -/php/integrate/loop_end.php:21
+#: -/php/integrate/loop_end.php:31
 msgid " in "
 msgstr ""
 
-#: -/php/integrate/loop_end.php:21
+#: -/php/integrate/loop_end.php:31
 msgid ", "
 msgstr ""
 
-#: -/php/integrate/restricted-age.php:13 -/php/shortcodes.php:140
+#: -/php/integrate/restricted-age.php:14 -/php/shortcodes.php:145
 msgid "Please verify your age to view this content:"
 msgstr ""
 
-#: -/php/integrate/restricted-age.php:13 -/php/shortcodes.php:140
-#: -/php/users.php:49
+#: -/php/integrate/restricted-age.php:14 -/php/shortcodes.php:145
+#: -/php/users.php:54
 msgid "Birthday"
 msgstr ""
 
-#: -/php/integrate/restricted-age.php:13
-#: -/php/integrate/restricted-role.php:12 -/php/shortcodes.php:140
-#: -/php/shortcodes.php:165 webcomic.php:885 webcomic.php:890
+#: -/php/integrate/restricted-age.php:14
+#: -/php/integrate/restricted-role.php:13 -/php/shortcodes.php:145
+#: -/php/shortcodes.php:171 webcomic.php:906 webcomic.php:911
 msgid "You don't have permission to view this content."
 msgstr ""
 
-#: -/php/integrate/restricted-age.php:13
-#: -/php/integrate/restricted-role.php:12
+#: -/php/integrate/restricted-age.php:14
+#: -/php/integrate/restricted-role.php:13
 msgid "Restricted Content | Webcomic"
 msgstr ""
 
-#: -/php/integrate/restricted-role.php:12 -/php/shortcodes.php:165
-msgid "Please <a href=\"%s\">log in</a> to view this content."
-msgstr ""
-
-#: -/php/integrate/the_content.php:23
-msgid "%1$s%2$s%%total Domestic"
-msgstr ""
-
-#: -/php/integrate/the_content.php:23 -/php/integrate/the_content.php:24
-#: -/php/integrate/the_content.php:27
-msgid "%dec."
-msgstr ""
-
-#: -/php/integrate/the_content.php:23 -/php/integrate/the_content.php:24
-#: -/php/integrate/the_content.php:27
-msgid "%sep,"
+#: -/php/integrate/restricted-role.php:13
+msgid "Please <a href='%s'>log in</a> to view this content."
 msgstr ""
 
 #: -/php/integrate/the_content.php:24
+msgid "%1$s%2$s%%total Domestic"
+msgstr ""
+
+#: -/php/integrate/the_content.php:24 -/php/integrate/the_content.php:25
+#: -/php/integrate/the_content.php:28
+msgid "%dec."
+msgstr ""
+
+#: -/php/integrate/the_content.php:24 -/php/integrate/the_content.php:25
+#: -/php/integrate/the_content.php:28
+msgid "%sep,"
+msgstr ""
+
+#: -/php/integrate/the_content.php:25
 msgid "%1$s%2$s%%total International"
 msgstr ""
 
-#: -/php/integrate/the_content.php:27
+#: -/php/integrate/the_content.php:28
 msgid "%1$s%2$s%%total Original"
 msgstr ""
 
-#: -/php/integrate/the_content.php:38
+#: -/php/integrate/the_content.php:39
 msgid "Part of "
 msgstr ""
 
-#: -/php/integrate/the_content.php:39
+#: -/php/integrate/the_content.php:40
 msgid "Featuring "
 msgstr ""
 
-#: -/php/integrate/the_content.php:40
+#: -/php/integrate/the_content.php:41
 msgid " | "
 msgstr ""
 
-#: -/php/integrate/the_content.php:40
+#: -/php/integrate/the_content.php:41
 msgid "- Transcript Language -"
 msgstr ""
 
-#: -/php/legacy.php:47
+#: -/php/legacy.php:52
 msgid "Webcomic 3"
 msgstr ""
 
-#: -/php/legacy.php:67
+#: -/php/legacy.php:72
 msgid "Webcomic %s Chapters"
 msgstr ""
 
-#: -/php/legacy.php:129
+#: -/php/legacy.php:136
 msgid "Upgrade to %s"
 msgstr ""
 
-#: -/php/legacy.php:129
+#: -/php/legacy.php:136
 msgid "Upgrade Webcomic"
 msgstr ""
 
-#: -/php/legacy.php:150
+#: -/php/legacy.php:158
 msgid "Upgrading? Let Webcomic Help"
 msgstr ""
 
-#: -/php/legacy.php:201
+#: -/php/legacy.php:209
 msgid "Just one more click!"
 msgstr ""
 
-#: -/php/legacy.php:202
+#: -/php/legacy.php:210
 msgid ""
 "Thanks again for using Webcomic! Clicking <b>Complete the Upgrade</b> will "
 "remove the upgrade tool, delete any leftover data, and take you to the "
@@ -2251,29 +2262,29 @@ msgid ""
 "<a href=\"%s\" target=\"_blank\">let the developer know</a>."
 msgstr ""
 
-#: -/php/legacy.php:206
+#: -/php/legacy.php:214
 msgid "Complete the Upgrade"
 msgstr ""
 
-#: -/php/legacy.php:213
+#: -/php/legacy.php:221
 msgid "Webcomic has paused the upgrade to prevent a timeout error."
 msgstr ""
 
-#: -/php/legacy.php:214
+#: -/php/legacy.php:222
 msgid ""
 "The upgrade will automatically resume in 5 seconds, or you may click "
 "<b>Continue Upgrading</b> to resume now."
 msgstr ""
 
-#: -/php/legacy.php:215
+#: -/php/legacy.php:223
 msgid "Continuing upgrade&hellip;"
 msgstr ""
 
-#: -/php/legacy.php:218
+#: -/php/legacy.php:226
 msgid "Continue Upgrading"
 msgstr ""
 
-#: -/php/legacy.php:226
+#: -/php/legacy.php:234
 msgid ""
 "This tool will attempt to automatically convert your existing %1$s data to "
 "Webcomic %2$s. Depending on the size of your site the upgrade may require "
@@ -2281,1192 +2292,1484 @@ msgid ""
 "uninstall Webcomic %2$s."
 msgstr ""
 
-#: -/php/legacy.php:227
+#: -/php/legacy.php:235
 msgid ""
 "Upgrades are not reversible and, once begun, should not be stopped. Please "
 "<a href=\"%1$s\" target=\"_blank\">read this</a> and <a href=\"%2$s\">backup "
 "your site</a> before upgrading."
 msgstr ""
 
-#: -/php/legacy.php:231
+#: -/php/legacy.php:239
 msgid "Upgrade Now"
 msgstr ""
 
-#: -/php/legacy.php:425 -/php/legacy.php:697 -/php/legacy.php:1085
-#: -/php/legacy.php:1224 -/php/transcripts.php:109 -/php/transcripts.php:222
-#: -/php/transcripts.php:228 webcomic.php:681
+#: -/php/legacy.php:434 -/php/legacy.php:707 -/php/legacy.php:1096
+#: -/php/legacy.php:1236 -/php/transcripts.php:115 -/php/transcripts.php:230
+#: -/php/transcripts.php:236 webcomic.php:698
 msgid "%s Transcript"
 msgstr ""
 
-#: -/php/media.php:62
+#: -/php/media.php:68
 msgid "Images could not be regenerated."
 msgstr ""
 
-#: -/php/media.php:66
+#: -/php/media.php:72
 msgid "Regenerated images for media attachments."
 msgstr ""
 
-#: -/php/media.php:74
+#: -/php/media.php:80
 msgid "Detached media."
 msgstr ""
 
-#: -/php/media.php:76
+#: -/php/media.php:82
 msgid "Media could not be detached."
 msgstr ""
 
-#: -/php/media.php:106
+#: -/php/media.php:112
 msgid "Images could not be regenerated for %s media attachment."
 msgid_plural "Images could not be regenerated for %s media attachments."
 msgstr[0] ""
 msgstr[1] ""
 
-#: -/php/media.php:110
+#: -/php/media.php:116
 msgid "Images regenerated for %s media attachment."
 msgid_plural "Images regenerated for %s media attachments."
 msgstr[0] ""
 msgstr[1] ""
 
-#: -/php/media.php:129
+#: -/php/media.php:135
 msgid "Could not detach %s attachment."
 msgid_plural "Could not detach %s attachments."
 msgstr[0] ""
 msgstr[1] ""
 
-#: -/php/media.php:133
+#: -/php/media.php:139
 msgid "Detached %s attachment."
 msgid_plural "Detached %s attachments."
 msgstr[0] ""
 msgstr[1] ""
 
-#: -/php/media.php:139
+#: -/php/media.php:145
 msgid "No matches selected."
 msgstr ""
 
-#: -/php/media.php:154
+#: -/php/media.php:160
 msgid "A media could not be attached to %s post."
 msgid_plural "Media could not be attached to %s posts."
 msgstr[0] ""
 msgstr[1] ""
 
-#: -/php/media.php:157
+#: -/php/media.php:163
 msgid "Media attached to %s post."
 msgid_plural "Media attached to %s posts."
 msgstr[0] ""
 msgstr[1] ""
 
-#: -/php/media.php:163
+#: -/php/media.php:169
 msgid "No media selected."
 msgstr ""
 
-#: -/php/media.php:165
+#: -/php/media.php:171
 msgid "The start date could not be understood."
 msgstr ""
 
-#: -/php/media.php:167
+#: -/php/media.php:173
 msgid "No weekdays selected."
 msgstr ""
 
-#: -/php/media.php:224
+#: -/php/media.php:230
 msgid "A post could not be generated for %d media."
 msgid_plural "Posts could not be generated for %d media."
 msgstr[0] ""
 msgstr[1] ""
 
-#: -/php/media.php:227
+#: -/php/media.php:233
 msgid "Post created for %d media."
 msgid_plural "Posts created for %d media."
 msgstr[0] ""
 msgstr[1] ""
 
-#: -/php/media.php:238
+#: -/php/media.php:245
 msgid "Webcomic Attacher"
 msgstr ""
 
-#: -/php/media.php:239
+#: -/php/media.php:246
 msgid "Webcomic Generator"
 msgstr ""
 
-#: -/php/media.php:250
+#: -/php/media.php:258
 msgid "Regenerate Images"
 msgstr ""
 
-#: -/php/media.php:250 -/php/media.php:264 -/php/media.php:330
-#: -/php/media.php:388
+#: -/php/media.php:258 -/php/media.php:273 -/php/media.php:338
+#: -/php/media.php:398
 msgid "Detach"
 msgstr ""
 
-#: -/php/media.php:261
+#: -/php/media.php:270
 msgid ""
 "Drag and drop the media attachments to change the order Webcomic will "
 "display them."
 msgstr ""
 
-#: -/php/media.php:264 -/php/media.php:344 -/php/media.php:384
+#: -/php/media.php:273 -/php/media.php:352 -/php/media.php:394
 msgid "Regenerate"
 msgstr ""
 
-#: -/php/media.php:267
+#: -/php/media.php:276
 msgid ""
 "To manage Webcomic Media please attach one or more images to this webcomic."
 msgstr ""
 
-#: -/php/media.php:330
+#: -/php/media.php:338
 msgid "Attached to:"
 msgstr ""
 
-#: -/php/media.php:344
+#: -/php/media.php:352
 msgid "Alternate Sizes:"
 msgstr ""
 
-#: -/php/media.php:344
+#: -/php/media.php:352
 msgid "None available"
 msgstr ""
 
-#: -/php/media.php:365 -/php/posts.php:62
+#: -/php/media.php:374 -/php/posts.php:66
 msgid "Webcomic Media"
 msgstr ""
 
-#: -/php/media.php:407
+#: -/php/media.php:418
+msgid "Webcomic Print Image"
+msgstr ""
+
+#: -/php/media.php:420
+msgid "Webcomic Link Image"
+msgstr ""
+
+#: -/php/media.php:422
+msgid "Webcomic Donation Image"
+msgstr ""
+
+#: -/php/media.php:424
+msgid "Purchase Webcomic Link Image"
+msgstr ""
+
+#: -/php/media.php:426
+msgid "Webcomic Storyline Link Image"
+msgstr ""
+
+#: -/php/media.php:428
+msgid "Webcomic Character Link Image"
+msgstr ""
+
+#: -/php/media.php:430
+msgid "Webcomic Collection Link Image"
+msgstr ""
+
+#: -/php/media.php:432
+msgid "Webcomic Transcripts Link Image"
+msgstr ""
+
+#: -/php/media.php:434
 msgid "%s Poster"
 msgstr ""
 
-#: -/php/media.php:409
+#: -/php/media.php:436
 msgid "%s Cover"
 msgstr ""
 
-#: -/php/media.php:411
+#: -/php/media.php:438
 msgid "%s Avatar"
 msgstr ""
 
-#: -/php/media.php:451 -/php/media.php:618
+#: -/php/media.php:480 -/php/media.php:648
 msgid "File"
 msgstr ""
 
-#: -/php/media.php:452
+#: -/php/media.php:481
 msgid "Matched With"
 msgstr ""
 
-#: -/php/media.php:526
+#: -/php/media.php:555
 msgid "No unattached media could be found."
 msgstr ""
 
-#: -/php/media.php:528
+#: -/php/media.php:557
 msgid "No orphaned webcomic posts could be found."
 msgstr ""
 
-#: -/php/media.php:530
+#: -/php/media.php:559
 msgid "No matches could be found."
 msgstr ""
 
-#: -/php/media.php:540
+#: -/php/media.php:569
 msgid "Attach Media"
 msgstr ""
 
-#: -/php/media.php:568
+#: -/php/media.php:597
 msgid "Match post&hellip;"
 msgstr ""
 
-#: -/php/media.php:570 -/php/media.php:580 -/php/widgets.php:129
-#: -/php/widgets.php:277 -/php/widgets.php:386 -/php/widgets.php:481
-#: -/php/widgets.php:592 -/php/widgets.php:709 -/php/widgets.php:829
+#: -/php/media.php:599 -/php/media.php:609 -/php/widgets.php:165
+#: -/php/widgets.php:349 -/php/widgets.php:533 -/php/widgets.php:640
+#: -/php/widgets.php:753 -/php/widgets.php:904 -/php/widgets.php:1018
+#: -/php/widgets.php:1147 -/php/widgets.php:1271 -/php/widgets.php:1376
+#: -/php/widgets.php:1518 -/php/widgets.php:1692 -/php/widgets.php:1864
+#: -/php/widgets.php:2034
 msgid "Title"
 msgstr ""
 
-#: -/php/media.php:573
+#: -/php/media.php:602
 msgid "Custom Field"
 msgstr ""
 
-#: -/php/media.php:577
+#: -/php/media.php:606
 msgid "With media&hellip;"
 msgstr ""
 
-#: -/php/media.php:579
+#: -/php/media.php:608
 msgid "Filename"
 msgstr ""
 
-#: -/php/media.php:586
+#: -/php/media.php:615
 msgid "Date Format"
 msgstr ""
 
-#: -/php/media.php:588
+#: -/php/media.php:617
 msgid ""
 "The <a href=\"%s\" target=\"_blank\">format</a> to use for comparison when "
 "<b>Match post&hellip;</b> is <b>Date</b>."
 msgstr ""
 
-#: -/php/media.php:591
+#: -/php/media.php:620
 msgid "Custom Field Key"
 msgstr ""
 
-#: -/php/media.php:593
+#: -/php/media.php:622
 msgid ""
 "The key to use for comparison when <b>Match post&hellip;</b> is <b>Custom "
 "Field</b>."
 msgstr ""
 
-#: -/php/media.php:595
+#: -/php/media.php:624
 msgid "Find Matches"
 msgstr ""
 
-#: -/php/media.php:624
+#: -/php/media.php:654
 msgid ""
 "The start date is not one of the selected publish days. Continue anyway?"
 msgstr ""
 
-#: -/php/media.php:644
+#: -/php/media.php:674
 msgid "No unattached media found."
 msgstr ""
 
-#: -/php/media.php:665
+#: -/php/media.php:695
 msgid "Start on&hellip;"
 msgstr ""
 
-#: -/php/media.php:668
+#: -/php/media.php:698
 msgid "Publish every&hellip;"
 msgstr ""
 
-#: -/php/media.php:669
+#: -/php/media.php:699
 msgid "Monday"
 msgstr ""
 
-#: -/php/media.php:670
+#: -/php/media.php:700
 msgid "Tuesday"
 msgstr ""
 
-#: -/php/media.php:671
+#: -/php/media.php:701
 msgid "Wednesday"
 msgstr ""
 
-#: -/php/media.php:672
+#: -/php/media.php:702
 msgid "Thursday"
 msgstr ""
 
-#: -/php/media.php:673
+#: -/php/media.php:703
 msgid "Friday"
 msgstr ""
 
-#: -/php/media.php:674
+#: -/php/media.php:704
 msgid "Saturday"
 msgstr ""
 
-#: -/php/media.php:675
+#: -/php/media.php:705
 msgid "Sunday"
 msgstr ""
 
-#: -/php/media.php:676
+#: -/php/media.php:706
 msgid "Save posts as drafts"
 msgstr ""
 
-#: -/php/media.php:677
+#: -/php/media.php:707
 msgid "Generate Webcomics"
 msgstr ""
 
-#: -/php/media.php:701
+#: -/php/media.php:732
 msgid "Display order updated."
 msgstr ""
 
-#: -/php/pages.php:120
+#: -/php/pages.php:126
 msgid "&mdash; No Change &mdash;"
 msgstr ""
 
-#: -/php/pages.php:150 -/php/pages.php:239
+#: -/php/pages.php:157 -/php/pages.php:251
 msgid "(no collection)"
 msgstr ""
 
-#: -/php/pages.php:173
+#: -/php/pages.php:181
 msgid "No Collection"
 msgstr ""
 
-#: -/php/posts.php:64 webcomic.php:278
+#: -/php/posts.php:68 webcomic.php:291
 msgid "Webcomic Transcripts"
 msgstr ""
 
-#: -/php/posts.php:152 -/php/posts.php:161
+#: -/php/posts.php:156 -/php/posts.php:165
 msgid "View all storylines"
 msgstr ""
 
-#: -/php/posts.php:278
+#: -/php/posts.php:286
 msgid "Transcribe"
 msgstr ""
 
-#: -/php/posts.php:280 -/php/posts.php:290 -/php/posts.php:298
+#: -/php/posts.php:288 -/php/posts.php:298 -/php/posts.php:306
 msgid "- No Change -"
 msgstr ""
 
-#: -/php/posts.php:281
+#: -/php/posts.php:289
 msgid "Allow"
 msgstr ""
 
-#: -/php/posts.php:282
+#: -/php/posts.php:290
 msgid "Do not allow"
 msgstr ""
 
-#: -/php/posts.php:291
+#: -/php/posts.php:299
 msgid "Sell"
 msgstr ""
 
-#: -/php/posts.php:292
+#: -/php/posts.php:300
 msgid "Do not sell"
 msgstr ""
 
-#: -/php/posts.php:299
+#: -/php/posts.php:307
 msgid "Available"
 msgstr ""
 
-#: -/php/posts.php:300
+#: -/php/posts.php:308
 msgid "Not available"
 msgstr ""
 
-#: -/php/posts.php:322
+#: -/php/posts.php:331
 msgid "Allow Transcribing"
 msgstr ""
 
-#: -/php/posts.php:325
+#: -/php/posts.php:334
 msgid "Sell Prints"
 msgstr ""
 
-#: -/php/posts.php:326
+#: -/php/posts.php:335
 msgid "Original Print Available"
 msgstr ""
 
-#: -/php/posts.php:366
+#: -/php/posts.php:377
 msgid "&mdash;"
 msgstr ""
 
-#: -/php/posts.php:388 -/php/transcripts.php:316
+#: -/php/posts.php:400 -/php/transcripts.php:328
 msgid "Orphaned"
 msgstr ""
 
-#: -/php/posts.php:435
+#: -/php/posts.php:450 -/php/posts.php:459
 msgid "Sell prints"
 msgstr ""
 
-#: -/php/posts.php:436 -/php/posts.php:515
+#: -/php/posts.php:451 -/php/posts.php:534
 msgid "- SOLD -"
 msgstr ""
 
-#: -/php/posts.php:442
+#: -/php/posts.php:461
 msgid "Price"
 msgstr ""
 
-#: -/php/posts.php:444
+#: -/php/posts.php:463
 msgid "Total"
 msgstr ""
 
-#: -/php/posts.php:535 -/php/transcripts.php:476
+#: -/php/posts.php:555 -/php/transcripts.php:495
 msgid "Allow transcribing"
 msgstr ""
 
-#: -/php/posts.php:562
+#: -/php/posts.php:582
 msgid " - "
 msgstr ""
 
-#: -/php/posts.php:571
+#: -/php/posts.php:591
 msgid "Submitted on %1$s at %2$s by %3$s (%4$s)"
 msgstr ""
 
-#: -/php/posts.php:608
+#: -/php/posts.php:634
 msgid "Add Media"
 msgstr ""
 
-#: -/php/posts.php:608
-msgid ""
-"Webcomic will automatically recognize any images attached to this post. You "
-"<b>do not</b> have to insert them directly into the post content."
+#: -/php/posts.php:635
+msgid "New Images"
 msgstr ""
 
-#: -/php/tags.php:805
+#: -/php/posts.php:636
+msgid ""
+"Click <strong>Add Media</strong> above and upload one or more images to "
+"attach them to this post. <strong>These images do not need to be inserted "
+"into the post.</strong> You can dismiss the media popup without inserting "
+"your images by clicking the X or anywhere in the darkened area outside of "
+"the popup."
+msgstr ""
+
+#: -/php/posts.php:637
+msgid "Existing Images"
+msgstr ""
+
+#: -/php/posts.php:638
+msgid ""
+"If you've already uploaded one or more images for this post they can be "
+"attached from the <strong>Media > Library</strong> page. After saving this "
+"post find the image or images you want to attach in the Media Library and "
+"click <strong>Attach</strong> in the <strong>Uploaded to</strong> column. "
+"You may have to <strong>Detach</strong> the images first if they were "
+"uploaded to another post."
+msgstr ""
+
+#: -/php/shortcodes.php:171
+msgid "Please <a href=\"%s\">log in</a> to view this content."
+msgstr ""
+
+#: -/php/tags.php:838
 msgid "&lsaquo;"
 msgstr ""
 
-#: -/php/tags.php:807
+#: -/php/tags.php:840
 msgid "&rsaquo;"
 msgstr ""
 
-#: -/php/tags.php:809
+#: -/php/tags.php:842
 msgid "&laquo;"
 msgstr ""
 
-#: -/php/tags.php:811
+#: -/php/tags.php:844
 msgid "&raquo;"
 msgstr ""
 
-#: -/php/tags.php:813
+#: -/php/tags.php:846
 msgid "&infin;"
 msgstr ""
 
-#: -/php/tags.php:882
+#: -/php/tags.php:917
 msgid "&curren;"
 msgstr ""
 
-#: -/php/tags.php:932 -/php/tags.php:1240
-msgid "%title"
-msgstr ""
-
-#: -/php/tags.php:1232
+#: -/php/tags.php:1279
 msgid "&lsaquo; %title"
 msgstr ""
 
-#: -/php/tags.php:1234
+#: -/php/tags.php:1281
 msgid "%title &rsaquo;"
 msgstr ""
 
-#: -/php/tags.php:1236
+#: -/php/tags.php:1283
 msgid "&laquo; %title"
 msgstr ""
 
-#: -/php/tags.php:1238
+#: -/php/tags.php:1285
 msgid "%title &raquo;"
 msgstr ""
 
-#: -/php/tags.php:1649
+#: -/php/tags.php:1287
+msgid "%title"
+msgstr ""
+
+#: -/php/tags.php:1710
 msgid "Support %s"
 msgstr ""
 
-#: -/php/tags.php:1755
+#: -/php/tags.php:1841
 msgid "View Cart"
 msgstr ""
 
-#: -/php/tags.php:1757
+#: -/php/tags.php:1843
 msgid "Add to Cart"
 msgstr ""
 
-#: -/php/tags.php:1757
+#: -/php/tags.php:1843
 msgid "Buy Now"
 msgstr ""
 
-#: -/php/tags.php:1843
+#: -/php/tags.php:1936
 msgid "Transcription Off"
 msgstr ""
 
-#: -/php/tags.php:1845
+#: -/php/tags.php:1938
 msgid "View %title Transcripts"
 msgstr ""
 
-#: -/php/tags.php:1847
+#: -/php/tags.php:1940
 msgid "Transcribe %title"
 msgstr ""
 
-#: -/php/tags.php:2049 -/php/transcripts.php:417
+#: -/php/tags.php:2148 -/php/transcripts.php:434
 msgid "Email"
 msgstr ""
 
-#: -/php/tags.php:2050
+#: -/php/tags.php:2149
 msgid "Website"
 msgstr ""
 
-#: -/php/tags.php:2052 webcomic.php:300
+#: -/php/tags.php:2151 webcomic.php:313
 msgid "Language"
 msgstr ""
 
-#: -/php/tags.php:2053
+#: -/php/tags.php:2152
 msgid "Transcript"
 msgstr ""
 
-#: -/php/tags.php:2054 webcomic.php:665
+#: -/php/tags.php:2153 webcomic.php:682
 msgid "You must be <a href=\"%s\">logged in</a> to transcribe this webcomic."
 msgstr ""
 
-#: -/php/tags.php:2055
+#: -/php/tags.php:2154
 msgid "Logged in as <a href=\"%1$s\">%2$s</a>. <a href=\"%3$s\">Log out?</a>"
 msgstr ""
 
-#: -/php/tags.php:2056
+#: -/php/tags.php:2155
 msgid "Your email address will not be published."
 msgstr ""
 
-#: -/php/tags.php:2056
+#: -/php/tags.php:2155
 msgid " Required fields are marked %s"
 msgstr ""
 
-#: -/php/tags.php:2058
+#: -/php/tags.php:2157
 msgid "Thank you! Your transcript has been submitted."
 msgstr ""
 
-#: -/php/tags.php:2059
+#: -/php/tags.php:2158
 msgid "There was a problem submitting your transcript. Please try again."
 msgstr ""
 
-#: -/php/tags.php:2061
+#: -/php/tags.php:2160
 msgid "Transcribe %s"
 msgstr ""
 
-#: -/php/tags.php:2061
+#: -/php/tags.php:2160
 msgid "Improve %s Transcript"
 msgstr ""
 
-#: -/php/tags.php:2062
+#: -/php/tags.php:2161
 msgid "Submit Transcript"
 msgstr ""
 
-#: -/php/tags.php:2642 -/php/tags.php:6451
+#: -/php/tags.php:2747 -/php/tags.php:6675
 msgid "Feed for %s"
 msgstr ""
 
-#: -/php/tags.php:2770 -/php/tags.php:2882 webcomic.php:197
+#: -/php/tags.php:2876 -/php/tags.php:2989 webcomic.php:210
 msgid "%s Webcomic"
 msgid_plural "%s Webcomics"
 msgstr[0] ""
 msgstr[1] ""
 
-#: -/php/taxonomy.php:80
+#: -/php/taxonomy.php:84
 msgid "Order updated."
 msgstr ""
 
-#: -/php/taxonomy.php:91
+#: -/php/taxonomy.php:96
 msgid "Sort Webcomic Terms"
 msgstr ""
 
-#: -/php/taxonomy.php:269 -/php/taxonomy.php:365
+#: -/php/taxonomy.php:277 -/php/taxonomy.php:378
 msgid "Sort %s"
 msgstr ""
 
-#: -/php/taxonomy.php:290 -/php/taxonomy.php:313 -/php/taxonomy.php:346
+#: -/php/taxonomy.php:299 -/php/taxonomy.php:323 -/php/taxonomy.php:358
 msgid "Cover"
 msgstr ""
 
-#: -/php/taxonomy.php:290 -/php/taxonomy.php:313 -/php/taxonomy.php:346
+#: -/php/taxonomy.php:299 -/php/taxonomy.php:323 -/php/taxonomy.php:358
 msgid "Avatar"
 msgstr ""
 
-#: -/php/taxonomy.php:293
+#: -/php/taxonomy.php:302
 msgid "The cover is a representative image that can be displayed on your site."
 msgstr ""
 
-#: -/php/taxonomy.php:293
+#: -/php/taxonomy.php:302
 msgid ""
 "The avatar is a representative image that can be displayed on your site."
 msgstr ""
 
-#: -/php/taxonomy.php:316
+#: -/php/taxonomy.php:326
 msgid ""
 "The cover is a representative image that can be displayed on your site. "
 "Don't forget to <b>Update</b> after updating the cover."
 msgstr ""
 
-#: -/php/taxonomy.php:316
+#: -/php/taxonomy.php:326
 msgid ""
 "The avatar is a representative image that can be displayed on your site. "
 "Don't forget to <b>Update</b> after updating the avatar."
 msgstr ""
 
-#: -/php/taxonomy.php:382
+#: -/php/taxonomy.php:395
 msgid "Drag and drop the terms to change their order."
 msgstr ""
 
-#: -/php/taxonomy.php:385
+#: -/php/taxonomy.php:398
 msgid "Cancel"
 msgstr ""
 
-#: -/php/taxonomy.php:405
+#: -/php/taxonomy.php:419
 msgid "Select a Cover"
 msgstr ""
 
-#: -/php/taxonomy.php:405
+#: -/php/taxonomy.php:419
 msgid "Select an Avatar"
 msgstr ""
 
-#: -/php/transcripts.php:133
+#: -/php/transcripts.php:140
 msgid "View all collections"
 msgstr ""
 
-#: -/php/transcripts.php:228
+#: -/php/transcripts.php:236
 msgid "Unattached Transcript"
 msgstr ""
 
-#: -/php/transcripts.php:254
+#: -/php/transcripts.php:263
 msgid "No Webcomic"
 msgstr ""
 
-#: -/php/transcripts.php:346
+#: -/php/transcripts.php:360
 msgid "Author"
 msgstr ""
 
-#: -/php/transcripts.php:410
+#: -/php/transcripts.php:427
 msgid "Checked authors will be deleted when the transcript is updated."
 msgstr ""
 
-#: -/php/transcripts.php:419
+#: -/php/transcripts.php:436
 msgid "IP"
 msgstr ""
 
-#: -/php/transcripts.php:448
+#: -/php/transcripts.php:465
 msgid "Add Author"
 msgstr ""
 
-#: -/php/transcripts.php:460
+#: -/php/transcripts.php:478
 msgid "(no parent)"
 msgstr ""
 
-#: -/php/transcripts.php:491
+#: -/php/transcripts.php:511
 msgid "No Attachments"
 msgstr ""
 
-#: -/php/users.php:52
+#: -/php/upgrade.php:136 webcomic.php:384
+msgid "Shopping Cart"
+msgstr ""
+
+#: -/php/users.php:57
 msgid "Your birthday is used for age verification."
 msgstr ""
 
-#: -/php/widgets.php:80
-msgid "Webcomic Link"
+#: -/php/widgets.php:97
+msgid "[Webcomic] Link"
 msgstr ""
 
-#: -/php/widgets.php:80
-msgid "Link to the first, last, or a random webcomic."
+#: -/php/widgets.php:97
+msgid "Link to the previous, next, first, last, or a random webcomic"
 msgstr ""
 
-#: -/php/widgets.php:135
-msgid "Target:"
+#: -/php/widgets.php:171 -/php/widgets.php:1034 -/php/widgets.php:1163
+#: -/php/widgets.php:1287 -/php/widgets.php:1536 -/php/widgets.php:1710
+msgid "Target"
 msgstr ""
 
-#: -/php/widgets.php:137
+#: -/php/widgets.php:173 -/php/widgets.php:1526 -/php/widgets.php:1700
+msgid "Previous"
+msgstr ""
+
+#: -/php/widgets.php:174 -/php/widgets.php:1527 -/php/widgets.php:1701
+msgid "Next"
+msgstr ""
+
+#: -/php/widgets.php:175 -/php/widgets.php:1528 -/php/widgets.php:1702
 msgid "First"
 msgstr ""
 
-#: -/php/widgets.php:138
+#: -/php/widgets.php:176 -/php/widgets.php:1529 -/php/widgets.php:1703
 msgid "Last"
 msgstr ""
 
-#: -/php/widgets.php:139
+#: -/php/widgets.php:177 -/php/widgets.php:1530 -/php/widgets.php:1704
 msgid "Random"
 msgstr ""
 
-#: -/php/widgets.php:144 -/php/widgets.php:282 -/php/widgets.php:391
-#: -/php/widgets.php:607 -/php/widgets.php:724
-msgid "Collection:"
-msgstr ""
-
-#: -/php/widgets.php:146 -/php/widgets.php:284 -/php/widgets.php:393
-#: -/php/widgets.php:609 -/php/widgets.php:726
+#: -/php/widgets.php:184 -/php/widgets.php:540 -/php/widgets.php:647
+#: -/php/widgets.php:760 -/php/widgets.php:911 -/php/widgets.php:1045
+#: -/php/widgets.php:1174 -/php/widgets.php:1549 -/php/widgets.php:1723
+#: -/php/widgets.php:1871
 msgid "(current collection)"
 msgstr ""
 
-#: -/php/widgets.php:157
-msgid "Link:"
+#: -/php/widgets.php:195
+msgid "Limit"
 msgstr ""
 
-#: -/php/widgets.php:162
+#: -/php/widgets.php:197
+msgid "(none)"
+msgstr ""
+
+#: -/php/widgets.php:201
+msgid ""
+"Limit navigation to the storylines or characters of the current webcomic."
+msgstr ""
+
+#: -/php/widgets.php:206 -/php/widgets.php:1382 -/php/widgets.php:1560
+#: -/php/widgets.php:1734 -/php/widgets.php:1882
+msgid "Link"
+msgstr ""
+
+#: -/php/widgets.php:209 -/php/widgets.php:1385 -/php/widgets.php:1563
+#: -/php/widgets.php:1737 -/php/widgets.php:1885
+msgid "The link text will be used as alternate text if you select an image."
+msgstr ""
+
+#: -/php/widgets.php:215 -/php/widgets.php:373 -/php/widgets.php:780
+#: -/php/widgets.php:1391 -/php/widgets.php:1569 -/php/widgets.php:1743
+#: -/php/widgets.php:1891 -/php/widgets.php:2065
 msgid "Token"
 msgstr ""
 
-#: -/php/widgets.php:163
+#: -/php/widgets.php:216 -/php/widgets.php:374 -/php/widgets.php:781
+#: -/php/widgets.php:1392 -/php/widgets.php:1570 -/php/widgets.php:1744
+#: -/php/widgets.php:1892 -/php/widgets.php:2066
 msgid "Replacement"
 msgstr ""
 
-#: -/php/widgets.php:169
+#: -/php/widgets.php:222 -/php/widgets.php:1398 -/php/widgets.php:2072
 msgid "Webcomic Title"
 msgstr ""
 
-#: -/php/widgets.php:173
+#: -/php/widgets.php:226 -/php/widgets.php:1402 -/php/widgets.php:2076
 msgid "Publish Date"
 msgstr ""
 
-#: -/php/widgets.php:184
+#: -/php/widgets.php:237 -/php/widgets.php:1413 -/php/widgets.php:2087
 msgid "Image Preview"
 msgstr ""
 
-#: -/php/widgets.php:202
-msgid "Dynamic Webcomic"
+#: -/php/widgets.php:258
+msgid "Select a Link Image"
 msgstr ""
 
-#: -/php/widgets.php:202
-msgid "A dynamic browser for your webcomics."
+#: -/php/widgets.php:258 -/php/widgets.php:428 -/php/widgets.php:815
+#: -/php/widgets.php:1434 -/php/widgets.php:1608 -/php/widgets.php:1782
+#: -/php/widgets.php:1930 -/php/widgets.php:2108
+msgid "Select Image"
 msgstr ""
 
-#: -/php/widgets.php:285 -/php/widgets.php:394
-msgid "(all collections)"
+#: -/php/widgets.php:274
+msgid "[Webcomic] Print"
 msgstr ""
 
-#: -/php/widgets.php:295
-msgid "Start with first webcomic"
+#: -/php/widgets.php:274
+msgid "A purchase print form for individual webcomics"
 msgstr ""
 
-#: -/php/widgets.php:304
-msgid ""
-"Please enable the dynamic navigation option on the Settings > Webcomic "
-"administrative page to use this widget."
+#: -/php/widgets.php:354
+msgid "Type"
 msgstr ""
 
-#: -/php/widgets.php:321
-msgid "Recent Webcomics"
-msgstr ""
-
-#: -/php/widgets.php:321
-msgid "The most recent webcomics on your site."
-msgstr ""
-
-#: -/php/widgets.php:405
-msgid "Webcomics to show:"
-msgstr ""
-
-#: -/php/widgets.php:410 -/php/widgets.php:622 -/php/widgets.php:739
-#: -/php/widgets.php:847
-msgid "Show webcomic previews"
-msgstr ""
-
-#: -/php/widgets.php:424
-msgid "Webcomic Donation"
-msgstr ""
-
-#: -/php/widgets.php:424
-msgid "A donation form for your webcomics."
-msgstr ""
-
-#: -/php/widgets.php:487
+#: -/php/widgets.php:364 -/php/widgets.php:771
 msgid "Label"
 msgstr ""
 
-#: -/php/widgets.php:503
+#: -/php/widgets.php:367 -/php/widgets.php:774
+msgid "The label text will be used as alternate text if you select an image."
+msgstr ""
+
+#: -/php/widgets.php:380
+msgid "Total Cost"
+msgstr ""
+
+#: -/php/widgets.php:384
+msgid "Print Cost"
+msgstr ""
+
+#: -/php/widgets.php:388
+msgid "Shipping Cost"
+msgstr ""
+
+#: -/php/widgets.php:392
+msgid "Collection Total Cost"
+msgstr ""
+
+#: -/php/widgets.php:396
+msgid "Collection Print Cost"
+msgstr ""
+
+#: -/php/widgets.php:400
+msgid "Collection Shipping Cost"
+msgstr ""
+
+#: -/php/widgets.php:405 -/php/widgets.php:792
 msgid ""
-"Please add a business email to one or more of your collections to use this "
-"widget."
+"You must add a business email to one or more collections to use this widget."
 msgstr ""
 
-#: -/php/widgets.php:520
-msgid "Webcomic Storylines"
+#: -/php/widgets.php:428
+msgid "Select a Print Image"
 msgstr ""
 
-#: -/php/widgets.php:520
-msgid "A list, dropdown, or cloud of Webcomic storylines."
+#: -/php/widgets.php:444
+msgid "[Webcomic] Dynamic"
 msgstr ""
 
-#: -/php/widgets.php:541
+#: -/php/widgets.php:444
+msgid "A dynamic browser for your webcomics"
+msgstr ""
+
+#: -/php/widgets.php:525
+msgid ""
+"You must enable dynamic navigation on the Settings > Webcomic page to use "
+"this widget."
+msgstr ""
+
+#: -/php/widgets.php:541 -/php/widgets.php:648 -/php/widgets.php:912
+msgid "(all collections)"
+msgstr ""
+
+#: -/php/widgets.php:551
+msgid "Start with first webcomic"
+msgstr ""
+
+#: -/php/widgets.php:552
+msgid "Enable touch gestures"
+msgstr ""
+
+#: -/php/widgets.php:553
+msgid "Gestures must be enabled on the <b>Settings > Webcomic</b> page."
+msgstr ""
+
+#: -/php/widgets.php:568
+msgid "[Webcomic] Recent"
+msgstr ""
+
+#: -/php/widgets.php:568
+msgid "The most recently published webcomics on your site"
+msgstr ""
+
+#: -/php/widgets.php:659 -/php/widgets.php:923
+msgid "Webcomics to show"
+msgstr ""
+
+#: -/php/widgets.php:664 -/php/widgets.php:928 -/php/widgets.php:1058
+#: -/php/widgets.php:1187 -/php/widgets.php:1299
+msgid "Show webcomic previews"
+msgstr ""
+
+#: -/php/widgets.php:678
+msgid "[Webcomic] Donation"
+msgstr ""
+
+#: -/php/widgets.php:678
+msgid "A donation form for your webcomics"
+msgstr ""
+
+#: -/php/widgets.php:787
+msgid "Donation Amount"
+msgstr ""
+
+#: -/php/widgets.php:815
+msgid "Select a Donation Image"
+msgstr ""
+
+#: -/php/widgets.php:831
+msgid "[Webcomic] Scheduled"
+msgstr ""
+
+#: -/php/widgets.php:831
+msgid "Share upcomming webcomics from your buffer."
+msgstr ""
+
+#: -/php/widgets.php:929
+msgid "Show webcomic publish date"
+msgstr ""
+
+#: -/php/widgets.php:943
+msgid "[Webcomic] Storylines"
+msgstr ""
+
+#: -/php/widgets.php:943
+msgid "A list, dropdown, or cloud of Webcomic storylines"
+msgstr ""
+
+#: -/php/widgets.php:965
 msgid "Select Storyline"
 msgstr ""
 
-#: -/php/widgets.php:598 -/php/widgets.php:715 -/php/widgets.php:835
-msgid "Format:"
+#: -/php/widgets.php:1024 -/php/widgets.php:1153 -/php/widgets.php:1277
+msgid "Format"
 msgstr ""
 
-#: -/php/widgets.php:600 -/php/widgets.php:717 -/php/widgets.php:837
+#: -/php/widgets.php:1026 -/php/widgets.php:1155 -/php/widgets.php:1279
 msgid "List"
 msgstr ""
 
-#: -/php/widgets.php:601 -/php/widgets.php:718 -/php/widgets.php:838
+#: -/php/widgets.php:1027 -/php/widgets.php:1156 -/php/widgets.php:1280
 msgid "Dropdown"
 msgstr ""
 
-#: -/php/widgets.php:602 -/php/widgets.php:719 -/php/widgets.php:839
+#: -/php/widgets.php:1028 -/php/widgets.php:1157 -/php/widgets.php:1281
 msgid "Cloud"
 msgstr ""
 
-#: -/php/widgets.php:619 -/php/widgets.php:736 -/php/widgets.php:844
+#: -/php/widgets.php:1037 -/php/widgets.php:1166 -/php/widgets.php:1290
+#: -/php/widgets.php:1539 -/php/widgets.php:1713
+msgid "First Webcomic"
+msgstr ""
+
+#: -/php/widgets.php:1038 -/php/widgets.php:1167 -/php/widgets.php:1291
+#: -/php/widgets.php:1540 -/php/widgets.php:1714
+msgid "Last Webcomic"
+msgstr ""
+
+#: -/php/widgets.php:1055 -/php/widgets.php:1184 -/php/widgets.php:1296
 msgid "Show webcomics"
 msgstr ""
 
-#: -/php/widgets.php:620
+#: -/php/widgets.php:1056
 msgid "Show storyline covers"
 msgstr ""
 
-#: -/php/widgets.php:621 -/php/widgets.php:738 -/php/widgets.php:846
+#: -/php/widgets.php:1057 -/php/widgets.php:1186 -/php/widgets.php:1298
 msgid "Show webcomic counts"
 msgstr ""
 
-#: -/php/widgets.php:623
-msgid "Link to the beginning of storylines"
+#: -/php/widgets.php:1072
+msgid "[Webcomic] Characters"
 msgstr ""
 
-#: -/php/widgets.php:637
-msgid "Webcomic Characters"
+#: -/php/widgets.php:1072
+msgid "A list, dropdown, or cloud of Webcomic characters"
 msgstr ""
 
-#: -/php/widgets.php:637
-msgid "A list, dropdown, or cloud of Webcomic characters."
-msgstr ""
-
-#: -/php/widgets.php:658
+#: -/php/widgets.php:1094
 msgid "Select Character"
 msgstr ""
 
-#: -/php/widgets.php:737
+#: -/php/widgets.php:1185
 msgid "Show character avatars"
 msgstr ""
 
-#: -/php/widgets.php:740
-msgid "Link to the first appareance of characters"
+#: -/php/widgets.php:1201
+msgid "[Webcomic] Collections"
 msgstr ""
 
-#: -/php/widgets.php:754
-msgid "Webcomic Collections"
+#: -/php/widgets.php:1201
+msgid "A list, dropdown, or cloud of Webcomic collections"
 msgstr ""
 
-#: -/php/widgets.php:754
-msgid "A list, dropdown, or cloud of Webcomic collections."
-msgstr ""
-
-#: -/php/widgets.php:774
+#: -/php/widgets.php:1222
 msgid "Select Collection"
 msgstr ""
 
-#: -/php/widgets.php:845
+#: -/php/widgets.php:1297
 msgid "Show collection posters"
 msgstr ""
 
-#: -/php/widgets.php:848
-msgid "Link to the beginning of collections"
+#: -/php/widgets.php:1313
+msgid "[Webcomic] Purchase Link"
 msgstr ""
 
-#: webcomic.php:198 webcomic.php:280
-msgid "Add New"
+#: -/php/widgets.php:1313
+msgid "Link to the purchase prints page for a webcomic"
 msgstr ""
 
-#: webcomic.php:199
-msgid "Add New Webcomic"
+#: -/php/widgets.php:1434
+msgid "Select a Purchase Link Image"
 msgstr ""
 
-#: webcomic.php:200
-msgid "Edit Webcomic"
+#: -/php/widgets.php:1450
+msgid "[Webcomic] Storyline Link"
 msgstr ""
 
-#: webcomic.php:201
-msgid "New Webcomic"
+#: -/php/widgets.php:1450
+msgid "Link to the previous, next, first, last, or a random webcomic storyline"
 msgstr ""
 
-#: webcomic.php:202
-msgid "All Webcomics"
-msgstr ""
-
-#: webcomic.php:203
-msgid "View Webcomic"
-msgstr ""
-
-#: webcomic.php:204
-msgid "Search Webcomics"
-msgstr ""
-
-#: webcomic.php:205
-msgid "No webcomics found."
-msgstr ""
-
-#: webcomic.php:206
-msgid "No webcomics found in Trash."
-msgstr ""
-
-#: webcomic.php:222
-msgid "%s Storylines"
-msgstr ""
-
-#: webcomic.php:223
+#: -/php/widgets.php:1524 webcomic.php:236
 msgid "Storyline"
 msgstr ""
 
-#: webcomic.php:224
-msgid "Search Storylines"
+#: -/php/widgets.php:1541 -/php/widgets.php:1715
+msgid "Random Webcomic"
 msgstr ""
 
-#: webcomic.php:225
-msgid "Popular Storylines"
+#: -/php/widgets.php:1544
+msgid "Where the storyline link will point to."
 msgstr ""
 
-#: webcomic.php:226
-msgid "All Storylines"
+#: -/php/widgets.php:1576
+msgid "Storyline Title"
 msgstr ""
 
-#: webcomic.php:227
-msgid "Parent Storyline"
+#: -/php/widgets.php:1587
+msgid "Cover Image"
 msgstr ""
 
-#: webcomic.php:228
-msgid "Parent Storyline:"
+#: -/php/widgets.php:1608
+msgid "Select a Storyline Link Image"
 msgstr ""
 
-#: webcomic.php:229
-msgid "Edit Storyline"
+#: -/php/widgets.php:1624
+msgid "[Webcomic] Character Link"
 msgstr ""
 
-#: webcomic.php:230
-msgid "Update Storyline"
+#: -/php/widgets.php:1624
+msgid "Link to the previous, next, first, last, or a random webcomic character"
 msgstr ""
 
-#: webcomic.php:231
-msgid "Add New Storyline"
-msgstr ""
-
-#: webcomic.php:232
-msgid "New Storyline Name"
-msgstr ""
-
-#: webcomic.php:247
-msgid "%s Characters"
-msgstr ""
-
-#: webcomic.php:248
+#: -/php/widgets.php:1698 webcomic.php:261
 msgid "Character"
 msgstr ""
 
-#: webcomic.php:249
+#: -/php/widgets.php:1718
+msgid "Where the character link will point to."
+msgstr ""
+
+#: -/php/widgets.php:1750
+msgid "Character Title"
+msgstr ""
+
+#: -/php/widgets.php:1761
+msgid "Avatar Image"
+msgstr ""
+
+#: -/php/widgets.php:1782
+msgid "Select a Character Link Image"
+msgstr ""
+
+#: -/php/widgets.php:1798
+msgid "[Webcomic] Collection Link"
+msgstr ""
+
+#: -/php/widgets.php:1798
+msgid "Link to a Webcomic collection archive"
+msgstr ""
+
+#: -/php/widgets.php:1898
+msgid "Collection Title"
+msgstr ""
+
+#: -/php/widgets.php:1909
+msgid "Poster Image"
+msgstr ""
+
+#: -/php/widgets.php:1930
+msgid "Select a Collection Link Image"
+msgstr ""
+
+#: -/php/widgets.php:1946
+msgid "[Webcomic] Transcripts Link"
+msgstr ""
+
+#: -/php/widgets.php:1946
+msgid "Link to the transcripts for a webcomic"
+msgstr ""
+
+#: -/php/widgets.php:2040
+msgid "None Link"
+msgstr ""
+
+#: -/php/widgets.php:2043
+msgid ""
+"Displayed when transcription is on but no transcripts are available. The "
+"link text will be used as alternate text if you select an image."
+msgstr ""
+
+#: -/php/widgets.php:2048
+msgid "Some Link"
+msgstr ""
+
+#: -/php/widgets.php:2051
+msgid ""
+"Displayed when one or more transcripts are available. The link text will be "
+"used as alternate text if you select an image."
+msgstr ""
+
+#: -/php/widgets.php:2056
+msgid "Off Link"
+msgstr ""
+
+#: -/php/widgets.php:2059
+msgid ""
+"Displayed when transcription is turned off. The link text will be used as "
+"alternate text if you select an image."
+msgstr ""
+
+#: -/php/widgets.php:2108
+msgid "Select a Transcript Link Image"
+msgstr ""
+
+#: webcomic.php:211 webcomic.php:293
+msgid "Add New"
+msgstr ""
+
+#: webcomic.php:212
+msgid "Add New Webcomic"
+msgstr ""
+
+#: webcomic.php:213
+msgid "Edit Webcomic"
+msgstr ""
+
+#: webcomic.php:214
+msgid "New Webcomic"
+msgstr ""
+
+#: webcomic.php:215
+msgid "All Webcomics"
+msgstr ""
+
+#: webcomic.php:216
+msgid "View Webcomic"
+msgstr ""
+
+#: webcomic.php:217
+msgid "Search Webcomics"
+msgstr ""
+
+#: webcomic.php:218
+msgid "No webcomics found."
+msgstr ""
+
+#: webcomic.php:219
+msgid "No webcomics found in Trash."
+msgstr ""
+
+#: webcomic.php:235
+msgid "%s Storylines"
+msgstr ""
+
+#: webcomic.php:237
+msgid "Search Storylines"
+msgstr ""
+
+#: webcomic.php:238
+msgid "Popular Storylines"
+msgstr ""
+
+#: webcomic.php:239
+msgid "All Storylines"
+msgstr ""
+
+#: webcomic.php:240
+msgid "Parent Storyline"
+msgstr ""
+
+#: webcomic.php:241
+msgid "Parent Storyline:"
+msgstr ""
+
+#: webcomic.php:242
+msgid "Edit Storyline"
+msgstr ""
+
+#: webcomic.php:243
+msgid "Update Storyline"
+msgstr ""
+
+#: webcomic.php:244
+msgid "Add New Storyline"
+msgstr ""
+
+#: webcomic.php:245
+msgid "New Storyline Name"
+msgstr ""
+
+#: webcomic.php:260
+msgid "%s Characters"
+msgstr ""
+
+#: webcomic.php:262
 msgid "Search Characters"
 msgstr ""
 
-#: webcomic.php:250
+#: webcomic.php:263
 msgid "Popular Characters"
 msgstr ""
 
-#: webcomic.php:251
+#: webcomic.php:264
 msgid "All Characters"
 msgstr ""
 
-#: webcomic.php:252
+#: webcomic.php:265
 msgid "Edit Character"
 msgstr ""
 
-#: webcomic.php:253
+#: webcomic.php:266
 msgid "Update Character"
 msgstr ""
 
-#: webcomic.php:254
+#: webcomic.php:267
 msgid "Add New Character"
 msgstr ""
 
-#: webcomic.php:255
+#: webcomic.php:268
 msgid "New Character Name"
 msgstr ""
 
-#: webcomic.php:256
+#: webcomic.php:269
 msgid "Separate characters with commas"
 msgstr ""
 
-#: webcomic.php:257
+#: webcomic.php:270
 msgid "Add or remove characters"
 msgstr ""
 
-#: webcomic.php:258
+#: webcomic.php:271
 msgid "Choose from the most used characters"
 msgstr ""
 
-#: webcomic.php:279
+#: webcomic.php:292
 msgid "Webcomic Transcript"
 msgstr ""
 
-#: webcomic.php:281
+#: webcomic.php:294
 msgid "Add New Transcript"
 msgstr ""
 
-#: webcomic.php:282
+#: webcomic.php:295
 msgid "Edit Transcript"
 msgstr ""
 
-#: webcomic.php:283
+#: webcomic.php:296
 msgid "New Transcript"
 msgstr ""
 
-#: webcomic.php:284
+#: webcomic.php:297
 msgid "All Transcripts"
 msgstr ""
 
-#: webcomic.php:285
+#: webcomic.php:298
 msgid "View Transcript"
 msgstr ""
 
-#: webcomic.php:286
+#: webcomic.php:299
 msgid "Search Transcripts"
 msgstr ""
 
-#: webcomic.php:287
+#: webcomic.php:300
 msgid "No transcripts found."
 msgstr ""
 
-#: webcomic.php:288
+#: webcomic.php:301
 msgid "No transcripts found in Trash."
 msgstr ""
 
-#: webcomic.php:299
+#: webcomic.php:312
 msgid "Webcomic Transcript Languages"
 msgstr ""
 
-#: webcomic.php:301
+#: webcomic.php:314
 msgid "Search Languages"
 msgstr ""
 
-#: webcomic.php:302
+#: webcomic.php:315
 msgid "Popular Lanuages"
 msgstr ""
 
-#: webcomic.php:303
+#: webcomic.php:316
 msgid "All Languages"
 msgstr ""
 
-#: webcomic.php:304
+#: webcomic.php:317
 msgid "Edit Language"
 msgstr ""
 
-#: webcomic.php:305
+#: webcomic.php:318
 msgid "Update Language"
 msgstr ""
 
-#: webcomic.php:306
+#: webcomic.php:319
 msgid "Add New Language"
 msgstr ""
 
-#: webcomic.php:307
+#: webcomic.php:320
 msgid "New Language Name"
 msgstr ""
 
-#: webcomic.php:308
+#: webcomic.php:321
 msgid "Separate languages with commas"
 msgstr ""
 
-#: webcomic.php:309
+#: webcomic.php:322
 msgid "Add or remove languages"
 msgstr ""
 
-#: webcomic.php:310
+#: webcomic.php:323
 msgid "Choose from the most used languages"
 msgstr ""
 
-#: webcomic.php:366
+#: webcomic.php:378
 msgid "Incomplete transaction"
 msgstr ""
 
-#: webcomic.php:369
+#: webcomic.php:381
 msgid "Transaction already completed"
 msgstr ""
 
-#: webcomic.php:381 webcomic.php:412 webcomic.php:431
+#: webcomic.php:393 webcomic.php:419 webcomic.php:438
 msgid "Invalid collection %s"
 msgstr ""
 
-#: webcomic.php:385 webcomic.php:415 webcomic.php:434
+#: webcomic.php:396 webcomic.php:422 webcomic.php:441
 msgid "Incorrect business email %s"
 msgstr ""
 
-#: webcomic.php:389 webcomic.php:418 webcomic.php:437
+#: webcomic.php:399 webcomic.php:425 webcomic.php:444
 msgid "Incorrect price %s"
 msgstr ""
 
-#: webcomic.php:393 webcomic.php:421 webcomic.php:440
+#: webcomic.php:402 webcomic.php:428 webcomic.php:447
 msgid "Incorrect currency %s"
 msgstr ""
 
-#: webcomic.php:399
-msgid "Good"
-msgstr ""
-
-#: webcomic.php:408
-msgid "%s Error"
-msgid_plural "%s Errors"
-msgstr[0] ""
-msgstr[1] ""
-
-#: webcomic.php:408 webcomic.php:446
+#: webcomic.php:409 webcomic.php:453
 msgid "Sale Get!"
 msgstr ""
 
-#: webcomic.php:423
+#: webcomic.php:430
 msgid "Donation Get!"
 msgstr ""
 
-#: webcomic.php:451
+#: webcomic.php:458
 msgid "Invalid response"
 msgstr ""
 
-#: webcomic.php:456
-msgid "HTTP Error"
+#: webcomic.php:462
+msgid "HTTP Error %s"
 msgstr ""
 
-#: webcomic.php:590
+#: webcomic.php:606
 msgid "Authorization denied. <a href=\"%1$s\">Return to %2$s Settings</a>"
 msgstr ""
 
-#: webcomic.php:590
+#: webcomic.php:606
 msgid "Twitter Authorization Denied | Webcomic"
 msgstr ""
 
-#: webcomic.php:620
+#: webcomic.php:636
 msgid ""
 "Newly published %1$s webcomics will be tweeted to <a href=\"%2$s\">%3$s</a>. "
 "<a href=\"%4$s\">Return to %1s Settings</a>"
 msgstr ""
 
-#: webcomic.php:625
+#: webcomic.php:641
 msgid "Twitter Authorization Complete | Webcomic"
 msgstr ""
 
-#: webcomic.php:627 webcomic.php:630
+#: webcomic.php:643 webcomic.php:646
 msgid ""
 "Your credentials could not be verified. Please ensure that your <b>consumer "
 "key</b> and <b>consumer secret</b> were entered correctly and <a href=\"%s"
 "\">try again.</a>"
 msgstr ""
 
-#: webcomic.php:627 webcomic.php:630
+#: webcomic.php:643 webcomic.php:646
 msgid "Twitter Authorization Failed | Webcomic"
 msgstr ""
 
-#: webcomic.php:650
+#: webcomic.php:667
 msgid "Transcripts can only be submitted for webcomics."
 msgstr ""
 
-#: webcomic.php:650 webcomic.php:669
+#: webcomic.php:667 webcomic.php:686
 msgid "Error | Webcomic"
 msgstr ""
 
-#: webcomic.php:652
+#: webcomic.php:669
 msgid "This webcomic cannot be transcribed."
 msgstr ""
 
-#: webcomic.php:652
+#: webcomic.php:669
 msgid "Transcribing Not Allowed | Webcomic"
 msgstr ""
 
-#: webcomic.php:661
+#: webcomic.php:678
 msgid "an anonymous user"
 msgstr ""
 
-#: webcomic.php:665 webcomic.php:667
+#: webcomic.php:682 webcomic.php:684
 msgid "Unauthorized Transcriber | Webcomic"
 msgstr ""
 
-#: webcomic.php:667
+#: webcomic.php:684
 msgid ""
 "You must provide a name and valid email address to transcribe this webcomic."
 msgstr ""
 
-#: webcomic.php:669
+#: webcomic.php:686
 msgid "Please write a transcript."
 msgstr ""
 
-#: webcomic.php:712
+#: webcomic.php:729
 msgid "[%1$s] %2$s Transcript Submitted"
 msgstr ""
 
-#: webcomic.php:713
+#: webcomic.php:730
 msgid ""
 "This is an automated notification that %1$s%2$s has <a href=\"%3$s\">%4$s</"
 "a> for %5$s."
 msgstr ""
 
-#: webcomic.php:717
+#: webcomic.php:734
 msgid "improved a transcript"
 msgstr ""
 
-#: webcomic.php:717
+#: webcomic.php:734
 msgid "submitted a transcript"
 msgstr ""
 
-#: webcomic.php:884 webcomic.php:889
+#: webcomic.php:905 webcomic.php:910
 msgid "Restricted Content"
 msgstr ""
 
-#: webcomic.php:885
+#: webcomic.php:906
 msgid "You must <a href=\"%s\">log in</a> to view this content."
 msgstr ""
 
-#: webcomic.php:890
+#: webcomic.php:911
 msgid "Please <a href=\"%s\">verify your age</a> to view this content."
 msgstr ""
 
-#: webcomic.php:975
+#: webcomic.php:998
 msgid "[%s] %s Buffer Alert - %s Day Left"
 msgid_plural "[%s] %s Buffer Alert - %s Days Left"
 msgstr[0] ""
 msgstr[1] ""
 
-#: webcomic.php:976
-msgid "This is an automated reminder that the buffer for %1$s expires on %2%s."
+#: webcomic.php:999
+msgid "This is an automated reminder that the buffer for %1$s expires on %2$s."
 msgstr ""
 
-#: webcomic.php:1113
+#: webcomic.php:1138
 msgid "<b>Twitter Error:</b> %s"
+msgstr ""
+
+#: webcomic.php:1702
+msgid "The Webcomic Network is currently unavailable."
 msgstr ""
 
 #. Plugin URI of the plugin/theme
