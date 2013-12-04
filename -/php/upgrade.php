@@ -5,7 +5,8 @@
  * @package Webcomic
  */
 
-/** Handle version-specific upgrades.
+/**
+ * Handle version-specific upgrades.
  * 
  * @package Webcomic
  */
@@ -96,6 +97,8 @@ class WebcomicUpgrade extends Webcomic {
 	
 	/**
 	 * Upgrade to 4.1
+	 * 
+	 * @see github.com/mgsisk/webcomic/commit/111d9df8cc2ce614a57f74409b6f73f74185bf24
 	 */
 	private function _41() {
 		global $blog_id;
