@@ -57,6 +57,10 @@ You can follow changes as they happen at [the master repository on GitHub](https
 
 = 4.1 =
 
+- [Update POT file for release.](https://github.com/mgsisk/webcomic/commit/c76a86f6049ac32bf29e5f064020cd02c50d0247)
+- [Cleanup bundled integration templates.](https://github.com/mgsisk/webcomic/commit/ed0d059fd68196d00a732e1c8a767cb143a0822f)
+- [Update changelog.](https://github.com/mgsisk/webcomic/commit/78b6a63ea3c5bbd5817252b89a7a32cce11ceb3f)
+- [Add image attaching explanation.](https://github.com/mgsisk/webcomic/commit/f76651f0ed983ab196901e60d3c27ff26b108432)
 - [Clean up standard integration templates.](https://github.com/mgsisk/webcomic/commit/507d663b9076c9b1a48555bd42b3cc21ee67b5e4)
 - [Swap join() for implode().](https://github.com/mgsisk/webcomic/commit/e38073c5a5a883eec4b01a3e454d506e4524c557)
 - [Update readme's for next release.](https://github.com/mgsisk/webcomic/commit/cf6c0d2c767f1c14ad2090ec9a029ab533c39a6e)
