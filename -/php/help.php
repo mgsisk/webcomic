@@ -380,6 +380,7 @@ class WebcomicHelp extends Webcomic {
 				<li>' .  __( '<b>With media&hellip;</b> specifies what media attribute should be use to match media with posts.', 'webcomic' ) . '</li>
 				<li>' . sprintf( __( '<b>Date Format</b> is <a href="%s" target="_blank">the date format</a> to use when using post or media dates for comparison', 'webcomic' ), '//php.net/manual/en/function.date.php' ) . '</li>
 				<li>' . __( '<b>Custom Field Key</b> is the name of the custom field to use when using a post custom field for comparison.', 'webcomic' ) . '</li>
+				<li>' .  __( '<b>Post and media values must match exactly</b> forces Webcomic to recognize only exact matches (e.g. a post date of 2008-12-04 will not match a media filename of 2008-12-03-awesome-comic.jpg with this option selected).', 'webcomic' ) . '</li>
 			</ul>
 			<p>' . __( "After clicking <b>Find Matches</b> Webcomic will compare all orphaned posts in the selected collection to all unattached media in your Library and list any matches it finds on the right. You can verify these matches and uncheck the ones you don't want to save.", 'webcomic' ) . '</p>
 			<p>' . __( "Webcomic may find more than one match between media and posts, and will uncheck and highlight these additional matches. Media can only be attached to one post, so it's a good idea to check these additional matches to see if they're a better fit than the first match Webcomic found.", 'webcomic' ) . '</p>
