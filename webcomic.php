@@ -4,7 +4,7 @@ Text Domain: webcomic
 Plugin Name: Webcomic
 Plugin URI: http://webcomic.nu
 Description: Comic publishing power for the web.
-Version: 4.1.1
+Version: 4.1.0.1
 Author: Michael Sisk
 Author URI: http://mgsisk.com
 License: GPL3
@@ -31,9 +31,9 @@ along with this program.  If not, see http://www.gnu.org/licenses.
  * 
  * @package Webcomic
  * @copyright 2008 - 2014 Michael Sisk
- * @license http://www.gnu.org/licenses/gpl.html GPL3
- * @version 4.1.1
- * @link http://webcomic.nu
+ * @license gnu.org/licenses/gpl.html GPL3
+ * @version 4.1.0.1
+ * @link webcomic.nu
  */
 
 /**
@@ -46,19 +46,19 @@ class Webcomic {
 	 * Internal version number.
 	 * @var string
 	 */
-	protected static $version = '4.1.1';
+	protected static $version = "4.1.0.1";
 	
 	/**
 	 * Absolute path to the Webcomic directory.
 	 * @var string
 	 */
-	protected static $dir = '';
+	protected static $dir = "";
 	
 	/**
 	 * URL to the Webcomic directory.
 	 * @var string
 	 */
-	protected static $url = '';
+	protected static $url = "";
 	
 	/**
 	 * Whether to enable debug mode.
@@ -82,7 +82,7 @@ class Webcomic {
 	 * Stores the collection the current page is related to.
 	 * @var string
 	 */
-	protected static $collection = '';
+	protected static $collection = "";
 	
 	/**
 	 * Set class properties and register hooks.
@@ -127,9 +127,9 @@ class Webcomic {
 	 * @uses WebcomicShortcode
 	 */
 	public function __construct() {
-		self::$dir    = plugin_dir_path( __FILE__ );
-		self::$url    = plugin_dir_url( __FILE__ );
-		self::$config = get_option( 'webcomic_options' );
+		self::$dir = plugin_dir_path( __FILE__ );
+		self::$url = plugin_dir_url( __FILE__ );
+		self::$config = get_option( "webcomic_options" );
 		
 		if ( self::$config and version_compare( self::$config[ 'version' ], '4x', '>=' ) ) {
 			add_action( 'init', array( $this, 'init' ) );

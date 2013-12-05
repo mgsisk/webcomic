@@ -87,8 +87,8 @@ class WebcomicAdmin extends Webcomic {
 	 */
 	public function activate() {
 		if ( !self::$config or version_compare( self::$config[ 'version' ], '4x', '<' ) ) {
-			$name   = __( 'Untitled Webcomic', 'webcomic' );
-			$slug   = sanitize_title( $name );
+			$name = __( 'Untitled Webcomic', 'webcomic' );
+			$slug = sanitize_title( $name );
 			$legacy = self::$config ? self::$config : get_option( 'webcomic_version' );
 			
 			self::$config = array(

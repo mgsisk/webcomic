@@ -1180,7 +1180,7 @@ class WebcomicLegacy extends Webcomic {
 			self::$config[ "collections" ][ "webcomic1" ][ "slugs" ][ "character" ] = "{$term->slug}-character";
 			self::$config[ "collections" ][ "webcomic1" ][ "taxonomies" ] = array( "category", "post_tag" );
 			self::$config[ "collections" ][ "webcomic1" ][ "description" ] = $term->description;
-			self::$config[ "collections" ][ "webcomic1" ][ "commerce" ][ "business" ] = isset( $legacy_config[ "buy_print_email" ] ) ? $legacy_config[ "buy_print_email" ] ) : "";
+			self::$config[ "collections" ][ "webcomic1" ][ "commerce" ][ "business" ] = isset( $legacy_config[ "buy_print_email" ] ) ? $legacy_config[ "buy_print_email" ] : "";
 			self::$config[ "collections" ][ "webcomic1" ][ "commerce" ][ "price" ][ "domestic" ] = isset( $legacy_config[ "buy_print_amount" ] ) ? $legacy_config[ "buy_print_amount" ] : 6;
 			self::$config[ "collections" ][ "webcomic1" ][ "commerce" ][ "price" ][ "international" ] = isset( $legacy_config[ "buy_print_amount" ] ) ? $legacy_config[ "buy_print_amount" ] : 9;
 			self::$config[ "collections" ][ "webcomic1" ][ "commerce" ][ "price" ][ "original" ] = isset( $legacy_config[ "buy_print_orig_amount" ] ) ? $legacy_config[ "buy_print_orig_amount" ] : 12;
@@ -1257,17 +1257,17 @@ class WebcomicLegacy extends Webcomic {
 					update_post_meta( $post, "webcomic_commerce", array(
 						"price" => array(
 							"domestic" => isset( $legacy_config[ "buy_print_amount" ] ) ? $legacy_config[ "buy_print_amount" ] : 6,
-							"international" => isset( $legacy_config[ "buy_print_amount" ] ) ? $legacy_config[ "buy_print_amount" ] : $legacy_config[ "buy_print_amount" ] : 9,
+							"international" => isset( $legacy_config[ "buy_print_amount" ] ) ? $legacy_config[ "buy_print_amount" ] : 9,
 							"original" => isset( $legacy_config[ "buy_print_orig_amount" ] ) ? $legacy_config[ "buy_print_orig_amount" ] : 12
 						),
 						"shipping" => array(
 							"domestic" => isset( $legacy_config[ "buy_print_amount" ] ) ? $legacy_config[ "buy_print_amount" ] : 4,
-							"international" => isset( $legacy_config[ "buy_print_amount" ] ) ? $legacy_config[ "buy_print_amount" ] : $legacy_config[ "buy_print_amount" ] : 6,
+							"international" => isset( $legacy_config[ "buy_print_amount" ] ) ? $legacy_config[ "buy_print_amount" ] : 6,
 							"original" => isset( $legacy_config[ "buy_print_orig_amount" ] ) ? $legacy_config[ "buy_print_orig_amount" ] : 8
 						),
 						"total"  => array(
 							"domestic" => isset( $legacy_config[ "buy_print_amount" ] ) ? $legacy_config[ "buy_print_amount" ] : 10,
-							"international" => isset( $legacy_config[ "buy_print_amount" ] ) ? $legacy_config[ "buy_print_amount" ] : $legacy_config[ "buy_print_amount" ] : 15,
+							"international" => isset( $legacy_config[ "buy_print_amount" ] ) ? $legacy_config[ "buy_print_amount" ] : 15,
 							"original" => isset( $legacy_config[ "buy_print_orig_amount" ] ) ? $legacy_config[ "buy_print_orig_amount" ] : 20
 						),
 						"adjust" => array(
