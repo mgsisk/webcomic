@@ -454,7 +454,7 @@ class Widget_DynamicWebcomic extends WP_Widget {
 	 * @uses WebcomicTag::get_webcomic_collections()
 	 */
 	public function widget( $args, $instance ) {
-		global $post;
+		global $post; $temp_post = $post;
 		
 		if ( wp_script_is( 'webcomic-dynamic', 'queue' ) ) {
 			extract( $args );
@@ -472,8 +472,6 @@ class Widget_DynamicWebcomic extends WP_Widget {
 				if ( $webcomic->have_posts() ) {
 					echo $before_widget, empty( $title ) ? '' : $before_title . $title . $after_title, '<div data-webcomic-container="', $widget_id, '"', empty( $gesture ) ?  '' : ' data-webcomic-gestures', '>';
 					
-					$temp_post = $post;
-					
 					while ( $webcomic->have_posts() ) { $webcomic->the_post();
 						if ( !locate_template( array( "webcomic/dynamic-{$collection}-{$widget_id}.php", "webcomic/dynamic-{$widget_id}.php", "webcomic/dynamic-{$collection}.php", 'webcomic/dynamic.php' ), true, false ) ) {
 							require WebcomicWidget::dir() . '-/php/integrate/dynamic.php';
@@ -481,11 +479,11 @@ class Widget_DynamicWebcomic extends WP_Widget {
 					}
 					
 					echo  '</div>', $after_widget;
-					
-					$post = $temp_post;
 				}
 			}
 		}
+		
+		$post = $temp_post;
 	}
 	
 	/**
@@ -578,7 +576,7 @@ class Widget_RecentWebcomics extends WP_Widget {
 	 * @uses WebcomicTag::get_webcomic_collections()
 	 */
 	public function widget( $args, $instance ) {
-		global $post;
+		global $post; $temp_post = $post;
 		
 		extract( $args );
 		extract( $instance );
@@ -595,17 +593,15 @@ class Widget_RecentWebcomics extends WP_Widget {
 			if ( $the_posts->have_posts() ) {
 				echo $before_widget, empty( $title ) ? '' : $before_title . $title . $after_title, '<ul class="recent-webcomics">';
 				
-				$temp_post = $post;
-				
 				while ( $the_posts->have_posts() ) { $the_posts->the_post();
 					echo '<li>', $image ? WebcomicTag::the_webcomic( $image, 'self' ) : '<a href="' . get_permalink() . '">' . get_the_title( '', '', false ) . '</a>', '</li>';
 				}
 				
 				echo '</ul>', $after_widget;
-				
-				$post = $temp_post;
 			}
 		}
+		
+		$post = $temp_post;
 	}
 	
 	/**
@@ -841,7 +837,7 @@ class Widget_ScheduledWebcomics extends WP_Widget {
 	 * @uses WebcomicTag::get_webcomic_collections()
 	 */
 	public function widget( $args, $instance ) {
-		global $post;
+		global $post; $temp_post = $post;
 		
 		extract( $args );
 		extract( $instance );
@@ -858,17 +854,15 @@ class Widget_ScheduledWebcomics extends WP_Widget {
 			if ( $the_posts->have_posts() ) {
 				echo $before_widget, empty( $title ) ? '' : $before_title . $title . $after_title, '<ul class="scheduled-webcomics">';
 				
-				$temp_post = $post;
-				
 				while ( $the_posts->have_posts() ) { $the_posts->the_post();
 					echo '<li><figure>', $image ? WebcomicTag::the_webcomic( $image ) : get_the_title( '', '', false ), $date ? '<figcaption>' . get_the_time( get_option( 'date_format' ) ) . '</figcaption>' : '', '</figure></li>';
 				}
 				
 				echo '</ul>', $after_widget;
-				
-				$post = $temp_post;
 			}
 		}
+		
+		$post = $temp_post;
 	}
 	
 	/**
