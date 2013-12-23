@@ -4,7 +4,7 @@ Text Domain: webcomic
 Plugin Name: Webcomic
 Plugin URI: http://webcomic.nu
 Description: Comic publishing power for the web.
-Version: 4.1.0.2
+Version: 4.1.0.3
 Author: Michael Sisk
 Author URI: http://mgsisk.com
 License: GPL3
@@ -32,7 +32,7 @@ along with this program.  If not, see http://www.gnu.org/licenses.
  * @package Webcomic
  * @copyright 2008 - 2014 Michael Sisk
  * @license gnu.org/licenses/gpl.html GPL3
- * @version 4.1.0.2
+ * @version 4.1.0.3
  * @link webcomic.nu
  */
 
@@ -46,7 +46,7 @@ class Webcomic {
 	 * Internal version number.
 	 * @var string
 	 */
-	protected static $version = "4.1.0.2";
+	protected static $version = "4.1.0.3";
 	
 	/**
 	 * Absolute path to the Webcomic directory.
@@ -871,7 +871,7 @@ class Webcomic {
 				)
 			and $match
 		) {
-			if ( 2 < count( $match ) ) {
+			if ( 2 < count( $match ) and $permalinks ) {
 				foreach ( $permalinks as $k => $v ) {
 					if ( false !== strpos( $k, '_webcomic' ) and preg_match( '{' . $v . '}', $match[ 1 ] ) ) {
 						self::$collection = str_replace( '_webcomic', '', $k );
@@ -879,7 +879,7 @@ class Webcomic {
 					}
 				}
 			} else {
-				$match[ 0 ]       = preg_replace( '/_(storyline|character)$/', '', $match[ 0 ] );
+				$match[ 0 ] = preg_replace( '/_(storyline|character)$/', '', $match[ 0 ] );
 				self::$collection = empty( self::$config[ 'collections' ][ $match[ 0 ] ] ) ? preg_replace( '/_(archive|webcomic|storyline|character)$/', '', array_search( $match[ 1 ], $permalinks ) ) : $match[ 0 ];
 			}
 		}
