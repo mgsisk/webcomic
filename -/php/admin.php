@@ -38,34 +38,34 @@ class WebcomicAdmin extends Webcomic {
 	public function __construct() {
 		parent::__construct();
 		
-		register_activation_hook( self::$dir . 'webcomic.php', array( $this, 'activate' ) );
-		register_deactivation_hook( self::$dir . 'webcomic.php', array( $this, 'deactivate' ) );
+		register_activation_hook( self::$dir . "webcomic.php", array( $this, "activate" ) );
+		register_deactivation_hook( self::$dir . "webcomic.php", array( $this, "deactivate" ) );
 		
-		if ( !self::$config or version_compare( self::$config[ 'version' ], self::$version, '<' ) ) {
-			add_action( 'admin_init', array( $this, 'activate' ) );
+		if ( !self::$config or version_compare( self::$config[ "version" ], self::$version, "<" ) ) {
+			add_action( "admin_init", array( $this, "activate" ) );
 		}
-				
-		if ( self::$config and version_compare( self::$config[ 'version' ], '4x', '>=' ) ) {
-			add_action( 'admin_init', array( $this, 'admin_init' ) );
-			add_action( 'admin_head', array( $this, 'admin_head' ) );
-			add_action( 'admin_notices', array( $this, 'admin_notices' ) );
-			add_action( 'wp_dashboard_setup', array( $this, 'wp_dashboard_setup' ) );
-			add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
+		
+		if ( self::$config and version_compare( self::$config[ "version" ], "4x", ">=" ) ) {
+			add_action( "admin_init", array( $this, "admin_init" ) );
+			add_action( "admin_head", array( $this, "admin_head" ) );
+			add_action( "admin_notices", array( $this, "admin_notices" ) );
+			add_action( "wp_dashboard_setup", array( $this, "wp_dashboard_setup" ) );
+			add_action( "admin_enqueue_scripts", array( $this, "admin_enqueue_scripts" ) );
 			
-			add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 3 );
-			add_filter( 'plugin_action_links', array( $this, 'plugin_action_links' ), 10, 4 );
+			add_filter( "plugin_row_meta", array( $this, "plugin_row_meta" ), 10, 3 );
+			add_filter( "plugin_action_links", array( $this, "plugin_action_links" ), 10, 4 );
 			
-			require_once self::$dir . '-/php/posts.php';			new WebcomicPosts;
-			require_once self::$dir . '-/php/pages.php';			new WebcomicPages;
-			require_once self::$dir . '-/php/users.php';			new WebcomicUsers;
-			require_once self::$dir . '-/php/media.php';			new WebcomicMedia;
-			require_once self::$dir . '-/php/config.php';			new WebcomicConfig;
-			require_once self::$dir . '-/php/commerce.php';		new WebcomicCommerce;
-			require_once self::$dir . '-/php/taxonomy.php';		new WebcomicTaxonomy;
-			require_once self::$dir . '-/php/transcripts.php';	new WebcomicTranscripts;
+			require_once self::$dir . "-/php/posts.php"; new WebcomicPosts;
+			require_once self::$dir . "-/php/pages.php"; new WebcomicPages;
+			require_once self::$dir . "-/php/users.php"; new WebcomicUsers;
+			require_once self::$dir . "-/php/media.php"; new WebcomicMedia;
+			require_once self::$dir . "-/php/config.php"; new WebcomicConfig;
+			require_once self::$dir . "-/php/commerce.php"; new WebcomicCommerce;
+			require_once self::$dir . "-/php/taxonomy.php"; new WebcomicTaxonomy;
+			require_once self::$dir . "-/php/transcripts.php"; new WebcomicTranscripts;
 			
-			if ( !empty( self::$config[ 'legacy' ] ) ) {
-				require_once self::$dir . '-/php/legacy.php';	new WebcomicLegacy;
+			if ( !empty( self::$config[ "legacy" ] ) ) {
+				require_once self::$dir . "-/php/legacy.php"; new WebcomicLegacy;
 			}
 		}
 	}
@@ -776,7 +776,7 @@ class WebcomicAdmin extends Webcomic {
 	 * @param string $message The message to display.
 	 * @param string $type The type of message, one of 'notice' or 'error'.
 	 */
-	public static function notify( $message, $type = 'notice' ) {
+	public static function notify( $message, $type = "notice" ) {
 		$notify = get_transient( "webcomic_{$type}" );
 		
 		set_transient( "webcomic_{$type}", array_merge( array( $message ), $notify ? $notify : array() ), 30 );

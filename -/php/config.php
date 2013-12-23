@@ -1554,7 +1554,8 @@ class WebcomicConfig extends Webcomic {
 				$url = $id;
 				$id  = array_shift( $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM {$wpdb->posts} WHERE guid = %s", $id ) ) );
 			} else {
-				$url = array_shift( wp_get_attachment_image_src( $id, 'full' ) );
+				$images = wp_get_attachment_image_src( $id, 'full' );
+				$url = array_shift( $images );
 			}
 			
 			if ( $id ) {
