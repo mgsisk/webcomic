@@ -2537,25 +2537,25 @@ class WebcomicTag extends Webcomic {
 				if ( !$collection or $v[ 'id' ] === $collection ) {
 					$readable_count   = $readable_count ? $readable_count->publish + $readable_count->private : 0;
 					$collection_title = apply_filters( 'webcomic_collection_dropdown_title', $v[ 'name' ], $v );
-				
+					
 					if ( $webcomics ) {
 						$the_posts = new WP_Query( array( 'posts_per_page' => -1, 'post_type' => $v[ 'id' ], 'order' => $webcomic_order, 'orderby' => $webcomic_orderby ) );
-					
+						
 						if ( $the_posts->have_posts() ) {
 							if ( $callback ) {
 								$options .= call_user_func( $callback, $v, $r, $the_posts );
 							} else {
 								$options .= '<optgroup label="' . $collection_title . ( $show_count ? " ({$readable_count})" : '' ) . '">';
-							
+								
 								while ( $the_posts->have_posts() ) { $the_posts->the_post();
 									$options .= '<option value="' . get_the_ID() . '" data-webcomic-url="' . apply_filters( 'the_permalink', get_permalink() ) . '"' . ( $selected === get_the_ID() ? ' selected' : '' ) . '>' . apply_filters( 'collection_dropdown_webcomic_title', the_title( '', '', false ), get_post(), $i ) . '</option>';
 								}
-							
+								
 								$options .= '</optgroup>';
 							}
 						}
 					} else {
-						$options .= $callback ? call_user_func( $callback, $v, $r ) : '<option value="' . $v[ 'id' ] . '" data-webcomic-url="' . ( 'archive' === $target ? get_post_type_archive_link( $v[ 'id' ] ) : self::get_relative_webcomic_link( $target, false, false, '', $v[ 'id' ] ) ) . '"' . $selected === $v[ 'id' ] ? ' selected' : '' . '>' . $collection_title . ( $show_count ? " ({$readable_count})" : '' ) . '</option>';
+						$options .= $callback ? call_user_func( $callback, $v, $r ) : '<option value="' . $v[ 'id' ] . '" data-webcomic-url="' . ( 'archive' === $target ? get_post_type_archive_link( $v[ 'id' ] ) : self::get_relative_webcomic_link( $target, false, false, '', $v[ 'id' ] ) ) . '"' . ( $selected === $v[ 'id' ] ? ' selected' : '' . '>' ) . $collection_title . ( $show_count ? " ({$readable_count})" : '' ) . '</option>';
 					}
 				}
 			}
