@@ -1050,7 +1050,7 @@ class Webcomic {
 					'%url'               => $link ? $link : get_permalink( $post->ID ),
 					'%date'              => get_the_time( get_option( 'date_format' ), $post ),
 					'%time'              => get_the_time( get_option( 'time_format' ), $post ),
-					'%title'             => get_the_title( $post->ID ),
+					'%title'             => html_entity_decode( get_the_title( $post->ID ), ENT_QUOTES, "UTF-8" ),
 					'%author'            => get_the_author_meta( 'display_name', $post->post_author ),
 					'%site-url'          => home_url(),
 					'%permalink'         => get_permalink( $post->ID ),
