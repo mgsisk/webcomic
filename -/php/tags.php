@@ -455,7 +455,7 @@ class WebcomicTag extends Webcomic {
 			) {
 				if ( $save and !empty( $user->ID ) ) {
 					update_user_meta( $user->ID, 'webcomic_birthday', $birthday );
-				} elseif ( $save ) {
+				} elseif ( $save and !headers_sent() ) {
 					setcookie( 'webcomic_birthday_' . COOKIEHASH, $birthday, ( integer ) current_time( 'timestamp' ) + 604800, COOKIEPATH );
 				}
 				
