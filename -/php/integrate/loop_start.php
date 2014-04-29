@@ -9,7 +9,7 @@
  * @uses next_webcomic_link()
  * @uses last_webcomic_link()
  * @uses the_webcomic()
- * @uses the_webcomic_collection()
+ * @uses the_webcomic_collections()
  * @uses the_webcomic_storylines()
  * @uses the_webcomic_characters()
  * @uses is_webcomic()
@@ -58,7 +58,7 @@
 			
 			<footer class="entry-meta">
 			<?php
-				the_webcomic_collection();
+				the_webcomic_collections();
 				the_webcomic_storylines( "<span class='sep'> | </span>" );
 				the_webcomic_characters( "<span class='sep'> | </span>" );
 				
