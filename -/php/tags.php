@@ -6568,14 +6568,15 @@ if ( !class_exists( 'Walker_WebcomicTerm_Dropdown' ) ) {
 						array(
 							'taxonomy' => $term->taxonomy,
 							'field'    => 'id',
+							'include_children' => false,
 							'terms'    => $term->term_id
 						)
 					)
 				) );
 				
+				$output .= '<optgroup label="' . $term_pad . $term_title . ( $show_count ? " ({$term->count})" : '' ) . '">';
+    			
 				if ( $the_posts->have_posts() ) {
-					$output .= '<optgroup label="' . $term_pad . $term_title . ( $show_count ? " ({$term->count})" : '' ) . '">';
-					
 					$i = 0;
 					
 					while ( $the_posts->have_posts() ) { $the_posts->the_post();
@@ -6583,9 +6584,9 @@ if ( !class_exists( 'Walker_WebcomicTerm_Dropdown' ) ) {
 						
 						$output .= '<option value="' . get_the_ID() . '" data-webcomic-url="' . apply_filters( 'the_permalink', get_permalink() ) . '"' . ( $selected === get_the_ID() ? ' selected' : '' ) . '>' . $term_pad . apply_filters( 'term_dropdown_webcomic_title', the_title( '', '', false ), get_post(), $i ) . '</option>';
 					}
-					
-					$output .= '</optgroup>';
 				}
+				
+				$output .= '</optgroup>';
 			} else {
 				$output .= '<option value="' . $term->term_id . '" data-webcomic-url="' . ( 'archive' === $target ? get_term_link( $term, $term->taxonomy ) : WebcomicTag::get_relative_webcomic_link( $target, $term->term_id, false, $term->taxonomy, preg_replace( '/_(storyline|character)$/', '', $term->taxonomy ) ) ) . '"' . ( $selected === $term->term_id ? ' selected' : '' ) . '>' . $term_pad . $term_title . ( $show_count ? " ({$term->count})" : '' ) . '</option>';
 			}
