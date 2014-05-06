@@ -6682,13 +6682,16 @@ if ( !class_exists( 'Walker_WebcomicTerm_List' ) ) {
 						array(
 							'taxonomy' => $term->taxonomy,
 							'field'    => 'id',
+							'include_children' => false,
 							'terms'    => $term->term_id
 						)
 					)
 				) );
 				
+				$output .= '<li class="webcomic-term ' . $term->taxonomy . ' webcomic-term-' . $term->term_id . ( $selected === $term->term_id ? ' current' : '' ) . '"><a href="' . ( 'archive' === $target ? get_term_link( $term, $term->taxonomy ) : WebcomicTag::get_relative_webcomic_link( $target, $term->term_id, false, $term->taxonomy, preg_replace( '/_(storyline|character)$/', '', $term->taxonomy ) ) ) . '" class="webcomic-term-link"><div class="webcomic-term-name">' . $term_title . ( $show_count ? " ({$term->count})" : '' ) . '</div>' . ( ( $show_image and $term->webcomic_image ) ? '<div class="webcomic-term-image">' . apply_filters( 'webcomic_term_image', wp_get_attachment_image( $term->webcomic_image, $show_image ), $show_image, $term ) . '</div>' : '' ) . '</a>' . ( ( $show_description and $term->description ) ? '<div class="webcomic-term-description">' . apply_filters( 'webcomic_term_description', $term->description, $term ) . '</div>' : '' ) . $feed_link;
+				
 				if ( $the_posts->have_posts() ) {
-					$output .= '<li class="webcomic-term ' . $term->taxonomy . ' webcomic-term-' . $term->term_id . ( $selected === $term->term_id ? ' current' : '' ) . '"><a href="' . ( 'archive' === $target ? get_term_link( $term, $term->taxonomy ) : WebcomicTag::get_relative_webcomic_link( $target, $term->term_id, false, $term->taxonomy, preg_replace( '/_(storyline|character)$/', '', $term->taxonomy ) ) ) . '" class="webcomic-term-link"><div class="webcomic-term-name">' . $term_title . ( $show_count ? " ({$term->count})" : '' ) . '</div>' . ( ( $show_image and $term->webcomic_image ) ? '<div class="webcomic-term-image">' . apply_filters( 'webcomic_term_image', wp_get_attachment_image( $term->webcomic_image, $show_image ), $show_image, $term ) . '</div>' : '' ) . '</a>' . ( ( $show_description and $term->description ) ? '<div class="webcomic-term-description">' . apply_filters( 'webcomic_term_description', $term->description, $term ) . '</div>' : '' ) . $feed_link . '<' . ( $ordered ? 'ol' : 'ul' ) . ' class="webcomics">';
+					$output .= '<' . ( $ordered ? 'ol' : 'ul' ) . ' class="webcomics">';
 					
 					$i = 0;
 					
