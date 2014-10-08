@@ -18,10 +18,10 @@ jQuery( function( $ ) {
 		}
 	}
 	
-	$.hotkeys.add( "right", function() { webcomic_shortcut( ".next-webcomic-link" ); } );
-	$.hotkeys.add( "left", function() { webcomic_shortcut( ".previous-webcomic-link" ); } );
-	$.hotkeys.add( "shift+right", function() { webcomic_shortcut( ".last-webcomic-link" ); } );
-	$.hotkeys.add( "shift+left", function() { webcomic_shortcut( ".first-webcomic-link" ); } );
-	$.hotkeys.add( "shift+up", function() { webcomic_shortcut( ".purchase-webcomic-link" ); } );
-	$.hotkeys.add( "shift+down", function() { webcomic_shortcut( ".random-webcomic-link" ); } );
+	$.hotkeys.add( "right", {disableInInput: true}, function() { webcomic_shortcut( ".next-webcomic-link" ); } );
+	$.hotkeys.add( "left", {disableInInput: true}, function() { webcomic_shortcut( ".previous-webcomic-link" ); } );
+	$.hotkeys.add( "shift+right", {disableInInput: true}, function() { webcomic_shortcut( ".last-webcomic-link" ); } );
+	$.hotkeys.add( "shift+left", {disableInInput: true}, function() { webcomic_shortcut( ".first-webcomic-link" ); } );
+	$.hotkeys.add( "shift+up", {disableInInput: true}, function() { webcomic_shortcut( ".purchase-webcomic-link" ); } );
+	$.hotkeys.add( "shift+down", {disableInInput: true}, function() { webcomic_shortcut( ".random-webcomic-link" ); } );
 } );
