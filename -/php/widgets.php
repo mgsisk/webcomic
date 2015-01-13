@@ -109,7 +109,7 @@ class Widget_WebcomicLink extends WP_Widget {
 		extract( $args );
 		extract( $instance );
 		
-		$collection = $collection ? $collection : WebcomicTag::get_webcomic_collection();
+		$collection = isset( $collection ) ? $collection : WebcomicTag::get_webcomic_collection();
 		
 		if ( !empty( $image ) and $image = wp_get_attachment_image( $image, 'full' ) ) {
 			$link = preg_replace( '/alt=".+?"/', 'alt="' . esc_attr( $link ) . '"', $image );

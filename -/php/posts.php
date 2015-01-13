@@ -38,7 +38,7 @@ class WebcomicPosts extends Webcomic {
 		add_action( 'restrict_manage_posts', array( $this, 'restrict_manage_posts' ) );
 		add_action( 'wp_insert_post', array( $this, 'save_webcomic_commerce' ), 10, 2 );
 		add_action( 'wp_insert_post_data', array( $this, 'wp_insert_post_data' ), 10, 2 );
-		add_action( 'wp_insert_post,', array( $this, 'save_webcomic_transcripts' ), 10, 2 );
+		add_action( 'wp_insert_post', array( $this, 'save_webcomic_transcripts' ), 10, 2 );
 		add_action( 'bulk_edit_custom_box', array( $this, 'bulk_edit_custom_box' ), 10, 2 );
 		add_action( 'quick_edit_custom_box', array( $this, 'quick_edit_custom_box' ), 10, 2 );
 		
@@ -665,10 +665,10 @@ class WebcomicPosts extends Webcomic {
 	 * @param boolean $transcripts Updated transcription meta value.
 	 */
 	public static function ajax_quick_save( $id, $prints, $original, $transcripts ) {
-		if ( isset( $_GET[ 'webcomic_inline_save' ] ) and wp_verify_nonce( $_GET[ 'webcomic_inline_save' ], 'webcomic_inline_save' ) and current_user_can( 'edit_post', $id ) ) {
+		// if ( isset( $_GET[ 'webcomic_inline_save' ] ) and wp_verify_nonce( $_GET[ 'webcomic_inline_save' ], 'webcomic_inline_save' ) and current_user_can( 'edit_post', $id ) ) {
 			update_post_meta( $id, 'webcomic_prints', ( boolean ) $prints );
 			update_post_meta( $id, 'webcomic_original', ( boolean ) $original );
 			update_post_meta( $id, 'webcomic_transcripts', ( boolean ) $transcripts );
-		}
+		// }
 	}
 }

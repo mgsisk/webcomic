@@ -487,7 +487,7 @@ class WebcomicTag extends Webcomic {
 			
 			if ( !empty( $user->ID ) and '!' === $roles[ 0 ] ) {
 				return true;
-			} elseif ( isset( $user->roles ) ) {
+			} elseif ( ! empty( $user->roles ) ) {
 				foreach ( $roles as $role ) {
 					if ( in_array( $role, $user->roles ) ) {
 						return true;
@@ -521,7 +521,7 @@ class WebcomicTag extends Webcomic {
 	 * @filter string the_webcomic Filters the output of `the_webcomic`.
 	 */
 	public static function the_webcomic( $size = 'full', $relative = '', $in_same_term = false, $excluded_terms = false, $taxonomy = 'storyline', $the_post = false ) {
-		if ( $the_post = get_post( $the_post ) and isset( self::$config[ 'collections' ][ $the_post->post_type ] ) and $attachments = self::get_attachments( $the_post->ID ) ) {
+		if ( $the_post = get_post( $the_post ) and $the_post->ID and isset( self::$config[ 'collections' ][ $the_post->post_type ] ) and $attachments = self::get_attachments( $the_post->ID ) ) {
 			$output = '';
 			
 			foreach ( $attachments as $attachment ) {
@@ -1124,7 +1124,9 @@ class WebcomicTag extends Webcomic {
 				$term_links[] = '<a href="' . $link . '"' . ( ( preg_match( '/^webcomic\d+_(storyline|character)/', $term->taxonomy ) and false === strpos( $term->taxonomy, $collection ) ) ? ' class="webcomic-crossover-term ' . str_replace( array( '_storyline', '_character' ), '', $term->taxonomy ) . '-crossover-term"' : '' ) . ' rel="tag">' . $label . '</a>';
 			}
 			
-			$term_links = apply_filters( "webcomic_term_links-{$taxonomy}", $term_links, $terms, $before, $sep, $after, $target, $image );
+			$tax_hook = implode('-', $taxonomy);
+			
+			$term_links = apply_filters( "webcomic_term_links-{$tax_hook}", $term_links, $terms, $before, $sep, $after, $target, $image );
 			$term_links = apply_filters( "webcomic_term_links", $term_links, $terms, $before, $sep, $after, $target, $image, $taxonomy );
 			
 			return apply_filters( 'the_webcomic_term_list', $before . implode( $sep, $term_links ) . $after, $id, $before, $sep, $after, $target, $image, $taxonomy );
@@ -1572,7 +1574,7 @@ class WebcomicTag extends Webcomic {
 		}
 		
 		$type   = explode( '-', $type );
-		$amount = empty( $type[ 1 ] ) ? self::$config[ 'collections' ][ $collection ][ 'total' ][ $type[ 0 ] ] : self::$config[ 'collections' ][ $collection ][ $type[ 1 ] ][ $type[ 0 ] ];
+		$amount = empty( $type[ 1 ] ) ? self::$config[ 'collections' ][ $collection ][ 'commerce' ][ 'total' ][ $type[ 0 ] ] : self::$config[ 'collections' ][ $collection ][ 'commerce' ][ $type[ 1 ] ][ $type[ 0 ] ];
 		$output = number_format( $amount, 2, $dec, $sep ) . ' ' . self::$config[ 'collections' ][ $collection ][ 'commerce' ][ 'currency' ];
 		
 		return apply_filters( 'webcomic_collection_print_amount', $output, $dec, $sep, $collection );
