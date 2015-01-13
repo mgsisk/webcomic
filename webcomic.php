@@ -220,7 +220,7 @@ class Webcomic {
 				),
 				'description' => esc_html( $v[ 'description' ] ),
 				'public'      => true,
-				'menu_icon'   => self::$url . '-/img/webcomic.png',
+				'menu_icon'   => 'dashicons-images-alt2',
 				'supports'    => $v[ 'supports' ],
 				'has_archive' => $v[ 'slugs' ][ 'archive' ],
 				'rewrite' => array(
@@ -304,7 +304,7 @@ class Webcomic {
 			'show_ui'   => true,
 			'exclude_from_search' => false,
 			'supports'  => array( 'editor', 'author', 'revisions' ),
-			'menu_icon' => self::$url . '-/img/transcript.png'
+			'menu_icon' => 'dashicons-testimonial'
 		) );
 		
 		register_taxonomy( 'webcomic_language', 'webcomic_transcript', array(
