@@ -52,15 +52,15 @@ jQuery( function( $ ) {
 			
 			if ( !webcomic_scrolling( d ) ) {
 				if ( 1 === end.touches.length ) {
-					if ( "left" === d ) {
+					if ( "right" === d ) {
 						$e = $( ".previous-webcomic-link[href]:first", canvas );
-					} else if ( "right" === d ) {
+					} else if ( "left" === d ) {
 						$e = $( ".next-webcomic-link[href]:first", canvas );
 					}
 				} else if ( 2 == end.touches.length ) {
-					if ( "left" === d ) {
+					if ( "right" === d ) {
 						$e = $( ".first-webcomic-link[href]:first", canvas );
-					} else if ( "right" === d ) {
+					} else if ( "left" === d ) {
 						$e = $( ".last-webcomic-link[href]:first", canvas );
 					} else if ( "up" === d ) {
 						$e = $( ".purchase-webcomic-link[href]:first", canvas );

@@ -2,15 +2,15 @@
 /*
 Text Domain: webcomic
 Plugin Name: Webcomic
-Plugin URI: http://webcomic.nu
+Plugin URI: http://github.com/mgsisk/webcomic
 Description: Comic publishing power for the web.
 Version: 4.1.0.4
 Author: Michael Sisk
 Author URI: http://mgsisk.com
-License: GPL3
+License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 
-Copyright 2008 - 2014 Michael Sisk (contact@mgsisk.com)
+Copyright 2008 - 2015 Michael Sisk (me@mgsisk.com)
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ along with this program.  If not, see http://www.gnu.org/licenses.
  * Comic Publishing Power for the Web
  * 
  * @package Webcomic
- * @copyright 2008 - 2014 Michael Sisk
+ * @copyright 2008 - 2015 Michael Sisk
  * @license gnu.org/licenses/gpl.html GPL3
  * @version 4.1.0.4
  * @link webcomic.nu
