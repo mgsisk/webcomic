@@ -27,16 +27,6 @@ along with this program.  If not, see http://www.gnu.org/licenses.
 */
 
 /**
- * Comic Publishing Power for the Web
- * 
- * @package Webcomic
- * @copyright 2008 - 2015 Michael Sisk
- * @license gnu.org/licenses/gpl.html GPL3
- * @version 4.1.0.4
- * @link webcomic.nu
- */
-
-/**
  * Initialize the plugin.
  * 
  * @package Webcomic
