@@ -260,7 +260,7 @@ class WebcomicConfig extends Webcomic {
 				} else {
 					if ( self::$config[ 'network' ][ 'showcase' ] ) {
 						$http = self::api_request( 'showcase/' . self::$config[ 'api' ] );
-				
+						
 						if ( isset( $http[ 200 ] ) ) {
 							self::$network[ 'showcase' ] = array_shift( $http );
 						} else {

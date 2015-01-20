@@ -486,7 +486,7 @@ class WebcomicAdmin extends Webcomic {
 		}
 		
 		if ( isset( self::$config[ 'thanks' ] ) ) {
-			echo '<div class="updated webcomic"><a href="https://flattr.com/submit/auto?user_id=mgsisk&amp;url=http://webcomic.nu&title=Webcomic&amp;description=Comic%20publishing%20power%20for%20the%20web.&amp;language=en_GB&amp;tags=webcomics,wordpress&amp;category=software" target="_blank"><b>&#x2764;</b>', sprintf( __( 'Thank you for using %s', 'webcomic' ), 'Webcomic ' . self::$version ), '</a></div>';
+			echo '<div class="updated webcomic"><a href="http://patreon.com/mgsisk" target="_blank"><b>&#x2764;</b>', sprintf( __( 'Thank you for using %s', 'webcomic' ), 'Webcomic ' . self::$version ), '</a></div>';
 			
 			unset( self::$config[ 'thanks' ] );
 			
@@ -540,7 +540,7 @@ class WebcomicAdmin extends Webcomic {
 	public function plugin_row_meta( $meta, $file, $data ) {
 		if ( 'Webcomic' === $data[ 'Name' ] ) {
 			$meta[] = '<a href="http://wordpress.org/support/view/plugin-reviews/webcomic#postform" target="_blank">' . __( 'Review', 'webcomic' ) . '</a>';
-			$meta[] = '<a href="https://flattr.com/submit/auto?user_id=mgsisk&amp;url=http://webcomic.nu&title=Webcomic&amp;description=Comic%20publishing%20power%20for%20the%20web.&amp;language=en_GB&amp;tags=webcomics,wordpress&amp;category=software" target="_blank">' . __( 'Donate', 'webcomic' ) . '</a>';
+			$meta[] = '<a href="https://patreon.com/mgsisk" target="_blank">' . __( 'Donate', 'webcomic' ) . '</a>';
 			
 			if ( self::$config[ 'uninstall' ] ) {
 				$meta[] = '<b style="color:#d98500">' . ( self::$config[ 'convert' ] ?  __( 'Webcomic data will be converted if the plugin is deactivated.', 'webcomic' ) : __( 'Webcomic data will be deleted if the plugin is deactivated.', 'webcomic' ) ) . '</b>';
