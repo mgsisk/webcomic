@@ -4,7 +4,7 @@ Text Domain: webcomic
 Plugin Name: Webcomic
 Plugin URI: http://github.com/mgsisk/webcomic
 Description: Comic publishing power for the web.
-Version: 4.1.0.4
+Version: 4.1.1
 Author: Michael Sisk
 Author URI: http://mgsisk.com
 License: GPLv3
@@ -36,7 +36,7 @@ class Webcomic {
 	 * Internal version number.
 	 * @var string
 	 */
-	protected static $version = "4.1.0.4";
+	protected static $version = "4.1.1";
 	
 	/**
 	 * Absolute path to the Webcomic directory.
@@ -895,12 +895,10 @@ class Webcomic {
 					$post->post_title = __( 'Restricted Content', 'webcomic' );
 					$pages            = array( is_user_logged_in() ? __( "You don't have permission to view this content.", 'webcomic' ) : sprintf( __( 'You must <a href="%s">log in</a> to view this content.', 'webcomic' ), wp_login_url( get_permalink( $post->ID ) ) ) );
 					$post->content    = $pages[ 0 ];
-					$post->ID         = 0;
-				} elseif ( !$clear = WebcomicTag::verify_webcomic_age( $post->post_type ) ) {
+				} elseif ( ! $clear = WebcomicTag::verify_webcomic_age( $post->post_type ) ) {
 					$post->post_title = __( 'Restricted Content', 'webcomic' );
 					$pages            = array( is_null( $clear ) ? sprintf( __( 'Please <a href="%s">verify your age</a> to view this content.', 'webcomic' ), get_permalink( $post->ID ) ) : __( "You don't have permission to view this content.", 'webcomic' ) );
 					$post->content    = $pages[ 0 ];
-					$post->ID         = 0;
 				}
 			}
 		}
@@ -1699,6 +1697,10 @@ class Webcomic {
 	 * @return array
 	 */
 	protected static function get_attachments( $id = 0 ) {
+		if ( ! current_user_can('edit_post', $id) and ( ! WebcomicTag::verify_webcomic_role(get_post_type($id)) or ! WebcomicTag::verify_webcomic_age(get_post_type($id)))) {
+			return array();
+		}
+		
 		return get_children( array(
 			'order'          => 'ASC',
 			'orderby'        => 'menu_order',

@@ -443,27 +443,32 @@ class WebcomicTag extends Webcomic {
 			return true;
 		} else {
 			$save = false;
-			$user = is_object( $user ) ? $user : wp_get_current_user();
 			$age  = ( $age and 0 < $age ) ? intval( $age ) : self::$config[ 'collections' ][ $collection ][ 'access' ][ 'age' ];
 			
-			if ( (
-					( isset( $user->ID ) and $birthday = get_user_meta( $user->ID, 'webcomic_birthday', true ) )
-					or ( empty( $user->ID ) and isset( $_COOKIE[ 'webcomic_birthday_' . COOKIEHASH ] ) and $birthday = $_COOKIE[ 'webcomic_birthday_' . COOKIEHASH ] )
-					or ( isset( $_POST[ 'webcomic_birthday' ] ) and $birthday = $_POST[ 'webcomic_birthday' ] and $save = true )
-				)
-				and $time = strtotime( $birthday )
-			) {
-				if ( $save and !empty( $user->ID ) ) {
-					update_user_meta( $user->ID, 'webcomic_birthday', $birthday );
-				} elseif ( $save and !headers_sent() ) {
-					setcookie( 'webcomic_birthday_' . COOKIEHASH, $birthday, ( integer ) current_time( 'timestamp' ) + 604800, COOKIEPATH );
+			if (isset($_COOKIE["{$collection}_birthday_" . COOKIEHASH ]) or isset($_POST['webcomic_birthday'])) {
+				if ( ! isset($_COOKIE["{$collection}_birthday_" . COOKIEHASH]) and ! headers_sent() ) {
+					$_COOKIE["{$collection}_birthday_" . COOKIEHASH] = (boolean) $_POST['webcomic_birthday'];
+					
+					setcookie("{$collection}_birthday_" . COOKIEHASH, $_POST['webcomic_birthday'], (integer) current_time('timestamp') + 604800, COOKIEPATH);
 				}
 				
-				return floor( ( ( integer ) current_time( 'timestamp' ) - $time ) / 31556926 ) >= $age;
+				return (boolean) $_COOKIE["{$collection}_birthday_" . COOKIEHASH];
 			}
 		}
 		
 		return null;
+	}
+	
+	/**
+	 * Return the minimum required age for a collection.
+	 * 
+	 * @param string $collection The collection to return the age for.
+	 * @return integer
+	 */
+	public static function get_verify_webcomic_age($collection = '') {
+		$collection = $collection ? $collection : self::$collection;
+		
+		return self::$config['collections'][$collection]['access']['age'];
 	}
 	
 	/**
@@ -3627,6 +3632,12 @@ if ( !function_exists( 'verify_webcomic_age' ) ) {
 	 */
 	function verify_webcomic_age( $collection = '', $user = false, $age = 0 ) {
 		return WebcomicTag::verify_webcomic_age( $collection, $user, $age );
+	}
+}
+
+if (!function_exists('the_verify_webcomic_age')) {
+	function the_verify_webcomic_age($collection = '') {
+		return WebcomicTag::get_verify_webcomic_age($collection);
 	}
 }
 

@@ -57,7 +57,6 @@ class WebcomicAdmin extends Webcomic {
 			
 			require_once self::$dir . "-/php/posts.php"; new WebcomicPosts;
 			require_once self::$dir . "-/php/pages.php"; new WebcomicPages;
-			require_once self::$dir . "-/php/users.php"; new WebcomicUsers;
 			require_once self::$dir . "-/php/media.php"; new WebcomicMedia;
 			require_once self::$dir . "-/php/config.php"; new WebcomicConfig;
 			require_once self::$dir . "-/php/commerce.php"; new WebcomicCommerce;
@@ -316,8 +315,6 @@ class WebcomicAdmin extends Webcomic {
 		}
 		
 		if ( self::$config[ 'uninstall' ] ) {
-			$wpdb->query( "DELETE FROM {$wpdb->usermeta} WHERE meta_key = 'webcomic_birthday'" );
-			
 			if ( self::$config[ 'convert' ] ) {
 				$language_cache = array();
 				
