@@ -1665,32 +1665,6 @@ class Webcomic {
 	}
 	
 	/**
-	 * Perform a Webcomic API request.
-	 * 
-	 * @param string $method The request method.
-	 * @param string $endpoing The API endpoint to access.
-	 * @param array $data A data bundle to send to the API.
-	 * @return array
-	 */
-	protected function api_request( $endpoint, $method = 'GET', $data = array() ) {
-		$data[ 'domain' ] = home_url();
-		$data[ 'key' ]    = self::$config[ 'api' ];
-		$data[ 0 ]        = hash( 'whirlpool', serialize( $data ) );
-		
-		$remote = wp_remote_request( "http://webcomic.nu/api/{$endpoint}", array(
-			'body'    => json_encode( $data ),
-			'method'  => $method,
-			'headers' => array(
-				'Referer' => home_url()
-			)
-		) );
-		
-		$code = wp_remote_retrieve_response_code( $remote );
-		
-		return $code ? array( $code => json_decode( wp_remote_retrieve_body( $remote ), true ) ) : array( 999 => __( 'The Webcomic Network is currently unavailable.', 'webcomic' ) );
-	}
-	
-	/**
 	 * Return Webcomic attachments for a post.
 	 * 
 	 * @param integer $id Post ID to retrieve attachments for.

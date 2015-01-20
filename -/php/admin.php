@@ -49,7 +49,6 @@ class WebcomicAdmin extends Webcomic {
 			add_action( "admin_init", array( $this, "admin_init" ) );
 			add_action( "admin_head", array( $this, "admin_head" ) );
 			add_action( "admin_notices", array( $this, "admin_notices" ) );
-			add_action( "wp_dashboard_setup", array( $this, "wp_dashboard_setup" ) );
 			add_action( "admin_enqueue_scripts", array( $this, "admin_enqueue_scripts" ) );
 			
 			add_filter( "plugin_row_meta", array( $this, "plugin_row_meta" ), 10, 3 );
@@ -93,7 +92,6 @@ class WebcomicAdmin extends Webcomic {
 			self::$config = array(
 				'version'      => self::$version,
 				'increment'    => 2,
-				'api'          => '',
 				'thanks'       => true,
 				'convert'      => false,
 				'dynamic'      => false,
@@ -103,9 +101,6 @@ class WebcomicAdmin extends Webcomic {
 				'uninstall'    => false,
 				'sizes'        => array(),
 				'terms'        => array(),
-				'network'      => array(
-					'showcase' => false
-				),
 				'collections'  => array(
 					'webcomic1' => array(
 						'id'          => 'webcomic1',
@@ -294,25 +289,19 @@ class WebcomicAdmin extends Webcomic {
 	/**
 	 * Deactivation hook.
 	 * 
-	 * Flushes rewrite rules and purges Webcomic Network data when
-	 * deactivated. If the uninstall option has been set we also need to
-	 * do delete all webcomics, transcripts, storylines, characters, and
-	 * languages. If a legacy configuration exists it will be reloaded.
-	 * If the convert option has been set we run
+	 * Flushes rewrite rules when deactivated. If the uninstall option has been
+	 * set we also need to do delete all webcomics, transcripts, storylines,
+	 * characters, and languages. If a legacy configuration exists it will be
+	 * reloaded. If the convert option has been set we run
 	 * Webcomic::save_collection() on each collection and convert
 	 * languages into tags.
 	 * 
 	 * @uses Webcomic::$config
-	 * @uses Webcomic::api_request()
 	 * @uses WebcomicAdmin::save_collection()
 	 * @hook webcomic.php
 	 */
 	public function deactivate() {
 		global $wpdb;
-		
-		if ( self::$config[ 'api' ] ) {
-			self::api_request( 'key/' . self::$config[ 'api' ], 'DELETE' );
-		}
 		
 		if ( self::$config[ 'uninstall' ] ) {
 			if ( self::$config[ 'convert' ] ) {
@@ -458,7 +447,7 @@ class WebcomicAdmin extends Webcomic {
 	public function admin_head() {
 		$screen = get_current_screen();
 		
-		if ( preg_match( '/^(dashboard|page|options-media|tools_page_webcomic-commerce|tools_page_webcomic-upgrader|media_page_webcomic-attacher|media_page_webcomic-generator|admin_page_webcomic-term-sort|settings_page_webcomic-options|admin_page_webcomic-network|(edit-)?webcomic_(transcript|language)|(webcomic\d+_page_|edit-)?webcomic\d+(-options|_storyline|_character)?)$/', $screen->id ) ) {
+		if ( preg_match( '/^(page|options-media|tools_page_webcomic-commerce|tools_page_webcomic-upgrader|media_page_webcomic-attacher|media_page_webcomic-generator|admin_page_webcomic-term-sort|settings_page_webcomic-options|(edit-)?webcomic_(transcript|language)|(webcomic\d+_page_|edit-)?webcomic\d+(-options|_storyline|_character)?)$/', $screen->id ) ) {
 			require_once self::$dir . '-/php/help.php';
 			
 			new WebcomicHelp( $screen );
@@ -495,16 +484,6 @@ class WebcomicAdmin extends Webcomic {
 	}
 	
 	/**
-	 * Add administrative dashboard widgets.
-	 * 
-	 * @uses WebcomicAdmin::widget_showcase()
-	 * @hook wp_dhasboard_setup
-	 */
-	public function wp_dashboard_setup() {
-		wp_add_dashboard_widget( 'webcomic-showcase', __( 'Webcomic Showcase', 'webcomic' ), array( $this, 'widget_showcase' ), array( $this, 'widget_showcase_config' ) );
-	}
-	
-	/**
 	 * Enqueue custom styles for thank you message.
 	 * 
 	 * @uses Webcomic::$url
@@ -513,12 +492,6 @@ class WebcomicAdmin extends Webcomic {
 	 */
 	public function admin_enqueue_scripts() {
 		$screen = get_current_screen();
-		
-		if ( 'dashboard' === $screen->id and self::$config[ 'api' ] ) {
-			wp_enqueue_style( 'webcomic-showcase', self::$url . '-/css/admin-showcase.css' );
-			
-			wp_enqueue_script( 'webcomic-showcase', self::$url . '-/js/admin-showcase.js' );
-		}
 		
 		if ( isset( self::$config[ 'thanks' ] ) ) {
 			wp_register_style( 'webcomic-google-font', 'http://fonts.googleapis.com/css?family=Maven+Pro' );
@@ -544,10 +517,6 @@ class WebcomicAdmin extends Webcomic {
 			
 			if ( self::$config[ 'uninstall' ] ) {
 				$meta[] = '<b style="color:#d98500">' . ( self::$config[ 'convert' ] ?  __( 'Webcomic data will be converted if the plugin is deactivated.', 'webcomic' ) : __( 'Webcomic data will be deleted if the plugin is deactivated.', 'webcomic' ) ) . '</b>';
-			}
-			
-			if ( self::$config[ 'api' ] ) {
-				$meta[] = '<b style="color:#bc0b0b">' . __( 'Webcomic Network data will be purged if the plugin is deactivated.', 'webcomic' ) . '</b>';
 			}
 		}
 		
@@ -632,139 +601,6 @@ class WebcomicAdmin extends Webcomic {
 		if ( $character_cache = array_unique( array_values( $character_cache ) ) ) {
 			clean_term_cache( $character_cache, 'post_tag' );
 		}
-	}
-	
-	/**
-	 * Render the Webcomic Showcase dashboard widget.
-	 * 
-	 * @uses Webcomic::$config
-	 * @uses Webcomic::api_request()
-	 */
-	public function widget_showcase() {
-		if ( self::$config[ 'api' ] ) {
-			$options = get_option( 'dashboard_widget_options' );
-			$data    = array(
-				'genre'  => isset( $options[ 'webcomic_showcase' ][ 'genre' ] ) ? $options[ 'webcomic_showcase' ][ 'genre' ] : array(),
-				'rating' => isset( $options[ 'webcomic_showcase' ][ 'rating' ] ) ? $options[ 'webcomic_showcase' ][ 'rating' ] : array()
-			);
-			
-			$http = self::api_request( 'showcase/' . ( isset( $options[ 'webcomic_showcase' ][ 'number' ] ) ? $options[ 'webcomic_showcase' ][ 'number' ] : 5 ), 'GET', $data );
-			
-			if ( isset( $http[ 200 ] ) ) {
-				if ( empty( $http[ 200 ] ) ) {
-					echo '<a href="', add_query_arg( array( 'page' => 'webcomic-network' ), admin_url( 'options.php' ) ), '" class="button">', __( 'Join the Webcomic Showcase', 'webcomic' ), '</a>';
-				} else {
-					echo '<div class="slideshow"><div>';
-					
-					foreach ( $http[ 200 ] as $entry ) {
-						foreach ( $entry[ 'creators' ] as $k => $v ) {
-							if ( 0 === strpos( $v, '@' ) ) {
-								$entry[ 'creators' ][ $k ] = '<a href="http://twitter.com/' . str_replace( '@', '', $v ) . '" target="_blank">' . str_replace( '@', '', $v ) . '</a>';
-							}
-						}
-						
-						$caption = empty( $entry[ 'template' ] ) ? sprintf( __( 'Created by %1$s with %2$s', 'webcomic' ),
-							implode( ', ', $entry[ 'creators' ] ),
-							'<a href="' . $entry[ 'theme' ][ 'url' ] . '" target="_blank">' . $entry[ 'theme' ][ 'name' ] . '</a>'
-						) : sprintf( __( 'Created by %1$s with %3$s (based on %4$s)', 'webcomic' ),
-							implode( ', ', $entry[ 'creators' ] ),
-							'<a href="' . $entry[ 'theme' ][ 'url' ] . '" target="_blank">' . $entry[ 'theme' ][ 'name' ] . '</a>',
-							'<a href="' . $entry[ 'template' ][ 'url' ] . '" target="_blank">' . $entry[ 'template' ][ 'name' ] . '</a>'
-						);
-						
-						echo '<figure><a href="', $entry[ 'url' ], '" target="_blank"><img src="', $entry[ 'image' ], '" alt=""><h4>', $entry[ 'name' ], '</h4><blockquote>', wpautop( $entry[ 'description' ] ), '</blockquote></a><figcaption>', $caption, ' <span>#', $entry[ 'rating' ], $entry[ 'genre' ] ? ' #' . implode( ' #', $entry[ 'genre' ] ) : '', '</span></figcaption></figure>';
-					}
-					
-					echo '</div></div>';
-				}
-			} else {
-				echo '<p>', array_shift( $http ), '</p>';
-			}
-		} else {
-			echo '<a href="', add_query_arg( array( 'page' => 'webcomic-network' ), admin_url( 'options.php' ) ), '" class="button">', __( 'Join the Webcomic Network', 'webcomic' ), '</a>';
-		}
-	}
-	
-	/**
-	 * Render the Webcomic Showcase dashboard widget configuration form.
-	 */
-	public function widget_showcase_config() {
-		$options = get_option( 'dashboard_widget_options' );
-		
-		if ( empty( $options ) ) {
-			$options = array();
-		} elseif ( empty( $options[ 'webcomic_showcase' ] ) ) {
-			$options[ 'webcomic_showcase' ] = array(
-				'genre'  => array(),
-				'rating' => array(),
-				'number' => 5
-			);
-		}
-		
-		if ( $_POST and isset( $_POST[ 'widget_id' ] ) and 'webcomic-showcase' === $_POST[ 'widget_id' ] ) {
-			$options[ 'webcomic_showcase' ] = array(
-				'genre'  => 24 === count( $_POST[ 'webcomic_showcase' ][ 'genre' ] ) ? array() : $_POST[ 'webcomic_showcase' ][ 'genre' ],
-				'rating' => 4 === count( $_POST[ 'webcomic_showcase' ][ 'rating' ] ) ? array() : $_POST[ 'webcomic_showcase' ][ 'rating' ],
-				'number' => intval( $_POST[ 'webcomic_showcase' ][ 'number' ] )
-			);
-			
-			update_option( 'dashboard_widget_options', $options );
-		}
-		
-		?>
-		<p>
-			<b><label for="webcomic_showcase[number]"><?php _e( 'Number', 'webcomic' ); ?></label></b>
-			<input type="number" name="webcomic_showcase[number]" id="webcomic_showcase[number]" min="1" max="10" value="<?php echo $options[ 'webcomic_showcase' ][ 'number' ]; ?>">
-		</p>
-		<p>
-			<b><?php _e( 'Ratings', 'webcomic' ); ?></b>
-			<?php
-				foreach ( array(
-					'everyone' => __( 'Everyone', 'webcomic' ),
-					'teen'     => __( 'Teen', 'webcomic' ),
-					'mature'   => __( 'Mature', 'webcomic' ),
-					'adult'    => __( 'Adult', 'webcomic' )
-				) as $k => $v ) {
-					echo '<label><input type="checkbox" name="webcomic_showcase[rating][]" value="', $k, '"', checked( ( empty( $options[ 'webcomic_showcase' ][ 'rating' ] ) or in_array( $k, $options[ 'webcomic_showcase' ][ 'rating' ] ) ), true, false ), '> ', esc_html( $v ), '</label>';
-				}
-			?>
-		</p>
-		<hr>
-		<p>
-			<b><?php _e( 'Genres', 'webcomic' ); ?></b>
-			<?php
-				foreach ( array(
-					'absurdist'     => __( 'Absurdist', 'webcomic' ),
-					'adventure'     => __( 'Adventure', 'webcomic' ),
-					'comedy'        => __( 'Comedy', 'webcomic' ),
-					'drama'         => __( 'Drama', 'webcomic' ),
-					'education'     => __( 'Education', 'webcomic' ),
-					'experimental'  => __( 'Experimental', 'webcomic' ),
-					'erotic'        => __( 'Erotic', 'webcomic' ),
-					'fantasy'       => __( 'Fantasy', 'webcomic' ),
-					'historical'    => __( 'Historical', 'webcomic' ),
-					'horror'        => __( 'Horror', 'webcomic' ),
-					'meta'          => __( 'Meta', 'webcomic' ),
-					'nonfiction'    => __( 'Nonfiction', 'webcomic' ),
-					'philosophical' => __( 'Philosophical', 'webcomic' ),
-					'political'     => __( 'Political', 'webcomic' ),
-					'pulp'          => __( 'Pulp', 'webcomic' ),
-					'religious'     => __( 'Religious', 'webcomic' ),
-					'romance'       => __( 'Romance', 'webcomic' ),
-					'saga'          => __( 'Saga', 'webcomic' ),
-					'satire'        => __( 'Satire', 'webcomic' ),
-					'scifi'         => __( 'Science Fiction', 'webcomic' ),
-					'suspense'      => __( 'Suspense', 'webcomic' ),
-					'thriller'      => __( 'Thriller', 'webcomic' ),
-					'tragedy'       => __( 'Tragedy', 'webcomic' ),
-					'western'       => __( 'Western', 'webcomic' )
-				) as $k => $v ) {
-					echo '<label><input type="checkbox" name="webcomic_showcase[genre][]" value="', $k, '"', checked( ( empty( $options[ 'webcomic_showcase' ][ 'genre' ] ) or in_array( $k, $options[ 'webcomic_showcase' ][ 'genre' ] ) ), true, false ), '> ', esc_html( $v ), '</label>';
-				}
-			?>
-		</p>
-		<hr>
-		<?php
 	}
 	
 	/**

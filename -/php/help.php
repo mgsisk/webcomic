@@ -16,7 +16,6 @@ class WebcomicHelp extends Webcomic {
 	 * 
 	 * @param object $screen Current screen object.
 	 * @uses WebcomicHelp::sidebar()
-	 * @uses WebcomicHelp::dashboard_showcase()
 	 * @uses WebcomicHelp::media_sizes()
 	 * @uses WebcomicHelp::commerce_overview()
 	 * @uses WebcomicHelp::legacy_overview()
@@ -25,8 +24,6 @@ class WebcomicHelp extends Webcomic {
 	 * @uses WebcomicHelp::term_order_overview()
 	 * @uses WebcomicHelp::settings_general()
 	 * @uses WebcomicHelp::settings_collections()
-	 * @uses WebcomicHelp::network_overview()
-	 * @uses WebcomicHelp::network_settings_showcase()
 	 * @uses WebcomicHelp::transcripts_overview()
 	 * @uses WebcomicHelp::transcripts_screen()
 	 * @uses WebcomicHelp::transcripts_actions()
@@ -66,13 +63,7 @@ class WebcomicHelp extends Webcomic {
 			$screen->set_help_sidebar( $this->sidebar() );
 		}
 		
-		if ( 'dashboard' === $screen->id ) {
-			$screen->add_help_tab( array(
-				'id'      => 'webcomic-showcase',
-				'title'   => __( 'Webcomic Showcase', 'webcomic' ),
-				'content' => $this->dashboard_showcase()
-			) );
-		} elseif ( 'page' === $screen->id ) {
+		if ( 'page' === $screen->id ) {
 			$screen->add_help_tab( array(
 				'id'      => 'webcomic-collection',
 				'title'   => __( 'Webcomic Collection', 'webcomic' ),
@@ -126,20 +117,6 @@ class WebcomicHelp extends Webcomic {
 				'title'   => __( 'Collections', 'webcomic' ),
 				'content' => $this->settings_collections()
 			) );
-		} elseif ( 'admin_page_webcomic-network' === $screen->id ) {
-			$screen->add_help_tab( array(
-				'id'      => 'overview',
-				'title'   => __( 'Overview', 'webcomic' ),
-				'content' => $this->network_overview()
-			) );
-			
-			if ( self::$config[ 'api' ] ) {
-				$screen->add_help_tab( array(
-					'id'      => 'showcase-settings',
-					'title'   => __( 'Showcase Settings', 'webcomic' ),
-					'content' => $this->network_settings_showcase()
-				) );
-			}
 		} elseif ( 'edit-webcomic_transcript' === $screen->id ) {
 			$screen->add_help_tab( array(
 				'id'      => 'overview',
@@ -353,17 +330,7 @@ class WebcomicHelp extends Webcomic {
 			<p><a href="http://groups.google.com/d/forum/webcomicnu" target="_blank">' . __( 'Support Forum', 'webcomic' ) . '</a></p>
 			<p><a href="http://github.com/mgsisk/webcomic/issues" target="_blank">' . __( 'Issue Tracker', 'webcomic' ) . '</a></p>
 			<hr style="border:0;border-top:thin solid #ddd">
-			<p><a href="support@webcomic.nu">' . __( 'Email Support', 'webcomic' ) . '</a></p>';
-	}
-	
-	/**
-	 * Return Webcomic Showcase widget help.
-	 * 
-	 * @return string
-	 */
-	private function dashboard_showcase() {
-		return '
-		<p>' . sprintf( __( 'The <b>Webcomic Showcase</b> highlights other Webcomic-powered sites that have opted to share their information via the showcase. To view the showcase you must have a Webcomic Network API key, which requires <a href="%s">joining the Webcomic Network</a>. After you have joined the network you may optionally list your site in the showcase. You can configure how may and what kinds of sites appear in the showcase using the <b>Configure</b> link in the widget title.', 'webcomic' ), add_query_arg( array( 'page' => 'webcomic-network' ), admin_url( 'options.php' ) ) ) . '</p>';
+			<p><a href="help@mgsisk.com">' . __( 'Email Support', 'webcomic' ) . '</a></p>';
 	}
 	
 	/**
@@ -846,7 +813,6 @@ class WebcomicHelp extends Webcomic {
 		return '
 			<p>' . __( 'The settings on this page affect your entire site:', 'webcomic' ) . '</p>
 			<ul>
-				<li>' . sprintf( __( '<b>Network</b> - The Webcomic Network is an optional service provided by %s to help Webcomic users connect with each other. Click <b>Access the Webcomic Network</b> to go to the Webcomic Network settings page.', 'webcomic' ), '<a href="http://webcomic.nu" target="_blank">webcomic.nu</a>' ) . '</li>
 				<li>' . __( "<b>Integrate</b> - Webcomic will attempt to automatically integrate basic functionality into your site. Integration may not work with certain WordPress themes and plugins.", 'webcomic' ) . '</li>
 				<li>' . sprintf( __( '<b>Navigate</b> - Changes how users browse through webcomics on your site. <a href="%1$s" target="_blank">Dynamic navigation</a> will attempt to load webcomics without refreshing the page. This makes browsing significantly faster, but may not work in all situations and will affect cost per impression advertising. When <a href="%2$s" target="_blank">touch gestures</a> are enabled readers can use various touch gestures to navigate your webcomics. When <a href="%3$s" target="_blank">keyboard shortcuts</a> are enabled users can press certain button combinations to navigate through webcomics.', 'webcomic' ), '//github.com/mgsisk/webcomic/wiki/Dynamic-Navigation', '//github.com/mgsisk/webcomic/wiki/Touch-Gestures', '//github.com/mgsisk/webcomic/wiki/Keyboard-Shortcuts' ) . '</li>
 				<li>' . __( '<b>Uninstall</b> - Deletes all data associated with Webcomic when the plugin is deactivated, including settings, webcomics, storylines, characters, transcripts, and languages (this cannot be undone; uploaded media will not be deleted). You may optionally choose to convert webcomics and transcripts into posts, storylines into categories, and characters and languages into tags.', 'webcomic' ) . '</li>
@@ -862,38 +828,6 @@ class WebcomicHelp extends Webcomic {
 		return '
 			<p>' . __( 'The Collections section provides a general overview of all of the collections on your site. To add a new collection enter a name in the box above the list and click <b>Add Collection</b>.', 'webcomic' ) . '</p>
 			<p>' . __( 'To delete a collection, check the box next to it and select either <b>Delete Permanently</b> or <b>Delete and Save</b> from the Bulk Actions dropdown at the bottom of the list. If <b>Delete and Save</b> is selected the checked collections will have their webcomics and transcripts converted into posts, storylines converted into categories, and characters converted into tags before being deleted.', 'webcomic' ) . '</p>';
-	}
-	
-	/**
-	 * Return general network settings help.
-	 * 
-	 * @return string
-	 */
-	private function network_overview() {
-		return self::$config[ 'api' ] ? '
-			<p>' . sprintf( __( 'The Webcomic Network is an optional service provided by %s to help Webcomic users connect with each other. Your site-specific <b>API key</b> grants you access to the network; never share it with anyone. Your use of the Webcomic Network is governed by the <a href="%s">Webcomic Network Terms of Service</a>. If you ever decide to leave the Webcomic Network or deactivate Webcomic all of your network information will be purged and your API key will be rescinded.', 'webcomic' ), '<a href="http://webcomic.nu" target="_blank">webcomic.nu</a>', 'http://webcomic.nu/legal' ) . '</p>'
-			: '<p>' . sprintf( __( 'Your use of the Webcomic Network is governed by the <a href="%s">Webcomic Network Terms of Service</a>', 'webcomic' ), 'http://webcomic.nu/legal' ) . '</p>';
-	}
-	
-	/**
-	 * Return general network settings help.
-	 * 
-	 * @return string
-	 */
-	private function network_settings_showcase() {
-		return '
-			<p>' . sprintf( __( 'The <b>Webcomic Showcase</b> allows you to share your site with other Webcomic users right in their administrative dashboard via the Webcomic Showcase widget and with everyone through %s. You can customize the following information about your site:', 'webcomic' ), '<a href="http://webcomic.nu" target="_blank">webcomic.nu</a>'  ) . '</p>
-			<ul>
-				<li>' . __( '<b>Name</b> - The name is how your site is labeled in the showcase.', 'webcomic' ) . '</li>
-				<li>' . __( '<b>URL</b> - Enter the address you want your showcase entry to link to.', 'webcomic' ) . '</li>
-				<li>' . __( '<b>Creators</b> - Enter the names or Twitter @usernames of the creators of this site, separated by commas.', 'webcomic' ) . '</li>
-				<li>' . __( '<b>Description</b> - The description is displayed with your showcase entry. 160 characters or less.', 'webcomic' ) . '</li>
-				<li>' . __( '<b>Genre</b> - Select up to five genres that describe your site.', 'webcomic' ) . '</li>
-				<li>' . __( '<b>Rating</b> - Select the rating that most fits the intended audience of your site.', 'webcomic' ) . '</li>
-				<li>' . __( '<b>Billboard</b> - The billboard is a representative image for your site. It should be 640x360 pixels in size and will be hotlinked directly from your site.', 'webcomic' ) . '</li>
-				<li>' . sprintf( __( '<b>Testimonial</b> - If provided, the testimonial will be displayed on %s', 'webcomic' ), '<a href="http://webcomic.nu" target="_blank">webcomic.nu</a>' ) . '</li>
-			</ul>
-			<p>' . __( "Some additional data is sent with your showcase entry, including the version of Webcomic you're using and information about your sites theme (name, url, author, and author url) and template (if you're using a child theme).", 'webcomic' ) . '</p>';
 	}
 	
 	/**
