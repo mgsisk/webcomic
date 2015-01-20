@@ -1193,8 +1193,8 @@ class WebcomicTag extends Webcomic {
 			} elseif ( 'next' === $relative ) {
 				if ( $children = get_terms( $object->taxonomy, array_merge( $args, array( 'parent' => $object->term_id ) ) ) and !is_wp_error( $children ) ) {
 					$object = $children[ 0 ];
-				} elseif ( $terms = get_terms( $object->taxonomy, array_merge( $args, array( 'parent' => $object->parent ) ) ) and !is_wp_error( $terms ) and false !== ( $key = array_search( $object, $terms ) ) and isset( $terms[ $key + 1 ] ) ) {
-					$object = $terms[ $key + 1 ];
+				} elseif ( $terms = get_terms( $object->taxonomy, array_merge( $args, array( 'parent' => $object->parent, 'fields' => 'ids' ) ) ) and !is_wp_error( $terms ) and false !== ( $key = array_search( $object->term_id, $terms ) ) and isset( $terms[ $key + 1 ] ) ) {
+					$object = get_term($terms[ $key + 1 ], $taxonomy);
 				} else {
 					$next = $object;
 					
