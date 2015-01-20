@@ -11,4 +11,18 @@
  * @uses verify_webcomic_age()
  */
 
-wp_die( is_null( verify_webcomic_age() ) ? __( "Please verify your age to view this content:", "webcomic" ) . "<form method='post'><label>" . __( "Birthday", "webcomic" ) . " <input type='date' name='webcomic_birthday'></label><input type='submit'></form>" : __( "You don't have permission to view this content.", "webcomic" ), __( "Restricted Content | Webcomic", "webcomic" ), 401 );
+wp_die(
+    is_null(verify_webcomic_age())
+        ? sprintf("
+            <form method='post'>
+                %s<br>
+                <button type='submit' name='webcomic_birthday' value='1'>%s</button>
+                <button type='submit' name='webcomic_birthday' value='0'>%s</button>
+            </form>",
+            sprintf(__('Are you %s years or older?', 'webcomic'), WebcomicTag::get_verify_webcomic_age()),
+            __('Yes', 'webcomic'),
+            __('No', 'webcomic')
+        )
+        : __("You don't have permission to view this content.", 'webcomic'),
+    __('Restricted Content | Webcomic', 'webcomic'), 401
+);
