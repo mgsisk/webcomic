@@ -68,8 +68,8 @@ class WebcomicWidget extends Webcomic {
 	public function admin_enqueue_scripts() {
 		$screen = get_current_screen();
 		
-		if ( 'widgets' === $screen->id ) {
-			wp_enqueue_script( 'webcomic-widgets', self::$url . '-/js/admin-widgets.js', array( 'jquery' ) );
+		if ('widgets' === $screen->id or 'customize' === $screen->id) {
+			wp_enqueue_script('webcomic-widgets', self::$url . '-/js/admin-widgets.js', array('jquery'));
 			
 			wp_enqueue_media();
 		}

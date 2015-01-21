@@ -12,6 +12,8 @@ jQuery( function( $ ) {
 			webcomic_admin_ajax: $e.data( "callback" )
 		}, function( data ) {
 			$( $e.closest( $e.data( "target" ) ) ).html( data );
+			
+			$($e.data('target')).closest('label').find('> input').trigger('change');
 		} );
 	} );
 } );
@@ -44,6 +46,8 @@ jQuery( function( $ ) {
 					webcomic_admin_ajax: $e.data( "callback" )
 				}, function( data ) {
 					$( $e.closest( $e.data( "target" ) ) ).html( data );
+					
+					$($e.data('target')).closest('label').find('> input').trigger('change');
 				} );
 			} );
 			
