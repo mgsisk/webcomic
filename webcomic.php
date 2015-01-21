@@ -148,6 +148,7 @@ class Webcomic {
 			add_action( 'post_type_link', array( $this, 'post_type_link' ), 10, 4 );
 			add_filter( 'template_include', array( $this, 'template_include' ), 10, 1 );
 			add_filter( 'the_content_feed', array( $this, 'the_content_feed' ), 10, 1 );
+			add_filter( 'pre_option_stylesheet', array( $this, 'pre_option_stylesheet' ) );
 			add_filter( 'wp_get_object_terms', array( $this, 'wp_get_object_terms' ), 10, 4 );
 			add_filter( 'extra_theme_headers', array( $this, 'extra_theme_headers' ), 10, 1 );
 			add_filter( 'wp_get_attachment_image_attributes', array( $this, 'wp_get_attachment_image_attributes' ), 10, 2 );
@@ -1472,6 +1473,20 @@ class Webcomic {
 		}
 		
 		return $content;
+	}
+	
+	/**
+	 * Return the appropriate theme ID for custom collection themes.
+	 * 
+	 * @return mixed
+	 * @hook pre_option_stylesheet
+	 */
+	public function pre_option_stylesheet() {
+		if (self::$collection and isset(self::$config['collections'][self::$collection]['theme']) and $stylesheet = substr(self::$config['collections'][self::$collection]['theme'], strpos(self::$config['collections'][self::$collection]['theme'], '|') + 1) and is_readable(get_theme_root() . "/{$stylesheet}")) {
+			return $stylesheet;
+		}
+		
+		return false;
 	}
 	
 	/**

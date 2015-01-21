@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Webcomic 4.2\n"
-"POT-Creation-Date: 2015-01-20 10:24-0500\n"
-"PO-Revision-Date: 2015-01-20 10:24-0500\n"
+"POT-Creation-Date: 2015-01-21 09:05-0500\n"
+"PO-Revision-Date: 2015-01-21 09:05-0500\n"
 "Last-Translator: \n"
 "Language-Team: Michael Sisk <help@mgsisk.com>\n"
 "Language: en_US\n"
@@ -166,7 +166,7 @@ msgid "Notification"
 msgstr ""
 
 #: webcomic/-/php/config.php:103 webcomic/-/php/transcripts.php:362
-#: webcomic/webcomic.php:314
+#: webcomic/webcomic.php:315
 msgid "Languages"
 msgstr ""
 
@@ -252,13 +252,13 @@ msgstr ""
 
 #: webcomic/-/php/config.php:127 webcomic/-/php/config.php:264
 #: webcomic/-/php/legacy.php:63 webcomic/-/php/posts.php:420
-#: webcomic/-/php/widgets.php:198 webcomic/webcomic.php:236
+#: webcomic/-/php/widgets.php:198 webcomic/webcomic.php:237
 msgid "Storylines"
 msgstr ""
 
 #: webcomic/-/php/config.php:128 webcomic/-/php/config.php:265
 #: webcomic/-/php/posts.php:419 webcomic/-/php/widgets.php:199
-#: webcomic/webcomic.php:262
+#: webcomic/webcomic.php:263
 msgid "Characters"
 msgstr ""
 
@@ -1869,7 +1869,7 @@ msgstr ""
 #: webcomic/-/php/integrate/restricted-age.php:26
 #: webcomic/-/php/integrate/restricted-role.php:13
 #: webcomic/-/php/shortcodes.php:145 webcomic/-/php/shortcodes.php:171
-#: webcomic/webcomic.php:896 webcomic/webcomic.php:900
+#: webcomic/webcomic.php:897 webcomic/webcomic.php:901
 msgid "You don't have permission to view this content."
 msgstr ""
 
@@ -2013,7 +2013,7 @@ msgstr ""
 #: webcomic/-/php/legacy.php:434 webcomic/-/php/legacy.php:707
 #: webcomic/-/php/legacy.php:1096 webcomic/-/php/legacy.php:1236
 #: webcomic/-/php/transcripts.php:115 webcomic/-/php/transcripts.php:230
-#: webcomic/-/php/transcripts.php:236 webcomic/webcomic.php:688
+#: webcomic/-/php/transcripts.php:236 webcomic/webcomic.php:689
 #, php-format
 msgid "%s Transcript"
 msgstr ""
@@ -2342,7 +2342,7 @@ msgstr ""
 msgid "No Collection"
 msgstr ""
 
-#: webcomic/-/php/posts.php:68 webcomic/webcomic.php:281
+#: webcomic/-/php/posts.php:68 webcomic/webcomic.php:282
 msgid "Webcomic Transcripts"
 msgstr ""
 
@@ -2557,7 +2557,7 @@ msgstr ""
 msgid "Website"
 msgstr ""
 
-#: webcomic/-/php/tags.php:2158 webcomic/webcomic.php:303
+#: webcomic/-/php/tags.php:2158 webcomic/webcomic.php:304
 msgid "Language"
 msgstr ""
 
@@ -2565,7 +2565,7 @@ msgstr ""
 msgid "Transcript"
 msgstr ""
 
-#: webcomic/-/php/tags.php:2160 webcomic/webcomic.php:672
+#: webcomic/-/php/tags.php:2160 webcomic/webcomic.php:673
 #, php-format
 msgid "You must be <a href=\"%s\">logged in</a> to transcribe this webcomic."
 msgstr ""
@@ -2612,7 +2612,7 @@ msgid "Feed for %s"
 msgstr ""
 
 #: webcomic/-/php/tags.php:2881 webcomic/-/php/tags.php:2994
-#: webcomic/webcomic.php:200
+#: webcomic/webcomic.php:201
 #, php-format
 msgid "%s Webcomic"
 msgid_plural "%s Webcomics"
@@ -2719,7 +2719,7 @@ msgstr ""
 msgid "No Attachments"
 msgstr ""
 
-#: webcomic/-/php/upgrade.php:139 webcomic/webcomic.php:374
+#: webcomic/-/php/upgrade.php:139 webcomic/webcomic.php:375
 msgid "Shopping Cart"
 msgstr ""
 
@@ -3075,7 +3075,7 @@ msgstr ""
 msgid "Link to the previous, next, first, last, or a random webcomic storyline"
 msgstr ""
 
-#: webcomic/-/php/widgets.php:1518 webcomic/webcomic.php:226
+#: webcomic/-/php/widgets.php:1518 webcomic/webcomic.php:227
 msgid "Storyline"
 msgstr ""
 
@@ -3107,7 +3107,7 @@ msgstr ""
 msgid "Link to the previous, next, first, last, or a random webcomic character"
 msgstr ""
 
-#: webcomic/-/php/widgets.php:1692 webcomic/webcomic.php:251
+#: webcomic/-/php/widgets.php:1692 webcomic/webcomic.php:252
 msgid "Character"
 msgstr ""
 
@@ -3189,278 +3189,278 @@ msgstr ""
 msgid "Select a Transcript Link Image"
 msgstr ""
 
-#: webcomic/webcomic.php:201 webcomic/webcomic.php:283
+#: webcomic/webcomic.php:202 webcomic/webcomic.php:284
 msgid "Add New"
 msgstr ""
 
-#: webcomic/webcomic.php:202
+#: webcomic/webcomic.php:203
 msgid "Add New Webcomic"
 msgstr ""
 
-#: webcomic/webcomic.php:203
+#: webcomic/webcomic.php:204
 msgid "Edit Webcomic"
 msgstr ""
 
-#: webcomic/webcomic.php:204
+#: webcomic/webcomic.php:205
 msgid "New Webcomic"
 msgstr ""
 
-#: webcomic/webcomic.php:205
+#: webcomic/webcomic.php:206
 msgid "All Webcomics"
 msgstr ""
 
-#: webcomic/webcomic.php:206
+#: webcomic/webcomic.php:207
 msgid "View Webcomic"
 msgstr ""
 
-#: webcomic/webcomic.php:207
+#: webcomic/webcomic.php:208
 msgid "Search Webcomics"
 msgstr ""
 
-#: webcomic/webcomic.php:208
+#: webcomic/webcomic.php:209
 msgid "No webcomics found."
 msgstr ""
 
-#: webcomic/webcomic.php:209
+#: webcomic/webcomic.php:210
 msgid "No webcomics found in Trash."
 msgstr ""
 
-#: webcomic/webcomic.php:225
+#: webcomic/webcomic.php:226
 #, php-format
 msgid "%s Storylines"
 msgstr ""
 
-#: webcomic/webcomic.php:227
+#: webcomic/webcomic.php:228
 msgid "Search Storylines"
 msgstr ""
 
-#: webcomic/webcomic.php:228
+#: webcomic/webcomic.php:229
 msgid "Popular Storylines"
 msgstr ""
 
-#: webcomic/webcomic.php:229
+#: webcomic/webcomic.php:230
 msgid "All Storylines"
 msgstr ""
 
-#: webcomic/webcomic.php:230
+#: webcomic/webcomic.php:231
 msgid "Parent Storyline"
 msgstr ""
 
-#: webcomic/webcomic.php:231
+#: webcomic/webcomic.php:232
 msgid "Parent Storyline:"
 msgstr ""
 
-#: webcomic/webcomic.php:232
+#: webcomic/webcomic.php:233
 msgid "Edit Storyline"
 msgstr ""
 
-#: webcomic/webcomic.php:233
+#: webcomic/webcomic.php:234
 msgid "Update Storyline"
 msgstr ""
 
-#: webcomic/webcomic.php:234
+#: webcomic/webcomic.php:235
 msgid "Add New Storyline"
 msgstr ""
 
-#: webcomic/webcomic.php:235
+#: webcomic/webcomic.php:236
 msgid "New Storyline Name"
 msgstr ""
 
-#: webcomic/webcomic.php:250
+#: webcomic/webcomic.php:251
 #, php-format
 msgid "%s Characters"
 msgstr ""
 
-#: webcomic/webcomic.php:252
+#: webcomic/webcomic.php:253
 msgid "Search Characters"
 msgstr ""
 
-#: webcomic/webcomic.php:253
+#: webcomic/webcomic.php:254
 msgid "Popular Characters"
 msgstr ""
 
-#: webcomic/webcomic.php:254
+#: webcomic/webcomic.php:255
 msgid "All Characters"
 msgstr ""
 
-#: webcomic/webcomic.php:255
+#: webcomic/webcomic.php:256
 msgid "Edit Character"
 msgstr ""
 
-#: webcomic/webcomic.php:256
+#: webcomic/webcomic.php:257
 msgid "Update Character"
 msgstr ""
 
-#: webcomic/webcomic.php:257
+#: webcomic/webcomic.php:258
 msgid "Add New Character"
 msgstr ""
 
-#: webcomic/webcomic.php:258
+#: webcomic/webcomic.php:259
 msgid "New Character Name"
 msgstr ""
 
-#: webcomic/webcomic.php:259
+#: webcomic/webcomic.php:260
 msgid "Separate characters with commas"
 msgstr ""
 
-#: webcomic/webcomic.php:260
+#: webcomic/webcomic.php:261
 msgid "Add or remove characters"
 msgstr ""
 
-#: webcomic/webcomic.php:261
+#: webcomic/webcomic.php:262
 msgid "Choose from the most used characters"
 msgstr ""
 
-#: webcomic/webcomic.php:282
+#: webcomic/webcomic.php:283
 msgid "Webcomic Transcript"
 msgstr ""
 
-#: webcomic/webcomic.php:284
+#: webcomic/webcomic.php:285
 msgid "Add New Transcript"
 msgstr ""
 
-#: webcomic/webcomic.php:285
+#: webcomic/webcomic.php:286
 msgid "Edit Transcript"
 msgstr ""
 
-#: webcomic/webcomic.php:286
+#: webcomic/webcomic.php:287
 msgid "New Transcript"
 msgstr ""
 
-#: webcomic/webcomic.php:287
+#: webcomic/webcomic.php:288
 msgid "All Transcripts"
 msgstr ""
 
-#: webcomic/webcomic.php:288
+#: webcomic/webcomic.php:289
 msgid "View Transcript"
 msgstr ""
 
-#: webcomic/webcomic.php:289
+#: webcomic/webcomic.php:290
 msgid "Search Transcripts"
 msgstr ""
 
-#: webcomic/webcomic.php:290
+#: webcomic/webcomic.php:291
 msgid "No transcripts found."
 msgstr ""
 
-#: webcomic/webcomic.php:291
+#: webcomic/webcomic.php:292
 msgid "No transcripts found in Trash."
 msgstr ""
 
-#: webcomic/webcomic.php:302
+#: webcomic/webcomic.php:303
 msgid "Webcomic Transcript Languages"
 msgstr ""
 
-#: webcomic/webcomic.php:304
+#: webcomic/webcomic.php:305
 msgid "Search Languages"
 msgstr ""
 
-#: webcomic/webcomic.php:305
+#: webcomic/webcomic.php:306
 msgid "Popular Lanuages"
 msgstr ""
 
-#: webcomic/webcomic.php:306
+#: webcomic/webcomic.php:307
 msgid "All Languages"
 msgstr ""
 
-#: webcomic/webcomic.php:307
+#: webcomic/webcomic.php:308
 msgid "Edit Language"
 msgstr ""
 
-#: webcomic/webcomic.php:308
+#: webcomic/webcomic.php:309
 msgid "Update Language"
 msgstr ""
 
-#: webcomic/webcomic.php:309
+#: webcomic/webcomic.php:310
 msgid "Add New Language"
 msgstr ""
 
-#: webcomic/webcomic.php:310
+#: webcomic/webcomic.php:311
 msgid "New Language Name"
 msgstr ""
 
-#: webcomic/webcomic.php:311
+#: webcomic/webcomic.php:312
 msgid "Separate languages with commas"
 msgstr ""
 
-#: webcomic/webcomic.php:312
+#: webcomic/webcomic.php:313
 msgid "Add or remove languages"
 msgstr ""
 
-#: webcomic/webcomic.php:313
+#: webcomic/webcomic.php:314
 msgid "Choose from the most used languages"
 msgstr ""
 
-#: webcomic/webcomic.php:368
+#: webcomic/webcomic.php:369
 msgid "Incomplete transaction"
 msgstr ""
 
-#: webcomic/webcomic.php:371
+#: webcomic/webcomic.php:372
 msgid "Transaction already completed"
 msgstr ""
 
-#: webcomic/webcomic.php:383 webcomic/webcomic.php:409
-#: webcomic/webcomic.php:428
+#: webcomic/webcomic.php:384 webcomic/webcomic.php:410
+#: webcomic/webcomic.php:429
 #, php-format
 msgid "Invalid collection %s"
 msgstr ""
 
-#: webcomic/webcomic.php:386 webcomic/webcomic.php:412
-#: webcomic/webcomic.php:431
+#: webcomic/webcomic.php:387 webcomic/webcomic.php:413
+#: webcomic/webcomic.php:432
 #, php-format
 msgid "Incorrect business email %s"
 msgstr ""
 
-#: webcomic/webcomic.php:389 webcomic/webcomic.php:415
-#: webcomic/webcomic.php:434
+#: webcomic/webcomic.php:390 webcomic/webcomic.php:416
+#: webcomic/webcomic.php:435
 #, php-format
 msgid "Incorrect price %s"
 msgstr ""
 
-#: webcomic/webcomic.php:392 webcomic/webcomic.php:418
-#: webcomic/webcomic.php:437
+#: webcomic/webcomic.php:393 webcomic/webcomic.php:419
+#: webcomic/webcomic.php:438
 #, php-format
 msgid "Incorrect currency %s"
 msgstr ""
 
-#: webcomic/webcomic.php:399 webcomic/webcomic.php:443
+#: webcomic/webcomic.php:400 webcomic/webcomic.php:444
 msgid "Sale Get!"
 msgstr ""
 
-#: webcomic/webcomic.php:420
+#: webcomic/webcomic.php:421
 msgid "Donation Get!"
 msgstr ""
 
-#: webcomic/webcomic.php:448
+#: webcomic/webcomic.php:449
 msgid "Invalid response"
 msgstr ""
 
-#: webcomic/webcomic.php:452
+#: webcomic/webcomic.php:453
 #, php-format
 msgid "HTTP Error %s"
 msgstr ""
 
-#: webcomic/webcomic.php:596
+#: webcomic/webcomic.php:597
 #, php-format
 msgid "Authorization denied. <a href=\"%1$s\">Return to %2$s Settings</a>"
 msgstr ""
 
-#: webcomic/webcomic.php:596
+#: webcomic/webcomic.php:597
 msgid "Twitter Authorization Denied | Webcomic"
 msgstr ""
 
-#: webcomic/webcomic.php:626
+#: webcomic/webcomic.php:627
 #, php-format
 msgid ""
 "Newly published %1$s webcomics will be tweeted to <a href=\"%2$s\">%3$s</a>. "
 "<a href=\"%4$s\">Return to %1s Settings</a>"
 msgstr ""
 
-#: webcomic/webcomic.php:631
+#: webcomic/webcomic.php:632
 msgid "Twitter Authorization Complete | Webcomic"
 msgstr ""
 
-#: webcomic/webcomic.php:633 webcomic/webcomic.php:636
+#: webcomic/webcomic.php:634 webcomic/webcomic.php:637
 #, php-format
 msgid ""
 "Your credentials could not be verified. Please ensure that your <b>consumer "
@@ -3468,90 +3468,90 @@ msgid ""
 "\">try again.</a>"
 msgstr ""
 
-#: webcomic/webcomic.php:633 webcomic/webcomic.php:636
+#: webcomic/webcomic.php:634 webcomic/webcomic.php:637
 msgid "Twitter Authorization Failed | Webcomic"
 msgstr ""
 
-#: webcomic/webcomic.php:657
+#: webcomic/webcomic.php:658
 msgid "Transcripts can only be submitted for webcomics."
 msgstr ""
 
-#: webcomic/webcomic.php:657 webcomic/webcomic.php:676
+#: webcomic/webcomic.php:658 webcomic/webcomic.php:677
 msgid "Error | Webcomic"
 msgstr ""
 
-#: webcomic/webcomic.php:659
+#: webcomic/webcomic.php:660
 msgid "This webcomic cannot be transcribed."
 msgstr ""
 
-#: webcomic/webcomic.php:659
+#: webcomic/webcomic.php:660
 msgid "Transcribing Not Allowed | Webcomic"
 msgstr ""
 
-#: webcomic/webcomic.php:668
+#: webcomic/webcomic.php:669
 msgid "an anonymous user"
 msgstr ""
 
-#: webcomic/webcomic.php:672 webcomic/webcomic.php:674
+#: webcomic/webcomic.php:673 webcomic/webcomic.php:675
 msgid "Unauthorized Transcriber | Webcomic"
 msgstr ""
 
-#: webcomic/webcomic.php:674
+#: webcomic/webcomic.php:675
 msgid ""
 "You must provide a name and valid email address to transcribe this webcomic."
 msgstr ""
 
-#: webcomic/webcomic.php:676
+#: webcomic/webcomic.php:677
 msgid "Please write a transcript."
 msgstr ""
 
-#: webcomic/webcomic.php:719
+#: webcomic/webcomic.php:720
 #, php-format
 msgid "[%1$s] %2$s Transcript Submitted"
 msgstr ""
 
-#: webcomic/webcomic.php:720
+#: webcomic/webcomic.php:721
 #, php-format
 msgid ""
 "This is an automated notification that %1$s%2$s has <a href=\"%3$s\">%4$s</"
 "a> for %5$s."
 msgstr ""
 
-#: webcomic/webcomic.php:724
+#: webcomic/webcomic.php:725
 msgid "improved a transcript"
 msgstr ""
 
-#: webcomic/webcomic.php:724
+#: webcomic/webcomic.php:725
 msgid "submitted a transcript"
 msgstr ""
 
-#: webcomic/webcomic.php:895 webcomic/webcomic.php:899
+#: webcomic/webcomic.php:896 webcomic/webcomic.php:900
 msgid "Restricted Content"
 msgstr ""
 
-#: webcomic/webcomic.php:896
+#: webcomic/webcomic.php:897
 #, php-format
 msgid "You must <a href=\"%s\">log in</a> to view this content."
 msgstr ""
 
-#: webcomic/webcomic.php:900
+#: webcomic/webcomic.php:901
 #, php-format
 msgid "Please <a href=\"%s\">verify your age</a> to view this content."
 msgstr ""
 
-#: webcomic/webcomic.php:986
+#: webcomic/webcomic.php:987
 #, php-format
 msgid "[%s] %s Buffer Alert - %s Day Left"
 msgid_plural "[%s] %s Buffer Alert - %s Days Left"
 msgstr[0] ""
 msgstr[1] ""
 
-#: webcomic/webcomic.php:987
+#: webcomic/webcomic.php:988
 #, php-format
 msgid "This is an automated reminder that the buffer for %1$s expires on %2$s."
 msgstr ""
 
-#: webcomic/webcomic.php:1126
+#: webcomic/webcomic.php:1127
 #, php-format
 msgid "<b>Twitter Error:</b> %s"
 msgstr ""
