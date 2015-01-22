@@ -6516,6 +6516,22 @@ if ( !function_exists( 'webcomic_collection_cloud' ) ) {
 	}
 }
 
+/**
+ * Return an infinite scroll link.
+ * 
+ * Useful for providing a bookmark link on infinite-scroll pages.
+ * 
+ * @return string
+ */
+function webcomic_infinite_link($text = '') {
+	$text = $text ? $text : __('Bookmark', 'webcomic');
+	
+	return sprintf('<a href="%1$s">%2$s</a>',
+		add_query_arg(array('offset' => $_POST['offset']), get_permalink($_POST['page'])),
+		$text
+	);
+}
+
 ///
 // Walker Classes
 ///
