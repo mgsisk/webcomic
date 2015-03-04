@@ -962,11 +962,15 @@ class WebcomicLegacy extends Webcomic {
 						foreach ( $characters as $character ) {
 							$character = get_term( $character, 'webcomic_character' );
 							
+							if ($character->term_group != $v->term_id) {
+								continue;
+							}
+							
 							$wpdb->update( $wpdb->terms, array( 'term_group' => 0 ), array( 'term_id' => $character->term_id ) );
 							$wpdb->update( $wpdb->term_taxonomy, array( 'taxonomy' => "{$collection_id}_character" ), array( 'term_id' => $character->term_id ) );
 							
 							if ( !empty( $legacy_config[ 'term_meta' ][ 'character' ][ $character->term_id ][ 'files' ] ) and $image_id = self::update_media_library( dirname( $upload_dir[ 'basedir' ] ) . "/webcomic/{$v->slug}/" . $legacy_config[ 'term_meta' ][ 'character' ][ $character->term_id ][ 'files' ][ 'full' ][ 0 ], "{$collection_id}_character" ) ) {
-								self::$config[ 'terms' ][ $character ][ 'image' ] = $image_id;
+								self::$config[ 'terms' ][ $character->term_id ][ 'image' ] = $image_id;
 								
 								update_option( 'webcomic_options', self::$config );
 							}
@@ -986,6 +990,10 @@ class WebcomicLegacy extends Webcomic {
 						
 						foreach ( $storylines as $storyline ) {
 							$storyline = get_term( $storyline, 'webcomic_storyline' );
+							
+							if ($storyline->term_group != $v->term_id) {
+								continue;
+							}
 							
 							$wpdb->update( $wpdb->terms, array( 'term_group' => isset( $count[ $storyline->parent ] ) ? $count[ $storyline->parent ] : 0 ), array( 'term_id' => $storyline->term_id ) );
 							$wpdb->update( $wpdb->term_taxonomy, array( 'taxonomy' => "{$collection_id}_storyline" ), array( 'term_id' => $storyline->term_id ) );
@@ -1092,7 +1100,7 @@ class WebcomicLegacy extends Webcomic {
 								
 								if ( !empty( $meta[ 'transcripts' ] ) ) {
 									foreach ( $meta[ 'transcripts' ] as $a => $b ) {
-										$date  = date( 'Y-m-d H:i:s', $b[ 'time' ] );
+										$date  = date( 'Y-m-d H:i:s', strtotime($b[ 'time' ]) );
 										$title = sprintf( __( '%s Transcript', 'webcomic' ), get_the_title( $post ) );
 										
 										if ( $new_transcript = wp_insert_post( array(
