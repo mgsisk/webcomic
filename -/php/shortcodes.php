@@ -816,7 +816,7 @@ class WebcomicShortcode extends Webcomic {
 	 */
 	public function webcomic_dropdown_terms( $atts, $content, $name ) {
 		$r = shortcode_atts( array(
-			'name'             => 'webcomic_terms',
+			'select_name'      => 'webcomic_terms',
 			'id'               => '',
 			'class'            => '',
 			'show_option_all'  => '',
@@ -859,7 +859,7 @@ class WebcomicShortcode extends Webcomic {
 	 */
 	public function webcomic_dropdown_collections( $atts ) {
 		$r = shortcode_atts( array(
-			'name'             => 'webcomic_collections',
+			'select_name'      => 'webcomic_collections',
 			'id'               => '',
 			'class'            => '',
 			'show_option_all'  => '',

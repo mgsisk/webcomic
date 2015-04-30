@@ -962,6 +962,8 @@ class Widget_WebcomicStorylines extends WP_Widget {
 		$a      = array_merge( $args, $instance );
 		$object = get_queried_object();
 		
+		unset($a['name']);
+		
 		$a[ 'target' ]           = empty( $a[ 'target' ] ) ? 'archive' : $a[ 'target' ];
 		$a[ 'taxonomy' ]         = $collection ? "{$collection}_storyline" : WebcomicTag::get_webcomic_collection() . '_storyline';
 		$a[ 'show_option_none' ] = __( 'Select Storyline', 'webcomic' );
@@ -1091,6 +1093,8 @@ class Widget_WebcomicCharacters extends WP_Widget {
 		$a      = array_merge( $args, $instance );
 		$object = get_queried_object();
 		
+		unset($a['name']);
+		
 		$a[ 'target' ]           = empty( $a[ 'target' ] ) ? 'archive' : $a[ 'target' ];
 		$a[ 'taxonomy' ]         = $collection ? "{$collection}_character" : WebcomicTag::get_webcomic_collection() . '_character';
 		$a[ 'show_option_none' ] = __( 'Select Character', 'webcomic' );
@@ -1218,6 +1222,8 @@ class Widget_WebcomicCollections extends WP_Widget {
 		
 		$a      = array_merge( $args, $instance );
 		$object = get_queried_object();
+		
+		unset($a['name']);
 		
 		$a[ 'target' ]           = empty( $a[ 'target' ] ) ? 'archive' : $a[ 'target' ];
 		$a[ 'orderby' ]          = 'name';

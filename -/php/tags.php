@@ -2244,7 +2244,7 @@ class WebcomicTag extends Webcomic {
 	 * 
 	 * ### Arguments
 	 * 
-	 * - `string` **$name** - Value for the name attribute of the `<select>` element.
+	 * - `string` **$select_name** - Value for the name attribute of the `<select>` element.
 	 * - `string` **$id** - Value of the id attribute of the `<select>` element.
 	 * - `mixed` **$class** - String or array of additional classes for the `<select>` element.
 	 * - `string` **$before** - Content to display before the output.
@@ -2270,7 +2270,7 @@ class WebcomicTag extends Webcomic {
 	public static function webcomic_dropdown_transcript_terms( $args = array(), $the_post = false ) {
 		if ( $the_post = get_post( $the_post ) and isset( self::$config[ 'collections' ][ $the_post->post_type ] ) ) {
 			$r = wp_parse_args( $args, array(
-				'name'             => 'webcomic_terms',
+				'select_name'      => 'webcomic_terms',
 				'id'               => '',
 				'class'            => '',
 				'before'           => '',
@@ -2302,7 +2302,7 @@ class WebcomicTag extends Webcomic {
 			$output = '';
 			
 			if ( ( $terms = get_terms( $r[ 'taxonomy' ], $r ) and !is_wp_error( $terms ) ) and count( $terms ) > 1 or !$hide_if_empty ) {
-				$output = $before . '<select' . ( $name ? ' name="' . esc_attr( $name ) . '"' : '' ) . ( $id ? ' id="' . esc_attr( $id ) . '"' : '' ) . ' class="' . implode( ' ', array_merge( array( 'webcomic-transcript-terms', $taxonomy ), ( array ) $class ) ) . '">' . ( $show_option_all ? '<option value="0"' . ( 0 === $selected ? ' selected' : '' ) . '>' . $show_option_all . '</option>' : '' ) . ( $show_option_none ? '<option value="-1"' . ( -1 === $selected ? ' selected' : '' ) . '>' . $show_option_none . '</option>' : '' ) . ( ( $terms and !is_wp_error( $terms ) ) ? call_user_func( array( $walker ? $walker : new Walker_WebcomicTranscriptTerm_Dropdown, 'walk' ), $terms, 0, $r ) : '' ) . '</select>' . $after;
+				$output = $before . '<select' . ( $select_name ? ' name="' . esc_attr( $select_name ) . '"' : '' ) . ( $id ? ' id="' . esc_attr( $id ) . '"' : '' ) . ' class="' . implode( ' ', array_merge( array( 'webcomic-transcript-terms', $taxonomy ), ( array ) $class ) ) . '">' . ( $show_option_all ? '<option value="0"' . ( 0 === $selected ? ' selected' : '' ) . '>' . $show_option_all . '</option>' : '' ) . ( $show_option_none ? '<option value="-1"' . ( -1 === $selected ? ' selected' : '' ) . '>' . $show_option_none . '</option>' : '' ) . ( ( $terms and !is_wp_error( $terms ) ) ? call_user_func( array( $walker ? $walker : new Walker_WebcomicTranscriptTerm_Dropdown, 'walk' ), $terms, 0, $r ) : '' ) . '</select>' . $after;
 			}
 			
 			return apply_filters( 'webcomic_dropdown_transcript_terms', $output, $r );
@@ -2392,7 +2392,7 @@ class WebcomicTag extends Webcomic {
 	 * 
 	 * ### Arguments
 	 * 
-	 * - `string` **$name** - Value for the name attribute of the `<select>` element.
+	 * - `string` **$select_name** - Value for the name attribute of the `<select>` element.
 	 * - `string` **$id** - Value of the id attribute of the `<select>` element.
 	 * - `mixed` **$class** - String or array of additional classes for the `<select>` element.
 	 * - `string` **$before** - Content to display before the output.
@@ -2419,7 +2419,7 @@ class WebcomicTag extends Webcomic {
 	 */
 	public static function webcomic_dropdown_terms( $args = array() ) {
 		$r = wp_parse_args( $args, array(
-			'name'             => 'webcomic_terms',
+			'select_name'      => 'webcomic_terms',
 			'id'               => '',
 			'class'            => '',
 			'before'           => '',
@@ -2449,7 +2449,7 @@ class WebcomicTag extends Webcomic {
 		$output = '';
 		
 		if ( ( $terms = get_terms( $r[ 'taxonomy' ], $r ) and !is_wp_error( $terms ) ) or !$hide_if_empty ) {
-			$output = $before . '<select' . ( $name ? ' name="' . esc_attr( $name ) . '"' : '' ) . ( $id ? ' id="' . esc_attr( $id ) . '"' : '' ) . ' class="' . implode( ' ', array_merge( array( 'webcomic-terms', $taxonomy ), ( array ) $class ) ) . '">' . ( $show_option_all ? '<option value="0"' . ( 0 === $selected ? ' selected' : '' ) . '>' . $show_option_all . '</option>' : '' ) . ( $show_option_none ? '<option value="-1"' . ( -1 === $selected ? ' selected' : '' ) . '>' . $show_option_none . '</option>' : '' ) . ( ( $terms and !is_wp_error( $terms ) ) ? call_user_func( array( $walker ? $walker : new Walker_WebcomicTerm_Dropdown, 'walk' ), $terms, $depth, $r ) : '' ) . '</select>' . $after;
+			$output = $before . '<select' . ( $select_name ? ' name="' . esc_attr( $select_name ) . '"' : '' ) . ( $id ? ' id="' . esc_attr( $id ) . '"' : '' ) . ' class="' . implode( ' ', array_merge( array( 'webcomic-terms', $taxonomy ), ( array ) $class ) ) . '">' . ( $show_option_all ? '<option value="0"' . ( 0 === $selected ? ' selected' : '' ) . '>' . $show_option_all . '</option>' : '' ) . ( $show_option_none ? '<option value="-1"' . ( -1 === $selected ? ' selected' : '' ) . '>' . $show_option_none . '</option>' : '' ) . ( ( $terms and !is_wp_error( $terms ) ) ? call_user_func( array( $walker ? $walker : new Walker_WebcomicTerm_Dropdown, 'walk' ), $terms, $depth, $r ) : '' ) . '</select>' . $after;
 		}
 		
 		return apply_filters( 'webcomic_dropdown_terms', $output, $r );
@@ -2460,7 +2460,7 @@ class WebcomicTag extends Webcomic {
 	 * 
 	 * ### Arguments
 	 * 
-	 * - `string` **$name** - Value for the name attribute of the `<select>` element.
+	 * - `string` **$select_name** - Value for the name attribute of the `<select>` element.
 	 * - `string` **$id** - Value of the id attribute of the `<select>` element.
 	 * - `mixed` **$class** - String or array of additional classes for the `<select>` element.
 	 * - `string` **$before** - Content to display before the output.
@@ -2497,7 +2497,7 @@ class WebcomicTag extends Webcomic {
 		global $post; $temp_post = $post;
 		
 		$r = wp_parse_args( $args, array(
-			'name'             => 'webcomic_collections',
+			'select_name'      => 'webcomic_collections',
 			'id'               => '',
 			'class'            => '',
 			'before'           => '',
@@ -2569,7 +2569,7 @@ class WebcomicTag extends Webcomic {
 		}
 		
 		if ( $options or !$hide_if_empty ) {
-			$output = $before . '<select' . ( $name ? ' name="' . esc_attr( $name ) . '"' : '' ) . ( $id ? ' id="' . esc_attr( $id ) . '"' : '' ) . ' class="' . implode( ' ', array_merge( array( 'webcomic-collections' ), ( array ) $class ) ) . '">' . ( $show_option_all ? '<option value="0"' . ( 0 === $selected ? ' selected' : '' ) . '>' . $show_option_all . '</option>' : '' ) . ( $show_option_none ? '<option value="-1"' . ( -1 === $selected ? ' selected' : '' ) . '>' . $show_option_none . '</option>' : '' ) . $options . '</select>' . $after;
+			$output = $before . '<select' . ( $select_name ? ' name="' . esc_attr( $select_name ) . '"' : '' ) . ( $id ? ' id="' . esc_attr( $id ) . '"' : '' ) . ' class="' . implode( ' ', array_merge( array( 'webcomic-collections' ), ( array ) $class ) ) . '">' . ( $show_option_all ? '<option value="0"' . ( 0 === $selected ? ' selected' : '' ) . '>' . $show_option_all . '</option>' : '' ) . ( $show_option_none ? '<option value="-1"' . ( -1 === $selected ? ' selected' : '' ) . '>' . $show_option_none . '</option>' : '' ) . $options . '</select>' . $after;
 		}
 		
 		$post = $temp_post;
@@ -5690,7 +5690,7 @@ if ( !function_exists( 'webcomic_dropdown_transcript_languages' ) ) {
 	 * 
 	 * ### Arguments
 	 * 
-	 * - `string` **$name** - Value for the name attribute of the `<select>` element.
+	 * - `string` **$select_name** - Value for the name attribute of the `<select>` element.
 	 * - `string` **$id** - Value of the id attribute of the `<select>` element.
 	 * - `mixed` **$class** - String or array of additional classes for the `<select>` element.
 	 * - `string` **$before** - Content to display before the output.
@@ -5722,7 +5722,7 @@ if ( !function_exists( 'webcomic_dropdown_transcript_languages' ) ) {
 	 */
 	function webcomic_dropdown_transcript_languages( $args = array(), $the_post = false ) {
 		$r = wp_parse_args( $args, array(
-			'name'             => 'webcomic_terms',
+			'select_name'      => 'webcomic_terms',
 			'id'               => '',
 			'class'            => '',
 			'before'           => '',
@@ -5810,7 +5810,7 @@ if ( !function_exists( 'webcomic_dropdown_storylines' ) ) {
 	 * 
 	 * ### Arguments
 	 * 
-	 * - `string` **$name** - Value for the name attribute of the `<select>` element.
+	 * - `string` **$select_name** - Value for the name attribute of the `<select>` element.
 	 * - `string` **$id** - Value of the id attribute of the `<select>` element.
 	 * - `mixed` **$class** - String or array of additional classes for the `<select>` element.
 	 * - `string` **$show_option_all** - String to display for an "all" `<option>` (value="0").
@@ -5855,7 +5855,7 @@ if ( !function_exists( 'webcomic_dropdown_storylines' ) ) {
 	 */
 	function webcomic_dropdown_storylines( $args = array() ) {
 		$r = wp_parse_args( $args, array(
-			'name'             => 'webcomic_terms',
+			'select_name'      => 'webcomic_terms',
 			'id'               => '',
 			'class'            => '',
 			'show_option_all'  => '',
@@ -5888,7 +5888,7 @@ if ( !function_exists( 'webcomic_dropdown_characters' ) ) {
 	 * 
 	 * ### Arguments
 	 * 
-	 * - `string` **$name** - Value for the name attribute of the `<select>` element.
+	 * - `string` **$select_name** - Value for the name attribute of the `<select>` element.
 	 * - `string` **$id** - Value of the id attribute of the `<select>` element.
 	 * - `mixed` **$class** - String or array of additional classes for the `<select>` element.
 	 * - `string` **$show_option_all** - String to display for an "all" `<option>` (value="0").
@@ -5932,7 +5932,7 @@ if ( !function_exists( 'webcomic_dropdown_characters' ) ) {
 	 */
 	function webcomic_dropdown_characters( $args = array() ) {
 		$r = wp_parse_args( $args, array(
-			'name'             => 'webcomic_terms',
+			'select_name'      => 'webcomic_terms',
 			'id'               => '',
 			'class'            => '',
 			'show_option_all'  => '',
@@ -5965,7 +5965,7 @@ if ( !function_exists( 'webcomic_dropdown_collections' ) ) {
 	 * 
 	 * ### Arguments
 	 * 
-	 * - `string` **$name** - Value for the name attribute of the `<select>` element.
+	 * - `string` **$select_name** - Value for the name attribute of the `<select>` element.
 	 * - `string` **$id** - Value of the id attribute of the `<select>` element.
 	 * - `mixed` **$class** - String or array of additional classes for the `<select>` element.
 	 * - `string` **$show_option_all** - String to display for an "all" `<option>` (value="0").
@@ -6008,7 +6008,7 @@ if ( !function_exists( 'webcomic_dropdown_collections' ) ) {
 	 */
 	function webcomic_dropdown_collections( $args = array() ) {
 		$r = wp_parse_args( $args, array(
-			'name'             => 'webcomic_collections',
+			'select_name'      => 'webcomic_collections',
 			'id'               => '',
 			'class'            => '',
 			'show_option_all'  => '',
