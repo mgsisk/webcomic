@@ -3,8 +3,8 @@
 Contributors: mgsisk
 Donate link: http://patreon.com/mgsisk
 Requires at least: 4.1
-Tested up to: 4.1
-Stable tag: 4.3
+Tested up to: 4.2
+Stable tag: 4.3.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 Tags: webcomics, comics, multiple comics, storylines, characters, custom post type, custom taxonomy, template tags, shortcodes, widgets, twitter, facebook, open graph
