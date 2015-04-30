@@ -2210,7 +2210,7 @@ class WebcomicTag extends Webcomic {
 				echo apply_filters( 'webcomic_transcript_form_field_language', $language_field, $the_post->post_type, $languages, $terms, empty( $update_terms ) ? array() : $update_terms );
 				
 				if ( $wysiwyg_editor ) {
-					wp_editor( '', "webcomic_transcript_content{$c}", array_merge( array( 'textarea_name' => 'webcomic_transcript_content', 'media_buttons' => false, 'teeny' => true, 'editor_css' => '<style scoped>*{box-sizing:content-box;-moz-box-sizing:content-box;-webkit-box-sizing:content-box}</style>' ), ( array ) $wysiwyg_editor ) );
+					wp_editor( '', "webcomic_transcript_content{$c}", array_merge( array( 'textarea_name' => 'webcomic_transcript_content', 'media_buttons' => false, 'teeny' => true ), ( array ) $wysiwyg_editor ) );
 				} else {
 					echo apply_filters( 'webcomic_transcript_form_field_transcript', $transcript_field, $the_post->post_type );
 				}
