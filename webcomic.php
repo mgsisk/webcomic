@@ -1174,7 +1174,7 @@ class Webcomic {
 	 * @hook request
 	 */
 	public function request( $query ) {
-		if ( isset( $query[ 'feed' ] ) and 1 === count( $query ) ) {
+		if ( isset( $query[ 'feed' ] ) and empty( $_GET['post_type'] ) ) {
 			$post_type = array( 'post' );
 			
 			foreach ( array_keys( self::$config[ 'collections' ] ) as $k ) {
