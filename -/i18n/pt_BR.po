@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Webcomic 4.3\n"
 "POT-Creation-Date: 2015-01-22 14:40-0500\n"
-"PO-Revision-Date: 2015-05-20 12:31-0300\n"
+"PO-Revision-Date: 2015-05-20 13:02-0300\n"
 "Last-Translator: Felipe Oliveira <felipe@faoliveira.me>\n"
 "Language-Team: Felipe Oliveira <felipe@faoliveira.me>\n"
 "Language: pt_BR\n"
@@ -511,7 +511,7 @@ msgstr ""
 #: webcomic/-/php/config.php:602 webcomic/-/php/config.php:626
 #: webcomic/-/php/posts.php:490 webcomic/-/php/widgets.php:357
 msgid "International"
-msgstr ""
+msgstr "Internacional"
 
 #: webcomic/-/php/config.php:607 webcomic/-/php/config.php:631
 #: webcomic/-/php/posts.php:304 webcomic/-/php/posts.php:511
@@ -525,27 +525,27 @@ msgstr ""
 
 #: webcomic/-/php/config.php:655
 msgid "Australian Dollar"
-msgstr ""
+msgstr "Dólar australiano"
 
 #: webcomic/-/php/config.php:656
 msgid "Brazilian Real"
-msgstr ""
+msgstr "Real Brasileiro"
 
 #: webcomic/-/php/config.php:657
 msgid "Canadian Dollar"
-msgstr ""
+msgstr "Dólar canadense"
 
 #: webcomic/-/php/config.php:658
 msgid "Swiss Franc"
-msgstr ""
+msgstr "Franco Suíço"
 
 #: webcomic/-/php/config.php:659
 msgid "Czech Koruna"
-msgstr ""
+msgstr "Coroa Checa"
 
 #: webcomic/-/php/config.php:660
 msgid "Danish Krone"
-msgstr ""
+msgstr "Coroa Dinamarquesa"
 
 #: webcomic/-/php/config.php:661
 msgid "Euro"
@@ -553,75 +553,75 @@ msgstr ""
 
 #: webcomic/-/php/config.php:662
 msgid "Pound Sterling"
-msgstr ""
+msgstr "Libra Esterlina"
 
 #: webcomic/-/php/config.php:663
 msgid "Hong Kong Dollar"
-msgstr ""
+msgstr "Dólar de Hong-Kong"
 
 #: webcomic/-/php/config.php:664
 msgid "Hungarian Forint"
-msgstr ""
+msgstr "Florim Húngaro"
 
 #: webcomic/-/php/config.php:665
 msgid "Israeli New Sheqel"
-msgstr ""
+msgstr "Israel Novo Sheqel"
 
 #: webcomic/-/php/config.php:666
 msgid "Japanese Yen"
-msgstr ""
+msgstr "Iene Japonês"
 
 #: webcomic/-/php/config.php:667
 msgid "Mexican Peso"
-msgstr ""
+msgstr "Peso Mexicano"
 
 #: webcomic/-/php/config.php:668
 msgid "Malaysian Ringgit"
-msgstr ""
+msgstr "Ringgit da Malásia"
 
 #: webcomic/-/php/config.php:669
 msgid "Norwegian Krone"
-msgstr ""
+msgstr "Coroa Norueguesa"
 
 #: webcomic/-/php/config.php:670
 msgid "New Zealand Dollar"
-msgstr ""
+msgstr "Dólar Neo-Zelandês"
 
 #: webcomic/-/php/config.php:671
 msgid "Philippine Peso"
-msgstr ""
+msgstr "Peso Filipino"
 
 #: webcomic/-/php/config.php:672
 msgid "Polish Zloty"
-msgstr ""
+msgstr "Zloty Polonês"
 
 #: webcomic/-/php/config.php:673
 msgid "Swedish Krona"
-msgstr ""
+msgstr "Coroa Sueca"
 
 #: webcomic/-/php/config.php:674
 msgid "Singapore Dollar"
-msgstr ""
+msgstr "Dólar de Singapura"
 
 #: webcomic/-/php/config.php:675
 msgid "Thai Baht"
-msgstr ""
+msgstr "Baht Tailandês"
 
 #: webcomic/-/php/config.php:676
 msgid "Turkish Lira"
-msgstr ""
+msgstr "Lira Turca"
 
 #: webcomic/-/php/config.php:677
 msgid "Taiwan New Dollar"
-msgstr ""
+msgstr "Novo dólar taiwanês"
 
 #: webcomic/-/php/config.php:678
 msgid "U.S. Dollar"
-msgstr ""
+msgstr "Dólar americano"
 
 #: webcomic/-/php/config.php:690
 msgid "All transactions will use this currency."
-msgstr ""
+msgstr "Todas as transações usará esta moeda."
 
 #: webcomic/-/php/config.php:704
 #, php-format
@@ -643,23 +643,23 @@ msgstr ""
 
 #: webcomic/-/php/config.php:745
 msgid "Post titles"
-msgstr ""
+msgstr "Títulos de post"
 
 #: webcomic/-/php/config.php:746
 msgid "Post excerpts"
-msgstr ""
+msgstr "Resumo do post"
 
 #: webcomic/-/php/config.php:747
 msgid "Post editor"
-msgstr ""
+msgstr "Editor de post"
 
 #: webcomic/-/php/config.php:748
 msgid "Featured images"
-msgstr ""
+msgstr "Imagens em Destaque"
 
 #: webcomic/-/php/config.php:759
 msgid "Comments"
-msgstr ""
+msgstr "Comentários"
 
 #: webcomic/-/php/config.php:760
 msgid "Trackbacks"
@@ -667,29 +667,29 @@ msgstr ""
 
 #: webcomic/-/php/config.php:771
 msgid "Revisions"
-msgstr ""
+msgstr "Revisões"
 
 #: webcomic/-/php/config.php:772
 msgid "Custom fields"
-msgstr ""
+msgstr "Campos Personalizados"
 
 #: webcomic/-/php/config.php:773
 msgid "Post formats"
-msgstr ""
+msgstr "Formatos de Post"
 
 #: webcomic/-/php/config.php:902
 msgid "Upload media with tweet"
-msgstr ""
+msgstr "Enviar mídia com tweet"
 
 #: webcomic/-/php/config.php:929
 #, php-format
 msgid "Untitled Webcomic %d"
-msgstr ""
+msgstr "Webcomic Sem título %d"
 
 #: webcomic/-/php/config.php:948
 #, php-format
 msgid "Added <b>%s</b>"
-msgstr ""
+msgstr "Adicionado <b>%s</b>"
 
 #: webcomic/-/php/config.php:984
 #, php-format
@@ -700,7 +700,7 @@ msgstr[1] ""
 
 #: webcomic/-/php/config.php:1120
 msgid "Settings saved."
-msgstr ""
+msgstr "Configurações salvas."
 
 #: webcomic/-/php/config.php:1168
 #, php-format
@@ -724,7 +724,7 @@ msgstr ""
 #: webcomic/-/php/widgets.php:1776 webcomic/-/php/widgets.php:1924
 #: webcomic/-/php/widgets.php:2102
 msgid "Update"
-msgstr ""
+msgstr "Atualizar"
 
 #: webcomic/-/php/config.php:1206 webcomic/-/php/config.php:1223
 #: webcomic/-/php/taxonomy.php:419 webcomic/-/php/widgets.php:258
@@ -733,12 +733,12 @@ msgstr ""
 #: webcomic/-/php/widgets.php:1776 webcomic/-/php/widgets.php:1924
 #: webcomic/-/php/widgets.php:2102
 msgid "Change"
-msgstr ""
+msgstr "Alterar"
 
 #: webcomic/-/php/config.php:1206 webcomic/-/php/config.php:1223
 #: webcomic/-/php/taxonomy.php:419
 msgid "Select"
-msgstr ""
+msgstr "Selecionar"
 
 #: webcomic/-/php/config.php:1209 webcomic/-/php/config.php:1226
 #: webcomic/-/php/taxonomy.php:422 webcomic/-/php/widgets.php:261
@@ -747,15 +747,15 @@ msgstr ""
 #: webcomic/-/php/widgets.php:1779 webcomic/-/php/widgets.php:1927
 #: webcomic/-/php/widgets.php:2105
 msgid "Remove"
-msgstr ""
+msgstr "Remover"
 
 #: webcomic/-/php/config.php:1223
 msgid "Select a Poster"
-msgstr ""
+msgstr "Selecione um Poster"
 
 #: webcomic/-/php/config.php:1300
 msgid "Revoke Access"
-msgstr ""
+msgstr "Revogar Acesso"
 
 #: webcomic/-/php/config.php:1314
 msgid "<p class=\"description\">Your credentials could not be verified.</p>"
@@ -3376,51 +3376,51 @@ msgstr ""
 
 #: webcomic/webcomic.php:305
 msgid "Search Languages"
-msgstr ""
+msgstr "Procurar idiomas"
 
 #: webcomic/webcomic.php:306
 msgid "Popular Lanuages"
-msgstr ""
+msgstr "Idiomas Populares"
 
 #: webcomic/webcomic.php:307
 msgid "All Languages"
-msgstr ""
+msgstr "Todos Idiomas"
 
 #: webcomic/webcomic.php:308
 msgid "Edit Language"
-msgstr ""
+msgstr "Editar idioma"
 
 #: webcomic/webcomic.php:309
 msgid "Update Language"
-msgstr ""
+msgstr "Atualizar Idioma"
 
 #: webcomic/webcomic.php:310
 msgid "Add New Language"
-msgstr ""
+msgstr "Adicionar novo Idioma"
 
 #: webcomic/webcomic.php:311
 msgid "New Language Name"
-msgstr ""
+msgstr "Nome Novo do Idioma"
 
 #: webcomic/webcomic.php:312
 msgid "Separate languages with commas"
-msgstr ""
+msgstr "Separar Idiomas por vírgulas"
 
 #: webcomic/webcomic.php:313
 msgid "Add or remove languages"
-msgstr ""
+msgstr "Adicionar ou remover idiomas"
 
 #: webcomic/webcomic.php:314
 msgid "Choose from the most used languages"
-msgstr ""
+msgstr "Escolher a partir dos idiomas mais usados"
 
 #: webcomic/webcomic.php:369
 msgid "Incomplete transaction"
-msgstr ""
+msgstr "Transação incompleta"
 
 #: webcomic/webcomic.php:372
 msgid "Transaction already completed"
-msgstr ""
+msgstr "Transação já concluída"
 
 #: webcomic/webcomic.php:384 webcomic/webcomic.php:410
 #: webcomic/webcomic.php:429
@@ -3501,7 +3501,7 @@ msgstr ""
 
 #: webcomic/webcomic.php:692 webcomic/webcomic.php:711
 msgid "Error | Webcomic"
-msgstr ""
+msgstr "Erro | Webcomic"
 
 #: webcomic/webcomic.php:694
 msgid "This webcomic cannot be transcribed."
@@ -3513,7 +3513,7 @@ msgstr ""
 
 #: webcomic/webcomic.php:703
 msgid "an anonymous user"
-msgstr ""
+msgstr "um usuário anônimo"
 
 #: webcomic/webcomic.php:707 webcomic/webcomic.php:709
 msgid "Unauthorized Transcriber | Webcomic"
@@ -3542,7 +3542,7 @@ msgstr ""
 
 #: webcomic/webcomic.php:759
 msgid "improved a transcript"
-msgstr ""
+msgstr "melhorou a transcrição"
 
 #: webcomic/webcomic.php:759
 msgid "submitted a transcript"
@@ -3550,7 +3550,7 @@ msgstr ""
 
 #: webcomic/webcomic.php:930 webcomic/webcomic.php:934
 msgid "Restricted Content"
-msgstr ""
+msgstr "Conteúdo restrito"
 
 #: webcomic/webcomic.php:931
 #, php-format
@@ -3577,4 +3577,4 @@ msgstr ""
 #: webcomic/webcomic.php:1162
 #, php-format
 msgid "<b>Twitter Error:</b> %s"
-msgstr ""
+msgstr "<b>Twitter erro:</b> %s"
