@@ -29,7 +29,7 @@
 		<?php if ( comments_open() and !post_password_required() ) { ?>
 		
 		<div class="comments-link">
-			<?php comments_popup_link( 0, 1, "%" ); ?>
+			<?php comments_popup_link(); ?>
 		</div><!-- .comments-link -->
 		
 		<?php } ?>
