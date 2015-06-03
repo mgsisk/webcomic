@@ -2555,7 +2555,7 @@ class WebcomicTag extends Webcomic {
 								$options .= '<optgroup label="' . $collection_title . ( $show_count ? " ({$readable_count})" : '' ) . '">';
 								
 								while ( $the_posts->have_posts() ) { $the_posts->the_post();
-									$options .= '<option value="' . get_the_ID() . '" data-webcomic-url="' . apply_filters( 'the_permalink', get_permalink() ) . '"' . ( $selected === get_the_ID() ? ' selected' : '' ) . '>' . apply_filters( 'collection_dropdown_webcomic_title', the_title( '', '', false ), get_post(), $i ) . '</option>';
+									$options .= '<option value="' . get_the_ID() . '" data-webcomic-url="' . apply_filters( 'the_permalink', get_permalink() ) . '"' . ( $selected === get_the_ID() ? ' selected' : '' ) . '>' . apply_filters( 'collection_dropdown_webcomic_title', the_title( '', '', false ), get_post(), $id ) . '</option>';
 								}
 								
 								$options .= '</optgroup>';
