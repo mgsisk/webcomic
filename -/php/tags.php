@@ -830,7 +830,7 @@ class WebcomicTag extends Webcomic {
 				$collection = ( $post and isset( self::$config[ 'collections' ][ $post->post_type ] ) ) ? $post->post_type : self::$collection;
 			}
 			
-			$href     = false === strpos( $relative, 'nocache' ) ? apply_filters( 'the_permalink', get_permalink( $the_post ) ) : self::get_relative_webcomic_link( $relative, $in_same_term, $excluded_terms, $taxonomy, $collection, false );
+			$href     = self::get_relative_webcomic_link( $relative, $in_same_term, $excluded_terms, $taxonomy, $collection, false );
 			$relative = str_replace( '-nocache', '', $relative );
 			$class    = array( 'webcomic-link', "{$collection}-link", "{$relative}-webcomic-link", "{$relative}-{$collection}-link" );
 			
