@@ -37,7 +37,7 @@ To everyone that continues to use and support Webcomic.
 
 ---
 
-© 2008 - 2015 Michael Sisk (contact@mgsisk.com)
+© 2008 - 2017 Michael Sisk (contact@mgsisk.com)
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
