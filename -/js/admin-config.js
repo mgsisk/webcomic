@@ -52,21 +52,21 @@ jQuery( function( $ ) {
 	} );
 	
 	/** Toggle collection setting sections. */
-	$( ".wrap h3" ).css( {
+	$( ".wrap form h2" ).css( {
 		"border-top": "thin solid #ddd",
 		color: "#0074a2",
 		cursor: "pointer",
 		padding: ".5em 0 0"
 	} ).nextAll( "table" ).hide();
 	
-	$( ".wrap h3" ).on( "mouseenter", function() { $( this ).css( "color", "#2ea2cc" ); } );
-	$( ".wrap h3" ).on( "mouseleave", function() { $( this ).css( "color", "#0074a2" ); } );
+	$( ".wrap form h2" ).on( "mouseenter", function() { $( this ).css( "color", "#2ea2cc" ); } );
+	$( ".wrap form h2" ).on( "mouseleave", function() { $( this ).css( "color", "#0074a2" ); } );
 	
-	$( ".wrap h3" ).on( "click", function() {
+	$( ".wrap form h2" ).on( "click", function() {
 		$( this ).nextAll( "table:first" ).toggle();
 	} );
 	
-	$( ".wrap :not(table) + h3:first" ).trigger( "click" );
+	$( ".wrap :not(table) + h2:first" ).trigger( "click" );
 } );
 
 /** Enable fancy image selection. */
