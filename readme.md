@@ -31,9 +31,7 @@ Once installed and activated you can use Webcomic in one of three ways:
 
 ## Special Thanks
 
-To [Mihari](http://katbox.net) for ongoing feedback and feature suggestions.
-
-To everyone that continues to use and support Webcomic.
+To everyone that continues to use and [support Webcomic](https://patreon.com/mgsisk).
 
 ---
 
