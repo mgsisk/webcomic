@@ -48,64 +48,50 @@ jQuery( function( $ ) {
 	}
 } );
 
-!(function (root) {
+/**
+ * New meta-box that uses `wp.media.view.MediaFrame.Select` to attach
+ * images. With this method, you can actually click `Add Media` in the
+ * modal view rather than having to click on the `x`, which is a more 
+ * user-friendly experience. Additionally, ONLY media uploaded to the
+ * current post is visible, which is the behavior we want.
+ *
+ * This is only a proof-of-concept, but it seems to work fine.
+ */
+jQuery(function ($) {
 
-	var _ = root._
-  var wp = root.wp
-  var Backbone = root.Backbone
-  var webcomic = root.webcomic = root.webcomic || {};
+	var _ = window._;
+  var wp = window.wp;
+  var frame;
 
-	/**
-	 * New meta-box that uses `wp.media.view.MediaFrame.Select` to attach
-	 * images. With this method, you can actually click `Add Media` in the
-	 * modal view rather than having to click on the `x`, which is a more 
-	 * user-friendly experience. Additionally, ONLY media uploaded to the
-	 * current post is visible, which is the behavior we want.
-	 *
-	 * This is only a proof-of-concept, but it seems to work fine.
-	 */
-	var WebcomicMediaMetabox = Backbone.View.extend({
+  var webcomicMediaFrameInit = function () {
+		frame = wp.media.frames.webcomicMedia = new wp.media.view.MediaFrame.Select({
+			title: 'Webcomic Media',
+			multiple: false,
+			library: {
+				order: 'ASC',
+				type: 'image',
+				uploadedTo: wp.media.view.settings.post.id
+			},
+			button: {
+				text: 'Add Media'
+			}
+		});
 
-		events: {
-			'click [data-webcomic-action="open-media"]': 'openMediaFrame'
-		},
-
-		initialize: function () {
-			var self = this;
-			this.frame = new wp.media.view.MediaFrame.Select({
-				title: 'Webcomic Media',
-				multiple: false,
-				library: {
-					order: 'ASC',
-					type: 'image',
-					uploadedTo: wp.media.view.settings.post.id
-				},
-				button: {
-					text: 'Add Media'
-				}
-			});
-			this.frame.on('select', _.bind(this.onImageSelected, this));
-		},
-
-		openMediaFrame : function(e) {
-			e.preventDefault();
-			this.frame.open();
-		},
-
-		onImageSelected : function() {
-			var attachments = this.frame.state().get('selection').models;
+		frame.on('select', function () {
+			var attachments = frame.state().get('selection').models;
 			var out = '';
 			_.each(attachments, _.bind(function (attachment) {
 				out += '<img src="' + attachment.get('sizes').thumbnail.url + '" />';
 			}, this));
-			this.$('#webcomic_media_preview').html(out);
-			this.frame.close();
-		}
+			$('#webcomic_media_preview').html(out);
+			frame.close();
+		});
+  }
 
-	});
+  $('[data-webcomic-action="open-media"]').on('click', function (e) {
+  	e.preventDefault();
+  	if (!frame) webcomicMediaFrameInit();
+  	frame.open();
+  });
 
-	root.jQuery(function () {
-		webcomic.mediaMetabox = new WebcomicMediaMetabox({ el: '#webcomic-media' }); 
-	});
-
-})(window);
+});
