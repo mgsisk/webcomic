@@ -123,7 +123,7 @@ class WebcomicPosts extends Webcomic {
 		if ( preg_match( '/^edit-webcomic\d+$/', $screen->id ) ) {
 			wp_enqueue_script( 'webcomic-admin-posts', self::$url . '-/js/admin-posts.js', array( 'jquery' ) );
 		} elseif ( isset( self::$config[ 'collections' ][ $screen->id ] ) ) {
-			wp_enqueue_script( 'webcomic-admin-meta', self::$url . '-/js/admin-meta.js', array( 'jquery' ) );
+			wp_enqueue_script( 'webcomic-admin-meta', self::$url . '-/js/admin-meta.js', array( 'jquery', 'wp-util', 'media-upload', 'backbone' ) );
 			
 			if ( !in_array( 'editor', self::$config[ 'collections' ][ $screen->id ][ 'supports' ] ) ) {
 				wp_enqueue_media( array( 'post' => get_post() ) );
@@ -427,11 +427,37 @@ class WebcomicPosts extends Webcomic {
 	 * Render the webcomic media meta box.
 	 * 
 	 * @param object $post Current post object.
-	 * @uses WebcomicPosts::ajax_media_preview()
+	 * @uses Webcomic::get_attachments()
 	 */
 	public function box_media( $post ) {
 		?>
-		<div id="webcomic_media_preview" data-webcomic-admin-url="<?php echo admin_url(); ?>"><?php self::ajax_media_preview( $post->ID ); ?></div>
+			<style scoped>
+				#webcomic_media_action {
+					margin-bottom: 10px;
+				}
+				#webcomic_media_preview img {
+					height:auto;
+					max-width:100%;
+					vertical-align:bottom;
+				}
+			</style>
+			<div id="webcomic_media_action">
+				<button class="button" data-webcomic-action="open-media">Add Media</button>
+			</div>
+			<div id="webcomic_media_preview" data-webcomic-admin-url="<?php echo admin_url(); ?>">
+				<?php 
+					if ( $attachments = self::get_attachments( $post->ID ) ) {
+						foreach ( $attachments as $attachment ) {
+							echo wp_get_attachment_image( $attachment->ID, "thumbnail");
+						}
+					} else {
+						?>
+							<p><?php echo __( "Click <strong>Add Media</strong> above and upload one or more images to attach them to this post.", "webcomic" ); ?></p>
+							<p><?php echo __( "If you've already uploaded one or more images for this post they can be attached from the <strong>Media > Library</strong> page. After saving this post find the image or images you want to attach in the Media Library and click <strong>Attach</strong> in the <strong>Uploaded to</strong> column. You may have to <strong>Detach</strong> the images first if they were uploaded to another post.", "webcomic" ); ?></p>
+						<?php
+					}
+				?>
+			</div>
 		<?php
 	}
 	
@@ -600,9 +626,12 @@ class WebcomicPosts extends Webcomic {
 		</div>
 		<?php
 	}
-	
+
 	/**
 	 * Render the webcomic attachments meta box.
+	 *
+	 * Note: with the new meta-box, this may no longer be used. This may require other
+	 *		 changes to the plugin (removing admin ajax?), but I'm leaving it here for now.
 	 * 
 	 * @param integer $id Post ID to render attachments for.
 	 * @uses Webcomic::get_attachments()
