@@ -111,7 +111,7 @@ jQuery( function( $ ) {
 		frame.open();
 	});
 
-	$('#webcomic_media_preview').on('click .detach-media', function (e) {
+	$('#webcomic_media_preview').on('click', '.detach-media', function (e) {
 		e.preventDefault();
 		var id = $(e.target).parent('.webcomic_media_image').data('attachment-id');
 		detachMedia(id);
