@@ -652,12 +652,31 @@ class WebcomicPosts extends Webcomic {
 				<p>%s</p>
 				<h4>%s</h4>
 				<p>%s</p>",
-				__( "New Images", "webcomic" ),
-				__( "Click <strong>Add Media</strong> above and upload one or more images to attach them to this post.", "webcomic" ),
-				__( "Existing Images", "webcomic" ),
-				__( "If you've already uploaded one or more images for this post they can be attached from the <strong>Media > Library</strong> page. After saving this post find the image or images you want to attach in the Media Library and click <strong>Attach</strong> in the <strong>Uploaded to</strong> column. You may have to <strong>Detach</strong> the images first if they were uploaded to another post.", "webcomic" )
+				__( "Attach Images", "webcomic" ),
+				__( "Click <strong>Add Media</strong> above and upload one or more images to attach them to this post, or select from any existing, <strong>Unattached</strong> images.", "webcomic" ),
+				__( "Other Methods", "webcomic" ),
+				__( "If you've already uploaded one or more images for this post they can also be attached from the <strong>Media > Library</strong> page. After saving this post find the image or images you want to attach in the Media Library and click <strong>Attach</strong> in the <strong>Uploaded to</strong> column. You may have to <strong>Detach</strong> the images first if they were uploaded to another post.", "webcomic" )
 			);
 		}
+	}
+
+	/**
+	 * Attach media to the given post.
+	 *
+	 * @param integer $post_id The parent post.
+	 * @param integer $attachment_id The ids of the attachment to attach.
+	 * @uses self::ajax_media_preview
+	 */
+	public static function ajax_attach_media( $post_id, $attachment_ids ) {
+		foreach ( $attachment_ids as $id ) {
+			$post = get_post( $id );
+			if ( $post->post_parent == $post_id ) {
+				continue;
+			}
+			$post->post_parent = $post_id;
+			wp_update_post($post);
+		}
+		self::ajax_media_preview( $post_id );
 	}
 	
 	/**

@@ -40,7 +40,8 @@ jQuery( function( $ ) {
 	var updating = false;
 
 	var disableMetaBox = function () {
-		$( '#webcomic_media_action .button' )
+		updating = true;
+		$( '#webcomic-media button' )
 			.addClass( 'button-disabled' )
 			.attr('disabled', true);
 		$( '#webcomic_media_action .spinner' )
@@ -48,7 +49,8 @@ jQuery( function( $ ) {
 	};
 
 	var enableMetaBox = function () {
-		$( '#webcomic_media_action .button' )
+		updating = false;
+		$( '#webcomic-media button' )
 			.removeClass( 'button-disabled' )
 			.attr('disabled', false);
 		$( '#webcomic_media_action .spinner' )
@@ -57,13 +59,24 @@ jQuery( function( $ ) {
 
 	var updateMetaBox = function () {
 		if (updating) return;
-		updating = true;
 		disableMetaBox();
 		$.get( $( "[data-webcomic-admin-url]" ).data( "webcomic-admin-url" ), {
 			post: $( "#post_ID" ).val(),
 			webcomic_admin_ajax: "WebcomicPosts::ajax_media_preview"
 		}, function( data ) {
-			updating = false;
+			enableMetaBox();
+			$( "#webcomic_media_preview" ).html( data );
+		} );
+	}
+
+	var attachMedia = function ( mediaIds ) {
+		if (updating) return;
+		disableMetaBox();
+		$.post( $( "[data-webcomic-admin-url]" ).data( "webcomic-admin-url" ), {
+			postId: $( "#post_ID" ).val(),
+			mediaIds: mediaIds,
+			webcomic_admin_ajax: "WebcomicPosts::ajax_attach_media"
+		}, function( data ) {
 			enableMetaBox();
 			$( "#webcomic_media_preview" ).html( data );
 		} );
@@ -71,37 +84,37 @@ jQuery( function( $ ) {
 
 	var detachMedia = function ( mediaId ) {
 		if (updating) return;
-		updating = true;
 		disableMetaBox();
 		$.post( $( "[data-webcomic-admin-url]" ).data( "webcomic-admin-url" ), {
 			postId: $( "#post_ID" ).val(),
 			mediaId: mediaId,
 			webcomic_admin_ajax: "WebcomicPosts::ajax_detach_media"
 		}, function( data ) {
-			updating = false;
 			enableMetaBox();
 			$( "#webcomic_media_preview" ).html( data );
-		} )
+		} );
 	}
 
 	var webcomicMediaFrameInit = function () {
-		frame = wp.media.frames.webcomicMedia = new wp.media.view.MediaFrame.Select({
+		frame = wp.media.frames.webcomicMedia = wp.media({
 			title: 'Webcomic Media',
-			multiple: false,
+			multiple: true,
 			library: {
-				order: 'ASC',
 				type: 'image',
-				uploadedTo: wp.media.view.settings.post.id
+				// Only show unattached images.
+				uploadedTo: 0
 			},
 			button: {
 				text: 'Add Media'
 			}
 		});
 
-		frame.on('close', updateMetaBox);
 		frame.on('select', function () {
-			updateMetaBox();
-			frame.close();
+			var attachments = frame.state().get('selection').models;
+			var ids = _.map( attachments, function (attachment) {
+				return attachment.get('id');
+			} );
+			attachMedia( ids );
 		});
 	}
 
