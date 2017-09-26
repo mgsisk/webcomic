@@ -440,23 +440,21 @@ class WebcomicPosts extends Webcomic {
 					max-width:100%;
 					vertical-align:bottom;
 				}
+				.webcomic_media_image {
+					position: relative;
+				}
+				#webcomic_media_preview .detach-media {
+					position: absolute;
+					top: 10px;
+					left: 10px;
+				}
 			</style>
 			<div id="webcomic_media_action">
-				<button class="button" data-webcomic-action="open-media">Add Media</button>
+				<span class="spinner"></span>
+				<button class="button open-frame">Add Media</button>
 			</div>
 			<div id="webcomic_media_preview" data-webcomic-admin-url="<?php echo admin_url(); ?>">
-				<?php 
-					if ( $attachments = self::get_attachments( $post->ID ) ) {
-						foreach ( $attachments as $attachment ) {
-							echo wp_get_attachment_image( $attachment->ID, "thumbnail");
-						}
-					} else {
-						?>
-							<p><?php echo __( "Click <strong>Add Media</strong> above and upload one or more images to attach them to this post.", "webcomic" ); ?></p>
-							<p><?php echo __( "If you've already uploaded one or more images for this post they can be attached from the <strong>Media > Library</strong> page. After saving this post find the image or images you want to attach in the Media Library and click <strong>Attach</strong> in the <strong>Uploaded to</strong> column. You may have to <strong>Detach</strong> the images first if they were uploaded to another post.", "webcomic" ); ?></p>
-						<?php
-					}
-				?>
+				<?php self::ajax_media_preview( $post->ID ); ?>
 			</div>
 		<?php
 	}
@@ -629,9 +627,6 @@ class WebcomicPosts extends Webcomic {
 
 	/**
 	 * Render the webcomic attachments meta box.
-	 *
-	 * Note: with the new meta-box, this may no longer be used. This may require other
-	 *		 changes to the plugin (removing admin ajax?), but I'm leaving it here for now.
 	 * 
 	 * @param integer $id Post ID to render attachments for.
 	 * @uses Webcomic::get_attachments()
@@ -643,32 +638,42 @@ class WebcomicPosts extends Webcomic {
 			$old_content_width = $content_width;
 			$content_width = 266;
 			
-			echo "<style scoped>.insert-media img{height:auto;max-width:100%;vertical-align:bottom}</style><a href='#' class='insert-media'>";
-			
 			foreach ( $attachments as $attachment ) {
+				echo '<div class="webcomic_media_image" data-attachment-id="' . esc_html($attachment->ID) . '">';
 				echo wp_get_attachment_image( $attachment->ID, array( $content_width, $content_width ) );
+				echo '<button class="button detach-media">Detach</button></div>';
 			}
-			
-			echo "</a>";
 			
 			$content_width = $old_content_width;
 		} else {
 			$post_ID = $post_ID ? $post_ID : $id;
 			printf( "
-				<p><a href='#' class='button insert-media'>%s</a></p>
 				<h4>%s</h4>
 				<p>%s</p>
 				<h4>%s</h4>
 				<p>%s</p>",
-				__( "Add Media", "webcomic" ),
 				__( "New Images", "webcomic" ),
-				__( "Click <strong>Add Media</strong> above and upload one or more images to attach them to this post. <strong>These images do not need to be inserted into the post.</strong> You can dismiss the media popup without inserting your images by clicking the X or anywhere in the darkened area outside of the popup.", "webcomic" ),
+				__( "Click <strong>Add Media</strong> above and upload one or more images to attach them to this post.", "webcomic" ),
 				__( "Existing Images", "webcomic" ),
 				__( "If you've already uploaded one or more images for this post they can be attached from the <strong>Media > Library</strong> page. After saving this post find the image or images you want to attach in the Media Library and click <strong>Attach</strong> in the <strong>Uploaded to</strong> column. You may have to <strong>Detach</strong> the images first if they were uploaded to another post.", "webcomic" )
 			);
 		}
 	}
 	
+	/**
+	 * Detach media from the given post, then render the revised webcomic 
+	 * attachments meta box.
+	 *
+	 * @param integer $post_id The parent post.
+	 * @param integer $attachment_id The id of the attachment to remove.
+	 * @uses self::ajax_media_preview
+	 */
+	public static function ajax_detach_media( $post_id, $attachment_id ) {
+		// maybe should handle errors?
+		wp_update_post( array ( "ID" => (integer) $attachment_id, 'post_parent' => 0 ) );
+		self::ajax_media_preview( $post_id );
+	}
+
 	/**
 	 * Update quick edit meta values.
 	 * 
