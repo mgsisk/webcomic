@@ -123,7 +123,7 @@ class WebcomicPosts extends Webcomic {
 		if ( preg_match( '/^edit-webcomic\d+$/', $screen->id ) ) {
 			wp_enqueue_script( 'webcomic-admin-posts', self::$url . '-/js/admin-posts.js', array( 'jquery' ) );
 		} elseif ( isset( self::$config[ 'collections' ][ $screen->id ] ) ) {
-			wp_enqueue_script( 'webcomic-admin-meta', self::$url . '-/js/admin-meta.js', array( 'jquery', 'wp-util', 'media-upload', 'backbone' ) );
+			wp_enqueue_script( 'webcomic-admin-meta', self::$url . '-/js/admin-meta.js', array( 'jquery-ui-sortable', 'wp-util', 'media-upload', 'backbone' ) );
 			
 			if ( !in_array( 'editor', self::$config[ 'collections' ][ $screen->id ][ 'supports' ] ) ) {
 				wp_enqueue_media( array( 'post' => get_post() ) );
@@ -641,7 +641,7 @@ class WebcomicPosts extends Webcomic {
 			foreach ( $attachments as $attachment ) {
 				echo '<div class="webcomic_media_image" data-attachment-id="' . esc_html($attachment->ID) . '">';
 				echo wp_get_attachment_image( $attachment->ID, array( $content_width, $content_width ) );
-				echo '<button class="button detach-media">Detach</button></div>';
+				echo '<button class="button detach-media">Detach</button><input type="hidden" name="webcomic_media_ids[]" value="'.$attachment->ID.'"></div>';
 			}
 			
 			$content_width = $old_content_width;

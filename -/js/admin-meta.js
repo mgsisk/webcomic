@@ -38,6 +38,17 @@ jQuery( function( $ ) {
 	var wp = window.wp;
 	var frame;
 	var updating = false;
+	
+	$( "#webcomic_media_preview" ).sortable( {
+		update: function() {
+			disableMetaBox();
+			$.post( $( "[data-webcomic-admin-url]" ).data( "webcomic-admin-url" ), {
+				ids: $( "[name='webcomic_media_ids[]']" ).serializeArray(),
+				webcomic_admin_ajax: "WebcomicMedia::ajax_sort_media"
+			}, function( data ) {
+				enableMetaBox();
+			} );
+		}
 
 	var disableMetaBox = function () {
 		updating = true;
@@ -55,6 +66,18 @@ jQuery( function( $ ) {
 			.attr('disabled', false);
 		$( '#webcomic_media_action .spinner' )
 			.removeClass( 'is-active' );
+		
+		$( "#webcomic_media_preview" ).sortable( {
+			update: function() {
+				disableMetaBox();
+				$.post( $( "[data-webcomic-admin-url]" ).data( "webcomic-admin-url" ), {
+					ids: $( "[name='webcomic_media_ids[]']" ).serializeArray(),
+					webcomic_admin_ajax: "WebcomicMedia::ajax_sort_media"
+				}, function( data ) {
+					enableMetaBox();
+				} );
+			}
+		} );
 	}
 
 	var updateMetaBox = function () {
