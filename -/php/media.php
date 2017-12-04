@@ -36,8 +36,7 @@ class WebcomicMedia extends Webcomic {
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 		add_action( 'media_upload_webcomic_media', array( $this, 'media_upload_webcomic_media' ) );
 		add_action( 'attachment_submitbox_misc_actions', array( $this, 'attachment_submitbox_misc_actions' ), 20 );
-		
-		add_filter( 'media_upload_tabs', array( $this, 'media_upload_tabs' ), 10, 1 );
+
 		add_filter( 'media_row_actions',  array( $this, 'media_row_actions' ), 10, 2 );
 		add_filter( 'display_media_states', array( $this, 'display_media_states' ), 10, 1 );
 		add_filter( 'image_size_names_choose', array( $this, 'image_size_names_choose' ), 10, 1 );
@@ -351,30 +350,6 @@ class WebcomicMedia extends Webcomic {
 			
 			echo '<div class="misc-pub-section">', __( 'Alternate Sizes:', "webcomic" ), '<br><b>', $sizes ? implode( '<br>', $sizes ) : __( 'None available', "webcomic" ), '</b><br><a href="', esc_html( wp_nonce_url( add_query_arg( array( 'post' => $post->ID, 'action' => 'edit', 'webcomic_action' => 'regenerate' ), admin_url( 'post.php' ) ), 'webcomic_regenerate' ) ), '" class="button">', __( 'Regenerate', "webcomic" ), '</a></div>';
 		}
-	}
-	
-	/**
-	 * Add 'Webcomic Media' modal media page.
-	 * 
-	 * @return array
-	 * @hook media_upload_tabs
-	 */
-	public function media_upload_tabs( $tabs ) {
-		global $post;
-		
-		$post_type = '';
-		
-		if ( $post ) {
-			$post_type = $post->post_type;
-		} elseif ( isset( $_GET[ 'post_id' ], $_GET[ 'tab' ] ) and 'webcomic_media' === $_GET[ 'tab' ] ) {
-			$post_type = get_post_type( $_GET[ 'post_id' ] );
-		}
-		
-		if ( $post_type and preg_match( '/^webcomic\d+$/', $post_type ) ) {
-			$tabs[ 'webcomic_media' ] = __( 'Webcomic Media', "webcomic" );
-		}
-		
-		return $tabs;
 	}
 	
 	/**
