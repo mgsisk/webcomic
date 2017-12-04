@@ -123,7 +123,7 @@ class WebcomicPosts extends Webcomic {
 		if ( preg_match( '/^edit-webcomic\d+$/', $screen->id ) ) {
 			wp_enqueue_script( 'webcomic-admin-posts', self::$url . '-/js/admin-posts.js', array( 'jquery' ) );
 		} elseif ( isset( self::$config[ 'collections' ][ $screen->id ] ) ) {
-			wp_enqueue_script( 'webcomic-admin-meta', self::$url . '-/js/admin-meta.js', array( 'jquery' ) );
+			wp_enqueue_script( 'webcomic-admin-meta', self::$url . '-/js/admin-meta.js', array( 'jquery', 'wp-util', 'media-upload', 'backbone' ) );
 			
 			if ( !in_array( 'editor', self::$config[ 'collections' ][ $screen->id ][ 'supports' ] ) ) {
 				wp_enqueue_media( array( 'post' => get_post() ) );
@@ -427,11 +427,35 @@ class WebcomicPosts extends Webcomic {
 	 * Render the webcomic media meta box.
 	 * 
 	 * @param object $post Current post object.
-	 * @uses WebcomicPosts::ajax_media_preview()
+	 * @uses Webcomic::get_attachments()
 	 */
 	public function box_media( $post ) {
 		?>
-		<div id="webcomic_media_preview" data-webcomic-admin-url="<?php echo admin_url(); ?>"><?php self::ajax_media_preview( $post->ID ); ?></div>
+			<style scoped>
+				#webcomic_media_action {
+					margin-bottom: 10px;
+				}
+				#webcomic_media_preview img {
+					height:auto;
+					max-width:100%;
+					vertical-align:bottom;
+				}
+				.webcomic_media_image {
+					position: relative;
+				}
+				#webcomic_media_preview .detach-media {
+					position: absolute;
+					top: 10px;
+					left: 10px;
+				}
+			</style>
+			<div id="webcomic_media_action">
+				<span class="spinner"></span>
+				<button class="button open-frame">Add Media</button>
+			</div>
+			<div id="webcomic_media_preview" data-webcomic-admin-url="<?php echo admin_url(); ?>">
+				<?php self::ajax_media_preview( $post->ID ); ?>
+			</div>
 		<?php
 	}
 	
@@ -600,7 +624,7 @@ class WebcomicPosts extends Webcomic {
 		</div>
 		<?php
 	}
-	
+
 	/**
 	 * Render the webcomic attachments meta box.
 	 * 
@@ -614,32 +638,61 @@ class WebcomicPosts extends Webcomic {
 			$old_content_width = $content_width;
 			$content_width = 266;
 			
-			echo "<style scoped>.insert-media img{height:auto;max-width:100%;vertical-align:bottom}</style><a href='#' class='insert-media'>";
-			
 			foreach ( $attachments as $attachment ) {
+				echo '<div class="webcomic_media_image" data-attachment-id="' . esc_html($attachment->ID) . '">';
 				echo wp_get_attachment_image( $attachment->ID, array( $content_width, $content_width ) );
+				echo '<button class="button detach-media">Detach</button></div>';
 			}
-			
-			echo "</a>";
 			
 			$content_width = $old_content_width;
 		} else {
 			$post_ID = $post_ID ? $post_ID : $id;
 			printf( "
-				<p><a href='#' class='button insert-media'>%s</a></p>
 				<h4>%s</h4>
 				<p>%s</p>
 				<h4>%s</h4>
 				<p>%s</p>",
-				__( "Add Media", "webcomic" ),
-				__( "New Images", "webcomic" ),
-				__( "Click <strong>Add Media</strong> above and upload one or more images to attach them to this post. <strong>These images do not need to be inserted into the post.</strong> You can dismiss the media popup without inserting your images by clicking the X or anywhere in the darkened area outside of the popup.", "webcomic" ),
-				__( "Existing Images", "webcomic" ),
-				__( "If you've already uploaded one or more images for this post they can be attached from the <strong>Media > Library</strong> page. After saving this post find the image or images you want to attach in the Media Library and click <strong>Attach</strong> in the <strong>Uploaded to</strong> column. You may have to <strong>Detach</strong> the images first if they were uploaded to another post.", "webcomic" )
+				__( "Attach Images", "webcomic" ),
+				__( "Click <strong>Add Media</strong> above and upload one or more images to attach them to this post, or select from any existing, <strong>Unattached</strong> images.", "webcomic" ),
+				__( "Other Methods", "webcomic" ),
+				__( "If you've already uploaded one or more images for this post they can also be attached from the <strong>Media > Library</strong> page. After saving this post find the image or images you want to attach in the Media Library and click <strong>Attach</strong> in the <strong>Uploaded to</strong> column. You may have to <strong>Detach</strong> the images first if they were uploaded to another post.", "webcomic" )
 			);
 		}
 	}
+
+	/**
+	 * Attach media to the given post.
+	 *
+	 * @param integer $post_id The parent post.
+	 * @param integer $attachment_id The ids of the attachment to attach.
+	 * @uses self::ajax_media_preview
+	 */
+	public static function ajax_attach_media( $post_id, $attachment_ids ) {
+		foreach ( $attachment_ids as $id ) {
+			$post = get_post( $id );
+			if ( $post->post_parent == $post_id ) {
+				continue;
+			}
+			$post->post_parent = $post_id;
+			wp_update_post($post);
+		}
+		self::ajax_media_preview( $post_id );
+	}
 	
+	/**
+	 * Detach media from the given post, then render the revised webcomic 
+	 * attachments meta box.
+	 *
+	 * @param integer $post_id The parent post.
+	 * @param integer $attachment_id The id of the attachment to remove.
+	 * @uses self::ajax_media_preview
+	 */
+	public static function ajax_detach_media( $post_id, $attachment_id ) {
+		// maybe should handle errors?
+		wp_update_post( array ( "ID" => (integer) $attachment_id, 'post_parent' => 0 ) );
+		self::ajax_media_preview( $post_id );
+	}
+
 	/**
 	 * Update quick edit meta values.
 	 * 
