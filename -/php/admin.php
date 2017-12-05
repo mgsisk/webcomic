@@ -462,6 +462,8 @@ class WebcomicAdmin extends Webcomic {
 	 * @hook admin_notices
 	 */
 	public function admin_notices() {
+		$screen = get_current_screen();
+		
 		if ( $notice = get_transient( 'webcomic_notice' ) ) {
 			delete_transient( 'webcomic_notice' );
 			
@@ -472,6 +474,10 @@ class WebcomicAdmin extends Webcomic {
 			delete_transient( 'webcomic_error' );
 			
 			echo '<div class="error"><p>', implode( '</p></div><div class="error"><p>', $error ), '</p></div>';
+		}
+		
+		if ( isset( self::$config['thanks'] ) || 'settings_page_webcomic-options' === $screen->id || preg_match( '/webcomic\d+_page_webcomic\d+-options/', $screen->id ) ) {
+			echo '<div class="notice notice-info"><p><strong><a href="https://mgsisk.com/webcomic5" target="_blank">', __( 'Get ready for Webcomic 5', 'webcomic' ), '</a></strong></p></div>';
 		}
 		
 		if ( isset( self::$config[ 'thanks' ] ) ) {
