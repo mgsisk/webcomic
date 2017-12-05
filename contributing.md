@@ -1,1 +1,0 @@
-Hey there! If you're having an issue with a public site, please **include a link to your site** in your issue.
