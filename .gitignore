@@ -1,0 +1,8 @@
+.DS_Store
+/.vagrant/
+/docs/_site/
+/node_modules/
+/tests/phpunit/coverage/
+/tests/phpunit/data/
+/tests/phpunit/includes/
+/vendor/
