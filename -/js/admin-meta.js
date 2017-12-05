@@ -49,6 +49,7 @@ jQuery( function( $ ) {
 				enableMetaBox();
 			} );
 		}
+	} );
 
 	var disableMetaBox = function () {
 		updating = true;
