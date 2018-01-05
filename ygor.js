@@ -1,275 +1,237 @@
 /* eslint-env node */
 
-const sfs = require( 'spiff' );
-const config = {
-  css: {
-    test: [ 'src/css/**/*.css' ],
-    make: [ 'src/css/**/*.css', 'docs/_css/colors.css' ],
-    output: ( path )=> path.replace( /\/_?css\//, '/srv/' ),
-    watcher: {
-      watch: [ 'src/css/**/*.css', 'docs/_css/**/*.css' ],
-      change: ( ygor )=> ygor.shell( 'node ygor make css -v' )
+const { tasks, shell, find, read, write } = require( 'ygor' );
+
+/**
+ * Process CSS with postcss.
+ *
+ * @return {void}
+ */
+async function makeCss() {
+  const make = require( 'postcss' );
+  const config = require( './.postcss.js' );
+
+  await find([ 'src/css/**/*.css', 'docs/_css/colors.css' ]).map( read() ).map( async( file ) =>
+    await make( config.plugins ).process( file.contents, {
+      from: file.absolute,
+      to: file.absolute.replace( /\/_?css\//, '/srv/' )
+    }).then( ( result )=> {
+      file.path = file.absolute.replace( /\/_?css\//, '/srv/' );
+      file.contents = result.css;
+      file.write();
+    })
+  );
+}
+
+/**
+ * Process images with sips and imageoptim.
+ *
+ * @return {void}
+ */
+async function makeImg() {
+  await shell`imageoptim -a -q -d assets`;
+}
+
+/**
+ * Process JavaScript with rollup.
+ *
+ * @return {void}
+ */
+async function makeJs() {
+  const make = require( 'rollup' ).rollup;
+  const config = require( './.rollup.js' );
+
+  await find([ 'src/js/**/*.js' ]).map( async( file )=> {
+    const fileConfig = Object.assign({}, config );
+
+    fileConfig.input = file.absolute;
+    fileConfig.file = file.absolute.replace( '/js/', '/srv/' );
+
+    await make( fileConfig ).then( ( result )=> result.write( fileConfig ) );
+  });
+}
+
+/**
+ * Test CSS with stylelint.
+ *
+ * @return {void}
+ */
+async function testCss() {
+  const test = require( 'stylelint' ).lint;
+  const config = require( './.stylelintrc.js' );
+
+  config.files = [ 'src/css/**/*.css' ];
+
+  await test( config ).then(
+    ( result )=> process.stdout.write( result.output )
+  ).catch( ( error )=> process.stdout.write( error.message ) );
+}
+
+/**
+ * Test JavaScript with eslint.
+ *
+ * @return {void}
+ */
+async function testJs() {
+  const Engine = require( 'eslint' ).CLIEngine;
+  const test = new Engine;
+
+  process.stdout.write(
+    test.getFormatter()(
+      test.executeOnFiles([ 'src/js/**/*.js', '*.js', '.*.js' ]).results
+    )
+  );
+}
+
+/**
+ * Test JSON with jsonlint.
+ *
+ * @return {void}
+ */
+async function testJson() {
+  const test = require( 'jsonlint' ).parse;
+
+  await find([ '*.json', '.*.json', '.babelrc', '.markdownlintrc' ]).map( read() ).map( ( file )=> {
+    try {
+      test( file.contents );
+    } catch ( error ) {
+      process.stdout.write( file.path + ' ' + error.message + '\n\n' );
     }
-  },
-  img: {
-    watcher: {
-      watch: [ 'assets/**/*.{jpg,png}' ],
-      change: ( ygor )=> ygor.shell( 'node ygor make img -v' )
-    },
-    optimize: 'assets'
-  },
-  js: {
-    test: [ 'src/js/**/*.js', '*.js', '.*.js' ],
-    make: [ 'src/js/**/*.js' ],
-    output: ( path )=> path.replace( '/js/', '/srv/' ),
-    watcher: {
-      watch: [ 'src/js/**/*.js' ],
-      change: ( ygor )=> ygor.shell( 'node ygor make js -v' )
+  });
+}
+
+/**
+ * Test Markdown with markdownlint.
+ *
+ * TODO await
+ *
+ * @return {void}
+ */
+async function testMd() {
+  const test = require( 'markdownlint' );
+
+  find( '.markdownlintrc' ).map( read() ).map( ( file )=> {
+    const config = JSON.parse( file.contents );
+
+    find([ 'docs/**/*.md', '*.md' ]).map( ( mdFile )=> test({
+      files: mdFile.absolute,
+      config: config
+    }, ( testError, result )=> {
+      if ( testError ) {
+        process.stdout.write( testError.message + '\n\n' );
+      } else if ( result.toString() ) {
+        process.stdout.write( result.toString() + '\n\n' );
+      }
+    }) );
+  });
+}
+
+/**
+ * Test PHP with phan, phpcs, phpmd, and phpunit.
+ *
+ * @return {void}
+ */
+async function testPhp() {
+  const xml = require( 'xml2js' ).parseString;
+
+  await find( '.phpcs.xml' ).map( read() ).map( async( file )=>
+    await xml( file.contents, async( xmlError, config )=> {
+      for ( const phpFile of config.ruleset.file ) {
+        await shell`vendor/bin/phpmd ${phpFile} text .phpmd.xml`;
+      }
+    })
+  );
+
+  await shell`PHAN_DISABLE_XDEBUG_WARN=1 vendor/bin/phan`;
+  await shell`vendor/bin/phpcs`;
+  await shell`vendor/bin/phpunit --no-coverage`;
+  await shell`WP_MULTISITE=1 vendor/bin/phpunit`;
+}
+
+/**
+ * Test Shell with shellcheck.
+ *
+ * @return {void}
+ */
+async function testShell() {
+  await find([ '*.sh', '.*.sh' ]).map( ( file )=>
+    shell`shellcheck -x ${file.path}`.catch( ( rn )=> rn )
+  );
+}
+
+/**
+ * Test XML with xmllint.
+ *
+ * @return {void}
+ */
+async function testXml() {
+  await find([ '*.xml', '.*.xml' ]).map(
+    async( file )=> await shell`xmllint --noout ${file.path}`.catch( ( rn )=> rn )
+  );
+}
+
+/**
+ * Test YML with js-yaml.
+ *
+ * @return {void}
+ */
+async function testYml() {
+  const test = require( 'js-yaml' ).safeLoad;
+
+  await find([ '*.yml', '.*.yml' ]).map( read() ).map( async( file )=> {
+    try {
+      await test( file.contents, { filename: file.path });
+    } catch ( error ) {
+      process.stdout.write( error.message + '\n\n' );
     }
-  },
-  json: {
-    test: [ '*.json', '.*.json', '.babelrc', '.markdownlintrc' ]
-  },
-  md: {
-    test: [ 'docs/**/*.md', '*.md' ]
-  },
-  shell: {
-    test: [ '*.sh', '.*.sh' ]
-  },
-  xml: {
-    test: [ '*.xml', '.*.xml' ]
-  },
-  yml: {
-    test: [ '*.yml', '.*.yml' ]
-  }
-};
+  });
+}
 
-require( 'ygor' )
+/**
+ * Watch for file changess and execute tasks.
+ *
+ * @return {void}
+ */
+function watchTask() {
+  const watch = require( 'chokidar' ).watch;
 
-  /**
-   * Delete extraneous project files.
-   *
-   * @return {void}
-   */
-  .task( 'clean', ()=> sfs.remove( '**/.DS_Store' ) )
+  watch([
+    'src/css/**/*.css',
+    'docs/_css/**/*.css',
+    'assets/**/*.{jpg,png}',
+    'src/js/**/*.js'
+  ]).on( 'change', ( path )=> {
+    process.stdout.write( 'working...\n' );
 
-  /**
-   * Watch for file changes and process accordingly.
-   *
-   * @param {object} cli The command line object.
-   * @param {object} ygor The task runner object.
-   * @return {void}
-   */
-  .task( 'watch', ( cli, ygor )=> {
-    const watch = require( 'chokidar' ).watch;
+    if ( path.match( /\.css$/ ) ) {
+      makeCss();
+    } else if ( path.match( /\.(jpg|png)$/ ) ) {
+      makeImg();
+    } else if ( path.match( /\.js$/ ) ) {
+      makeJs();
+    }
 
     process.stdout.write( 'watching...\n' );
+  });
+}
 
-    for ( const item in config ) {
-      if ( ! config.hasOwnProperty( item ) || ! config[item].watcher ) {
-        continue;
-      }
+tasks.add( 'clean', async()=> await shell`find . -name '*.DS_Store' -type f -delete` );
 
-      for ( const action in config[item].watcher ) {
-        if ( 'watch' === action || ! config[item].watcher.hasOwnProperty( action ) ) {
-          continue;
-        }
+tasks.add( 'make', ()=> tasks()
+  .add( 'css', makeCss )
+  .add( 'img', makeImg )
+  .add( 'js', makeJs )
+);
 
-        watch( config[item].watcher.watch ).on( action, ()=> config[item].watcher[action]( ygor ) );
-      }
-    }
-  })
+tasks.add( 'test', ()=> tasks()
+  .add( 'css', testCss )
+  .add( 'js', testJs )
+  .add( 'json', testJson )
+  .add( 'md', testMd )
+  .add( 'php', testPhp )
+  .add( 'shell', testShell )
+  .add( 'xml', testXml )
+  .add( 'yml', testYml )
+);
 
-  .task(
-    'test', ( __, ygor )=> ygor()
-
-      /**
-       * Test CSS with stylelint.
-       *
-       * @return {void}
-       */
-      .task( 'css', ()=> {
-        const test = require( 'stylelint' ).lint;
-        const testConfig = require( './.stylelintrc.js' );
-
-        testConfig.files = config.css.test;
-
-        test( testConfig ).then(
-          ( result )=> process.stdout.write( result.output )
-        ).catch( ( error )=> process.stdout.write( error.message ) );
-      })
-
-      /**
-       * Test JavaScript with eslint.
-       *
-       * @return {void}
-       */
-      .task( 'js', ()=> {
-        const Engine = require( 'eslint' ).CLIEngine;
-        const test = new Engine;
-
-        process.stdout.write(
-          test.getFormatter()(
-            test.executeOnFiles( config.js.test ).results
-          )
-        );
-      })
-
-      /**
-       * Test JSON with jsonlint.
-       *
-       * @return {void}
-       */
-      .task( 'json', ()=> {
-        const test = require( 'jsonlint' ).parse;
-
-        sfs.read( config.json.test, { base: __dirname }).map( ( file )=> {
-          try {
-            return test( file.contents );
-          } catch ( error ) {
-            return process.stdout.write( `${file.relative} ${error.message}\n\n` );
-          }
-        });
-      })
-
-      /**
-       * Test Markdown with markdownlint.
-       *
-       * @return {void}
-       */
-      .task( 'md', ()=> {
-        const test = require( 'markdownlint' );
-
-        sfs.read( '.markdownlintrc' ).map( ( file )=> {
-          const testConfig = JSON.parse( file.contents );
-
-          return sfs.find( config.md.test, {base: __dirname}).map(
-            ( testFile )=> test({
-              files: testFile.relative,
-              config: testConfig
-            }, ( linterError, result )=> {
-              if ( linterError ) {
-                process.stdout.write( `${linterError.message}\n\n` );
-              } else if ( result.toString() ) {
-                process.stdout.write( `${result.toString()}\n\n` );
-              }
-            })
-          );
-        });
-      })
-
-      /**
-       * Test PHP with phan, phpcs, phpmd, and phpunit.
-       *
-       * @return {void}
-       */
-      .task( 'php', ()=> {
-        const xml = require( 'xml2js' ).parseString;
-
-        sfs.read( '.phpcs.xml' ).map(
-          ( file )=> xml( file.contents, ( xmlError, testConfig )=> {
-            for ( const testFile of testConfig.ruleset.file ) {
-              ygor.shell(
-                `vendor/bin/phpmd ${testFile} text .phpmd.xml` ).catch( ( rn )=> rn
-              );
-            }
-
-            ygor.shell( 'PHAN_DISABLE_XDEBUG_WARN=1 vendor/bin/phan' ).catch( ( rn )=> rn );
-            ygor.shell( 'vendor/bin/phpcs' ).catch( ( rn )=> rn );
-            ygor.shell( 'vendor/bin/phpunit --no-coverage' ).catch( ( rn )=> rn );
-            ygor.shell( 'WP_MULTISITE=1 vendor/bin/phpunit' ).catch( ( rn )=> rn );
-          })
-        );
-      })
-
-      /**
-       * Test Shell with shellcheck.
-       *
-       * @return {void}
-       */
-      .task( 'shell', ()=> {
-        sfs.find( config.shell.test, {base: __dirname}).map(
-          ( file )=> ygor.shell( `shellcheck -x ${file.relative}` ).catch( ( rn )=> rn )
-        );
-      })
-
-      /**
-       * Test XML with xmllint.
-       *
-       * @return {void}
-       */
-      .task( 'xml', ()=> {
-        sfs.find( config.xml.test, {base: __dirname}).map(
-          ( file )=> ygor.shell( `xmllint --noout ${file.relative}` ).catch( ( rn )=> rn )
-        );
-      })
-
-      /**
-       * Test YML with js-yaml.
-       *
-       * @return {void}
-       */
-      .task( 'yml', ()=> {
-        const test = require( 'js-yaml' ).safeLoad;
-
-        sfs.read( config.yml.test, {base: __dirname}).map( ( file )=> {
-          try {
-            return test( file.contents, {filename: file.relative});
-          } catch ( error ) {
-            return process.stdout.write( `${error.message}\n\n` );
-          }
-        });
-      })
-  )
-
-  .task(
-    'make', ( __, ygor )=> ygor()
-
-      /**
-       * Process CSS with postcss.
-       *
-       * @return {void}
-       */
-      .task( 'css', ()=> {
-        const make = require( 'postcss' );
-        const makeConfig = require( './.postcss.js' );
-
-        sfs.read( config.css.make, {base: __dirname}).map( ( file )=>
-          make( makeConfig.plugins ).process( file.contents, {
-            from: file.relative,
-            to: config.css.output( file.relative )
-          }).then( ( result )=> {
-            file.path = config.css.output( file.path );
-            file.contents = result.css;
-            file.write();
-          })
-        );
-      })
-
-      /**
-       * Process images with sips and imageoptim.
-       *
-       * @type {Object}
-       */
-      .task( 'img', ()=> ygor.shell( `imageoptim -a -q -d ${config.img.optimize}` ) )
-
-      /**
-       * Process JavaScript with rollup.
-       *
-       * @return {void}
-       */
-      .task( 'js', ()=> {
-        const make = require( 'rollup' ).rollup;
-        const makeConfig = require( './.rollup.js' );
-
-        sfs.read( config.js.make, {base: __dirname}).map( ( file )=> {
-          makeConfig.plugins.unshift({
-            load: ()=> file.contents
-          });
-          makeConfig.input = file.relative;
-          makeConfig.file = config.js.output( file.path );
-
-          return make( makeConfig ).then( ( result )=> result.write( makeConfig ) );
-        });
-      })
-  );
+tasks.add( 'watch', watchTask );
