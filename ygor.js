@@ -1,26 +1,27 @@
 /* eslint-env node */
 
-const { tasks, shell, find, read, write } = require( 'ygor' );
+const { tasks, shell, find, read } = require( 'ygor' );
 
 /**
  * Process CSS with postcss.
  *
  * @return {void}
  */
-async function makeCss() {
+function makeCss() {
   const make = require( 'postcss' );
   const config = require( './.postcss.js' );
 
-  await find([ 'src/css/**/*.css', 'docs/_css/colors.css' ]).map( read() ).map( async( file ) =>
-    await make( config.plugins ).process( file.contents, {
-      from: file.absolute,
-      to: file.absolute.replace( /\/_?css\//, '/srv/' )
-    }).then( ( result )=> {
-      file.path = file.absolute.replace( /\/_?css\//, '/srv/' );
-      file.contents = result.css;
-      file.write();
-    })
-  );
+  find([ 'src/css/**/*.css', 'docs/_css/colors.css' ])
+    .map( read() )
+    .map( ( file )=>
+      make( config.plugins ).process( file.contents, {
+        from: file.absolute,
+        to: file.absolute.replace( /\/_?css\//, '/srv/' )
+      }).then( ( result )=> {
+        file.path = file.absolute.replace( /\/_?css\//, '/srv/' );
+        file.contents = result.css;
+        file.write();
+      }) );
 }
 
 /**
@@ -28,8 +29,8 @@ async function makeCss() {
  *
  * @return {void}
  */
-async function makeImg() {
-  await shell`imageoptim -a -q -d assets`;
+function makeImg() {
+  shell`imageoptim -a -q -d assets`;
 }
 
 /**
@@ -37,18 +38,19 @@ async function makeImg() {
  *
  * @return {void}
  */
-async function makeJs() {
+function makeJs() {
   const make = require( 'rollup' ).rollup;
   const config = require( './.rollup.js' );
 
-  await find([ 'src/js/**/*.js' ]).map( async( file )=> {
-    const fileConfig = Object.assign({}, config );
+  find([ 'src/js/**/*.js' ])
+    .map( ( file )=> {
+      const fileConfig = Object.assign({}, config );
 
-    fileConfig.input = file.absolute;
-    fileConfig.file = file.absolute.replace( '/js/', '/srv/' );
+      fileConfig.input = file.absolute;
+      fileConfig.file = file.absolute.replace( '/js/', '/srv/' );
 
-    await make( fileConfig ).then( ( result )=> result.write( fileConfig ) );
-  });
+      make( fileConfig ).then( ( result )=> result.write( fileConfig ) );
+    });
 }
 
 /**
@@ -56,15 +58,15 @@ async function makeJs() {
  *
  * @return {void}
  */
-async function testCss() {
+function testCss() {
   const test = require( 'stylelint' ).lint;
   const config = require( './.stylelintrc.js' );
 
   config.files = [ 'src/css/**/*.css' ];
 
-  await test( config ).then(
-    ( result )=> process.stdout.write( result.output )
-  ).catch( ( error )=> process.stdout.write( error.message ) );
+  test( config )
+    .then( ( result )=> process.stdout.write( result.output ) )
+    .catch( ( error )=> process.stdout.write( error.message ) );
 }
 
 /**
@@ -72,15 +74,12 @@ async function testCss() {
  *
  * @return {void}
  */
-async function testJs() {
+function testJs() {
   const Engine = require( 'eslint' ).CLIEngine;
   const test = new Engine;
+  const output = test.executeOnFiles([ 'src/js/**/*.js', '*.js', '.*.js' ]);
 
-  process.stdout.write(
-    test.getFormatter()(
-      test.executeOnFiles([ 'src/js/**/*.js', '*.js', '.*.js' ]).results
-    )
-  );
+  process.stdout.write( test.getFormatter()( output.results ) );
 }
 
 /**
@@ -88,42 +87,45 @@ async function testJs() {
  *
  * @return {void}
  */
-async function testJson() {
+function testJson() {
   const test = require( 'jsonlint' ).parse;
 
-  await find([ '*.json', '.*.json', '.babelrc', '.markdownlintrc' ]).map( read() ).map( ( file )=> {
-    try {
-      test( file.contents );
-    } catch ( error ) {
-      process.stdout.write( file.path + ' ' + error.message + '\n\n' );
-    }
-  });
+  find([ '*.json', '.*.json', '.babelrc', '.markdownlintrc' ])
+    .map( read() )
+    .map( ( file )=> {
+      try {
+        test( file.contents );
+      } catch ( error ) {
+        process.stdout.write( `${file.path} ${error.message}\n\n` );
+      }
+    });
 }
 
 /**
  * Test Markdown with markdownlint.
  *
- * TODO await
- *
  * @return {void}
  */
-async function testMd() {
+function testMd() {
   const test = require( 'markdownlint' );
 
-  find( '.markdownlintrc' ).map( read() ).map( ( file )=> {
-    const config = JSON.parse( file.contents );
+  find( '.markdownlintrc' )
+    .map( read() )
+    .map( ( file )=> {
+      const config = JSON.parse( file.contents );
 
-    find([ 'docs/**/*.md', '*.md' ]).map( ( mdFile )=> test({
-      files: mdFile.absolute,
-      config: config
-    }, ( testError, result )=> {
-      if ( testError ) {
-        process.stdout.write( testError.message + '\n\n' );
-      } else if ( result.toString() ) {
-        process.stdout.write( result.toString() + '\n\n' );
-      }
-    }) );
-  });
+      find([ 'docs/**/*.md', '*.md' ])
+        .map( ( mdFile )=> test({
+          files: mdFile.absolute,
+          config: config
+        }, ( testError, result )=> {
+          if ( testError ) {
+            process.stdout.write( `${testError.message}\n\n` );
+          } else if ( result.toString() ) {
+            process.stdout.write( `${result.toString()}\n\n` );
+          }
+        }) );
+    });
 }
 
 /**
@@ -131,21 +133,22 @@ async function testMd() {
  *
  * @return {void}
  */
-async function testPhp() {
+function testPhp() {
   const xml = require( 'xml2js' ).parseString;
 
-  await find( '.phpcs.xml' ).map( read() ).map( async( file )=>
-    await xml( file.contents, async( xmlError, config )=> {
-      for ( const phpFile of config.ruleset.file ) {
-        await shell`vendor/bin/phpmd ${phpFile} text .phpmd.xml`;
-      }
-    })
-  );
-
-  await shell`PHAN_DISABLE_XDEBUG_WARN=1 vendor/bin/phan`;
-  await shell`vendor/bin/phpcs`;
-  await shell`vendor/bin/phpunit --no-coverage`;
-  await shell`WP_MULTISITE=1 vendor/bin/phpunit`;
+  find( '.phpcs.xml' )
+    .map( read() )
+    .map( ( file )=>
+      xml( file.contents, ( xmlError, config )=> {
+        for ( const phpFile of config.ruleset.file ) {
+          shell`vendor/bin/phpmd ${phpFile} text .phpmd.xml`;
+        }
+      }) )
+    .then( ()=> shell`
+      PHAN_DISABLE_XDEBUG_WARN=1 vendor/bin/phan
+      vendor/bin/phpcs
+      vendor/bin/phpunit --no-coverage && WP_MULTISITE=1 vendor/bin/phpunit`
+    );
 }
 
 /**
@@ -153,10 +156,9 @@ async function testPhp() {
  *
  * @return {void}
  */
-async function testShell() {
-  await find([ '*.sh', '.*.sh' ]).map( ( file )=>
-    shell`shellcheck -x ${file.path}`.catch( ( rn )=> rn )
-  );
+function testShell() {
+  find([ '*.sh', '.*.sh' ])
+    .map( ( file )=> shell`shellcheck -x ${file.path}`.catch( ( rn )=> rn ) );
 }
 
 /**
@@ -164,10 +166,9 @@ async function testShell() {
  *
  * @return {void}
  */
-async function testXml() {
-  await find([ '*.xml', '.*.xml' ]).map(
-    async( file )=> await shell`xmllint --noout ${file.path}`.catch( ( rn )=> rn )
-  );
+function testXml() {
+  find([ '*.xml', '.*.xml' ])
+    .map( ( file )=> shell`xmllint --noout ${file.path}`.catch( ( rn )=> rn ) );
 }
 
 /**
@@ -175,47 +176,21 @@ async function testXml() {
  *
  * @return {void}
  */
-async function testYml() {
+function testYml() {
   const test = require( 'js-yaml' ).safeLoad;
 
-  await find([ '*.yml', '.*.yml' ]).map( read() ).map( async( file )=> {
-    try {
-      await test( file.contents, { filename: file.path });
-    } catch ( error ) {
-      process.stdout.write( error.message + '\n\n' );
-    }
-  });
+  find([ '*.yml', '.*.yml' ])
+    .map( read() )
+    .map( ( file )=> {
+      try {
+        test( file.contents, { filename: file.path });
+      } catch ( error ) {
+        process.stdout.write( `${error.message}\n\n` );
+      }
+    });
 }
 
-/**
- * Watch for file changess and execute tasks.
- *
- * @return {void}
- */
-function watchTask() {
-  const watch = require( 'chokidar' ).watch;
-
-  watch([
-    'src/css/**/*.css',
-    'docs/_css/**/*.css',
-    'assets/**/*.{jpg,png}',
-    'src/js/**/*.js'
-  ]).on( 'change', ( path )=> {
-    process.stdout.write( 'working...\n' );
-
-    if ( path.match( /\.css$/ ) ) {
-      makeCss();
-    } else if ( path.match( /\.(jpg|png)$/ ) ) {
-      makeImg();
-    } else if ( path.match( /\.js$/ ) ) {
-      makeJs();
-    }
-
-    process.stdout.write( 'watching...\n' );
-  });
-}
-
-tasks.add( 'clean', async()=> await shell`find . -name '*.DS_Store' -type f -delete` );
+tasks.cli.quiet = true;
 
 tasks.add( 'make', ()=> tasks()
   .add( 'css', makeCss )
@@ -234,4 +209,30 @@ tasks.add( 'test', ()=> tasks()
   .add( 'yml', testYml )
 );
 
-tasks.add( 'watch', watchTask );
+tasks
+  .add( 'clean', ()=> shell`find . -name '*.DS_Store' -type f -delete` )
+  .add( 'watch', ()=> {
+    const watch = require( 'chokidar' ).watch;
+
+    process.stdout.write( 'watching... ' );
+
+    watch([
+      'src/css/**/*.css',
+      'docs/_css/**/*.css',
+      'assets/**/*.{jpg,png}',
+      'src/js/**/*.js'
+    ])
+      .on( 'change', ( path )=> {
+        process.stdout.write( 'working...\n' );
+
+        if ( path.match( /\.css$/ ) ) {
+          makeCss();
+        } else if ( path.match( /\.(jpg|png)$/ ) ) {
+          makeImg();
+        } else if ( path.match( /\.js$/ ) ) {
+          makeJs();
+        }
+
+        process.stdout.write( 'watching...\n' );
+      });
+  });
