@@ -127,7 +127,7 @@ server {
     try_files \$uri \$uri/ /index.php?\$args;
   }
 
-  location ~ \.php$ {
+  location ~ \\.php$ {
     fastcgi_index index.php;
     fastcgi_pass unix:/run/php/php$phpv-fpm.sock;
     include fastcgi_params;
@@ -154,7 +154,7 @@ server {
     try_files \$uri \$uri/ =404;
   }
 
-  location ~ \.php$ {
+  location ~ \\.php$ {
     fastcgi_index index.php;
     fastcgi_pass unix:/run/php/php$phpv-fpm.sock;
     include fastcgi_params;
@@ -201,7 +201,7 @@ if [ ! -e /usr/share/nginx/admin/index.php ]; then
 foreach (glob('*', GLOB_ONLYDIR) as \$directory) {
   if (!glob("{\$directory}/index.{php,html}", GLOB_BRACE)) continue;
 
-  echo "<a href='".\$directory."/'>".\$directory."</a>\n";
+  echo "<a href='".\$directory."/'>".\$directory."</a>\\n";
 }
 
 INDEX
@@ -482,7 +482,7 @@ if grep -q '#sed' /etc/nginx/conf.d/default.conf; then
   if (!-e \$request_filename) {
     rewrite /wp-admin$ \$scheme://\$host\$uri/ permanent;
     rewrite ^/([^/]+)?(/wp-.*) /\$2 last;
-    rewrite ^/([^/]+)?(/.*\.php)$ /\$2 last;
+    rewrite ^/([^/]+)?(/.*\\.php)$ /\$2 last;
   }
 NGINXLOC
   sed -ir '/#sed/{r /tmp/nginxloc
