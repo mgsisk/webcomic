@@ -108,10 +108,10 @@ To everyone that continues to use and [support Webcomic][url-donate].
 [img-tested]: https://img.shields.io/wordpress/v/webcomic.svg?style=flat-square
 [img-php]: https://img.shields.io/badge/php-7.0-8893bd.svg?style=flat-square
 [img-license]: https://img.shields.io/github/license/mgsisk/webcomic.svg?style=flat-square
-[img-donate]: https://img.shields.io/badge/donate-patreon-orange.svg?style=flat-square
+[img-donate]: https://img.shields.io/badge/donate-paypal-orange.svg?style=flat-square
 [url-stable]: https://wordpress.org/plugins/webcomic
 [url-requires]: https://wordpress.org/news/2016/12/vaughan
 [url-tested]: https://wordpress.org/download
 [url-php]: https://php.net
 [url-license]: https://github.com/mgsisk/webcomic/blob/master/license.md
-[url-donate]: https://patreon.com/mgsisk
+[url-donate]: https://mgsisk.com/#support
