@@ -18,7 +18,7 @@ Webcomic.
 ## [Discord Server ![Discord shield][img-discord]][url-discord]
 
 If you enjoy real-time interaction you may prefer the Discord Server over the
-Support Forum. The Discord Server provides both public and [Patron-only]
+Support Forum. The Discord Server provides both public and [patron-only]
 channels.
 
 ## [Issue Tracker ![Issues shield][img-issues]][url-issues]
@@ -39,5 +39,5 @@ response isn't guaranteed, but Mike does his best to answer questions as he can.
 [url-issues]: https://github.com/mgsisk/webcomic/issues
 [User Guide]: https://github.com/mgsisk/webcomic/wiki
 [Support Forum]: https://wordpress.org/support/plugin/webcomic
-[Patron-only]: https://patreon.com/mgsisk
+[patron-only]: https://mgsisk.com/#support
 [Contact Mike]: mailto:help@mgsisk.com?subject=Webcomic%20Help
