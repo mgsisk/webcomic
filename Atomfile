@@ -34,7 +34,6 @@ minimap-selection
 minimap-split-diff
 pigments
 platformio-ide-terminal
-pure-syntax
 sort-lines
 split-diff
 teletype
