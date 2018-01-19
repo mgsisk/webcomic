@@ -1,0 +1,1 @@
+!function(){"use strict";!function e(){if("loading"===document.readyState)return document.addEventListener("DOMContentLoaded",e);jQuery(document).on("ajaxComplete",function(){if(!document.querySelector("#ajax-response").children.length)for(var e=document.querySelectorAll("[data-webcomic-media-manager] a"),n=0;n<e.length;n++)e[n].dispatchEvent(new MouseEvent("click"))})}()}();

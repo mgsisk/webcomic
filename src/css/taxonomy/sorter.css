@@ -1,0 +1,47 @@
+ol {
+	outline: thin solid rgba(0, 0, 0, 0.05);
+
+	& img {
+		height: auto !important;
+		max-width: 100% !important;
+	}
+
+	& input {
+		display: none;
+	}
+
+	& label {
+		cursor: move;
+		display: block;
+	}
+
+	& li {
+		list-style: none;
+		margin: 0.25rem;
+		padding: 0.25rem;
+	}
+
+	& ol {
+		margin: 0.5rem 0 0 2rem;
+		padding: 0;
+	}
+
+	& .media {
+		box-shadow: 0 0 0.5rem 0 rgba(0, 0, 0, 0.1) inset;
+		display: inline-block;
+		height: 2rem;
+		margin: 0 0.5rem 0 0;
+		outline: thin solid rgba(0, 0, 0, 0.1);
+		overflow: hidden;
+		text-align: center;
+		vertical-align: middle;
+		width: 2rem;
+	}
+
+	& .ui-sortable-placeholder {
+		background: rgba(0, 0, 0, 0.05);
+		box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.1) inset;
+		outline: thin dashed rgba(0, 0, 0, 0.1);
+		visibility: visible !important;
+	}
+}
