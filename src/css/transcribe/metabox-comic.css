@@ -1,0 +1,7 @@
+[data-webcomic-search] {
+	overflow: auto;
+
+	&.contain .size-full {
+		max-width: none;
+	}
+}

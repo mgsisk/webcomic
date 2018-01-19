@@ -1,0 +1,38 @@
+.wp-list-table tbody {
+
+	& .status-draft {
+
+		& th {
+			border-left: 0;
+			border-right: 4px solid #d54e21;
+		}
+
+		& input {
+			margin: 0 4px 0 0;
+		}
+	}
+
+	& .status-pending {
+
+		& th {
+			border-left: 0;
+			border-right: 4px solid #00a0d2;
+		}
+
+		& input {
+			margin: 0 4px 0 0;
+		}
+	}
+
+	& .status-private {
+
+		& th {
+			border-left: 0;
+			border-right: 4px solid #555;
+		}
+
+		& input {
+			margin: 0 4px 0 0;
+		}
+	}
+}
