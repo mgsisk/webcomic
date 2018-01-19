@@ -1,0 +1,11 @@
+.webcomic-commerce-container {
+	margin: -6px -12px;
+
+	& table {
+		border: 0;
+	}
+
+	& input {
+		text-align: center;
+	}
+}
