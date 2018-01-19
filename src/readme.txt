@@ -5,7 +5,7 @@ Tested up to: 4.9.1
 Requires PHP: 7.0
 License: GPL-2.0+
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
-Donate link: http://patreon.com/mgsisk
+Donate link: https://mgsisk.com/#support
 Contributors: mgsisk
 Tags: comic, media, shortcode, webcomic, widget
 
@@ -280,4 +280,4 @@ Visit https://mgsisk.com/webcomic5 for important information about this version.
 
 To everyone that continues to use and [support Webcomic].
 
-[support Webcomic]: https://patreon.com/mgsisk
+[support Webcomic]: https://mgsisk.com/#support
