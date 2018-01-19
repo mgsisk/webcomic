@@ -70,7 +70,7 @@ function hook_uninstall( bool $network, int $site = 0 ) {
 			webcomic_load( [ $component ] );
 
 			/* This action is documented in Mgsisk\Webcomic\Plugin\hook_sanitize_components() */
-			do_action( "webcomic_deactivate_{$component}" );
+			do_action( 'webcomic_deactivate_' . $component );
 		}
 
 		delete_option( 'webcomic' );
@@ -391,7 +391,7 @@ function hook_sanitize_components( array $options ) : array {
 		 * This action provides a way for components to perform component-specific
 		 * cleanup and other actions before deactivation.
 		 */
-		do_action( "webcomic_deactivate_{$component}" );
+		do_action( 'webcomic_deactivate_' . $component );
 	}
 
 	foreach ( array_diff( $options['components'], $old_components ) as $component ) {
@@ -403,7 +403,7 @@ function hook_sanitize_components( array $options ) : array {
 		 * This action provides a way for components to perform component-specific
 		 * setup and other actions before activation.
 		 */
-		do_action( "webcomic_activate_{$component}" );
+		do_action( 'webcomic_activate_' . $component );
 	}
 
 	return $options;
