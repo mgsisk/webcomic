@@ -98,7 +98,7 @@ function webcomic_help() : string {
 	$output .= '<li><a href="https://github.com/mgsisk/webcomic/issues" target="_blank">' . esc_html__( 'Issue Tracker', 'webcomic' ) . '</a></li>';
 	$output .= '<li><a href="mailto:help@mgsisk.com?subject=Webcomic%20Help">' . esc_html__( 'Contact Mike', 'webcomic' ) . '</a></li>';
 	$output .= '</ul>';
-	$output .= '<p><a href="https://patreon.com/mgsisk" target="_blank" class="button button-primary button-small">' . esc_html__( 'Support Webcomic', 'webcomic' ) . '</a></p>';
+	$output .= '<p><a href="https://mgsisk.com/#support" target="_blank" class="button button-primary button-small">' . esc_html__( 'Support Webcomic', 'webcomic' ) . '</a></p>';
 	$output .= '<p><small>';
 	// Translators: Plugin version.
 	$output .= sprintf( esc_html__( 'Thank you for creating with Webcomic %s', 'webcomic' ), webcomic( 'option.version' ) );

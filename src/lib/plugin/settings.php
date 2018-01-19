@@ -455,7 +455,7 @@ function hook_add_plugin_links( array $meta, string $file, array $data, string $
 		)
 	);
 	$meta['settings'] = "<a href='{$settings_url}'>" . esc_html__( 'Settings', 'webcomic' ) . '</a>';
-	$meta['support']  = '<a href="https://patreon.com/mgsisk/" target="_blank">' . esc_html__( 'Support', 'webcomic' ) . '</a>';
+	$meta['support']  = '<a href="https://mgsisk.com/#support" target="_blank">' . esc_html__( 'Support', 'webcomic' ) . '</a>';
 
 	return $meta;
 }
