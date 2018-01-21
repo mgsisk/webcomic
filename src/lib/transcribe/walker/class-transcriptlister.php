@@ -67,7 +67,7 @@ class TranscriptLister extends Walker {
 		 *
 		 * @param array   $tokens The token values.
 		 * @param string  $link The list item text to search for tokens.
-		 * @param WP_Post $collection The transcript the list item is for.
+		 * @param WP_Post $transcript The transcript the list item is for.
 		 * @param array   $args The transcript list arguments.
 		 */
 		$tokens   = apply_filters( 'get_webcomic_transcripts_list_item_tokens', [], $match[2], $transcript, $args );
