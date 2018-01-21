@@ -732,7 +732,7 @@ function get_webcomic_link( string $link = '%title', $post = null, array $args =
 	 *
 	 * @param array   $tokens The token values.
 	 * @param string  $link The link text to search for tokens.
-	 * @param WP_Post $collection The comic the link is for.
+	 * @param WP_Post $comic The comic the link is for.
 	 */
 	$tokens  = apply_filters( 'get_webcomic_link_tokens', [], $match[2], $comic );
 	$anchor  = str_replace( array_keys( $tokens ), $tokens, $match[2] );
