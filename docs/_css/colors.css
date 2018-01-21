@@ -1,0 +1,317 @@
+@import "config.css";
+
+::selection {
+	background: color(var(--color-base) alpha(40%));
+}
+
+button {
+	background: linear-gradient(135deg, var(--color-base), color(var(--color-base) alpha(0))), var(--color-base);
+	text-shadow: 0.1em 0.2em 0.3em color(var(--color-base) hue(+30));
+
+	&:--enter {
+		background: linear-gradient(135deg, var(--color-base), color(var(--color-base) alpha(0))), color(var(--color-base) hue(+30));
+	}
+
+	&:active {
+		background: color(var(--color-base) hue(+180));
+		text-shadow: none;
+	}
+}
+
+input:--enter {
+	color: var(--color-base);
+}
+
+select {
+
+	&:--enter {
+		color: color(var(--color-base) tint(50%));
+	}
+}
+
+hr {
+	background: linear-gradient(135deg, var(--color-base), color(var(--color-base) hue(+30)));
+}
+
+pre {
+	border-color: transparent color(var(--color-base) hue(+30)) transparent var(--color-base);
+}
+
+blockquote {
+	border-color: var(--color-base);
+}
+
+nav {
+	color: var(--color-base);
+
+	& a:--enter {
+		color: color(var(--color-base) tint(50%));
+	}
+
+	& label {
+
+		&:--enter {
+			color: color(var(--color-base) tint(50%));
+		}
+	}
+}
+
+header {
+	background: linear-gradient(135deg, var(--color-base), color(var(--color-base) hue(+30)));
+	text-shadow: 0.1em 0.2em 0.3em color(var(--color-base) hue(+30));
+}
+
+footer {
+	color: var(--color-base);
+
+	& a:--enter {
+		color: color(var(--color-base) tint(50%));
+	}
+}
+
+table {
+	background-image: linear-gradient(0deg, color(var(--color-base) hue(+30)), color(var(--color-base) hue(+30)));
+}
+
+td {
+	background-image: linear-gradient(0deg, var(--color-base), var(--color-base));
+}
+
+a {
+	color: var(--color-base);
+
+	&:--enter {
+		color: color(var(--color-base) hue(+30));
+	}
+
+	&:active {
+		color: color(var(--color-base) hue(+180));
+	}
+}
+
+code {
+	color: color(var(--color-base) hue(+30));
+}
+
+.highlight {
+
+	/* Keyword */
+	& .k {
+		color: color(var(--color-base) hue(+45));
+	}
+
+	/* Keyword.Constant */
+	& .kc {
+		color: color(var(--color-base) hue(+45));
+	}
+
+	/* Keyword.Declaration */
+	& .kd {
+		color: color(var(--color-base) hue(+45));
+	}
+
+	/* Keyword.Pseudo */
+	& .kp {
+		color: color(var(--color-base) hue(+45));
+	}
+
+	/* Keyword.Reserved */
+	& .kr {
+		color: color(var(--color-base) hue(+45));
+	}
+
+	/* Keyword.Type */
+	& .kt {
+		color: color(var(--color-base) hue(+45));
+	}
+
+	/* Keyword.Namespace */
+	& .kn {
+		color: color(var(--color-base) hue(+45));
+	}
+
+	/* Literal.String.Symbol */
+	& .ss {
+		color: color(var(--color-base) hue(+45));
+	}
+
+	/* Name.BuiltIn */
+	& .nb {
+		color: color(var(--color-base) hue(+45));
+	}
+
+	/* Name.BuiltIn.Pseudo */
+	& .bp {
+		color: color(var(--color-base) hue(+45));
+	}
+
+	/* Name.Decorator */
+	& .nd {
+		color: color(var(--color-base) hue(+90));
+	}
+
+	/* Name.Tag */
+	& .nt {
+		color: color(var(--color-base) hue(+90));
+	}
+
+	/* Operator */
+	& .o {
+		color: color(var(--color-base) hue(+90));
+	}
+
+	/* Operator.Word */
+	& .ow {
+		color: color(var(--color-base) hue(+90));
+	}
+
+	/* Punctuation */
+	& .p {
+		color: color(var(--color-base) hue(+90));
+	}
+
+	/* Error */
+	& .err {
+		color: color(var(--color-base) hue(+135));
+	}
+
+	/* Name.Exception */
+	& .ne {
+		color: color(var(--color-base) hue(+135));
+	}
+
+	/* Name.Constant */
+	& .no {
+		color: color(var(--color-base) hue(+135));
+	}
+
+	/* Name.Variable */
+	& .nv {
+		color: color(var(--color-base) hue(+135));
+	}
+
+	/* Name.Variable.Class */
+	& .vc {
+		color: color(var(--color-base) hue(+135));
+	}
+
+	/* Name.Variable.Global */
+	& .vg {
+		color: color(var(--color-base) hue(+135));
+	}
+
+	/* Name.Variable.Instance */
+	& .vi {
+		color: color(var(--color-base) hue(+135));
+	}
+
+	/* Literal.String.Interpol */
+	& .si {
+		color: color(var(--color-base) hue(+135));
+	}
+
+	/* Literal.String.Escape */
+	& .se {
+		color: color(var(--color-base) hue(+135));
+	}
+
+	/* Literal.Date */
+	& .ld {
+		color: color(var(--color-base) hue(+135));
+	}
+
+	/* Name.Attribute */
+	& .na {
+		color: color(var(--color-base) hue(+180));
+	}
+
+	/* Name.Class */
+	& .nc {
+		color: color(var(--color-base) hue(+180));
+	}
+
+	/* Name.Function */
+	& .nf {
+		color: color(var(--color-base) hue(+180));
+	}
+
+	/* Name.Namespace */
+	& .nn {
+		color: color(var(--color-base) hue(+180));
+	}
+
+	/* Literal.Number.Integer.Long */
+	& .il {
+		color: color(var(--color-base) hue(+225));
+	}
+
+	/* Literal.Number */
+	& .m {
+		color: color(var(--color-base) hue(+225));
+	}
+
+	/* Literal.Number.Float */
+	& .mf {
+		color: color(var(--color-base) hue(+225));
+	}
+
+	/* Literal.Number.Hex */
+	& .mh {
+		color: color(var(--color-base) hue(+225));
+	}
+
+	/* Literal.Number.Integer */
+	& .mi {
+		color: color(var(--color-base) hue(+225));
+	}
+
+	/* Literal.Number.Oct */
+	& .mo {
+		color: color(var(--color-base) hue(+225));
+	}
+
+	/* Literal */
+	& .l {
+		color: color(var(--color-base) hue(+225));
+	}
+
+	/* Literal.String */
+	& .s {
+		color: color(var(--color-base) hue(+270));
+	}
+
+	/* Literal.String.Single */
+	& .s1 {
+		color: color(var(--color-base) hue(+270));
+	}
+
+	/* Literal.String.Double */
+	& .s2 {
+		color: color(var(--color-base) hue(+270));
+	}
+
+	/* Literal.String.Backtick */
+	& .sb {
+		color: color(var(--color-base) hue(+270));
+	}
+
+	/* Literal.String.Heredoc */
+	& .sh {
+		color: color(var(--color-base) hue(+270));
+	}
+
+	/* Literal.String.Regex */
+	& .sr {
+		color: color(var(--color-base) hue(+270));
+	}
+
+	/* Literal.String.Other */
+	& .sx {
+		color: color(var(--color-base) hue(+270));
+	}
+
+	/* Generic.Error */
+	& .gr {
+		background: color(var(--color-base) hue(+180));
+	}
+}
