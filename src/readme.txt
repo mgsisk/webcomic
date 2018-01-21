@@ -116,7 +116,7 @@ you're more technically-inclined, [pull requests] are always welcome.
 
 [Complete changelog](https://github.com/mgsisk/webcomic/blob/master/changelog.md)
 
-= 5.0.0 - Phoenix Down (2017-12-25) =
+= 5.0.0 - Phoenix Down (2018-01-21) =
 > Refactored everything into a functional component-based architecture.
 
 **Added**
