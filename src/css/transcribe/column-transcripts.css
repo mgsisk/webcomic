@@ -1,0 +1,23 @@
+.column-webcomic_transcripts {
+	width: 5.5em;
+
+	& .post-com-count-wrapper {
+		display: inline-block;
+		position: relative;
+	}
+
+	& .post-com-count-pending.transcript {
+		background: #00a0d2;
+		left: auto;
+		position: absolute;
+		right: 3px;
+		top: 16px;
+	}
+
+	& .post-com-count-no-pending + .post-com-count-pending.transcript {
+		left: -3px;
+		position: relative;
+		right: auto;
+		top: auto;
+	}
+}

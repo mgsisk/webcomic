@@ -1,0 +1,29 @@
+#customize-control-webcomic_integrate_front_page_content,
+#customize-control-webcomic_integrate_front_page_transcripts,
+#customize-control-webcomic_integrate_front_page_comments {
+	clear: none;
+	width: auto;
+
+	& label {
+		margin: 0 15px 0 0;
+	}
+
+	& .description {
+		opacity: 0.3;
+		transition: opacity 0.3s ease-in-out;
+	}
+
+	& input:checked + .description {
+		opacity: 1;
+	}
+
+	& .dashicons {
+		font-size: 40px;
+		height: 40px;
+		width: 40px;
+	}
+}
+
+input[type="checkbox"][data-customize-setting-link^="webcomic_integrate_front_page_"] {
+	display: none;
+}

@@ -1,0 +1,19 @@
+title: Webcomic
+description: >
+  Comic publishing power for the web. Turn your WordPress-powered site into a
+  comic publishing platform with Webcomic.
+url: https://mgsisk.com
+baseurl: /webcomic
+defaults:
+  - scope:
+      path: ''
+    values:
+      image: hero-4x.jpg
+      author:
+        name: Michael Sisk
+        twitter: mgsisk
+include:
+  - _pages
+exclude:
+  - Gemfile
+  - Gemfile.lock

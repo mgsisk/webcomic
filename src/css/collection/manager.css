@@ -1,0 +1,51 @@
+.button .dashicons {
+	vertical-align: -0.25em;
+}
+
+[data-webcomic-media-manager] {
+
+	& div {
+		position: relative;
+
+		& a {
+			background: #fff;
+			left: 0.25rem;
+			position: absolute;
+			top: 0.25rem;
+			transform-origin: 0 0;
+			transition-property: color, transform;
+
+			&:focus,
+			&:hover {
+				transform: scale(1.5);
+			}
+		}
+
+		&.ui-sortable-placeholder {
+			background: rgba(0, 0, 0, 0.05);
+			box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.1) inset;
+			outline: thin dashed rgba(0, 0, 0, 0.1);
+			visibility: visible !important;
+		}
+
+		&.ui-sortable-helper img {
+			box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2);
+		}
+	}
+
+	& img {
+		height: auto;
+		max-width: 100%;
+		vertical-align: middle;
+	}
+
+	& noscript {
+		color: #d98500;
+		display: block;
+		margin: 0.5rem 0;
+	}
+}
+
+[data-webcomic-media-manager="multiple"] div {
+	cursor: move;
+}

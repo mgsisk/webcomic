@@ -1,0 +1,27 @@
+.webcomic-twitter-alert {
+	color: #d98500;
+}
+
+.webcomic-twitter-error {
+	color: #dc3232;
+}
+
+.webcomic-twitter-account {
+
+	&:after {
+		clear: both;
+		content: "";
+		display: table;
+	}
+
+	& img {
+		float: left;
+		margin-right: 0.7em;
+		max-width: 56px;
+		vertical-align: middle;
+	}
+
+	& b {
+		font-size: larger;
+	}
+}

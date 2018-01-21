@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<ruleset name="mgsisk/webcomic">
+  <description>PHPCS ruleset for mgsisk/webcomic</description>
+
+  <file>src</file>
+  <file>tests/phpunit/src</file>
+  <exclude-pattern>*.js</exclude-pattern>
+  <exclude-pattern>*.css</exclude-pattern>
+
+  <!-- PHPCompatibility =====================================================-->
+
+  <config name="testVersion" value="7.0-"/>
+  <rule ref="PHPCompatibility"/>
+
+  <!-- WordPress ============================================================-->
+
+  <rule ref="WordPress">
+    <exclude name="WordPress.VIP"/>
+  </rule>
+  <rule ref="WordPress.WP.I18n">
+    <properties>
+      <property name="text_domain" type="array" value="webcomic"/>
+    </properties>
+  </rule>
+  <rule ref="WordPress.WhiteSpace.ControlStructureSpacing">
+    <properties>
+      <property name="blank_line_check" value="true"/>
+      <property name="spaces_before_closure_open_paren" value="0"/>
+    </properties>
+  </rule>
+  <rule ref="WordPress.WP.DeprecatedClasses">
+    <properties>
+      <property name="minimum_supported_version" value="4.7"/>
+    </properties>
+  </rule>
+  <rule ref="WordPress.WP.DeprecatedFunctions">
+    <properties>
+      <property name="minimum_supported_version" value="4.7"/>
+    </properties>
+  </rule>
+  <rule ref="WordPress.WP.DeprecatedParameters">
+    <properties>
+      <property name="minimum_supported_version" value="4.7"/>
+    </properties>
+  </rule>
+
+  <!-- Generic ==============================================================-->
+
+  <rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
+  <rule ref="Generic.CodeAnalysis.AssignmentInCondition"/>
+  <rule ref="Generic.Files.OneClassPerFile"/>
+  <rule ref="Generic.Files.OneInterfacePerFile"/>
+  <rule ref="Generic.Files.OneObjectStructurePerFile"/>
+  <rule ref="Generic.Files.OneTraitPerFile"/>
+  <rule ref="Generic.Metrics.CyclomaticComplexity">
+    <properties>
+      <property name="complexity" value="8"/>
+      <property name="absoluteComplexity" value="16"/>
+    </properties>
+  </rule>
+  <rule ref="Generic.Metrics.NestingLevel">
+    <properties>
+      <property name="nestingLevel" value="4"/>
+      <property name="absoluteNestingLevel" value="8"/>
+    </properties>
+  </rule>
+  <rule ref="Generic.NamingConventions.ConstructorName"/>
+  <rule ref="Generic.PHP.CharacterBeforePHPOpeningTag"/>
+  <rule ref="Generic.PHP.SAPIUsage"/>
+
+  <!-- PSR1 =================================================================-->
+
+  <rule ref="PSR1.Files.SideEffects"/>
+
+  <!-- PSR2 =================================================================-->
+
+  <rule ref="PSR2.Methods.MethodDeclaration"/>
+  <rule ref="PSR2.Namespaces.NamespaceDeclaration"/>
+  <rule ref="PSR2.Namespaces.UseDeclaration"/>
+
+  <!-- PEAR =================================================================-->
+
+  <rule ref="PEAR.Functions.ValidDefaultValue"/>
+
+  <!-- Squiz ================================================================-->
+
+  <rule ref="Squiz.Objects.ObjectInstantiation"/>
+  <rule ref="Squiz.PHP.DisallowInlineIf"/>
+  <rule ref="Squiz.PHP.DisallowObEndFlush"/>
+  <rule ref="Squiz.PHP.GlobalKeyword"/>
+  <rule ref="Squiz.PHP.Heredoc"/>
+  <rule ref="Squiz.PHP.InnerFunctions"/>
+  <rule ref="Squiz.PHP.LowercasePHPFunctions"/>
+  <rule ref="Squiz.Scope.MemberVarScope"/>
+  <rule ref="Squiz.Scope.MethodScope"/>
+  <rule ref="Squiz.Scope.StaticThisUsage"/>
+  <rule ref="Squiz.Strings.EchoedStrings"/>
+</ruleset>

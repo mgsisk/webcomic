@@ -1,0 +1,20 @@
+.webcomic-authors {
+	margin: -6px -12px;
+
+	& table {
+		border: 0;
+	}
+
+	& label {
+		display: flex;
+		flex-wrap: wrap;
+	}
+
+	& input {
+		flex: 1 1 auto;
+	}
+
+	& span {
+		flex: 0 1 5em;
+	}
+}

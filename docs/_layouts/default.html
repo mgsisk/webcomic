@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns#">
+  <head>
+    <meta charset="utf-8">
+    <meta name="author" content="{{page.author.name}}">
+    <meta name="description" property="og:description" content="{{page.excerpt | replace: 'site.description', site.description | strip_html | truncate: 160 | smartify}}">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1">
+    <meta name="twitter:creator" content="@{{page.author.twitter}}">
+    <meta name="twitter:card" content="summary">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="{{site.title | smartify}}">
+    <meta property="og:title" content="{{page.title | strip | smartify}}">
+    <meta property="og:image" content="{{site.url}}{{site.baseurl}}/srv/{{page.image}}">
+    <meta property="og:url" content="{{site.url}}{{site.baseurl}}{{page.url | replace: '/index.html', ''}}">
+    <title>{{page.title | strip | smartify}} / {{site.title}}</title>
+    <link rel="canonical" href="{{site.url}}{{site.baseurl}}{{page.url | replace: '/index.html', ''}}">
+    <link rel="icon" href="{{site.baseurl}}/srv/icon.jpg">
+    <link rel="stylesheet" href="/srv/style.css">
+    <link rel="stylesheet" href="{{site.baseurl}}/srv/colors.css">
+    <script src="https://use.typekit.net/hne7oit.js"></script>
+    <script>try{Typekit.load({async:true});}catch(e){}</script>
+  </head>
+  <body id="top">
+    <a href="#nav">Skip to menu</a>
+    <header>
+      {{page.title | prepend: '# ' | markdownify}}
+    </header>
+    <main>
+      {{content}}
+    </main>
+    <nav id="nav">
+      <a href="/">{{site.url | replace: 'http://', '' | replace: 'https://', ''}}</a>
+      {%if site.data.projects%}
+        <label>
+          <span>Projects</span>
+          <select data-root="{{site.url}}">
+            {%if page.title == 'File Not Found'%}<option>error</option>{%endif%}
+            <option></option>
+            {%for project in site.data.projects%}
+              {% assign baseurl = '/' | append: project %}
+              <option{%if baseurl == site.baseurl%} selected{%endif%}>{{project}}</option>
+            {%endfor%}
+          </select>
+        </label>
+      {%endif%}
+      {%if page.title != 'File Not Found' and site.baseurl != ''%}
+      <label>
+        <span>Sections</span>
+        <select data-root="{{site.url}}{{site.baseurl}}">
+          <option></option>
+          {%for section in site.data.sections%}
+            {%if section[0] == '_'%}
+              {%for subsection in section[1]%}
+                <option value="{{subsection | replace: ' ', '-'}}"{%if subsection == page.title%} selected{%endif%}>{{subsection}}</option>
+              {%endfor%}
+            {%else%}
+              <optgroup label="{{section[0]}}">
+                {%for subsection in section[1]%}
+                  <option value="{{subsection | replace: ' ', '-'}}"{%if subsection == page.title%} selected{%endif%}>{{subsection}}</option>
+                {%endfor%}
+              </optgroup>
+            {%endif%}
+          {%endfor%}
+        </select>
+      </label>
+      {%endif%}
+    </nav>
+    </nav>
+    <footer>
+      <a href="#top">© {{site.time | date: '%Y'}} {{page.author.name}}</a>
+    </footer>
+    <script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');ga('create','UA-78610910-1','auto');ga('send','pageview')</script>
+    <script src="/srv/script.js" async></script>
+  </body>
+</html>

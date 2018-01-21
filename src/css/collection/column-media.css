@@ -1,0 +1,9 @@
+.column-webcomic_media {
+	width: 15%;
+
+	& img {
+		height: auto;
+		max-width: 100%;
+		vertical-align: middle;
+	}
+}

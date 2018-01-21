@@ -1,0 +1,22 @@
+.form-table {
+	margin: 0;
+
+	& td {
+		display: block;
+		margin: 0;
+		padding: 0 0 1em;
+	}
+
+	& th {
+		display: block;
+		padding: 0;
+	}
+
+	& label {
+		font-size: 13px;
+	}
+
+	& input[type="text"] {
+		width: 95%;
+	}
+}

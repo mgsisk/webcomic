@@ -1,0 +1,108 @@
+.webcomic-transcript-form {
+	background: #f9f9f9;
+	box-shadow:
+		0 1px 0 rgba(0, 0, 0, 0.1) inset,
+		0 -1px 0 rgba(0, 0, 0, 0.1) inset;
+	color: #555;
+	margin: -8px -12px 6px;
+	padding: 18px 12px 0;
+
+	& legend {
+		font-weight: 600;
+		margin: 0;
+		position: relative;
+		top: 14px;
+	}
+
+	& textarea {
+		height: 120px;
+	}
+
+	& span {
+		float: right;
+	}
+
+	& img {
+		display: block;
+		height: auto;
+		margin: auto;
+		max-width: 100%;
+	}
+
+	& label {
+		display: block;
+		margin: 0 0 1em;
+	}
+
+	& .error {
+		color: #dc3232;
+		display: inline-block;
+		float: none;
+		padding: 0 12px;
+		text-align: center;
+	}
+
+	& .webcomic-transcript-editor {
+		display: flex;
+	}
+
+	& .wp-editor-wrap {
+		flex: 0 1 85%;
+	}
+
+	& .webcomic-transcript-languages {
+		background: #fff;
+		border: 1px solid rgba(0, 0, 0, 0.1);
+		flex: 0 1 15%;
+		height: 11em;
+		overflow: auto;
+		padding: 8px 10px;
+		margin: 0 0 0 12px;
+	}
+
+	& .webcomic-media {
+		overflow: auto;
+	}
+}
+
+.webcomic-transcripts {
+	margin: -6px -12px -12px;
+
+	& table {
+		border: 0;
+	}
+
+	& tr.pending {
+		background: #f7fcfe;
+	}
+
+	& tr.draft {
+		background: #fef7f1;
+	}
+
+	& .avatar {
+		float: left;
+		margin: 1px 10px 0 0;
+	}
+
+	& .js-error {
+		color: #dc3232;
+	}
+
+	& .webcomic_transcript_authors {
+		width: 25%;
+	}
+
+	& .webcomic_transcript_languages {
+		width: 15%;
+	}
+
+	& .webcomic-transcript-form {
+		margin: -18px -10px -8px;
+		padding: 18px 10px 0;
+
+		& p {
+			margin: 1em 0;
+		}
+	}
+}

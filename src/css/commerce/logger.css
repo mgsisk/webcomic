@@ -1,0 +1,15 @@
+table {
+
+	& .error td {
+		color: #dc3232;
+	}
+
+	& dl {
+		margin: 0;
+	}
+
+	& dd {
+		margin: 0 0 10px 20px;
+	}
+
+}

@@ -1,0 +1,72 @@
+/**
+ * Integration styles
+ *
+ * NOTE This stylesheet isn't loaded via the register/enqueue system; the
+ * processed CSS foundis prepended directly to the themes custom CSS to avoid an
+ * extra request and improve page speed. See lib/collection/customize.php
+ */
+
+.webcomic-media {
+	display: flex;
+	justify-content: center;
+
+	& img {
+		height: auto;
+		max-width: 100%;
+	}
+}
+
+.webcomic-navigation {
+	display: flex;
+	justify-content: center;
+	text-align: center;
+
+	& a {
+		display: block;
+		font-size: 200%;
+	}
+
+	& img {
+		height: auto;
+		max-width: 100%;
+	}
+
+	& .widget {
+		flex: 1 0 auto;
+		list-style: none;
+	}
+
+	& .current-webcomic {
+		visibility: hidden;
+	}
+}
+
+.webcomic-meta {
+
+	& img {
+		height: auto;
+		max-width: 100%;
+	}
+
+	& span:after {
+		content: ", ";
+	}
+
+	& span:last-child:after {
+		content: "";
+	}
+
+	& .widget {
+		list-style: none;
+		margin: 0 0 15px;
+	}
+}
+
+.webcomic-infinite {
+	clear: both;
+
+	& img {
+		height: auto;
+		max-width: 100%;
+	}
+}
