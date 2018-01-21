@@ -12,6 +12,16 @@ use WP_Widget;
 
 /**
  * Comic transcript link widget implementation.
+ *
+ * @name Webcomic Transcripts Link
+ * @summary Display a comic transcripts link.
+ * @option Title: Optional widget title.
+ * @option Link: Link text; accepts
+ * [a variety of tokens](get_webcomic_link_tokens). Will be used as alternate
+ * text if an image is selected.
+ * @option Link to the transcript form: Link to the transcript form instead of
+ * the transcripts list.
+ * @option Comic: The comic to link to, or the current page's comic (if any).
  */
 class WebcomicTranscriptsLink extends WP_Widget {
 	/**

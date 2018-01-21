@@ -12,6 +12,14 @@ use WP_Widget;
 
 /**
  * Comic link widget implementation.
+ *
+ * @name Webcomic Link
+ * @summary Display a link to a comic.
+ * @option Title: Optional widget title.
+ * @option Link: Link text; accepts
+ * [a variety of tokens](get_webcomic_term_link_tokens). Will be used as
+ * alternate text if an image is selected.
+ * @option Comic: The comic to link to, or the current page's comic (if any).
  */
 class WebcomicLink extends WP_Widget {
 	/**

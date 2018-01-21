@@ -12,6 +12,17 @@ use WP_Widget;
 
 /**
  * Collection link widget implementation.
+ *
+ * @name Webcomic Collection Link
+ * @summary Display a link to a comic collection.
+ * @option Title: Optional widget title.
+ * @option Link: Link text; accepts
+ * [a variety of tokens](get_webcomic_collection_link_tokens). Will be used as
+ * alternate text if an image is selected.
+ * @option Link to: Where the link goes; one of Archive page, First comic, Last
+ * comic, or Random comic.
+ * @option Collection: The collection to link to. The (current collection) can't
+ * always be determined.
  */
 class WebcomicCollectionLink extends WP_Widget {
 	/**

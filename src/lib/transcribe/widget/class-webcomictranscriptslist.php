@@ -12,6 +12,22 @@ use WP_Widget;
 
 /**
  * Comic transcripts list widget implementation.
+ *
+ * @name Webcomic Transcripts List
+ * @summary Display a list of comic transcripts.
+ * @option Title: Optional widget title.
+ * @option Number of transcripts to show: Optional number of transcripts to
+ * show; -1 shows all transcripts.
+ * @option Include pending transcripts: When checked, includes pending
+ * transcripts in the list. Pending transcripts may be edited and resubmited,
+ * depending on your collection settings.
+ * @option Include language selector: When checked, includes a select element to
+ * filter the list of transcripts by language.
+ * @option Item: Transcript item format; accepts
+ * [a variety of tokens](get_webcomic_transcripts_list_item_tokens).
+ * @option Format: List format; one of None, Ordered, Plain, or Unordered.
+ * @option Comic: The comic to list transcripts for, or the current page's comic
+ * (if any).
  */
 class WebcomicTranscriptsList extends WP_Widget {
 	/**

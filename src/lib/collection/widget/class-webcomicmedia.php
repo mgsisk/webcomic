@@ -12,6 +12,20 @@ use WP_Widget;
 
 /**
  * Comic media widget implementation.
+ *
+ * @name Webcomic Media
+ * @summary Display comic media.
+ * @option Title: Optional widget title.
+ * @option Format: Optional media format, like before{{join}}after{size}. Size
+ * may be be any valid image size or a comma-separated list of width and height
+ * pixel values (in that order), and may be specified without the rest of the
+ * format arguments.
+ * @option Comic: The comic to display media for, or the current page's comic
+ * (if any).
+ * @option Link to: Where to link the media to; one of None, Current comic,
+ * First comic, Previous comic, Next comic, Last comic, or Random comic.
+ * @option Related by: The collection or taxonomy the linked comics must be
+ * related by. The (current collection) can't always be determined.
  */
 class WebcomicMedia extends WP_Widget {
 	/**

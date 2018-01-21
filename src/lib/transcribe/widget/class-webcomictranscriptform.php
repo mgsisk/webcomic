@@ -12,6 +12,17 @@ use WP_Widget;
 
 /**
  * Comic transcript form widget implementation.
+ *
+ * @name Webcomic Transcript Form
+ * @summary Display a comic transcript form.
+ * @option Title: Optional widget title.
+ * @option Notes: Optional text to display just below the transcript field.
+ * @option Show the author URL field: When checked, shows the optional author
+ * URL field.
+ * @option Show the transcript language field: When checked, shows the optional
+ * language selection field.
+ * @option Comic: The comic the transcript form is for, or the current page's
+ * comic (if any).
  */
 class WebcomicTranscriptForm extends WP_Widget {
 	/**

@@ -11,6 +11,18 @@ use WP_Widget;
 
 /**
  * Comics list widget implementation.
+ *
+ * @name Webcomics List
+ * @summary Display a list of comic collections.
+ * @option Title: Optional widget title.
+ * @option Number of comics to show: Optional number of comics to show; -1 shows
+ * all comics.
+ * @option Link: Link text; accepts
+ * [a variety of tokens](get_webcomic_link_tokens).
+ * @option Format: List format; one of None, Cloud, Ordered, Plain, Select, or
+ * Unordered.
+ * @option Related to: The collection or comic the comics must be related to.
+ * The (current collection) can't always be determined.
  */
 class WebcomicsList extends WP_Widget {
 	/**

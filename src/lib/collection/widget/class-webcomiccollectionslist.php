@@ -11,6 +11,23 @@ use WP_Widget;
 
 /**
  * Comic collections list widget implementation.
+ *
+ * @name Webcomic Collections List
+ * @summary Display a list of comic collections.
+ * @option Title: Optional widget title.
+ * @option Number of collections to show: Optional number of collections to
+ * show; 0 shows all collections.
+ * @option Related to the current comic: When checked, limits the list to
+ * collections related to the current comic (if any).
+ * @option Link: Link text; accepts
+ * [a variety of tokens](get_webcomic_collection_link_tokens).
+ * @option Link to: Where the link goes; one of Archive page, First comic, Last
+ * comic, or Random comic.
+ * @option Format: List format; one of None, Cloud, Ordered, Plain, Select, or
+ * Unordered.
+ * @option Comic link: Optional comic link text; accepts
+ * [a variety of tokens](get_webcomic_link_tokens). Some formats never list
+ * comics.
  */
 class WebcomicCollectionsList extends WP_Widget {
 	/**

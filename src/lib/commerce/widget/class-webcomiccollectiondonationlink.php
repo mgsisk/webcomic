@@ -12,6 +12,15 @@ use WP_Widget;
 
 /**
  * Collection donation link widget implementation.
+ *
+ * @name Webcomic Collection Donation Link
+ * @summary Display a link to a comic collection donation.
+ * @option Title: Optional widget title.
+ * @option Link: Link text; accepts
+ * [a variety of tokens](get_webcomic_collection_link_tokens). Will be used as
+ * alternate text if an image is selected.
+ * @option Collection: The collection to link to. The (current collection) can't
+ * always be determined.
  */
 class WebcomicCollectionDonationLink extends WP_Widget {
 	/**
