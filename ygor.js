@@ -41,7 +41,7 @@ function makeCss() {
  * @return {void}
  */
 function makeImg() {
-  shell`imageoptim -a -q -d assets`;
+  shell`find ./assets ./docs/srv -name '*.jpg' -o -name '*.png' | imageoptim -a -q`;
 }
 
 /**
@@ -246,9 +246,10 @@ tasks
     process.stdout.write( 'watching... ' );
 
     watch([
-      'src/css/**/*.css',
-      'docs/_css/**/*.css',
       'assets/**/*.{jpg,png}',
+      'docs/srv/*{jpg,png}',
+      'docs/_css/**/*.css',
+      'src/css/**/*.css',
       'src/js/**/*.js'
     ])
       .on( 'change', ( path )=> {
