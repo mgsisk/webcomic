@@ -103,7 +103,7 @@ if ( ! isset( $args ) ) {
 						}
 
 						foreach ( $match as $ids ) :
-							list( $post, $media ) = explode( '-', $ids );
+							list( $post, $media ) = array_map( 'intval', explode( '-', $ids ) );
 						?>
 						<tr>
 							<th scope="row" class="check-column"><input type="checkbox" id="match-<?php echo esc_attr( $ids ); ?>" name="webcomic_match[]" value="<?php echo esc_attr( $ids ); ?>" form="webcomic_matcher"></th>

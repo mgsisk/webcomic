@@ -239,7 +239,7 @@ function hook_save_matches() {
 	foreach ( webcomic( 'GLOBALS._REQUEST.webcomic_match' ) as $match ) {
 		$count++;
 
-		list( $post, $media ) = explode( '-', $match );
+		list( $post, $media ) = array_map( 'intval', explode( '-', $match ) );
 
 		if ( ! add_post_meta( $post, 'webcomic_media', $media ) ) {
 			$error++;
