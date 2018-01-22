@@ -4,10 +4,6 @@ plugins:
     enabled: true
   markdownlint:
     enabled: true
-  phan:
-    enabled: true
-    config:
-      file_extensions: "php"
   phpcodesniffer:
     enabled: true
     config:
