@@ -7,6 +7,7 @@
   "ul-style": {
     "style": "dash"
   },
+  "no-trailing-spaces": false,
   "line-length": {
     "code_blocks": false
   },
