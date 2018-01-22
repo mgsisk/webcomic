@@ -3,6 +3,17 @@
 const { tasks, shell, find, read } = require( 'ygor' );
 
 /**
+ * Process everything.
+ *
+ * @return {void}
+ */
+function makeAll() {
+  makeCss();
+  makeImg();
+  makeJs();
+}
+
+/**
  * Process CSS with postcss.
  *
  * @return {void}
@@ -193,6 +204,7 @@ function testYml() {
 tasks.cli.quiet = true;
 
 tasks.add( 'make', ()=> tasks()
+  .add( 'all', makeAll )
   .add( 'css', makeCss )
   .add( 'img', makeImg )
   .add( 'js', makeJs )
