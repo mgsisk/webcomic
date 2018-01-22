@@ -95,4 +95,4 @@ all IPN's Webcomic has logged to date.
 
 [img-1]: srv/Commerce.png
 [img-2]: srv/Commerce-Box.png
-[url-1]: Widgets#Commerce-widgets
+[url-1]: Widgets#commerce-widgets

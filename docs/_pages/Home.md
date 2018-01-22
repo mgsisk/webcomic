@@ -40,6 +40,6 @@ When you're ready, click on the **Untitled Comic** link in the sidebar.
 
 [url-1]: https://codex.wordpress.org/New_To_WordPress_-_Where_to_Start
 [url-2]: https://wordpress.org/hosting/
-[url-3]: https://github.com/mgsisk/webcomic#Installation
+[url-3]: https://github.com/mgsisk/webcomic#installation
 [img-1]: srv/banner.png
 [img-2]: srv/Home.png
