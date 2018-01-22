@@ -65,6 +65,22 @@ function makeJs() {
 }
 
 /**
+ * Test everything.
+ *
+ * @return {void}
+ */
+function testAll() {
+  testCss();
+  testJs();
+  testJson();
+  testMd();
+  testPhp();
+  testShell();
+  testXml();
+  testYml();
+}
+
+/**
  * Test CSS with stylelint.
  *
  * @return {void}
@@ -211,6 +227,7 @@ tasks.add( 'make', ()=> tasks()
 );
 
 tasks.add( 'test', ()=> tasks()
+  .add( 'all', testAll )
   .add( 'css', testCss )
   .add( 'js', testJs )
   .add( 'json', testJson )
