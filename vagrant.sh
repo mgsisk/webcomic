@@ -319,6 +319,12 @@ if ! grep -q 'upload_max_filesize = 999M' "/etc/php/$phpv/fpm/php.ini"; then
   rm -f "/etc/php/$phpv/fpm/php.inir"
 fi
 
+if ! grep -q 'post_max_size = 999M' "/etc/php/$phpv/fpm/php.ini"; then
+  printf 'Updating PHP max post size'
+  sed -ir 's/post_max_size = 8M/post_max_size = 999M/' "/etc/php/$phpv/fpm/php.ini"
+  rm -f "/etc/php/$phpv/fpm/php.inir"
+fi
+
 if [ ! -e /usr/share/nginx/admin/php ]; then
   printf 'Creating PHP info page'
   mkdir /usr/share/nginx/admin/php
