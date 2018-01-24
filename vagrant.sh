@@ -183,6 +183,12 @@ if ! grep -q 'client_max_body_size 999m;' /etc/nginx/nginx.conf; then
   rm -f /etc/nginx/nginx.confr
 fi
 
+if ! grep -q 'fastcgi_read_timeout 999;' /etc/nginx/nginx.conf; then
+  printf 'Updating Nginx fastcgi_read_timeout'
+  sed -ir 's/client_max_body_size 999m;/client_max_body_size 999m;\n    fastcgi_read_timeout 999;/' /etc/nginx/nginx.conf
+  rm -f /etc/nginx/nginx.confr
+fi
+
 if [ ! -e /usr/share/nginx/admin/index.php ]; then
   printf 'Creating Nginx index page'
   mkdir /usr/share/nginx/admin
