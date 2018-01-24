@@ -325,6 +325,12 @@ if ! grep -q 'post_max_size = 999M' "/etc/php/$phpv/fpm/php.ini"; then
   rm -f "/etc/php/$phpv/fpm/php.inir"
 fi
 
+if ! grep -q 'memory_limit = 512M' "/etc/php/$phpv/fpm/php.ini"; then
+  printf 'Updating PHP memory limit'
+  sed -ir 's/memory_limit = 128M/memory_limit = 512M/' "/etc/php/$phpv/fpm/php.ini"
+  rm -f "/etc/php/$phpv/fpm/php.inir"
+fi
+
 if [ ! -e /usr/share/nginx/admin/php ]; then
   printf 'Creating PHP info page'
   mkdir /usr/share/nginx/admin/php
