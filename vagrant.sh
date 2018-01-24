@@ -240,7 +240,7 @@ fi
 if [ ! -e /usr/share/nginx/admin/db/index.php ]; then
   printf 'Installing Adminer'
   mkdir /usr/share/nginx/admin/db
-  wget -qO /usr/share/nginx/admin/db/index.php https://github.com/vrana/adminer/releases/download/v4.3.1/adminer-4.3.1-en.php
+  wget -qO /usr/share/nginx/admin/db/index.php https://github.com/vrana/adminer/releases/download/v4.4.0/adminer-4.4.0-en.php
 fi
 
 # ----- MailDev ----------------------------------------------------------------
