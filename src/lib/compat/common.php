@@ -594,6 +594,8 @@ function hook_get_post_prints_v4( $meta, $id, $key, $single ) {
 		return $meta;
 	}
 
+	remove_filter( 'get_post_metadata', __FUNCTION__ );
+
 	$commerce      = webcomic( 'option.' . get_post_type( $id ) . '.commerce_prints' );
 	$post_commerce = get_post_meta( $id, 'webcomic_commerce', true );
 
@@ -636,6 +638,8 @@ function hook_get_post_prints_v4( $meta, $id, $key, $single ) {
 	delete_post_meta( $id, 'webcomic_prints' );
 	delete_post_meta( $id, 'webcomic_original' );
 	delete_post_meta( $id, 'webcomic_commerce' );
+
+	add_filter( 'get_post_metadata', __FUNCTION__ );
 
 	return $meta;
 } // @codingStandardsIgnoreEnd Generic.Metrics.CyclomaticComplexity.TooHigh
