@@ -3,7 +3,7 @@ title: Webcomic
 permalink: index
 ---
 
-![Webcomic 5.0.0][img-1]
+![Webcomic 5][img-1]
 
 Webcomic provides a host of features related to creating, managing, and sharing
 comics on the web – and if you don't know where to start, you've come to the
