@@ -639,7 +639,7 @@ function hook_get_post_prints_v4( $meta, $id, $key, $single ) {
 	delete_post_meta( $id, 'webcomic_original' );
 	delete_post_meta( $id, 'webcomic_commerce' );
 
-	add_filter( 'get_post_metadata', __FUNCTION__ );
+	add_filter( 'get_post_metadata', __FUNCTION__, 10, 4 );
 
 	return $meta;
 } // @codingStandardsIgnoreEnd Generic.Metrics.CyclomaticComplexity.TooHigh
