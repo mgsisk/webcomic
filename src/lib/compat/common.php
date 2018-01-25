@@ -587,6 +587,7 @@ function hook_get_post_media_v4( $meta, $id, $key, $single ) {
  * @param bool   $single Whether to return only the first $key value.
  * @return mixed
  * @SuppressWarnings(PHPMD.NPathComplexity) - Required for compatibility.
+ * @suppress PhanUndeclaredFunctionInCallable - Incorrectly triggered.
  * @codingStandardsIgnoreStart Generic.Metrics.CyclomaticComplexity.TooHigh - Required for compatibility.
  */
 function hook_get_post_prints_v4( $meta, $id, $key, $single ) {
