@@ -9,75 +9,41 @@ Donate link: https://mgsisk.com/#support
 Contributors: mgsisk
 Tags: comic, media, shortcode, webcomic, widget
 
-Comic publishing power for the web. Turn your WordPress-powered site into a
-comic publishing platform with Webcomic.
+Comic publishing power for the web. Turn your WordPress-powered site into a comic publishing platform with Webcomic.
 
 == Description ==
 
-Webcomic provides a host of features related to creating, managing, and sharing
-comics on the web.
+Webcomic provides a host of features related to creating, managing, and sharing comics on the web.
 
 = Comic Management =
-Webcomic organizes comics into collections – custom post types dedicated to a
-specific comic series. Publish any number of distinct comic series on a single
-WordPress site, each with it's own unique settings. Manage comic media using
-WordPress' own media management features.
+Webcomic organizes comics into collections – custom post types dedicated to a specific comic series. Publish any number of distinct comic series on a single WordPress site, each with it's own unique settings. Manage comic media using WordPress' own media management features.
 
 = Theme Integration =
-Webcomic adds a new section to the Customizer that's all about integrating
-comics into your site's theme. The Universal integration method supports most
-themes, but methods for integrating with themes built specifically for Webcomic
-and themes built for other comic plugins are also available. If none of the
-standard integration methods work with your theme you can [use custom actions]
-to add comic features right where you want them.
+Webcomic adds a new section to the Customizer that's all about integrating comics into your site's theme. The Universal integration method supports most themes, but methods for integrating with themes built specifically for Webcomic and themes built for other comic plugins are also available. If none of the standard integration methods work with your theme you can [use custom actions] to add comic features right where you want them.
 
 = Powerful Tools =
-Webcomic includes a variety of tools for working with comics and getting comics
-up and running on your WordPress-powered site. Use the Generator to
-automatically create and publish comics for any number of uploaded media items,
-or use the Matcher to match media items with existing comics. Use
-collection-specific settings to organize your comics into categories and tags,
-customize your comic URL's, and more.
+Webcomic includes a variety of tools for working with comics and getting comics up and running on your WordPress-powered site. Use the Generator to automatically create and publish comics for any number of uploaded media items, or use the Matcher to match media items with existing comics. Use collection-specific settings to organize your comics into categories and tags, customize your comic URL's, and more.
 
 = Unlimited Potential =
-Those are some of Webcomic's standard features, but there are other components
-included with Webcomic that provide a variety of new settings, shortcodes,
-template tags, and widgets. Take your online comic publishing even further with:
+Those are some of Webcomic's standard features, but there are other components included with Webcomic that provide a variety of new settings, shortcodes, template tags, and widgets. Take your online comic publishing even further with:
 
-- **Alert**, which adds settings for creating buffer and hiatus email alerts.
-  Never forget an update with customizable email alerts.
-- **Character**, which allows you to tag character appearances and use
-  character-based archives.
+- **Alert**, which adds settings for creating buffer and hiatus email alerts. Never forget an update with customizable email alerts.
+- **Character**, which allows you to tag character appearances and use character-based archives.
 - **Commerce**, which adds PayPal-based print selling and donation features.
-- **Restrict**, which adds features for restricting access to comics based on
-  age or user role.
-- **Storyline**, which allows you to organize comics by storyline and use
-  storyline-based archives.
-- **Transcribe**, which adds comic transcription features for SEO-enhancing
-  text alternatives to your comics.
-- **Twitter**, which adds settings for updating your Twitter account status
-  when publishing comics.
+- **Restrict**, which adds features for restricting access to comics based on age or user role.
+- **Storyline**, which allows you to organize comics by storyline and use storyline-based archives.
+- **Transcribe**, which adds comic transcription features for SEO-enhancing text alternatives to your comics.
+- **Twitter**, which adds settings for updating your Twitter account status when publishing comics.
 
 [use custom actions]: https://github.com/mgsisk/webcomic/wiki/Actions#integration-actions
 
 == Installation ==
 
-Install Webcomic from the [Plugins > Add New] screen by searching for `webcomic`
-(the first result should be the one you're looking for) or by
-[downloading the plugin archive][stable] and uploading it to your site.
+Install Webcomic from the [Plugins > Add New] screen by searching for `webcomic` (the first result should be the one you're looking for) or by [downloading the plugin archive][stable] and uploading it to your site.
 
-One activated, you can choose which components to use on the Settings > Webcomic
-screen. If this is a new installation you should see your first comic
-collection, Untitled Comic, in the sidebar. You can adjust collection-specific
-settings on the Untitled Comic > Settings screen. Most components will add
-settings to this screen.
+One activated, you can choose which components to use on the Settings > Webcomic screen. If this is a new installation you should see your first comic collection, Untitled Comic, in the sidebar. You can adjust collection-specific settings on the Untitled Comic > Settings screen. Most components will add settings to this screen.
 
-You'll want to visit the Webcomic section of the Customizer to adjust
-integration settings for your site theme. The Universal integration method
-supports most themes, but methods for integrating with themes built specifically
-for Webcomic and themes built for other comic plugins are also available. If
-none of the standard integration methods work with your theme you can
-[use custom actions] to add comic features right where you want them.
+You'll want to visit the Webcomic section of the Customizer to adjust integration settings for your site theme. The Universal integration method supports most themes, but methods for integrating with themes built specifically for Webcomic and themes built for other comic plugins are also available. If none of the standard integration methods work with your theme you can [use custom actions] to add comic features right where you want them.
 
 [stable]: https://wordpress.org/plugins/webcomic
 [Plugins > Add New]: https://codex.wordpress.org/Plugins_Add_New_Screen
@@ -86,18 +52,14 @@ none of the standard integration methods work with your theme you can
 == Frequently Asked Questions ==
 
 = Need help? =
-All administration screens related to Webcomic include [contextual help] with
-[support links]. If you're new to Webcomic you may want to start by reading
-[the User Guide].
+All administration screens related to Webcomic include [contextual help] with [support links]. If you're new to Webcomic you may want to start by reading [the User Guide].
 
 [contextual help]: https://codex.wordpress.org/Administration_Screens#Help
 [support links]: https://github.com/mgsisk/webcomic/blob/master/support.md
 [the User Guide]: https://github.com/mgsisk/webcomic/wiki
 
 = Want to help? =
-If you're a friendly and knowledgable Webcomic user, please chime in and help
-others out on [the Support Forum], [Discord Server], or [Issue Tracker]. If
-you're more technically-inclined, [pull requests] are always welcome.
+If you're a friendly and knowledgable Webcomic user, please chime in and help others out on [the Support Forum], [Discord Server], or [Issue Tracker]. If you're more technically-inclined, [pull requests] are always welcome.
 
 [the Support Forum]: https://wordpress.org/support/plugin/webcomic
 [Discord Server]: https://discord.gg/TNTfzzg
@@ -121,35 +83,28 @@ you're more technically-inclined, [pull requests] are always welcome.
 
 **Added**
 - Assets for the WordPress plugin directory
-- Changelog to provide a curated, chronologically ordered list of notable
-  changes for each version
+- Changelog to provide a curated, chronologically ordered list of notable changes for each version
 - Code of conduct for project participants
-- Contributing guidelines, issue template, and pull request template for
-  project contributors
+- Contributing guidelines, issue template, and pull request template for project contributors
 - Details view on plugin and collection settings pages
-- Development configurations for Atom, Babel, Composer, Eslint, Git, Homebrew,
-  MarkdownLint, Node, Phan, PHP Code Sniffer, PHPMD, PHPUnit, PostCSS, Rollup,
-  Stylelint, and Vagrant
+- Development configurations for Atom, Babel, Composer, Eslint, Git, Homebrew, MarkdownLint, Node, Phan, PHP Code Sniffer, PHPMD, PHPUnit, PostCSS, Rollup, Stylelint, and Vagrant
 - Support document for users
 
 **Changed**
 - Alert functionality refactored into the `alert` component
-- Character functionality refactored into the `character` and `taxonomy`
-  components
+- Character functionality refactored into the `character` and `taxonomy` components
 - Commerce functionality refactored into the `commerce` component
 - Contextual help for all administrative screens
 - Core functionality refactored into the `plugin` and `collection` components
 - CSS assets refactored based on component, processed with PostCSS
 - Deprecated functionality refactored into the `compat` component
 - Integration is now configurable in a new Customizer section
-- JavaScript assets refactored based on component, processed with Babel, Rollup,
-  and UglifyJS
+- JavaScript assets refactored based on component, processed with Babel, Rollup, and UglifyJS
 - Plugin license is now GPL-2.0+
 - Plugin versions now follow Semantic Versioning
 - Readme now contains more descriptive, useful information
 - Restrict functionality refactored into the `restrict` component
-- Storyline functionality refactored into the `storyline` and `taxonomy`
-  components
+- Storyline functionality refactored into the `storyline` and `taxonomy` components
 - Transcript functionality refactored into the `transcribe` component
 - Twitter functionality refactored into the `twitter` component
 - User experience improved for all administrative screens
