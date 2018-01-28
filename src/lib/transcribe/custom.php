@@ -420,7 +420,7 @@ function hook_display_parent_column( string $column, int $post ) {
 		}
 
 		$url     = esc_url( get_permalink( $parent ) );
-		$output  = implode( '<br>', $comic ) . $output;
+		$output  = implode( '', $comic ) . $output;
 		$output .= sprintf( "<a href='{$url}' class='comments-view-item-link'>%s</a>", __( 'View Comic', 'webcomic' ) );
 		$output .= "<span class='post-com-count-wrapper'>" . util_transcripts_bubble( $parent ) . '</span>';
 	}
