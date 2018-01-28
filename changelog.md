@@ -3,12 +3,26 @@
 ## TODO
 
 - Finish this change log
+- Finish unit testing
 - Add API usage examples to documentation
+- Investigate Gutenberg support
 - Investigate dynamic comic functionality
 - Investigate transitioning from Comic Easel
 - Investigate always-first comic option for landing pages
 - Investigate setting a primary site collection, is_* rules for non-primary
   collection (per-landing page? Front page theme resolution?)
+
+## [5.0.1] (2018-01-27)
+
+### Changed
+- Nginx fastcgi_read_timeout increased to 999 in test vagrant box
+- PHP post_max_size increased to 999M in test vagrant box
+- PHP memory_limit increased to 512M in test vagrant box
+- Adminer updated to 4.4.0 in test vagrant box
+
+### Fixed
+- Double counting of saved Webcomic Matcher matches
+- Recursive call to Mgsisk\Webcomic\Compat\hook_get_post_prints_v4
 
 ## [5.0.0] – Phoenix Down (2018-01-21)
 
@@ -537,6 +551,7 @@
 
 > Initial public commit.
 
+[5.0.1]: https://github.com/mgsisk/webcomic/compare/v5.0.0...v5.0.1
 [5.0.0]: https://github.com/mgsisk/webcomic/compare/4.4.1...v5.0.0
 [4.4.1]: https://github.com/mgsisk/webcomic/compare/4.4...4.4.1
 [4.4]: https://github.com/mgsisk/webcomic/compare/4.3.3...4.4

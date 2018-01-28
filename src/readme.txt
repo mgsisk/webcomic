@@ -1,5 +1,5 @@
 === Webcomic ===
-Stable tag: 5.0.0
+Stable tag: 5.0.1
 Requires at least: 4.7
 Tested up to: 4.9.1
 Requires PHP: 7.0
@@ -77,6 +77,19 @@ If you're a friendly and knowledgable Webcomic user, please chime in and help ot
 == Changelog ==
 
 [Complete changelog](https://github.com/mgsisk/webcomic/blob/master/changelog.md)
+
+
+= 5.0.1 (2018-01-27) =
+
+**Changed**
+- Nginx fastcgi_read_timeout increased to 999 in test vagrant box
+- PHP post_max_size increased to 999M in test vagrant box
+- PHP memory_limit increased to 512M in test vagrant box
+- Adminer updated to 4.4.0 in test vagrant box
+
+**Fixed**
+- Double counting of saved Webcomic Matcher matches
+- Recursive call to Mgsisk\Webcomic\Compat\hook_get_post_prints_v4
 
 = 5.0.0 - Phoenix Down (2018-01-21) =
 > Refactored everything into a functional component-based architecture.
@@ -228,7 +241,7 @@ If you're a friendly and knowledgable Webcomic user, please chime in and help ot
 
 == Upgrade Notice ==
 
-= 5.0.0 =
+= 5.0.1 =
 Visit https://mgsisk.com/webcomic5 for important information about this version.
 
 == Special Thanks ==
