@@ -8,12 +8,12 @@
     <meta name="twitter:creator" content="@{{page.author.twitter}}">
     <meta name="twitter:card" content="summary">
     <meta property="og:type" content="website">
-    <meta property="og:site_name" content="{{site.title | markdownify}}">
-    <meta property="og:title" content="{{page.title | strip | markdownify}}">
+    <meta property="og:site_name" content="{{site.title | remove: '\' | smartify}}">
+    <meta property="og:title" content="{{page.title | strip | remove: '\' | smartify}}">
     <meta property="og:image" content="{{site.url}}{{site.baseurl}}/srv/{{page.image}}">
-    <meta property="og:url" content="{{site.url}}{{site.baseurl}}{{page.url | replace: '/index.html', ''}}">
+    <meta property="og:url" content="{{site.url}}{{site.baseurl}}{{page.url | remove: '/index.html'}}">
     <title>{{page.title | strip | markdownify}} / {{site.title}}</title>
-    <link rel="canonical" href="{{site.url}}{{site.baseurl}}{{page.url | replace: '/index.html', ''}}">
+    <link rel="canonical" href="{{site.url}}{{site.baseurl}}{{page.url | remove: '/index.html'}}">
     <link rel="icon" href="{{site.baseurl}}/srv/icon.jpg">
     <link rel="stylesheet" href="/srv/style.css">
     <link rel="stylesheet" href="{{site.baseurl}}/srv/colors.css">
@@ -29,7 +29,7 @@
       {{content}}
     </main>
     <nav id="nav">
-      <a href="/">{{site.url | replace: 'http://', '' | replace: 'https://', ''}}</a>
+      <a href="/">{{site.url | remove: 'http://' | remove: 'https://'}}</a>
       {%if site.data.projects%}
         <label>
           <span>Projects</span>
