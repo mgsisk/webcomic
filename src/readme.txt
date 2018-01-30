@@ -241,7 +241,6 @@ If you're a friendly and knowledgable Webcomic user, please chime in and help ot
 
 == Upgrade Notice ==
 
-= 5.0.1 =
 Visit https://mgsisk.com/webcomic5 for important information about this version.
 
 == Special Thanks ==
