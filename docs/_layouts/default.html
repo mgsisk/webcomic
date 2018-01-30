@@ -8,11 +8,11 @@
     <meta name="twitter:creator" content="@{{page.author.twitter}}">
     <meta name="twitter:card" content="summary">
     <meta property="og:type" content="website">
-    <meta property="og:site_name" content="{{site.title | smartify}}">
-    <meta property="og:title" content="{{page.title | strip | smartify}}">
+    <meta property="og:site_name" content="{{site.title | markdownify}}">
+    <meta property="og:title" content="{{page.title | strip | markdownify}}">
     <meta property="og:image" content="{{site.url}}{{site.baseurl}}/srv/{{page.image}}">
     <meta property="og:url" content="{{site.url}}{{site.baseurl}}{{page.url | replace: '/index.html', ''}}">
-    <title>{{page.title | strip | smartify}} / {{site.title}}</title>
+    <title>{{page.title | strip | markdownify}} / {{site.title}}</title>
     <link rel="canonical" href="{{site.url}}{{site.baseurl}}{{page.url | replace: '/index.html', ''}}">
     <link rel="icon" href="{{site.baseurl}}/srv/icon.jpg">
     <link rel="stylesheet" href="/srv/style.css">
