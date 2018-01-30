@@ -12,7 +12,7 @@
     <meta property="og:title" content="{{page.title | strip | remove: '\' | smartify}}">
     <meta property="og:image" content="{{site.url}}{{site.baseurl}}/srv/{{page.image}}">
     <meta property="og:url" content="{{site.url}}{{site.baseurl}}{{page.url | remove: '/index.html'}}">
-    <title>{{page.title | strip | markdownify}} / {{site.title}}</title>
+    <title>{{page.title | strip | smartify}} / {{site.title}}</title>
     <link rel="canonical" href="{{site.url}}{{site.baseurl}}{{page.url | remove: '/index.html'}}">
     <link rel="icon" href="{{site.baseurl}}/srv/icon.jpg">
     <link rel="stylesheet" href="/srv/style.css">
