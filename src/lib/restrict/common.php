@@ -177,8 +177,9 @@ function hook_comic_content( string $content ) : string {
  * @return string
  * @suppress PhanPluginAlwaysReturnFunction - Incorrectly triggered.
  */
-function hook_comic_comments( string $template ) : string {
-	$id = get_the_ID();
+function hook_comic_comments( $template ) : string {
+	$id       = get_the_ID();
+	$template = (string) $template;
 
 	if ( ! is_a_webcomic( $id ) ) {
 		return $template;
@@ -194,7 +195,7 @@ function hook_comic_comments( string $template ) : string {
 		 */
 		$template = apply_filters( 'webcomic_roles_required_comments', __DIR__ . '/common-inc-comments.php', $template );
 
-		return (string) $template;
+		return $template;
 	} elseif ( webcomic_age_required( $id ) ) {
 		/**
 		 * Alter the age restricted comments template path.
@@ -207,7 +208,7 @@ function hook_comic_comments( string $template ) : string {
 		 */
 		$template = apply_filters( 'webcomic_age_required_comments', __DIR__ . '/common-inc-comments.php', $template );
 
-		return (string) $template;
+		return $template;
 	}
 
 	return $template;
