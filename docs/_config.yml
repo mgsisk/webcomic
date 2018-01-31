@@ -13,6 +13,7 @@ defaults:
         name: Michael Sisk
         twitter: mgsisk
 include:
+  - _api
   - _pages
 exclude:
   - Gemfile
