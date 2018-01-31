@@ -83,12 +83,12 @@ function bulid_file( string $block, array $comment ) : string {
 	}
 
   $title   = str_replace( '-', ' ', $comment['file'] );
-  $title   = preg_replace( '/^(.+)__$/', '\[$1\]', $comment['file'] );
+  $title   = preg_replace( '/^(.+)__$/', '\[$1\]', $title );
   $output  = "---\ntitle: {$title}\npermalink: {$comment['file']}\n---\n\n";
 	$output .= '> ' . $comment['summary'];
 
 	if ( 'widget' === $block ) {
-		$output .= "\n\n[![The {$comment['id']} widget.](srv/{$comment['file']}.png )](srv/{$comment['file']}.png)";
+		$output .= "\n\n[![The {$comment['id']} widget.](srv/{$comment['file']}.png)](srv/{$comment['file']}.png)";
 	} else {
 		$output .= "\n\n```php\n{$block}\n```";
 		$output .= rtrim( "\n\n{$comment['description']}" );
@@ -205,7 +205,7 @@ function get_shortcode_block( array $comment, array $tokens, int $key ) : string
 		$content = $comment['tags']['param']['$content']['description'];
 
 		if ( preg_match( '/\s+is\s+(for\s+)a\s+/', $content ) && preg_match( '/_(first|previous|next|last|random)_/', $comment['id'], $match ) ) {
-			$content = preg_replace( '/\s+is\s+( for\s+ )?a( \s+ )/', ' is $1the ' . $match[1] . '$2', $content );
+			$content = preg_replace( '/\s+is\s+(for\s+)?a(\s+)/', ' is $1the ' . $match[1] . '$2', $content );
 		}
 
 		$block .= $content . '[/' . $comment['id'] . ']';
