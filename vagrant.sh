@@ -487,7 +487,7 @@ if ! stat -c '%U' wp-config.php | grep -q 'vagrant'; then
   find . -exec chown vagrant {} \; &>/dev/null
 fi
 
-if [ ! -e wp-content/plugins/webcomic ]; then
+if [ ! -e wp-content/plugins/webcomic-dev ]; then
   printf 'Updating WordPress project directory link'
   ln -fs /vagrant/src wp-content/plugins/webcomic-dev
 fi
