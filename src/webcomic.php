@@ -16,21 +16,17 @@
 namespace Mgsisk\Webcomic;
 
 if ( version_compare( PHP_VERSION, '7', '<' ) ) {
-	add_filter( 'admin_notices', function() {
+	return add_filter( 'admin_notices', function() {
 		echo '<div class="notice notice-error is-dismissible"><p>' . esc_html__( 'Webcomic requires PHP 7 or later.', 'webcomic' ) . '</p></div>';
 
 		deactivate_plugins( [ plugin_basename( __FILE__ ) ] );
 	} );
-
-	return;
 } elseif ( version_compare( get_bloginfo( 'version' ), '4.7', '<' ) ) {
-	add_filter( 'admin_notices', function() {
+	return add_filter( 'admin_notices', function() {
 		echo '<div class="notice notice-error is-dismissible"><p>' . esc_html__( 'Webcomic requires WordPress 4.7 or later.', 'webcomic' ) . '</p></div>';
 
 		deactivate_plugins( [ plugin_basename( __FILE__ ) ] );
 	} );
-
-	return;
 } elseif ( function_exists( 'webcomic' ) ) {
 	return; // NOTE For compatibility with Inkblot 4.
 }
