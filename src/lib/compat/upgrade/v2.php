@@ -176,7 +176,7 @@ function v2_alert( array &$options, array $plugin ) {
 }
 
 /**
- * Update storyline options and add Webcomic 2 chapter conversion filters.
+ * Update storyline options and convert Webcomic 2 chapters.
  *
  * @param array   $options The Webcomic 5 collection options array.
  * @param string  $collection The collection to check for storylines.
@@ -191,6 +191,18 @@ function v2_storyline( array &$options, string $collection, WP_Term $category ) 
 		'storyline_hierarchical'      => true,
 		'storyline_hierarchical_skip' => false,
 	];
+
+	$table = webcomic( 'GLOBALS.wpdb' )->term_taxonomy;
+	$terms = webcomic( 'GLOBALS.wpdb' )->get_col( "SELECT term_id from {$table} where taxonomy = 'chapter' and parent = {$category->term_id}" );
+	$order = 1;
+
+	webcomic( 'GLOBALS.wpdb' )->query( "UPDATE {$table} set taxonomy = '{$collection}_storyline', parent = 0 where taxonomy = 'chapter' and parent = {$category->term_id}" );
+
+	foreach ( $terms as $term ) {
+		update_term_meta( $term, 'webcomic_order', $order );
+
+		$order++;
+	}
 }
 
 /**
