@@ -29,7 +29,7 @@ class WebcomicLoad extends WP_UnitTestCase {
 
 		add_option(
 			'webcomic', [
-				'version' => '5.0.1',
+				'version' => '5.0.2',
 			]
 		);
 	}
