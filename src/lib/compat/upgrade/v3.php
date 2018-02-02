@@ -88,7 +88,7 @@ function v3_collections( array $options ) {
 		];
 
 		v3_alert( $collection_options, $options );
-		v3_character( $collection_options, $collection, $increment );
+		v3_character( $collection_options, $collection, $term );
 		v3_commerce( $collection_options, $options, $meta['paypal'] );
 		v3_storyline( $collection_options, $collection, $increment );
 		v3_restrict( $collection_options, $options, $term, (bool) $meta['restrict'] );
@@ -121,19 +121,34 @@ function v3_alert( array &$options, array $plugin ) {
 /**
  * Update character options and add Webcomci 3 character conversion filters.
  *
- * @param array  $options The Webcomic 5 collection options array.
- * @param string $collection The collection to check for characters.
- * @param int    $increment The current collection increment.
+ * @param array   $options The Webcomic 5 collection options array.
+ * @param string  $collection The collection to check for characters.
+ * @param WP_Term $collection_term The collection object.
  * @return void
  */
-function v3_character( array &$options, string $collection, int $increment ) {
+function v3_character( array &$options, string $collection, WP_Term $collection_term ) {
 	$options += [
-		'character_slug'              => "untitled-comic-{$increment}-character",
+		'character_slug'              => "{$collection_term->slug}-character",
 		'character_sort'              => true,
 		'character_crossovers'        => false,
 		'character_hierarchical'      => true,
 		'character_hierarchical_skip' => false,
 	];
+
+	$table_terms    = webcomic( 'GLOBALS.wpdb' )->terms;
+	$table_taxonomy = webcomic( 'GLOBALS.wpdb' )->term_taxonomy;
+	$terms          = webcomic( 'GLOBALS.wpdb' )->get_col( "SELECT term_id from {$table_terms} join {$table_taxonomy} on {$table_terms}.term_id = {$table_taxonomy}.term_id and {$table_taxonomy}.taxonomy = 'webcomic_character' where term_group = {$collection_term->term_id}" );
+	$term_ids       = implode( ',', array_filter( array_map( 'intval', $terms ) ) );
+	$order          = 1;
+
+	webcomic( 'GLOBALS.wpdb' )->query( "UPDATE {$table_terms} set term_group = 0 where term_id in ({$term_ids})" );
+	webcomic( 'GLOBALS.wpdb' )->query( "UPDATE {$table_taxonomy} set taxonomy = '{$collection}_character' where taxonomy = 'webcomic_character' and term_id in ({$term_ids})" );
+
+	foreach ( $terms as $term ) {
+		update_term_meta( $term, 'webcomic_order', $order );
+
+		$order++;
+	}
 }
 
 /**
