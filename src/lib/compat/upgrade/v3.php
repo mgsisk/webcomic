@@ -59,18 +59,22 @@ function v3() {
  * @return void
  */
 function v3_collections( array $options ) {
+	register_taxonomy( 'webcomic_collection', 'post' );
+
 	$increment   = 1;
 	$collections = [];
 
 	foreach ( $options['term_meta']['collection'] as $id => $meta ) {
+		$term = get_term( $id, 'webcomic_collection' );
+
 		$collection         = "webcomic{$increment}";
 		$collections[]      = $collection;
 		$collection_options = [
 			'id'                => $collection,
-			'name'              => __( 'Untitled Comic', 'webcomic' ),
-			'slug'              => "untitled-comic-{$increment}",
-			'permalink'         => "untitled-comic-{$increment}",
-			'description'       => '',
+			'name'              => $term->name,
+			'slug'              => $term->slug,
+			'permalink'         => $term->slug,
+			'description'       => $term->description,
 			'media'             => 0,
 			'theme'             => $meta['theme'] . '|' . $meta['theme'],
 			'archive_date'      => true,
