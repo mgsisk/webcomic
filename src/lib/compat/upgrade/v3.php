@@ -90,8 +90,8 @@ function v3_collections( array $options ) {
 		v3_alert( $collection_options, $options );
 		v3_character( $collection_options, $collection, $increment );
 		v3_commerce( $collection_options, $options, $meta['paypal'] );
-		v3_restrict( $collection_options, $options, (int) $id, (bool) $meta['restrict'] );
 		v3_storyline( $collection_options, $collection, $increment );
+		v3_restrict( $collection_options, $options, $term, (bool) $meta['restrict'] );
 		v3_transcribe( $collection_options, $options );
 
 		update_option( $collection, $collection_options );
@@ -186,16 +186,16 @@ function v3_commerce( array &$options, array $plugin, array $collection ) {
 /**
  * Update restrict options.
  *
- * @param array $options The Webcomic 5 collection options array.
- * @param array $plugin The plugin options array.
- * @param int   $collection The current collection term ID.
- * @param bool  $restrict_roles Wether to require users to login to view posts.
+ * @param array   $options The Webcomic 5 collection options array.
+ * @param array   $plugin The plugin options array.
+ * @param WP_Term $collection The current collection object.
+ * @param bool    $restrict_roles Wether to require users to login to view posts.
  * @return void
  */
-function v3_restrict( array &$options, array $plugin, int $collection, bool $restrict_roles ) {
+function v3_restrict( array &$options, array $plugin, WP_Term $collection, bool $restrict_roles ) {
 	$table    = webcomic( 'GLOBALS.wpdb' )->terms;
 	$options += [
-		'restrict_age'            => (int) webcomic( 'GLOBALS.wpdb' )->get_col( "SELECT term_group from {$table} where term_id = {$collection}" ),
+		'restrict_age'            => (int) webcomic( 'GLOBALS.wpdb' )->get_col( "SELECT term_group from {$table} where term_id = {$collection->term_id}" ),
 		'restrict_age_media'      => 0,
 		'restrict_roles'          => [],
 		'restrict_roles_media'    => 0,
