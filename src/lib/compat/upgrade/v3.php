@@ -90,8 +90,8 @@ function v3_collections( array $options ) {
 		v3_alert( $collection_options, $options );
 		v3_character( $collection_options, $collection, $term );
 		v3_commerce( $collection_options, $options, $meta['paypal'] );
-		v3_storyline( $collection_options, $collection, $increment );
 		v3_restrict( $collection_options, $options, $term, (bool) $meta['restrict'] );
+		v3_storyline( $collection_options, $collection, $term );
 		v3_transcribe( $collection_options, $options );
 
 		update_option( $collection, $collection_options );
@@ -229,19 +229,34 @@ function v3_restrict( array &$options, array $plugin, WP_Term $collection, bool 
 /**
  * Update storyline options and add Webcomci 3 storyline conversion filters.
  *
- * @param array  $options The Webcomic 5 collection options array.
- * @param string $collection The collection to check for storylines.
- * @param int    $increment The current collection increment.
+ * @param array   $options The Webcomic 5 collection options array.
+ * @param string  $collection The collection to check for characters.
+ * @param WP_Term $collection_term The collection object.
  * @return void
  */
-function v3_storyline( array &$options, string $collection, int $increment ) {
+function v3_storyline( array &$options, string $collection, WP_Term $collection_term ) {
 	$options += [
-		'storyline_slug'              => "untitled-comic-{$increment}-storyline",
+		'storyline_slug'              => "{$collection_term->slug}-storyline",
 		'storyline_sort'              => true,
 		'storyline_crossovers'        => false,
 		'storyline_hierarchical'      => true,
 		'storyline_hierarchical_skip' => false,
 	];
+
+	$table_terms    = webcomic( 'GLOBALS.wpdb' )->terms;
+	$table_taxonomy = webcomic( 'GLOBALS.wpdb' )->term_taxonomy;
+	$terms          = webcomic( 'GLOBALS.wpdb' )->get_col( "SELECT term_id from {$table_terms} join {$table_taxonomy} on {$table_terms}.term_id = {$table_taxonomy}.term_id and {$table_taxonomy}.taxonomy = 'webcomic_storyline' where term_group = {$collection_term->term_id}" );
+	$term_ids       = implode( ',', array_filter( array_map( 'intval', $terms ) ) );
+	$order          = 1;
+
+	webcomic( 'GLOBALS.wpdb' )->query( "UPDATE {$table_terms} set term_group = 0 where term_id in ({$term_ids})" );
+	webcomic( 'GLOBALS.wpdb' )->query( "UPDATE {$table_taxonomy} set taxonomy = '{$collection}_storyline' where taxonomy = 'webcomic_storyline' and term_id in ({$term_ids})" );
+
+	foreach ( $terms as $term ) {
+		update_term_meta( $term, 'webcomic_order', $order );
+
+		$order++;
+	}
 }
 
 /**
