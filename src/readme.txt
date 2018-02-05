@@ -1,5 +1,5 @@
 === Webcomic ===
-Stable tag: 5.0.2
+Stable tag: 5.0.3
 Requires at least: 4.7
 Tested up to: 4.9.2
 Requires PHP: 7.0
@@ -78,15 +78,11 @@ If you're a friendly and knowledgable Webcomic user, please chime in and help ot
 
 [Complete changelog](https://github.com/mgsisk/webcomic/blob/master/changelog.md)
 
-= 5.0.2 (2018-02-01) =
-
-**Changed**
-- PHP and WordPress dependencies now fail gracefully
+= 5.0.3 (2018-02-04) =
 
 **Fixed**
-- Overly-restrictive argument type on `Mgsisk\Webcomic\Restrict\hook_comic_comments()`
-- v3 upgrades not using collection term details
-- v1, v2, and v3 upgrades not converting storylines and characters
+- Missing default value for `webcomic_integrate_archive_preview`
+- Default `orderby` value on term list shortcodes
 
 = 5.0.0 - Phoenix Down (2018-01-21) =
 > Refactored everything into a functional component-based architecture.
@@ -238,6 +234,7 @@ If you're a friendly and knowledgable Webcomic user, please chime in and help ot
 
 == Upgrade Notice ==
 
+= 5.0.3 =
 Visit https://mgsisk.com/webcomic5 for important information about this version.
 
 == Special Thanks ==

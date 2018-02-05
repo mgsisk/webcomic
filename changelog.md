@@ -12,6 +12,12 @@
 - Investigate setting a primary site collection, is_* rules for non-primary
   collection (per-landing page? Front page theme resolution?)
 
+## [5.0.3] (2018-02-04)
+
+### Fixed
+- Missing default value for `webcomic_integrate_archive_preview`
+- Default `orderby` value on term list shortcodes
+
 ## [5.0.2] (2018-02-01)
 
 ### Changed
@@ -563,6 +569,7 @@
 
 > Initial public commit.
 
+[5.0.3]: https://github.com/mgsisk/webcomic/compare/v5.0.2...v5.0.3
 [5.0.2]: https://github.com/mgsisk/webcomic/compare/v5.0.1...v5.0.2
 [5.0.1]: https://github.com/mgsisk/webcomic/compare/v5.0.0...v5.0.1
 [5.0.0]: https://github.com/mgsisk/webcomic/compare/4.4.1...v5.0.0
