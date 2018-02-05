@@ -492,7 +492,7 @@ function webcomic_terms_list_shortcode( $atts, string $content, string $name ) :
 			'link'            => '%title',
 			'object_ids'      => null,
 			'order'           => 'asc',
-			'orderby'         => 'name',
+			'orderby'         => '',
 			'start_el'        => '',
 			'start_lvl'       => '',
 			'start'           => '',
@@ -511,6 +511,10 @@ function webcomic_terms_list_shortcode( $atts, string $content, string $name ) :
 
 	if ( $content ) {
 		$args['link'] = do_shortcode( htmlspecialchars_decode( $content ) );
+	}
+
+	if ( ! $args['orderby'] ) {
+		unset( $args['orderby'] );
 	}
 
 	if ( is_string( $args['link_args'] ) ) {
