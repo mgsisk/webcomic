@@ -21,7 +21,7 @@ If you enjoy real-time interaction you may prefer the Discord Server over the
 Support Forum. The Discord Server provides both public and [patron-only]
 channels.
 
-## [Issue Tracker ![Issues shield][img-issues]][url-issues]
+## [Issue Tracker ![Issues shield][img-issues] ![Issues wait shield][img-issues-close]][url-issues]
 
 If you've found a bug in Webcomic or want to suggest a new feature you should
 file an issue in the Issue Tracker. The Issue Tracker is for discussing
@@ -35,6 +35,7 @@ response isn't guaranteed, but Mike does his best to answer questions as he can.
 
 [img-discord]: https://img.shields.io/discord/361857773874446339.svg?style=flat-square
 [img-issues]: https://img.shields.io/github/issues/mgsisk/webcomic.svg?style=flat-square
+[img-issues-close]: https://img.shields.io/issuestats/i/github/mgsisk/webcomic.svg?style=for-the-badge
 [url-discord]: https://discord.gg/TNTfzzg
 [url-issues]: https://github.com/mgsisk/webcomic/issues
 [User Guide]: https://github.com/mgsisk/webcomic/wiki
