@@ -4,7 +4,7 @@
 
 [![Stable tag 5.0.3][img-stable]][url-stable]
 [![Requires WordPress 4.7][img-requires]][url-requires]
-[![Tested up to WordPress 4.9.1][img-tested]][url-tested]
+[![Tested up to WordPress 4.9.4][img-tested]][url-tested]
 [![Requires PHP 7.0][img-php]][url-php]
 [![Licensed under GPL-2.0+][img-license]][url-license]
 [![Support development][img-donate]][url-donate]
