@@ -1,5 +1,5 @@
 === Webcomic ===
-Stable tag: 5.0.3
+Stable tag: 5.0.4
 Requires at least: 4.7
 Tested up to: 4.9.4
 Requires PHP: 7.0
@@ -78,11 +78,16 @@ If you're a friendly and knowledgable Webcomic user, please chime in and help ot
 
 [Complete changelog](https://github.com/mgsisk/webcomic/blob/master/changelog.md)
 
-= 5.0.3 (2018-02-04) =
+= 5.0.4 (2018-02-07) =
+
+**Changed**
+- Adminer updated to 4.6.0 in test vagrant box
+- Media manager close button styling
 
 **Fixed**
-- Missing default value for `webcomic_integrate_archive_preview`
-- Default `orderby` value on term list shortcodes
+- `webcomic_media()` format for the Webcomic Media meta box
+- Empty size for `get_webcomic_media()` with certain `$format` arguments
+- Remove media links always removing the last media item
 
 = 5.0.0 - Phoenix Down (2018-01-21) =
 > Refactored everything into a functional component-based architecture.
@@ -234,7 +239,7 @@ If you're a friendly and knowledgable Webcomic user, please chime in and help ot
 
 == Upgrade Notice ==
 
-= 5.0.3 =
+= 5.0.4 =
 Visit https://mgsisk.com/webcomic5 for important information about this version.
 
 == Special Thanks ==

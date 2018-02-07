@@ -12,7 +12,21 @@
 - Investigate setting a primary site collection, is_* rules for non-primary
   collection (per-landing page? Front page theme resolution?)
 
+## [5.0.4] (2018-02-07)
+
+### Changed
+- Adminer updated to 4.6.0 in test vagrant box
+- Media manager close button styling
+
+### Fixed
+- `webcomic_media()` format for the Webcomic Media meta box
+- Empty size for `get_webcomic_media()` with certain `$format` arguments
+- Remove media links always removing the last media item
+
 ## [5.0.3] (2018-02-04)
+
+### Changed
+- Adminer updated to 4.5.0 in test vagrant box
 
 ### Fixed
 - Missing default value for `webcomic_integrate_archive_preview`
@@ -569,6 +583,7 @@
 
 > Initial public commit.
 
+[5.0.4]: https://github.com/mgsisk/webcomic/compare/v5.0.3...v5.0.4
 [5.0.3]: https://github.com/mgsisk/webcomic/compare/v5.0.2...v5.0.3
 [5.0.2]: https://github.com/mgsisk/webcomic/compare/v5.0.1...v5.0.2
 [5.0.1]: https://github.com/mgsisk/webcomic/compare/v5.0.0...v5.0.1
