@@ -75,6 +75,8 @@
 				return;
 			}
 
+			media = media.map( ( id )=> parseInt( id ) );
+
 			getMediaManager( element, media, multiple, JSON.parse( xhr.responseText ) );
 		};
 		xhr.open( 'POST', ajaxurl );
@@ -114,8 +116,6 @@
 				event.preventDefault();
 
 				const index = media.indexOf( Number( anchors[ i ].parentNode.getAttribute( 'data-id' ) ) );
-
-				console.log( index );
 
 				media.splice( index, 1 );
 
