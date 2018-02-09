@@ -41,7 +41,7 @@ echo $args['account']; // WPCS: xss ok.
 <p class="post-attributes-label-wrapper">
 	<label for="webcomic_twitter_status" class="post-attributes-label"><?php esc_html_e( 'Status', 'webcomic' ); ?></label>
 </p>
-<p><input type="text" id="webcomic_twitter_status" name="webcomic_twitter_status" value="<?php echo esc_attr( $args['option_status'] ); ?>" style="width:100%;"></p>
+<p><input type="text" id="webcomic_twitter_status" name="webcomic_twitter_status" value="<?php echo esc_attr( $args['option_status'] ); ?>" class="large-text"></p>
 <div data-input="webcomic_twitter_status_media" data-webcomic-media-manager>
 	<?php $args['option_status_media'] && printf( '%s', wp_get_attachment_image( $args['option_status_media'], 'medium' ) ); ?>
 	<noscript><?php esc_html_e( 'Media management requires JavaScript.', 'webcomic' ); ?></noscript>
