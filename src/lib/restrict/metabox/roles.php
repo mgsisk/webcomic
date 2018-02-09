@@ -99,7 +99,7 @@ function hook_add_box_roles( string $type ) {
 	}
 
 	add_meta_box(
-		str_replace( '\\', '_', __NAMESPACE__ ),
+		str_replace( '\\', '_', __NAMESPACE__ ) . 'Roles',
 		__( 'Webcomic Role Restrictions', 'webcomic' ),
 		function( $post ) {
 			$args = [
