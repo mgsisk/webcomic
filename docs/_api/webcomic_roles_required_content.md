@@ -3,7 +3,7 @@ title: webcomic_roles_required_content
 permalink: webcomic_roles_required_content
 ---
 
-> Alter the standard role restricted content.
+> Alter the standard roles restricted content.
 
 ```php
 apply_filters( 'webcomic_roles_required_content', string $content, int $id )
