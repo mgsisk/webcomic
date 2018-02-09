@@ -88,7 +88,7 @@ if ( ! isset( $args ) ) {
 			</td>
 			<td class="desc">
 				<div class="plugin-description">
-					<p><?php esc_html_e( 'Restrict adds features for restricting access to comics based on age or user role.', 'webcomic' ); ?></p>
+					<p><?php esc_html_e( 'Restrict adds features for restricting access to comics based on age, referrer, or user role.', 'webcomic' ); ?></p>
 				</div>
 			</td>
 		</tr>

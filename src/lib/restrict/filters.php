@@ -56,6 +56,8 @@ function hook_get_webcomic_url( string $url, WP_Post $comic, array $args, $post 
 function hook_get_post_meta_restrict_media( $meta, $id, $key, $single ) {
 	if ( 'webcomic_media' !== $key || ! is_a_webcomic( $id ) ) {
 		return $meta;
+	} elseif ( webcomic_referrers_required( $id ) ) {
+		return get_post_meta( $id, 'webcomic_restrict_referrers_media' );
 	} elseif ( webcomic_roles_required( $id ) ) {
 		return get_post_meta( $id, 'webcomic_restrict_roles_media' );
 	} elseif ( webcomic_age_required( $id ) ) {

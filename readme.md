@@ -48,7 +48,7 @@ template tags, and widgets. Take your online comic publishing even further with:
   character-based archives.
 - **Commerce**, which adds PayPal-based print selling and donation features.
 - **Restrict**, which adds features for restricting access to comics based on
-  age or user role.
+  age, referrer, or user role.
 - **Storyline**, which allows you to organize comics by storyline and use
   storyline-based archives.
 - **Transcribe**, which adds comic transcription features for SEO-enhancing

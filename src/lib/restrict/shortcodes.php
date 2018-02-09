@@ -15,6 +15,7 @@ namespace Mgsisk\Webcomic\Restrict;
 function shortcodes() {
 	add_shortcode( 'webcomic_age', __NAMESPACE__ . '\webcomic_age_shortcode' );
 	add_shortcode( 'webcomic_age_required', __NAMESPACE__ . '\webcomic_age_required_shortcode' );
+	add_shortcode( 'webcomic_referrers_required', __NAMESPACE__ . '\webcomic_referrers_required_shortcode' );
 	add_shortcode( 'webcomic_roles_required', __NAMESPACE__ . '\webcomic_roles_required_shortcode' );
 }
 
@@ -79,6 +80,40 @@ function webcomic_age_required_shortcode( $atts, string $content, string $name )
 
 	return do_shortcode( $content );
 }
+
+/**
+ * Display content if a user was referred from a valid URL.
+ *
+ * @uses webcomic_referrers_required()
+ * @param array  $atts {
+ *     Optional attributes.
+ *
+ *     @type mixed $post Optional post to check.
+ *     @type array $args Optional arguments.
+ * }
+ * @param string $content Content to display if a user came from a valid URL.
+ * @param string $name Shortcode name.
+ * @return string
+ */
+function webcomic_referrers_required_shortcode( $atts, string $content, string $name ) : string {
+	$args = shortcode_atts(
+		[
+			'post' => null,
+			'args' => [],
+		], $atts, $name
+	);
+
+	if ( is_string( $args['args'] ) ) {
+		parse_str( htmlspecialchars_decode( $args['args'] ), $args['args'] );
+	}
+
+	if ( webcomic_referrers_required( $args['post'], $args['args'] ) ) {
+		return '';
+	}
+
+	return do_shortcode( $content );
+}
+
 
 /**
  * Display content if a user has a required role.
