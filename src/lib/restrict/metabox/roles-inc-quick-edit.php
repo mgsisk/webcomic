@@ -18,16 +18,7 @@ wp_nonce_field( $args['nonce'], $args['nonce'] );
 <fieldset class="inline-edit-col-left">
 	<div class="inline-edit-col">
 		<span class="title">
-			<?php
-			$title = __( 'Roles', 'webcomic' );
-
-
-			if ( $args['bulk'] ) :
-				$title = __( 'Roles to Add', 'webcomic' );
-			endif;
-
-			echo esc_html( $title );
-			?>
+			<?php echo esc_html( $args['title'] ); ?>
 		</span>
 		<ul class="cat-checklist category-checklist webcomic-restrict-roles-checklist">
 			<li>

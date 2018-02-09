@@ -131,8 +131,13 @@ function hook_add_quick_edit_roles( string $column, string $type ) {
 	$args = [
 		'file'  => __DIR__ . '/roles-inc-quick-edit.php',
 		'bulk'  => false !== strpos( current_filter(), 'bulk' ),
+		'title' => __( 'Roles', 'webcomic' ),
 		'nonce' => __NAMESPACE__ . 'RolesNonce',
 	];
+
+	if ( $args['bulk'] ) {
+		$args['title'] = __( 'Roles to Add', 'webcomic' );
+	}
 
 	require $args['file'];
 }
