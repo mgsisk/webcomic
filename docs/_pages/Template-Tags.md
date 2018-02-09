@@ -152,9 +152,11 @@ These template tags are available with the Commerce component.
 These template tags are available with the Restrict component.
 
 - [get_webcomic_age()](get_webcomic_age())
+- [get_webcomic_referrers()](get_webcomic_referrers())
 - [get_webcomic_roles()](get_webcomic_roles())
 - [webcomic_age_required()](webcomic_age_required())
 - [webcomic_age()](webcomic_age())
+- [webcomic_referrers_required()](webcomic_referrers_required())
 - [webcomic_roles_required()](webcomic_roles_required())
 
 ## Storyline template tags

@@ -51,6 +51,8 @@ These filters are available with the Restrict component.
 
 - [webcomic_age_required_comments](webcomic_age_required_comments)
 - [webcomic_age_required_content](webcomic_age_required_content)
+- [webcomic_referrers_required_comments](webcomic_referrers_required_comments)
+- [webcomic_referrers_required_content](webcomic_referrers_required_content)
 - [webcomic_roles_required_comments](webcomic_roles_required_comments)
 - [webcomic_roles_required_content](webcomic_roles_required_content)
 
