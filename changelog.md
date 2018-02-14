@@ -12,6 +12,17 @@
 - Investigate setting a primary site collection, is_* rules for non-primary
   collection (per-landing page? Front page theme resolution?)
 
+## [5.0.5] (2018-02-14)
+
+### Changed
+- Log viewer plugin is no longer activated by default in the test vagrant box
+- Media tokens are now replaced with an empty string if no media exists
+
+### Fixed
+- Empty Twitter status saving
+- Meta box ID for Webcomic Role Restrictions
+- Term object check for media states
+
 ## [5.0.4] (2018-02-07)
 
 ### Changed
@@ -583,6 +594,7 @@
 
 > Initial public commit.
 
+[5.0.5]: https://github.com/mgsisk/webcomic/compare/v5.0.4...v5.0.5
 [5.0.4]: https://github.com/mgsisk/webcomic/compare/v5.0.3...v5.0.4
 [5.0.3]: https://github.com/mgsisk/webcomic/compare/v5.0.2...v5.0.3
 [5.0.2]: https://github.com/mgsisk/webcomic/compare/v5.0.1...v5.0.2

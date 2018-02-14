@@ -2,7 +2,7 @@
 
 <img src="assets/icon-256x256.png" align="right" width="96">
 
-[![Stable tag 5.0.4][img-stable]][url-stable]
+[![Stable tag 5.0.5][img-stable]][url-stable]
 [![Requires WordPress 4.7][img-requires]][url-requires]
 [![Tested up to WordPress 4.9.4][img-tested]][url-tested]
 [![Requires PHP 7.0][img-php]][url-php]
