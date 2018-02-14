@@ -462,6 +462,7 @@ done
 for plugin in "${plugins[@]}"; do
   if [ "$plugin" = 'akismet' ]; then continue; fi
   if [ "$plugin" = 'hello' ]; then continue; fi
+  if [ "$plugin" = 'log-viewer' ]; then continue; fi
   if [ "$plugin" = 'piglatin' ]; then continue; fi
 
   if ! wp --allow-root plugin status "$plugin" | grep -q 'Status: Network Active'; then
