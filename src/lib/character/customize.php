@@ -7,8 +7,6 @@
 
 namespace Mgsisk\Webcomic\Character;
 
-use WP_Query;
-
 /**
  * Add customize hooks.
  *

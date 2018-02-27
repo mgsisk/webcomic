@@ -7,8 +7,6 @@
 
 namespace Mgsisk\Webcomic\Collection;
 
-use WP_Post;
-
 /**
  * Add settings hooks.
  *

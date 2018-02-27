@@ -7,8 +7,6 @@
 
 namespace Mgsisk\Webcomic\Storyline;
 
-use WP_Query;
-
 /**
  * Add customize hooks.
  *

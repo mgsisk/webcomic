@@ -213,7 +213,6 @@ function get_webcomic_term_updated( string $format = '', $term = null, array $ar
  * @param mixed $post Optional reference post.
  * @param array $post_args Optional post arguments.
  * @return string
- * @suppress PhanPluginAlwaysReturnFunction - Incorrectly triggered.
  */
 function get_webcomic_term_url( $term = null, array $args = [], $post = null, array $post_args = [] ) : string {
 	$comic_term = get_webcomic_term( $term, $args );

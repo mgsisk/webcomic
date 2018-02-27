@@ -7,8 +7,6 @@
 
 namespace Mgsisk\Webcomic\Plugin;
 
-use WP_Screen;
-
 /**
  * Add plugin settings hooks.
  *

@@ -504,7 +504,6 @@ function util_generate_comics( string $collection, $now, array $media, array $pu
  * @param array  $publish_every The days to publish generated comics.
  * @return string
  * @internal For hook_generate_comics().
- * @suppress PhanPluginAlwaysReturnFunction - Incorrectly triggered.
  */
 function util_validate_generator_data( string $collection, $now, array $media, array $publish_every ) : string {
 	if ( ! webcomic_collection_exists( $collection ) ) {

@@ -7,8 +7,6 @@
 
 namespace Mgsisk\Webcomic\Commerce\MetaBox;
 
-use WP_Post;
-
 /**
  * Add prints metabox hooks.
  *

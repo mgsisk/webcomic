@@ -7,8 +7,6 @@
 
 namespace Mgsisk\Webcomic\Transcribe\MetaBox;
 
-use WP_Screen;
-
 /**
  * Add transcripts metabox hooks.
  *
