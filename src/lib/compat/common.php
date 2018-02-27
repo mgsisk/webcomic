@@ -48,6 +48,7 @@ function common() {
  * @param string  $format The status format.
  * @param WP_Post $post The current post object.
  * @return array
+ * @suppress PhanTypeArraySuspiciousNullable - Incorrectly triggered.
  * @SuppressWarnings(PHPMD.NPathComplexity) - Required for compatibility.
  * @SuppressWarnings(PHPMD.ExcessiveMethodLength) - Required for compatibility.
  * @codingStandardsIgnoreStart Generic.Metrics.NestingLevel.TooHigh, Generic.Metrics.CyclomaticComplexity.MaxExceeded - Required for compatibility.
