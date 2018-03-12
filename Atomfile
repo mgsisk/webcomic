@@ -36,5 +36,6 @@ pigments
 platformio-ide-terminal
 sort-lines
 split-diff
+sync-settings
 teletype
 todo-show
