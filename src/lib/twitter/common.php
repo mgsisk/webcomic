@@ -541,8 +541,7 @@ function util_api_request( string $method, string $endpoint, array $args ) : arr
  * @param array $response The response to parse.
  * @return array
  * @internal For util_api_request().
- * @suppress PhanTypeMismatchForeach - $output['body']['errors'] incorrectly triggers this.
- * @suppress PhanTypeMismatchDimFetch - $output['body']['errors'] incorrectly triggers this.
+ * @suppress PhanTypeArraySuspiciousNullable - $output['body']['errors'] incorrectly triggers this.
  */
 function util_api_response( array $response ) : array {
 	$output = [

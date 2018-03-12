@@ -167,7 +167,7 @@ function hook_create_new_collection() {
 	 *
 	 * @param array $defaults The default collection settings.
 	 */
-	$options = apply_filters(
+	$options                         = apply_filters(
 		'webcomic_new_collection', [
 			'id'          => "webcomic{$id}",
 			// Translators: Custom post type increment number.

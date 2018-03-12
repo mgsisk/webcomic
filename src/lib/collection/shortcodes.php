@@ -361,6 +361,7 @@ function webcomic_infinite_link_shortcode( $atts, string $content, string $name 
  * @param string $content Optional shortcode content; mapped to $args['link'].
  * @param string $name Shortcode name.
  * @return string
+ * @suppress PhanTypeMismatchDimFetch - Array access to $args['link'] incorrectly triggers this.
  */
 function webcomic_link_shortcode( $atts, string $content, string $name ) : string {
 	if ( isset( $atts['format'] ) || isset( $atts['in_same_term'] ) || isset( $atts['excluded_terms'] ) || isset( $atts['taxonomy'] ) || isset( $atts['collection'] ) || isset( $atts['the_post'] ) || isset( $atts['cache'] ) ) {

@@ -167,6 +167,8 @@ class TermLister extends Walker {
 	 * @param array   $args The list arguments.
 	 * @param int     $depth The current list depth.
 	 * @return string
+	 * @suppress PhanTypeComparisonToArray - $args['webcomics']['post_type'] incorrectly triggers this.
+	 * @suppress PhanTypeInvalidDimOffset - $args['webcomics']['post_type'] incorrectly triggers this.
 	 */
 	protected function get_webcomics_list( string $item, WP_Term $comic_term, array $args, int $depth ) : string {
 		if ( -1 < $args['webcomics_depth'] && $depth !== $args['webcomics_depth'] ) {
