@@ -2130,7 +2130,7 @@ class WebcomicTag {
 			$args['format'] = str_replace( 'ul', 'ol', $args['format'] );
 		}
 
-		$args['format'] = $args['before'] . $args['format'] . $args['after'];
+		$args['format'] = $old_args['before'] . $args['format'] . $old_args['after'];
 
 		if ( $old_args['show_count'] ) {
 			$args['link'] = str_replace( '%title', '%title (%count)', $args['link'] );
@@ -2283,7 +2283,7 @@ class WebcomicTag {
 			$args['format'] = str_replace( [ '<ul id', '<li>{{', '{{</li><li>}}', '}}</li></ul>' ], [ '<div id', '{{', "{{{$old_args['sep']}}}", '}}</div>' ], $args['format'] );
 		}
 
-		$args['format'] = $args['before'] . $args['format'] . $args['after'];
+		$args['format'] = $old_args['before'] . $args['format'] . $old_args['after'];
 
 		if ( $old_args['image'] ) {
 			$args['link'] = "%{$old_args['image']}";
