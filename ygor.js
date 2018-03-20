@@ -58,9 +58,12 @@ function makeJs() {
       const fileConfig = Object.assign({}, config );
 
       fileConfig.input = file.absolute;
-      fileConfig.file = file.absolute.replace( '/js/', '/srv/' );
 
-      make( fileConfig ).then( ( result )=> result.write( fileConfig ) );
+      make( fileConfig ).then( ( result )=> {
+        fileConfig.file = file.absolute.replace( '/js/', '/srv/' );
+
+        result.write( fileConfig );
+      });
     });
 }
 
