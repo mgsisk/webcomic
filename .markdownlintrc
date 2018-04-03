@@ -12,6 +12,7 @@
     "code_blocks": false
   },
   "blanks-around-headers": false,
+  "no-duplicate-header": false,
   "ol-prefix": {
     "style": "ordered"
   },
