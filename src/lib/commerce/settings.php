@@ -205,7 +205,7 @@ function hook_add_field_currency() {
 				],
 			]
 		);
-	} // End foreach().
+	}// End foreach().
 }
 
 /**
