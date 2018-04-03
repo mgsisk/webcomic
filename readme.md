@@ -103,12 +103,12 @@ you're more technically-inclined, [pull requests] are always welcome.
 
 To everyone that continues to use and [support Webcomic][url-donate].
 
-[img-stable]: https://img.shields.io/wordpress/plugin/v/webcomic.svg?style=flat-square
-[img-requires]: https://img.shields.io/badge/wordpress-4.7%20required-blue.svg?style=flat-square
-[img-tested]: https://img.shields.io/wordpress/v/webcomic.svg?style=flat-square
-[img-php]: https://img.shields.io/badge/php-7.0-8893bd.svg?style=flat-square
-[img-license]: https://img.shields.io/github/license/mgsisk/webcomic.svg?style=flat-square
-[img-donate]: https://img.shields.io/badge/donate-paypal-orange.svg?style=flat-square
+[img-stable]: https://img.shields.io/wordpress/plugin/v/webcomic.svg
+[img-requires]: https://img.shields.io/badge/wordpress-4.7%20required-blue.svg
+[img-tested]: https://img.shields.io/wordpress/v/webcomic.svg
+[img-php]: https://img.shields.io/badge/php-7.0_required-8893bd.svg
+[img-license]: https://img.shields.io/github/license/mgsisk/webcomic.svg
+[img-donate]: https://img.shields.io/badge/donate-paypal-yellow.svg
 [url-stable]: https://wordpress.org/plugins/webcomic
 [url-requires]: https://wordpress.org/news/2016/12/vaughan
 [url-tested]: https://wordpress.org/download
