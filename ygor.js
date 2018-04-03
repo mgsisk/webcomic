@@ -246,7 +246,7 @@ tasks
   .add( 'watch', ()=> {
     const watch = require( 'chokidar' ).watch;
 
-    process.stdout.write( 'watching... ' );
+    process.stdout.write( 'watching...\n' );
 
     watch([
       'assets/**/*.{jpg,png}',
