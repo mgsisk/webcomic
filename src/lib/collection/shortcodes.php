@@ -765,7 +765,7 @@ function webcomics_list_shortcode( $atts, string $content, string $name ) : stri
 			'link_args'      => [],
 			'link'           => '%title',
 			'not_related_by' => [],
-			'order'          => 'ASC',
+			'order'          => 'asc',
 			'orderby'        => 'date',
 			'posts_per_page' => -1,
 			'related_by'     => [],

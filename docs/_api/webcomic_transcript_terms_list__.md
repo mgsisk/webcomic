@@ -77,7 +77,7 @@ these objects.
 
 ### `string` order
 Whether to order terms in ascending or descending
-order. Accepts 'ASC' (ascending) or 'DESC'
+order. Accepts 'asc' (ascending) or 'desc'
 (descending).
 
 ### `string` orderby
