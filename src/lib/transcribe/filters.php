@@ -54,7 +54,7 @@ function hook_get_webcomic_transcript_author_link_tokens( array $tokens, string 
 	if ( preg_match( '/%avatar(?:-(\d+))?/', $link, $match ) ) {
 		$match += [ 96 ];
 
-		$tokens[ $match[0] ] = get_avatar( $author['email'], $match[1] );
+		$tokens[ $match[0] ] = get_avatar( $author['email'], (int) $match[1] );
 	}
 
 	return $tokens;
