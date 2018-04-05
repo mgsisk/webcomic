@@ -16,6 +16,7 @@ plugins:
     enabled: true
     config:
       file_extensions: "php"
+      ignore-undeclared: true
   phpmd:
     enabled: true
     config:
