@@ -22,7 +22,7 @@ function makeCss() {
   const make = require( 'postcss' );
   const config = require( './.postcss.js' );
 
-  find([ 'src/css/**/*.css', 'docs/_css/colors.css' ])
+  find([ 'src/css/**/*.css', 'docs/_css/colors.css' ], { dot: true })
     .map( read() )
     .map( ( file )=>
       make( config.plugins ).process( file.contents, {
@@ -53,7 +53,7 @@ function makeJs() {
   const make = require( 'rollup' ).rollup;
   const config = require( './.rollup.js' );
 
-  find([ 'src/js/**/*.js' ])
+  find([ 'src/js/**/*.js' ], { dot: true })
     .map( ( file )=> {
       const fileConfig = Object.assign({}, config );
 
@@ -70,63 +70,67 @@ function makeJs() {
 /**
  * Test everything.
  *
+ * @param {object} cli Command-line arguments.
  * @return {void}
  */
-function testAll() {
-  testCss();
-  testJs();
-  testJson();
-  testMd();
-  testPhp();
-  testShell();
-  testXml();
-  testYml();
+function testAll( cli ) {
+  testCss( cli );
+  testJs( cli );
+  testJson( cli );
+  testMd( cli );
+  testPhp( cli );
+  testShell( cli );
+  testXml( cli );
+  testYml( cli );
 }
 
 /**
  * Test CSS with stylelint.
  *
+ * @param {object} cli Command-line arguments.
  * @return {void}
  */
-function testCss() {
+function testCss( cli ) {
   const test = require( 'stylelint' ).lint;
   const config = require( './.stylelintrc.js' );
 
   config.files = [ 'src/css/**/*.css' ];
 
   test( config )
-    .then( ( result )=> process.stdout.write( result.output ) )
-    .catch( ( error )=> process.stdout.write( error.message ) );
+    .catch( ( error )=> process.stdout.write( error.message ) && ciExit() )
+    .then( ( result )=> process.stdout.write( result.output ) && result.errored && ciExit() );
 }
 
 /**
  * Test JavaScript with eslint.
  *
+ * @param {object} cli Command-line arguments.
  * @return {void}
  */
-function testJs() {
+function testJs( cli ) {
   const Engine = require( 'eslint' ).CLIEngine;
   const test = new Engine;
   const output = test.executeOnFiles([ 'src/js/**/*.js', '*.js', '.*.js' ]);
 
-  process.stdout.write( test.getFormatter()( output.results ) );
+  process.stdout.write( test.getFormatter()( output.results ) ) && output.errorCount && ciExit();
 }
 
 /**
  * Test JSON with jsonlint.
  *
+ * @param {object} cli Command-line arguments.
  * @return {void}
  */
-function testJson() {
+function testJson( cli ) {
   const test = require( 'jsonlint' ).parse;
 
-  find([ '*.json', '.*.json', '.babelrc', '.markdownlintrc' ])
+  find([ '*.json', '.*.json', '.babelrc', '.markdownlintrc' ], { dot: true })
     .map( read() )
     .map( ( file )=> {
       try {
         test( file.contents );
       } catch ( error ) {
-        process.stdout.write( `${file.path} ${error.message}\n\n` );
+        process.stdout.write( `${file.path} ${error.message}\n\n` ) && ciExit();
       }
     });
 }
@@ -134,25 +138,26 @@ function testJson() {
 /**
  * Test Markdown with markdownlint.
  *
+ * @param {object} cli Command-line arguments.
  * @return {void}
  */
-function testMd() {
+function testMd( cli ) {
   const test = require( 'markdownlint' );
 
-  find( '.markdownlintrc' )
+  find( '.markdownlintrc', { dot: true })
     .map( read() )
     .map( ( file )=> {
       const config = JSON.parse( file.contents );
 
-      find([ 'docs/**/*.md', '*.md' ])
+      find([ 'docs/**/*.md', '*.md', '!license.md' ], { dot: true })
         .map( ( mdFile )=> test({
           files: mdFile.absolute,
           config: config
         }, ( testError, result )=> {
           if ( testError ) {
-            process.stdout.write( `${testError.message}\n\n` );
+            process.stdout.write( `${testError.message}\n\n` ) && ciExit();
           } else if ( result.toString() ) {
-            process.stdout.write( `${result.toString()}\n\n` );
+            process.stdout.write( `${result.toString()}\n\n` ) && ciExit();
           }
         }) );
     });
@@ -161,63 +166,86 @@ function testMd() {
 /**
  * Test PHP with phan, phpcs, phpmd, and phpunit.
  *
+ * @param {object} cli Command-line arguments.
  * @return {void}
  */
-function testPhp() {
+function testPhp( cli ) {
   const xml = require( 'xml2js' ).parseString;
 
-  find( '.phpcs.xml' )
+  find( '.phpcs.xml', { dot: true })
     .map( read() )
     .map( ( file )=>
       xml( file.contents, ( xmlError, config )=> {
         for ( const phpFile of config.ruleset.file ) {
-          shell`vendor/bin/phpmd ${phpFile} text .phpmd.xml`;
+          shell`vendor/bin/phpmd ${phpFile} text .phpmd.xml`.catch( ( sh )=> ciExit( sh.code ) );
         }
       }) )
-    .then( ()=> shell`
-      PHAN_DISABLE_XDEBUG_WARN=1 vendor/bin/phan
-      vendor/bin/phpcs
-      vendor/bin/phpunit --no-coverage && WP_MULTISITE=1 vendor/bin/phpunit`
+    .then( ()=>
+      shell`PHAN_DISABLE_XDEBUG_WARN=1 vendor/bin/phan`.catch( ( sh )=> ciExit( sh.code ) )
+        .then( ()=>
+          shell`vendor/bin/phpcs`.catch( ( sh )=> ciExit( sh.code ) )
+            .then( ()=>
+              shell`vendor/bin/phpunit --no-coverage && WP_MULTISITE=1 vendor/bin/phpunit`.catch( ( sh )=> ciExit( sh.code ) )
+            )
+        )
+
     );
 }
 
 /**
  * Test Shell with shellcheck.
  *
+ * @param {object} cli Command-line arguments.
  * @return {void}
  */
-function testShell() {
-  find([ '*.sh', '.*.sh' ])
-    .map( ( file )=> shell`shellcheck -x ${file.path}`.catch( ( rn )=> rn ) );
+function testShell( cli ) {
+  find([ '*.sh', '.*.sh' ], { dot: true })
+    .map( ( file )=> shell`shellcheck -x ${file.path}`.catch( ( sh )=> ciExit( sh.code ) ) );
 }
 
 /**
  * Test XML with xmllint.
  *
+ * @param {object} cli Command-line arguments.
  * @return {void}
  */
-function testXml() {
-  find([ '*.xml', '.*.xml' ])
-    .map( ( file )=> shell`xmllint --noout ${file.path}`.catch( ( rn )=> rn ) );
+function testXml( cli ) {
+  find([ '*.xml', '.*.xml' ], { dot: true })
+    .map( ( file )=> shell`xmllint --noout ${file.path}`.catch( ( sh )=> ciExit( sh.code ) ) );
 }
 
 /**
  * Test YML with js-yaml.
  *
+ * @param {object} cli Command-line arguments.
  * @return {void}
  */
-function testYml() {
+function testYml( cli ) {
   const test = require( 'js-yaml' ).safeLoad;
 
-  find([ '*.yml', '.*.yml' ])
+  find([ '*.yml', '.*.yml' ], { dot: true })
     .map( read() )
     .map( ( file )=> {
       try {
         test( file.contents, { filename: file.path });
       } catch ( error ) {
-        process.stdout.write( `${error.message}\n\n` );
+        process.stdout.write( `${error.message}\n\n` ) && ciExit();
       }
     });
+}
+
+/**
+ * Exit with an approriate code during continuous integration.
+ *
+ * @param {int} code The process exit code.
+ * @return {void}
+ */
+function ciExit( code ) {
+  if ( ! code ) {
+    code = 1;
+  }
+
+  process.env.TRAVIS && process.exit( code );
 }
 
 tasks.cli.quiet = true;
