@@ -28,6 +28,7 @@ install:
   - svn co "https://develop.svn.wordpress.org/branches/$wpvn/tests/phpunit/data/" tests/phpunit/data
   - sed -ir "s/'DB_HOST', 'local.test'/'DB_HOST', 'localhost'/" tests/phpunit/wp-tests-config.php
   - sed -ir "s/'DB_PASSWORD', 'root'/'DB_PASSWORD', ''/" tests/phpunit/wp-tests-config.php
+  - sed -ir "s:tests/phpunit/coverage/clover.xml:clover.xml:" phpunit.xml
   - rm -rf vendor/johnpbloch/wordpress-core
   - mkdir tmp vendor/johnpbloch/wordpress-core
   - export PATH=$PATH:$(pwd)/tmp
@@ -48,5 +49,4 @@ before_script:
 script:
   - node ygor test all
 after_script:
-  - mv tests/phpunit/coverage/clover.xml clover.xml
   - cc-test-reporter after-build -t clover --exit-code $TRAVIS_TEST_RESULT
