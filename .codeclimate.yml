@@ -18,6 +18,9 @@ checks:
   method-lines:
     config:
       threshold: 128
+  return-statements:
+    config:
+      threshold: 8
   similar-code:
     enabled: false
 plugins:
