@@ -159,7 +159,7 @@ function hook_comic_content( string $content ) : string {
 		);
 
 		return (string) $content;
-	}// End if().
+	}//end if()
 
 	return $content;
 }

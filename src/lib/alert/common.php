@@ -70,7 +70,7 @@ function hook_alert_hiatus() {
 		];
 
 		wp_mail( webcomic( "option.{$collection}.alert_hiatus.{$days}" ), $subject, $message, $headers );
-	}// End foreach().
+	}//end foreach()
 }
 
 /**

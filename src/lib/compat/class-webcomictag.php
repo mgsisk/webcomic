@@ -735,7 +735,7 @@ class WebcomicTag {
 					];
 				}
 			}
-		} // End if().
+		}//end if()
 
 		return get_webcomic( $comic, $args );
 	} // @codingStandardsIgnoreEnd Generic.Metrics.CyclomaticComplexity.MaxExceeded, Generic.Metrics.NestingLevel.TooHigh
