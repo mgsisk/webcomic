@@ -5,9 +5,6 @@
   bootstrap="tests/phpunit/includes/bootstrap.php"
   checkForUnintentionallyCoveredCode="true"
   colors="true"
-  convertErrorsToExceptions="true"
-  convertNoticesToExceptions="true"
-  convertWarningsToExceptions="true"
   forceCoversAnnotation="true"
 >
   <testsuites>
