@@ -169,11 +169,12 @@ class TermLister extends Walker {
 	 * @return string
 	 * @suppress PhanTypeComparisonToArray - $args['webcomics']['post_type'] incorrectly triggers this.
 	 * @suppress PhanTypeInvalidDimOffset - $args['webcomics']['post_type'] incorrectly triggers this.
+	 * @suppress PhanTypeMismatchArgument - The first argument passed to get_term_children() incorrectly triggers this for WP 4.8-
 	 */
 	protected function get_webcomics_list( string $item, WP_Term $comic_term, array $args, int $depth ) : string {
 		if ( -1 < $args['webcomics_depth'] && $depth !== $args['webcomics_depth'] ) {
 			return $item;
-		} elseif ( -1 === $args['webcomics_depth'] && get_term_children( (string) $comic_term->term_id, $comic_term->taxonomy ) ) {
+		} elseif ( -1 === $args['webcomics_depth'] && get_term_children( $comic_term->term_id, $comic_term->taxonomy ) ) {
 			return $item;
 		}
 
