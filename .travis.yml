@@ -48,4 +48,5 @@ before_script:
 script:
   - node ygor test all
 after_script:
-  - cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+  - mv tests/phpunit/coverage/clover.xml clover.xml
+  - cc-test-reporter after-build -t clover --exit-code $TRAVIS_TEST_RESULT
