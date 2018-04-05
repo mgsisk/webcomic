@@ -1,0 +1,39 @@
+version: "2"
+plugins:
+  editorconfig:
+    enabled: true
+  eslint:
+    enabled: true
+  fixme:
+    enabled: true
+  markdownlint:
+    enabled: true
+  phpcodesniffer:
+    enabled: true
+    config:
+      standard: ".phpcs.xml"
+  phan:
+    enabled: true
+    config:
+      file_extensions: "php"
+  phpmd:
+    enabled: true
+    config:
+      rulesets: ".phpmd.xml"
+  shellcheck:
+    enabled: true
+  stylelint:
+    enabled: true
+
+exclude_patterns:
+  - ".phan/plugins/"
+  - ".vagrant/"
+  - "**/node_modules/"
+  - "**/vendor/"
+  - "assets/"
+  - "docs/srv/"
+  - "license.md"
+  - "src/srv/"
+  - "tests/phpunit/coverage/"
+  - "tests/phpunit/data/"
+  - "tests/phpunit/includes/"
