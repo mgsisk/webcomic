@@ -34,6 +34,7 @@ exclude_patterns:
   - "assets/"
   - "docs/srv/"
   - "license.md"
+  - "src/js/taxonomy/jquery.mjs.nestedSortable.js"
   - "src/srv/"
   - "tests/phpunit/coverage/"
   - "tests/phpunit/data/"
