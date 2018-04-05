@@ -644,6 +644,7 @@ function is_a_last_webcomic_term( $term = null, $relative = null, array $args = 
  *                            collection ID's.
  * }
  * @return bool
+ * @suppress PhanTypeInvalidDimOffset - $args keys incorrectly trigger this.
  */
 function is_webcomic_tax( $taxonomies = null, $terms = null, $relative = null, array $args = [] ) : bool {
 	$taxonomies = preg_grep( '/^webcomic\d+_.+/', (array) $taxonomies );

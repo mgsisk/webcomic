@@ -308,6 +308,7 @@ function hook_get_transcript_form() {
  * Handle new transcript submission requests.
  *
  * @return void
+ * @suppress PhanTypeInvalidDimOffset - $args keys incorrectly trigger this.
  */
 function hook_submit_transcript() {
 	check_admin_referer( __NAMESPACE__ . 'SubmitTranscriptNonce', __NAMESPACE__ . 'SubmitTranscriptNonce' );
