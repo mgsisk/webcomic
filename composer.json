@@ -9,6 +9,11 @@
       "email": "me@mgsisk.com"
     }
   ],
+  "config": {
+    "platform": {
+      "php": "7.0"
+    }
+  },
   "minimum-stability": "stable",
   "scripts": {
     "post-install-cmd": [
