@@ -8,9 +8,7 @@
     "style": "dash"
   },
   "no-trailing-spaces": false,
-  "line-length": {
-    "code_blocks": false
-  },
+  "line-length": false,
   "blanks-around-headers": false,
   "no-duplicate-header": false,
   "ol-prefix": {
