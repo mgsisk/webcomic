@@ -1,4 +1,26 @@
 version: "2"
+checks:
+  argument-count:
+    config:
+      threshold: 8
+  complex-logic:
+    config:
+      threshold: 8
+  file-lines:
+    config:
+      threshold: 1024
+  method-complexity:
+    config:
+      threshold: 256
+  method-count:
+    config:
+      threshold: 32
+  method-lines:
+    config:
+      threshold: 128
+  return-statements:
+    config:
+      threshold: 8
 plugins:
   editorconfig:
     enabled: true
