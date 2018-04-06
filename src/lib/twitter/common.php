@@ -134,7 +134,7 @@ function hook_add_status_tokens_basic( array $tokens, string $format, WP_Post $p
 	}
 
 	return $tokens;
-} // @codingStandardsIgnoreEnd Generic.Metrics.CyclomaticComplexity.TooHigh
+}// @codingStandardsIgnoreEnd Generic.Metrics.CyclomaticComplexity.TooHigh
 
 /**
  * Add custom field status tokens.

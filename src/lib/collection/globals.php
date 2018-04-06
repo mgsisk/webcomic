@@ -540,7 +540,7 @@ function get_webcomic( $post = null, array $args = [] ) {
 	}
 
 	return get_post( $comics[0] );
-} // @codingStandardsIgnoreEnd
+}// @codingStandardsIgnoreEnd
 
 /**
  * Get comic media.

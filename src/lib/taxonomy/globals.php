@@ -107,7 +107,7 @@ function get_webcomic_term( $term = null, array $args = [] ) {
 			'taxonomy' => $args['taxonomy'],
 		]
 	);
-} // @codingStandardsIgnoreEnd
+}// @codingStandardsIgnoreEnd
 
 /**
  * Get a term comic count.
@@ -540,7 +540,7 @@ function has_webcomic_term( string $taxonomy = '', $term = null, $post = null ) 
 	}
 
 	return false;
-} // @codingStandardsIgnoreEnd
+}// @codingStandardsIgnoreEnd
 
 /**
  * Is the term a comic term?

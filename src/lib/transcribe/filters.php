@@ -190,7 +190,7 @@ function hook_get_webcomic_transcript_form_fields( array $fields, array $args, a
 	}
 
 	return $fields;
-} // @codingStandardsIgnoreEnd Generic.Metrics.CyclomaticComplexity.TooHigh
+}// @codingStandardsIgnoreEnd Generic.Metrics.CyclomaticComplexity.TooHigh
 
 /**
  * Handle default webcomic transcript list item tokens.
@@ -257,7 +257,7 @@ function hook_get_webcomic_transcripts_list_item_tokens( array $tokens, string $
 	}
 
 	return $tokens;
-} // @codingStandardsIgnoreEnd Generic.Metrics.CyclomaticComplexity.TooHigh
+}// @codingStandardsIgnoreEnd Generic.Metrics.CyclomaticComplexity.TooHigh
 
 /**
  * Handle type arguments for get_webcomic_transcript_terms().

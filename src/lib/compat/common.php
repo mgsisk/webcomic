@@ -138,7 +138,7 @@ function hook_add_status_tokens( array $tokens, string $format, WP_Post $post ) 
 	}
 
 	return $tokens;
-} // @codingStandardsIgnoreEnd Generic.Metrics.NestingLevel.TooHigh, Generic.Metrics.CyclomaticComplexity.MaxExceeded
+}// @codingStandardsIgnoreEnd Generic.Metrics.NestingLevel.TooHigh, Generic.Metrics.CyclomaticComplexity.MaxExceeded
 
 /**
  * Add deprecated rewrite endpoints.
@@ -197,7 +197,7 @@ function hook_redirect_webcomic_url() {
 	$url = WebcomicTag::get_relative_webcomic_link_( $relation, $in_same_term, $excluded_terms, $taxonomy, $collection );
 
 	define( 'DOING_AJAX', true ) && wp_safe_redirect( $url ) && wp_die();
-} // @codingStandardsIgnoreEnd Generic.Metrics.CyclomaticComplexity.TooHigh
+}// @codingStandardsIgnoreEnd Generic.Metrics.CyclomaticComplexity.TooHigh
 
 /**
  * Redirect old webcomic term URL parameterized requests.
@@ -644,7 +644,7 @@ function hook_get_post_prints_v4( $meta, $id, $key, $single ) {
 	add_filter( 'get_post_metadata', __FUNCTION__, 10, 4 );
 
 	return $meta;
-} // @codingStandardsIgnoreEnd Generic.Metrics.CyclomaticComplexity.TooHigh
+}// @codingStandardsIgnoreEnd Generic.Metrics.CyclomaticComplexity.TooHigh
 
 /**
  * Convert Webcomic 4 transcript data.

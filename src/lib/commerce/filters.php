@@ -431,7 +431,7 @@ function hook_get_webcomic_link_tokens( array $tokens, string $link, WP_Post $co
 	}
 
 	return $tokens;
-} // @codingStandardsIgnoreEnd Generic.Metrics.CyclomaticComplexity.TooHigh
+}// @codingStandardsIgnoreEnd Generic.Metrics.CyclomaticComplexity.TooHigh
 
 /**
  * Add webcomic commerce link classes.

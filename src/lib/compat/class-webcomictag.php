@@ -605,7 +605,7 @@ class WebcomicTag {
 		}
 
 		return get_webcomics( $args );
-	} // @codingStandardsIgnoreEnd Generic.Metrics.CyclomaticComplexity.TooHigh
+	}// @codingStandardsIgnoreEnd Generic.Metrics.CyclomaticComplexity.TooHigh
 
 	/**
 	 * Deprecated method.
@@ -739,7 +739,7 @@ class WebcomicTag {
 		}//end if()
 
 		return get_webcomic( $comic, $args );
-	} // @codingStandardsIgnoreEnd Generic.Metrics.CyclomaticComplexity.MaxExceeded, Generic.Metrics.NestingLevel.TooHigh
+	}// @codingStandardsIgnoreEnd Generic.Metrics.CyclomaticComplexity.MaxExceeded, Generic.Metrics.NestingLevel.TooHigh
 
 	/**
 	 * Deprecated method.
@@ -2072,7 +2072,7 @@ class WebcomicTag {
 		unset( $args['after'], $args['before'], $args['class'], $args['id'], $args['selected'], $args['show_count'], $args['show_description'], $args['show_image'], $args['target'], $args['webcomic_image'], $args['webcomic_order'], $args['webcomic_order_by'] );
 
 		return get_webcomic_terms_list( $args );
-	} // @codingStandardsIgnoreEnd Generic.Metrics.CyclomaticComplexity.TooHigh
+	}// @codingStandardsIgnoreEnd Generic.Metrics.CyclomaticComplexity.TooHigh
 
 	/**
 	 * Deprecated method.
@@ -2171,7 +2171,7 @@ class WebcomicTag {
 		}
 
 		return get_webcomic_collections_list( $args );
-	} // @codingStandardsIgnoreEnd Generic.Metrics.CyclomaticComplexity.TooHigh
+	}// @codingStandardsIgnoreEnd Generic.Metrics.CyclomaticComplexity.TooHigh
 
 	/**
 	 * Deprecated method.
