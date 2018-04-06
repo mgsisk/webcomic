@@ -12,6 +12,8 @@ function makeAll() {
   makeApi();
   makeImg();
   makeJs();
+  makeWiki();
+}
 
 /**
  * Process API documentation.
@@ -74,6 +76,15 @@ function makeJs() {
         result.write( fileConfig );
       });
     });
+}
+
+/**
+ * Process documentation for the wiki.
+ *
+ * @return {void}
+ */
+function makeWiki() {
+  shell`php docs/_build/wiki.php`;
 }
 
 /**
@@ -265,6 +276,7 @@ tasks.add( 'make', ()=> tasks()
   .add( 'css', makeCss )
   .add( 'img', makeImg )
   .add( 'js', makeJs )
+  .add( 'wiki', makeWiki )
 );
 
 tasks.add( 'test', ()=> tasks()
