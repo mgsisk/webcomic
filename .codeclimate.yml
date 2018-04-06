@@ -1,4 +1,5 @@
 version: "2"
+
 checks:
   argument-count:
     config:
@@ -23,6 +24,7 @@ checks:
       threshold: 8
   similar-code:
     enabled: false
+
 plugins:
   editorconfig:
     enabled: true
