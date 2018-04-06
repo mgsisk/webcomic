@@ -1,0 +1,26 @@
+{
+  "_": [
+    "Welcome to Webcomic",
+    "Publishing a Comic",
+    "Integrating Your Comic",
+    "Customizing Your Comic",
+    "Doing More with Your Comic"
+  ],
+  "Components": [
+    "Alert",
+    "Character",
+    "Commerce",
+    "Compat",
+    "Restrict",
+    "Storyline",
+    "Transcribe",
+    "Twitter"
+  ],
+  "API": [
+    "Actions",
+    "Filters",
+    "Shortcodes",
+    "Template Tags",
+    "Widgets"
+  ]
+}
