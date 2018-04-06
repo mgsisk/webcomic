@@ -60,19 +60,25 @@ foreach ( $sections as $label => $section ) {
 // @codingStandardsIgnoreLine
 file_put_contents( $path . '/_wiki/_Sidebar.md', $sidebar );
 
-$footer = '[![Support forum][img-1]][url-1]
-[![Discord server][img-2]][url-2]
-[![Contact Mike][img-3]][url-3]
-[![Support development][img-4]][url-4]
+$footer = '[![Stable tag 5.0.6][img-stable]][url-stable]
+[![Requires PHP 7.0+][img-php]][url-php]
+[![Requires WordPress 4.7+][img-requires]][url-requires]
+[![Tested up to WordPress 4.9.5][img-tested]][url-tested]
+[![Licensed under GPL-2.0+][img-license]][url-license]
+[![Support development][img-donate]][url-donate]
 
-[img-1]: https://img.shields.io/badge/support-forum-blue.svg
-[img-2]: https://img.shields.io/discord/361857773874446339.svg
-[img-3]: https://img.shields.io/badge/contact-mike-red.svg
-[img-4]: https://img.shields.io/badge/donate-paypal-yellow.svg
-[url-1]: https://wordpress.org/support/plugin/webcomic
-[url-2]: https://discord.gg/TNTfzzg
-[url-3]: mailto:help@mgsisk.com?subject=Webcomic%20Help
-[url-4]: https://mgsisk.com/#support
+[img-stable]: https://img.shields.io/wordpress/plugin/v/webcomic.svg
+[img-requires]: https://img.shields.io/badge/wordpress-4.7+-blue.svg
+[img-tested]: https://img.shields.io/wordpress/v/webcomic.svg
+[img-php]: https://img.shields.io/badge/PHP-7.0+-8893bd.svg
+[img-license]: https://img.shields.io/github/license/mgsisk/webcomic.svg
+[img-donate]: https://img.shields.io/badge/donate-paypal-yellow.svg
+[url-stable]: https://wordpress.org/plugins/webcomic
+[url-requires]: https://wordpress.org/news/2016/12/vaughan
+[url-tested]: https://wordpress.org/download
+[url-php]: https://php.net
+[url-license]: https://github.com/mgsisk/webcomic/blob/master/license.md
+[url-donate]: https://mgsisk.com/#support
 ';
 
 // @codingStandardsIgnoreLine
