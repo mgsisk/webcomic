@@ -4,8 +4,49 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "4c9c60f2225f099dde1e6ff10371d968",
-    "packages": [],
+    "content-hash": "e51c0eb9e47fc1ddc10f3aed21cb89dc",
+    "packages": [
+        {
+            "name": "johnpbloch/wordpress-core",
+            "version": "4.7.10",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/johnpbloch/wordpress-core.git",
+                "reference": "22b63fc24ecef19d5452934506f5d7bf2b172d7a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/johnpbloch/wordpress-core/zipball/22b63fc24ecef19d5452934506f5d7bf2b172d7a",
+                "reference": "22b63fc24ecef19d5452934506f5d7bf2b172d7a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "provide": {
+                "wordpress/core-implementation": "4.7.10"
+            },
+            "type": "wordpress-core",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "WordPress Community",
+                    "homepage": "http://wordpress.org/about/"
+                }
+            ],
+            "description": "WordPress is web software you can use to create a beautiful website or blog.",
+            "homepage": "http://wordpress.org/",
+            "keywords": [
+                "blog",
+                "cms",
+                "wordpress"
+            ],
+            "time": "2018-04-03T22:48:17+00:00"
+        }
+    ],
     "packages-dev": [
         {
             "name": "composer/semver",
@@ -207,46 +248,6 @@
             ],
             "description": "A more advanced JSONRPC implementation",
             "time": "2017-10-28T21:26:16+00:00"
-        },
-        {
-            "name": "johnpbloch/wordpress-core",
-            "version": "4.7.10",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/johnpbloch/wordpress-core.git",
-                "reference": "22b63fc24ecef19d5452934506f5d7bf2b172d7a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/johnpbloch/wordpress-core/zipball/22b63fc24ecef19d5452934506f5d7bf2b172d7a",
-                "reference": "22b63fc24ecef19d5452934506f5d7bf2b172d7a",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.2"
-            },
-            "provide": {
-                "wordpress/core-implementation": "4.7.10"
-            },
-            "type": "wordpress-core",
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "WordPress Community",
-                    "homepage": "http://wordpress.org/about/"
-                }
-            ],
-            "description": "WordPress is web software you can use to create a beautiful website or blog.",
-            "homepage": "http://wordpress.org/",
-            "keywords": [
-                "blog",
-                "cms",
-                "wordpress"
-            ],
-            "time": "2018-04-03T22:48:17+00:00"
         },
         {
             "name": "microsoft/tolerant-php-parser",
@@ -2798,7 +2799,9 @@
     "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
+    "platform": {
+        "php": "^7.0"
+    },
     "platform-dev": [],
     "platform-overrides": {
         "php": "7.0"

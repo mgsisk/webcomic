@@ -22,8 +22,11 @@
       "svn co --quiet https://develop.svn.wordpress.org/branches/4.7/tests/phpunit/data/ tests/phpunit/data"
     ]
   },
+  "require": {
+    "php": "^7.0",
+    "johnpbloch/wordpress-core": "~4.7.0"
+  },
   "require-dev": {
-    "johnpbloch/wordpress-core": "~4.7.0",
     "phan/phan": "^0.12.5",
     "phploc/phploc": "^4.0",
     "phpmd/phpmd": "^2.6",
