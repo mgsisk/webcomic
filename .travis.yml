@@ -1,25 +1,30 @@
 language: php
+
 php:
-  - 7.0
-  - 7.1
-  - 7.2
+  - '7.0'
+  - '7.1'
+  - '7.2'
+
 env:
   global:
     - host=local.test
     - wptz=America/Detroit
     - CC_TEST_REPORTER_ID=3c6a5785336b4c74efc6d2bc0cf24edda35a2c8d12d0b631c453f610a177fc91
   matrix:
-    - wpvn=4.7
-    - wpvn=4.8
-    - wpvn=4.9
+    - wpvn='4.7'
+    - wpvn='4.8'
+    - wpvn='4.9'
+
 addons:
   apt:
     packages:
       - libxml2-utils
   hosts:
     - local.test
+
 before_install:
   - pecl install ast
+
 install:
   - npm install
   - composer install --no-scripts
@@ -42,11 +47,14 @@ install:
   - wp option update timezone_string "$wptz"
   - wp rewrite structure '/%postname%/'
   - cd ../../..
+
 before_script:
   - wget -O tmp/cc-test-reporter https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
   - chmod +x tmp/cc-test-reporter
   - cc-test-reporter before-build
+
 script:
   - node ygor test all
+
 after_script:
   - cc-test-reporter after-build -t clover --exit-code $TRAVIS_TEST_RESULT
