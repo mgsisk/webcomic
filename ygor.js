@@ -9,8 +9,17 @@ const { tasks, shell, find, read } = require( 'ygor' );
  */
 function makeAll() {
   makeCss();
+  makeApi();
   makeImg();
   makeJs();
+
+/**
+ * Process API documentation.
+ *
+ * @return {void}
+ */
+function makeApi() {
+  shell`php docs/_build/api.php`;
 }
 
 /**
@@ -252,6 +261,7 @@ tasks.cli.quiet = true;
 
 tasks.add( 'make', ()=> tasks()
   .add( 'all', makeAll )
+  .add( 'api', makeApi )
   .add( 'css', makeCss )
   .add( 'img', makeImg )
   .add( 'js', makeJs )
