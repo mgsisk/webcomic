@@ -1,6 +1,5 @@
 # Webcomic
 
-<img src="assets/icon-256x256.png" align="right" width="96">
 
 [![Stable tag 5.0.5][img-stable]][url-stable]
 [![Requires WordPress 4.7][img-requires]][url-requires]

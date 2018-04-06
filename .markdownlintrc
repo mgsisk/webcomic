@@ -15,11 +15,6 @@
     "style": "ordered"
   },
   "blanks-around-lists": false,
-  "no-inline-html": {
-    "allowed_elements": [
-      "img"
-    ]
-  },
   "hr-style": {
     "style": "---"
   },
