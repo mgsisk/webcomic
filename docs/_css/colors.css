@@ -4,31 +4,6 @@
 	background: color(var(--color-base) alpha(40%));
 }
 
-button {
-	background: linear-gradient(135deg, var(--color-base), color(var(--color-base) alpha(0))), var(--color-base);
-	text-shadow: 0.1em 0.2em 0.3em color(var(--color-base) hue(+30));
-
-	&:--enter {
-		background: linear-gradient(135deg, var(--color-base), color(var(--color-base) alpha(0))), color(var(--color-base) hue(+30));
-	}
-
-	&:active {
-		background: color(var(--color-base) hue(+180));
-		text-shadow: none;
-	}
-}
-
-input:--enter {
-	color: var(--color-base);
-}
-
-select {
-
-	&:--enter {
-		color: color(var(--color-base) tint(50%));
-	}
-}
-
 hr {
 	background: linear-gradient(135deg, var(--color-base), color(var(--color-base) hue(+30)));
 }
@@ -39,6 +14,32 @@ pre {
 
 blockquote {
 	border-color: var(--color-base);
+}
+
+header {
+	background: linear-gradient(135deg, var(--color-base), color(var(--color-base) hue(+30)));
+	text-shadow: 0.1em 0.2em 0.3em color(var(--color-base) hue(+30));
+}
+
+table {
+	background-image: linear-gradient(0deg, color(var(--color-base) hue(+30)), color(var(--color-base) hue(+30)));
+}
+
+td {
+	background-image: linear-gradient(0deg, var(--color-base), var(--color-base));
+}
+
+a {
+
+	color: var(--color-base);
+
+	&:--enter {
+		color: color(var(--color-base) hue(+30));
+	}
+
+	&:active {
+		color: color(var(--color-base) hue(+180));
+	}
 }
 
 nav {
@@ -54,11 +55,13 @@ nav {
 			color: color(var(--color-base) tint(50%));
 		}
 	}
-}
 
-header {
-	background: linear-gradient(135deg, var(--color-base), color(var(--color-base) hue(+30)));
-	text-shadow: 0.1em 0.2em 0.3em color(var(--color-base) hue(+30));
+	& select {
+
+		&:--enter {
+			color: color(var(--color-base) tint(50%));
+		}
+	}
 }
 
 footer {
@@ -66,26 +69,6 @@ footer {
 
 	& a:--enter {
 		color: color(var(--color-base) tint(50%));
-	}
-}
-
-table {
-	background-image: linear-gradient(0deg, color(var(--color-base) hue(+30)), color(var(--color-base) hue(+30)));
-}
-
-td {
-	background-image: linear-gradient(0deg, var(--color-base), var(--color-base));
-}
-
-a {
-	color: var(--color-base);
-
-	&:--enter {
-		color: color(var(--color-base) hue(+30));
-	}
-
-	&:active {
-		color: color(var(--color-base) hue(+180));
 	}
 }
 
