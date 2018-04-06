@@ -28,12 +28,8 @@ before_install:
 install:
   - npm install
   - composer install --no-scripts
-  - vendor/bin/phpcs --config-set installed_paths vendor/wimg/php-compatibility,vendor/wp-coding-standards/wpcs
   - svn co "https://develop.svn.wordpress.org/branches/$wpvn/tests/phpunit/includes/" tests/phpunit/includes
   - svn co "https://develop.svn.wordpress.org/branches/$wpvn/tests/phpunit/data/" tests/phpunit/data
-  - sed -ir "s/'DB_HOST', 'local.test'/'DB_HOST', 'localhost'/" tests/phpunit/wp-tests-config.php
-  - sed -ir "s/'DB_PASSWORD', 'root'/'DB_PASSWORD', ''/" tests/phpunit/wp-tests-config.php
-  - sed -ir "s:tests/phpunit/coverage/clover.xml:clover.xml:" phpunit.xml
   - rm -rf vendor/johnpbloch/wordpress-core
   - mkdir tmp vendor/johnpbloch/wordpress-core
   - export PATH=$PATH:$(pwd)/tmp
@@ -49,6 +45,11 @@ install:
   - cd ../../..
 
 before_script:
+  - if [[ ("$wpvn" == '4.7' || "$wpvn" == '4.8') && "$TRAVIS_PHP_VERSION" = '7.2' ]]; then sed -ir "s@define( 'WP_DEBUG', true );@// define( 'WP_DEBUG', true );@" tests/phpunit/wp-tests-config.php; fi
+  - sed -ir "s/'DB_HOST', 'local.test'/'DB_HOST', 'localhost'/" tests/phpunit/wp-tests-config.php
+  - sed -ir "s/'DB_PASSWORD', 'root'/'DB_PASSWORD', ''/" tests/phpunit/wp-tests-config.php
+  - sed -ir "s@tests/phpunit/coverage/clover.xml@clover.xml@" phpunit.xml
+  - vendor/bin/phpcs --config-set installed_paths vendor/wimg/php-compatibility,vendor/wp-coding-standards/wpcs
   - wget -O tmp/cc-test-reporter https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
   - chmod +x tmp/cc-test-reporter
   - cc-test-reporter before-build
