@@ -60,25 +60,17 @@ foreach ( $sections as $label => $section ) {
 // @codingStandardsIgnoreLine
 file_put_contents( $path . '/_wiki/_Sidebar.md', $sidebar );
 
-$footer = '[![Stable tag 5.0.6][img-stable]][url-stable]
-[![Requires PHP 7.0+][img-php]][url-php]
-[![Requires WordPress 4.7+][img-requires]][url-requires]
-[![Tested up to WordPress 4.9.5][img-tested]][url-tested]
-[![Licensed under GPL-2.0+][img-license]][url-license]
-[![Support development][img-donate]][url-donate]
+$footer = '[![Stable release 5.0.6][img-plugin]][url-plugin]
+[![More information][img-info]][url-info]
+[![Support development][img-support]][url-support]
 
-[img-stable]: https://img.shields.io/wordpress/plugin/v/webcomic.svg
-[img-requires]: https://img.shields.io/badge/wordpress-4.7+-blue.svg
-[img-tested]: https://img.shields.io/wordpress/v/webcomic.svg
-[img-php]: https://img.shields.io/badge/PHP-7.0+-8893bd.svg
-[img-license]: https://img.shields.io/github/license/mgsisk/webcomic.svg
-[img-donate]: https://img.shields.io/badge/donate-paypal-yellow.svg
-[url-stable]: https://wordpress.org/plugins/webcomic
-[url-requires]: https://wordpress.org/news/2016/12/vaughan
-[url-tested]: https://wordpress.org/download
-[url-php]: https://php.net
-[url-license]: https://github.com/mgsisk/webcomic/blob/master/license.md
-[url-donate]: https://mgsisk.com/#support
+[img-plugin]: https://img.shields.io/wordpress/plugin/v/webcomic.svg
+[img-info]: https://img.shields.io/badge/more-information-green.svg
+[img-support]: https://img.shields.io/badge/support-development-lightgrey.svg
+
+[url-plugin]: https://wordpress.org/plugins/webcomic
+[url-info]: https://github.com/mgsisk/webcomic/blob/master/support.md
+[url-support]: https://mgsisk.com/#support
 ';
 
 // @codingStandardsIgnoreLine

@@ -1,12 +1,10 @@
 # Webcomic
 
-
-[![Stable tag 5.0.5][img-stable]][url-stable]
-[![Requires WordPress 4.7][img-requires]][url-requires]
-[![Tested up to WordPress 4.9.4][img-tested]][url-tested]
-[![Requires PHP 7.0][img-php]][url-php]
-[![Licensed under GPL-2.0+][img-license]][url-license]
-[![Support development][img-donate]][url-donate]
+[![Stable release 5.0.5][img-plugin]][url-plugin]
+[![Build status][img-build]][url-build]
+[![Coverage grade][img-coverage]][url-climate]
+[![Maintainability grade][img-maintainability]][url-climate]
+[![Support development][img-support]][url-support]
 
 > Comic publishing power for the web. Turn your WordPress-powered site into a
 > comic publishing platform with Webcomic.
@@ -100,17 +98,15 @@ you're more technically-inclined, [pull requests] are always welcome.
 
 ## Special Thanks
 
-To everyone that continues to use and [support Webcomic][url-donate].
+To everyone that continues to use and [support Webcomic][url-support].
 
-[img-stable]: https://img.shields.io/wordpress/plugin/v/webcomic.svg
-[img-requires]: https://img.shields.io/badge/wordpress-4.7%20required-blue.svg
-[img-tested]: https://img.shields.io/wordpress/v/webcomic.svg
-[img-php]: https://img.shields.io/badge/php-7.0_required-8893bd.svg
-[img-license]: https://img.shields.io/github/license/mgsisk/webcomic.svg
-[img-donate]: https://img.shields.io/badge/donate-paypal-yellow.svg
-[url-stable]: https://wordpress.org/plugins/webcomic
-[url-requires]: https://wordpress.org/news/2016/12/vaughan
-[url-tested]: https://wordpress.org/download
-[url-php]: https://php.net
-[url-license]: https://github.com/mgsisk/webcomic/blob/master/license.md
-[url-donate]: https://mgsisk.com/#support
+[img-plugin]: https://img.shields.io/wordpress/plugin/v/webcomic.svg
+[img-build]: https://img.shields.io/travis/mgsisk/webcomic.svg
+[img-coverage]: https://img.shields.io/codeclimate/coverage/mgsisk/webcomic.svg
+[img-maintainability]: https://img.shields.io/codeclimate/maintainability/mgsisk/webcomic.svg
+[img-support]: https://img.shields.io/badge/support-development-lightgrey.svg
+
+[url-plugin]: https://wordpress.org/plugins/webcomic
+[url-build]: https://travis-ci.org/mgsisk/webcomic
+[url-climate]: https://codeclimate.com/github/mgsisk/webcomic
+[url-support]: https://mgsisk.com#support
