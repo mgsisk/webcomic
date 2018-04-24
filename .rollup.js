@@ -4,8 +4,8 @@ const babel = require( 'rollup-plugin-babel' );
 const uglify = require( 'rollup-plugin-uglify' );
 
 module.exports = {
-  output: {
-    format: 'iife'
-  },
-  plugins: [ babel(), uglify() ]
+	output: {
+		format: 'iife'
+	},
+	plugins: [ babel(), uglify() ]
 };
