@@ -1,12 +1,12 @@
 .column-webcomic_transcript_comic {
 
 	& .post-com-count-pending.transcript {
-		right: auto;
 		left: 3px;
+		right: auto;
 	}
 
 	& .post-com-count-no-pending + .post-com-count-pending.transcript {
-		right: -3px;
 		left: auto;
+		right: -3px;
 	}
 }
