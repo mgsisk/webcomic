@@ -8,28 +8,36 @@
 		return document.addEventListener( 'DOMContentLoaded', load );
 	}
 
-	const tables = document.querySelectorAll( 'table.webcomic-records' );
+	prepareTables( document.querySelectorAll( 'table.webcomic-records' ) );
 
-	for ( let i = 0; i < tables.length; i++ ) {
-		prepareTable( tables[ i ]);
+	/**
+	 * Prepare record tables for managing records.
+	 *
+	 * @param {array} elements The current list of webcomic record tables.
+	 * @return {void}
+	 */
+	function prepareTables( elements ) {
+		for ( let i = 0; i < elements.length; i++ ) {
+			prepareTable( elements[i]);
+		}
 	}
 
 	/**
-	 * Prepare a table for adding and removing alerts.
+	 * Prepare a table for adding and removing records.
 	 *
 	 * @param {object} table The table to prepare.
 	 * @return {void}
 	 */
 	function prepareTable( table ) {
-		const rows     = table.querySelectorAll( 'tbody > tr' ),
-					template = table.querySelector( 'tbody > tr' );
+		const rows = table.querySelectorAll( 'tbody > tr' );
+		const template = table.querySelector( 'tbody > tr' );
 
 		template.parentNode.removeChild( template );
 
 		getAddButton( table, template );
 
 		for ( let i = 1; i < rows.length; i++ ) {
-			getDeleteButton( rows[ i ]);
+			getDeleteButton( rows[i]);
 		}
 	}
 
@@ -44,13 +52,13 @@
 		const cell = document.createElement( 'td' );
 
 		cell.style.width = '3rem';
-		cell.innerHTML   = `
+		cell.innerHTML = `
 		<button type="button" class="button button-secondary delete small">
 			<span class="dashicons dashicons-plus">
 				<span class="screen-reader-text">${webcomicRecordL10n.add}</span>
 			</span>
 		</button>`;
-		cell.querySelector( 'button' ).addEventListener( 'click', ( event )=> getNewRow( table, template ) );
+		cell.querySelector( 'button' ).addEventListener( 'click', ()=> getNewRow( table, template ) );
 
 		table.querySelector( 'thead tr' ).appendChild( cell );
 	}
@@ -71,13 +79,13 @@
 			</span>
 		</button>`;
 		cell.querySelector( 'button' ).addEventListener( 'click', ( event )=> {
-			let row = event.target;
+			let activeRow = event.target;
 
-			while ( 'tr' !== row.tagName.toLowerCase() ) {
-				row = row.parentNode;
+			while ( 'tr' !== activeRow.tagName.toLowerCase() ) {
+				activeRow = activeRow.parentNode;
 			}
 
-			row.parentNode.removeChild( row );
+			activeRow.parentNode.removeChild( activeRow );
 		});
 
 		row.appendChild( cell );

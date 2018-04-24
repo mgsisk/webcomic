@@ -1,26 +1,34 @@
-/* global ajaxurl, jQuery, webcomicMediaManagerL10n, wp  */
+/* global ajaxurl, webcomicMediaManagerL10n */
 
 /**
  * Media manager implementation.
  *
  * Utilizes WordPress' own media features to provide consistent media handling
  * for various Webcomic features.
- *
- * @return {void}
  */
 ( function load() {
 	if ( 'loading' === document.readyState ) {
 		return document.addEventListener( 'DOMContentLoaded', load );
 	}
 
-	const elements = document.querySelectorAll( '[data-webcomic-media-manager]' );
+	prepareMediaManagers( document.querySelectorAll( '[data-webcomic-media-manager]' ) );
 
-	for ( let i = 0; i < elements.length; i++ ) {
-		updateMediaManager(
-			elements[ i ],
-			document.querySelector( `[name="${elements[ i ].getAttribute( 'data-input' )}"]` ).value.split( ',' ),
-			Boolean( elements[ i ].getAttribute( 'data-webcomic-media-manager' ) )
-		);
+	jQuery( document ).on( 'widget-added widget-updated', updateMediaManagerWidget );
+
+	/**
+	 * Prepare media managers for media management.
+	 *
+	 * @param {array} elements The current list of media managers.
+	 * @return {void}
+	 */
+	function prepareMediaManagers( elements ) {
+		for ( let i = 0; i < elements.length; i++ ) {
+			updateMediaManager(
+				elements[i],
+				document.querySelector( `[name="${elements[i].getAttribute( 'data-input' )}"]` ).value.split( ',' ),
+				Boolean( elements[i].getAttribute( 'data-webcomic-media-manager' ) )
+			);
+		}
 	}
 
 	/**
@@ -28,8 +36,12 @@
 	 *
 	 * Widgets have their own, jQuery-enabled events, so we have to use jQuery
 	 * to listen for these events and update the media manager as necessary.
+	 *
+	 * @param {object} event The current event object.
+	 * @param {object} widget The current widget object.
+	 * @return {void}
 	 */
-	jQuery( document ).on( 'widget-added widget-updated', ( event, widget )=> {
+	function updateMediaManagerWidget( event, widget ) {
 		if ( ! widget[0].id.match( /_mgsisk_webcomic_/ ) ) {
 			return;
 		}
@@ -38,12 +50,12 @@
 
 		for ( let i = 0; i < elements.length; i++ ) {
 			updateMediaManager(
-				elements[ i ],
-				document.querySelector( `[name="${elements[ i ].getAttribute( 'data-input' )}"]` ).value.split( ',' ),
-				Boolean( elements[ i ].getAttribute( 'data-webcomic-media-manager' ) )
+				elements[i],
+				document.querySelector( `[name="${elements[i].getAttribute( 'data-input' )}"]` ).value.split( ',' ),
+				Boolean( elements[i].getAttribute( 'data-webcomic-media-manager' ) )
 			);
 		}
-	});
+	}
 
 	/**
 	 * Update the media manager.
@@ -54,10 +66,10 @@
 	 * @return {void}
 	 */
 	function updateMediaManager( element, media, multiple ) {
-		const input    = document.querySelector( `[name="${element.getAttribute( 'data-input' )}"]` ),
-					data     = new FormData,
-					xhr      = new XMLHttpRequest,
-					oldValue = input.value.split( ',' );
+		const input = document.querySelector( `[name="${element.getAttribute( 'data-input' )}"]` );
+		const data = new FormData;
+		const xhr = new XMLHttpRequest;
+		const oldValue = input.value.split( ',' );
 
 		input.value = media.toString();
 
@@ -75,7 +87,7 @@
 				return;
 			}
 
-			media = media.map( ( id )=> parseInt( id ) );
+			media = media.map( id=> parseInt( id ) );
 
 			getMediaManager( element, media, multiple, JSON.parse( xhr.responseText ) );
 		};
@@ -96,7 +108,7 @@
 		element.innerHTML = '';
 
 		for ( let i = 0; i < elements.length; i++ ) {
-			element.innerHTML += getMediaElement( elements[ i ].id, elements[ i ].media );
+			element.innerHTML += getMediaElement( elements[i].id, elements[i].media );
 		}
 
 		element.innerHTML += getMediaButton( elements, multiple );
@@ -112,10 +124,10 @@
 		const anchors = element.querySelectorAll( 'a' );
 
 		for ( let i = 0; i < anchors.length; i++ ) {
-			anchors[ i ].addEventListener( 'click', ( event )=> {
+			anchors[i].addEventListener( 'click', ( event )=> {
 				event.preventDefault();
 
-				const index = media.indexOf( Number( anchors[ i ].parentNode.getAttribute( 'data-id' ) ) );
+				const index = media.indexOf( Number( anchors[i].parentNode.getAttribute( 'data-id' ) ) );
 
 				media.splice( index, 1 );
 
@@ -144,14 +156,14 @@
 	/**
 	 * Get the media manager button and help text.
 	 *
-	 * @param {array} elements The array of elements returns by the XHR handler.
+	 * @param {array} media The array of media returned by the XHR handler.
 	 * @param {bool}  multiple Wether the media manager supports multiple media.
 	 * @return {string}
 	 */
 	function getMediaButton( media, multiple ) {
-		let icon   = 'dashicons-format-image',
-				label  = webcomicMediaManagerL10n.add,
-				button = '';
+		let icon = 'dashicons-format-image';
+		let label = webcomicMediaManagerL10n.add;
+		let button = '';
 
 		if ( multiple ) {
 			icon = 'dashicons-images-alt2';
@@ -217,15 +229,17 @@
 				type: 'image'
 			},
 			multiple
-		}).on( 'select', ()=> {
-			const media     = [],
-						selection = wp.media.frames.webcomicMedia.state().get( 'selection' );
+		})
+			.on( 'select', ()=> {
+				const media = [];
+				const selection = wp.media.frames.webcomicMedia.state().get( 'selection' );
 
-			for ( let i = 0; i < selection.length; i++ ) {
-				media.push( selection.models[ i ].id );
-			}
+				for ( let i = 0; i < selection.length; i++ ) {
+					media.push( selection.models[i].id );
+				}
 
-			updateMediaManager( element, media, multiple );
-		}).open();
+				updateMediaManager( element, media, multiple );
+			})
+			.open();
 	}
 }() );

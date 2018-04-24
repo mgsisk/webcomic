@@ -1,31 +1,30 @@
-/* global wp */
-
 /**
  * Customizer functionality.
- *
- * @return {void}
  */
-wp.customize.bind( 'ready', function() {
-	toggleFrontPageControls( wp.customize( 'webcomic_integrate_front_page_order' ).get() );
-	toggleIntegrateControls( wp.customize( 'webcomic_integrate' ).get() );
+wp.customize.bind( 'ready', ()=> {
+	prepareComicCustomizer();
 
-	wp.customize.control( 'webcomic_integrate', function( control ) {
-		control.setting.bind( function( value ) {
-			toggleIntegrateControls( value );
-		});
-	});
+	/**
+	 * Prepare Webcomic's customizer section and controls.
+	 *
+	 * @return {void}
+	 */
+	function prepareComicCustomizer() {
+		toggleFrontPageControls( wp.customize( 'webcomic_integrate_front_page_order' ).get() );
+		toggleIntegrateControls( wp.customize( 'webcomic_integrate' ).get() );
 
-	wp.customize.control( 'webcomic_integrate_archive_preview', function( control ) {
-		control.setting.bind( function( value ) {
-			toggleArchiveControls( value );
+		wp.customize.control( 'webcomic_integrate', ( control )=> {
+			control.setting.bind( value=> toggleIntegrateControls( value ) );
 		});
-	});
 
-	wp.customize.control( 'webcomic_integrate_front_page_order', function( control ) {
-		control.setting.bind( function( value ) {
-			toggleFrontPageControls( value );
+		wp.customize.control( 'webcomic_integrate_archive_preview', ( control )=> {
+			control.setting.bind( value=> toggleArchiveControls( value ) );
 		});
-	});
+
+		wp.customize.control( 'webcomic_integrate_front_page_order', ( control )=> {
+			control.setting.bind( value=> toggleFrontPageControls( value ) );
+		});
+	}
 
 	/**
 	 * Toggle the visibility of a customizer control.

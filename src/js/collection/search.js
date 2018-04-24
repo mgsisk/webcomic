@@ -1,25 +1,14 @@
-/* global ajaxurl, jQuery, webcomicSearchL10n  */
+/* global ajaxurl, webcomicSearchL10n  */
 
 /**
  * Comic search implementation.
- *
- * Enables the search and comic select features of the Webcomic Link widget.
- *
- * @return {void}
  */
 ( function load() {
 	if ( 'loading' === document.readyState ) {
 		return document.addEventListener( 'DOMContentLoaded', load );
 	}
 
-	const elements = document.querySelectorAll( '[data-webcomic-search]' );
-
-	for ( let i = 0; i < elements.length; i++ ) {
-		updateComicSearch(
-			elements[ i ],
-			Number( document.querySelector( `[name="${elements[ i ].getAttribute( 'data-input' )}"]` ).value )
-		);
-	}
+	prepareComicSearch( document.querySelectorAll( '[data-webcomic-search]' ) );
 
 	/**
 	 * Update the comic search during widget events.
@@ -36,11 +25,26 @@
 
 		for ( let i = 0; i < elements.length; i++ ) {
 			updateComicSearch(
-				elements[ i ],
-				Number( document.querySelector( `[name="${elements[ i ].getAttribute( 'data-input' )}"]` ).value )
+				elements[i],
+				Number( document.querySelector( `[name="${elements[i].getAttribute( 'data-input' )}"]` ).value )
 			);
 		}
 	});
+
+	/**
+	 * Preapre comic search elements for searching.
+	 *
+	 * @param {array} elements The current list of comic search elements.
+	 * @return {void}
+	 */
+	function prepareComicSearch( elements ) {
+		for ( let i = 0; i < elements.length; i++ ) {
+			updateComicSearch(
+				elements[i],
+				Number( document.querySelector( `[name="${elements[i].getAttribute( 'data-input' )}"]` ).value )
+			);
+		}
+	}
 
 	/**
 	 * Update the comic search.
@@ -50,9 +54,9 @@
 	 * @return {void}
 	 */
 	function updateComicSearch( element, post ) {
-		const input = document.querySelector( `[name="${element.getAttribute( 'data-input' )}"]` ),
-					data  = new FormData,
-					xhr   = new XMLHttpRequest;
+		const input = document.querySelector( `[name="${element.getAttribute( 'data-input' )}"]` );
+		const data = new FormData;
+		const xhr = new XMLHttpRequest;
 
 		input.value = post;
 
@@ -111,8 +115,8 @@
 	 * @return {void}
 	 */
 	function searchComics( element, query ) {
-		const data  = new FormData,
-					xhr   = new XMLHttpRequest;
+		const data = new FormData;
+		const xhr = new XMLHttpRequest;
 
 		data.append( 'action', 'webcomic_update_comic_search' );
 		data.append( 'query', query );
@@ -141,13 +145,13 @@
 
 		for ( let i = 0; i < posts.length; i++ ) {
 			results += `
-			<tr data-id="${posts[ i ].ID}">
+			<tr data-id="${posts[i].ID}">
 				<td class="title column-title column-primary">
 					<strong class="has-media-icon">
-						<span class="media-icon image-icon">${posts[ i ].webcomic_media}</span>
-						${posts[ i ].post_title}
+						<span class="media-icon image-icon">${posts[i].webcomic_media}</span>
+						${posts[i].post_title}
 					</strong>
-					<p>${posts[ i ].status_label}</p>
+					<p>${posts[i].status_label}</p>
 				</td>
 			</tr>`;
 		}
@@ -170,8 +174,8 @@
 		const elements = element.querySelectorAll( '[data-id]' );
 
 		for ( let i = 0; i < elements.length; i++ ) {
-			elements[ i ].addEventListener( 'click', ()=> {
-				updateComicSearch( element, Number( elements[ i ].getAttribute( 'data-id' ) ) );
+			elements[i].addEventListener( 'click', ()=> {
+				updateComicSearch( element, Number( elements[i].getAttribute( 'data-id' ) ) );
 			});
 		}
 	}

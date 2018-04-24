@@ -2,8 +2,6 @@
 
 /**
  * Common functionality.
- *
- * @return {void}
  */
 ( function load() {
 	if ( 'loading' === document.readyState ) {
@@ -11,54 +9,48 @@
 	}
 
 	const touchEvent = {
-					minDistance: 150,
-					maxTime: 300,
-					time: 0,
-					posX: 0,
-					posY: 0
-				},
-				infiniteStart = parseInt( ( window.location.search.match( /wi=(\d+)/ ) || [ '', 0 ])[1]);
+		minDistance: 150,
+		maxTime: 300,
+		time: 0,
+		posX: 0,
+		posY: 0
+	};
+	const infiniteStart = parseInt( ( window.location.search.match( /wi=(\d+)/ ) || [ '', 0 ])[1]);
 
-	window.addEventListener( 'scroll', webcomicInfiniteScroll );
-	document.addEventListener( 'change', webcomicSelectNavigation );
-	document.addEventListener( 'keyup', webcomicKeyboardNavigation );
-	document.addEventListener( 'click', webcomicDynamicComicLoading );
-	document.documentElement.addEventListener( 'touchstart', webcomicTouchNavigationStart, false );
-	document.documentElement.addEventListener( 'touchend', webcomicTouchNavigationEnd );
+	webcomicCommonEvents();
 
-	window.dispatchEvent( new Event( 'scroll' ) );
+	/**
+	 * Prepare common event handlers.
+	 *
+	 * @return {void}
+	 */
+	function webcomicCommonEvents() {
+		window.addEventListener( 'scroll', webcomicInfiniteScroll );
+		document.addEventListener( 'change', webcomicSelectNavigation );
+		document.addEventListener( 'keyup', webcomicKeyboardNavigation );
+		document.addEventListener( 'click', webcomicDynamicComicLoading );
+		document.documentElement.addEventListener( 'touchstart', webcomicTouchNavigationStart, false );
+		document.documentElement.addEventListener( 'touchend', webcomicTouchNavigationEnd );
+
+		window.dispatchEvent( new Event( 'scroll' ) );
+	}
 
 	/**
 	 * Handle infinitely-scrolling comic containers.
+	 *
 	 * @return {void}
 	 */
 	function webcomicInfiniteScroll() {
 		const container = document.querySelector( '.webcomic-infinite, [data-webcomic-infinite]' );
 
-		if ( ! container ) {
-			window.removeEventListener( 'scroll', webcomicInfiniteScroll );
-
-			return;
-		} else if ( container.classList.contains( 'loading' ) ) {
+		if ( ! webcomicInitInfiniteScroll( container ) ) {
 			return;
 		}
 
-		const containerLastChild = container.children[ container.children.length - 1 ];
-
-		if ( containerLastChild && containerLastChild.getBoundingClientRect().top + window.scrollY > window.scrollY + window.innerHeight ) {
-			return;
-		} else if ( container.querySelector( 'wbr.finished' ) ) {
-			window.removeEventListener( 'scroll', webcomicInfiniteScroll );
-
-			return;
-		}
-
-		container.classList.add( 'loading' );
-
-		const offset = parseInt( container.children.length ) + infiniteStart,
-					data   = new FormData,
-					xhr    = new XMLHttpRequest;
-		let   url    = window.location.href.replace( /wi=\d+/, `wi=${offset}` );
+		const data = new FormData;
+		const xhr = new XMLHttpRequest;
+		const offset = parseInt( container.children.length ) + infiniteStart;
+		let url = window.location.href.replace( /wi=\d+/, `wi=${offset}` );
 
 		if ( ! window.location.search ) {
 			url = `${window.location.href}?wi=${offset}`;
@@ -89,11 +81,13 @@
 	 * @return {void}
 	 */
 	function webcomicSelectNavigation( event ) {
-		if ( 'select' !== event.target.tagName.toLowerCase() || ! event.target.options[ event.target.selectedIndex ].getAttribute( 'data-webcomic-url' ) ) {
+		if ( 'select' !== event.target.tagName.toLowerCase() ) {
+			return;
+		} else if ( ! event.target.options[event.target.selectedIndex].getAttribute( 'data-webcomic-url' ) ) {
 			return;
 		}
 
-		const url = event.target.options[ event.target.selectedIndex ].getAttribute( 'data-webcomic-url' );
+		const url = event.target.options[event.target.selectedIndex].getAttribute( 'data-webcomic-url' );
 
 		if ( url === window.location.href ) {
 			return;
@@ -116,8 +110,8 @@
 			return;
 		}
 
-		let container = document.querySelector( '.webcomic-keyboard, [data-webcomic-shortcuts]' ),
-				key       = event.key;
+		const container = document.querySelector( '.webcomic-keyboard, [data-webcomic-shortcuts]' );
+		let key = event.key;
 
 		if ( ! container ) {
 			return;
@@ -135,7 +129,7 @@
 	 * @return {void}
 	 */
 	function webcomicDynamicComicLoading( event ) {
-		let containers = document.querySelectorAll( '.webcomic-dynamic' );
+		const containers = document.querySelectorAll( '.webcomic-dynamic' );
 
 		if ( ! containers.length ) {
 			return;
@@ -153,8 +147,8 @@
 
 		event.preventDefault();
 
-		const data = new FormData,
-					xhr  = new XMLHttpRequest;
+		const data = new FormData;
+		const xhr = new XMLHttpRequest;
 
 		data.append( 'action', 'webcomic_dynamic' );
 
@@ -217,11 +211,10 @@
 	 * @return {void}
 	 */
 	function webcomicTouchNavigationEnd( event ) {
-		const container = document.querySelector( '.webcomic-gestures, [data-webcomic-gestures]' ),
-					swipeT    = new Date().getTime() - touchEvent.time,
-					swipeX    = event.changedTouches[0].pageX - touchEvent.posX,
-					swipeY    = event.changedTouches[0].pageY - touchEvent.posY;
-		let shortcut    = 'Arrow';
+		const container = document.querySelector( '.webcomic-gestures, [data-webcomic-gestures]' );
+		const swipeT = new Date().getTime() - touchEvent.time;
+		const swipeX = event.changedTouches[0].pageX - touchEvent.posX;
+		const swipeY = event.changedTouches[0].pageY - touchEvent.posY;
 
 		if ( ! container ) {
 			document.documentElement.removeEventListener( 'touchstart', webcomicTouchNavigationStart, false );
@@ -231,6 +224,54 @@
 		} else if ( swipeT > touchEvent.maxTime ) {
 			return;
 		}
+
+		const shortcut = webcmoicGetTouchNavigationShortcut( event, swipeX, swipeY );
+
+		if ( ! shortcut.replace( /^Arrow(Shift)?$/, '' ) ) {
+			return;
+		}
+
+		webcomicShortcut( shortcut, container );
+	}
+
+	/**
+	 * Handle comic navigation shortcuts.
+	 *
+	 * @param {string} shortcut The shortcut to execute.
+	 * @param {object} container The webcomic shortcut container.
+	 * @return {void}
+	 */
+	function webcomicShortcut( shortcut, container ) {
+		const classes = {
+			ArrowDownShift: 'random-webcomic-link',
+			ArrowLeft: 'previous-webcomic-link',
+			ArrowLeftShift: 'first-webcomic-link',
+			ArrowRight: 'next-webcomic-link',
+			ArrowRightShift: 'last-webcomic-link',
+			ArrowUpShift: 'webcomic-print-link'
+		};
+		const anchor = container.querySelector( `.${classes[shortcut]}[href]` );
+
+		if ( ! shortcut || ! container || ! anchor ) {
+			return;
+		}
+
+		anchor.dispatchEvent( new MouseEvent( 'click', {
+			bubbles: true,
+			cancelable: true
+		}) );
+	}
+
+	/**
+	 * Get a touch navigation shortcut key.
+	 *
+	 * @param {object} event The current event object.
+	 * @param {int} swipeX The horizontal swipe difference.
+	 * @param {int} swipeY The vertical swipe difference.
+	 * @return {string}
+	 */
+	function webcmoicGetTouchNavigationShortcut( event, swipeX, swipeY ) {
+		let shortcut = 'Arrow';
 
 		if ( Math.abs( swipeX ) >= touchEvent.minDistance && Math.abs( swipeY ) < touchEvent.minDistance ) {
 			shortcut += 'Right';
@@ -246,39 +287,42 @@
 			}
 		}
 
-		if ( 'Arrow' === shortcut ) {
-			return;
-		} else if ( 1 < event.changedTouches.length ) {
+		if ( 1 < event.changedTouches.length ) {
 			shortcut += 'Shift';
 		}
 
-		webcomicShortcut( shortcut, container );
+		return shortcut;
 	}
 
 	/**
-	 * Handle comic navigation shortcuts.
+	 * Initialize Webcomic's infinite scroll
 	 *
-	 * @param {string} shortcut The shortcut to execute.
-	 * @param {object} container The webcomic shortcut container.
+	 * @param {object} container The webcomic infinite scroll container.
+	 * @return {bool}
 	 */
-	function webcomicShortcut( shortcut, container ) {
-		const classes = {
-						ArrowDownShift: 'random-webcomic-link',
-						ArrowLeft: 'previous-webcomic-link',
-						ArrowLeftShift: 'first-webcomic-link',
-						ArrowRight: 'next-webcomic-link',
-						ArrowRightShift: 'last-webcomic-link',
-						ArrowUpShift: 'webcomic-print-link'
-					},
-					anchor  = container.querySelector( `.${classes[ shortcut ]}[href]` );
+	function webcomicInitInfiniteScroll( container ) {
+		if ( ! container ) {
+			window.removeEventListener( 'scroll', webcomicInfiniteScroll );
 
-		if ( ! shortcut || ! container || ! anchor ) {
-			return;
+			return false;
+		} else if ( container.classList.contains( 'loading' ) ) {
+			return false;
 		}
 
-		anchor.dispatchEvent( new MouseEvent( 'click', {
-			bubbles: true,
-			cancelable: true
-		}) );
+		const containerLastChild = container.children[container.children.length - 1];
+		const containerScroll = containerLastChild.getBoundingClientRect().top + window.scrollY;
+		const windowScroll = window.scrollY + window.innerHeight;
+
+		if ( containerLastChild && containerScroll > windowScroll ) {
+			return false;
+		} else if ( container.querySelector( 'wbr.finished' ) ) {
+			window.removeEventListener( 'scroll', webcomicInfiniteScroll );
+
+			return false;
+		}
+
+		container.classList.add( 'loading' );
+
+		return true;
 	}
 }() );

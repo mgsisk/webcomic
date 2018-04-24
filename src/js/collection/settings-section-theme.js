@@ -13,9 +13,9 @@
 	const elements = document.querySelectorAll( '.theme-actions .no-save' );
 
 	for ( let i = 0; i < elements.length; i++ ) {
-		elements[ i ].addEventListener( 'click', ( event )=> {
-			const data = new FormData,
-						xhr	 = new XMLHttpRequest;
+		elements[i].addEventListener( 'click', ( event )=> {
+			const data = new FormData;
+			const xhr	= new XMLHttpRequest;
 
 			data.append( 'action', 'webcomic_customize_theme' );
 			data.append( 'theme', event.target.getAttribute( 'data-stylesheet' ) );

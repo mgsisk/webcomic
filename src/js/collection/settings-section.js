@@ -9,15 +9,15 @@
 	const sections = document.querySelectorAll( '#wpbody .wrap form > h2' );
 
 	for ( let i = 0; i < sections.length; i++ ) {
-		const ruler  = document.createElement( 'hr' ),
-					anchor = document.createElement( 'a' );
+		const ruler = document.createElement( 'hr' );
+		const anchor = document.createElement( 'a' );
 
-		anchor.innerHTML = sections[ i ].innerHTML;
+		anchor.innerHTML = sections[i].innerHTML;
 
-		sections[ i ].innerHTML    = anchor.outerHTML;
-		sections[ i ].style.cursor = 'pointer';
-		sections[ i ].parentNode.insertBefore( ruler, sections[ i ]);
-		sections[ i ].addEventListener( 'click', ( event )=> {
+		sections[i].innerHTML = anchor.outerHTML;
+		sections[i].style.cursor = 'pointer';
+		sections[i].parentNode.insertBefore( ruler, sections[i]);
+		sections[i].addEventListener( 'click', ( event )=> {
 			event.preventDefault();
 
 			let next = event.target.nextElementSibling;
@@ -43,6 +43,6 @@
 			}
 		});
 
-		sections[ i ].dispatchEvent( new MouseEvent( 'click' ) );
+		sections[i].dispatchEvent( new MouseEvent( 'click' ) );
 	}
 }() );
