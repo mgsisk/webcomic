@@ -55,7 +55,14 @@ before_script:
   - cc-test-reporter before-build
 
 script:
-  - node ygor test all
+  - node ygor test css
+  - node ygor test js
+  - node ygor test json
+  - node ygor test md
+  - node ygor test php
+  - node ygor test shell
+  - node ygor test xml
+  - node ygor test yml
 
 after_script:
   - cc-test-reporter after-build -t clover --exit-code $TRAVIS_TEST_RESULT
