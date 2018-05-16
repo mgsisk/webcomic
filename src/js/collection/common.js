@@ -310,8 +310,12 @@
 		}
 
 		const containerLastChild = container.children[container.children.length - 1];
-		const containerScroll = containerLastChild.getBoundingClientRect().top + window.scrollY;
 		const windowScroll = window.scrollY + window.innerHeight;
+		let containerScroll = 0;
+
+		if ( containerLastChild ) {
+			containerScroll = containerLastChild.getBoundingClientRect().top + window.scrollY;
+		}
 
 		if ( containerLastChild && containerScroll > windowScroll ) {
 			return false;
