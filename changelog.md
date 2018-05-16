@@ -12,6 +12,19 @@
 - Investigate setting a primary site collection, is_* rules for non-primary
   collection (per-landing page? Front page theme resolution?)
 
+## [5.0.6] (2018-04-30)
+
+### Added
+- Development configurations for Code Climate and TravisCI
+
+### Changed
+- CSS refactored to adhere to more stringent `stylelint` configuration
+- JavaScript refactored to adhere to more stringent `eslint` configuration
+
+### Fixed
+- Incorrect variable reference in `compat` template tag
+- Static analysis and code sniffing issues
+
 ## [5.0.5] (2018-02-14)
 
 ### Changed
@@ -594,6 +607,7 @@
 
 > Initial public commit.
 
+[5.0.6]: https://github.com/mgsisk/webcomic/compare/v5.0.5...v5.0.6
 [5.0.5]: https://github.com/mgsisk/webcomic/compare/v5.0.4...v5.0.5
 [5.0.4]: https://github.com/mgsisk/webcomic/compare/v5.0.3...v5.0.4
 [5.0.3]: https://github.com/mgsisk/webcomic/compare/v5.0.2...v5.0.3
