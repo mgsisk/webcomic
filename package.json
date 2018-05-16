@@ -6,8 +6,8 @@
   "author": "mgsisk <me@mgsisk.com>",
   "license": "GPL-2.0+",
   "devDependencies": {
-    "babel-core": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
+    "@babel/core": "^7.0.0-beta.47",
+    "babel-preset-env": "^7.0.0-beta.3",
     "chokidar": "^2.0.3",
     "cssnano": "^3.10.0",
     "eslint": "^4.19.1",
@@ -16,23 +16,20 @@
     "js-yaml": "^3.11.0",
     "jsonlint": "^1.6.3",
     "markdownlint": "^0.8.1",
-    "postcss": "^6.0.21",
+    "postcss": "^6.0.22",
     "postcss-cssnext": "^3.1.0",
     "postcss-easings": "^1.0.1",
     "postcss-import": "^11.1.0",
     "postcss-short": "^4.1.0",
-    "remark": "^9.0.0",
-    "remark-lint": "^6.0.1",
     "rollup": "^0.57.1",
-    "rollup-plugin-babel": "^3.0.3",
+    "rollup-plugin-babel": "^4.0.0-beta.4",
     "rollup-plugin-uglify": "^3.0.0",
     "stylelint": "^9.2.0",
     "stylelint-config-standard": "^18.2.0",
     "stylelint-config-wordpress": "^13.0.0",
     "stylelint-declaration-block-no-ignored-properties": "^1.1.0",
-    "stylelint-no-browser-hacks": "^1.2.1",
     "stylelint-order": "^0.8.1",
     "xml2js": "^0.4.19",
-    "ygor": "^6.0.1"
-  },
+    "ygor": "^6.0.2"
+  }
 }
