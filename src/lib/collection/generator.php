@@ -366,7 +366,7 @@ function hook_get_generator_preview() {
 	}
 
 	$now           = strtotime( webcomic( 'GLOBALS._REQUEST.webcomic_generator.start_date' ) );
-	$media         = webcomic( 'GLOBALS._REQUEST.webcomic_generate' );
+	$media         = (array) webcomic( 'GLOBALS._REQUEST.webcomic_generate' );
 	$weekdays      = [ 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun' ];
 	$publish_every = array_filter( webcomic( 'GLOBALS._REQUEST.webcomic_generator.publish_every' ) );
 

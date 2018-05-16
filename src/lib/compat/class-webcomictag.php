@@ -651,6 +651,7 @@ class WebcomicTag {
 	 * @return mixed
 	 * @deprecated
 	 * @suppress PhanTypeInvalidDimOffset - $args keys incorrectly trigger this.
+	 * @suppress PhanTypeComparisonToArray - $args keys incorrectly trigger this.
 	 * @SuppressWarnings(PHPMD.ExcessiveMethodLength) - Required for compatibility.
 	 * @SuppressWarnings(PHPMD.NPathComplexity) - Required for compatibility.
 	 * @codingStandardsIgnoreStart Generic.Metrics.CyclomaticComplexity.MaxExceeded, Generic.Metrics.NestingLevel.TooHigh - Required for compatibility.
