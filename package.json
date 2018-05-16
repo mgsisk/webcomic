@@ -35,8 +35,4 @@
     "xml2js": "^0.4.19",
     "ygor": "^6.0.1"
   },
-  "eslintIgnore": [
-    "src/js/taxonomy/jquery.mjs.nestedSortable.js"
-  ],
-  "dependencies": {}
 }
