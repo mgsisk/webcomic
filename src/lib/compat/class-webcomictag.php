@@ -677,6 +677,10 @@ class WebcomicTag {
 
 		$args['relation'] = $relation;
 
+		if ( 'self' === $args['relation'] ) {
+			unset( $args['relation'] );
+		}
+
 		if ( isset( $args['post_type'] ) && ( $in_same_term || $excluded_terms ) ) {
 			foreach ( (array) $taxonomies as $taxonomy ) {
 				if ( preg_match( '/^!?(character|storyline)$/', $taxonomy ) ) {
