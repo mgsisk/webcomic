@@ -6,11 +6,7 @@ module.exports = {
 		require( './.postcss.custom.js' ),
 		require( 'postcss-easings' ),
 		require( 'postcss-short' ),
-		require( 'postcss-cssnext' )({
-			browsers: 'last 2 versions, ie 11'
-		}),
-		require( 'cssnano' )({
-			autoprefixer: false
-		})
+		require( 'postcss-cssnext' )(),
+		require( 'cssnano' )({autoprefixer: false})
 	]
 };

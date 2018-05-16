@@ -5,7 +5,6 @@ module.exports = {
 	extends: [ 'stylelint-config-standard', 'stylelint-config-wordpress' ],
 	plugins: [
 		'stylelint-declaration-block-no-ignored-properties',
-		'stylelint-no-browser-hacks/lib',
 		'stylelint-order'
 	],
 	rules: {
@@ -58,7 +57,6 @@ module.exports = {
 		// ----- Plugins -----------------------------------------------------------
 
 		'order/properties-alphabetical-order': true,
-		'plugin/declaration-block-no-ignored-properties': true,
-		'plugin/no-browser-hacks': [ true, {browsers: 'last 2 versions, ie 11'} ]
+		'plugin/declaration-block-no-ignored-properties': true
 	}
 };
