@@ -50,7 +50,7 @@ foreach ( $files as $file ) {
 		preg_match( '/\/lib\/(.+?)(\/|$)/', dirname( $file[0] ), $match );
 
 		// @codingStandardsIgnoreLine
-		file_put_contents( $cwd . '/_api/' . $filepath . '.md', $filedata );
+		file_put_contents( $cwd . '/_api/' . $filepath . '.md', str_replace( '{{', '\{\{', $filedata ) );
 		// @codingStandardsIgnoreLine
 		file_put_contents( $cwd . '/_api/!' . $token[1] . '.md', '- ' . $match[1] . ' ' . $filepath . "\n", FILE_APPEND );
 	}
