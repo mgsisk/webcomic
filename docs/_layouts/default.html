@@ -11,9 +11,9 @@
     <meta property="og:site_name" content="{{ site.title | remove: '\' | smartify }}">
     <meta property="og:title" content="{{ page.title | strip | remove: '\' | smartify }}">
     <meta property="og:image" content="{{ site.url }}{{ site.baseurl }}/srv/{{ page.image }}">
-    <meta property="og:url" content="{{ site.url }}{{site.baseurl }}{{ page.url | remove: '/index.html' }}">
+    <meta property="og:url" content="{{ site.url }}{{site.baseurl }}{{ page.url | remove: '/index.html' | remove: '/index' }}">
     <title>{{ page.title | strip | remove: '\' | smartify }} / {{ site.title }}</title>
-    <link rel="canonical" href="{{ site.url }}{{ site.baseurl }}{{ page.url | remove: '/index.html' }}">
+    <link rel="canonical" href="{{ site.url }}{{ site.baseurl }}{{ page.url | remove: '/index.html' | remove: '/index' }}">
     <link rel="icon" href="{{ site.baseurl }}/srv/icon.png">
     <link rel="stylesheet" href="https://use.typekit.net/hne7oit.css">
     <link rel="stylesheet" href="/srv/style.css">
