@@ -23,14 +23,14 @@ You can install the development dependencies and launch the development
 environment with:
 
 ```sh
-composer install; npm install; vagrant up test
+npm install; npm start
 ```
 
-[Ygor] provides a set of automation tasks to help with processing assets and
-running tests. You can see a list of available tasks with:
+A set of automation tasks is available through [npm] to help with processing
+assets and running tests. You can see a list of available tasks with:
 
 ```sh
-node ygor
+npm run
 ```
 
 The `test` box hosts a WordPress multisite install with a set of development
@@ -43,13 +43,7 @@ If you're making changes that need cross-browser testing you can test in Edge
 and Internet Explorer with:
 
 ```sh
-vagrant up edge
-```
-
-If you work in [Atom] you can install a set of useful packages with:
-
-```sh
-apm install --package-file Atomfile
+npm run start:edge
 ```
 
 ## Coding Standards
@@ -79,12 +73,12 @@ group as well as their component group.
 [Homebrew Bundle]: https://github.com/Homebrew/homebrew-bundle
 [Composer]: https://getcomposer.org
 [Node]: https://nodejs.org
+[npm]: https://docs.npmjs.com/misc/scripts
 [PHP 7]: https://php.net
 [php-ast]: https://github.com/nikic/php-ast
 [xdebug]: https://github.com/xdebug/xdebug
 [Vagrant]: https://vagrantup.com
 [VirtualBox]: https://www.virtualbox.org
-[Ygor]: https://github.com/shannonmoeller/ygor
 [Atom]: https://atom.io
 [WordPress Theme Unit Test Data]: https://github.com/WPTRT/theme-unit-test
 [WordPress Coding Standards]: https://make.wordpress.org/core/handbook/best-practices/coding-standards
