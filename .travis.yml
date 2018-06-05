@@ -26,7 +26,7 @@ before_install:
   - pecl install ast
 
 install:
-  - npm install
+  - npm install --ignore-scripts
   - composer install --no-scripts
   - svn co "https://develop.svn.wordpress.org/branches/$wpvn/tests/phpunit/includes/" tests/phpunit/includes
   - svn co "https://develop.svn.wordpress.org/branches/$wpvn/tests/phpunit/data/" tests/phpunit/data
@@ -55,14 +55,14 @@ before_script:
   - cc-test-reporter before-build
 
 script:
-  - node ygor test css
-  - node ygor test js
-  - node ygor test json
-  - node ygor test md
-  - node ygor test php
-  - node ygor test shell
-  - node ygor test xml
-  - node ygor test yml
+  - npm run test:css
+  - npm run test:js
+  - npm run test:json
+  - npm run test:md
+  - npm run test:php
+  - npm run test:sh
+  - npm run test:xml
+  - npm run test:yml
 
 after_script:
   - cc-test-reporter after-build -t clover --exit-code $TRAVIS_TEST_RESULT
