@@ -31,30 +31,28 @@ foreach ( $files as $file ) {
   // @codingStandardsIgnoreLine
 	$content = preg_replace( '/^---[\S\s]+---\s+/', '', file_get_contents( $file ) );
 
-	// @codingStandardsIgnoreLine
-	file_put_contents( str_replace( [ '_api', '_pages' ], '_wiki', $file ), $content );
+  // @codingStandardsIgnoreLine
+	file_put_contents( str_replace( [ '_api', '_pages' ], '_wiki', $file ), str_replace( '\{\{', '{{', $content ) );
 }
 
 $counter = 0;
 $sidebar = '';
 // @codingStandardsIgnoreLine
-$sections = json_decode( file_get_contents( $path . '/_data/sections.json' ) );
+$navigation = json_decode( file_get_contents( $path . '/_data/navigation.json' ), true );
 
-foreach ( $sections as $label => $section ) {
-	if ( '_' === $label ) {
-		foreach ( $section as $subsection ) {
-			$counter++;
-			$sidebar .= "{$counter}. [{$subsection}](" . str_replace( ' ', '-', $subsection ) . ")\n";
+foreach ( $navigation as $label => $link ) {
+	if ( is_array( $link ) ) {
+		$sidebar .= "\n### {$label}\n\n";
+
+		foreach ( $link as $text => $url ) {
+			$sidebar .= "- [{$text}]($url)\n";
 		}
 
 		continue;
 	}
 
-	$sidebar .= "\n### {$label}\n\n";
-
-	foreach ( $section as $subsection ) {
-		$sidebar .= "- [{$subsection}](" . str_replace( [ ' ', 'Character', 'Storyline' ], [ '-', 'Taxonomies', 'Taxonomies' ], $subsection ) . ")\n";
-	}
+	$counter++;
+	$sidebar .= "{$counter}. [{$label}]({$link})\n";
 }
 
 // @codingStandardsIgnoreLine
