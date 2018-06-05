@@ -14,7 +14,7 @@ Shortcode content overrides the `link` attribute.
 ## Attributes
 
 ### `string` link
-Optional link text, like 'before{{text}}after'.
+Optional link text, like 'before\{\{text}}after'.
 
 ### `mixed` collection
 Optional collection to display a link for.

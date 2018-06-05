@@ -15,11 +15,11 @@ get_webcomic_prints_list( array $args = [] ) : string
 Optional arguments.
 
 - **`string` format**  
-Optional list format, like before{{join}}after.
+Optional list format, like before\{\{join}}after.
 Including `<select>` or `<optgroup>` elements will
 convert links to `<option>` elements.
 - **`string` link**  
-Optional link text, like before{{text}}after.
+Optional link text, like before\{\{text}}after.
 - **`mixed` link_post**  
 Optional reference post for print links.
 - **`array` link_args**  

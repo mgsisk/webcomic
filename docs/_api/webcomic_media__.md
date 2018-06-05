@@ -13,7 +13,7 @@ permalink: webcomic_media__
 
 ### `string` format
 Optional media format, like
-before{{join}}after{size}. Size may be be any valid
+before\{\{join}}after{size}. Size may be be any valid
 image size or a comma-separated list of width and
 height pixel values (in that order), and may be
 specified without the rest of the format arguments.

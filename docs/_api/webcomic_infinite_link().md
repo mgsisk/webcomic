@@ -12,7 +12,7 @@ webcomic_infinite_link( string $link = '' ) : void
 ## Parameters
 
 ### `string` $link
-Optional link text, like before{{text}}after.
+Optional link text, like before\{\{text}}after.
 
 ## Return
 
