@@ -40,7 +40,8 @@
     "test:sh": "find . -name '*.sh' ! -path '*/node_modules/*' ! -path '*/vendor/*' | xargs shellcheck -x",
     "test:xml": "find . -name '*.xml' ! -path '*/node_modules/*' ! -path '*/vendor/*' ! -path '*/tests/*' | xargs xmllint --noout",
     "test:yml": "find . -name '*.yml' ! -path '*/node_modules/*' ! -path '*/vendor/*' ! -path '*/docs/_site/*' | xargs -L1 js-yaml",
-    "version": "node scripts.js tagVersion $npm_package_version"
+    "version": "node scripts.js tagVersion $npm_package_version",
+    "postversion": "git push --tags"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.49",
