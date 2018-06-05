@@ -58,7 +58,7 @@ function hook_enqueue_search_styles() {
 	/**
 	 * Alter comic term search enqueing.
 	 *
-	 * This filter allows hooks to enqueue the shared comicterm  search
+	 * This filter allows hooks to enqueue the shared comic term search
 	 * functionality.
 	 *
 	 * @param bool $enqueue Wether to enqueue the comic term search.

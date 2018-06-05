@@ -463,7 +463,7 @@ function get_webcomic_transcripts( $args = [] ) : array {
 /**
  * Get a list of comic transcripts.
  *
- * @uses get_webcomic_transcripts() The fields argument is always set to 'ids'.
+ * @uses get_webcomic_transcripts() The fields argument is always set to `ids`.
  * @param array $args {
  *     Optional arguments.
  *
