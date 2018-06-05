@@ -1,6 +1,6 @@
 # Webcomic
 
-[![Stable release 5.0.5][img-plugin]][url-plugin]
+[![Stable tag 5.0.5][img-plugin]][url-plugin]
 [![Build status][img-build]][url-build]
 [![Coverage grade][img-coverage]][url-climate]
 [![Maintainability grade][img-maintainability]][url-climate]
