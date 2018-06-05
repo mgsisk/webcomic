@@ -1,9 +1,6 @@
 ---
 title: Taxonomies
 permalink: Taxonomies
-redirect_from:
-  - Character
-  - Storyline
 ---
 
 [![A comic taxonomy management screen.][img-1]][img-1]
