@@ -56,6 +56,7 @@ class WebcomicError extends WP_UnitTestCase {
 			self::assertTrue( webcomic_error( '.' ) );
 		} catch ( \Exception $exception ) {
 			self::assertInstanceOf( \Exception::class, $exception );
+			self::assertSame( '.', $exception->getMessage() );
 		}
 	}
 }
