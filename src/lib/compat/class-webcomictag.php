@@ -2352,6 +2352,7 @@ class WebcomicTag {
 	 * @param string $name Shortcode name.
 	 * @return string
 	 * @deprecated
+	 * @suppress PhanTypeMismatchDimFetch - Array access to $args['link'] incorrectly triggers this.
 	 */
 	protected static function webcomic_link_shortcode( $atts, string $content, string $name ) : string {
 		$args = shortcode_atts(
@@ -2376,9 +2377,13 @@ class WebcomicTag {
 
 		$args['relation'] = substr( $name, 0, strpos( $name, '_' ) );
 
-		if ( is_array( $args['link'] ) ) {
+		if ( $content ) {
+			$args['link'] = do_shortcode( htmlspecialchars_decode( $content ) );
+		} elseif ( is_array( $args['link'] ) ) {
 			$args['link'] = $args['link'][ $args['relation'] ];
 		}
+
+		$args['link'] = htmlspecialchars_decode( $args['link'] );
 
 		if ( false === $args['cache'] ) {
 			$args['relation'] .= '-nocache';
