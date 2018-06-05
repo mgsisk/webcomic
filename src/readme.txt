@@ -1,7 +1,7 @@
 === Webcomic ===
 Stable tag: 5.0.5
 Requires at least: 4.7
-Tested up to: 4.9.4
+Tested up to: 4.9.6
 Requires PHP: 7.0
 License: GPL-2.0+
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
