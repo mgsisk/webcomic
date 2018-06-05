@@ -251,16 +251,16 @@
         },
         {
             "name": "microsoft/tolerant-php-parser",
-            "version": "v0.0.10",
+            "version": "v0.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Microsoft/tolerant-php-parser.git",
-                "reference": "694b1538bb73fdcf1b8ea8e20f5acd03aae594e9"
+                "reference": "7647b60b13afd7e929aeef3de2c35696266c4da5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Microsoft/tolerant-php-parser/zipball/694b1538bb73fdcf1b8ea8e20f5acd03aae594e9",
-                "reference": "694b1538bb73fdcf1b8ea8e20f5acd03aae594e9",
+                "url": "https://api.github.com/repos/Microsoft/tolerant-php-parser/zipball/7647b60b13afd7e929aeef3de2c35696266c4da5",
+                "reference": "7647b60b13afd7e929aeef3de2c35696266c4da5",
                 "shasum": ""
             },
             "require": {
@@ -288,7 +288,7 @@
                 }
             ],
             "description": "Tolerant PHP-to-AST parser designed for IDE usage scenarios",
-            "time": "2018-03-18T03:12:58+00:00"
+            "time": "2018-05-12T19:12:14+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -419,16 +419,16 @@
         },
         {
             "name": "phan/phan",
-            "version": "0.12.8",
+            "version": "0.12.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phan/phan.git",
-                "reference": "a94caa92d4485769eb6bd6963d3ca412f6fe3f7f"
+                "reference": "f088e608abe654e6d24c32088d7bb73d801e72aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phan/phan/zipball/a94caa92d4485769eb6bd6963d3ca412f6fe3f7f",
-                "reference": "a94caa92d4485769eb6bd6963d3ca412f6fe3f7f",
+                "url": "https://api.github.com/repos/phan/phan/zipball/f088e608abe654e6d24c32088d7bb73d801e72aa",
+                "reference": "f088e608abe654e6d24c32088d7bb73d801e72aa",
                 "shasum": ""
             },
             "require": {
@@ -436,13 +436,16 @@
                 "composer/xdebug-handler": "^1.0",
                 "ext-ast": "^0.1.5",
                 "felixfbecker/advanced-json-rpc": "^3.0",
-                "microsoft/tolerant-php-parser": "0.0.10",
+                "microsoft/tolerant-php-parser": "0.0.11",
                 "php": "^7.0.0",
                 "sabre/event": "^5.0",
                 "symfony/console": "^2.3|^3.0|~4.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^6.3.0"
+            },
+            "suggest": {
+                "ext-tokenizer": "Needed for non-AST support and file/line-based suppressions"
             },
             "bin": [
                 "phan",
@@ -476,7 +479,7 @@
                 "php",
                 "static"
             ],
-            "time": "2018-05-12T16:29:55+00:00"
+            "time": "2018-05-31T03:00:02+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -1245,16 +1248,16 @@
         },
         {
             "name": "phpunit/phpunit-mock-objects",
-            "version": "5.0.6",
+            "version": "5.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit-mock-objects.git",
-                "reference": "33fd41a76e746b8fa96d00b49a23dadfa8334cdf"
+                "reference": "3eaf040f20154d27d6da59ca2c6e28ac8fd56dce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/33fd41a76e746b8fa96d00b49a23dadfa8334cdf",
-                "reference": "33fd41a76e746b8fa96d00b49a23dadfa8334cdf",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/3eaf040f20154d27d6da59ca2c6e28ac8fd56dce",
+                "reference": "3eaf040f20154d27d6da59ca2c6e28ac8fd56dce",
                 "shasum": ""
             },
             "require": {
@@ -1300,7 +1303,7 @@
                 "mock",
                 "xunit"
             ],
-            "time": "2018-01-06T05:45:45+00:00"
+            "time": "2018-05-29T13:50:43+00:00"
         },
         {
             "name": "psr/container",
