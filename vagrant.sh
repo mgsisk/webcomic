@@ -245,10 +245,10 @@ fi
 
 # ----- MailDev ----------------------------------------------------------------
 
-if ! which maildev &>/dev/null; then
+if ! command -v maildev &>/dev/null; then
   printf 'Installing MailDev'
   npm install -g --silent forever maildev &>/dev/null
-  forever start "$(which maildev)" &>/dev/null
+  forever start "$(command -v maildev)" &>/dev/null
 fi
 
 if [ ! -e /etc/init.d/maildev ]; then
@@ -266,7 +266,7 @@ if [ ! -e /etc/init.d/maildev ]; then
 # Description: Enable maildev service at boot
 ### END INIT INFO
 
-forever start "$(which maildev)"
+forever start "$(command -v maildev)"
 MAILDEV
 
   chmod +x /etc/init.d/maildev
@@ -407,7 +407,7 @@ plugins=(
   wordpress-importer
 )
 
-if ! which wp &>/dev/null; then
+if ! command -v wp &>/dev/null; then
   printf 'Installing wp-cli'
   wget -qO /usr/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && chmod +x /usr/bin/wp
 fi
@@ -515,7 +515,7 @@ printf 'Restarting services'
 service nginx restart
 service mysql restart
 service postfix restart
-forever restart "$(which maildev)" &>/dev/null
+forever restart "$(command -v maildev)" &>/dev/null
 service memcached restart
 service "php$phpv-fpm" restart
 
