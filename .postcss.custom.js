@@ -3,13 +3,24 @@
 
 const postcss = require( 'postcss' );
 
+/**
+ * Add custom units for modular scale vertical rhythm values.
+ */
 module.exports = postcss.plugin( '.postcss.custom.js', ( options )=> {
-	options = options || {};
+	options = options || {
+		fontSize: 1,
+		fontUnit: 'em',
+		lineHeight: 1.5,
+		rhythmUnit: 'rem',
+		ratio: 1.2,
+		bases: [ 1 ],
+		round: 5
+	};
 
 	/**
 	 * Calculate a modular scale value.
 	 *
-	 * @param {int}   power The power of the modular scale value.
+	 * @param {int} power The power of the modular scale value.
 	 * @param {float} ratio The modular scale ratio.
 	 * @param {array} bases One or more modular scale bases.
 	 * @return {float}
@@ -34,25 +45,23 @@ module.exports = postcss.plugin( '.postcss.custom.js', ( options )=> {
 	}
 
 	/**
-	 * Calculate a unitless line height based on a modular scale.
+	 * Calculate a unitless line height for a given modular scale.
 	 *
 	 * @param {float} lineHeight The base, unitless line height.
-	 * @param {int}   power The power of the modular scale value.
+	 * @param {int} power The power of the modular scale value.
 	 * @param {float} ratio The modular scale ratio.
 	 * @param {array} bases One or more modular scale bases.
 	 * @return {float}
 	 */
 	function lineHeightScale( lineHeight, power, ratio, bases ) {
-		let multiplier = 1;
-		let output = lineHeight / modularScale( power, ratio, bases );
+		const baseHeight = lineHeight / modularScale( power, ratio, bases );
+		let realHeight = baseHeight;
 
-		while ( 1 > output ) {
-			multiplier += 1;
-
-			output *= multiplier;
+		while ( 1 > realHeight ) {
+			realHeight += baseHeight;
 		}
 
-		return output;
+		return realHeight;
 	}
 
 	return ( root )=> {
@@ -61,10 +70,12 @@ module.exports = postcss.plugin( '.postcss.custom.js', ( options )=> {
 				return;
 			}
 
-			if ( '--font-size' === decl.prop  ) {
+			if ( '--font-size' === decl.prop ) {
 				options.fontSize = parseFloat( decl.value );
+				options.fontUnit = decl.value.replace( /(\d|\.|-)+/, '' );
 			} else if ( '--line-height' === decl.prop ) {
 				options.lineHeight = parseFloat( decl.value );
+				options.rhythmUnit = decl.value.replace( /(\d|\.|-)+/, '' );
 			} else if ( '--modular-scale' === decl.prop ) {
 				const [ ratio, ...bases ] = postcss.list.space( decl.value );
 
@@ -74,29 +85,39 @@ module.exports = postcss.plugin( '.postcss.custom.js', ( options )=> {
 				if ( ! options.bases.length ) {
 					options.bases.push( 1 );
 				}
-			} else if ( '--vertical-rhythm' === decl.prop ) {
-				options.rhythmUnit = decl.value;
 			}
 		});
 
 		root.replaceValues(
-			/\b(-?\d*\.?\d+)mlh\b/,
-			value=> lineHeightScale( options.lineHeight, parseFloat( value ), options.ratio, options.bases )
+			/(-?\d*\.?\d+)mfs\b/g,
+			( value )=> {
+				const size = modularScale( parseFloat( value ), options.ratio, options.bases ) * options.fontSize;
+
+				return size.toFixed( options.round ) + options.fontUnit;
+			}
 		);
 
 		root.replaceValues(
-			/\b(-?\d*\.?\d+)mfs\b/,
-			value=> modularScale( parseFloat( value ), options.ratio, options.bases ) * options.fontSize + options.rhythmUnit
+			/(-?\d*\.?\d+)mlh\b/g,
+			( value )=> {
+				const height = lineHeightScale( options.lineHeight, parseFloat( value ), options.ratio, options.bases );
+
+				return height.toFixed( options.round );
+			}
 		);
 
 		root.replaceValues(
-			/\b(-?\d*\.?\d+)msu\b/,
-			value=> modularScale( parseFloat( value ), options.ratio, options.bases )
+			/(-?\d*\.?\d+)msu\b/g,
+			value=> modularScale( parseFloat( value ), options.ratio, options.bases ).toFixed( options.round )
 		);
 
 		root.replaceValues(
-			/\b(-?\d*\.?\d+)vru\b/,
-			value=> parseFloat( value ) * options.lineHeight + options.rhythmUnit
+			/(-?\d*\.?\d+)vru\b/g,
+			( value )=> {
+				const rhythm = parseFloat( value ) * options.lineHeight;
+
+				return rhythm.toFixed( options.round ) + options.rhythmUnit;
+			}
 		);
 	};
 });
