@@ -3,10 +3,7 @@
 module.exports = {
 	formatter: 'string',
 	extends: [ 'stylelint-config-standard', 'stylelint-config-wordpress' ],
-	plugins: [
-		'stylelint-declaration-block-no-ignored-properties',
-		'stylelint-order'
-	],
+	plugins: [ 'stylelint-order' ],
 	rules: {
 
 		// ----- Possible Errors ---------------------------------------------------
@@ -56,7 +53,6 @@ module.exports = {
 
 		// ----- Plugins -----------------------------------------------------------
 
-		'order/properties-alphabetical-order': true,
-		'plugin/declaration-block-no-ignored-properties': true
+		'order/properties-alphabetical-order': true
 	}
 };
