@@ -33,5 +33,5 @@ if ( version_compare( PHP_VERSION, '7', '<' ) ) {
 
 require __DIR__ . '/lib/plugin/globals.php';
 
-webcomic_init( '5.0.5' );
+webcomic_init( '5.0.6' );
 webcomic_load( webcomic( 'option.components' ) );

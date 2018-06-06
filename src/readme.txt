@@ -78,16 +78,20 @@ If you're a friendly and knowledgable Webcomic user, please chime in and help ot
 
 [Complete changelog](https://github.com/mgsisk/webcomic/blob/master/changelog.md)
 
-= 5.0.5 (2018-02-14) =
+= 5.0.6 (2018-06-06) =
+**Added**
+- Development configurations for Code Climate and TravisCI
 
 **Changed**
-- Log viewer plugin is no longer activated by default in the test vagrant box
-- Media tokens are now replaced with an empty string if no media exists
+- CSS refactored to adhere to stricter `stylelint` configuration
+- JavaScript refactored to adhere to stricter `eslint` configuration
+- Removed Atom configuration
+- Task runner to NPM
 
 **Fixed**
-- Empty Twitter status saving
-- Meta box ID for Webcomic Role Restrictions
-- Term object check for media states
+- Incorrect variable reference in `compat` template tag
+- Static analysis and code sniffing issues
+- Compat `webcomic_link` shortcodes not using `$content` for link text
 
 = 5.0.0 - Phoenix Down (2018-01-21) =
 > Refactored everything into a functional component-based architecture.
@@ -239,7 +243,7 @@ If you're a friendly and knowledgable Webcomic user, please chime in and help ot
 
 == Upgrade Notice ==
 
-= 5.0.5 =
+= 5.0.6 =
 Visit https://mgsisk.com/webcomic/Upgrading-to-Webcomic-5 for important information about this version.
 
 == Special Thanks ==

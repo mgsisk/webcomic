@@ -12,18 +12,21 @@
 - Investigate setting a primary site collection, is_* rules for non-primary
   collection (per-landing page? Front page theme resolution?)
 
-## [5.0.6] (2018-04-30)
+## [5.0.6] (2018-06-06)
 
 ### Added
 - Development configurations for Code Climate and TravisCI
 
 ### Changed
-- CSS refactored to adhere to more stringent `stylelint` configuration
-- JavaScript refactored to adhere to more stringent `eslint` configuration
+- CSS refactored to adhere to stricter `stylelint` configuration
+- JavaScript refactored to adhere to stricter `eslint` configuration
+- Removed Atom configuration
+- Task runner to NPM
 
 ### Fixed
 - Incorrect variable reference in `compat` template tag
 - Static analysis and code sniffing issues
+- Compat `webcomic_link` shortcodes not using `$content` for link text
 
 ## [5.0.5] (2018-02-14)
 
