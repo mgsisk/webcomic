@@ -18,9 +18,9 @@ env:
 matrix:
   fast_finish: true
   exclude:
-    - php: 7.2
+    - php: '7.2'
       env: wpvn='4.7'
-    - php: 7.2
+    - php: '7.2'
       env: wpvn='4.8'
 
 addons:
