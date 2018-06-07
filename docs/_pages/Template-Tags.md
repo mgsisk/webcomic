@@ -147,6 +147,44 @@ These template tags are available with the Commerce component.
 - [webcomic_print_sold()](webcomic_print_sold())
 - [webcomic_prints_list()](webcomic_prints_list())
 
+## Location template tags
+
+These template tags are available with the Location component.
+
+- [get_webcomic_location()](get_webcomic_location())
+- [get_webcomic_location_count()](get_webcomic_location_count())
+- [get_webcomic_location_description()](get_webcomic_location_description())
+- [get_webcomic_location_media()](get_webcomic_location_media())
+- [get_webcomic_location_title()](get_webcomic_location_title())
+- [get_webcomic_location_updated()](get_webcomic_location_updated())
+- [get_webcomic_location_url()](get_webcomic_location_url())
+- [get_webcomic_location_link()](get_webcomic_location_link())
+- [get_webcomic_locations()](get_webcomic_locations())
+- [get_webcomic_locations_list()](get_webcomic_locations_list())
+- [has_webcomic_location()](has_webcomic_location())
+- [is_a_webcomic_location()](is_a_webcomic_location())
+- [is_a_first_webcomic_location()](is_a_first_webcomic_location())
+- [is_a_previous_webcomic_location()](is_a_previous_webcomic_location())
+- [is_a_next_webcomic_location()](is_a_next_webcomic_location())
+- [is_a_last_webcomic_location()](is_a_last_webcomic_location())
+- [is_webcomic_location()](is_webcomic_location())
+- [is_first_webcomic_location()](is_first_webcomic_location())
+- [is_previous_webcomic_location()](is_previous_webcomic_location())
+- [is_next_webcomic_location()](is_next_webcomic_location())
+- [is_last_webcomic_location()](is_last_webcomic_location())
+- [webcomic_location_count()](webcomic_location_count())
+- [webcomic_location_description()](webcomic_location_description())
+- [webcomic_location_media()](webcomic_location_media())
+- [webcomic_location_title()](webcomic_location_title())
+- [webcomic_location_updated()](webcomic_location_updated())
+- [webcomic_location_link()](webcomic_location_link())
+- [first_webcomic_location_link()](first_webcomic_location_link())
+- [previous_webcomic_location_link()](previous_webcomic_location_link())
+- [next_webcomic_location_link()](next_webcomic_location_link())
+- [last_webcomic_location_link()](last_webcomic_location_link())
+- [random_webcomic_location_link()](random_webcomic_location_link())
+- [webcomic_locations_list()](webcomic_locations_list())
+
 ## Restrict template tags
 
 These template tags are available with the Restrict component.

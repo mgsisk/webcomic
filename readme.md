@@ -44,6 +44,8 @@ template tags, and widgets. Take your online comic publishing even further with:
 - **Character**, which allows you to tag character appearances and use
   character-based archives.
 - **Commerce**, which adds PayPal-based print selling and donation features.
+- **Location**, which allows you to tag important locations that appear in your
+  comics and use location-based archives.
 - **Restrict**, which adds features for restricting access to comics based on
   age or user role.
 - **Storyline**, which allows you to organize comics by storyline and use
