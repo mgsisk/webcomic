@@ -12,7 +12,7 @@ get_webcomic_term_link( string $link = '%title', mixed $term = null, array $args
 ## Parameters
 
 ### `string` $link
-Optional link text, like before{{text}}after.
+Optional link text, like before\{\{text}}after.
 
 ### `mixed` $term
 Optional reference term.

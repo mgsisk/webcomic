@@ -134,7 +134,7 @@ function hook_add_status_tokens_basic( array $tokens, string $format, WP_Post $p
 	}
 
 	return $tokens;
-} // @codingStandardsIgnoreEnd Generic.Metrics.CyclomaticComplexity.TooHigh
+}// @codingStandardsIgnoreEnd Generic.Metrics.CyclomaticComplexity.TooHigh
 
 /**
  * Add custom field status tokens.
@@ -541,6 +541,7 @@ function util_api_request( string $method, string $endpoint, array $args ) : arr
  * @param array $response The response to parse.
  * @return array
  * @internal For util_api_request().
+ * @suppress PhanTypeArraySuspiciousNullable - $output['body']['errors'] incorrectly triggers this.
  */
 function util_api_response( array $response ) : array {
 	$output = [

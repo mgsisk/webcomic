@@ -107,7 +107,7 @@ function get_webcomic_term( $term = null, array $args = [] ) {
 			'taxonomy' => $args['taxonomy'],
 		]
 	);
-} // @codingStandardsIgnoreEnd
+}// @codingStandardsIgnoreEnd
 
 /**
  * Get a term comic count.
@@ -213,7 +213,6 @@ function get_webcomic_term_updated( string $format = '', $term = null, array $ar
  * @param mixed $post Optional reference post.
  * @param array $post_args Optional post arguments.
  * @return string
- * @suppress PhanPluginAlwaysReturnFunction - Incorrectly triggered.
  */
 function get_webcomic_term_url( $term = null, array $args = [], $post = null, array $post_args = [] ) : string {
 	$comic_term = get_webcomic_term( $term, $args );
@@ -306,18 +305,18 @@ function get_webcomic_term_link( string $link = '%title', $term = null, array $a
 	 *
 	 * ## Core tokens
 	 *
-	 * |Token        |Value                                    |Example       |
-	 * |-------------|-----------------------------------------|--------------|
-	 * |%count       |The number of comics in the collection.  |42            |
-	 * |%date        |The collection's update date.            |May 1, 2099   |
-	 * |%description |The collection's description.            |It's exciting!|
-	 * |%full        |The collection's full-size media.        |              |
-	 * |%large       |The collection's large-size media.       |              |
-	 * |%medium      |The collection's medium-size media.      |              |
-	 * |%medium_large|The collection's medium_large-size media.|              |
-	 * |%thumbnail   |The collection's thumbnail-size media.   |              |
-	 * |%time        |The collection's updated time.           |4:52 pm       |
-	 * |%title       |The collection's title.                  |Chapter 1     |
+	 * |Token        |Value                              |Example       |
+	 * |-------------|-----------------------------------|--------------|
+	 * |%count       |The number of comics in the term.  |42            |
+	 * |%date        |The term's update date.            |May 1, 2099   |
+	 * |%description |The term's description.            |It's exciting!|
+	 * |%full        |The term's full-size media.        |              |
+	 * |%large       |The term's large-size media.       |              |
+	 * |%medium      |The term's medium-size media.      |              |
+	 * |%medium_large|The term's medium_large-size media.|              |
+	 * |%thumbnail   |The term's thumbnail-size media.   |              |
+	 * |%time        |The term's updated time.           |4:52 pm       |
+	 * |%title       |The term's title.                  |Chapter 1     |
 	 *
 	 * @param array   $tokens The token values.
 	 * @param string  $link The link text to search for tokens.
@@ -541,7 +540,7 @@ function has_webcomic_term( string $taxonomy = '', $term = null, $post = null ) 
 	}
 
 	return false;
-} // @codingStandardsIgnoreEnd
+}// @codingStandardsIgnoreEnd
 
 /**
  * Is the term a comic term?
@@ -645,6 +644,7 @@ function is_a_last_webcomic_term( $term = null, $relative = null, array $args = 
  *                            collection ID's.
  * }
  * @return bool
+ * @suppress PhanTypeInvalidDimOffset - $args keys incorrectly trigger this.
  */
 function is_webcomic_tax( $taxonomies = null, $terms = null, $relative = null, array $args = [] ) : bool {
 	$taxonomies = preg_grep( '/^webcomic\d+_.+/', (array) $taxonomies );

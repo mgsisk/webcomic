@@ -5,9 +5,6 @@
   bootstrap="tests/phpunit/includes/bootstrap.php"
   checkForUnintentionallyCoveredCode="true"
   colors="true"
-  convertErrorsToExceptions="true"
-  convertNoticesToExceptions="true"
-  convertWarningsToExceptions="true"
   forceCoversAnnotation="true"
 >
   <testsuites>
@@ -29,7 +26,7 @@
   </filter>
 
   <logging>
-    <log type="coverage-clover" target="tests/phpunit/coverage/coverage.xml"/>
+    <log type="coverage-clover" target="tests/phpunit/coverage/clover.xml"/>
     <log type="coverage-html" target="tests/phpunit/coverage" lowUpperBound="40" highLowerBound="80"/>
   </logging>
 </phpunit>

@@ -2,7 +2,7 @@
  * Integration styles
  *
  * NOTE This stylesheet isn't loaded via the register/enqueue system; the
- * processed CSS foundis prepended directly to the themes custom CSS to avoid an
+ * processed CSS is prepended directly to the themes custom CSS to avoid an
  * extra request and improve page speed. See lib/collection/customize.php
  */
 
@@ -48,11 +48,11 @@
 		max-width: 100%;
 	}
 
-	& span:after {
+	& span::after {
 		content: ", ";
 	}
 
-	& span:last-child:after {
+	& span:last-child::after {
 		content: "";
 	}
 

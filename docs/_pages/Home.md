@@ -27,7 +27,7 @@ WordPress-powered site, WordPress has [some hosting recommendations to get you
 started][url-2]. If you haven't installed and activated Webcomic, there are
 [instructions for installing and activating Webcomic][url-3].
 
-![The Plugins screen in WordPress, with the Help link highlighted.][img-2]
+[![The Plugins screen in WordPress, with the Help link highlighted.][img-2]][img-2]
 
 Before you dive in to this user guide, take a moment to find the **Help** tab
 in the WordPress dashboard. It doesn't appear on every screen, but every

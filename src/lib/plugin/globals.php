@@ -192,7 +192,7 @@ function webcomic_init( string $version ) {
 
 	// Translators: Plugin version.
 	webcomic_notice( '<strong>' . sprintf( __( 'Thank you for creating with Webcomic %s', 'webcomic' ), webcomic( 'option.version' ) ) . "</strong> {$learn}", 'info' );
-} // @codingStandardsIgnoreEnd Generic.Metrics.CyclomaticComplexity.TooHigh
+}// @codingStandardsIgnoreEnd Generic.Metrics.CyclomaticComplexity.TooHigh
 
 /**
  * Load plugin components.

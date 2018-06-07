@@ -9,7 +9,7 @@ permalink: webcomic_enqueue_comic_term_search
 apply_filters( 'webcomic_enqueue_comic_term_search', bool $enqueue )
 ```
 
-This filter allows hooks to enqueue the shared comicterm  search
+This filter allows hooks to enqueue the shared comic term search
 functionality.
 
 ## Parameters

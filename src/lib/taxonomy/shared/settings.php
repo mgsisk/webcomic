@@ -97,7 +97,7 @@ function deactivate( string $type ) {
 		foreach ( $terms as $term ) {
 			wp_delete_term( $term, "{$collection}_{$type}" );
 		}
-	} // End foreach().
+	}//end foreach()
 
 	$type  = sanitize_key( $type );
 	$table = webcomic( 'GLOBALS.wpdb' )->options;
@@ -182,7 +182,7 @@ function add_sorter_page( string $type ) {
 				require $args['file'];
 			}
 		);
-	} // End foreach().
+	}//end foreach()
 }
 
 /**

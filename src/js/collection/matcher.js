@@ -14,7 +14,7 @@
 		const fields = document.querySelectorAll( 'label[for^="webcomic_matcher[post_"]' );
 
 		for ( let i = 0; i < fields.length; i++ ) {
-			fields[ i ].parentNode.parentNode.className = 'hidden';
+			fields[i].parentNode.parentNode.className = 'hidden';
 		}
 
 		if ( 'post_date' === event.target.value ) {

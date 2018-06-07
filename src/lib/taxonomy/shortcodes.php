@@ -459,7 +459,7 @@ function is_webcomic_tax_shortcode( $atts, string $content, string $name ) : str
  *                              Results will be limited to terms associated with
  *                              these objects.
  *     @type string $order Whether to order terms in ascending or descending
- *                         order. Accepts 'ASC' (ascending) or 'DESC'
+ *                         order. Accepts 'asc' (ascending) or 'desc'
  *                         (descending).
  *     @type string $orderby Field to order terms by. Accepts term fields (
  *                           'name', 'slug', 'term_group', 'term_id', 'id',
@@ -492,7 +492,7 @@ function webcomic_terms_list_shortcode( $atts, string $content, string $name ) :
 			'link'            => '%title',
 			'object_ids'      => null,
 			'order'           => 'asc',
-			'orderby'         => 'name',
+			'orderby'         => '',
 			'start_el'        => '',
 			'start_lvl'       => '',
 			'start'           => '',
@@ -511,6 +511,10 @@ function webcomic_terms_list_shortcode( $atts, string $content, string $name ) :
 
 	if ( $content ) {
 		$args['link'] = do_shortcode( htmlspecialchars_decode( $content ) );
+	}
+
+	if ( ! $args['orderby'] ) {
+		unset( $args['orderby'] );
 	}
 
 	if ( is_string( $args['link_args'] ) ) {

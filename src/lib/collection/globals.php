@@ -503,6 +503,7 @@ function get_webcomic_infinite_link( string $link = '' ) : string {
  *                            the related post to get.
  * }
  * @return mixed
+ * @suppress PhanTypeInvalidDimOffset - $args keys incorrectly trigger this.
  * @codingStandardsIgnoreStart Generic.Metrics.CyclomaticComplexity.TooHigh - More refactoring would be counterproductive.
  */
 function get_webcomic( $post = null, array $args = [] ) {
@@ -539,7 +540,7 @@ function get_webcomic( $post = null, array $args = [] ) {
 	}
 
 	return get_post( $comics[0] );
-} // @codingStandardsIgnoreEnd
+}// @codingStandardsIgnoreEnd
 
 /**
  * Get comic media.
@@ -558,6 +559,7 @@ function get_webcomic( $post = null, array $args = [] ) {
  *     @type int   $offset Optional zero-based media index to use.
  * }
  * @return string
+ * @suppress PhanTypeInvalidDimOffset - $args keys incorrectly trigger this.
  */
 function get_webcomic_media( $format = 'full', $post = null, array $args = [] ) : string {
 	$comic = get_webcomic( $post, $args );
@@ -575,17 +577,16 @@ function get_webcomic_media( $format = 'full', $post = null, array $args = [] ) 
 	preg_match( '/^(.*){{(.*)}}(.*?)(?:{(.+?)})?$/s', $format, $match );
 
 	if ( empty( $match ) ) {
-		$match = [ '', '', '', '', $format ];
-	} elseif ( 5 !== count( $match ) ) {
-		$match += [ '', '', '', '', 'full' ];
+		$match = array_filter( [ '', '', '', '', wp_strip_all_tags( $format ) ] );
 	}
 
-	$args += [
+	$items  = [];
+	$match += [ '', '', '', '', 'full' ];
+	$args  += [
 		'attr'   => [],
 		'offset' => null,
 		'length' => null,
 	];
-	$items = [];
 
 	if ( preg_match( '/^\s*(\d+)(?:\s*,\s*(\d+))?\s*$/', $match[4], $size ) ) {
 		$size    += [ '', $size[1], $size[1] ];

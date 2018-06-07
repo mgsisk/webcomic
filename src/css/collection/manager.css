@@ -7,42 +7,46 @@
 	& div {
 		position: relative;
 
+		& img {
+			height: auto;
+			max-width: 100%;
+			vertical-align: middle;
+		}
+
+		& noscript {
+			color: #d98500;
+			display: block;
+			margin: 0.5em 0;
+		}
+
 		& a {
 			background: #fff;
-			left: 0.25rem;
+			border: thin solid #ccc;
+			display: block;
+			left: 0.25em;
 			position: absolute;
-			top: 0.25rem;
+			top: 0.25em;
 			transform-origin: 0 0;
-			transition-property: color, transform;
+			transition-property: border, color, transform;
 
 			&:focus,
 			&:hover {
+				border: thin solid;
 				transform: scale(1.5);
 			}
 		}
 
 		&.ui-sortable-placeholder {
 			background: rgba(0, 0, 0, 0.05);
-			box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.1) inset;
+			box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.1) inset;
 			outline: thin dashed rgba(0, 0, 0, 0.1);
+			/* stylelint-disable-next-line declaration-no-important */
 			visibility: visible !important;
 		}
 
 		&.ui-sortable-helper img {
-			box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2);
+			box-shadow: 0 0 1em rgba(0, 0, 0, 0.2);
 		}
-	}
-
-	& img {
-		height: auto;
-		max-width: 100%;
-		vertical-align: middle;
-	}
-
-	& noscript {
-		color: #d98500;
-		display: block;
-		margin: 0.5rem 0;
 	}
 }
 

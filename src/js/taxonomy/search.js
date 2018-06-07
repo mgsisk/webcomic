@@ -1,4 +1,4 @@
-/* global ajaxurl, jQuery  */
+/* global ajaxurl  */
 
 /**
  * Comic term search implementation.
@@ -13,13 +13,23 @@
 		return document.addEventListener( 'DOMContentLoaded', load );
 	}
 
-	const elements = document.querySelectorAll( '[data-webcomic-term-search]' );
+	jQuery( document ).on( 'widget-added widget-updated', webcomicUpdateTermSearchWidget );
 
-	for ( let i = 0; i < elements.length; i++ ) {
-		updateComicTermSearch(
-			elements[ i ],
-			Number( document.querySelector( `[name="${elements[ i ].getAttribute( 'data-input' )}"]` ).value )
-		);
+	webcomicPrepareTermSearch( document.querySelectorAll( '[data-webcomic-term-search]' ) );
+
+	/**
+	 * Prepare comic term search elements for searching.
+	 *
+	 * @param {array} elements The current list of comic term search elements.
+	 * @return {void}
+	 */
+	function webcomicPrepareTermSearch( elements ) {
+		for ( let i = 0; i < elements.length; i++ ) {
+			webcomicUpdateTermSeach(
+				elements[i],
+				Number( document.querySelector( `[name="${elements[i].getAttribute( 'data-input' )}"]` ).value )
+			);
+		}
 	}
 
 	/**
@@ -27,8 +37,12 @@
 	 *
 	 * Widgets have their own, jQuery-enabled events, so we have to use jQuery
 	 * to listen for these events and update the comic term search as necessary.
+	 *
+	 * @param {object} event The current event object.
+	 * @param {object} widget The current widget object.
+	 * @return {void}
 	 */
-	jQuery( document ).on( 'widget-added widget-updated', ( event, widget )=> {
+	function webcomicUpdateTermSearchWidget( event, widget ) {
 		if ( ! widget[0].id.match( /_mgsisk_webcomic_/ ) ) {
 			return;
 		}
@@ -36,12 +50,12 @@
 		const elements = widget[0].querySelectorAll( '[data-webcomic-term-search]' );
 
 		for ( let i = 0; i < elements.length; i++ ) {
-			updateComicTermSearch(
-				elements[ i ],
-				Number( document.querySelector( `[name="${elements[ i ].getAttribute( 'data-input' )}"]` ).value )
+			webcomicUpdateTermSeach(
+				elements[i],
+				Number( document.querySelector( `[name="${elements[i].getAttribute( 'data-input' )}"]` ).value )
 			);
 		}
-	});
+	}
 
 	/**
 	 * Update the comic term search.
@@ -50,10 +64,10 @@
 	 * @param {int}    term The selected term.
 	 * @return {void}
 	 */
-	function updateComicTermSearch( element, term ) {
-		const input = document.querySelector( `[name="${element.getAttribute( 'data-input' )}"]` ),
-					data  = new FormData,
-					xhr   = new XMLHttpRequest;
+	function webcomicUpdateTermSeach( element, term ) {
+		const input = document.querySelector( `[name="${element.getAttribute( 'data-input' )}"]` );
+		const data = new FormData;
+		const xhr = new XMLHttpRequest;
 
 		input.value = term;
 
@@ -70,14 +84,14 @@
 			if ( 4 !== xhr.readyState ) {
 				return;
 			} else if ( ! term ) {
-				getSearchFields( element );
+				webcomicGetSearchFields( element );
 
 				element.querySelector( 'input' ).dispatchEvent( new Event( 'input' ) );
 
 				return;
 			}
 
-			getSelectedComicTerm( element, JSON.parse( xhr.responseText ) );
+			webcomicGetSelectedTerm( element, JSON.parse( xhr.responseText ) );
 		};
 		xhr.open( 'POST', ajaxurl );
 		xhr.send( data );
@@ -89,7 +103,7 @@
 	 * @param {object} element The comic term search element.
 	 * @return {void}
 	 */
-	function getSearchFields( element ) {
+	function webcomicGetSearchFields( element ) {
 		if ( ! element.querySelector( 'input' ) ) {
 			element.innerHTML = `<input type="search" id="${element.getAttribute( 'data-webcomic-term-search' )}" class="widefat" placeholder="${element.getAttribute( 'data-webcomic-term-search-search' )}">`;
 		}
@@ -99,7 +113,7 @@
 		}
 
 		element.querySelector( 'input' ).addEventListener( 'input', ( event )=> {
-			searchComicTerms( element, event.target.value );
+			webcomicSearchTerms( element, event.target.value );
 		});
 	}
 
@@ -110,9 +124,9 @@
 	 * @param {string} query The query to search for.
 	 * @return {void}
 	 */
-	function searchComicTerms( element, query ) {
-		const data  = new FormData,
-					xhr   = new XMLHttpRequest;
+	function webcomicSearchTerms( element, query ) {
+		const data = new FormData;
+		const xhr = new XMLHttpRequest;
 
 		data.append( 'action', 'webcomic_update_comic_term_search' );
 		data.append( 'query', query );
@@ -123,7 +137,7 @@
 				return;
 			}
 
-			getSearchResults( element, query, JSON.parse( xhr.responseText ) );
+			webcomicGetSearchResults( element, query, JSON.parse( xhr.responseText ) );
 		};
 		xhr.open( 'POST', ajaxurl );
 		xhr.send( data );
@@ -137,16 +151,16 @@
 	 * @param {array}  terms The array of elements returned by the XHR handler.
 	 * @return {void}
 	 */
-	function getSearchResults( element, query, terms ) {
+	function webcomicGetSearchResults( element, query, terms ) {
 		let results = '<table class="widefat fixed striped media">';
 
 		for ( let i = 0; i < terms.length; i++ ) {
 			results += `
-			<tr data-id="${terms[ i ].term_id}">
+			<tr data-id="${terms[i].term_id}">
 				<td class="title column-title column-primary">
 					<strong class="has-media-icon">
-						<span class="media-icon image-icon">${terms[ i ].webcomic_term_media}</span>
-						${terms[ i ].name}
+						<span class="media-icon image-icon">${terms[i].webcomic_term_media}</span>
+						${terms[i].name}
 					</strong>
 				</td>
 			</tr>`;
@@ -170,8 +184,8 @@
 		const elements = element.querySelectorAll( '[data-id]' );
 
 		for ( let i = 0; i < elements.length; i++ ) {
-			elements[ i ].addEventListener( 'click', ()=> {
-				updateComicTermSearch( element, Number( elements[ i ].getAttribute( 'data-id' ) ) );
+			elements[i].addEventListener( 'click', ()=> {
+				webcomicUpdateTermSeach( element, Number( elements[i].getAttribute( 'data-id' ) ) );
 			});
 		}
 	}
@@ -183,7 +197,7 @@
 	 * @param {object} term The term object returned by the XHR handler.
 	 * @return {void}
 	 */
-	function getSelectedComicTerm( element, term ) {
+	function webcomicGetSelectedTerm( element, term ) {
 		element.innerHTML = `
 			<a class="dashicons dashicons-no">
 				<span class="screen-reader-text">${element.getAttribute( 'data-webcomic-term-search-remove' )}</span>
@@ -192,7 +206,7 @@
 			${term.media}`;
 
 		element.querySelector( 'a' ).addEventListener( 'click', ()=> {
-			updateComicTermSearch( element, 0 );
+			webcomicUpdateTermSeach( element, 0 );
 		});
 	}
 }() );

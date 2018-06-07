@@ -10,15 +10,23 @@
 		return document.addEventListener( 'DOMContentLoaded', load );
 	}
 
-	document.addEventListener( 'click', ( event )=> {
+	document.addEventListener( 'click', webcomicQuickEditRoles );
+
+	/**
+	 * Update roles quick edit settings.
+	 *
+	 * @param {object} event The current event object.
+	 * @return {void}
+	 */
+	function webcomicQuickEditRoles( event ) {
 		if ( 'editinline' !== event.target.className ) {
 			return;
 		}
 
-		const data    = new FormData,
-					xhr     = new XMLHttpRequest,
-					element = event.target.parentNode.parentNode.previousElementSibling,
-					postId  = element.id.substr( 7 );
+		const data = new FormData;
+		const xhr = new XMLHttpRequest;
+		const element = event.target.parentNode.parentNode.previousElementSibling;
+		const postId = element.id.substr( 7 );
 
 		data.append( 'action', 'webcomic_restrict_roles_quick_edit' );
 		data.append( 'post', postId );
@@ -28,18 +36,18 @@
 				return;
 			}
 
-			const response = JSON.parse( xhr.responseText ),
-						elements = document.querySelectorAll( `#edit-${postId} .webcomic-restrict-roles-checklist input` );
+			const response = JSON.parse( xhr.responseText );
+			const elements = document.querySelectorAll( `#edit-${postId} .webcomic-restrict-roles-checklist input` );
 
 			for ( let i = 0; i < elements.length; i++ ) {
-				if ( 0 > response.indexOf( elements[ i ].value ) ) {
+				if ( 0 > response.indexOf( elements[i].value ) ) {
 					continue;
 				}
 
-				elements[ i ].checked = true;
+				elements[i].checked = true;
 			}
 		};
 		xhr.open( 'POST', ajaxurl );
 		xhr.send( data );
-	});
+	}
 }() );

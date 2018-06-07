@@ -154,7 +154,7 @@ function hook_add_media_states( array $states ) : array {
 	foreach ( $comic_terms as $comic_term ) {
 		$comic_term = get_term( $comic_term );
 
-		if ( ! $comic_term ) {
+		if ( ! $comic_term || is_wp_error( $comic_term ) ) {
 			delete_post_meta( get_the_ID(), 'webcomic_term', $comic_term );
 
 			continue;

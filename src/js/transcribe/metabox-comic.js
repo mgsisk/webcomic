@@ -10,24 +10,18 @@
 		return document.addEventListener( 'DOMContentLoaded', load );
 	}
 
+	document.addEventListener( 'click', webcomicToggleContainer );
+	document.addEventListener( 'click', webcomicAddTranscribeCheckBox );
+	document.addEventListener( 'click', webcomicRemoveTranscribeCheckBox );
+
 	/**
 	 * Toggle container properties when a parent comic image is clicked.
 	 *
+	 * @param {object} event The current event object.
 	 * @return {void}
 	 */
-	document.addEventListener( 'click', ( event )=> {
+	function webcomicToggleContainer( event ) {
 		if ( 'img' !== event.target.tagName.toLowerCase() ) {
-			return;
-		}
-
-		let element = event.target;
-
-		while ( element.tagName && ! element.hasAttribute( 'data-webcomic-search' ) ) {
-			element = element.parentNode;
-		}
-
-		if ( ! element.tagName || ! element.hasAttribute( 'data-webcomic-search' ) ) {
-
 			return;
 		}
 
@@ -37,10 +31,27 @@
 			dataId = dataId.parentNode;
 		}
 
-		if ( dataId.tagName && dataId.hasAttribute( 'data-id' ) ) {
+		if ( dataId && dataId.tagName && dataId.hasAttribute( 'data-id' ) ) {
 			return;
 		}
 
+		const element = webcomicGetSearchElement( event );
+
+		if ( ! element ) {
+			return;
+		}
+
+		webcomicChangeContainerProperties( event, element );
+	}
+
+	/**
+	 * Change comic container properties.
+	 *
+	 * @param {object} event The current event object.
+	 * @param {object} element The container element object.
+	 * @return {void}
+	 */
+	function webcomicChangeContainerProperties( event, element ) {
 		if ( element.classList.contains( 'contain' ) ) {
 			element.querySelector( 'p' ).style.display = null;
 			element.classList.remove( 'contain' );
@@ -49,44 +60,41 @@
 			return;
 		}
 
-		const width  = Number( event.target.getAttribute( 'width' ) ),
-					height = Number( event.target.getAttribute( 'height' ) ),
-					ratio  = width / height,
-					scale  = height / 2 * ratio;
+		const width = Number( event.target.getAttribute( 'width' ) );
+		const height = Number( event.target.getAttribute( 'height' ) );
+		const ratio = width / height;
+		const scale = height / 2 * ratio;
 
 		element.querySelector( 'p' ).style.display = 'none';
 		element.classList.add( 'contain' );
 		element.style.height = `${scale}px`;
-	});
+	}
 
 	/**
 	 * Add the webcomic_transcribe checkbox when a comic is selected.
 	 *
+	 * @param {object} event The current event object.
 	 * @return {void}
 	 */
-	document.addEventListener( 'click', ( event )=> {
+	function webcomicAddTranscribeCheckBox( event ) {
 		let dataId = event.target;
 
-		while ( dataId.tagName && ! dataId.hasAttribute( 'data-id' ) ) {
+		while ( dataId && dataId.tagName && ! dataId.hasAttribute( 'data-id' ) ) {
 			dataId = dataId.parentNode;
 		}
 
-		if ( ! dataId.tagName || ! dataId.hasAttribute( 'data-id' ) ) {
+		if ( ! dataId || ! dataId.tagName || ! dataId.hasAttribute( 'data-id' ) ) {
 			return;
 		}
 
-		let element = event.target;
+		const element = webcomicGetSearchElement( event );
 
-		while ( element.tagName && ! element.hasAttribute( 'data-webcomic-search' ) ) {
-			element = element.parentNode;
-		}
-
-		if ( ! element.tagName || ! element.hasAttribute( 'data-webcomic-search' ) ) {
+		if ( ! element ) {
 			return;
 		}
 
-		const data = new FormData,
-					xhr  = new XMLHttpRequest;
+		const data = new FormData;
+		const xhr = new XMLHttpRequest;
 
 		data.append( 'action', 'webcomic_transcript_comic_search' );
 		data.append( 'post', dataId.getAttribute( 'data-id' ) );
@@ -104,7 +112,6 @@
 				checked = ' checked';
 			}
 
-			// label.className = 'selectit transcribe';
 			paragraph.innerHTML = `
 				<label class="selectit">
 					<input type="hidden" name="webcomic_transcribe">
@@ -117,30 +124,47 @@
 		};
 		xhr.open( 'POST', ajaxurl );
 		xhr.send( data );
-	});
+	}
 
 	/**
 	 * Remove the webcomic_transcribe checkbox when a comic is removed.
 	 *
+	 * @param {object} event The current event object.
 	 * @return {void}
 	 */
-	document.addEventListener( 'click', ( event )=> {
+	function webcomicRemoveTranscribeCheckBox( event ) {
 		if ( 'a' !== event.target.tagName.toLowerCase() ) {
 			return;
 		}
 
-		let element = event.target;
+		const element = webcomicGetSearchElement( event );
 
-		while ( element.tagName && ! element.hasAttribute( 'data-webcomic-search' ) ) {
-			element = element.parentNode;
-		}
-
-		if ( ! element.tagName || ! element.hasAttribute( 'data-webcomic-search' ) ) {
+		if ( ! element || ! element.parentNode || ! element.parentNode.querySelector( 'p' ) ) {
 			return;
 		}
 
 		element.parentNode.querySelector( 'p' ).parentNode.removeChild( element.parentNode.querySelector( 'p' ) );
 		element.classList.remove( 'contain' );
 		element.style.height = 'auto';
-	});
+	}
+
+	/**
+	 * Get the comic search element.
+	 *
+	 * @param {object} event The current event object.
+	 * @return {object}
+	 */
+	function webcomicGetSearchElement( event ) {
+		let element = event.target;
+
+		while ( element && element.tagName && ! element.hasAttribute( 'data-webcomic-search' ) ) {
+			element = element.parentNode;
+		}
+
+		if ( ! element || ! element.tagName || ! element.hasAttribute( 'data-webcomic-search' ) ) {
+			return {};
+		}
+
+		return element;
+	}
 }() );

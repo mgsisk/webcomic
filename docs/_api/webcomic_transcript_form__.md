@@ -22,11 +22,11 @@ Shortcode content overrides the `item` attribute.
 Optional form fields.
 
 ### `string` form
-Optional form structure, like before{{fields}}after.
+Optional form structure, like before\{\{fields}}after.
 Should include the %fields token.
 
 ### `string` format
-Optional form format, like before{{form}}after.
+Optional form format, like before\{\{form}}after.
 Should include the %cancel-link and %form tokens.
 
 ### `string` logged_in_as

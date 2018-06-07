@@ -12,7 +12,7 @@ webcomic_collection_donation_link( string $link = '', mixed $collection = null )
 ## Parameters
 
 ### `string` $link
-Optional link text, like 'before{{text}}after'.
+Optional link text, like 'before\{\{text}}after'.
 
 ### `mixed` $collection
 Optional collection to display a donation link

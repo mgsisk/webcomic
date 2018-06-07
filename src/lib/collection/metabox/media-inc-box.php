@@ -16,7 +16,7 @@ wp_nonce_field( $args['nonce'], $args['nonce'] );
 ?>
 
 <div data-input="webcomic_media" data-webcomic-media-manager="multiple">
-	<?php webcomic_media( '<div>{{</div>{medium}<div>}}</div>' ); ?>
+	<?php webcomic_media( '<div>{{</div><div>}}</div>{medium}' ); ?>
 	<noscript><?php esc_html_e( 'Media management requires JavaScript.', 'webcomic' ); ?></noscript>
 </div>
 <input type="hidden" name="webcomic_media" value="<?php echo esc_attr( $args['media'] ); ?>">

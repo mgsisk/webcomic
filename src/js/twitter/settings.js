@@ -2,8 +2,6 @@
 
 /**
  * Twitter consumer token update implementation.
- *
- * @return {void}
  */
 ( function load() {
 	if ( 'loading' === document.readyState ) {
@@ -29,9 +27,9 @@
 			return;
 		}
 
-		const data      = new FormData,
-					xhr       = new XMLHttpRequest,
-					container = event.target.parentNode.parentNode;
+		const data = new FormData;
+		const xhr = new XMLHttpRequest;
+		const container = event.target.parentNode.parentNode;
 
 		data.append( 'action', 'webcomic_twitter_account' );
 		data.append( 'collection', match[1]);

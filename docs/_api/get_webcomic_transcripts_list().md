@@ -20,11 +20,11 @@ get_webcomic_transcript_authors_list(); only
 used when $item contains the %authors token.
 - **`string` edit_link**  
 Optional edit link format, like
-before{{text}}after.
+before\{\{text}}after.
 - **`string` format**  
-Optional list format, like before{{join}}after.
+Optional list format, like before\{\{join}}after.
 - **`string` item**  
-Optional item format, like before{{item}}after. The
+Optional item format, like before\{\{item}}after. The
 before text should include two sprintf() tokens,
 which will be replaced with the transcript ID and
 CSS class names, respectively.
@@ -35,7 +35,7 @@ only used when $item contains the %languages
 token.
 - **`string` parent_link**  
 Optional parent link format, like
-before{{text}}after.
+before\{\{text}}after.
 - **`string` walker**  
 Optional custom Walker class to use instead of
 Mgsisk\Webcomic\Transcribe\Walker\TranscriptLister.
@@ -46,4 +46,4 @@ Mgsisk\Webcomic\Transcribe\Walker\TranscriptLister.
 
 ## Uses
 - [get_webcomic_transcripts()](get_webcomic_transcripts())  
-The fields argument is always set to 'ids'.
+The fields argument is always set to `ids`.

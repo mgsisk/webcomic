@@ -7,8 +7,6 @@
 
 namespace Mgsisk\Webcomic\Commerce\MetaBox;
 
-use WP_Post;
-
 /**
  * Add prints metabox hooks.
  *
@@ -244,7 +242,7 @@ function hook_quick_edit_prints() {
 /* ===== Collection Hooks =================================================== */
 
 /**
- * Update webcomic_commerce_prints meta data.
+ * Update webcomic_commerce_prints meta data.\
  *
  * @param int $id The post to update.
  * @return void
@@ -264,12 +262,12 @@ function hook_update_post_meta_prints( int $id ) {
 	}
 
 	if ( null === webcomic( 'GLOBALS._REQUEST.webcomic_commerce_prints_bulk' ) ) {
-		foreach ( $old_prints as $print ) {
+		foreach ( array_diff( $old_prints, $new_prints ) as $print ) {
 			delete_post_meta( $id, 'webcomic_commerce_prints', $print );
 		}
 	}
 
-	foreach ( $new_prints as $print ) {
+	foreach ( array_diff( $new_prints, $old_prints ) as $print ) {
 		$sold  = (int) get_post_meta( $id, "webcomic_commerce_prints_sold_{$print}", true );
 		$stock = webcomic( "option.{$post_type}.commerce_prints.{$print}.stock" );
 

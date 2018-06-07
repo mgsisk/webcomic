@@ -262,7 +262,7 @@ function hook_webcomic_integrate_infinite( $args = [] ) {
 	 *
 	 * This filter allows hooks to alter the infinite container arguments before
 	 * they're converted for the data-webcomic-infinite attribute and ultimately
-	 * passed to `get_webcomics()`. The fields argument is always set to 'ids'.
+	 * passed to `get_webcomics()`. The fields argument is always set to `ids`.
 	 *
 	 * @param array $args Optional arguments.
 	 */
@@ -995,7 +995,7 @@ function hook_integrate_body_classes( array $classes ) : array {
  * @return string
  */
 function hook_integrate_archive_preview( string $content ) : string {
-	if ( ! get_theme_mod( 'webcomic_integrate' ) || ! get_theme_mod( 'webcomic_integrate_archive_preview' ) || is_admin() || ! is_main_query() || ! in_the_loop() || ! ( is_archive() || is_search() ) || ! is_a_webcomic() ) {
+	if ( ! get_theme_mod( 'webcomic_integrate' ) || ! get_theme_mod( 'webcomic_integrate_archive_preview', '%medium' ) || is_admin() || ! is_main_query() || ! in_the_loop() || ! ( is_archive() || is_search() ) || ! is_a_webcomic() ) {
 		return $content;
 	}
 
@@ -1200,7 +1200,7 @@ function hook_integrate_universal_comiceasel_infinite( WP_Query $query ) : WP_Qu
 	 * - On author archives (e.g. `author.php`), a default author argument is set
 	 *   based on the archive author.
 	 *
-	 * @uses get_webcomics() The fields argument is always set to 'ids'.
+	 * @uses get_webcomics() The fields argument is always set to `ids`.
 	 * @param array $args Optional arguments.
 	 */
 	do_action( 'webcomic_integrate_infinite' );

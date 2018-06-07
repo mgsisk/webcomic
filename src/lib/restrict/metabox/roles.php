@@ -99,7 +99,7 @@ function hook_add_box_roles( string $type ) {
 	}
 
 	add_meta_box(
-		str_replace( '\\', '_', __NAMESPACE__ ),
+		str_replace( '\\', '_', __NAMESPACE__ ) . 'Roles',
 		__( 'Webcomic Role Restrictions', 'webcomic' ),
 		function( $post ) {
 			$args = [
@@ -131,8 +131,13 @@ function hook_add_quick_edit_roles( string $column, string $type ) {
 	$args = [
 		'file'  => __DIR__ . '/roles-inc-quick-edit.php',
 		'bulk'  => false !== strpos( current_filter(), 'bulk' ),
+		'title' => __( 'Roles', 'webcomic' ),
 		'nonce' => __NAMESPACE__ . 'RolesNonce',
 	];
+
+	if ( $args['bulk'] ) {
+		$args['title'] = __( 'Roles to Add', 'webcomic' );
+	}
 
 	require $args['file'];
 }
@@ -303,8 +308,9 @@ function hook_update_post_meta_roles( int $id ) {
 		return;
 	}
 
-	$old_roles = get_post_meta( $id, 'webcomic_restrict_roles' );
-	$new_roles = array_filter( webcomic( 'GLOBALS._REQUEST.webcomic_restrict_roles' ) );
+	$roles     = array_merge( [ '~loggedin~' ], array_keys( get_editable_roles() ) );
+	$old_roles = array_filter( array_intersect( (array) get_post_meta( $id, 'webcomic_restrict_roles' ), $roles ) );
+	$new_roles = array_filter( array_intersect( webcomic( 'GLOBALS._REQUEST.webcomic_restrict_roles' ), $roles ) );
 
 	if ( $old_roles === $new_roles ) {
 		return;
@@ -316,16 +322,12 @@ function hook_update_post_meta_roles( int $id ) {
 	}
 
 	if ( null === webcomic( 'GLOBALS._REQUEST.webcomic_restrict_roles_bulk' ) ) {
-		foreach ( $old_roles as $role ) {
+		foreach ( array_diff( $old_roles, $new_roles ) as $role ) {
 			delete_post_meta( $id, 'webcomic_restrict_roles', $role );
 		}
 	}
 
-	foreach ( $new_roles as $role ) {
-		if ( webcomic( 'GLOBALS._REQUEST.webcomic_restrict_roles_bulk' ) && in_array( $role, $old_roles, true ) ) {
-			continue;
-		}
-
+	foreach ( array_diff( $new_roles, $old_roles ) as $role ) {
 		add_post_meta( $id, 'webcomic_restrict_roles', $role );
 	}
 }

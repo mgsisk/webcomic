@@ -12,6 +12,64 @@
 - Investigate setting a primary site collection, is_* rules for non-primary
   collection (per-landing page? Front page theme resolution?)
 
+## [5.0.6] (2018-06-06)
+
+### Added
+- Development configurations for Code Climate and TravisCI
+
+### Changed
+- CSS refactored to adhere to stricter `stylelint` configuration
+- JavaScript refactored to adhere to stricter `eslint` configuration
+- Removed Atom configuration
+- Task runner to NPM
+
+### Fixed
+- Incorrect variable reference in `compat` template tag
+- Static analysis and code sniffing issues
+- Compat `webcomic_link` shortcodes not using `$content` for link text
+
+## [5.0.5] (2018-02-14)
+
+### Changed
+- Log viewer plugin is no longer activated by default in the test vagrant box
+- Media tokens are now replaced with an empty string if no media exists
+
+### Fixed
+- Empty Twitter status saving
+- Meta box ID for Webcomic Role Restrictions
+- Term object check for media states
+
+## [5.0.4] (2018-02-07)
+
+### Changed
+- Adminer updated to 4.6.0 in test vagrant box
+- Media manager close button styling
+
+### Fixed
+- `webcomic_media()` format for the Webcomic Media meta box
+- Empty size for `get_webcomic_media()` with certain `$format` arguments
+- Remove media links always removing the last media item
+
+## [5.0.3] (2018-02-04)
+
+### Changed
+- Adminer updated to 4.5.0 in test vagrant box
+
+### Fixed
+- Missing default value for `webcomic_integrate_archive_preview`
+- Default `orderby` value on term list shortcodes
+
+## [5.0.2] (2018-02-01)
+
+### Changed
+- PHP and WordPress dependencies now fail gracefully
+
+### Fixed
+- Overly-restrictive argument type on
+  `Mgsisk\Webcomic\Restrict\hook_comic_comments()`
+- v3 upgrades not using collection term details
+- v1, v2, and v3 upgrades not converting storylines and characters
+
 ## [5.0.1] (2018-01-27)
 
 ### Changed
@@ -22,7 +80,7 @@
 
 ### Fixed
 - Double counting of saved Webcomic Matcher matches
-- Recursive call to Mgsisk\Webcomic\Compat\hook_get_post_prints_v4
+- Recursive call to `Mgsisk\Webcomic\Compat\hook_get_post_prints_v4()`
 
 ## [5.0.0] – Phoenix Down (2018-01-21)
 
@@ -454,7 +512,8 @@
   - get_the_collection() now accepts an array argument which takes any
     key/value pairs that the WordPress function get_terms() will accept (see
     wp-includes/taxonomy.php).
-- Includes new template tags get_comic_image(), the_current_chapter(), and the_current_volume().
+- Includes new template tags get_comic_image(), the_current_chapter(), and
+  the_current_volume().
 - All plugin files now include inline documentation.
 - Other bug fixes and feature enhancements.
 
@@ -551,6 +610,11 @@
 
 > Initial public commit.
 
+[5.0.6]: https://github.com/mgsisk/webcomic/compare/v5.0.5...v5.0.6
+[5.0.5]: https://github.com/mgsisk/webcomic/compare/v5.0.4...v5.0.5
+[5.0.4]: https://github.com/mgsisk/webcomic/compare/v5.0.3...v5.0.4
+[5.0.3]: https://github.com/mgsisk/webcomic/compare/v5.0.2...v5.0.3
+[5.0.2]: https://github.com/mgsisk/webcomic/compare/v5.0.1...v5.0.2
 [5.0.1]: https://github.com/mgsisk/webcomic/compare/v5.0.0...v5.0.1
 [5.0.0]: https://github.com/mgsisk/webcomic/compare/4.4.1...v5.0.0
 [4.4.1]: https://github.com/mgsisk/webcomic/compare/4.4...4.4.1

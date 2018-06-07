@@ -364,10 +364,12 @@ function util_get_media_tokens( array $objects ) : array {
 	$tokens = [];
 	$sizes  = array_merge( [ 'full' ], get_intermediate_image_sizes() );
 
+	foreach ( $sizes as $size ) {
+		$tokens[ "%{$size}" ] = '';
+	}
+
 	foreach ( $objects as $prefix => $object ) {
-		if ( ! $object ) {
-			continue;
-		} elseif ( ! is_string( $prefix ) ) {
+		if ( ! is_string( $prefix ) ) {
 			$prefix = '';
 		}
 
@@ -375,6 +377,10 @@ function util_get_media_tokens( array $objects ) : array {
 
 		foreach ( $sizes as $size ) {
 			$tokens[ "%{$prefix}{$size}" ] = '';
+
+			if ( ! $object ) {
+				continue;
+			}
 
 			foreach ( $object as $obj ) {
 				$tokens[ "%{$prefix}{$size}" ] .= wp_get_attachment_image( $obj, $size );

@@ -8,7 +8,6 @@
 		return document.addEventListener( 'DOMContentLoaded', load );
 	}
 
-
 	const template = document.querySelector( '[name="webcomic_page_template"]' );
 
 	template.addEventListener( 'change', ( event )=> {

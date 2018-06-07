@@ -15,14 +15,14 @@ get_webcomic_collections_list( array $args = [] ) : string
 Optional arguments.
 
 - **`string` format**  
-Optional list format, like before{{join}}after.
+Optional list format, like before\{\{join}}after.
 Including `<select>` or `<optgroup>` elements will
 convert links to `<option>` elements. Using
 'webcomics_optgroup' as the join will replace
 collection links with a list of comic `<option>`
 elements wrapped in an `<optgroup>`.
 - **`string` link**  
-Optional link text, like before{{text}}after.
+Optional link text, like before\{\{text}}after.
 - **`mixed` link_post**  
 Optional reference post for collection links.
 - **`array` link_args**  

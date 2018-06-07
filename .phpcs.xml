@@ -3,6 +3,7 @@
   <description>PHPCS ruleset for mgsisk/webcomic</description>
 
   <file>src</file>
+  <file>docs/_build</file>
   <file>tests/phpunit/src</file>
   <exclude-pattern>*.js</exclude-pattern>
   <exclude-pattern>*.css</exclude-pattern>

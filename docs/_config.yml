@@ -8,15 +8,11 @@ defaults:
   - scope:
       path: ''
     values:
-      image: hero-4x.jpg
-      author:
-        name: Michael Sisk
-        twitter: mgsisk
+      image: banner.jpg
+      aside: complementary.md
 include:
   - _api
   - _pages
 exclude:
   - Gemfile
   - Gemfile.lock
-plugins:
-  - jekyll-redirect-from

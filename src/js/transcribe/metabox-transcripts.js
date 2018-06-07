@@ -12,43 +12,74 @@
 		return;
 	}
 
-	const metabox     = document.querySelector( '#Mgsisk_Webcomic_Transcribe_MetaBoxTranscripts .inside' ),
-				transcripts = metabox.querySelectorAll( 'tr' );
+	webcomicPrepareTranscriptMetaBox( document.querySelector( '#Mgsisk_Webcomic_Transcribe_MetaBoxTranscripts .inside' ) );
 
-	addTranscriptButton( metabox );
+	/**
+	 * Prepare a transcript metabox for use.
+	 *
+	 * @param {object} transcriptMetabox The transcript metabox to prepare.
+	 * @return {void}
+	 */
+	function webcomicPrepareTranscriptMetaBox( transcriptMetabox ) {
+		const transcripts = transcriptMetabox.querySelectorAll( 'tr' );
 
-	QTags.addButton(
-		'comic',
-		webcomicTranscriptL10n.comic,
-		( target )=> {
-			let form = target;
+		QTags.addButton(
+			'comic',
+			webcomicTranscriptL10n.comic,
+			webcomicHandleQuickTag,
+			'',
+			'g',
+			'',
+			0,
+			'webcomic_transcript_content'
+		);
 
-			while ( form.tagName && ! form.classList.contains( 'webcomic-transcript-form' ) ) {
-				form = form.parentNode;
+		webcomicAddTranscriptButton( transcriptMetabox );
+
+		for ( let i = 0; i < transcripts.length; i++ ) {
+			if ( transcripts[i].classList.contains( 'none' ) ) {
+				continue;
 			}
 
-			if ( ! form.tagName || ! form.classList.contains( 'webcomic-transcript-form' ) ) {
-				return;
-			}
+			webcomicActivateRowActions( transcripts[i]);
+		}
+	}
 
-			quicktagComic( form );
-		}, '', 'g', '', 0, 'webcomic_transcript_content'
-	);
+	/**
+	 * Handle comic quick tag.
+	 *
+	 * @param {object} target The current target object.
+	 * @return {void}
+	 */
+	function webcomicHandleQuickTag( target ) {
+		let form = target;
 
-	for ( let i = 0; i < transcripts.length; i++ ) {
-		if ( transcripts[i].classList.contains( 'none' ) ) {
-			continue;
+		while ( form.tagName && ! form.classList.contains( 'webcomic-transcript-form' ) ) {
+			form = form.parentNode;
 		}
 
-		activateRowActions( transcripts[i]);
+		if ( ! form.tagName || ! form.classList.contains( 'webcomic-transcript-form' ) ) {
+			return;
+		}
+
+		const media = form.querySelector( '.webcomic-media' );
+
+		if ( ! media.style.display || 'block' === media.style.display ) {
+			media.style.display = 'none';
+
+			return;
+		}
+
+		media.style.display = null;
 	}
 
 	/**
 	 * Get an Add Transcript button.
 	 *
 	 * @param {object} metabox The metabox to insert the Add Transcript button in.
+	 * @return {void}
 	 */
-	function addTranscriptButton( metabox ) {
+	function webcomicAddTranscriptButton( metabox ) {
 		if ( metabox.querySelector( '.add-transcript' ) ) {
 			return;
 		}
@@ -59,7 +90,7 @@
 		button.addEventListener( 'click', ( event )=> {
 			event.preventDefault();
 
-			getTranscriptForm( metabox, 0 );
+			webcomicGetTranscriptForm( metabox, 0 );
 		});
 
 		metabox.insertBefore( button, metabox.querySelector( '.webcomic-transcripts' ) );
@@ -72,7 +103,7 @@
 	 * @param {int}    post The post form is for.
 	 * @return {void}
 	 */
-	function getTranscriptForm( container, post ) {
+	function webcomicGetTranscriptForm( container, post ) {
 		let oldForm = container;
 
 		while ( oldForm.tagName && ! oldForm.classList.contains( 'inside' ) ) {
@@ -83,12 +114,12 @@
 			oldForm = oldForm.querySelector( 'fieldset' );
 
 			if ( oldForm ) {
-				return removeTranscriptForm( oldForm.parentNode, container, post );
+				return webcomicRemoveTranscriptForm( oldForm.parentNode, container, post );
 			}
 		}
 
-		const data = new FormData,
-					xhr  = new XMLHttpRequest;
+		const data = new FormData;
+		const xhr = new XMLHttpRequest;
 
 		data.append( 'action', 'webcomic_transcribe_form' );
 		data.append( 'parent', document.querySelector( '#post_ID' ).value );
@@ -103,7 +134,7 @@
 
 			form.innerHTML = xhr.responseText;
 
-			activateForm( form );
+			webcomicActivateForm( form );
 
 			if ( post ) {
 				container.innerHTML = '<td colspan="3"></td>';
@@ -117,6 +148,7 @@
 				id: 'webcomic_transcript_content',
 				buttons: 'strong,em,link,block,del,ins,ul,ol,li,code,close'
 			});
+			QTags._buttonsInit(); /* eslint-disable-line no-underscore-dangle */
 			form.querySelector( 'textarea' ).style.height = `${form.querySelector( 'textarea' ).scrollHeight}px`;
 			form.querySelector( 'textarea' ).focus();
 		};
@@ -132,24 +164,26 @@
 	 * @param {int}    post The post the form is for.
 	 * @return {void}
 	 */
-	function removeTranscriptForm( form, container, post ) {
+	function webcomicRemoveTranscriptForm( form, container, post ) {
 		const textarea = form.querySelector( 'textarea' );
+		const saved = textarea.classList.contains( 'saved' );
 
-		if ( ! textarea.classList.contains( 'saved' ) && textarea.value !== textarea.defaultValue && ! window.confirm( webcomicTranscriptL10n.warn ) ) {
+		/* eslint-disable-next-line no-alert */
+		if ( ! saved && textarea.value !== textarea.defaultValue && ! window.confirm( webcomicTranscriptL10n.warn ) ) {
 			return;
 		} else if ( form.parentNode.classList.contains( 'inside' ) ) {
 			form.parentNode.querySelector( '.add-transcript' ).parentNode.style.display = null;
 			form.parentNode.removeChild( form );
 
 			if ( container ) {
-				getTranscriptForm( container, post );
+				webcomicGetTranscriptForm( container, post );
 			}
 
 			return;
 		}
 
-		const data = new FormData,
-					xhr  = new XMLHttpRequest;
+		const data = new FormData;
+		const xhr = new XMLHttpRequest;
 
 		data.append( 'action', 'webcomic_transcribe_row' );
 		data.append( 'post', form.querySelector( '[data-id]' ).getAttribute( 'data-id' ) );
@@ -163,7 +197,7 @@
 				return;
 			}
 
-			const tbody  = document.createElement( 'tbody' );
+			const tbody = document.createElement( 'tbody' );
 			let oldRow = form;
 
 			while ( oldRow.tagName && 'tr' !== oldRow.tagName.toLowerCase() ) {
@@ -172,12 +206,12 @@
 
 			tbody.innerHTML = xhr.responseText;
 
-			activateRowActions( tbody );
+			webcomicActivateRowActions( tbody );
 
 			oldRow.parentNode.replaceChild( tbody.children[0], oldRow );
 
 			if ( container ) {
-				getTranscriptForm( container, post );
+				webcomicGetTranscriptForm( container, post );
 			}
 		};
 		xhr.open( 'POST', ajaxurl );
@@ -191,9 +225,9 @@
 	 * @param {int}    post The post to get a row for.
 	 * @return {void}
 	 */
-	function addTranscriptRow( table, post ) {
-		const data = new FormData,
-					xhr  = new XMLHttpRequest;
+	function webcomicAddTranscriptRow( table, post ) {
+		const data = new FormData;
+		const xhr = new XMLHttpRequest;
 
 		data.append( 'action', 'webcomic_transcribe_row' );
 		data.append( 'post', post );
@@ -205,12 +239,12 @@
 				return;
 			}
 
-			const tbody   = document.createElement( 'tbody' ),
-						lastRow = table.querySelector( 'tr:last-child' );
+			const tbody = document.createElement( 'tbody' );
+			const lastRow = table.querySelector( 'tr:last-child' );
 
 			tbody.innerHTML = xhr.responseText;
 
-			activateRowActions( tbody );
+			webcomicActivateRowActions( tbody );
 
 			table.insertBefore( tbody.children[0], table.querySelector( 'tr' ) );
 
@@ -228,18 +262,18 @@
 	 * @param {object} row The row to activate actions on.
 	 * @return {void}
 	 */
-	function activateRowActions( row ) {
+	function webcomicActivateRowActions( row ) {
 		row.querySelector( '.quickedit a' ).addEventListener( 'click', ( event )=> {
 			event.preventDefault();
 
-			const row = event.target.parentNode.parentNode.parentNode.parentNode;
+			const currentRow = event.target.parentNode.parentNode.parentNode.parentNode;
 
-			getTranscriptForm( row, row.getAttribute( 'data-id' ) );
+			webcomicGetTranscriptForm( currentRow, currentRow.getAttribute( 'data-id' ) );
 		});
 		row.querySelector( '.trash a' ).addEventListener( 'click', ( event )=> {
 			event.preventDefault();
 
-			trashTranscript( event.target.parentNode.parentNode.parentNode.parentNode );
+			webcomicTrashTranscript( event.target.parentNode.parentNode.parentNode.parentNode );
 		});
 	}
 
@@ -249,23 +283,23 @@
 	 * @param {object} form The form to activate.
 	 * @return {void}
 	 */
-	function activateForm( form ) {
+	function webcomicActivateForm( form ) {
 		form.querySelector( '.button-primary' ).addEventListener( 'click', ( event )=> {
 			event.preventDefault();
 
-			submitTranscript( form );
+			webcomicSubmitTranscript( form );
 		});
 		form.querySelector( '.button-secondary' ).addEventListener( 'click', ( event )=> {
 			event.preventDefault();
 
-			removeTranscriptForm( form );
+			webcomicRemoveTranscriptForm( form );
 		});
 		form.querySelector( 'textarea' ).addEventListener( 'keyup', ( event )=> {
 			if ( 'escape' !== event.key.toLowerCase() ) {
 				return;
 			}
 
-			removeTranscriptForm( form );
+			webcomicRemoveTranscriptForm( form );
 		});
 		form.querySelector( '.webcomic-media' ).addEventListener( 'click', ( event )=> {
 			let element = event.target;
@@ -285,10 +319,10 @@
 				return;
 			}
 
-			const width  = Number( element.querySelector( 'img' ).getAttribute( 'width' ) ),
-						height = Number( element.querySelector( 'img' ).getAttribute( 'height' ) ),
-						ratio  = width / height,
-						scale  = height / 2 * ratio;
+			const width = Number( element.querySelector( 'img' ).getAttribute( 'width' ) );
+			const height = Number( element.querySelector( 'img' ).getAttribute( 'height' ) );
+			const ratio = width / height;
+			const scale = height / 2 * ratio;
 
 			element.classList.add( 'contain' );
 			element.style.height = `${scale}px`;
@@ -302,20 +336,11 @@
 	 * @param {object} form The transcript form to submit.
 	 * @return {void}
 	 */
-	function submitTranscript( form ) {
-		const data  = new FormData,
-					xhr   = new XMLHttpRequest,
-					post  = form.querySelector( '[data-id]' ).getAttribute( 'data-id' ),
-					langs = form.querySelectorAll( '[type="checkbox"]' ),
-					languages = [];
-
-		for ( let i = 0; i < langs.length; i++ ) {
-			if ( ! langs[i].checked ) {
-				continue;
-			}
-
-			languages.push( langs[i].value );
-		}
+	function webcomicSubmitTranscript( form ) {
+		const data = new FormData;
+		const xhr = new XMLHttpRequest;
+		const post = form.querySelector( '[data-id]' ).getAttribute( 'data-id' );
+		const languages = webcomicGetTranscriptLanguages( form );
 
 		data.append( 'action', 'webcomic_transcribe_submit' );
 		data.append( 'post', post );
@@ -323,7 +348,10 @@
 		data.append( 'post_content', form.querySelector( 'textarea' ).value );
 		data.append( 'post_status', form.querySelector( '.status' ).value );
 		data.append( 'post_languages', languages );
-		data.append( 'Mgsisk\\Webcomic\\Transcribe\\MetaBoxSubmitTranscriptNonce', form.querySelector( '[type="hidden"]' ).value );
+		data.append(
+			'Mgsisk\\Webcomic\\Transcribe\\MetaBoxSubmitTranscriptNonce',
+			form.querySelector( '[type="hidden"]' ).value
+		);
 
 		xhr.onreadystatechange = ()=> {
 			if ( 4 !== xhr.readyState ) {
@@ -339,12 +367,12 @@
 					container = container.parentNode;
 				}
 
-				addTranscriptRow( container.querySelector( 'tbody' ), xhr.responseText );
+				webcomicAddTranscriptRow( container.querySelector( 'tbody' ), xhr.responseText );
 			}
 
 			form.querySelector( 'textarea' ).classList.add( 'saved' );
 
-			removeTranscriptForm( form );
+			webcomicRemoveTranscriptForm( form );
 		};
 		xhr.open( 'POST', ajaxurl );
 		xhr.send( data );
@@ -356,11 +384,11 @@
 	 * @param {object} transcript The transcript to delete.
 	 * @return {void}
 	 */
-	function trashTranscript( transcript ) {
-		const data = new FormData,
-					xhr  = new XMLHttpRequest,
-					post = transcript.getAttribute( 'data-id' ),
-					href = transcript.querySelector( '.trash a' ).href;
+	function webcomicTrashTranscript( transcript ) {
+		const data = new FormData;
+		const xhr = new XMLHttpRequest;
+		const post = transcript.getAttribute( 'data-id' );
+		const href = transcript.querySelector( '.trash a' ).href;
 
 		data.append( 'action', 'webcomic_transcribe_trash' );
 		data.append( 'post', post );
@@ -380,11 +408,11 @@
 			transcript.querySelector( 'a' ).addEventListener( 'click', ( event )=> {
 				event.preventDefault();
 
-				const data = new FormData;
+				const untrashData = new FormData;
 
-				data.append( 'action', 'webcomic_transcribe_untrash' );
-				data.append( 'post', post );
-				data.append( '_wpnonce', event.target.href.substr( event.target.href.indexOf( '_wpnonce' ) + 9 ) );
+				untrashData.append( 'action', 'webcomic_transcribe_untrash' );
+				untrashData.append( 'post', post );
+				untrashData.append( '_wpnonce', event.target.href.substr( event.target.href.indexOf( '_wpnonce' ) + 9 ) );
 
 				xhr.onreadystatechange = ()=> {
 					if ( 4 !== xhr.readyState ) {
@@ -397,10 +425,10 @@
 
 					transcript.innerHTML = xhr.responseText;
 
-					activateRowActions( transcript );
+					webcomicActivateRowActions( transcript );
 				};
 				xhr.open( 'POST', ajaxurl );
-				xhr.send( data );
+				xhr.send( untrashData );
 			});
 		};
 		xhr.open( 'POST', ajaxurl );
@@ -408,20 +436,23 @@
 	}
 
 	/**
-	 * Add the comic quicktag to transcript editors.
+	 * Get transcript languages.
 	 *
 	 * @param {object} form The transcript form.
-	 * @return {void}
+	 * @return {array}
 	 */
-	function quicktagComic( form ) {
-		const media = form.querySelector( '.webcomic-media' );
+	function webcomicGetTranscriptLanguages( form ) {
+		const langs = form.querySelectorAll( '[type="checkbox"]' );
+		const languages = [];
 
-		if ( ! media.style.display || 'block' === media.style.display ) {
-			media.style.display = 'none';
+		for ( let i = 0; i < langs.length; i++ ) {
+			if ( ! langs[i].checked ) {
+				continue;
+			}
 
-			return;
+			languages.push( langs[i].value );
 		}
 
-		media.style.display = null;
+		return languages;
 	}
 }() );
