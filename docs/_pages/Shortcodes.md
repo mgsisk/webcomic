@@ -89,6 +89,34 @@ These shortcodes are available with the Commerce component.
 - [[webcomic_print_sold]](webcomic_print_sold__)
 - [[webcomic_prints_list]](webcomic_prints_list__)
 
+## Location shortcodes
+
+These shortcodes are available with the Location component.
+
+- [[first_webcomic_location_link]](first_webcomic_location_link__)
+- [[has_webcomic_location]](has_webcomic_location__)
+- [[is_a_first_webcomic_location]](is_a_first_webcomic_location__)
+- [[is_a_last_webcomic_location]](is_a_last_webcomic_location__)
+- [[is_a_next_webcomic_location]](is_a_next_webcomic_location__)
+- [[is_a_previous_webcomic_location]](is_a_previous_webcomic_location__)
+- [[is_a_webcomic_location]](is_a_webcomic_location__)
+- [[is_first_webcomic_location]](is_first_webcomic_location__)
+- [[is_last_webcomic_location]](is_last_webcomic_location__)
+- [[is_next_webcomic_location]](is_next_webcomic_location__)
+- [[is_previous_webcomic_location]](is_previous_webcomic_location__)
+- [[is_webcomic_location]](is_webcomic_location__)
+- [[last_webcomic_location_link]](last_webcomic_location_link__)
+- [[next_webcomic_location_link]](next_webcomic_location_link__)
+- [[previous_webcomic_location_link]](previous_webcomic_location_link__)
+- [[random_webcomic_location_link]](random_webcomic_location_link__)
+- [[webcomic_location_count]](webcomic_location_count__)
+- [[webcomic_location_description]](webcomic_location_description__)
+- [[webcomic_location_link]](webcomic_location_link__)
+- [[webcomic_location_media]](webcomic_location_media__)
+- [[webcomic_location_title]](webcomic_location_title__)
+- [[webcomic_location_updated]](webcomic_location_updated__)
+- [[webcomic_locations_list]](webcomic_locations_list__)
+
 ## Restrict shortcodes
 
 These shortcodes are available with the Restrict component.

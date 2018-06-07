@@ -12,7 +12,7 @@ get_webcomic_link( string $link = '%title', mixed $post = null, array $args = []
 ## Parameters
 
 ### `string` $link
-Optional link text, like before{{text}}after.
+Optional link text, like before\{\{text}}after.
 
 ### `mixed` $post
 Optional post to get a link for.

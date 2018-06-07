@@ -12,7 +12,7 @@ first_webcomic_link( string $link = '&laquo;', mixed $post = null, array $args =
 ## Parameters
 
 ### `string` $link
-Optional link text, like before{{text}}after.
+Optional link text, like before\{\{text}}after.
 
 ### `mixed` $post
 Optional reference post.

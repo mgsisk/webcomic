@@ -14,7 +14,7 @@ Shortcode content overrides the `link` attribute.
 ## Attributes
 
 ### `string` link
-Optional link text, like before{{text}}after.
+Optional link text, like before\{\{text}}after.
 
 ## Uses
 - [get_webcomic_infinite_link()](get_webcomic_infinite_link())

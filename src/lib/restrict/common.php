@@ -117,7 +117,6 @@ function hook_comic_title( string $title, int $id ) : string {
  *
  * @param string $content The post content.
  * @return string
- * @suppress PhanPluginAlwaysReturnFunction - Incorrectly triggered.
  */
 function hook_comic_content( string $content ) : string {
 	$id = get_the_ID();
@@ -186,7 +185,7 @@ function hook_comic_content( string $content ) : string {
 		);
 
 		return (string) $content;
-	}// End if().
+	}//end if()
 
 	return $content;
 }
@@ -201,7 +200,6 @@ function hook_comic_content( string $content ) : string {
  *
  * @param string $template The comic template to use.
  * @return string
- * @suppress PhanPluginAlwaysReturnFunction - Incorrectly triggered.
  */
 function hook_comic_comments( $template ) : string {
 	$id       = get_the_ID();

@@ -2,8 +2,8 @@ ol {
 	outline: thin solid rgba(0, 0, 0, 0.05);
 
 	& img {
-		height: auto !important;
-		max-width: 100% !important;
+		height: auto;
+		max-width: 100%;
 	}
 
 	& input {
@@ -42,6 +42,7 @@ ol {
 		background: rgba(0, 0, 0, 0.05);
 		box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.1) inset;
 		outline: thin dashed rgba(0, 0, 0, 0.1);
+		/* stylelint-disable-next-line declaration-no-important */
 		visibility: visible !important;
 	}
 }

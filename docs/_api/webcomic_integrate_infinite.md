@@ -30,4 +30,4 @@ Optional arguments.
 
 ## Uses
 - [get_webcomics()](get_webcomics())  
-The fields argument is always set to 'ids'.
+The fields argument is always set to `ids`.

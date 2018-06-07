@@ -12,7 +12,7 @@ webcomic_collection_cart_link( string $link = '', mixed $collection = null ) : v
 ## Parameters
 
 ### `string` $link
-Optional link text, like 'before{{text}}after'.
+Optional link text, like 'before\{\{text}}after'.
 
 ### `mixed` $collection
 Optional collection to display a cart link for.

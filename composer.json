@@ -9,6 +9,11 @@
       "email": "me@mgsisk.com"
     }
   ],
+  "config": {
+    "platform": {
+      "php": "7.0"
+    }
+  },
   "minimum-stability": "stable",
   "scripts": {
     "post-install-cmd": [
@@ -17,15 +22,18 @@
       "svn co --quiet https://develop.svn.wordpress.org/branches/4.7/tests/phpunit/data/ tests/phpunit/data"
     ]
   },
+  "require": {
+    "php": "^7.0",
+    "johnpbloch/wordpress-core": "~4.7.0"
+  },
   "require-dev": {
-    "johnpbloch/wordpress-core": "~4.7.0",
-    "phan/phan": "^0.10.0",
+    "phan/phan": "^0.12.5",
     "phploc/phploc": "^4.0",
     "phpmd/phpmd": "^2.6",
-    "phpunit/phpunit": "^6.3",
+    "phpunit/phpunit": "^6.5",
     "sebastian/phpcpd": "^3.0",
-    "squizlabs/php_codesniffer": "^3.1",
-    "wimg/php-compatibility": "^8.0",
-    "wp-coding-standards/wpcs": "^0.14.0"
+    "squizlabs/php_codesniffer": "^3.2",
+    "wimg/php-compatibility": "^8.1",
+    "wp-coding-standards/wpcs": "^0.14.1"
   }
 }

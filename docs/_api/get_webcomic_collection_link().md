@@ -12,7 +12,7 @@ get_webcomic_collection_link( string $link = '%title', mixed $collection = null,
 ## Parameters
 
 ### `string` $link
-Optional link text, like 'before{{text}}after'.
+Optional link text, like 'before\{\{text}}after'.
 
 ### `mixed` $collection
 Optional collection to get a link for.

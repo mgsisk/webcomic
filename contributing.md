@@ -14,42 +14,36 @@ These guidelines should help get you started.
 
 ## Development Tools
 
-Webcomic uses a variety of open source software to manage development. If
-you're working on a Mac you can install the suggested software using
-[Homebrew Bundle]. Otherwise, you'll want to at least install [Composer],
-[Node], [PHP 7] with [php-ast] and [xdebug], [Vagrant], and [VirtualBox].
+Webcomic uses a variety of open source software to manage development; you'll
+want to at least install [Composer], [Node], [PHP 7] with [php-ast] and
+[xdebug], [Vagrant], and [VirtualBox]. If you're working on a Mac you can
+install the suggested software using [Homebrew Bundle].
 
 You can install the development dependencies and launch the development
 environment with:
 
 ```sh
-composer install; npm install; vagrant up test
+npm install; npm start
 ```
 
-The [Ygor] task runner provides a set of automation tasks to help with
-processing assets and running tests. You can see a list of available tasks with:
+A set of automation tasks is available through [npm] to help with processing
+assets and running tests. You can see a list of available tasks with:
 
 ```sh
-node ygor
+npm run
 ```
 
-The `test` box serves a WordPress multisite install with a set of development
+The `test` box hosts a WordPress multisite install with a set of development
 plugins network-activated and the [WordPress Theme Unit Test Data] pre-loaded.
 Some box administration tools are available at the `admin` subdomain (e.g.
 `admin.local.test`). Use the username and password `root` to login to WordPress
 and the box administration tools.
 
-If you're making changes that need cross-browser testing and you're not on
-Windows you can test in Edge and Internet Explorer with:
+If you're making changes that need cross-browser testing you can test in Edge
+and Internet Explorer with:
 
 ```sh
-vagrant up edge
-```
-
-If you work in [Atom] you can install a set of useful packages with:
-
-```sh
-apm install --package-file Atomfile
+npm run start:edge
 ```
 
 ## Coding Standards
@@ -62,9 +56,9 @@ you should:
 2. Add tests to cover all changes.
 3. Verify that all new and existing tests pass.
 
-The `test` box provides the database used to run PHPUnit tests locally. Group
-tests by component (e.g. `@group collection`); add isolated tests to the
-`isolated` group as well as their component group.
+The `test` box hosts the database used to run PHPUnit tests locally. Group tests
+by component (e.g. `@group collection`); add isolated tests to the `isolated`
+group as well as their component group.
 
 [conduct-it]: https://github.com/mgsisk/webcomic/blob/master/code_of_conduct.md
 [submit-it]: https://github.com/mgsisk/webcomic/issues/new
@@ -79,12 +73,12 @@ tests by component (e.g. `@group collection`); add isolated tests to the
 [Homebrew Bundle]: https://github.com/Homebrew/homebrew-bundle
 [Composer]: https://getcomposer.org
 [Node]: https://nodejs.org
+[npm]: https://docs.npmjs.com/misc/scripts
 [PHP 7]: https://php.net
 [php-ast]: https://github.com/nikic/php-ast
 [xdebug]: https://github.com/xdebug/xdebug
 [Vagrant]: https://vagrantup.com
 [VirtualBox]: https://www.virtualbox.org
-[Ygor]: https://github.com/shannonmoeller/ygor
 [Atom]: https://atom.io
 [WordPress Theme Unit Test Data]: https://github.com/WPTRT/theme-unit-test
 [WordPress Coding Standards]: https://make.wordpress.org/core/handbook/best-practices/coding-standards

@@ -7,6 +7,18 @@
 	& div {
 		position: relative;
 
+		& img {
+			height: auto;
+			max-width: 100%;
+			vertical-align: middle;
+		}
+
+		& noscript {
+			color: #d98500;
+			display: block;
+			margin: 0.5em 0;
+		}
+
 		& a {
 			background: #fff;
 			border: thin solid #ccc;
@@ -28,24 +40,13 @@
 			background: rgba(0, 0, 0, 0.05);
 			box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.1) inset;
 			outline: thin dashed rgba(0, 0, 0, 0.1);
+			/* stylelint-disable-next-line declaration-no-important */
 			visibility: visible !important;
 		}
 
 		&.ui-sortable-helper img {
 			box-shadow: 0 0 1em rgba(0, 0, 0, 0.2);
 		}
-	}
-
-	& img {
-		height: auto;
-		max-width: 100%;
-		vertical-align: middle;
-	}
-
-	& noscript {
-		color: #d98500;
-		display: block;
-		margin: 0.5em 0;
 	}
 }
 

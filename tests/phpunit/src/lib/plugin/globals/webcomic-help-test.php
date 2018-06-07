@@ -26,7 +26,7 @@ class WebcomicHelp extends WP_UnitTestCase {
 
 		add_option(
 			'webcomic', [
-				'version' => '5.0.4',
+				'version' => '5.0.6',
 			]
 		);
 	}
@@ -58,7 +58,7 @@ class WebcomicHelp extends WP_UnitTestCase {
 		$expected .= '<li><a href="mailto:help@mgsisk.com?subject=Webcomic%20Help">Contact Mike</a></li>';
 		$expected .= '</ul>';
 		$expected .= '<p><a href="https://mgsisk.com/#support" target="_blank" class="button button-primary button-small">Support Webcomic</a></p>';
-		$expected .= '<p><small>Thank you for creating with Webcomic 5.0.4</small></p>';
+		$expected .= '<p><small>Thank you for creating with Webcomic 5.0.6</small></p>';
 
 		self::assertSame( $expected, webcomic_help() );
 

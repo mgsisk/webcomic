@@ -81,6 +81,18 @@ if ( ! isset( $args ) ) {
 			</td>
 		</tr>
 
+		<tr class="<?php echo esc_attr( $args['css_class'][ (bool) checked( in_array( 'location', $args['option'], true ), true, false ) ] ); ?>">
+			<th class="check-column"><input type="checkbox" id="<?php echo esc_attr( $args['label_for'] ); ?>_location" name="<?php echo esc_attr( $args['label_for'] ); ?>[]" value="location" <?php checked( in_array( 'location', $args['option'], true ) ); ?>></th>
+			<td class="plugin-title">
+				<label for="<?php echo esc_attr( $args['label_for'] ); ?>_location"><strong><?php esc_html_e( 'Location', 'webcomic' ); ?></strong></label>
+			</td>
+			<td class="desc">
+				<div class="plugin-description">
+					<p><?php esc_html_e( 'Location allows you to tag important locations that appear in your comics and use location-based archives.', 'webcomic' ); ?></p>
+				</div>
+			</td>
+		</tr>
+
 		<tr class="<?php echo esc_attr( $args['css_class'][ (bool) checked( in_array( 'restrict', $args['option'], true ), true, false ) ] ); ?>">
 			<th class="check-column"><input type="checkbox" id="<?php echo esc_attr( $args['label_for'] ); ?>_restrict" name="<?php echo esc_attr( $args['label_for'] ); ?>[]" value="restrict" <?php checked( in_array( 'restrict', $args['option'], true ) ); ?>></th>
 			<td class="plugin-title">

@@ -7,8 +7,6 @@
 
 namespace Mgsisk\Webcomic\Plugin;
 
-use WP_Screen;
-
 /**
  * Add plugin settings hooks.
  *
@@ -381,7 +379,7 @@ function hook_sanitize_components( array $options ) : array {
 	$old_components        = webcomic( 'option.components' );
 	$options['components'] = array_merge(
 		[ 'collection' ],
-		array_intersect( $options['components'], [ 'alert', 'character', 'commerce', 'compat', 'integrate', 'restrict', 'storyline', 'transcribe', 'twitter' ] )
+		array_intersect( $options['components'], [ 'alert', 'character', 'commerce', 'compat', 'integrate', 'location', 'restrict', 'storyline', 'transcribe', 'twitter' ] )
 	);
 
 	foreach ( array_diff( $old_components, $options['components'] ) as $component ) {

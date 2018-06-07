@@ -12,7 +12,7 @@ last_webcomic_storyline_link( string $link = '%title &raquo;', mixed $term = nul
 ## Parameters
 
 ### `string` $link
-Optional link text, like before{{text}}after.
+Optional link text, like before\{\{text}}after.
 
 ### `mixed` $term
 Optional reference term.

@@ -1,5 +1,0 @@
-:root {
-	--color-base: hsl(180, 50%, 50%);
-}
-
-@custom-selector :--enter :hover, :focus;

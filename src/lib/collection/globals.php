@@ -503,6 +503,7 @@ function get_webcomic_infinite_link( string $link = '' ) : string {
  *                            the related post to get.
  * }
  * @return mixed
+ * @suppress PhanTypeInvalidDimOffset - $args keys incorrectly trigger this.
  * @codingStandardsIgnoreStart Generic.Metrics.CyclomaticComplexity.TooHigh - More refactoring would be counterproductive.
  */
 function get_webcomic( $post = null, array $args = [] ) {
@@ -539,7 +540,7 @@ function get_webcomic( $post = null, array $args = [] ) {
 	}
 
 	return get_post( $comics[0] );
-} // @codingStandardsIgnoreEnd
+}// @codingStandardsIgnoreEnd
 
 /**
  * Get comic media.
@@ -558,6 +559,7 @@ function get_webcomic( $post = null, array $args = [] ) {
  *     @type int   $offset Optional zero-based media index to use.
  * }
  * @return string
+ * @suppress PhanTypeInvalidDimOffset - $args keys incorrectly trigger this.
  */
 function get_webcomic_media( $format = 'full', $post = null, array $args = [] ) : string {
 	$comic = get_webcomic( $post, $args );

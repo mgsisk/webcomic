@@ -7,8 +7,6 @@
 
 namespace Mgsisk\Webcomic;
 
-use WebcomicTag;
-
 /**
  * Initialize the compat component.
  *

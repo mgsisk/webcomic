@@ -48,11 +48,11 @@
 		max-width: 100%;
 	}
 
-	& span:after {
+	& span::after {
 		content: ", ";
 	}
 
-	& span:last-child:after {
+	& span:last-child::after {
 		content: "";
 	}
 

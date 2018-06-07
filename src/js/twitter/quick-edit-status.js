@@ -2,8 +2,6 @@
 
 /**
  * Quick edit utilities.
- *
- * @return {void}
  */
 ( function load() {
 	if ( 'loading' === document.readyState ) {
@@ -23,10 +21,10 @@
 			return;
 		}
 
-		const data    = new FormData,
-					xhr     = new XMLHttpRequest,
-					element = event.target.parentNode.parentNode.previousElementSibling,
-					postId  = element.id.substr( 7 );
+		const data = new FormData;
+		const xhr = new XMLHttpRequest;
+		const element = event.target.parentNode.parentNode.previousElementSibling;
+		const postId = element.id.substr( 7 );
 
 		data.append( 'action', 'webcomic_twitter_status_quick_edit' );
 		data.append( 'post', postId );
@@ -38,7 +36,7 @@
 
 			const response = JSON.parse( xhr.responseText );
 
-			document.querySelector( `#edit-${postId} [type="checkbox"][name="webcomic_twitter_update"]` ).checked       = response[0];
+			document.querySelector( `#edit-${postId} [type="checkbox"][name="webcomic_twitter_update"]` ).checked = response[0];
 			document.querySelector( `#edit-${postId} [type="checkbox"][name="webcomic_twitter_update_media"]` ).checked = response[1];
 		};
 		xhr.open( 'POST', ajaxurl );

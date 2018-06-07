@@ -1,0 +1,65 @@
+version: "2"
+
+checks:
+  argument-count:
+    config:
+      threshold: 8
+  complex-logic:
+    config:
+      threshold: 8
+  file-lines:
+    config:
+      threshold: 1024
+  method-complexity:
+    config:
+      threshold: 256
+  method-count:
+    config:
+      threshold: 32
+  method-lines:
+    config:
+      threshold: 128
+  return-statements:
+    config:
+      threshold: 8
+  similar-code:
+    enabled: false
+
+plugins:
+  editorconfig:
+    enabled: true
+  eslint:
+    enabled: true
+  fixme:
+    enabled: true
+  phpcodesniffer:
+    enabled: true
+    config:
+      standard: ".phpcs.xml"
+  phan:
+    enabled: true
+    config:
+      file_extensions: "php"
+      ignore-undeclared: true
+  phpmd:
+    enabled: true
+    config:
+      rulesets: ".phpmd.xml"
+  shellcheck:
+    enabled: true
+  stylelint:
+    enabled: true
+
+exclude_patterns:
+  - ".phan/plugins/"
+  - ".vagrant/"
+  - "**/node_modules/"
+  - "**/vendor/"
+  - "assets/"
+  - "docs/srv/"
+  - "license.md"
+  - "src/js/taxonomy/jquery.mjs.nestedSortable.js"
+  - "src/srv/"
+  - "tests/phpunit/coverage/"
+  - "tests/phpunit/data/"
+  - "tests/phpunit/includes/"

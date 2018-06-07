@@ -15,7 +15,7 @@ permalink: webcomic_transcript_terms_list__
 Optional term ID of the current term or terms.
 
 ### `string` format
-Optional flat list format, like before{{join}}after.
+Optional flat list format, like before\{\{join}}after.
 Including `<select>` or `<optgroup>` elements will
 convert links to `<option>` elements. Using
 webcomics_optgroup as a join will replace collection
@@ -77,7 +77,7 @@ these objects.
 
 ### `string` order
 Whether to order terms in ascending or descending
-order. Accepts 'ASC' (ascending) or 'DESC'
+order. Accepts 'asc' (ascending) or 'desc'
 (descending).
 
 ### `string` orderby

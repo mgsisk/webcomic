@@ -10,15 +10,23 @@
 		return document.addEventListener( 'DOMContentLoaded', load );
 	}
 
-	document.addEventListener( 'click', ( event )=> {
+	document.addEventListener( 'click', webcomicQuickEditAge );
+
+	/**
+	 * Update age quick edit settings.
+	 *
+	 * @param {object} event The current event object.
+	 * @return {void}
+	 */
+	function webcomicQuickEditAge( event ) {
 		if ( 'editinline' !== event.target.className ) {
 			return;
 		}
 
-		const data    = new FormData,
-					xhr     = new XMLHttpRequest,
-					element = event.target.parentNode.parentNode.previousElementSibling,
-					postId  = element.id.substr( 7 );
+		const data = new FormData;
+		const xhr = new XMLHttpRequest;
+		const element = event.target.parentNode.parentNode.previousElementSibling;
+		const postId = element.id.substr( 7 );
 
 		data.append( 'action', 'webcomic_restrict_age_quick_edit' );
 		data.append( 'post', postId );
@@ -32,5 +40,5 @@
 		};
 		xhr.open( 'POST', ajaxurl );
 		xhr.send( data );
-	});
+	}
 }() );

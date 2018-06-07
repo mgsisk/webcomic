@@ -7,8 +7,6 @@
 
 namespace Mgsisk\Webcomic;
 
-use WP_Post;
-
 /**
  * Initialize the alert component.
  *

@@ -460,6 +460,8 @@ function hook_update_post_meta_status( int $id ) {
 
 	if ( ! $status ) {
 		delete_post_meta( $id, 'webcomic_twitter_status' );
+
+		return;
 	}
 
 	update_post_meta( $id, 'webcomic_twitter_status', $status );

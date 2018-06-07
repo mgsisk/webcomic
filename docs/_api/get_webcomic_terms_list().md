@@ -26,7 +26,7 @@ rss2.
 - **`string` feed**  
 Optional term feed link text.
 - **`string` format**  
-Optional flat list format, like before{{join}}after.
+Optional flat list format, like before\{\{join}}after.
 Including `<select>` or `<optgroup>` elements will
 convert links to `<option>` elements. Using
 webcomics_optgroup as a join will replace collection
@@ -50,7 +50,7 @@ Optional reference post for term links.
 - **`array` link_post_args**  
 Optional post arguments for term links.
 - **`string` link**  
-Optional link text, like before{{text}}after.
+Optional link text, like before\{\{text}}after.
 - **`string` start_el**  
 Optional text to prepend to list items when
 $hierarchical is true.

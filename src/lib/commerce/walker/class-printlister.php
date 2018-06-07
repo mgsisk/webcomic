@@ -29,7 +29,6 @@ class PrintLister extends Walker {
 	 * @param array  $args The walker arguments.
 	 * @param int    $id The current comic print ID.
 	 * @return void
-	 * @suppress PhanTypeMismatchArgument - $link_args incorrectly triggers this.
 	 */
 	public function start_el( &$output, $comic_print, $depth = 0, $args = [], $id = 0 ) {
 		$link      = preg_replace( '/%print-(?!currency)(\S+)/', "%{$comic_print->slug}-print-$1", $args['link'] );

@@ -7,8 +7,6 @@
 
 namespace Mgsisk\Webcomic\Restrict\MetaBox;
 
-use WP_Post;
-
 /**
  * Add password metabox hooks.
  *

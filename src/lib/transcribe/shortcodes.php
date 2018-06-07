@@ -227,7 +227,7 @@ function webcomic_transcript_languages_list_shortcode( $atts, string $content, s
  *                              Results will be limited to terms associated with
  *                              these objects.
  *     @type string $order Whether to order terms in ascending or descending
- *                         order. Accepts 'ASC' (ascending) or 'DESC'
+ *                         order. Accepts 'asc' (ascending) or 'desc'
  *                         (descending).
  *     @type string $orderby Field to order terms by. Accepts term fields (
  *                           'name', 'slug', 'term_group', 'term_id', 'id',

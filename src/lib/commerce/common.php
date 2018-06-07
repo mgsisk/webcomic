@@ -346,7 +346,6 @@ function util_process_cart_ipn( array $ipn ) : string {
  * @param array $ipn The IPN data to process.
  * @return string
  * @internal For hook_capture_ipn().
- * @suppress PhanPluginAlwaysReturnFunction - Incorrectly triggered.
  */
 function util_process_print_ipn( array $ipn ) : string {
 	$item  = explode( '-', $ipn['item_number'], 2 );
@@ -388,7 +387,6 @@ function util_process_print_ipn( array $ipn ) : string {
  * @param array $ipn The IPN data to process.
  * @return string
  * @internal For hook_capture_ipn().
- * @suppress PhanPluginAlwaysReturnFunction - Incorrectly triggered.
  */
 function util_process_donation_ipn( array $ipn ) : string {
 	if ( ! webcomic_collection_exists( $ipn['item_number'] ) ) {

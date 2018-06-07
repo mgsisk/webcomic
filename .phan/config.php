@@ -8,6 +8,7 @@
 return [
 	'directory_list'                  => [
 		'src',
+    'docs',
 		'tests',
 		'vendor/johnpbloch/wordpress-core',
 		'vendor/phpunit/phpunit',

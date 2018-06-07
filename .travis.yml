@@ -1,0 +1,75 @@
+language: php
+
+php:
+  - '7.0'
+  - '7.1'
+  - '7.2'
+
+env:
+  global:
+    - host=local.test
+    - wptz=America/Detroit
+    - CC_TEST_REPORTER_ID=3c6a5785336b4c74efc6d2bc0cf24edda35a2c8d12d0b631c453f610a177fc91
+  matrix:
+    - wpvn='4.7'
+    - wpvn='4.8'
+    - wpvn='4.9'
+
+matrix:
+  fast_finish: true
+  exclude:
+    - php: '7.2'
+      env: wpvn='4.7'
+    - php: '7.2'
+      env: wpvn='4.8'
+
+addons:
+  apt:
+    packages:
+      - libxml2-utils
+  hosts:
+    - local.test
+
+before_install:
+  - pecl install ast
+
+install:
+  - npm install --ignore-scripts
+  - composer install --no-scripts
+  - svn co "https://develop.svn.wordpress.org/branches/$wpvn/tests/phpunit/includes/" tests/phpunit/includes
+  - svn co "https://develop.svn.wordpress.org/branches/$wpvn/tests/phpunit/data/" tests/phpunit/data
+  - rm -rf vendor/johnpbloch/wordpress-core
+  - mkdir tmp vendor/johnpbloch/wordpress-core
+  - export PATH=$PATH:$(pwd)/tmp
+  - wget -O tmp/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+  - chmod +x tmp/wp
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS wp'
+  - cd vendor/johnpbloch/wordpress-core
+  - wp core download --version="$wpvn"
+  - wp core config --dbname=wp --dbuser=root --dbpass=''
+  - wp core multisite-install --skip-email --url="$host" --title="$host" --admin_user=root --admin_password=root --admin_email="root@$host"
+  - wp option update timezone_string "$wptz"
+  - wp rewrite structure '/%postname%/'
+  - cd ../../..
+
+before_script:
+  - sed -ir "s/'DB_HOST', 'local.test'/'DB_HOST', 'localhost'/" tests/phpunit/wp-tests-config.php
+  - sed -ir "s/'DB_PASSWORD', 'root'/'DB_PASSWORD', ''/" tests/phpunit/wp-tests-config.php
+  - sed -ir "s@tests/phpunit/coverage/clover.xml@clover.xml@" phpunit.xml
+  - vendor/bin/phpcs --config-set installed_paths vendor/wimg/php-compatibility,vendor/wp-coding-standards/wpcs
+  - wget -O tmp/cc-test-reporter https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
+  - chmod +x tmp/cc-test-reporter
+  - cc-test-reporter before-build
+
+script:
+  - npm run test:css
+  - npm run test:js
+  - npm run test:json
+  - npm run test:md
+  - npm run test:php
+  - npm run test:sh
+  - npm run test:xml
+  - npm run test:yml
+
+after_script:
+  - cc-test-reporter after-build -t clover --exit-code $TRAVIS_TEST_RESULT

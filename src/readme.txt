@@ -1,7 +1,7 @@
 === Webcomic ===
-Stable tag: 5.0.4
+Stable tag: 5.0.6
 Requires at least: 4.7
-Tested up to: 4.9.4
+Tested up to: 4.9.6
 Requires PHP: 7.0
 License: GPL-2.0+
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -30,6 +30,7 @@ Those are some of Webcomic's standard features, but there are other components i
 - **Alert**, which adds settings for creating buffer and hiatus email alerts. Never forget an update with customizable email alerts.
 - **Character**, which allows you to tag character appearances and use character-based archives.
 - **Commerce**, which adds PayPal-based print selling and donation features.
+- **Location**, which allows you to tag important locations that appear in your comics and use location-based archives.
 - **Restrict**, which adds features for restricting access to comics based on age, referrer, or user role.
 - **Storyline**, which allows you to organize comics by storyline and use storyline-based archives.
 - **Transcribe**, which adds comic transcription features for SEO-enhancing text alternatives to your comics.
@@ -78,16 +79,20 @@ If you're a friendly and knowledgable Webcomic user, please chime in and help ot
 
 [Complete changelog](https://github.com/mgsisk/webcomic/blob/master/changelog.md)
 
-= 5.0.4 (2018-02-07) =
+= 5.0.6 (2018-06-06) =
+**Added**
+- Development configurations for Code Climate and TravisCI
 
 **Changed**
-- Adminer updated to 4.6.0 in test vagrant box
-- Media manager close button styling
+- CSS refactored to adhere to stricter `stylelint` configuration
+- JavaScript refactored to adhere to stricter `eslint` configuration
+- Removed Atom configuration
+- Task runner to NPM
 
 **Fixed**
-- `webcomic_media()` format for the Webcomic Media meta box
-- Empty size for `get_webcomic_media()` with certain `$format` arguments
-- Remove media links always removing the last media item
+- Incorrect variable reference in `compat` template tag
+- Static analysis and code sniffing issues
+- Compat `webcomic_link` shortcodes not using `$content` for link text
 
 = 5.0.0 - Phoenix Down (2018-01-21) =
 > Refactored everything into a functional component-based architecture.
@@ -239,8 +244,8 @@ If you're a friendly and knowledgable Webcomic user, please chime in and help ot
 
 == Upgrade Notice ==
 
-= 5.0.4 =
-Visit https://mgsisk.com/webcomic5 for important information about this version.
+= 5.0.6 =
+Visit https://mgsisk.com/webcomic/Upgrading-to-Webcomic-5 for important information about this version.
 
 == Special Thanks ==
 

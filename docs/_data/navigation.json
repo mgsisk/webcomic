@@ -1,0 +1,24 @@
+{
+  "Welcome to Webcomic": "Welcome-to-Webcomic",
+  "Publishing a Comic": "Publishing-a-Comic",
+  "Integrating Your Comic": "Integrating-Your-Comic",
+  "Customizing Your Comic": "Customizing-Your-Comic",
+  "Doing More with Your Comic": "Doing-More-with-Your-Comic",
+  "Components": {
+    "Alert": "Alert",
+    "Character": "Taxonomies",
+    "Commerce": "Commerce",
+    "Compat": "Compat",
+    "Restrict": "Restrict",
+    "Storyline": "Taxonomies",
+    "Transcribe": "Transcribe",
+    "Twitter": "Twitter"
+  },
+  "API": {
+    "Actions": "Actions",
+    "Filters": "Filters",
+    "Shortcodes": "Shortcodes",
+    "Template Tags": "Template-Tags",
+    "Widgets": "Widgets"
+  }
+}

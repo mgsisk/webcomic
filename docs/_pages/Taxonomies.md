@@ -1,18 +1,22 @@
 ---
 title: Taxonomies
 permalink: Taxonomies
-redirect_from:
-  - Character
-  - Storyline
+
+
+
+
+
+
+
 ---
 
 [![A comic taxonomy management screen.][img-1]][img-1]
 
-The **Character** and **Storyline** components allow you to tag character
-appearances, organize comics by storyline, and use taxonomy-based archives.
-Both components have the same set of features, so we'll focus on the Character
-component for the rest of this section. Everything here applies to the
-Storyline component as well, though.
+The **Character**, **Location**, and **Storyline** components allow you to tag
+character appearances or important settings, organize comics by storyline, and
+use taxonomy-based archives. These components have the same set of features, so
+we'll focus on the Character component for the rest of this section. Everything
+here applies to the Location and Storyline component as well, though.
 
 ## Managing taxonomies
 

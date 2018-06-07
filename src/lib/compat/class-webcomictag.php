@@ -605,7 +605,7 @@ class WebcomicTag {
 		}
 
 		return get_webcomics( $args );
-	} // @codingStandardsIgnoreEnd Generic.Metrics.CyclomaticComplexity.TooHigh
+	}// @codingStandardsIgnoreEnd Generic.Metrics.CyclomaticComplexity.TooHigh
 
 	/**
 	 * Deprecated method.
@@ -650,6 +650,8 @@ class WebcomicTag {
 	 * @param string $collection Deprecated parameter.
 	 * @return mixed
 	 * @deprecated
+	 * @suppress PhanTypeInvalidDimOffset - $args keys incorrectly trigger this.
+	 * @suppress PhanTypeComparisonToArray - $args keys incorrectly trigger this.
 	 * @SuppressWarnings(PHPMD.ExcessiveMethodLength) - Required for compatibility.
 	 * @SuppressWarnings(PHPMD.NPathComplexity) - Required for compatibility.
 	 * @codingStandardsIgnoreStart Generic.Metrics.CyclomaticComplexity.MaxExceeded, Generic.Metrics.NestingLevel.TooHigh - Required for compatibility.
@@ -675,6 +677,10 @@ class WebcomicTag {
 		}
 
 		$args['relation'] = $relation;
+
+		if ( 'self' === $args['relation'] ) {
+			unset( $args['relation'] );
+		}
 
 		if ( isset( $args['post_type'] ) && ( $in_same_term || $excluded_terms ) ) {
 			foreach ( (array) $taxonomies as $taxonomy ) {
@@ -735,10 +741,10 @@ class WebcomicTag {
 					];
 				}
 			}
-		} // End if().
+		}//end if()
 
 		return get_webcomic( $comic, $args );
-	} // @codingStandardsIgnoreEnd Generic.Metrics.CyclomaticComplexity.MaxExceeded, Generic.Metrics.NestingLevel.TooHigh
+	}// @codingStandardsIgnoreEnd Generic.Metrics.CyclomaticComplexity.MaxExceeded, Generic.Metrics.NestingLevel.TooHigh
 
 	/**
 	 * Deprecated method.
@@ -1853,7 +1859,7 @@ class WebcomicTag {
 				'target'           => 'archive',
 				'taxonomy'         => '',
 				'walker'           => '',
-				'webcomic_order'   => 'ASC',
+				'webcomic_order'   => 'asc',
 				'webcomic_orderby' => 'date',
 				'webcomics'        => [],
 			]
@@ -1913,7 +1919,7 @@ class WebcomicTag {
 				'collection'       => '',
 				'hide_empty'       => true,
 				'id'               => '',
-				'order'            => 'ASC',
+				'order'            => 'asc',
 				'orderby'          => '',
 				'select_name'      => 'webcomic_collections',
 				'selected'         => '',
@@ -1921,7 +1927,7 @@ class WebcomicTag {
 				'show_option_all'  => '',
 				'show_option_none' => '',
 				'target'           => 'archive',
-				'webcomic_order'   => 'ASC',
+				'webcomic_order'   => 'asc',
 				'webcomic_orderby' => 'date',
 				'webcomics'        => false,
 			]
@@ -2004,7 +2010,7 @@ class WebcomicTag {
 				'taxonomy'         => '',
 				'walker'           => '',
 				'webcomic_image'   => '',
-				'webcomic_order'   => 'ASC',
+				'webcomic_order'   => 'asc',
 				'webcomic_orderby' => 'date',
 				'webcomics'        => [],
 			]
@@ -2071,7 +2077,7 @@ class WebcomicTag {
 		unset( $args['after'], $args['before'], $args['class'], $args['id'], $args['selected'], $args['show_count'], $args['show_description'], $args['show_image'], $args['target'], $args['webcomic_image'], $args['webcomic_order'], $args['webcomic_order_by'] );
 
 		return get_webcomic_terms_list( $args );
-	} // @codingStandardsIgnoreEnd Generic.Metrics.CyclomaticComplexity.TooHigh
+	}// @codingStandardsIgnoreEnd Generic.Metrics.CyclomaticComplexity.TooHigh
 
 	/**
 	 * Deprecated method.
@@ -2096,7 +2102,7 @@ class WebcomicTag {
 				'feed'             => '',
 				'hide_empty'       => true,
 				'id'               => '',
-				'order'            => 'ASC',
+				'order'            => 'asc',
 				'orderby'          => '',
 				'ordered'          => false,
 				'selected'         => '',
@@ -2105,7 +2111,7 @@ class WebcomicTag {
 				'show_image'       => '',
 				'target'           => 'archive',
 				'webcomic_image'   => '',
-				'webcomic_order'   => 'ASC',
+				'webcomic_order'   => 'asc',
 				'webcomic_orderby' => 'date',
 				'webcomics'        => false,
 			]
@@ -2130,7 +2136,7 @@ class WebcomicTag {
 			$args['format'] = str_replace( 'ul', 'ol', $args['format'] );
 		}
 
-		$args['format'] = $args['before'] . $args['format'] . $args['after'];
+		$args['format'] = $old_args['before'] . $args['format'] . $old_args['after'];
 
 		if ( $old_args['show_count'] ) {
 			$args['link'] = str_replace( '%title', '%title (%count)', $args['link'] );
@@ -2170,7 +2176,7 @@ class WebcomicTag {
 		}
 
 		return get_webcomic_collections_list( $args );
-	} // @codingStandardsIgnoreEnd Generic.Metrics.CyclomaticComplexity.TooHigh
+	}// @codingStandardsIgnoreEnd Generic.Metrics.CyclomaticComplexity.TooHigh
 
 	/**
 	 * Deprecated method.
@@ -2191,7 +2197,7 @@ class WebcomicTag {
 				'image'      => '',
 				'largest'    => 150,
 				'order'      => '',
-				'orderby'    => 'RAND',
+				'orderby'    => 'rand',
 				'selected'   => 0,
 				'sep'        => ' ',
 				'show_count' => false,
@@ -2255,7 +2261,7 @@ class WebcomicTag {
 				'image'      => '',
 				'largest'    => 150,
 				'order'      => '',
-				'orderby'    => 'RAND',
+				'orderby'    => 'rand',
 				'selected'   => '',
 				'sep'        => ' ',
 				'show_count' => false,
@@ -2283,7 +2289,7 @@ class WebcomicTag {
 			$args['format'] = str_replace( [ '<ul id', '<li>{{', '{{</li><li>}}', '}}</li></ul>' ], [ '<div id', '{{', "{{{$old_args['sep']}}}", '}}</div>' ], $args['format'] );
 		}
 
-		$args['format'] = $args['before'] . $args['format'] . $args['after'];
+		$args['format'] = $old_args['before'] . $args['format'] . $old_args['after'];
 
 		if ( $old_args['image'] ) {
 			$args['link'] = "%{$old_args['image']}";
@@ -2346,6 +2352,7 @@ class WebcomicTag {
 	 * @param string $name Shortcode name.
 	 * @return string
 	 * @deprecated
+	 * @suppress PhanTypeMismatchDimFetch - Array access to $args['link'] incorrectly triggers this.
 	 */
 	protected static function webcomic_link_shortcode( $atts, string $content, string $name ) : string {
 		$args = shortcode_atts(
@@ -2370,9 +2377,13 @@ class WebcomicTag {
 
 		$args['relation'] = substr( $name, 0, strpos( $name, '_' ) );
 
-		if ( is_array( $args['link'] ) ) {
+		if ( $content ) {
+			$args['link'] = do_shortcode( htmlspecialchars_decode( $content ) );
+		} elseif ( is_array( $args['link'] ) ) {
 			$args['link'] = $args['link'][ $args['relation'] ];
 		}
+
+		$args['link'] = htmlspecialchars_decode( $args['link'] );
 
 		if ( false === $args['cache'] ) {
 			$args['relation'] .= '-nocache';

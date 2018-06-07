@@ -3,7 +3,7 @@
  * Plugin Name: Webcomic
  * Plugin URI: https://github.com/mgsisk/webcomic
  * Description: Comic publishing power for the web. Turn your WordPress-powered site into a comic publishing platform with Webcomic.
- * Version: 5.0.4
+ * Version: 5.0.6
  * Author: Michael Sisk
  * Author URI: https://mgsisk.com/
  * License: GPL-2.0+
@@ -33,5 +33,5 @@ if ( version_compare( PHP_VERSION, '7', '<' ) ) {
 
 require __DIR__ . '/lib/plugin/globals.php';
 
-webcomic_init( '5.0.4' );
+webcomic_init( '5.0.6' );
 webcomic_load( webcomic( 'option.components' ) );

@@ -366,7 +366,7 @@ function hook_get_generator_preview() {
 	}
 
 	$now           = strtotime( webcomic( 'GLOBALS._REQUEST.webcomic_generator.start_date' ) );
-	$media         = webcomic( 'GLOBALS._REQUEST.webcomic_generate' );
+	$media         = (array) webcomic( 'GLOBALS._REQUEST.webcomic_generate' );
 	$weekdays      = [ 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun' ];
 	$publish_every = array_filter( webcomic( 'GLOBALS._REQUEST.webcomic_generator.publish_every' ) );
 
@@ -504,7 +504,6 @@ function util_generate_comics( string $collection, $now, array $media, array $pu
  * @param array  $publish_every The days to publish generated comics.
  * @return string
  * @internal For hook_generate_comics().
- * @suppress PhanPluginAlwaysReturnFunction - Incorrectly triggered.
  */
 function util_validate_generator_data( string $collection, $now, array $media, array $publish_every ) : string {
 	if ( ! webcomic_collection_exists( $collection ) ) {

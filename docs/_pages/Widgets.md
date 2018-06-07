@@ -42,6 +42,18 @@ These widgets are available with the Character component.
 - [Webcomic Character Link](Webcomic-Character-Link)
 - [Webcomic Characters List](Webcomic-Characters-List)
 
+## Location widgets
+
+These widgets are available with the Location component.
+
+- [Last Webcomic Location Link](Last-Webcomic-Location-Link)
+- [First Webcomic Location Link](First-Webcomic-Location-Link)
+- [Random Webcomic Location Link](Random-Webcomic-Location-Link)
+- [Webcomic Locations List](Webcomic-Locations-List)
+- [Previous Webcomic Location Link](Previous-Webcomic-Location-Link)
+- [Next Webcomic Location Link](Next-Webcomic-Location-Link)
+- [Webcomic Location Link](Webcomic-Location-Link)
+
 ## Storyline widgets
 
 These widgets are available with the Storyline component.
