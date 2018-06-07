@@ -123,6 +123,7 @@ These shortcodes are available with the Restrict component.
 
 - [[webcomic_age_required]](webcomic_age_required__)
 - [[webcomic_age]](webcomic_age__)
+- [[webcomic_referrers_required]](webcomic_referrers_required__)
 - [[webcomic_roles_required]](webcomic_roles_required__)
 
 ## Storyline shortcodes

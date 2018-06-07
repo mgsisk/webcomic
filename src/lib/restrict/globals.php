@@ -23,6 +23,23 @@ function get_webcomic_age( $post = null, array $args = [] ) : int {
 }
 
 /**
+ * Get the referrers allowed to view a comic.
+ *
+ * @param mixed $post Optional post to get referrers for.
+ * @param array $args Optional arguments.
+ * @return array
+ */
+function get_webcomic_referrers( $post = null, array $args = [] ) : array {
+	$comic = get_webcomic( $post, $args );
+
+	if ( ! $comic ) {
+		return [];
+	}
+
+	return get_post_meta( $comic->ID, 'webcomic_restrict_referrers' );
+}
+
+/**
  * Get the roles allowed to view a comic.
  *
  * @param mixed $post Optional post to get required roles for.
@@ -62,6 +79,50 @@ function webcomic_age_required( $post = null, array $args = [] ) : bool {
 	$user_age = (int) webcomic( "GLOBALS._COOKIE.{$comic->post_type}_age_" . COOKIEHASH );
 
 	return $user_age < $age;
+}
+
+/**
+ * Does viewing a comic require a specific referrer?
+ *
+ * @param mixed $post Optional post to check.
+ * @param array $args Optional arguments.
+ * @return bool
+ */
+function webcomic_referrers_required( $post = null, array $args = [] ) : bool {
+	$comic = get_webcomic( $post, $args );
+
+	if ( ! $comic ) {
+		return false;
+	}
+
+	$referrers = get_webcomic_referrers( $comic );
+
+	if ( ! $referrers || ( is_admin() && current_user_can( 'edit_post', $comic->ID ) ) ) {
+		return false;
+	}
+
+	$referer = wp_get_raw_referer();
+
+	if ( ! $referer ) {
+		return true;
+	}
+
+	foreach ( $referrers as $referrer ) {
+		if ( $referer === $referrer ) {
+			return false;
+		} elseif ( false !== strpos( $referrer, '://' ) ) {
+			continue;
+		}
+
+		$scheme   = wp_parse_url( $referer, PHP_URL_SCHEME );
+		$referrer = "{$scheme}://{$referrer}";
+
+		if ( 0 === strpos( $referer, $referrer ) ) {
+			return false;
+		}
+	}
+
+	return true;
 }
 
 /**

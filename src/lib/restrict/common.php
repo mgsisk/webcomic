@@ -77,6 +77,14 @@ function hook_add_post_classes( array $classes, array $class, int $post ) : arra
 		}
 	}
 
+	if ( get_post_meta( $post, 'webcomic_restrict_referrers' ) ) {
+		$classes[] = 'webcomic-referrers-protected';
+
+		if ( webcomic_referrers_required( $post ) ) {
+			$classes[] = 'webcomic-referrers-required';
+		}
+	}
+
 	if ( get_post_meta( $post, 'webcomic_restrict_roles' ) ) {
 		$classes[] = 'webcomic-roles-protected';
 
@@ -96,7 +104,7 @@ function hook_add_post_classes( array $classes, array $class, int $post ) : arra
  * @return string
  */
 function hook_comic_title( string $title, int $id ) : string {
-	if ( is_a_webcomic( $id ) && ( webcomic_roles_required( $id ) || webcomic_age_required( $id ) ) ) {
+	if ( is_a_webcomic( $id ) && ( webcomic_referrers_required( $id ) || webcomic_roles_required( $id ) || webcomic_age_required( $id ) ) ) {
 		// Translators: Post title.
 		return sprintf( __( 'Restricted: %s', 'webcomic' ), $title );
 	}
@@ -115,9 +123,27 @@ function hook_comic_content( string $content ) : string {
 
 	if ( ! is_a_webcomic( $id ) ) {
 		return $content;
+	} elseif ( webcomic_referrers_required( $id ) ) {
+		/**
+		 * Alter the standard referrers restricted content.
+		 *
+		 * This filter allows hooks to alter the standard content returned when
+		 * a user was not referred by a valid URL to view the comic.
+		 *
+		 * @param string $content The content to return in place of the normal
+		 *                        post content.
+		 * @param int    $id The post ID.
+		 */
+		$content = apply_filters(
+			'webcomic_referrers_required_content',
+			'<p>' . esc_html__( 'You must be referred from a valid website to view this comic.', 'webcomic' ) . '</p>',
+			$id
+		);
+
+		return (string) $content;
 	} elseif ( webcomic_roles_required( $id ) ) {
 		/**
-		 * Alter the standard role restricted content.
+		 * Alter the standard roles restricted content.
 		 *
 		 * This filter allows hooks to alter the standard content returned when
 		 * a user does not have the required role or roles to view the comic.
@@ -181,9 +207,22 @@ function hook_comic_comments( $template ) : string {
 
 	if ( ! is_a_webcomic( $id ) ) {
 		return $template;
+	} elseif ( webcomic_referrers_required( $id ) ) {
+		/**
+		 * Alter the referrers restricted comments template path.
+		 *
+		 * This filter allows hooks to alter the template used when a user was not
+		 * referrerd by a valid URL to view the comic.
+		 *
+		 * @param string $restricted The restricted comment template.
+		 * @param string $template The original comment template.
+		 */
+		$template = apply_filters( 'webcomic_referrers_required_comments', __DIR__ . '/common-inc-comments.php', $template );
+
+		return $template;
 	} elseif ( webcomic_roles_required( $id ) ) {
 		/**
-		 * Alter the role restricted comments template path.
+		 * Alter the roles restricted comments template path.
 		 *
 		 * This filter allows hooks to alter the template used when a user does not
 		 * have the required role or roles to view the comic.

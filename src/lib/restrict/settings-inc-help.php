@@ -16,19 +16,29 @@ namespace Mgsisk\Webcomic\Restrict;
 		<?php esc_html_e( ' &mdash; The minimum age required to view the post content and comic media of newly created comics. Users will have to confirm their age before viewing the post content and comic media of comics with a minimum age greater than zero.', 'webcomic' ); ?>
 	</li>
 	<li>
-		<b><?php esc_html_e( 'Accessible Roles', 'webcomic' ); ?></b>
-		<?php esc_html_e( " &mdash; The user roles allowed to view the post content and comic media of newly created comics. Selecting Any registered user will allow any registered user to view the post content and comic media once they've logged in, overriding any other role selections.", 'webcomic' ); ?>
-	</li>
-	<li>
 		<b><?php esc_html_e( 'Age-Restricted Media', 'webcomic' ); ?></b>
 		<?php esc_html_e( ' &mdash; Alternative media to display to age-restricted users in place of the normal comic media.', 'webcomic' ); ?>
 	</li>
 	<li>
-		<b><?php esc_html_e( 'Role-Restricted Media', 'webcomic' ); ?></b>
-		<?php esc_html_e( ' &mdash; Alternative media to display to role-restricted users in place of the normal comic media.', 'webcomic' ); ?>
-	</li>
-	<li>
 		<b><?php esc_html_e( 'Password-Restricted Media', 'webcomic' ); ?></b>
 		<?php esc_html_e( ' &mdash; Alternative media to display to password-restricted users in place of the normal comic media.', 'webcomic' ); ?>
+	</li>
+
+	<li>
+		<b><?php esc_html_e( 'Allowed Referrers', 'webcomic' ); ?></b>
+		<?php esc_html_e( " &mdash; The web addresses a user must be referred from to view the post content and comic media of newly created comics. Uses will have to be referred from one of the specified URL's to see post content and comic media. Full URL's (e.g. http://example.com/) must match the referrer exactly. Partial URL's (e.g. example.com) will match any referrer beginning with the specified address.", 'webcomic' ); ?>
+	</li>
+	<li>
+		<b><?php esc_html_e( 'Referrer-Restricted Media', 'webcomic' ); ?></b>
+		<?php esc_html_e( ' &mdash; Alternative media to display to referrer-restricted users in place of the normal comic media.', 'webcomic' ); ?>
+	</li>
+
+	<li>
+		<b><?php esc_html_e( 'Accessible Roles', 'webcomic' ); ?></b>
+		<?php esc_html_e( " &mdash; The user roles allowed to view the post content and comic media of newly created comics. Selecting Any registered user will allow any registered user to view the post content and comic media once they've logged in, overriding any other role selections.", 'webcomic' ); ?>
+	</li>
+	<li>
+		<b><?php esc_html_e( 'Role-Restricted Media', 'webcomic' ); ?></b>
+		<?php esc_html_e( ' &mdash; Alternative media to display to role-restricted users in place of the normal comic media.', 'webcomic' ); ?>
 	</li>
 </ul>

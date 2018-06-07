@@ -47,7 +47,7 @@ template tags, and widgets. Take your online comic publishing even further with:
 - **Location**, which allows you to tag important locations that appear in your
   comics and use location-based archives.
 - **Restrict**, which adds features for restricting access to comics based on
-  age or user role.
+  age, referrer, or user role.
 - **Storyline**, which allows you to organize comics by storyline and use
   storyline-based archives.
 - **Transcribe**, which adds comic transcription features for SEO-enhancing

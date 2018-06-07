@@ -7,7 +7,7 @@ permalink: Restrict
 component.][img-1]][img-1]
 
 The **Restrict** component Restrict adds features for restricting access to
-comics based on age or user role.
+comics based on age, referrer, or user role.
 
 ## Settings
 
@@ -20,6 +20,29 @@ The minimum age required to view the post content and comic media of newly
 created comics. Users will have to confirm their age before viewing the post
 content and comic media of comics with a minimum age greater than zero.
 
+### Age-Restricted Media
+
+Alternative media to display to age-restricted users in place of the normal
+comic media.
+
+### Password-Restricted Media
+
+Alternative media to display to password-restricted users in place of the
+normal comic media.
+
+### Allowed Referrers
+
+The web addresses a user must be referred from to view the post content and
+comic media of newly created comics. Uses will have to be referred from one of
+the specified URL's to see post content and comic media. Full URL's (e.g.
+<http://example.com/>) must match the referrer exactly. Partial URL's (e.g.
+example.com) will match any referrer beginning with the specified address.
+
+### Referrer-Restricted Media
+
+Alternative media to display to referrer-restricted users in place of the
+normal comic media.
+
 ### Accessible Roles
 
 The user roles allowed to view the post content and comic media of newly created
@@ -27,20 +50,10 @@ comics. Selecting Any registered user will allow any registered user to view the
 post content and comic media once they've logged in, overriding any other role
 selections.
 
-### Age-Restricted Media
-
-Alternative media to display to age-restricted users in place of the normal
-comic media.
-
 ### Role-Restricted Media
 
 Alternative media to display to role-restricted users in place of the normal
 comic media.
-
-### Password-Restricted Media
-
-Alternative media to display to password-restricted users in place of the
-normal comic media.
 
 ## Managing restrictions
 
