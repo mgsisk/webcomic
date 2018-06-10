@@ -15,10 +15,10 @@
 			return;
 		}
 
-		const data    = new FormData,
-					xhr     = new XMLHttpRequest,
-					element = event.target.parentNode.parentNode.previousElementSibling,
-					postId  = element.id.substr( 7 );
+		const data    = new FormData;
+		const xhr     = new XMLHttpRequest;
+		const element = event.target.parentNode.parentNode.previousElementSibling;
+		const postId  = element.id.substr( 7 );
 
 		data.append( 'action', 'webcomic_restrict_referrers_quick_edit' );
 		data.append( 'post', postId );
