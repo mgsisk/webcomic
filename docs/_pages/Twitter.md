@@ -6,8 +6,7 @@ permalink: Twitter
 [![The settings added to the Collection Settings screen by the Twitter
 component.][img-1]][img-1]
 
-The **Twitter** component Restrict adds features for restricting access to
-comics based on age or user role.
+The **Twitter** component adds settings for updating your Twitter account status when publishing comics.
 
 ## Settings
 
