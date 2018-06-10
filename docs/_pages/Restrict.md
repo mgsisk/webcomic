@@ -6,8 +6,8 @@ permalink: Restrict
 [![The settings added to the Collection Settings screen by the Restrict
 component.][img-1]][img-1]
 
-The **Restrict** component Restrict adds features for restricting access to
-comics based on age or user role.
+The **Restrict** component adds features for restricting access to comics based
+on age or user role.
 
 ## Settings
 
