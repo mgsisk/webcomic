@@ -64,7 +64,7 @@ function hook_add_card_data_basic( array $data, string $collection ) : array {
 		$data['description'][] = wp_strip_all_tags( get_queried_object()->description, true );
 
 		if ( $media ) {
-			$media[] = get_term_meta( get_queried_object()->term_id, 'webcomic_media' );
+			$media[] = get_term_meta( get_queried_object()->term_id, 'webcomic_media', true );
 		}
 	}
 
