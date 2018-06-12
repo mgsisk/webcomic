@@ -7,8 +7,6 @@
 
 namespace Mgsisk\Webcomic\Location;
 
-use WP_Query;
-
 /**
  * Add customize hooks.
  *
