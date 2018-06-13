@@ -395,7 +395,7 @@ function hook_webcomic_integrate_landing_page_content( array $args ) {
 
 	$collection = get_post_type();
 	$templates  = [
-		"template-paprts/{$collection}/content.php",
+		"template-parts/{$collection}/content.php",
 		"template-parts/post/content-{$collection}.php",
 		"content-{$collection}.php",
 		'template-parts/post/content.php',
