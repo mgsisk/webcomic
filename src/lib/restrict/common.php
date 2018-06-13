@@ -55,7 +55,7 @@ function hook_confirm_age( string $template ) {
 		setcookie( "{$post_type}_age_" . COOKIEHASH, (string) $age, $time, COOKIEPATH );
 	}
 
-	define( 'DOING_AJAX', true ) && wp_safe_redirect( get_webcomic_url() ) && wp_die();
+	add_filter( 'wp_doing_ajax', '__return_true' ) && wp_safe_redirect( get_webcomic_url() ) && wp_die();
 }
 
 /**

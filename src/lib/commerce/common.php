@@ -148,7 +148,7 @@ function hook_prints( string $template ) {
 
 	require $args['file'];
 
-	define( 'DOING_AJAX', true ) && wp_die();
+	add_filter( 'wp_doing_ajax', '__return_true' ) && wp_die();
 }
 
 /**
@@ -187,7 +187,7 @@ function hook_cart( string $template ) {
 
 	require $args['file'];
 
-	define( 'DOING_AJAX', true ) && wp_die();
+	add_filter( 'wp_doing_ajax', '__return_true' ) && wp_die();
 }
 
 /**
@@ -234,7 +234,7 @@ function hook_donate( string $template ) {
 
 	require $args['file'];
 
-	define( 'DOING_AJAX', true ) && wp_die();
+	add_filter( 'wp_doing_ajax', '__return_true' ) && wp_die();
 }
 
 /* ===== Utility Functions ================================================== */

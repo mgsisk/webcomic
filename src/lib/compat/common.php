@@ -196,7 +196,7 @@ function hook_redirect_webcomic_url() {
 
 	$url = WebcomicTag::get_relative_webcomic_link_( $relation, $in_same_term, $excluded_terms, $taxonomy, $collection );
 
-	define( 'DOING_AJAX', true ) && wp_safe_redirect( $url ) && wp_die();
+	add_filter( 'wp_doing_ajax', '__return_true' ) && wp_safe_redirect( $url ) && wp_die();
 }// @codingStandardsIgnoreEnd Generic.Metrics.CyclomaticComplexity.TooHigh
 
 /**
@@ -244,7 +244,7 @@ function hook_redirect_webcomic_term_url() {
 
 	$url = WebcomicTag::get_relative_webcomic_term_link_( $target, $relation, $taxonomy, $args );
 
-	define( 'DOING_AJAX', true ) && wp_safe_redirect( $url ) && wp_die();
+	add_filter( 'wp_doing_ajax', '__return_true' ) && wp_safe_redirect( $url ) && wp_die();
 }
 
 /**
@@ -274,7 +274,7 @@ function hook_confirm_webcomic_age() {
 
 	header( 'Refresh:0' );
 
-	define( 'DOING_AJAX', true ) && wp_die();
+	add_filter( 'wp_doing_ajax', '__return_true' ) && wp_die();
 }
 
 /**
