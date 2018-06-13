@@ -206,5 +206,5 @@ function hook_sanitize_delete( array $options ) {
 	// Translators: The post type name.
 	webcomic_notice( '<strong>' . sprintf( __( '%s has been deleted.', 'webcomic' ), esc_html( $name ) ) . '</strong>' );
 
-	define( 'DOING_AJAX', true ) && wp_safe_redirect( admin_url() ) && wp_die();
+	add_filter( 'wp_doing_ajax', '__return_true' ) && wp_safe_redirect( admin_url() ) && wp_die();
 }

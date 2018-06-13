@@ -199,7 +199,7 @@ function hook_create_new_collection() {
 
 	webcomic_notice( '<strong>' . __( 'New collection created.', 'webcomic' ) . "</strong> {$settings}" );
 
-	define( 'DOING_AJAX', true ) && wp_safe_redirect( admin_url() ) && wp_die();
+	add_filter( 'wp_doing_ajax', '__return_true' ) && wp_safe_redirect( admin_url() ) && wp_die();
 }
 
 /**

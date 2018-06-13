@@ -320,7 +320,7 @@ function hook_delete_twitter_tokens() {
 
 	webcomic_notice( '<strong>' . __( 'Twitter authorization tokens removed.', 'webcomic' ) . '</strong>' );
 
-	define( 'DOING_AJAX', true ) && wp_safe_redirect( $redirect_url ) && wp_die();
+	add_filter( 'wp_doing_ajax', '__return_true' ) && wp_safe_redirect( $redirect_url ) && wp_die();
 }
 
 /**

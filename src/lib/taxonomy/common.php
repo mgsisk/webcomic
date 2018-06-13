@@ -117,7 +117,7 @@ function hook_redirect_webcomic_term_url() {
 		$args[5] = [];
 	}
 
-	define( 'DOING_AJAX', true ) && wp_safe_redirect( get_webcomic_term_url( $args[2], $args[3], $args[4], $args[5] ) ) && wp_die();
+	add_filter( 'wp_doing_ajax', '__return_true' ) && wp_safe_redirect( get_webcomic_term_url( $args[2], $args[3], $args[4], $args[5] ) ) && wp_die();
 }
 
 /**
