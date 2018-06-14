@@ -19,6 +19,7 @@ use WP_Query;
 function customize() {
 	add_filter( 'webcomic_integrate_infinite_args', __NAMESPACE__ . '\hook_webcomic_integrate_infinite_args' );
 	add_filter( 'webcomic_integrate_landing_page_args', __NAMESPACE__ . '\hook_webcomic_integrate_landing_page_args' );
+	add_filter( 'webcomic_integrate_landing_page_content_templates', __NAMESPACE__ . '\hook_webcomic_integrate_landing_page_content_templates', 10, 2 );
 	add_filter( 'webcomic_integrate_media', __NAMESPACE__ . '\hook_webcomic_integrate_media' );
 	add_filter( 'webcomic_integrate_navigation', __NAMESPACE__ . '\hook_webcomic_integrate_navigation' );
 	add_filter( 'webcomic_integrate_meta', __NAMESPACE__ . '\hook_webcomic_integrate_meta' );
@@ -168,6 +169,28 @@ function hook_webcomic_integrate_landing_page_args( array $args ) : array {
 	}
 
 	return $args + $defaults;
+}
+
+/**
+ * Add the default landing page content templates.
+ *
+ * @param array  $templates The list of templates to check for.
+ * @param string $collection The current collection.
+ * @return array
+ */
+function hook_webcomic_integrate_landing_page_content_templates( array $templates, string $collection ) {
+	$templates[] = "template-parts/{$collection}/content.php";
+	$templates[] = "template-parts/post/content-{$collection}.php";
+	$templates[] = "content-{$collection}.php";
+
+	if ( 'comiceasel' === get_theme_mod( 'webcomic_integrate' ) ) {
+		$templates[] = 'content-comic.php';
+	}
+
+	$templates[] = 'template-parts/post/content.php';
+	$templates[] = 'content.php';
+
+	return $templates;
 }
 
 /**
@@ -394,19 +417,18 @@ function hook_webcomic_integrate_landing_page_content( array $args ) {
 	}
 
 	$collection = get_post_type();
-	$templates  = [
-		"template-parts/{$collection}/content.php",
-		"template-parts/post/content-{$collection}.php",
-		"content-{$collection}.php",
-		'template-parts/post/content.php',
-		'content.php',
-	];
 
-	if ( 'comiceasel' === get_theme_mod( 'webcomic_integrate' ) ) {
-		array_splice( $templates, 3, 0, 'content-comic.php' );
-	}
-
-	$template = locate_template( $templates );
+	/**
+	 * Alter the content templates to look for.
+	 *
+	 * This filter allows hooks to alter the possible content templates used when
+	 * integrating comic content into a landing page.
+	 *
+	 * @param array $templates The list of content templates.
+	 * @param string $collection The current collection.
+	 */
+	$templates = apply_filters( 'webcomic_integrate_landing_page_content_templates', [], $collection );
+	$template  = locate_template( $templates );
 
 	if ( ! $template ) {
 		$template = __DIR__ . '/customize-inc-integrate-landing-page-content.php';

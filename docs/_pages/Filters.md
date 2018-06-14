@@ -29,6 +29,7 @@ enabled.
 - [webcomic_enqueue_table_record](webcomic_enqueue_table_record)
 - [webcomic_integrate_infinite_args](webcomic_integrate_infinite_args)
 - [webcomic_integrate_landing_page_args](webcomic_integrate_landing_page_args)
+- [webcomic_integrate_landing_page_content_templates](webcomic_integrate_landing_page_content_templates)
 - [webcomic_new_collection](webcomic_new_collection)
 - [webcomic_permalink_tokens](webcomic_permalink_tokens)
 - [webcomic_rewrite_rules](webcomic_rewrite_rules)
