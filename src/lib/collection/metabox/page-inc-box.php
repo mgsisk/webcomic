@@ -35,7 +35,7 @@ wp_nonce_field( $args['nonce'], $args['nonce'] );
 <p>
 	<select id="<?php echo esc_attr( $args['label_template'] ); ?>" name="<?php echo esc_attr( $args['label_template'] ); ?>">
 		<option value=""><?php esc_html_e( 'None', 'webcomic' ); ?></option>
-		<option value="landing" <?php selected( (bool) get_post_meta( get_the_ID(), 'webcomic_integrate_landing_page_order', true ) ); ?>><?php esc_html_e( 'Landinage Page', 'webcomic' ); ?></option>
+		<option value="landing" <?php selected( (bool) get_post_meta( get_the_ID(), 'webcomic_integrate_landing_page_order', true ) ); ?>><?php esc_html_e( 'Landing Page', 'webcomic' ); ?></option>
 		<option value="infinite" <?php selected( (bool) get_post_meta( get_the_ID(), 'webcomic_integrate_infinite_order', true ) ); ?>><?php esc_html_e( 'Infinite Scroll', 'webcomic' ); ?></option>
 	</select>
 </p>
