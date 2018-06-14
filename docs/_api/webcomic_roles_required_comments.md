@@ -3,7 +3,7 @@ title: webcomic_roles_required_comments
 permalink: webcomic_roles_required_comments
 ---
 
-> Alter the role restricted comments template path.
+> Alter the roles restricted comments template path.
 
 ```php
 apply_filters( 'webcomic_roles_required_comments', string $restricted, string $template )

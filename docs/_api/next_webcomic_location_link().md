@@ -12,7 +12,7 @@ next_webcomic_location_link( string $link = '%title &rsaquo;', mixed $term = nul
 ## Parameters
 
 ### `string` $link
-Optional link text, like before{{text}}after.
+Optional link text, like before\{\{text}}after.
 
 ### `mixed` $term
 Optional reference term.
