@@ -87,7 +87,6 @@
 
   <rule ref="Squiz.Objects.ObjectInstantiation"/>
   <rule ref="Squiz.PHP.DisallowInlineIf"/>
-  <rule ref="Squiz.PHP.DisallowObEndFlush"/>
   <rule ref="Squiz.PHP.GlobalKeyword"/>
   <rule ref="Squiz.PHP.Heredoc"/>
   <rule ref="Squiz.PHP.InnerFunctions"/>
