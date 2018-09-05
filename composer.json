@@ -17,7 +17,6 @@
   "minimum-stability": "stable",
   "scripts": {
     "post-install-cmd": [
-      "vendor/bin/phpcs --config-set installed_paths vendor/wimg/php-compatibility,vendor/wp-coding-standards/wpcs",
       "svn co --quiet https://develop.svn.wordpress.org/branches/4.7/tests/phpunit/includes/ tests/phpunit/includes",
       "svn co --quiet https://develop.svn.wordpress.org/branches/4.7/tests/phpunit/data/ tests/phpunit/data"
     ]
