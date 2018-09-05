@@ -40,7 +40,7 @@ if ( ! isset( $this, $instance ) ) {
 	</div>
 	<input type="hidden" id="<?php echo esc_attr( $this->get_field_id( 'post' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'post' ) ); ?>" value="<?php echo esc_attr( $instance['post'] ); ?>">
 	<br>
-<?php
+	<?php
 	return;
 endif;
 ?>

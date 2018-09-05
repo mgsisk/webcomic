@@ -104,37 +104,37 @@ if ( ! isset( $args ) ) {
 
 						foreach ( $match as $ids ) :
 							list( $post, $media ) = array_map( 'intval', explode( '-', $ids ) );
-						?>
-						<tr>
-							<th scope="row" class="check-column"><input type="checkbox" id="match-<?php echo esc_attr( $ids ); ?>" name="webcomic_match[]" value="<?php echo esc_attr( $ids ); ?>" form="webcomic_matcher"></th>
-							<td class="title column-title column-primary">
-								<label for="match-<?php echo esc_attr( $ids ); ?>">
-									<strong class="has-media-icon">
-										<span class="media-icon image-icon"><?php echo wp_get_attachment_image( $media, 'medium' ); ?></span>
-										<?php echo esc_html( get_the_title( $media ) ); ?>
-									</strong>
-									<p class="filename"><?php echo esc_html( basename( get_attached_file( $media ) ) ); ?></p>
-								</label>
-							</td>
-							<td class="title column-title column-primary">
-								<label for="match-<?php echo esc_attr( $ids ); ?>">
-									<strong><?php echo esc_html( get_the_title( $post ) ); ?></strong>
-									<p><?php echo esc_html( get_post_status_object( get_post_status( $post ) )->label ); ?></p>
-								</label>
-							</td>
-						</tr>
-						<?php
+							?>
+							<tr>
+								<th scope="row" class="check-column"><input type="checkbox" id="match-<?php echo esc_attr( $ids ); ?>" name="webcomic_match[]" value="<?php echo esc_attr( $ids ); ?>" form="webcomic_matcher"></th>
+								<td class="title column-title column-primary">
+									<label for="match-<?php echo esc_attr( $ids ); ?>">
+										<strong class="has-media-icon">
+											<span class="media-icon image-icon"><?php echo wp_get_attachment_image( $media, 'medium' ); ?></span>
+											<?php echo esc_html( get_the_title( $media ) ); ?>
+										</strong>
+										<p class="filename"><?php echo esc_html( basename( get_attached_file( $media ) ) ); ?></p>
+									</label>
+								</td>
+								<td class="title column-title column-primary">
+									<label for="match-<?php echo esc_attr( $ids ); ?>">
+										<strong><?php echo esc_html( get_the_title( $post ) ); ?></strong>
+										<p><?php echo esc_html( get_post_status_object( get_post_status( $post ) )->label ); ?></p>
+									</label>
+								</td>
+							</tr>
+							<?php
 						endforeach;
 
 						if ( $args['collection'] && ! $match ) :
-						?>
-						<tr>
-							<td colspan="3"><?php esc_html_e( 'No matches found.', 'webcomic' ); ?></td>
-						</tr>
+							?>
+							<tr>
+								<td colspan="3"><?php esc_html_e( 'No matches found.', 'webcomic' ); ?></td>
+							</tr>
 						<?php elseif ( ! $match ) : ?>
-						<tr>
-							<td colspan="3"><?php esc_html_e( 'Click Find Matches to search for media/comic matches.', 'webcomic' ); ?></td>
-						</tr>
+							<tr>
+								<td colspan="3"><?php esc_html_e( 'Click Find Matches to search for media/comic matches.', 'webcomic' ); ?></td>
+							</tr>
 						<?php endif; ?>
 					</tbody>
 				</table>

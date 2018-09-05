@@ -54,27 +54,27 @@ if ( ! isset( $args ) ) {
 
 						foreach ( $media as $image ) :
 							$count++;
-						?>
-						<tr data-id="<?php echo esc_attr( $image->ID ); ?>">
-							<th scope="row" class="check-column"><input type="checkbox" id="media-<?php echo esc_attr( $image->ID ); ?>" name="webcomic_generate[]" value="<?php echo esc_attr( $image->ID ); ?>" form="webcomic_generator" <?php checked( in_array( $image->ID, $args['media'], true ) ); ?>></th>
-							<td class="title column-title column-primary">
-								<label for="media-<?php echo esc_attr( $image->ID ); ?>">
-									<strong class="has-media-icon">
-										<span class="media-icon image-icon"><?php echo wp_get_attachment_image( $image->ID, 'medium' ); ?></span>
-										<?php echo esc_html( get_the_title( $image->ID ) ); ?>
-									</strong>
-									<p class="filename"><?php echo esc_html( basename( get_attached_file( $image->ID ) ) ); ?></p>
-								</label>
-							</td>
-						</tr>
-						<?php
+							?>
+							<tr data-id="<?php echo esc_attr( $image->ID ); ?>">
+								<th scope="row" class="check-column"><input type="checkbox" id="media-<?php echo esc_attr( $image->ID ); ?>" name="webcomic_generate[]" value="<?php echo esc_attr( $image->ID ); ?>" form="webcomic_generator" <?php checked( in_array( $image->ID, $args['media'], true ) ); ?>></th>
+								<td class="title column-title column-primary">
+									<label for="media-<?php echo esc_attr( $image->ID ); ?>">
+										<strong class="has-media-icon">
+											<span class="media-icon image-icon"><?php echo wp_get_attachment_image( $image->ID, 'medium' ); ?></span>
+											<?php echo esc_html( get_the_title( $image->ID ) ); ?>
+										</strong>
+										<p class="filename"><?php echo esc_html( basename( get_attached_file( $image->ID ) ) ); ?></p>
+									</label>
+								</td>
+							</tr>
+							<?php
 						endforeach;
 
 						if ( ! $count ) :
-						?>
-						<tr>
-							<td colspan="2"><?php esc_html_e( 'No orphaned media found.', 'webcomic' ); ?></td>
-						</tr>
+							?>
+							<tr>
+								<td colspan="2"><?php esc_html_e( 'No orphaned media found.', 'webcomic' ); ?></td>
+							</tr>
 						<?php endif; ?>
 					</tbody>
 				</table>

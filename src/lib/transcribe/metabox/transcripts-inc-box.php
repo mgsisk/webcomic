@@ -38,10 +38,10 @@ if ( 'auto-draft' === $post->post_status ) {
 			}
 
 			if ( ! $args['transcripts'] ) :
-			?>
-			<tr class="none">
-				<td><?php esc_html_e( 'No transcripts yet.', 'webcomic' ); ?></td>
-			</tr>
+				?>
+				<tr class="none">
+					<td><?php esc_html_e( 'No transcripts yet.', 'webcomic' ); ?></td>
+				</tr>
 			<?php endif; ?>
 		</tbody>
 	</table>

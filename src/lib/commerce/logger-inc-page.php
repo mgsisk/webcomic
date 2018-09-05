@@ -38,26 +38,26 @@ if ( ! isset( $args ) ) {
 				if ( false !== strpos( $content, 'ERROR' ) ) {
 					$class = 'error';
 				}
-			?>
-			<tr class="<?php echo esc_attr( $class ); ?>">
-				<td><?php echo esc_html( get_the_title( $post ) ); ?></td>
-				<td><?php echo esc_html( get_the_excerpt( $post ) ); ?></td>
-				<td><?php echo wp_kses_post( $content ); ?></td>
-				<td>
-					<?php
-					// Translators: 1: Post publish date. 2: Post publish time.
-					echo esc_html( sprintf( __( '%1$s @ %2$s', 'webcomic' ), get_the_date( '', $post ), get_the_time( '', $post ) ) );
-					?>
-				</td>
-			</tr>
-			<?php
+				?>
+				<tr class="<?php echo esc_attr( $class ); ?>">
+					<td><?php echo esc_html( get_the_title( $post ) ); ?></td>
+					<td><?php echo esc_html( get_the_excerpt( $post ) ); ?></td>
+					<td><?php echo wp_kses_post( $content ); ?></td>
+					<td>
+						<?php
+						// Translators: 1: Post publish date. 2: Post publish time.
+						echo esc_html( sprintf( __( '%1$s @ %2$s', 'webcomic' ), get_the_date( '', $post ), get_the_time( '', $post ) ) );
+						?>
+					</td>
+				</tr>
+				<?php
 			endforeach;
 
 			if ( ! $args['posts'] ) :
-			?>
-			<tr>
-				<td colspan="4"><?php esc_html_e( 'No instant payment notifications found.', 'webcomic' ); ?></td>
-			</tr>
+				?>
+				<tr>
+					<td colspan="4"><?php esc_html_e( 'No instant payment notifications found.', 'webcomic' ); ?></td>
+				</tr>
 			<?php endif; ?>
 		</tbody>
 	</table>

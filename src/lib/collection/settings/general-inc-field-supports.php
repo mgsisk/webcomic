@@ -63,7 +63,7 @@ if ( ! isset( $args ) ) {
 	<input type="hidden" name="<?php echo esc_attr( $args['label_tax'] ); ?>[]">
 	<?php
 	foreach ( $args['taxonomies'] as $taxonomy ) :
-	?>
+		?>
 		<label>
 			<input type="checkbox" name="<?php echo esc_attr( $args['label_tax'] ); ?>[]" value="<?php echo esc_attr( $taxonomy->name ); ?>" <?php checked( in_array( $taxonomy->name, $args['option_tax'], true ) ); ?>>
 			<span><?php echo esc_html( $taxonomy->labels->name ); ?></span>

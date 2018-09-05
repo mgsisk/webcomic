@@ -15,7 +15,7 @@
 function get_api_data( int $key, array $tokens ) : array {
 	if ( 'add_shortcode' === $tokens[ $key ][1] ) {
 		$comment = get_api_shortcode_comment( $key, $tokens );
-		$preview = get_api_shortcode_preview( $comment, $key, $tokens );
+		$preview = get_api_shortcode_preview( $comment );
 
 		return get_api_shortcode_filedata( $comment, $preview );
 	} elseif ( 'do_action' === $tokens[ $key ][1] && isset( $tokens[ $key - 2 ][0] ) && T_DOC_COMMENT === $tokens[ $key - 2 ][0] ) {
@@ -75,11 +75,9 @@ function get_api_shortcode_comment( int $key, array $tokens ) : array {
  * Get a shortcode preview.
  *
  * @param array $comment The docblock comment.
- * @param int   $key The current token key.
- * @param array $tokens File tokens.
  * @return string
  */
-function get_api_shortcode_preview( array $comment, int $key, array $tokens ) : string {
+function get_api_shortcode_preview( array $comment ) : string {
 	$output = '[' . $comment['id'] . ']';
 
 	if ( 0 === strpos( $comment['tags']['param']['$content']['description'], 'Content ' ) ) {

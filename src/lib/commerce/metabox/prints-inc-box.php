@@ -20,11 +20,11 @@ if ( ! $args['prints'] ) :
 			'page'      => get_post_type() . '_options',
 		], admin_url( 'edit.php' )
 	);
-?>
+	?>
 	<p><a href="<?php echo esc_url( $url ); ?>" class="button"><?php esc_html_e( 'Manage Prints', 'webcomic' ); ?></a></p>
 	<input type="hidden" name="webcomic_commerce_prints[]">
 	<input type="hidden" name="webcomic_commerce_prints_adjust[]">
-<?php
+	<?php
 	return;
 endif;
 ?>
@@ -49,7 +49,7 @@ endif;
 				$adjust       = (int) get_post_meta( get_the_ID(), "webcomic_commerce_prints_adjust_{$key}", true );
 				$checkbox     = str_replace( '%s', $key, $args['label_adjust'] );
 				$label_adjust = str_replace( '_prints[', '_prints_adjust[', $checkbox );
-			?>
+				?>
 				<tr>
 					<th class="check-column">
 						<?php if ( ! $print['stock'] || $sold < $print['stock'] ) : ?>

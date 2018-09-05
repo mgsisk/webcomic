@@ -33,7 +33,7 @@ if ( ! isset( $args ) ) {
 			if ( $value === $args['option'] ) {
 				$active = ' active';
 			}
-		?>
+			?>
 			<div class="theme<?php echo esc_attr( $active ); ?>">
 				<label>
 					<div class="theme-screenshot"><img src="<?php echo esc_attr( $theme->get_screenshot() ); ?>" alt="<?php echo esc_attr( $theme->name ); ?>"></div>
