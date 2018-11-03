@@ -41,7 +41,8 @@
     "test:xml": "find . -name '*.xml' ! -path '*/node_modules/*' ! -path '*/vendor/*' ! -path '*/tests/*' | xargs xmllint --noout",
     "test:yml": "find . -name '*.yml' ! -path '*/node_modules/*' ! -path '*/vendor/*' ! -path '*/docs/_site/*' | xargs -L1 js-yaml",
     "version": "node scripts.js tagVersion $npm_package_version; git add readme.md src/readme.txt src/webcomic.php",
-    "postversion": "git push --follow-tags"
+    "postversion": "git push --follow-tags",
+    "postinstall": "opencollective-postinstall"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.49",
@@ -67,5 +68,13 @@
     "stylelint-config-standard": "^18.2.0",
     "stylelint-config-wordpress": "^13.0.0",
     "stylelint-order": "^0.8.1"
+  },
+  "dependencies": {
+    "opencollective-postinstall": "^2.0.1",
+    "opencollective": "^1.0.3"
+  },
+  "collective": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/webcomic"
   }
 }
