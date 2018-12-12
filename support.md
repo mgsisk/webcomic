@@ -33,8 +33,8 @@ and grouped into milestones to help drive development.
 If all else fails, you can try contacting the lead developer directly. A
 response isn't guaranteed, but Mike does his best to answer questions as he can.
 
-[img-discord]: https://img.shields.io/discord/361857773874446339.svg
-[img-issues]: https://img.shields.io/github/issues/mgsisk/webcomic.svg
+[img-discord]: https://img.shields.io/discord/361857773874446339.svg?logo=discord
+[img-issues]: https://img.shields.io/github/issues/mgsisk/webcomic.svg?logo=github&logoColor=white
 [url-discord]: https://discord.gg/TNTfzzg
 [url-issues]: https://github.com/mgsisk/webcomic/issues
 [User Guide]: https://github.com/mgsisk/webcomic/wiki
