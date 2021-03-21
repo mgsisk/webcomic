@@ -115,7 +115,18 @@
 
 		if ( ! container ) {
 			return;
-		} else if ( event.shiftKey ) {
+		}
+
+		if ( event.ctrlKey ) {
+			key += 'Ctrl';
+		}
+		if ( event.altKey ) {
+			key += 'Alt';
+		}
+		if ( event.metaKey ) {
+			key += 'Meta';
+		}
+		if ( event.shiftKey ) {
 			key += 'Shift';
 		}
 
