@@ -130,7 +130,9 @@
 			key += 'Shift';
 		}
 
-		webcomicShortcut( key, container );
+		if ( webcomicShortcut( key, container ) ) {
+			event.preventDefault();
+		}
 	}
 
 	/**
@@ -264,13 +266,15 @@
 		const anchor = container.querySelector( `.${classes[shortcut]}[href]` );
 
 		if ( ! shortcut || ! container || ! anchor ) {
-			return;
+			return false;
 		}
 
 		anchor.dispatchEvent( new MouseEvent( 'click', {
 			bubbles: true,
 			cancelable: true
 		}) );
+
+		return true;
 	}
 
 	/**
