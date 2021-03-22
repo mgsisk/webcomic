@@ -225,7 +225,7 @@
 			return;
 		}
 
-		const shortcut = webcmoicGetTouchNavigationShortcut( event, swipeX, swipeY );
+		const shortcut = webcomicGetTouchNavigationShortcut( event, swipeX, swipeY );
 
 		if ( ! shortcut.replace( /^Arrow(Shift)?$/, '' ) ) {
 			return;
@@ -270,7 +270,7 @@
 	 * @param {int} swipeY The vertical swipe difference.
 	 * @return {string}
 	 */
-	function webcmoicGetTouchNavigationShortcut( event, swipeX, swipeY ) {
+	function webcomicGetTouchNavigationShortcut( event, swipeX, swipeY ) {
 		let shortcut = 'Arrow';
 
 		if ( Math.abs( swipeX ) >= touchEvent.minDistance && Math.abs( swipeY ) < touchEvent.minDistance ) {
