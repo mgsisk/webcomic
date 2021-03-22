@@ -27,7 +27,7 @@
 	function webcomicCommonEvents() {
 		window.addEventListener( 'scroll', webcomicInfiniteScroll );
 		document.addEventListener( 'change', webcomicSelectNavigation );
-		document.addEventListener( 'keyup', webcomicKeyboardNavigation );
+		document.addEventListener( 'keydown', webcomicKeyboardNavigation );
 		document.addEventListener( 'click', webcomicDynamicComicLoading );
 		document.documentElement.addEventListener( 'touchstart', webcomicTouchNavigationStart, false );
 		document.documentElement.addEventListener( 'touchend', webcomicTouchNavigationEnd );
