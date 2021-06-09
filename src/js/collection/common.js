@@ -27,7 +27,7 @@
 	function webcomicCommonEvents() {
 		window.addEventListener( 'scroll', webcomicInfiniteScroll );
 		document.addEventListener( 'change', webcomicSelectNavigation );
-		document.addEventListener( 'keyup', webcomicKeyboardNavigation );
+		document.addEventListener( 'keydown', webcomicKeyboardNavigation );
 		document.addEventListener( 'click', webcomicDynamicComicLoading );
 		document.documentElement.addEventListener( 'touchstart', webcomicTouchNavigationStart, false );
 		document.documentElement.addEventListener( 'touchend', webcomicTouchNavigationEnd );
@@ -115,11 +115,24 @@
 
 		if ( ! container ) {
 			return;
-		} else if ( event.shiftKey ) {
+		}
+
+		if ( event.ctrlKey ) {
+			key += 'Ctrl';
+		}
+		if ( event.altKey ) {
+			key += 'Alt';
+		}
+		if ( event.metaKey ) {
+			key += 'Meta';
+		}
+		if ( event.shiftKey ) {
 			key += 'Shift';
 		}
 
-		webcomicShortcut( key, container );
+		if ( webcomicShortcut( key, container ) ) {
+			event.preventDefault();
+		}
 	}
 
 	/**
@@ -253,13 +266,15 @@
 		const anchor = container.querySelector( `.${classes[shortcut]}[href]` );
 
 		if ( ! shortcut || ! container || ! anchor ) {
-			return;
+			return false;
 		}
 
 		anchor.dispatchEvent( new MouseEvent( 'click', {
 			bubbles: true,
 			cancelable: true
 		}) );
+
+		return true;
 	}
 
 	/**
