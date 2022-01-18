@@ -106,7 +106,7 @@
 	 * @return {void}
 	 */
 	function webcomicKeyboardNavigation( event ) {
-		if ( event.target.tagName.toLowerCase().match( /button|input|meter|option|output|progress|select|textarea/ ) ) {
+		if ( event.target.tagName.toLowerCase().match( /button|input|meter|option|output|progress|select|textarea/ ) || event.target.getAttribute('contenteditable') !== null ) {
 			return;
 		}
 
